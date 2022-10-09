@@ -3572,118 +3572,112 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation>Seletor de Tipo de Diretório</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation>Diretório</translation>
+        <translation type="vanished">Diretório</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation>Selecione &apos;%1&apos; para não registrar seu servidor com um diretório.</translation>
+        <translation type="vanished">Selecione &apos;%1&apos; para não registrar seu servidor com um diretório.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation>Selecione um dos gêneros para registrar-se nesse diretório.</translation>
+        <translation type="vanished">Selecione um dos gêneros para registrar-se nesse diretório.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation>Ou selecione &apos;%1&apos; e especifique um endereço de Diretório Personalizado na guia Opções para registrar-se com um diretório personalizado.</translation>
+        <translation type="vanished">Ou selecione &apos;%1&apos; e especifique um endereço de Diretório Personalizado na guia Opções para registrar-se com um diretório personalizado.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation>Para qualquer valor, exceto &apos;%1&apos;,este servidor registra-se em um diretório para que um usuário %2 possa selecioná-lo na lista de servidores da caixa de diálogo de conexão do cliente ao escolher esse diretório.</translation>
+        <translation type="vanished">Para qualquer valor, exceto &apos;%1&apos;,este servidor registra-se em um diretório para que um usuário %2 possa selecioná-lo na lista de servidores da caixa de diálogo de conexão do cliente ao escolher esse diretório.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation>O registro do servidor é renovado periodicamente para garantir que todos os servidores na lista do diálogo de conexão estejam realmente acessíveis.</translation>
+        <translation type="vanished">O registro do servidor é renovado periodicamente para garantir que todos os servidores na lista do diálogo de conexão estejam realmente acessíveis.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="81"/>
+        <location filename="../serverdlg.cpp" line="80"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
         <translation>Quando um valordirefente de &quot;%1&quot; for escolhido para Diretório, isso mostrará se o registro foi bem sucedido. Se o registro falhou, escolha um diretório diferente.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="134"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
         <translation>Nenhum diretório de gravação foi definido ou o valor não pode ser usado. Verifique o valor na guia Opções.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="145"/>
+        <location filename="../serverdlg.cpp" line="144"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
         <translation>Se o diretório de gravação não for utilizável, o problema será exibido no lugar do diretório de sessão.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="176"/>
+        <location filename="../serverdlg.cpp" line="175"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
         <translation>Clique no botão para abrir a caixa de diálogo que permite selecionar o diretório de gravação principal. O valor escolhido deve existir e ser gravável (permitir a criação de subdiretórios pelo usuário com o qual %1 está sendo executado).</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="183"/>
+        <location filename="../serverdlg.cpp" line="182"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
         <translation>Valor atual do diretório principal de gravação. O valor escolhido deve existir e ser gravável (permite criação de subdiretórios pelo usuário com o qual %1 está sendo executado.). Clique no botão para abrir a caixa de diálogo que permite selecionar o diretório principal de gravação.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="195"/>
+        <location filename="../serverdlg.cpp" line="194"/>
         <source>Custom Directory address</source>
         <translation>End. de Diretório Personalizado</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="196"/>
+        <location filename="../serverdlg.cpp" line="195"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
         <translation>O endereço do Diretório Personalizado é o endereço do diretório que contém a lista de servidores ao qual esse servidor deve ser adicionado.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="203"/>
         <source>Server List Filename dialog push button</source>
         <translation>Botão de diálogo do arquivo da Lista de Servidores</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="205"/>
-        <location filename="../serverdlg.cpp" line="213"/>
+        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename</source>
         <translation>Arquivo da Lista de Servidores</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="206"/>
+        <location filename="../serverdlg.cpp" line="205"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
         <translation>Clique no botão para abrir a caixa de diálogo que permite definir o nome do arquivo de persistência da lista de servidores. O usuário com o qual %1 está sendo executado necessita ser capaz de criar o nome do arquivo especificado, embora ele já exista (será substituído ao salvar).</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="212"/>
+        <location filename="../serverdlg.cpp" line="211"/>
         <source>Server List Filename text box (read-only)</source>
         <translation>Caixa de texto com o arquivo da Lista de Servidores (apenas leitura)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="214"/>
+        <location filename="../serverdlg.cpp" line="213"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
         <translation>O valor atual do nome do arquivo de persistência da lista de servidores. O usuário com o qual %1 está sendo executado precisa ser capaz de criar o nome do arquivo especificado, embora ele já exista (será substituído ao salvar). Clique no botão para abrir a caixa de diálogo que permite definir o nome do arquivo de persistência da lista de servidores.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="221"/>
+        <location filename="../serverdlg.cpp" line="220"/>
         <source>Clear the server list file name button</source>
         <translation>Botão limpar arquivo da lista de servidores</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="222"/>
+        <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear Server List Filename</source>
         <translation>Limpar Arquivo da Lista de Servidores</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="223"/>
+        <location filename="../serverdlg.cpp" line="222"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
         <translation>Clique no botão para limpar o nome do arquivo de persistência da lista de servidores atualmente selecionado. Isso impedirá a persistência da lista de servidores até que um novo valor seja selecionado.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="227"/>
+        <location filename="../serverdlg.cpp" line="226"/>
         <source>Start Minimized on Operating System Start</source>
         <translation>Iniciar Minimizado com o Sistema Operacional</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
+        <location filename="../serverdlg.cpp" line="736"/>
         <source>Now a directory</source>
         <translation>Agora um diretório</translation>
     </message>
@@ -3716,7 +3710,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished"> possam ver o servidor na lista do diálogo de ligação e ligar-se a ele. O registo do servidor é renovado periodicamente para garantir que todos os servidores na lista de diálogo de ligação estejam realmente disponíveis.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="80"/>
+        <location filename="../serverdlg.cpp" line="79"/>
         <source>Register Server Status</source>
         <translation>Estado de Registro do Servidor</translation>
     </message>
@@ -3741,7 +3735,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">Seletor do servidor central padrão</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="228"/>
+        <location filename="../serverdlg.cpp" line="227"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
         <translation>Se a caixa de seleção Iniciar Minimizado com o Sistema Operacional estiver marcada, o servidor será iniciado quando o sistema operacional for iniciado, e minimizado automaticamente para um ícone da barra de tarefas do sistema.</translation>
     </message>
@@ -3774,7 +3768,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">Seletor de lista de servidores</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="87"/>
+        <location filename="../serverdlg.cpp" line="86"/>
         <source>Server Name</source>
         <translation>Nome do Servidor</translation>
     </message>
@@ -3783,27 +3777,27 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">O nome do servidor identifica o servidor na lista do diálogo de ligação exibido nos clientes. Se nenhum nome for fornecido, o endereço IP será mostrado.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="88"/>
+        <location filename="../serverdlg.cpp" line="87"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
         <translation>O nome do servidor identifica seu servidor na lista do diálogo de conexão exibido nos clientes.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="94"/>
+        <location filename="../serverdlg.cpp" line="93"/>
         <source>Server name line edit</source>
         <translation>Caixa de edição do nome do servidor</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="97"/>
+        <location filename="../serverdlg.cpp" line="96"/>
         <source>Location City</source>
         <translation>Localização: Cidade</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="98"/>
+        <location filename="../serverdlg.cpp" line="97"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>A cidade onde este servidor está localizado pode ser definida aqui. Se um nome de cidade for inserido, este será mostrado na lista do diálogo de conexão dos clientes.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="105"/>
+        <location filename="../serverdlg.cpp" line="104"/>
         <source>City where the server is located line edit</source>
         <translation>Caixa de edição da cidade onde o servidor se encontra</translation>
     </message>
@@ -3820,38 +3814,38 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">Seletor do país onde o servidor se encontra</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="108"/>
+        <location filename="../serverdlg.cpp" line="107"/>
         <source>Country/Region</source>
         <translation>País/Região</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="109"/>
+        <location filename="../serverdlg.cpp" line="108"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
         <translation>Define o país ou região onde o servidor está sendo executado. Os clientes irão exibir essa localização na caixa de diálogo de conexão da lista de servidores.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="116"/>
+        <location filename="../serverdlg.cpp" line="115"/>
         <source>Combo box for location of this server</source>
         <translation>Seletor para localização deste servidor</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="138"/>
+        <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox.</source>
         <translation>Gravação foi desligada pela caixa de seleção da IU.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="140"/>
+        <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
         <translation>Gravação foi desligada pela caixa de seleção da IU ou SIGUSR2 recebido.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="173"/>
         <source>Display dialog to select recording directory button</source>
         <translation>Botão que mostra diálogo para selecionar diretório de gravação</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="175"/>
-        <location filename="../serverdlg.cpp" line="182"/>
+        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="181"/>
         <source>Main Recording Directory</source>
         <translation>Diretório Principal de Gravação</translation>
     </message>
@@ -3860,7 +3854,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">Clique no botão para abrir a caixa de diálogo que permite selecionar o diretório principal de gravação. O valor escolhido deve existir e ser gravável(permite a criação de subdiretórios pelo usuário que está executando Jamulus). </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="181"/>
+        <location filename="../serverdlg.cpp" line="180"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>Caixa de texto com o diretório principal de gravação (apenas leitura)</translation>
     </message>
@@ -3869,22 +3863,22 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">Valor atual do diretório principal de gravação. O valor escolhido deve existir e ser gravável (permite criação de subdiretórios pelo usuário que está executando Jamulus). Clique no botão para abrir a caixa de diálogo que permite selecionar o diretório principal de gravação.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="189"/>
+        <location filename="../serverdlg.cpp" line="188"/>
         <source>Clear the recording directory button</source>
         <translation>Botão para limpar o diretório de gravação</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="190"/>
+        <location filename="../serverdlg.cpp" line="189"/>
         <source>Clear Recording Directory</source>
         <translation>Limpar Diretório de Gravação</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="191"/>
+        <location filename="../serverdlg.cpp" line="190"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
         <translation>Clique no botão para limpar o diretório de gravação atualmente selecionado. Isso impedirá a gravação até que um novo valor seja selecionado.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="119"/>
+        <location filename="../serverdlg.cpp" line="118"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>Caixa de seleção para ligar ou desligar a gravação no servidor</translation>
     </message>
@@ -3893,42 +3887,48 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">Se a caixa de seleção Registrar Servidor estiver marcada, isto exibirá se o registro no servidor de diretório foi bem-sucedido. Se o registro falhar, escolha outra lista de servidores.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="120"/>
+        <location filename="../serverdlg.cpp" line="119"/>
         <source>Enable Recorder</source>
         <translation>Habilitar Gravador</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="121"/>
+        <location filename="../serverdlg.cpp" line="120"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
         <translation>Ativo quando o gravador estiver ligado, caso contrário inativo. O gravador irá rodar quando uma sessão estiver a decorrer, se (corretamente configurado e ) ativo.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="148"/>
+        <location filename="../serverdlg.cpp" line="147"/>
         <source>Current session directory text box (read-only)</source>
         <translation>Caixa de texto com a pasta da gravação (apenas leitura)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="152"/>
+        <location filename="../serverdlg.cpp" line="151"/>
         <source>Current Session Directory</source>
         <translation>Pasta da Sessão Atual</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="153"/>
+        <location filename="../serverdlg.cpp" line="152"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation>Ativo durante a gravação e exibe a pasta da gravação atual. Inativo depois de gravação ou quando o gravador não estiver habilitado.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="130"/>
+        <location filename="../serverdlg.cpp" line="129"/>
         <source>Recorder status label</source>
         <translation>Etiqueta do estado do Gravador</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="60"/>
+        <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder Status</source>
         <translation>Estado do Gravador</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
         <translation>Exibe o estado atual do gravador. Os seguintes valores são possíveis:</translation>
     </message>
@@ -3949,17 +3949,17 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">, pela caixa de ativação da IU ou SIGUSR2 foi recebido</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="142"/>
+        <location filename="../serverdlg.cpp" line="141"/>
         <source>There is no one connected to the server to record.</source>
         <translation>Não há ninguém conectado ao servidor para gravar.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="143"/>
+        <location filename="../serverdlg.cpp" line="142"/>
         <source>The performers are being recorded to the specified session directory.</source>
         <translation>Os artistas estão sendo gravados no diretório de sessão especificado.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="144"/>
+        <location filename="../serverdlg.cpp" line="143"/>
         <source>NOTE</source>
         <translation>NOTA</translation>
     </message>
@@ -3968,32 +3968,32 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">Se o diretório de gravação não é utilizável, o problema será exibido no lugar do diretório.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="159"/>
+        <location filename="../serverdlg.cpp" line="158"/>
         <source>Server welcome message edit box</source>
         <translation>Caixa de edição da mensagem de boas-vindas do servidor</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="160"/>
+        <location filename="../serverdlg.cpp" line="159"/>
         <source>Server Welcome Message</source>
         <translation>Mensagem de Boas-vindas do Servidor</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="161"/>
+        <location filename="../serverdlg.cpp" line="160"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
         <translation>Uma mensagem de boas-vindas é exibida na janela de chat se um músico entra no servidor. Se nenhuma mensagem for definida, a mensagem de boas-vindas do servidor é desativada.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Language</source>
         <translation>Idioma</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>Selecione o idioma para ser utilizado na interface do usuário.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="171"/>
+        <location filename="../serverdlg.cpp" line="170"/>
         <source>Language combo box</source>
         <translation>Seletor de idioma</translation>
     </message>
@@ -4010,28 +4010,28 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">O diretório personalizado é o endereço IP ou URL do servidor de diretório na qual a lista de servidores do diálogo de conexão é gerida.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="201"/>
+        <location filename="../serverdlg.cpp" line="200"/>
         <source>Custom Directory line edit</source>
         <translation>Edição de linha do Diretório Personalizado</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="245"/>
+        <location filename="../serverdlg.cpp" line="244"/>
         <source>&amp;Hide %1 server</source>
         <translation>&amp;Ocultar servidor %1</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="248"/>
+        <location filename="../serverdlg.cpp" line="247"/>
         <source>&amp;Show %1 server</source>
         <translation>Mostrar &amp;servidor %1</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="253"/>
+        <location filename="../serverdlg.cpp" line="252"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
         <translation>Servidor %1</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="337"/>
+        <location filename="../serverdlg.cpp" line="336"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>Digite uma mensagem de boas-vindas aqui. Se nenhuma mensagem for definida, a mensagem de boas-vindas do servidor será desativada.</translation>
     </message>
@@ -4046,12 +4046,12 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">atualização de software disponível</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="590"/>
+        <location filename="../serverdlg.cpp" line="589"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>O gravador falhou ao iniciar. Verifique o espaço em disco disponível e as permissões e tente novamente. Erro: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="870"/>
+        <location filename="../serverdlg.cpp" line="869"/>
         <source>ERROR</source>
         <translation>ERRO</translation>
     </message>
@@ -4060,23 +4060,23 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">Mostra o estado atual do gravador.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="125"/>
+        <location filename="../serverdlg.cpp" line="124"/>
         <source>Request new recording button</source>
         <translation>Botão para começar nova gravação</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="126"/>
+        <location filename="../serverdlg.cpp" line="125"/>
         <source>New Recording</source>
         <translation>Nova Gravação</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="127"/>
+        <location filename="../serverdlg.cpp" line="126"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>Durante uma sessão de gravação, este botão pode ser usado para começar uma nova gravação.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="241"/>
-        <location filename="../serverdlg.cpp" line="393"/>
+        <location filename="../serverdlg.cpp" line="240"/>
+        <location filename="../serverdlg.cpp" line="392"/>
         <source>E&amp;xit</source>
         <translation>&amp;Sair</translation>
     </message>
@@ -4097,7 +4097,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished"> </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="602"/>
+        <location filename="../serverdlg.cpp" line="601"/>
         <source>Select Main Recording Directory</source>
         <translation>Selecione Diretório Principal de Gravação</translation>
     </message>
@@ -4142,7 +4142,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished"> - Servidor</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="391"/>
+        <location filename="../serverdlg.cpp" line="390"/>
         <source>&amp;Window</source>
         <translation>&amp;Janela</translation>
     </message>

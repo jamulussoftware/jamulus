@@ -3120,68 +3120,74 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Widok listy podłączonych użytkowników</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="176"/>
+        <location filename="../serverdlg.cpp" line="60"/>
+        <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="175"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
         <translation>Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego %1.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="183"/>
+        <location filename="../serverdlg.cpp" line="182"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
         <translation>Aktualny głowny katalog nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego %1. Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="195"/>
+        <location filename="../serverdlg.cpp" line="194"/>
         <source>Custom Directory address</source>
         <translation>Własny adres serwera zbiorczego</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="196"/>
+        <location filename="../serverdlg.cpp" line="195"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
         <translation>Własny adres serwera zbiorczego to adres serwera, na którym zarządzana jest lista serwerów w oknie dialogowym połączenia.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="203"/>
         <source>Server List Filename dialog push button</source>
         <translation>Przycisk dla nazwy pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="205"/>
-        <location filename="../serverdlg.cpp" line="213"/>
+        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename</source>
         <translation>Nazwa pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="206"/>
+        <location filename="../serverdlg.cpp" line="205"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
         <translation>Otwiera okno dialogowe wyboru nazwy pliku z listą serwerów. Użytkownik uruchamiający %1-a musi mieć prawo do tworzenia plików (gdy plik już istnieje, zostanie nadpisany).</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="212"/>
+        <location filename="../serverdlg.cpp" line="211"/>
         <source>Server List Filename text box (read-only)</source>
         <translation>Pole tekstowe z nazwą pliku listy serwerów (tylko do odczytu)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="214"/>
+        <location filename="../serverdlg.cpp" line="213"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
         <translation>Obecna nazwa pliku z listą serwerów. Użytkownik uruchamiający %1-a musi mieć prawo do tworzenia plików (gdy plik już istnieje, zostanie nadpisany). Naciśnij przycisk aby otwierzyć okno dialogowe wyboru nazwy pliku z listą serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="221"/>
+        <location filename="../serverdlg.cpp" line="220"/>
         <source>Clear the server list file name button</source>
         <translation>Przycisk kasowania nazwy pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="222"/>
+        <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear Server List Filename</source>
         <translation>Wyczyść nazwę pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="223"/>
+        <location filename="../serverdlg.cpp" line="222"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
         <translation>Naciśnij aby wyczyść nazwę pliku z listą serwerów. Lista serwerów nie będzie isnieć dopóki nie zostanie podana nowa nazwa.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="227"/>
+        <location filename="../serverdlg.cpp" line="226"/>
         <source>Start Minimized on Operating System Start</source>
         <translation>Uruchom w tle przy włączeniu systemu operacyjnego</translation>
     </message>
@@ -3190,7 +3196,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Ustaw serwer jako publiczny</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="80"/>
+        <location filename="../serverdlg.cpp" line="79"/>
         <source>Register Server Status</source>
         <translation>Zarejetruj status serwera</translation>
     </message>
@@ -3223,27 +3229,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Pole wyboru listy serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="87"/>
+        <location filename="../serverdlg.cpp" line="86"/>
         <source>Server Name</source>
         <translation>Nazwa serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="94"/>
+        <location filename="../serverdlg.cpp" line="93"/>
         <source>Server name line edit</source>
         <translation>Pole edycji nazwy serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="97"/>
+        <location filename="../serverdlg.cpp" line="96"/>
         <source>Location City</source>
         <translation>Lokalizacja serwera - miasto</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="98"/>
+        <location filename="../serverdlg.cpp" line="97"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>W tym okne można ustawić nazwę miasta, w którym znajduje się serwer. Jeżeli nazwa miasta jest wprowadzona, zostanie wyświetlona w oknie dialogowym połączenia, na liście dostępnych serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="105"/>
+        <location filename="../serverdlg.cpp" line="104"/>
         <source>City where the server is located line edit</source>
         <translation>Pole wyboru miasta, w którym zlokalizowany jest serwer</translation>
     </message>
@@ -3260,13 +3266,13 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Pole wyboru kraju, w którym zlokalizowany jest serwer</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="173"/>
         <source>Display dialog to select recording directory button</source>
         <translation>Wyświetla okno wyboru katalogu nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="175"/>
-        <location filename="../serverdlg.cpp" line="182"/>
+        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="181"/>
         <source>Main Recording Directory</source>
         <translation>Główny katalog nagrywania</translation>
     </message>
@@ -3275,7 +3281,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego Jamulus-a. </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="181"/>
+        <location filename="../serverdlg.cpp" line="180"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>Pole tekstowe katalogu nagrywania (tylko do odczytu)</translation>
     </message>
@@ -3284,22 +3290,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Aktualny głowny katalog nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego Jamulus-a. Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="189"/>
+        <location filename="../serverdlg.cpp" line="188"/>
         <source>Clear the recording directory button</source>
         <translation>Przycisk czyszczenia katalogu nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="190"/>
+        <location filename="../serverdlg.cpp" line="189"/>
         <source>Clear Recording Directory</source>
         <translation>Wyczyść katalog nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="191"/>
+        <location filename="../serverdlg.cpp" line="190"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
         <translation>Naciśnij przycisk aby wyczyścić wybraną ścieżkę katalogu. Nagrywanie będzie niemożliwe dopóki nowa ścieżka nie zostanie podana.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="119"/>
+        <location filename="../serverdlg.cpp" line="118"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>Pole wyboru do włączania lub wyłączania nagrywania na serwerze</translation>
     </message>
@@ -3308,32 +3314,32 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeżeli pole wyboru „Rejestruj serwer” jest zaznaczone, wyświetli się komunikat o powowdzeniu rejestracji na serwerze. Gdy rejestracja się nie uda, proszę wybrać inny katalog serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="120"/>
+        <location filename="../serverdlg.cpp" line="119"/>
         <source>Enable Recorder</source>
         <translation>Nagrywanie włączone</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="121"/>
+        <location filename="../serverdlg.cpp" line="120"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
         <translation>Zaznaczone kiedy nagrywanie jest możliwe. Nagrywanie rozpocznie się razem z sesją, jeżeli jest ustawione prawidłowo i dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="148"/>
+        <location filename="../serverdlg.cpp" line="147"/>
         <source>Current session directory text box (read-only)</source>
         <translation>Pole tekstowe aktualnego katalogu sesji (tylko do odczytu)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="152"/>
+        <location filename="../serverdlg.cpp" line="151"/>
         <source>Current Session Directory</source>
         <translation>Katalog sesji bieżących</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="153"/>
+        <location filename="../serverdlg.cpp" line="152"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation>Dostępne podczas nagrywania, przechowuje ścieżkę do aktualnego katalogu nagrywania. Wyłączone po nagraniu lub gdy rejestrator nie jest włączony.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="130"/>
+        <location filename="../serverdlg.cpp" line="129"/>
         <source>Recorder status label</source>
         <translation>Etykieta statusu nagrywania</translation>
     </message>
@@ -3343,82 +3349,76 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Lista wyboru typu serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation>Serwer</translation>
+        <translation type="vanished">Serwer</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation>Zaznacz „%1” żeby nie rejestrować twojego serwera w katalogu zbiorczym.</translation>
+        <translation type="vanished">Zaznacz „%1” żeby nie rejestrować twojego serwera w katalogu zbiorczym.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation>Wybierz który ze stylów zostanie zajejstrowany z tym serwerem.</translation>
+        <translation type="vanished">Wybierz który ze stylów zostanie zajejstrowany z tym serwerem.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation>Lub zaznacz „%1” i podaj adres własnego serwera zbiorczego na karcie Opcje żeby zarejstrować razem z nim.</translation>
+        <translation type="vanished">Lub zaznacz „%1” i podaj adres własnego serwera zbiorczego na karcie Opcje żeby zarejstrować razem z nim.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation>Ten serwer zostanie zarejstrowany w katalogu zbiorczym dla każdego wpisu oprócz „%1”, więc użytkonik %2-a będzie mógł go zaznaczyć w oknie połączenia kiedy wybierze ten katalog zbiorczy.</translation>
+        <translation type="vanished">Ten serwer zostanie zarejstrowany w katalogu zbiorczym dla każdego wpisu oprócz „%1”, więc użytkonik %2-a będzie mógł go zaznaczyć w oknie połączenia kiedy wybierze ten katalog zbiorczy.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation>Rejestracja serwerów jest odnawiana okresowo żeby mieć pweność, że wszystkie serwery na liście są dostępne.</translation>
+        <translation type="vanished">Rejestracja serwerów jest odnawiana okresowo żeby mieć pweność, że wszystkie serwery na liście są dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="81"/>
+        <location filename="../serverdlg.cpp" line="80"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
         <translation>Kiedy podana nazwa jest różna niż „%1” zostanie wyświetlone czy rejestracja się powiodła. Gdy się nie powiedzie, proszę wybrać inny katalog serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder Status</source>
         <translation>Status nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="134"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
         <translation>Nie wybrano katalogu nagrywania lub nie da się go używać. Proszę sprawdzić na karcie Opcje.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="138"/>
+        <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox.</source>
         <translation>Nagrywanie zostało wyłączone przez użytkownika.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="140"/>
+        <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
         <translation>Nagrywanie zostało wyłączone przez użytkownika lub otrzymano komunikat SIGUSR2.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="145"/>
+        <location filename="../serverdlg.cpp" line="144"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
         <translation>Gdy nie da się używać katalogu nagrywania, zostanie to wyświetlone w miejscu katalogu sesji.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Language</source>
         <translation>Język</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>Wybierz język interfejsu użytkownika.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="171"/>
+        <location filename="../serverdlg.cpp" line="170"/>
         <source>Language combo box</source>
         <translation>Lista wyboru języka</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
+        <location filename="../serverdlg.cpp" line="736"/>
         <source>Now a directory</source>
         <translation>Bieżący serwer</translation>
     </message>
@@ -3435,22 +3435,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Niestandardowy adres serwera zbiorczego to adres IP lub adres URL serwera, na którym zarządzana jest lista serwerów w oknie dialogowym połączenia.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="201"/>
+        <location filename="../serverdlg.cpp" line="200"/>
         <source>Custom Directory line edit</source>
         <translation>Pole edycji własnych serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="245"/>
+        <location filename="../serverdlg.cpp" line="244"/>
         <source>&amp;Hide %1 server</source>
         <translation>&amp;Ukryj serwer %1</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="248"/>
+        <location filename="../serverdlg.cpp" line="247"/>
         <source>&amp;Show %1 server</source>
         <translation>&amp;Pokaż serwer %1</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="253"/>
+        <location filename="../serverdlg.cpp" line="252"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
         <translation>serwer %1-a</translation>
@@ -3462,38 +3462,38 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Serwer %1-a</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="590"/>
+        <location filename="../serverdlg.cpp" line="589"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>Nie dało się nagrywać. Sprawdź dostępne miejsce na dysku i prawa dostępu i spróbuj ponownie. Błąd: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="602"/>
+        <location filename="../serverdlg.cpp" line="601"/>
         <source>Select Main Recording Directory</source>
         <translation>Wybierz katalog nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="870"/>
+        <location filename="../serverdlg.cpp" line="869"/>
         <source>ERROR</source>
         <translation>BŁĄD</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="125"/>
+        <location filename="../serverdlg.cpp" line="124"/>
         <source>Request new recording button</source>
         <translation>Nowy przycisk nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="126"/>
+        <location filename="../serverdlg.cpp" line="125"/>
         <source>New Recording</source>
         <translation>Nowe nagranie</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="127"/>
+        <location filename="../serverdlg.cpp" line="126"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>Podczas sesji nagraniowej można użyć przycisku w celu rozpoczęcia nowego nagrania.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="241"/>
-        <location filename="../serverdlg.cpp" line="393"/>
+        <location filename="../serverdlg.cpp" line="240"/>
+        <location filename="../serverdlg.cpp" line="392"/>
         <source>E&amp;xit</source>
         <translation>&amp;Wyjdź</translation>
     </message>
@@ -3534,7 +3534,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished"> Serwer</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="228"/>
+        <location filename="../serverdlg.cpp" line="227"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
         <translation>Jeśli pole wyboru start zminimalizowany na starcie systemu operacyjnego jest zaznaczone, serwer zostanie uruchomiony po uruchomieniu systemu operacyjnego i zostanie automatycznie zminimalizowany do ikony paska zadań systemowych.</translation>
     </message>
@@ -3543,27 +3543,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeśli pole wyboru „Ustaw serwer jako publiczny” jest zaznaczone, serwer ten rejestruje się na serwerze zbiorczym, tak aby wszyscy użytkownicy aplikacji mogli zobaczyć go na liście i połączyć się z nim. Rejestracja serwera jest okresowo odnawiana, aby upewnić się, że wszystkie serwery na liście są rzeczywiście dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="88"/>
+        <location filename="../serverdlg.cpp" line="87"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
         <translation>Nazwa serwera identyfikuje twój serwer w oknie dialogowym połączenia na liście dostępnych serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="108"/>
+        <location filename="../serverdlg.cpp" line="107"/>
         <source>Country/Region</source>
         <translation>Kraj/Region</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="109"/>
+        <location filename="../serverdlg.cpp" line="108"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
         <translation>Ustaw kraj lub region gdzie znajduje się serwer. Inni będą widzieć tą nazwę lokalizacji w oknie z listą serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="116"/>
+        <location filename="../serverdlg.cpp" line="115"/>
         <source>Combo box for location of this server</source>
         <translation>Lista rozwijana położenia tego serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
         <translation>Wyświetla aktualny stan nagrywania. Możliwe są następujące wartości:</translation>
     </message>
@@ -3584,17 +3584,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">, albo przez pole wyboru lub sygnał SIGUSR2</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="142"/>
+        <location filename="../serverdlg.cpp" line="141"/>
         <source>There is no one connected to the server to record.</source>
         <translation>Nikt nie jest podłączony do serwera żeby nagrywać.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="143"/>
+        <location filename="../serverdlg.cpp" line="142"/>
         <source>The performers are being recorded to the specified session directory.</source>
         <translation>Wykonawcy są nagrywani do wybranego katalogu.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="144"/>
+        <location filename="../serverdlg.cpp" line="143"/>
         <source>NOTE</source>
         <translation>UWAGA</translation>
     </message>
@@ -3603,22 +3603,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeżeli nie da się korzystać z katalogu nagrywania, problem będzie wyświetlony zamiast ściżki.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="159"/>
+        <location filename="../serverdlg.cpp" line="158"/>
         <source>Server welcome message edit box</source>
         <translation>Pole edycji tekstu powitania na serwerze</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="160"/>
+        <location filename="../serverdlg.cpp" line="159"/>
         <source>Server Welcome Message</source>
         <translation>Tekst powitania na serwerze</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="161"/>
+        <location filename="../serverdlg.cpp" line="160"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
         <translation>Tekst powitania pojawi się w oknie czatu kidy muzyk połaczy sie z serwerem. Jeżli tekst nie jest podany okno czatu nie zostanie wyświetlone po połączeniu.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="337"/>
+        <location filename="../serverdlg.cpp" line="336"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>Wpisz tutaj tekst. Jeżli tekst nie jest podany okno czatu nie zostanie wyświetlone po połączeniu.</translation>
     </message>
@@ -3627,7 +3627,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">dostępna aktualizacja oprogramowania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="391"/>
+        <location filename="../serverdlg.cpp" line="390"/>
         <source>&amp;Window</source>
         <translation>&amp;Okno</translation>
     </message>

@@ -1,14 +1,14 @@
 
 ### 3.9.0dev <- NOTE: the release version number will be 3.9.1 ###
 
-- Bugfix: Correct new channel not being shown to others if it connects with null channel info (#2754, #2774).
-  (contributed by @softins)
-
 - Client: Improved performance of GUI when someone joins or leaves a server (#2738).
   (contributed by @ann0see)
 
 - Client: Bugfix: Removed channel number from saved fader tag when `--ctrlmidich` is in use. In this release `--cleanuplegacyfadersettings` can be used on any saved fader settings that have been corrupted to attempt recovery (#2839).
   (contributed by @pljones)
+
+- Bugfix: Correct new channel not being shown to others if it connects with null channel info (#2754, #2774).
+  (contributed by @softins)
 
 - Server: Fixed --serverinfo country code misinterpretation introduced in Jamulus 3.9.0 on Qt6-based builds such as Mac (#2829).
   (contributed by @hoffie)
@@ -31,8 +31,8 @@
 - Translation: Added nb_NO App translation (#2849).
   (contributed by @ann0see)
 
-- Translations updated from Hosted Weblate (#2835, #2852).
-  (contributed by @weblate)
+- Translations updated from Hosted Weblate (#2835, #2852, #2856).
+  (contributed by @weblate and translators)
 
 - Refactoring: Moved around files to clean up the repository (#2822, #2824, #2834, #2838).
   (contributed by @ann0see)
@@ -48,6 +48,9 @@
 
 - Build: Debian/Ubuntu: Renamed headless .deb file to `jamulus-headless_[version]_ubuntu_[arch].deb` for consistency with binary. This might need changes to scripts downloading this `.deb` file (#2821).
   (contributed by @ann0see)
+
+- Build: Debian/Ubuntu: Added .deb aarch64 (Raspberry) 64bit builds (#2895).
+  (contributed by @hoffie)
 
 - Build: Mac: Combined Intel & M1 builds into a single Universal binary and improved M1 -dev build user-friendliness by introducing ad-hoc signing support (#2808, #2825).
   (contributed by @hoffie)

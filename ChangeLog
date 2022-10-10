@@ -28,8 +28,8 @@
 - Windows: Upgraded JACK build to use JACK 1.9.21 (#2665).
   (contributed by @ann0see)
 
-- Translation: Added nb_NO App translation (#2849).
-  (contributed by @ann0see)
+- Translation: Added nb_NO App translation (#2849, #2852).
+  (contributed by @comradekingu, @ann0see)
 
 - Translations updated from Hosted Weblate (#2835, #2852, #2856).
   (contributed by @weblate and translators)

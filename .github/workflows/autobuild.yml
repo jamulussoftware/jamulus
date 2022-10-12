@@ -356,6 +356,8 @@ jobs:
           MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
+          GOOGLE_RELEASE_KEYSTORE:  ${{ secrets.GOOGLE_KEYSTORE }}
+          GOOGLE_KEYSTORE_PASS:     ${{ secrets.GOOGLE_KEYSTORE_PASS }}
 
       - name:                       Post-Build for ${{ matrix.config.config_name }}
         id:                         get-artifacts
@@ -402,6 +404,25 @@ jobs:
         uses:                       devbotsxyz/xcode-staple@ae68b22ca35d15864b7f7923e1a166533b2944bf
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+
+      ## RELEASE PROCEDURE FOR:
+      ## - Android Play Store - aab
+      ## Requirement: Service Account JSON setup:
+      ## - Google Play Console -> Setup -> API Access -> Create/Link Google Cloud Project 
+      ## - Google Cloud console -> IAM & Admin -> Service Accounts -> Create (Wizard). Then create JSON key and export/save
+      - name:                       Publish all Android ABI builds to Play Store
+        if:                         >-
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
+                                    matrix.config.target_os == 'android'
+        id:                         publish_android
+        uses:                       r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          packageName:              io.jamulus.jamulus
+          releaseFiles:             deploy/Jamulus*.aab
+          releaseName:              ${{ needs.create_release.outputs.build_version }}
+          track:                    beta
+          status:                   draft
 
       - name:                       Upload Artifact 1 to Release
         # Every build job has at least one artifact. Therefore, no `if artifact_1` condition here.

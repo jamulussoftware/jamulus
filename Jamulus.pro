@@ -229,18 +229,44 @@ win32 {
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {
-    ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    # note: only armeabi-v7a arm64-v8a are targeted, others are dead/deprecated
+
+    # get ANDROID_ABIS from environment - passed directly to qmake
+    ANDROID_ABIS = $$getenv(ANDROID_ABIS)
+
+    # if ANDROID_ABIS is passed as env var to qmake, will override this
+    # !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
+
+    # Experiments show likely better results with Android 10+ devices
+    ANDROID_MIN_SDK_VERSION = 29
+    ANDROID_TARGET_SDK_VERSION = 32
     ANDROID_VERSION_NAME = $$VERSION
-    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+
+    # date-based unique value - prevent clashes in Play Store build numbering
+    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(date +%s | cut -c 2-)
+
+    # make separate version codes for each abi build otherwise Play Store rejects
+    contains (ANDROID_ABIS, armeabi-v7a) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 1)
+        message("Setting for armeabi-v7a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    } else {
+        message("Setting for armv8a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
     # liboboe requires C++17 for std::timed_mutex
     CONFIG += c++17
 
+    # For device recording permissions
+    # Qt5:
     QT += androidextras
+    # Qt6:
+    # QT += core-private
 
     # enabled only for debugging on android devices
-    DEFINES += ANDROIDDEBUG
+    #DEFINES += ANDROIDDEBUG
 
     target.path = /tmp/your_executable # path on device
     INSTALLS += target

@@ -35,7 +35,7 @@ class UnexpectedGithubStatus(RuntimeError):
 
 
 # List of user names which should be ignored (such as bots):
-ignore_list = ['github-actions[bot]', 'imgbot[bot]', 'actions-bot', 'actions-user', 'ImgBotApp']
+ignore_list = ['github-actions[bot]', 'imgbot[bot]', 'actions-bot', 'actions-user', 'ImgBotApp', 'dependabot[bot]', 'weblate']
 
 CHARSET = 'utf-8'
 

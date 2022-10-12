@@ -208,7 +208,7 @@ def find_contributors(git_log_selector, from_, to):
     """
     contributors = set()
     co_author_keys = set()
-    commits = subprocess.check_output(['git', 'log', '-z', '--format=format:%H %an <%ae>%n%b', '%s..%s' % (from_, to), '--'] + git_log_selector)
+    commits = subprocess.check_output(['git', 'log', '-z', '--show-pulls', '--format=format:%H %an <%ae>%n%b', '%s..%s' % (from_, to), '--'] + git_log_selector)
     commits = commits.decode(CHARSET)
     for commit in commits.split('\0'):
         if not commit:

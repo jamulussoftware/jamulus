@@ -218,6 +218,7 @@ def find_contributors(git_log_selector, from_, to):
         contributors.add(contributor)
         co_authors = re.findall('Co-authored-by:\s*(\S.*(<[^ >]+>))\s*(?:$|\n)', commit, re.I)
         for co_author_full, co_author_email in co_authors:
+            logger.debug(f'checking co author {co_author_full}')
             contributor = authors.get_login_or_realname(co_author_full, None)
             if not contributor or not contributor.startswith('@'):
                 # try to find a previous commit by this mail address
@@ -241,7 +242,6 @@ def find_contributors(git_log_selector, from_, to):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(levelname)s %(message)s')
     p = argparse.ArgumentParser(
         description='Generates a list of Github user names who contributed to a specific release.')
     p.add_argument('--from', dest='from_', required=True,
@@ -252,7 +252,20 @@ if __name__ == '__main__':
                    help='the path to the git repository to be analyzed, e.g. ./jamuluswebsite')
     p.add_argument('--github-token',
                    help='a Github Personal Access Token; optional, but might be needed if we exceed the anonymous API requests per hour limit')
+    p.add_argument('--verbose', '-v', action='store_true',
+                   help='enable verbose output')
+    p.add_argument('--quiet', '-q', action='store_true',
+                   help='only log errors')
     args = p.parse_args()
+    if args.verbose and args.quiet:
+        p.error('--verbose and --quiet are mutually exclusive')
+    if args.verbose:
+        level = logging.DEBUG
+    elif args.quiet:
+        level = logging.ERROR
+    else:
+        level = logging.WARNING
+    logging.basicConfig(format='%(levelname)s %(message)s', level=level)
     os.chdir(args.repo)
     authors.set_github_token(args.github_token)
     main(args.from_, args.to)

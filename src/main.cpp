@@ -40,7 +40,7 @@
 #endif
 #include "util.h"
 #ifdef ANDROID
-#    include <QtAndroidExtras/QtAndroid>
+#    include <QtCore/private/qandroidextras_p.h>
 #endif
 #if defined( Q_OS_MACX )
 #    include "mac/activity.h"

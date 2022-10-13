@@ -23,6 +23,7 @@ QT_VERSION=6.3.2
 QT_BASEDIR="/opt/Qt"
 BUILD_DIR=build
 ANDROID_NDK_HOST="linux-x86_64"
+ANDROID_NDK_ROOT="${ANDROID_NDK_ROOT}"
 # Only variables which are really needed by sub-commands are exported.
 export JAVA_HOME=${JAVA_HOME_11_X64}
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
@@ -67,7 +68,6 @@ setup_qt() {
 build_app() {
     local ARCH_ABI="${1}"
 
-    local QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
     local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
 
     echo "${GOOGLE_RELEASE_KEYSTORE}" | base64 --decode > android/android_release.keystore
@@ -111,7 +111,7 @@ build_aab() {
         --aab \
         --release \
         --sign android/android_release.keystore jamulus \
-            --storepass ${GOOGLE_KEYSTORE_PASS} \
+            --storepass "${GOOGLE_KEYSTORE_PASS}" \
         --android-platform "${ANDROID_PLATFORM}" \
         --jdk "${JAVA_HOME}" \
         --gradle
@@ -132,8 +132,8 @@ pass_artifact_to_job() {
     mkdir -p deploy
     local artifact="Jamulus_${JAMULUS_BUILD_VERSION}_android_${BUILDNAME}.aab"
     # debug to check for filenames
-    ls -alR ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/
-    ls -al ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab
+    ls -alR "${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/"
+    ls -al "${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab"
     echo ">>> Moving ${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab to deploy/${artifact}"
     mv "./${BUILD_DIR}_${ARCH_ABI}/build/outputs/bundle/release/build_${ARCH_ABI}-release.aab" "./deploy/${artifact}"
     echo ">>> Moved .aab file to deploy/${artifact}"

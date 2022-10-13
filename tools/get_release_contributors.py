@@ -34,8 +34,8 @@ class UnexpectedGithubStatus(RuntimeError):
     pass
 
 
-# List of user names which should be ignored (such as bots):
-ignore_list = ['github-actions[bot]', 'imgbot[bot]', 'actions-bot', 'actions-user', 'ImgBotApp']
+# List of contributor names which should be ignored (such as bots):
+ignore_list = ['@github-actions[bot]', '@imgbot[bot]', '@actions-bot', '@actions-user', '@ImgBotApp', '@dependabot[bot]', '@weblate']
 
 CHARSET = 'utf-8'
 
@@ -62,7 +62,7 @@ class Authors:
     def set_github_token(self, token):
         self.token = token
 
-    def get_login(self, key, commit_hash):
+    def _get_login(self, key, commit_hash):
         """
         Returns the Github login associated with the given name+email key.
         A related commit hash is required in order to have a reference
@@ -71,24 +71,36 @@ class Authors:
         Once looked up, the results are cached in a local file.
         """
         if key not in self.keys_to_user:
-            if commit_hash:
-                self.keys_to_user[key] = self.get_user_by_commit(commit_hash)
+            user = self.get_user_by_email(key)
+            if not user and commit_hash:
+                user = self.get_user_by_commit(commit_hash)
+
+            if user:
+                self.keys_to_user[key] = user
                 self.save()
-            else:
-                return None
-        return self.keys_to_user[key]
+
+        return self.keys_to_user.get(key, None)
+
+    def get_login_or_realname(self, key, commit_hash):
+        """
+        Returns the Github login (@-prefixed) or, if not found, the real name from
+        the given name+email key.
+        """
+        login = self._get_login(key, commit_hash)
+        if login:
+            return f'@{login}'
+        m = re.match('\A([^@<>]+) <.*>\Z', key)
+        if m:
+            return m.group(1)
+        logger.warning(f'unable to extract github login or real name from {repr(key)}')
+        return None
 
     def get_user_by_commit(self, hash):
         """
         Retrieves the associated Github user name for the given commit
         hash.
         """
-        headers = {
-            'Accept': 'application/vnd.github.v3+json',
-        }
-        if self.token:
-            headers['Authorization'] = 'token %s' % self.token
-        r = requests.get('https://api.github.com/repos/jamulussoftware/%s/commits/%s' % (self.repo, hash), headers=headers)
+        r = self._github_api_get(f'repos/jamulussoftware/{self.repo}/commits/{hash}')
         if 200 <= r.status_code < 300:
             try:
                 return r.json()['author']['login']
@@ -99,6 +111,38 @@ class Authors:
             logger.warning('unable to find author of %s, saving as empty', hash)
             return ''
         raise UnexpectedGithubStatus('status was %d' % r.status_code)
+
+    def _github_api_get(self, path, *args, **kwargs):
+        headers = {
+            'Accept': 'application/vnd.github.v3+json',
+        }
+        if self.token:
+            headers['Authorization'] = 'token %s' % self.token
+        r = requests.get(f'https://api.github.com/{path}', *args, headers=headers, **kwargs)
+        return r
+
+    def get_user_by_email(self, key):
+        m = re.match(r'\A[^<]+<([^<> ]+@[^<> ]+)>\Z', key)
+        if not m:
+            return None
+        email = m.group(1)
+        # Handle Github-generated email addresses via static matching:
+        m = re.match(r'\A(\d+\+)?([^+@]+)\@users\.noreply\.github\.com\Z', email)
+        if m:
+            return m.group(2)
+        r = self._github_api_get('search/users', params={'q': f'{email} in:email'})
+        if r.status_code < 200 or r.status_code >= 300:
+            logger.warning(f'search/users for {email} failed with code {r.status_code}')
+            return None
+        items = r.json().get('items', [])
+        for item in items:
+            login = item['login']
+            u = self._github_api_get(f'users/{login}').json()
+            if u.get('email', '') == email:
+                return login
+
+        logger.warning(f'unable to find a github profile with public email {email}')
+        return None
 
     def save(self):
         """
@@ -149,8 +193,8 @@ def print_website_contributors(from_, to):
 
 
 def print_contributors(title, git_log_selector, from_, to):
-    contributors = ['@%s' % u for u in find_contributors(git_log_selector, from_, to) if u and u not in ignore_list]
-    contributors_str = ' '.join(contributors)
+    contributors = [u for u in find_contributors(git_log_selector, from_, to) if u and u not in ignore_list]
+    contributors_str = ', '.join(contributors)
     print('%s: %s' % (title, contributors_str))
 
 
@@ -164,37 +208,40 @@ def find_contributors(git_log_selector, from_, to):
     """
     contributors = set()
     co_author_keys = set()
-    commits = subprocess.check_output(['git', 'log', '-z', '--format=format:%H %an <%ae>%n%b', '%s..%s' % (from_, to), '--'] + git_log_selector)
+    commits = subprocess.check_output(['git', 'log', '-z', '--show-pulls', '--format=format:%H %an <%ae>%n%b', '%s..%s' % (from_, to), '--'] + git_log_selector)
     commits = commits.decode(CHARSET)
     for commit in commits.split('\0'):
         if not commit:
             continue
         hash, author_key = commit.split('\n', 1)[0].split(' ', 1)
-        login = authors.get_login(author_key, hash)
-        contributors.add(login)
-        co_authors = re.findall('Co-authored-by:\s*(\S.*(<[^ >]+>))\s*\n', commit, re.I)
+        contributor = authors.get_login_or_realname(author_key, hash)
+        contributors.add(contributor)
+        co_authors = re.findall('Co-authored-by:\s*(\S.*(<[^ >]+>))\s*(?:$|\n)', commit, re.I)
         for co_author_full, co_author_email in co_authors:
-            login = authors.get_login(co_author_full, None)
-            if not login:
+            logger.debug(f'checking co author {co_author_full}')
+            contributor = authors.get_login_or_realname(co_author_full, None)
+            if not contributor or not contributor.startswith('@'):
                 # try to find a previous commit by this mail address
-                # and pass this commit id to get_login() to retrieve the
+                # and pass this commit id to get_login_or_realname() to retrieve the
                 # associated handle from the github API.
                 commit = subprocess.check_output(['git', 'log', '--format=%H', '--max-count=1', '--author=%s' % re.escape(co_author_email)]).strip().decode(CHARSET)
                 if commit:
-                    login = authors.get_login(co_author_full, commit)
-            if login:
-                contributors.add(login)
+                    contributor = authors.get_login_or_realname(co_author_full, commit)
+            if contributor:
+                contributors.add(contributor)
 
     # Resolve co-authors last because we have to rely on having seen the
     # email-to-login mapping via some other commit.
     for co_author in co_author_keys:
-        login = authors.get_login(co_author, None)
-        contributors.add(login)
+        contributor = authors.get_login_or_realname(co_author, None)
+        if contributor:
+            contributors.add(contributor)
+        else:
+            contributors.add(realname)
     return sorted(contributors, key=str.casefold)
 
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(levelname)s %(message)s')
     p = argparse.ArgumentParser(
         description='Generates a list of Github user names who contributed to a specific release.')
     p.add_argument('--from', dest='from_', required=True,
@@ -205,7 +252,20 @@ if __name__ == '__main__':
                    help='the path to the git repository to be analyzed, e.g. ./jamuluswebsite')
     p.add_argument('--github-token',
                    help='a Github Personal Access Token; optional, but might be needed if we exceed the anonymous API requests per hour limit')
+    p.add_argument('--verbose', '-v', action='store_true',
+                   help='enable verbose output')
+    p.add_argument('--quiet', '-q', action='store_true',
+                   help='only log errors')
     args = p.parse_args()
+    if args.verbose and args.quiet:
+        p.error('--verbose and --quiet are mutually exclusive')
+    if args.verbose:
+        level = logging.DEBUG
+    elif args.quiet:
+        level = logging.ERROR
+    else:
+        level = logging.WARNING
+    logging.basicConfig(format='%(levelname)s %(message)s', level=level)
     os.chdir(args.repo)
     authors.set_github_token(args.github_token)
     main(args.from_, args.to)

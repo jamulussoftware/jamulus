@@ -52,15 +52,18 @@ setup_qt() {
         # icu needs explicit installation 
         # otherwise: "qmake: error while loading shared libraries: libicui18n.so.56: cannot open shared object file: No such file or directory"
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" \
-            --archives qtbase qtdeclarative qtsvg qttools icu
+            --archives qtbase qtdeclarative qtsvg qttools icu \
+            --modules qtmultimedia
 
         # - 64bit required for Play Store
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_arm64_v8a \
-            --archives qtbase qtdeclarative qtsvg qttools
+            --archives qtbase qtdeclarative qtsvg qttools \
+            --modules qtmultimedia
         
         # Also install for arm_v7 to build for 32bit devices
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" android_armv7 \
-            --archives qtbase qtdeclarative qtsvg qttools
+            --archives qtbase qtdeclarative qtsvg qttools \
+            --modules qtmultimedia
         
     fi
 }

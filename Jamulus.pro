@@ -260,10 +260,8 @@ win32 {
     CONFIG += c++17
 
     # For device recording permissions
-    # Qt5:
-    QT += androidextras
     # Qt6:
-    # QT += core-private
+    QT += core-private
 
     # enabled only for debugging on android devices
     #DEFINES += ANDROIDDEBUG

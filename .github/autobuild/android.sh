@@ -39,7 +39,7 @@ setup_ubuntu_dependencies() {
 
     sudo apt-get -qq update
     sudo apt-get -qq --no-install-recommends -y install \
-        build-essential zip unzip bzip2 p7zip-full curl chrpath openjdk-11-jdk-headless
+        build-essential zip unzip bzip2 p7zip-full curl chrpath
 }
 
 

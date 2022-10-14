@@ -23,6 +23,7 @@ QT_VERSION=6.3.2
 QT_BASEDIR="/opt/Qt"
 BUILD_DIR=build
 ANDROID_NDK_HOST="linux-x86_64"
+# Use Github CI image-provided env var for ANDROID_NDK_ROOT, but explicitly re-assign to placate shellcheck
 ANDROID_NDK_ROOT="${ANDROID_NDK_ROOT}"
 # Only variables which are really needed by sub-commands are exported.
 export JAVA_HOME=${JAVA_HOME_11_X64}

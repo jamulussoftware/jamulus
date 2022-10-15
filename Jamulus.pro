@@ -230,7 +230,6 @@ win32 {
         -framework AudioToolbox
 } else:android {
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
-    # note: only armeabi-v7a arm64-v8a are targeted, others are dead/deprecated
 
     # get ANDROID_ABIS from environment - passed directly to qmake
     ANDROID_ABIS = $$getenv(ANDROID_ABIS)

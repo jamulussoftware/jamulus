@@ -410,7 +410,7 @@ jobs:
       ## Requirement: Service Account JSON setup:
       ## - Google Play Console -> Setup -> API Access -> Create/Link Google Cloud Project 
       ## - Google Cloud console -> IAM & Admin -> Service Accounts -> Create (Wizard). Then create JSON key and export/save
-      - name:                       Publish arm, arm64 Android builds to Play Store
+      - name:                       Publish all Android ABI builds to Play Store
         if:                         >-
                                     needs.create_release.outputs.publish_to_release == 'true' &&
                                     matrix.config.target_os == 'android'
@@ -419,7 +419,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           packageName:              io.jamulus.jamulus
-          releaseFiles:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }},deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
+          releaseFiles:             deploy/Jamulus*.aab
           releaseName:              ${{ needs.create_release.outputs.build_version }}
           track:                    beta
           status:                   draft

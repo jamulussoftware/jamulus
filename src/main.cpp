@@ -803,11 +803,11 @@ int main ( int argc, char** argv )
 
 #ifdef ANDROID
     // special Android code needed for record audio permission handling
-    auto recaudio_check = QtAndroidPrivate::checkPermission( QString ( "android.permission.RECORD_AUDIO" ) );
+    auto recaudio_check = QtAndroidPrivate::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
 
     if ( recaudio_check.result() == QtAndroidPrivate::PermissionResult::Denied )
     {
-        auto recaudio_reqPermRes = QtAndroidPrivate::requestPermission( "android.permission.RECORD_AUDIO" );
+        auto recaudio_reqPermRes = QtAndroidPrivate::requestPermission ( "android.permission.RECORD_AUDIO" );
 
         if ( recaudio_reqPermRes.result() == QtAndroidPrivate::PermissionResult::Denied )
         {

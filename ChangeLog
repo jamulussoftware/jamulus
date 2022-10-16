@@ -27,12 +27,23 @@
 
 - Windows: Upgraded JACK build to use JACK 1.9.21 (#2665).
   (contributed by @ann0see)
-
+  
+- Translations have been updated (#2835, #2852, #2856):
+  * Chinese, by @BLumia
+  * Dutch, by @henkdegroot
+  * French, by @trebmuh, @jujudusud, J. Lavoie
+  * German, by @ann0see, Hans Spoerer
+  * Korean, by @MarongHappy
+  * Norwegian Bokmål, by @comradekingu
+  * Polish, by @SeeLook
+  * Portuguese European, by @mansil
+  * Slovak, by @jose1711
+  * Spanish, by @ignotus666
+  * Swedish, by @tygyh, @comradekingu
+  (mainly translated on @weblate by multiple translators)
+  
 - Translation: Added nb_NO App translation (#2849, #2852).
   (contributed by @comradekingu, @ann0see)
-
-- Translations updated from Hosted Weblate (#2835, #2852, #2856).
-  (contributed by @weblate and translators)
 
 - Refactoring: Moved around files to clean up the repository (#2822, #2824, #2834, #2838).
   (contributed by @ann0see)

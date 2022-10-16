@@ -28,7 +28,7 @@
 - Windows: Upgraded JACK build to use JACK 1.9.21 (#2665).
   (contributed by @ann0see)
   
-- Translations have been updated (#2835, #2852, #2856):
+- Translations have been updated (#2835, #2852, #2856, #2915):
   (mainly translated on @weblate by multiple translators)
   * Chinese, by @BLumia
   * Dutch, by @henkdegroot

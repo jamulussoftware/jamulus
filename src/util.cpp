@@ -703,6 +703,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                               "</b></p>"
                               "<p>Miguel de Matos (<a href=\"https://github.com/Snayler\">Snayler</a>)</p>"
                               "<p>Melcon Moraes (<a href=\"https://github.com/melcon\">melcon</a>)</p>"
+                              "<p>Manuela Silva (<a href=\"https://hosted.weblate.org/user/mansil/\">mansil</a>)</p>"
+                              "<p>gbonaspetti (<a href=\"https://hosted.weblate.org/user/gbonaspetti/\">gbonaspetti</a>)</p>"
                               "<p><b>" +
                               tr ( "Dutch" ) +
                               "</b></p>"
@@ -726,17 +728,23 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                               tr ( "Swedish" ) +
                               "</b></p>"
                               "<p>Daniel (<a href=\"https://github.com/genesisproject2020\">genesisproject2020</a>)</p>"
+                              "<p>tygyh (<a href=\"https://github.com/tygyh\">tygyh</a>)</p>"
+                              "<p>Allan Nordhøy (<a href=\"https://hosted.weblate.org/user/kingu/\">kingu</a>)</p>"
                               "<p><b>" +
                               tr ( "Korean" ) +
                               "</b></p>"
                               "<p>Jung-Kyu Park (<a href=\"https://github.com/bagjunggyu\">bagjunggyu</a>)</p>"
+                              "<p>이정희 (<a href=\"https://hosted.weblate.org/user/MarongHappy/\">MarongHappy</a>)</p>"
                               "<p><b>" +
                               tr ( "Slovak" ) +
                               "</b></p>"
                               "<p>Jose Riha (<a href=\"https://github.com/jose1711\">jose1711</a>)</p>" +
                               "<p><b>" + tr ( "Simplified Chinese" ) +
                               "</b></p>"
-                              "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>" );
+                              "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>" +
+                              "<p><b>" + tr ( "Norwegian Bokmål" ) +
+                              "</b></p>"
+                              "<p>Allan Nordhøy (<a href=\"https://hosted.weblate.org/user/kingu/\">kingu</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );

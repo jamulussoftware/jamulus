@@ -27,11 +27,192 @@
 
 CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* parent ) : QObject ( parent )
 {
+
+    /// @rpc_notification jamulusserver/chatReceived
+    /// @brief Emitted when a chat text is received. Server-generated chats are not included in this notification.
+    /// @param {string} params.id       - The channel ID generating the chat.
+    /// @param {string} params.name     - The user name generating the chat.
+    /// @param {number} params.address  - The address of the channel generating the chat.
+    /// @param {string} params.stamp    - The date/time of the chat (ISO 8601 format, in server configured timezone).
+    /// @param {string} params.text     - The chat text.
+    connect ( pServer, &CServer::rpcChatSent, [=] ( int ChanID, QString ChanName, QString ChanAddr, QString ChatStamp, QString strChatText ) {
+        pRpcServer->BroadcastNotification ( "jamulusserver/chatReceived",
+                                            QJsonObject{
+                                                { "id", ChanID },
+                                                { "name", ChanName },
+                                                { "address", ChanAddr },
+                                                { "stamp", ChatStamp },
+                                                { "text", strChatText },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusserver/clientDisconnect
+    /// @brief Emitted when a client disconnects from the server.
+    /// @result {string} result.id - The client channel id.
+    /// @result {string} result.name - The client’s name.
+    /// @result {string} result.address - The client’s address (ip:port).
+    QObject::connect ( pServer, &CServer::rpcClientDisconnected, [=] ( int ChanID, QString ChanName, CHostAddress ChanAddr ) {
+        pRpcServer->BroadcastNotification ( "jamulusserver/clientDisconnect",
+                                            QJsonObject{
+                                                { "id", ChanID },
+                                                { "name", ChanName },
+                                                { "address", ChanAddr.toString ( CHostAddress::SM_IP_PORT ) },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusserver/clientConnect
+    /// @brief Emitted when a new client connects to the server.
+    /// @result {string} result.name - The client’s name.
+    /// @result {string} result.address - The client’s address (ip:port).
+    /// @result {number} result.instrumentCode - The id of the user's instrument.
+    /// @result {number} result.instrumentName - The text name of the user's instrument.
+    /// @result {string} result.city - The user's city name.
+    /// @result {number} result.countryCode - The id of the country specified by the user (see QLocale::Country).
+    /// @result {number} result.countryName - The text name of the user's country (see QLocale::Country).
+    /// @result {number} result.skillLevelCode - The user's skill level id.
+    /// @result {number} result.skillLevelName - The user's skill level text name.
+    QObject::connect ( &CRpcLogging::getInstance(), &CRpcLogging::rpcClientConnected, [=] ( CChannel& channel ) {
+        CChannelCoreInfo chanInfo = channel.GetChanInfo();
+
+        // We have to find the channel id ourselves.
+        int ChanID = pServer->FindChannel ( channel.GetAddress() );
+
+        pRpcServer->BroadcastNotification ( "jamulusserver/clientConnect",
+                                            QJsonObject{
+                                                { "id", ChanID },
+                                                { "name", chanInfo.strName },
+                                                { "address", channel.GetAddress().toString ( CHostAddress::SM_IP_PORT ) },
+                                                { "instrumentCode", chanInfo.iInstrument },
+                                                { "instrumentName", CInstPictures::GetName ( chanInfo.iInstrument ) },
+                                                { "city", chanInfo.strCity },
+                                                { "countryCode", chanInfo.eCountry },
+                                                { "countryName", QLocale::countryToString ( chanInfo.eCountry ) },
+                                                { "skillLevelCode", chanInfo.eSkillLevel },
+                                                { "skillLevelName", SkillLevelToString ( chanInfo.eSkillLevel ) },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusserver/clientInfoChanged
+    /// @brief Emitted when a client changes their information (name, instrument, country, city, skill level).
+    /// @result {string} result.oldName - The client’s name just prior to this change.
+    /// @result {string} result.name - The client’s name (new one, if change).
+    /// @result {string} result.address - The client’s address (ip:port).
+    /// @result {number} result.instrumentCode - The id of the user's instrument.
+    /// @result {number} result.instrumentName - The text name of the user's instrument.
+    /// @result {string} result.city - The user's city name.
+    /// @result {number} result.countryCode - The id of the country specified by the user (see QLocale::Country).
+    /// @result {number} result.countryName - The text name of the user's country (see QLocale::Country).
+    /// @result {number} result.skillLevelCode - The user's skill level id.
+    /// @result {number} result.skillLevelName - The user's skill level text name.
+
+    QObject::connect ( &CRpcLogging::getInstance(), &CRpcLogging::rpcUpdateConnection, [=] ( CChannel& channel, const QString strOldName ) {
+        CChannelCoreInfo chanInfo = channel.GetChanInfo();
+
+        // We have to find the channel id ourselves.
+        int ChanID = pServer->FindChannel ( channel.GetAddress() );
+
+        pRpcServer->BroadcastNotification ( "jamulusserver/clientInfoChanged",
+                                            QJsonObject{
+                                                { "id", ChanID },
+                                                { "oldName", strOldName },
+                                                { "name", chanInfo.strName },
+                                                { "address", channel.GetAddress().toString ( CHostAddress::SM_IP_PORT ) },
+                                                { "instrumentCode", chanInfo.iInstrument },
+                                                { "instrumentName", CInstPictures::GetName ( chanInfo.iInstrument ) },
+                                                { "city", chanInfo.strCity },
+                                                { "countryCode", chanInfo.eCountry },
+                                                { "countryName", QLocale::countryToString ( chanInfo.eCountry ) },
+                                                { "skillLevelCode", chanInfo.eSkillLevel },
+                                                { "skillLevelName", SkillLevelToString ( chanInfo.eSkillLevel ) },
+                                            } );
+    } );
+
     // API doc already part of CClientRpc
     pRpcServer->HandleMethod ( "jamulus/getMode", [=] ( const QJsonObject& params, QJsonObject& response ) {
         QJsonObject result{ { "mode", "server" } };
         response["result"] = result;
         Q_UNUSED ( params );
+    } );
+
+    /// @rpc_method jamulusserver/sendBroadcastChat
+    /// @brief Send a chat message to all connected clients.  Messages from the server are not escaped and can contain HTML as defined for
+    /// QTextBrowser.
+    /// @param {string} params.textMessage - The chat message to be sent.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusserver/sendBroadcastChat", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto chatMessage = params["textMessage"];
+
+        if ( !chatMessage.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: textMessage is not a string" );
+            return;
+        }
+
+        pServer->CreateAndSendChatTextForAllConChannels ( -1, QString ( chatMessage.toString() ) );
+
+        response["result"] = "ok";
+    } );
+
+    /// @rpc_method jamulusserver/sendChat
+    /// @brief Send a chat message to the channel identified by a specificc address. The chat should be pre-escaped if necessary prior to calling this
+    /// method.
+    /// @param {string} params.address - The full channel IP address as a string XXX.XXX.XXX.XXX:PPPPP
+    /// @param {string} params.textMessage - The chat message to be sent.
+    /// @result {string} result - "ok" if channel could be determined and message sent.
+    pRpcServer->HandleMethod ( "jamulusserver/sendChat", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto strAddress  = params["address"];
+        auto chatMessage = params["textMessage"];
+
+        bool                      boolStatus;
+        CVector<CHostAddress>     vecHostAddresses;
+        CVector<QString>          vecsName;
+        CVector<int>              veciJitBufNumFrames;
+        CVector<int>              veciNetwFrameSizeFact;
+        CVector<CChannelCoreInfo> vecChanInfo;
+
+        if ( !chatMessage.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: textMessage is not a string" );
+            return;
+        }
+
+        if ( !strAddress.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: address is not a string" );
+            return;
+        }
+
+        // Find the channel number from the address provided.
+
+        pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufNumFrames, veciNetwFrameSizeFact, vecChanInfo );
+
+        const int iNumChannels = vecHostAddresses.Size();
+
+        // fill list with connected clients
+        for ( int i = 0; i < iNumChannels; i++ )
+        {
+            if ( vecHostAddresses[i].InetAddr == QHostAddress ( static_cast<quint32> ( 0 ) ) )
+            {
+                continue;
+            }
+
+            if ( QString ( vecHostAddresses[i].toString ( CHostAddress::SM_IP_PORT ) ) == QString ( strAddress.toString() ) )
+            {
+                // Send chat to channel
+
+                boolStatus = pServer->CreateAndSendPreEscapedChatText ( i, QString ( chatMessage.toString() ) );
+
+                if ( boolStatus )
+                {
+                    response["result"] = "ok";
+                    return;
+                }
+                else
+                    break;
+            }
+        }
+
+        response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrChannelNotFound, "Could not locate channel from address" );
     } );
 
     /// @rpc_method jamulusserver/getRecorderStatus

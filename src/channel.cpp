@@ -22,6 +22,7 @@
  *
 \******************************************************************************/
 
+#include "rpcserver.h" // Here and not in channel.h to avoid circular issue
 #include "channel.h"
 
 // CChannel implementation *****************************************************
@@ -337,9 +338,23 @@ void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
     // apply value (if a new channel or different from previous one)
     if ( !bIsIdentified || ChannelInfo != NChanInf )
     {
-        bIsIdentified = true; // Indicate we have received channel info
+
+        QString strOldName = ChannelInfo.strName;
 
         ChannelInfo = NChanInf;
+
+#ifndef NO_JSON_RPC
+        if ( !bIsIdentified )
+        {
+            CRpcLogging::getInstance().rpcOnNewConnection ( *this );
+        }
+        else
+        {
+            CRpcLogging::getInstance().rpcOnUpdateConnection ( *this, strOldName );
+        }
+#endif
+
+        bIsIdentified = true; // Indicate we have received channel info
 
         // fire message that the channel info has changed
         emit ChanInfoHasChanged();

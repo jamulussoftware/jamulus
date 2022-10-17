@@ -62,6 +62,7 @@ public:
     // Our errors
     static const int iErrAuthenticationFailed = 400;
     static const int iErrUnauthenticated      = 401;
+    static const int iErrChannelNotFound      = 402;
 
 private:
     int         iPort;
@@ -81,4 +82,40 @@ private:
 
 protected slots:
     void OnNewConnection();
+};
+
+/**
+ * Singleton class that will be used as a consolidation point
+ * for signals emitting from multi-instance classes (ie, channels)
+ */
+
+#include "channel.h"
+
+class CRpcLogging : public QObject
+{
+
+    Q_OBJECT
+
+private:
+    CRpcLogging() {}
+
+    bool rpcEnabled = false;
+
+public:
+    static CRpcLogging& getInstance()
+    {
+        static CRpcLogging instance;
+        return instance;
+    }
+
+    bool isRpcEnabled() { return rpcEnabled; }
+    void setRpcEnabled() { rpcEnabled = true; }
+    void setRpcDisabled() { rpcEnabled = false; }
+
+    void rpcOnNewConnection ( CChannel& channel ) { emit rpcClientConnected ( channel ); }
+    void rpcOnUpdateConnection ( CChannel& channel, const QString strOldName ) { emit rpcUpdateConnection ( channel, strOldName ); }
+
+signals:
+    void rpcClientConnected ( CChannel& channel );
+    void rpcUpdateConnection ( CChannel& channel, const QString strOldName );
 };

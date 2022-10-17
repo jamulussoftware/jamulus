@@ -27,6 +27,7 @@
 
 #include "server.h"
 #include "rpcserver.h"
+#include "channel.h"
 
 /* Classes ********************************************************************/
 class CServerRpc : public QObject

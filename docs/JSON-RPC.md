@@ -297,6 +297,41 @@ Results:
 | result | string | Always "acknowledged".   To check if the recording was restarted or if there is any error, call `jamulusserver/getRecorderStatus` again. |
 
 
+### jamulusserver/sendBroadcastChat
+
+Send a chat message to all connected clients.  Messages from the server are not escaped and can contain HTML as defined for  QTextBrowser.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.textMessage | string | The chat message to be sent. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
+### jamulusserver/sendChat
+
+Send a chat message to the channel identified by a specificc address. The chat should be pre-escaped if necessary prior to calling this  method.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.address | string | The full channel IP address as a string XXX.XXX.XXX.XXX:PPPPP |
+| params.textMessage | string | The chat message to be sent. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | "ok" if channel could be determined and message sent. |
+
+
 ### jamulusserver/setRecordingDirectory
 
 Sets the server recording directory.
@@ -443,5 +478,72 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params | object | No parameters (empty object). |
+
+
+### jamulusserver/chatReceived
+
+Emitted when a chat text is received. Server-generated chats are not included in this notification.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.id | string | The channel ID generating the chat. |
+| params.name | string | The user name generating the chat. |
+| params.address | number | The address of the channel generating the chat. |
+| params.stamp | string | The date/time of the chat (ISO 8601 format, in server configured timezone). |
+| params.text | string | The chat text. |
+
+
+### jamulusserver/clientConnect
+
+Emitted when a new client connects to the server.
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result.name | string | The client’s name. |
+| result.address | string | The client’s address (ip:port). |
+| result.instrumentCode | number | The id of the user's instrument. |
+| result.instrumentName | number | The text name of the user's instrument. |
+| result.city | string | The user's city name. |
+| result.countryCode | number | The id of the country specified by the user (see QLocale::Country). |
+| result.countryName | number | The text name of the user's country (see QLocale::Country). |
+| result.skillLevelCode | number | The user's skill level id. |
+| result.skillLevelName | number | The user's skill level text name. |
+
+
+### jamulusserver/clientDisconnect
+
+Emitted when a client disconnects from the server.
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result.id | string | The client channel id. |
+| result.name | string | The client’s name. |
+| result.address | string | The client’s address (ip:port). |
+
+
+### jamulusserver/clientInfoChanged
+
+Emitted when a client changes their information (name, instrument, country, city, skill level).
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result.oldName | string | The client’s name just prior to this change. |
+| result.name | string | The client’s name (new one, if change). |
+| result.address | string | The client’s address (ip:port). |
+| result.instrumentCode | number | The id of the user's instrument. |
+| result.instrumentName | number | The text name of the user's instrument. |
+| result.city | string | The user's city name. |
+| result.countryCode | number | The id of the country specified by the user (see QLocale::Country). |
+| result.countryName | number | The text name of the user's country (see QLocale::Country). |
+| result.skillLevelCode | number | The user's skill level id. |
+| result.skillLevelName | number | The user's skill level text name. |
 
 

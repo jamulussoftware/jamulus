@@ -858,6 +858,9 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             // and emit the client disconnected signal
             if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
             {
+                // RPC - send the channel object
+                emit rpcClientDisconnected ( iCurChanID, vecChannels[iCurChanID].GetName(), vecChannels[iCurChanID].GetAddress() );
+
                 if ( JamController.GetRecordingEnabled() )
                 {
                     emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
@@ -1231,27 +1234,68 @@ void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
     vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
 }
 
+bool CServer::CreateAndSendPreEscapedChatText ( const int iChannel, const QString& strChatText )
+{
+    if ( iChannel < 0 || iChannel > iMaxNumChannels )
+        return false;
+
+    if ( vecChannels[iChannel].IsConnected() )
+    {
+        vecChannels[iChannel].CreateChatTextMes ( strChatText );
+        return true;
+    }
+
+    return false;
+}
+
 void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText )
 {
+    QString strActualMessageText;
+
     // Create message which is sent to all connected clients -------------------
-    // get client name
-    QString ChanName = vecChannels[iCurChanID].GetName();
 
-    // add time and name of the client at the beginning of the message text and
-    // use different colors
-    QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
+    QString strChanName = ( iCurChanID < 0 ) ? "** Server **" : vecChannels[iCurChanID].GetName();
+    QString strChanAddr = ( iCurChanID < 0 ) ? "" : vecChannels[iCurChanID].GetAddress().toString ( CHostAddress::SM_IP_PORT );
+    QString strChatTime = QDateTime::currentDateTime().toString ( Qt::ISODate );
 
-    const QString strActualMessageText = "<font color=\"" + sCurColor + "\">(" + QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" +
-                                         ChanName.toHtmlEscaped() + "</b></font> " + strChatText.toHtmlEscaped();
+    if ( iCurChanID < 0 ) // A server-push chat message
+    {
+        // Server can send HTML messages, so no escaping here.
+
+        // The decision to prepend "Server Message" to the message here is for consistency of src location.
+
+        strActualMessageText =
+            "<font color=\"#f0f\">(" + QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>Server Message:</b></font> " + strChatText;
+    }
+    else
+    {
+
+        // add time and name of the client at the beginning of the message text and
+        // use different colors
+
+        QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
+
+        strActualMessageText = "<font color=\"" + sCurColor + "\">(" + QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" +
+                               strChanName.toHtmlEscaped() + "</b></font> " + strChatText.toHtmlEscaped();
+    }
 
     // Send chat text to all connected clients ---------------------------------
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
+        // TODO: This section can be refactored to call CreateAndSendPreEscapedChatText if desired
+        // as the code was duplicated there...
+
         if ( vecChannels[i].IsConnected() )
         {
             // send message
             vecChannels[i].CreateChatTextMes ( strActualMessageText );
         }
+    }
+
+    // Only emit signal for client generated chats, not server generated
+    if ( iCurChanID >= 0 )
+    {
+        emit rpcChatSent ( iCurChanID, strChanName, strChanAddr, strChatTime, strChatText );
     }
 }
 
@@ -1490,6 +1534,7 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
             vecsName[i]              = vecChannels[i].GetName();
             veciJitBufNumFrames[i]   = vecChannels[i].GetSockBufNumFrames();
             veciNetwFrameSizeFact[i] = vecChannels[i].GetNetwFrameSizeFact();
+            vecChanInfo[i]           = vecChannels[i].GetChanInfo();
         }
     }
 }

@@ -77,47 +77,52 @@
         <translation>portugalčina</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="707"/>
+        <location filename="../util.cpp" line="709"/>
         <source>Dutch</source>
         <translation>holandčina</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="712"/>
+        <location filename="../util.cpp" line="714"/>
         <source>Italian</source>
         <translation>taliančina</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="716"/>
+        <location filename="../util.cpp" line="718"/>
         <source>German</source>
         <translation>nemčina</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="721"/>
+        <location filename="../util.cpp" line="723"/>
         <source>Polish</source>
         <translation>poľština</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="726"/>
+        <location filename="../util.cpp" line="728"/>
         <source>Swedish</source>
         <translation>švédčina</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="730"/>
+        <location filename="../util.cpp" line="734"/>
         <source>Korean</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="734"/>
+        <location filename="../util.cpp" line="739"/>
         <source>Slovak</source>
         <translation>slovenčina</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="737"/>
+        <location filename="../util.cpp" line="742"/>
         <source>Simplified Chinese</source>
         <translation>zjednodušená čínština</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="745"/>
+        <source>Norwegian Bokmål</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="753"/>
         <source>About %1</source>
         <translation>O programe %1</translation>
     </message>
@@ -1482,7 +1487,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <location filename="../clientsettingsdlg.cpp" line="470"/>
         <location filename="../clientsettingsdlg.cpp" line="609"/>
         <location filename="../clientsettingsdlg.cpp" line="617"/>
-        <location filename="../util.cpp" line="1192"/>
+        <location filename="../util.cpp" line="1200"/>
         <source>None</source>
         <translation>Nenastavené</translation>
     </message>
@@ -1899,247 +1904,247 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation type="vanished">Ok</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1195"/>
+        <location filename="../util.cpp" line="1203"/>
         <source>Drum Set</source>
         <translation>Bicie</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1198"/>
+        <location filename="../util.cpp" line="1206"/>
         <source>Djembe</source>
         <translation>Djembe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1201"/>
+        <location filename="../util.cpp" line="1209"/>
         <source>Electric Guitar</source>
         <translation>Elektrická gitara</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1204"/>
+        <location filename="../util.cpp" line="1212"/>
         <source>Acoustic Guitar</source>
         <translation>Akustická gitara</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1207"/>
+        <location filename="../util.cpp" line="1215"/>
         <source>Bass Guitar</source>
         <translation>Basová gitara</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1210"/>
+        <location filename="../util.cpp" line="1218"/>
         <source>Keyboard</source>
         <translation>Keyboard</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1213"/>
+        <location filename="../util.cpp" line="1221"/>
         <source>Synthesizer</source>
         <translation>Syntetizátor</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1216"/>
+        <location filename="../util.cpp" line="1224"/>
         <source>Grand Piano</source>
         <translation>Koncertné krídlo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1219"/>
+        <location filename="../util.cpp" line="1227"/>
         <source>Accordion</source>
         <translation>Akordeón</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1222"/>
+        <location filename="../util.cpp" line="1230"/>
         <source>Vocal</source>
         <translation>Vokály</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1225"/>
+        <location filename="../util.cpp" line="1233"/>
         <source>Microphone</source>
         <translation>Mikrofón</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1228"/>
+        <location filename="../util.cpp" line="1236"/>
         <source>Harmonica</source>
         <translation>Ústna harmonika</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1231"/>
+        <location filename="../util.cpp" line="1239"/>
         <source>Trumpet</source>
         <translation>Trúbka</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1234"/>
+        <location filename="../util.cpp" line="1242"/>
         <source>Trombone</source>
         <translation>Trombón</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1237"/>
+        <location filename="../util.cpp" line="1245"/>
         <source>French Horn</source>
         <translation>Lesný roh</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1240"/>
+        <location filename="../util.cpp" line="1248"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1243"/>
+        <location filename="../util.cpp" line="1251"/>
         <source>Saxophone</source>
         <translation>Saxofón</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1246"/>
+        <location filename="../util.cpp" line="1254"/>
         <source>Clarinet</source>
         <translation>Klarinet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1249"/>
+        <location filename="../util.cpp" line="1257"/>
         <source>Flute</source>
         <translation>Flauta</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1252"/>
+        <location filename="../util.cpp" line="1260"/>
         <source>Violin</source>
         <translation>Husle</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1255"/>
+        <location filename="../util.cpp" line="1263"/>
         <source>Cello</source>
         <translation>Violončelo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1258"/>
+        <location filename="../util.cpp" line="1266"/>
         <source>Double Bass</source>
         <translation>Kontrabas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1261"/>
+        <location filename="../util.cpp" line="1269"/>
         <source>Recorder</source>
         <translation>Rekordér</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1264"/>
+        <location filename="../util.cpp" line="1272"/>
         <source>Streamer</source>
         <translation>Streamovač</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1267"/>
+        <location filename="../util.cpp" line="1275"/>
         <source>Listener</source>
         <translation>Poslucháč</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1270"/>
+        <location filename="../util.cpp" line="1278"/>
         <source>Guitar+Vocal</source>
         <translation>Gitara+Vokály</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1273"/>
+        <location filename="../util.cpp" line="1281"/>
         <source>Keyboard+Vocal</source>
         <translation>Klávesnica+Vokály</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1276"/>
+        <location filename="../util.cpp" line="1284"/>
         <source>Bodhran</source>
         <translation>Bodhran</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1279"/>
+        <location filename="../util.cpp" line="1287"/>
         <source>Bassoon</source>
         <translation>Fagot</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1282"/>
+        <location filename="../util.cpp" line="1290"/>
         <source>Oboe</source>
         <translation>Hoboj</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1285"/>
+        <location filename="../util.cpp" line="1293"/>
         <source>Harp</source>
         <translation>Harfa</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1288"/>
+        <location filename="../util.cpp" line="1296"/>
         <source>Viola</source>
         <translation>Viola</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1291"/>
+        <location filename="../util.cpp" line="1299"/>
         <source>Congas</source>
         <translation>Kongy</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1294"/>
+        <location filename="../util.cpp" line="1302"/>
         <source>Bongo</source>
         <translation>Bongo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1297"/>
+        <location filename="../util.cpp" line="1305"/>
         <source>Vocal Bass</source>
         <translation>Basové vokály</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1300"/>
+        <location filename="../util.cpp" line="1308"/>
         <source>Vocal Tenor</source>
         <translation>Tenorové vokály</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1303"/>
+        <location filename="../util.cpp" line="1311"/>
         <source>Vocal Alto</source>
         <translation>Altové vokály</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1306"/>
+        <location filename="../util.cpp" line="1314"/>
         <source>Vocal Soprano</source>
         <translation>Sopránové vokály</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1309"/>
+        <location filename="../util.cpp" line="1317"/>
         <source>Banjo</source>
         <translation>Bendžo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1312"/>
+        <location filename="../util.cpp" line="1320"/>
         <source>Mandolin</source>
         <translation>Mandolína</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1315"/>
+        <location filename="../util.cpp" line="1323"/>
         <source>Ukulele</source>
         <translation>Ukulele</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1318"/>
+        <location filename="../util.cpp" line="1326"/>
         <source>Bass Ukulele</source>
         <translation>Basové ukulele</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1321"/>
+        <location filename="../util.cpp" line="1329"/>
         <source>Vocal Baritone</source>
         <translation>Barytónové vokály</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1324"/>
+        <location filename="../util.cpp" line="1332"/>
         <source>Vocal Lead</source>
         <translation>Hlavný spev</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1327"/>
+        <location filename="../util.cpp" line="1335"/>
         <source>Mountain Dulcimer</source>
         <translation>Horský dulcimer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1330"/>
+        <location filename="../util.cpp" line="1338"/>
         <source>Scratching</source>
         <translation>Skrečing</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1333"/>
+        <location filename="../util.cpp" line="1341"/>
         <source>Rapping</source>
         <translation>Repovanie</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1336"/>
+        <location filename="../util.cpp" line="1344"/>
         <source>Vibraphone</source>
         <translation>Vibrafón</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1339"/>
+        <location filename="../util.cpp" line="1347"/>
         <source>Conductor</source>
         <translation>Dirigent</translation>
     </message>
@@ -2616,33 +2621,33 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../util.cpp" line="787"/>
+        <location filename="../util.cpp" line="795"/>
         <source>&amp;Help</source>
         <translation>Po&amp;mocník</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="794"/>
-        <location filename="../util.cpp" line="799"/>
+        <location filename="../util.cpp" line="802"/>
+        <location filename="../util.cpp" line="807"/>
         <source>Getting &amp;Started...</source>
         <translation>&amp;Začíname...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="795"/>
+        <location filename="../util.cpp" line="803"/>
         <source>Software &amp;Manual...</source>
         <translation>&amp;Manuál programu...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="802"/>
+        <location filename="../util.cpp" line="810"/>
         <source>What&apos;s &amp;This</source>
         <translation>Čo j&amp;e toto</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="804"/>
+        <location filename="../util.cpp" line="812"/>
         <source>&amp;About Jamulus...</source>
         <translation>&amp;O programe Jamulus...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="806"/>
+        <location filename="../util.cpp" line="814"/>
         <source>About &amp;Qt...</source>
         <translation>O &amp;Qt...</translation>
     </message>
@@ -2659,12 +2664,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../util.cpp" line="863"/>
+        <location filename="../util.cpp" line="871"/>
         <source>Restart Required</source>
         <translation>Vyžadovaný reštart</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="863"/>
+        <location filename="../util.cpp" line="871"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>Aby sa zmeny nastavenia jazyku prejavili, musíte reštartovať aplikáciu.</translation>
     </message>
@@ -2676,22 +2681,22 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation type="vanished">&amp;Súhlasím s licenčnými podmienkami vyššie</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="763"/>
+        <location filename="../util.cpp" line="771"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>Tento server od vás pred pripojením vyžaduje akceptovanie podmienok. Prosím, prečítajte si ich v okne chatu.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="764"/>
+        <location filename="../util.cpp" line="772"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Prečítal som si podmienky a &amp;akceptujem ich.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="765"/>
+        <location filename="../util.cpp" line="773"/>
         <source>Accept</source>
         <translation>Akceptovať</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="766"/>
+        <location filename="../util.cpp" line="774"/>
         <source>Decline</source>
         <translation>Odmietnuť</translation>
     </message>
@@ -3936,13 +3941,13 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation type="vanished">Softvér na džemovanie cez internet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1600"/>
+        <location filename="../util.cpp" line="1608"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, Verzia %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1617"/>
+        <location filename="../util.cpp" line="1625"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Vydané pod licenciou GNU General Public License verzie 2 alebo novšej (GPLv2)</translation>
     </message>

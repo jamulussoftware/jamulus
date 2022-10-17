@@ -229,12 +229,13 @@ win32 {
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {
+    # By default build for all the ABIs
     # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
 
     # get ANDROID_ABIS from environment - passed directly to qmake
     ANDROID_ABIS = $$getenv(ANDROID_ABIS)
 
-    # if ANDROID_ABIS is passed as env var to qmake, will override this
+    # Optional: if ANDROID_ABIS is passed as env var to qmake, will override this
     # !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
 
     # Experiments show likely better results with Android 10+ devices
@@ -242,15 +243,27 @@ win32 {
     ANDROID_TARGET_SDK_VERSION = 32
     ANDROID_VERSION_NAME = $$VERSION
 
-    # date-based unique value - prevent clashes in Play Store build numbering
-    !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(date +%s | cut -c 2-)
+    ## FOR LOCAL DEV USE on Windows/WAL:
+    equals(QMAKE_HOST.os, Windows) {
+        ANDROID_ABIS = x86_64
+        ANDROID_VERSION_CODE = 1234 # dummy int value
+    } else {
+        # date-based unique integer value for Play Store submission
+        !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(date +%s | cut -c 2-)
+    }
 
     # make separate version codes for each abi build otherwise Play Store rejects
     contains (ANDROID_ABIS, armeabi-v7a) {
         ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 1)
         message("Setting for armeabi-v7a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
-    } else {
-        message("Setting for armv8a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+    contains (ANDROID_ABIS, x86) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 2)
+        message("Setting for x86: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+    contains (ANDROID_ABIS, x86_64) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 3)
+        message("Setting for x86_64: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
     }
 
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
@@ -259,8 +272,7 @@ win32 {
     CONFIG += c++17
 
     # For device recording permissions
-    # Qt6:
-    QT += core-private
+    QT += core-private # for Qt6
 
     # enabled only for debugging on android devices
     #DEFINES += ANDROIDDEBUG

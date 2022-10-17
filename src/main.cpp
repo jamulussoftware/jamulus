@@ -99,6 +99,7 @@ int main ( int argc, char** argv )
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     int          iJsonRpcPortNumber          = INVALID_PORT;
+    QString      strJsonRpcBindIP            = DEFAULT_JSON_RPC_LISTEN_ADDRESS;
     quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strMIDISetup                = "";
@@ -206,6 +207,15 @@ int main ( int argc, char** argv )
             strJsonRpcSecretFileName = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- JSON-RPC secret file: %1" ).arg ( strJsonRpcSecretFileName ) );
             CommandLineOptions << "--jsonrpcsecretfile";
+            continue;
+        }
+
+        // JSON-RPC bind address ------------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "--jsonrpcbindip", "--jsonrpcbindip", strArgument ) )
+        {
+            strJsonRpcBindIP = QString ( strArgument );
+            qInfo() << qUtf8Printable ( QString ( "- JSON-RPC will bind to: %1 if enabled" ).arg ( strJsonRpcBindIP ) );
+            CommandLineOptions << "--jsonrpcbindip";
             continue;
         }
 
@@ -783,6 +793,31 @@ int main ( int argc, char** argv )
                 strServerBindIP = "";
             }
         }
+
+#ifndef NO_JSON_RPC
+        //
+        // strJsonRpcBind address defaults to loopback and should not be empty, but
+        // in the odd chance that an empty IP is passed, we'll check for it here.
+
+        if ( strJsonRpcBindIP.trimmed().isEmpty() )
+        {
+            qCritical() << qUtf8Printable ( QString ( "JSON-RPC is enabled but no bind address was provided, exiting." ) );
+            exit ( 1 );
+        }
+
+        // This means of testing the validity of IP addresses is far from perfect but
+        // we do it here as an upfront check.  The downstream network calls will error
+        // out on malformed addresses not caught here.
+        {
+            QHostAddress InetAddr;
+            if ( !InetAddr.setAddress ( strJsonRpcBindIP ) )
+            {
+                qCritical() << qUtf8Printable ( QString ( "The JSON-RPC address specified is not valid, exiting. " ) );
+                exit ( 1 );
+            }
+        }
+
+#endif
     }
 
     // Application/GUI setup ---------------------------------------------------
@@ -880,7 +915,7 @@ int main ( int argc, char** argv )
         qWarning() << "- JSON-RPC: This interface is experimental and is subject to breaking changes even on patch versions "
                       "(not subject to semantic versioning) during the initial phase.";
 
-        pRpcServer = new CRpcServer ( pApp, iJsonRpcPortNumber, strJsonRpcSecret );
+        pRpcServer = new CRpcServer ( pApp, strJsonRpcBindIP, iJsonRpcPortNumber, strJsonRpcSecret );
         if ( !pRpcServer->Start() )
         {
             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) );
@@ -1072,6 +1107,7 @@ QString UsageArguments ( char** argv )
            "      --jsonrpcsecretfile\n"
            "                        path to a single-line file which contains a freely\n"
            "                        chosen secret to authenticate JSON-RPC users.\n"
+           "      --jsonrpcbindip   optional network address to bind RPC server. Defaults to 127.0.0.1 (IPv4 only, IPv6 not tested).\n"
            "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
            "                        (see the Jamulus website to enable QoS on Windows)\n"
            "  -t, --notranslation   disable translation (use English language)\n"

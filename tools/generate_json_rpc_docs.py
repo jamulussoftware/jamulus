@@ -204,6 +204,9 @@ It can be generated like this:
 $ openssl rand -base64 10 > /file/with/a/secret.txt
 ```
 
+The JSON-RPC server defaults to listening on the local loopback network interface (127.0.0.1).  This can be optionally changed by using the `--jsonrpcbindip <ip address>` command line option. **IPv4 only. IPv6 support has not been tested.**
+
+
 ## Wire protocol
 
 The JSON-RPC server is based on the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) protocol, using [streaming newline-delimited JSON over TCP](https://clue.engineering/2018/introducing-reactphp-ndjson) as the transport. There are three main types of messages being exchanged:

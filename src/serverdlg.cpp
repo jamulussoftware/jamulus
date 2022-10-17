@@ -679,14 +679,15 @@ void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType
 
 void CServerDlg::OnTimer()
 {
-    CVector<CHostAddress> vecHostAddresses;
-    CVector<QString>      vecsName;
-    CVector<int>          veciJitBufNumFrames;
-    CVector<int>          veciNetwFrameSizeFact;
+    CVector<CHostAddress>     vecHostAddresses;
+    CVector<QString>          vecsName;
+    CVector<int>              veciJitBufNumFrames;
+    CVector<int>              veciNetwFrameSizeFact;
+    CVector<CChannelCoreInfo> vecChanInfo;
 
     ListViewMutex.lock();
     {
-        pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufNumFrames, veciNetwFrameSizeFact );
+        pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufNumFrames, veciNetwFrameSizeFact, vecChanInfo );
 
         // we assume that all vectors have the same length
         const int iNumChannels = vecHostAddresses.Size();

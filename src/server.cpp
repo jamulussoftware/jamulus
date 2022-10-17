@@ -1469,16 +1469,18 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf, const int iNum
     return bNewConnection;
 }
 
-void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-                               CVector<QString>&      vecsName,
-                               CVector<int>&          veciJitBufNumFrames,
-                               CVector<int>&          veciNetwFrameSizeFact )
+void CServer::GetConCliParam ( CVector<CHostAddress>&     vecHostAddresses,
+                               CVector<QString>&          vecsName,
+                               CVector<int>&              veciJitBufNumFrames,
+                               CVector<int>&              veciNetwFrameSizeFact,
+                               CVector<CChannelCoreInfo>& vecChanInfo )
 {
     // init return values
     vecHostAddresses.Init ( iMaxNumChannels );
     vecsName.Init ( iMaxNumChannels );
     veciJitBufNumFrames.Init ( iMaxNumChannels );
     veciNetwFrameSizeFact.Init ( iMaxNumChannels );
+    vecChanInfo.Init ( iMaxNumChannels );
 
     // check all possible channels
     for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -1490,6 +1492,7 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
             vecsName[i]              = vecChannels[i].GetName();
             veciJitBufNumFrames[i]   = vecChannels[i].GetSockBufNumFrames();
             veciNetwFrameSizeFact[i] = vecChannels[i].GetNetwFrameSizeFact();
+            vecChanInfo[i]           = vecChannels[i].GetChanInfo();
         }
     }
 }

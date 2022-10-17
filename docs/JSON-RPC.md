@@ -234,12 +234,17 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
+| result.connections | number | The number of active connections. |
 | result.clients | array | The list of connected clients. |
 | result.clients[*].id | number | The client’s channel id. |
 | result.clients[*].address | string | The client’s address (ip:port). |
 | result.clients[*].name | string | The client’s name. |
 | result.clients[*].jitterBufferSize | number | The client’s jitter buffer size. |
 | result.clients[*].channels | number | The number of audio channels of the client. |
+| result.clients[*].instrumentCode | number | The id of the instrument for this channel. |
+| result.clients[*].city | string | The city name provided by the user for this channel. |
+| result.clients[*].countryName | number | The text name of the country specified by the user for this channel (see QLocale::Country). |
+| result.clients[*].skillLevelCode | number | The skill level id provided by the user for this channel. |
 
 
 ### jamulusserver/getRecorderStatus

@@ -116,10 +116,11 @@ public:
 
     int GetNumberOfConnectedClients();
 
-    void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-                          CVector<QString>&      vecsName,
-                          CVector<int>&          veciJitBufNumFrames,
-                          CVector<int>&          veciNetwFrameSizeFact );
+    void GetConCliParam ( CVector<CHostAddress>&     vecHostAddresses,
+                          CVector<QString>&          vecsName,
+                          CVector<int>&              veciJitBufNumFrames,
+                          CVector<int>&              veciNetwFrameSizeFact,
+                          CVector<CChannelCoreInfo>& vecChanInfo );
 
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 

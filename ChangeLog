@@ -1,5 +1,5 @@
 
-### 3.9.0dev <- NOTE: the release version number will be 3.9.1 ###
+### 3.9.1 (2022-10-17) ###
 
 - Client: Improved performance of GUI when someone joins or leaves a server (#2738).
   (contributed by @ann0see)
@@ -27,7 +27,7 @@
 
 - Windows: Upgraded JACK build to use JACK 1.9.21 (#2665).
   (contributed by @ann0see)
-  
+
 - Translations have been updated (#2835, #2852, #2856, #2915):
   (mainly translated on @weblate by multiple translators)
   * Chinese, by @BLumia
@@ -41,7 +41,7 @@
   * Slovak, by @jose1711
   * Spanish, by @ignotus666
   * Swedish, by @tygyh, @comradekingu
-  
+
 - Translation: Added nb_NO App translation (#2849, #2852).
   (contributed by @comradekingu, @ann0see)
 

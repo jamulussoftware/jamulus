@@ -37,6 +37,9 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     setupUi ( this );
 
+    // always start on the main tab
+    tabWidget->setCurrentIndex ( 0 );
+
     // set window title
     setWindowTitle ( tr ( "%1 Server", "%1 is the name of the main application" ).arg ( APP_NAME ) );
 

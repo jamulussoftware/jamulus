@@ -68,7 +68,7 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>13</height>
+               <height>10</height>
               </size>
              </property>
             </spacer>
@@ -78,115 +78,148 @@
              <property name="title">
               <string>Musician's Profile</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_10">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_9">
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_8">
-                  <item>
-                   <widget class="QLabel" name="plblAlias">
-                    <property name="text">
-                     <string>Alias/Name</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="plblInstrument">
-                    <property name="text">
-                     <string>Instrument</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="plblCountry">
-                    <property name="text">
-                     <string>Country/Region</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="plblCity">
-                    <property name="text">
-                     <string>City</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="plblSkill">
-                    <property name="text">
-                     <string>Skill</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_9">
-                  <item>
-                   <widget class="QLineEdit" name="pedtAlias">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>150</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="pcbxInstrument">
-                    <property name="minimumSize">
-                     <size>
-                      <width>150</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="pcbxCountry">
-                    <property name="minimumSize">
-                     <size>
-                      <width>150</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="pedtCity">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>150</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="pcbxSkill">
-                    <property name="minimumSize">
-                     <size>
-                      <width>150</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
+             <layout class="QFormLayout" name="formLayout_2">
+              <item row="0" column="0">
+               <widget class="QLabel" name="plblAlias">
+                <property name="text">
+                 <string>Alias/Name</string>
+                </property>
+                <property name="margin">
+                 <number>1</number>
+                </property>
+                <property name="indent">
+                 <number>0</number>
+                </property>
+                <property name="buddy">
+                 <cstring>pedtAlias</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="pedtAlias">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="plblInstrument">
+                <property name="text">
+                 <string>Instrument</string>
+                </property>
+                <property name="margin">
+                 <number>1</number>
+                </property>
+                <property name="indent">
+                 <number>0</number>
+                </property>
+                <property name="buddy">
+                 <cstring>pcbxInstrument</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="pcbxInstrument">
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="plblCountry">
+                <property name="text">
+                 <string>Country/Region</string>
+                </property>
+                <property name="margin">
+                 <number>1</number>
+                </property>
+                <property name="indent">
+                 <number>0</number>
+                </property>
+                <property name="buddy">
+                 <cstring>pcbxCountry</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QComboBox" name="pcbxCountry">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="plblCity">
+                <property name="text">
+                 <string>City</string>
+                </property>
+                <property name="margin">
+                 <number>1</number>
+                </property>
+                <property name="indent">
+                 <number>0</number>
+                </property>
+                <property name="buddy">
+                 <cstring>pedtCity</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="pedtCity">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="plblSkill">
+                <property name="text">
+                 <string>Skill</string>
+                </property>
+                <property name="margin">
+                 <number>1</number>
+                </property>
+                <property name="indent">
+                 <number>0</number>
+                </property>
+                <property name="buddy">
+                 <cstring>pcbxSkill</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QComboBox" name="pcbxSkill">
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -199,7 +232,7 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>40</height>
+               <height>10</height>
               </size>
              </property>
             </spacer>
@@ -209,95 +242,112 @@
              <property name="title">
               <string>User Interface</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_11">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_5">
-                  <item>
-                   <widget class="QLabel" name="lblSkin">
-                    <property name="text">
-                     <string>Skin</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblMeterStyle">
-                    <property name="text">
-                     <string>Meter Style</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblLanguage">
-                    <property name="text">
-                     <string>Language</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblMixerRows">
-                    <property name="text">
-                     <string>Mixer Rows</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblAudioAlerts">
-                    <property name="text">
-                     <string>Audio Alerts</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_7">
-                  <item>
-                   <widget class="QComboBox" name="cbxSkin"/>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="cbxMeterStyle"/>
-                  </item>
-                  <item>
-                   <widget class="CLanguageComboBox" name="cbxLanguage">
-                    <property name="minimumSize">
-                     <size>
-                      <width>150</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QSpinBox" name="spnMixerRows">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                    </property>
-                    <property name="minimum">
-                     <number>1</number>
-                    </property>
-                    <property name="maximum">
-                     <number>8</number>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QCheckBox" name="chbAudioAlerts">
-                    <property name="text">
-                     <string>Enable</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
+             <layout class="QFormLayout" name="formLayout">
+              <item row="0" column="0">
+               <widget class="QLabel" name="lblSkin">
+                <property name="text">
+                 <string>Skin</string>
+                </property>
+                <property name="margin">
+                 <number>1</number>
+                </property>
+                <property name="indent">
+                 <number>0</number>
+                </property>
+                <property name="buddy">
+                 <cstring>cbxSkin</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="cbxSkin"/>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lblMeterStyle">
+                <property name="text">
+                 <string>Meter Style</string>
+                </property>
+                <property name="margin">
+                 <number>1</number>
+                </property>
+                <property name="indent">
+                 <number>0</number>
+                </property>
+                <property name="buddy">
+                 <cstring>cbxMeterStyle</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="cbxMeterStyle"/>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="lblLanguage">
+                <property name="text">
+                 <string extracomment="Consider adding &quot;(Lang)&quot; as a suffix to ensure that users who selected the wrong language find the correct control">Language</string>
+                </property>
+                <property name="margin">
+                 <number>1</number>
+                </property>
+                <property name="indent">
+                 <number>0</number>
+                </property>
+                <property name="buddy">
+                 <cstring>cbxLanguage</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="CLanguageComboBox" name="cbxLanguage">
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="lblMixerRows">
+                <property name="text">
+                 <string>Mixer Rows</string>
+                </property>
+                <property name="margin">
+                 <number>1</number>
+                </property>
+                <property name="indent">
+                 <number>0</number>
+                </property>
+                <property name="buddy">
+                 <cstring>spnMixerRows</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QSpinBox" name="spnMixerRows">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>8</number>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QCheckBox" name="chbAudioAlerts">
+                <property name="text">
+                 <string>Audio Alerts</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -310,7 +360,7 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>14</height>
+               <height>10</height>
               </size>
              </property>
             </spacer>
@@ -341,6 +391,9 @@
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
@@ -446,52 +499,62 @@
                </widget>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="_3">
-                <property name="spacing">
-                 <number>3</number>
+               <layout class="QFormLayout" name="formLayout_5">
+                <property name="horizontalSpacing">
+                 <number>9</number>
                 </property>
-                <item>
-                 <layout class="QVBoxLayout" name="_4">
-                  <item>
-                   <widget class="QLabel" name="lblLInChan">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>L</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblRInChan">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>R</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="_5">
-                  <property name="spacing">
-                   <number>3</number>
+                <property name="verticalSpacing">
+                 <number>9</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="lblLInChan">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
-                  <item>
-                   <widget class="QComboBox" name="cbxLInChan"/>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="cbxRInChan"/>
-                  </item>
-                 </layout>
+                  <property name="text">
+                   <string>L</string>
+                  </property>
+                  <property name="margin">
+                   <number>1</number>
+                  </property>
+                  <property name="indent">
+                   <number>0</number>
+                  </property>
+                  <property name="buddy">
+                   <cstring>cbxLInChan</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="cbxLInChan"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="lblRInChan">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>R</string>
+                  </property>
+                  <property name="margin">
+                   <number>1</number>
+                  </property>
+                  <property name="indent">
+                   <number>0</number>
+                  </property>
+                  <property name="buddy">
+                   <cstring>cbxRInChan</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="cbxRInChan"/>
                 </item>
                </layout>
               </item>
@@ -503,52 +566,62 @@
                </widget>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="_6">
-                <property name="spacing">
-                 <number>3</number>
+               <layout class="QFormLayout" name="formLayout_4">
+                <property name="horizontalSpacing">
+                 <number>9</number>
                 </property>
-                <item>
-                 <layout class="QVBoxLayout" name="_7">
-                  <item>
-                   <widget class="QLabel" name="lblLOutChan">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>L</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblROutChan">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>R</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="_8">
-                  <property name="spacing">
-                   <number>3</number>
+                <property name="verticalSpacing">
+                 <number>9</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="lblLOutChan">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
-                  <item>
-                   <widget class="QComboBox" name="cbxLOutChan"/>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="cbxROutChan"/>
-                  </item>
-                 </layout>
+                  <property name="text">
+                   <string>L</string>
+                  </property>
+                  <property name="margin">
+                   <number>1</number>
+                  </property>
+                  <property name="indent">
+                   <number>0</number>
+                  </property>
+                  <property name="buddy">
+                   <cstring>cbxLOutChan</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="cbxLOutChan"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="lblROutChan">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>R</string>
+                  </property>
+                  <property name="margin">
+                   <number>1</number>
+                  </property>
+                  <property name="indent">
+                   <number>0</number>
+                  </property>
+                  <property name="buddy">
+                   <cstring>cbxROutChan</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="cbxROutChan"/>
                 </item>
                </layout>
               </item>
@@ -572,34 +645,50 @@
             </spacer>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
-               <item>
-                <widget class="QLabel" name="lblAudioChannels">
-                 <property name="text">
-                  <string>Audio Channels</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="lblAudioQuality">
-                 <property name="text">
-                  <string>Audio Quality</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+            <layout class="QFormLayout" name="formLayout_3">
+             <property name="horizontalSpacing">
+              <number>9</number>
+             </property>
+             <property name="verticalSpacing">
+              <number>9</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblAudioChannels">
+               <property name="text">
+                <string>Audio Channels</string>
+               </property>
+               <property name="margin">
+                <number>1</number>
+               </property>
+               <property name="indent">
+                <number>0</number>
+               </property>
+               <property name="buddy">
+                <cstring>cbxAudioChannels</cstring>
+               </property>
+              </widget>
              </item>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout">
-               <item>
-                <widget class="QComboBox" name="cbxAudioChannels"/>
-               </item>
-               <item>
-                <widget class="QComboBox" name="cbxAudioQuality"/>
-               </item>
-              </layout>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="cbxAudioChannels"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="lblAudioQuality">
+               <property name="text">
+                <string>Audio Quality</string>
+               </property>
+               <property name="margin">
+                <number>1</number>
+               </property>
+               <property name="indent">
+                <number>0</number>
+               </property>
+               <property name="buddy">
+                <cstring>cbxAudioQuality</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QComboBox" name="cbxAudioQuality"/>
              </item>
             </layout>
            </item>
@@ -684,6 +773,9 @@
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_13">
+           <property name="spacing">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QGroupBox" name="grbJitterBuffer">
              <property name="title">
@@ -841,7 +933,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="chbEnableOPUS64">
+            <widget class="QCheckBox" name="chbSmallNetworkBuffers">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -849,7 +941,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Enable Small Network Buffers</string>
+              <string>Small Network Buffers</string>
              </property>
             </widget>
            </item>
@@ -956,7 +1048,7 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>10</width>
+               <width>0</width>
                <height>20</height>
               </size>
              </property>
@@ -974,8 +1066,8 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>17</width>
-                 <height>20</height>
+                 <width>20</width>
+                 <height>40</height>
                 </size>
                </property>
               </spacer>
@@ -985,10 +1077,19 @@
                <property name="text">
                 <string>Custom Directories:</string>
                </property>
+               <property name="buddy">
+                <cstring>cbxCustomDirectories</cstring>
+               </property>
               </widget>
              </item>
              <item>
               <widget class="QComboBox" name="cbxCustomDirectories">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>80</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="editable">
                 <bool>true</bool>
                </property>
@@ -1002,7 +1103,7 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>13</height>
+                 <height>40</height>
                 </size>
                </property>
               </spacer>
@@ -1012,12 +1113,22 @@
                <property name="text">
                 <string>New Client Level</string>
                </property>
+               <property name="buddy">
+                <cstring>edtNewClientLevel</cstring>
+               </property>
               </widget>
              </item>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
-                <widget class="QLineEdit" name="edtNewClientLevel"/>
+                <widget class="QLineEdit" name="edtNewClientLevel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QLabel" name="lblPercentUnit">
@@ -1046,6 +1157,9 @@
                <property name="text">
                 <string>Input Boost</string>
                </property>
+               <property name="buddy">
+                <cstring>cbxInputBoost</cstring>
+               </property>
               </widget>
              </item>
              <item>
@@ -1065,13 +1179,6 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="lblDetectFeedback">
-               <property name="text">
-                <string>Feedback Protection</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QCheckBox" name="chbDetectFeedback">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1080,7 +1187,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Enable</string>
+                <string>Feedback Protection</string>
                </property>
               </widget>
              </item>
@@ -1106,7 +1213,7 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>10</width>
+               <width>0</width>
                <height>20</height>
               </size>
              </property>
@@ -1150,6 +1257,9 @@
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="buddy">
+                   <cstring>sldAudioPan</cstring>
                   </property>
                  </widget>
                 </item>
@@ -1288,6 +1398,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>tabSettings</tabstop>
   <tabstop>pedtAlias</tabstop>
   <tabstop>pcbxInstrument</tabstop>
   <tabstop>pcbxCountry</tabstop>
@@ -1312,7 +1423,7 @@
   <tabstop>chbAutoJitBuf</tabstop>
   <tabstop>sldNetBuf</tabstop>
   <tabstop>sldNetBufServer</tabstop>
-  <tabstop>chbEnableOPUS64</tabstop>
+  <tabstop>chbSmallNetworkBuffers</tabstop>
   <tabstop>cbxCustomDirectories</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxInputBoost</tabstop>

@@ -74,6 +74,9 @@
            <property name="text">
             <string>Directory</string>
            </property>
+           <property name="buddy">
+            <cstring>cbxDirectoryType</cstring>
+           </property>
           </widget>
          </item>
          <item>
@@ -109,44 +112,45 @@
          <property name="title">
           <string>My Server Info</string>
          </property>
-         <layout class="QHBoxLayout">
-          <item>
-           <layout class="QVBoxLayout">
-            <item>
-             <widget class="QLabel" name="lblServerName">
-              <property name="text">
-               <string>Name</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="lblLocationCity">
-              <property name="text">
-               <string>Location: City</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="lblLocationCountry">
-              <property name="text">
-               <string>Location: Region</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblServerName">
+            <property name="text">
+             <string>Name</string>
+            </property>
+            <property name="buddy">
+             <cstring>edtServerName</cstring>
+            </property>
+           </widget>
           </item>
-          <item>
-           <layout class="QVBoxLayout">
-            <item>
-             <widget class="QLineEdit" name="edtServerName"/>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="edtLocationCity"/>
-            </item>
-            <item>
-             <widget class="QComboBox" name="cbxLocationCountry"/>
-            </item>
-           </layout>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="edtServerName"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblLocationCity">
+            <property name="text">
+             <string>Location: City</string>
+            </property>
+            <property name="buddy">
+             <cstring>edtLocationCity</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="edtLocationCity"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblLocationCountry">
+            <property name="text">
+             <string>Location: Region</string>
+            </property>
+            <property name="buddy">
+             <cstring>cbxLocationCountry</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="cbxLocationCountry"/>
           </item>
          </layout>
         </widget>
@@ -156,7 +160,7 @@
          <item>
           <widget class="QCheckBox" name="chbEnableRecorder">
            <property name="text">
-            <string>Enable Jam Recorder</string>
+            <string>Jam Recorder</string>
            </property>
           </widget>
          </item>
@@ -189,6 +193,9 @@
            <property name="text">
             <string>Session</string>
            </property>
+           <property name="buddy">
+            <cstring>edtCurrentSessionDir</cstring>
+           </property>
           </widget>
          </item>
          <item>
@@ -204,6 +211,9 @@
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Chat Window Welcome (HTML/CSS Supported)</string>
+         </property>
+         <property name="buddy">
+          <cstring>tedWelcomeMessage</cstring>
          </property>
         </widget>
        </item>
@@ -225,15 +235,55 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="lblLanguage">
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="4" column="1">
+          <widget class="QCheckBox" name="chbStartOnOSStart">
            <property name="text">
-            <string extracomment="Consider add &quot;(Lang)&quot; as a suffix to ensure that users who selected the wrong language find the correct button">Language</string>
+            <string>Start Minimized on Windows Start</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="pbtRecordingDir">
+           <property name="text">
+            <string>Recording Directory</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="lblLanguage">
+           <property name="text">
+            <string extracomment="Consider adding &quot;(Lang)&quot; as a suffix to ensure that users who selected the wrong language find the correct control">Language</string>
+           </property>
+           <property name="buddy">
+            <cstring>cbxLanguage</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="lblCustomDirectory">
+           <property name="text">
+            <string>Custom Directory address</string>
+           </property>
+           <property name="buddy">
+            <cstring>edtCustomDirectory</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QToolButton" name="tbtClearServerListPersistence"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="edtRecordingDir">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="edtCustomDirectory"/>
+         </item>
+         <item row="0" column="1">
           <widget class="CLanguageComboBox" name="cbxLanguage">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -243,77 +293,31 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout">
-         <item>
-          <widget class="QPushButton" name="pbtRecordingDir">
-           <property name="text">
-            <string>Recording Directory</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="edtRecordingDir">
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
+         <item row="1" column="2">
           <widget class="QToolButton" name="tbtClearRecordingDir"/>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout">
-         <item>
-          <widget class="QLabel" name="lblCustomDirectory">
-           <property name="text">
-            <string>Custom Directory address</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="edtCustomDirectory"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout">
-         <item>
-          <widget class="QPushButton" name="pbtServerListPersistence">
-           <property name="text">
-            <string>Server List Filename</string>
-           </property>
-          </widget>
-         </item>
-         <item>
+         <item row="3" column="1">
           <widget class="QLineEdit" name="edtServerListPersistence">
            <property name="readOnly">
             <bool>true</bool>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QToolButton" name="tbtClearServerListPersistence"/>
+         <item row="3" column="0">
+          <widget class="QPushButton" name="pbtServerListPersistence">
+           <property name="text">
+            <string>Server List Filename</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QCheckBox" name="chbEnableDelayPanning">
+           <property name="text">
+            <string>Delay panning</string>
+           </property>
+          </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="chbStartOnOSStart">
-         <property name="text">
-          <string>Start Minimized on Windows Start</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="chbEnableDelayPanning">
-         <property name="text">
-          <string>Enable delay panning</string>
-         </property>
-        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer">
@@ -356,8 +360,8 @@
   <tabstop>edtLocationCity</tabstop>
   <tabstop>cbxLocationCountry</tabstop>
   <tabstop>chbEnableRecorder</tabstop>
-  <tabstop>edtCurrentSessionDir</tabstop>
   <tabstop>pbtNewRecording</tabstop>
+  <tabstop>edtCurrentSessionDir</tabstop>
   <tabstop>tedWelcomeMessage</tabstop>
   <tabstop>cbxLanguage</tabstop>
   <tabstop>pbtRecordingDir</tabstop>

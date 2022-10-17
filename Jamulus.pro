@@ -243,7 +243,7 @@ win32 {
     ANDROID_TARGET_SDK_VERSION = 32
     ANDROID_VERSION_NAME = $$VERSION
 
-    ## FOR LOCAL DEV USE on Windows/WAL:
+    ## For local Dev use on Windows/WSA:
     equals(QMAKE_HOST.os, Windows) {
         ANDROID_ABIS = x86_64
         ANDROID_VERSION_CODE = 1234 # dummy int value

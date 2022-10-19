@@ -4,7 +4,7 @@
 
 <!-- Explain what your PR does -->
 
-CHANGELOG: <!-- Insert a short, end-user understandable sentence in past tense right here, e.g.: Client: Fixed crash when clicking the connect button too fast -->
+CHANGELOG: <!-- Insert a short, end-user understandable sentence in past tense right here, e.g.: Client: Fixed crash when clicking the connect button too fast or SKIP if the change should not be documented in the ChangeLog -->
 
 **Context: Fixes an issue?**
 

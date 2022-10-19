@@ -477,7 +477,11 @@ void CClient::StartDelayTimer()
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     CHostAddress HostAddress;
+#ifdef CLIENT_NO_SRV_CONNECT
     if ( NetworkUtil().ParseNetworkAddress ( strNAddr, HostAddress, bEnableIPv6 ) )
+#else
+    if ( NetworkUtil().ParseNetworkAddressWithSrvDiscovery ( strNAddr, HostAddress, bEnableIPv6 ) )
+#endif
     {
         // apply address to the channel
         Channel.SetAddress ( HostAddress );

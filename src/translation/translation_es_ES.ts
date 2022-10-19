@@ -151,7 +151,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Noruego bokmål</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>

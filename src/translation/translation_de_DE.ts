@@ -3551,7 +3551,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation type="unfinished">Oder wähle &quot;%1&quot; und gebe in der Registerkarte &quot;Optionen&quot; eine benutzerdefinierte Verzeichnisadresse an, um dich bei einem benutzerdefinierten Verzeichnis zu registrieren.</translation>
+        <translation type="unfinished">Oder wählen Sie &quot;%1&quot; und geben Sie auf der Registerkarte &quot;Optionen&quot; eine benutzerdefinierte Verzeichnisadresse an, um sich bei einem benutzerdefinierten Verzeichnis zu registrieren.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="67"/>

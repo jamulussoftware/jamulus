@@ -30,7 +30,7 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>Qt cross-platform application framework</source>
-        <translation></translation>
+        <translation>Framework QT multi piattaforma</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="607"/>
@@ -132,7 +132,7 @@
     <message>
         <location filename="../util.cpp" line="734"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Coreano</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="739"/>
@@ -147,7 +147,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Norvegese bokmål</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>
@@ -278,7 +278,7 @@
         <location filename="../audiomixerboard.cpp" line="162"/>
         <location filename="../audiomixerboard.cpp" line="252"/>
         <source>Mute</source>
-        <translation>Mute</translation>
+        <translation>Muto</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="49"/>
@@ -902,7 +902,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="170"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation>Il ritardo della scheda audio(ovvero  il buffer size) è troppo basso (vedere i Settaggi della Scheda).</translation>
+        <translation>Il ritardo della scheda audio(ovvero la &quot;dimensione del buffer&quot;) è impostato su un valore troppo piccolo (vedere i Settaggi della Scheda).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="174"/>
@@ -1086,7 +1086,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="184"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation>Se questo indicatore LED  diventa rosso , il flusso audio si interromperà.</translation>
+        <translation>Se questo indicatore LED diventa rosso , il flusso audio subirà delle interruzioni.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="191"/>
@@ -1194,7 +1194,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
-        <translation>Delay</translation>
+        <translation>Ritardo</translation>
     </message>
     <message>
         <source>Buffers</source>
@@ -1362,7 +1362,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="137"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
-        <translation>Nel caso in cui vengano usati i  driver ASIO4ALL bisogna sapere che questi di solito introducono 10-30 ms di ritardo aggiuntivo. Si consiglia di usare driver ASIO nativi per la scheda audio in uso.</translation>
+        <translation>Nel caso in cui vengano usati i driver ASIO4ALL bisogna sapere che questi di solito introducono 10-30 ms di ritardo aggiuntivo. Si consiglia di usare driver ASIO nativi per la scheda audio in uso.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="142"/>
@@ -2011,7 +2011,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Audio Upstream Rate</source>
-        <translation>Audio Upstream Rate</translation>
+        <translation>Banda per l&apos;upstream Audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
@@ -2400,7 +2400,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1254"/>
         <source>Clarinet</source>
-        <translation>Clarinet</translation>
+        <translation>Clarinetto</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1257"/>
@@ -2415,7 +2415,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1263"/>
         <source>Cello</source>
-        <translation>Cello</translation>
+        <translation>Violoncello</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1266"/>
@@ -2425,7 +2425,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1269"/>
         <source>Recorder</source>
-        <translation>Recorder</translation>
+        <translation>Registratore</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1272"/>
@@ -2450,7 +2450,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1284"/>
         <source>Bodhran</source>
-        <translation>Bodhran</translation>
+        <translation>Bodran</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1287"/>
@@ -2475,7 +2475,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1299"/>
         <source>Congas</source>
-        <translation>Congas</translation>
+        <translation>Conga</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1302"/>
@@ -3620,7 +3620,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../serverdlg.cpp" line="205"/>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename</source>
-        <translation>Filename lista dei server</translation>
+        <translation>Nome del file della lista dei server</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
@@ -3645,7 +3645,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear Server List Filename</source>
-        <translation>Cancella lista Server</translation>
+        <translation>Cancella file della lista dei Server</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="223"/>

@@ -1038,6 +1038,7 @@ public:
 class NetworkUtil
 {
 public:
+    static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 );
     static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 
     static QString      FixAddress ( const QString& strAddress );

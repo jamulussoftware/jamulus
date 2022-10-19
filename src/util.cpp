@@ -889,6 +889,31 @@ QSize CMinimumStackedLayout::sizeHint() const
 * Other Classes                                                                *
 \******************************************************************************/
 // Network utility functions ---------------------------------------------------
+bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 )
+{
+    // try to get host by name, assuming
+    // that the string contains a valid host name string or IP address
+    const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
+
+    if ( HostInfo.error() != QHostInfo::NoError )
+    {
+        // qInfo() << qUtf8Printable ( QString ( "Invalid hostname" ) );
+        return false; // invalid address
+    }
+
+    foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
+    {
+        // qInfo() << qUtf8Printable ( QString ( "Resolved network address to %1 for proto %2" ) .arg ( HostAddr.toString() ) .arg (
+        // HostAddr.protocol() ) );
+        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bEnableIPv6 && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
+        {
+            InetAddr = HostAddr;
+            return true;
+        }
+    }
+    return false;
+}
+
 bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
 {
     QHostAddress InetAddr;
@@ -970,31 +995,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
             return false; // invalid address
         }
 
-        // try to get host by name, assuming
-        // that the string contains a valid host name string
-        const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
-
-        if ( HostInfo.error() != QHostInfo::NoError )
-        {
-            // qInfo() << qUtf8Printable ( QString ( "Invalid hostname" ) );
-            return false; // invalid address
-        }
-
-        bool bFoundAddr = false;
-
-        foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
-        {
-            // qInfo() << qUtf8Printable ( QString ( "Resolved network address to %1 for proto %2" ) .arg ( HostAddr.toString() ) .arg (
-            // HostAddr.protocol() ) );
-            if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bEnableIPv6 && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
-            {
-                InetAddr   = HostAddr;
-                bFoundAddr = true;
-                break;
-            }
-        }
-
-        if ( !bFoundAddr )
+        if ( !ParseNetworkAddressString ( strAddress, InetAddr, bEnableIPv6 ) )
         {
             // no valid address found
             // qInfo() << qUtf8Printable ( QString ( "No IP address found for hostname" ) );

@@ -68,7 +68,7 @@ We are getting ready for the ${RELEASE} release. No further changes to translata
 
 We would be happy if you updated the Jamulus software translations for **${LANG}** by **${DEADLINE}**.
 
-Please
+Please either [update the translations on Hosted Weblate](https://hosted.weblate.org/projects/jamulus/) or use Git:
 - Update your fork from `jamulussoftware/jamulus` `master` and create a working branch
 - Update translations using Qt Linguist in your fork,
 - Commit and push your changes and reference this Issue,
@@ -85,7 +85,9 @@ ${EXTRA_TEXT}${MULTIPLE_TRANSLATORS_TEXT}
 
 Further documentation can be found in [TRANSLATING.md](https://github.com/jamulussoftware/jamulus/blob/master/docs/TRANSLATING.md).
 
-Thanks for contributing to Jamulus!'
+Thanks for contributing to Jamulus!
+
+<a href="https://hosted.weblate.org/engage/jamulus/"><img src="https://hosted.weblate.org/widgets/jamulus/-/jamulus-app/multi-auto.svg" alt="Translation status" /></a>'
 
 # shellcheck disable=SC2016  # shellcheck can't know that this will be used with envsubst, so verbatim variables are correct here.
 BODY_TEMPLATE_WEB='Hi ${SPLIT_TRANSLATORS},
@@ -94,10 +96,10 @@ We are getting ready for the ${RELEASE} release and have created the [${TRANSLAT
 
 We would be happy if you updated the translations for **${LANG}** by **${DEADLINE}**.
 
-Please
+Please either [update the translations on Hosted Weblate](https://hosted.weblate.org/projects/jamulus/), or use Git:
 
 - Start your work in your fork on a branch based on jamuluswebsite'"'"'s `${TRANSLATE_BRANCH}` branch.
-- Update the language-specific files using your favorite editor (or directly on Github),
+- Update the language-specific files using your favourite editor (or directly on GitHub),
 - New/changed images are listed at the end of this issue. [Generate new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your image `.inc` files.
 - Commit and push your changes to your fork,
 - Open a Pull Request with your translations to the **${TRANSLATE_BRANCH}** branch with the subject `${TITLE}`,

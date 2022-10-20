@@ -87,7 +87,7 @@ The ChangeLog must be updated for each new feature or bug fix. Please include a 
 
 If you are a first-time contributor/translator, please add your name to the contributors/translators list in the About dialog of Jamulus (see in `src/util.cpp` in the constructor function `CAboutDlg::CAboutDlg()`).
 
-### Merging Pull Requests
+### Merging pull requests
 
 The git master branch is protected and requires at least two reviews by the main developers before the pull request can be merged. Any of the main developers can initiate the merge if a pull request receives at least two positive reviews.
 

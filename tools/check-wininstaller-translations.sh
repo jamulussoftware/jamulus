@@ -2,7 +2,7 @@
 set -eu -o pipefail
 
 BASE_DIR=src/translation/wininstaller/
-BASE_LANG=en_UK
+BASE_LANG=en_GB
 INSTALLERLNG=installerlng.nsi
 BASE_LANGSTRINGS=$(grep LangString "${BASE_DIR}/${BASE_LANG}.nsi" | cut -d' ' -f2)
 EXIT=0

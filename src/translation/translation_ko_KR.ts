@@ -119,7 +119,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>노르웨이어, 부크몰</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>

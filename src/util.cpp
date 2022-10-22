@@ -1460,7 +1460,7 @@ QLocale::Country CLocale::GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode
     {
         QStringList vstrLocParts = qLocale.name().split ( "_" );
 
-        if ( vstrLocParts.size() >= 2 && vstrLocParts.at ( 1 ).toLower() == sTwoLetterCode )
+        if ( vstrLocParts.size() >= 2 && vstrLocParts.at ( 1 ).toLower() == sTwoLetterCode.toLower() )
         {
             return qLocale.country();
         }

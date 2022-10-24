@@ -25,7 +25,7 @@ LangString ASIO_DRIVER_SUB ${LANG_SIMPCHINESE} \
      "要使用 ${APP_NAME}，您需要一个 ASIO 驱动"
 
 LangString ASIO_DRIVER_EXPLAIN ${LANG_SIMPCHINESE} \
-      "${APP_NAME} 需要 ASIO 驱动以提供低延迟的音频。更多信息："
+     "${APP_NAME} 需要 ASIO 驱动以提供低延迟的音频。更多信息："
 
 LangString ASIO_DRIVER_MORE_INFO ${LANG_SIMPCHINESE} \
      "jamulus.io 上的关于 ASIO 的更多信息"

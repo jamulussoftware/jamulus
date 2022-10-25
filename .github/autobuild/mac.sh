@@ -59,7 +59,7 @@ prepare_signing() {
     security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
     # Tell Github Workflow that we need notarization & stapling:
-    echo "::set-output name=macos_signed::true"
+    echo "macos_signed=true" >> "$GITHUB_OUTPUT"
     return 0
 }
 
@@ -80,7 +80,7 @@ pass_artifact_to_job() {
     artifact="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact}"
-    echo "::set-output name=artifact_1::${artifact}"
+    echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 }
 
 case "${1:-}" in

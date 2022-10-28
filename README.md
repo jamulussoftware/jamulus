@@ -2,6 +2,10 @@
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
+## Contents of this feature branch
+
+This branch contains changes to the CI to automatically upload the Android build to the PlayStore. For more information see danryu's Pull Request: [#2909](https://github.com/jamulussoftware/jamulus/pull/2909). This is just a PoC and needs further work. Further development can be based on this branch.
+
 # Jamulus - Internet Jam Session Software
 
 <a href="https://jamulus.io/"><img align="left" width="102" height="102" src="https://jamulus.io/assets/img/jamulus-icon-2020.svg"/></a>

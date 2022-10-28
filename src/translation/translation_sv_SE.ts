@@ -3209,133 +3209,107 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation type="unfinished">Katalog</translation>
+        <translation type="obsolete">Katalog</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="61"/>
-        <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../serverdlg.cpp" line="62"/>
-        <source>Select one of the genres to register with that directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../serverdlg.cpp" line="63"/>
-        <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../serverdlg.cpp" line="67"/>
-        <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../serverdlg.cpp" line="73"/>
-        <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../serverdlg.cpp" line="81"/>
+        <location filename="../serverdlg.cpp" line="80"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="134"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="138"/>
+        <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox.</source>
         <translation type="unfinished">Inspelningen har stängts av av kryssrutan UI.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="140"/>
+        <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
         <translation type="unfinished">Inspelningen har stängts av, antingen genom att kryssrutan UI eller SIGUSR2 har tagits emot.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="145"/>
+        <location filename="../serverdlg.cpp" line="144"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="176"/>
+        <location filename="../serverdlg.cpp" line="175"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="183"/>
+        <location filename="../serverdlg.cpp" line="182"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="195"/>
+        <location filename="../serverdlg.cpp" line="194"/>
         <source>Custom Directory address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="196"/>
+        <location filename="../serverdlg.cpp" line="195"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="203"/>
         <source>Server List Filename dialog push button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="205"/>
-        <location filename="../serverdlg.cpp" line="213"/>
+        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="206"/>
+        <location filename="../serverdlg.cpp" line="205"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="212"/>
+        <location filename="../serverdlg.cpp" line="211"/>
         <source>Server List Filename text box (read-only)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="214"/>
+        <location filename="../serverdlg.cpp" line="213"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="221"/>
+        <location filename="../serverdlg.cpp" line="220"/>
         <source>Clear the server list file name button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="222"/>
+        <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear Server List Filename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="223"/>
+        <location filename="../serverdlg.cpp" line="222"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="227"/>
+        <location filename="../serverdlg.cpp" line="226"/>
         <source>Start Minimized on Operating System Start</source>
         <translation>Starta Minimerad vid operativsystemets start</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="228"/>
+        <location filename="../serverdlg.cpp" line="227"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
         <translation>Om kryssrutan Starta minimerad på operativsystemets start är markerad kommer servern att startas när operativsystemet startar och minimeras automatiskt till en ikon för systemaktivitetsfält.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
+        <location filename="../serverdlg.cpp" line="736"/>
         <source>Now a directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3356,7 +3330,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Om kryssrutan Gör min server publik är markerad, registrerar den här servern sig själv på katalogservern så att alla användare av Jamulus kan se servern i anslutningsdialogens serverlista och ansluta till den. Registreringen av servern förnyas regelbundet för att se till att alla servrar i listan är tillgängliga.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="80"/>
+        <location filename="../serverdlg.cpp" line="79"/>
         <source>Register Server Status</source>
         <translation>Serverstatus om servern är registrerad</translation>
     </message>
@@ -3389,32 +3363,32 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Kombineringsknapp för val av serverlista</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="87"/>
+        <location filename="../serverdlg.cpp" line="86"/>
         <source>Server Name</source>
         <translation>Servernamn</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="88"/>
+        <location filename="../serverdlg.cpp" line="87"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
         <translation>Servernamnet identifierar din server i anslutningsdialogens serverlista hos klienterna.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="94"/>
+        <location filename="../serverdlg.cpp" line="93"/>
         <source>Server name line edit</source>
         <translation>Ändra servernamnet</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="97"/>
+        <location filename="../serverdlg.cpp" line="96"/>
         <source>Location City</source>
         <translation>Stad</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="98"/>
+        <location filename="../serverdlg.cpp" line="97"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Här kan man visa serverns plats. Om en stad anges kommer det att visas i listan för anslutningsdialogserver på klienterna.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="105"/>
+        <location filename="../serverdlg.cpp" line="104"/>
         <source>City where the server is located line edit</source>
         <translation>Ändra var servern befinner sig</translation>
     </message>
@@ -3431,28 +3405,28 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Kombineringsknapp för val av serverplacering</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="108"/>
+        <location filename="../serverdlg.cpp" line="107"/>
         <source>Country/Region</source>
         <translation type="unfinished">Land/region</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="109"/>
+        <location filename="../serverdlg.cpp" line="108"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
         <translation type="unfinished">Ställ in det land eller den region där servern körs. Klienter kommer att visa denna plats i sin anslutningsdialogs serverlista.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="116"/>
+        <location filename="../serverdlg.cpp" line="115"/>
         <source>Combo box for location of this server</source>
         <translation type="unfinished">Kombineringsknapp för val av serverplacering</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="173"/>
         <source>Display dialog to select recording directory button</source>
         <translation>Knapp för att visa dialogruta för att välja inspelningskatalog</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="175"/>
-        <location filename="../serverdlg.cpp" line="182"/>
+        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="181"/>
         <source>Main Recording Directory</source>
         <translation>Huvudinspelningskatalog</translation>
     </message>
@@ -3461,7 +3435,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Klicka på knappen för att öppna dialogrutan som gör det möjligt att välja den huvudsakliga inspelningskatalogen. Den valda platsen måste finnas och vara skrivbar (tillåta skapandet av underkataloger av den användare som Jamulus körs via.). </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="181"/>
+        <location filename="../serverdlg.cpp" line="180"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>Textruta för huvudinspelningskatalog (skrivskyddad)</translation>
     </message>
@@ -3470,22 +3444,22 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Det aktuella värdet för huvudinspelningskatalogen. Det valda värdet måste existera och vara skrivbart (tillåta skapandet av underkataloger av användaren som Jamulus körs av). Klicka på knappen för att öppna dialogrutan som gör det möjligt att välja huvudinspelningskatalogen.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="189"/>
+        <location filename="../serverdlg.cpp" line="188"/>
         <source>Clear the recording directory button</source>
         <translation>Knappen för att rensa inspelningskatalogen</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="190"/>
+        <location filename="../serverdlg.cpp" line="189"/>
         <source>Clear Recording Directory</source>
         <translation>Rensa inspelningskatalogen</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="191"/>
+        <location filename="../serverdlg.cpp" line="190"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
         <translation>Klicka på knappen för att rensa den valda inspelningskatalogen. Detta förhindrar inspelning tills ett ny plats valts.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="119"/>
+        <location filename="../serverdlg.cpp" line="118"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>Knapp för att slå på eller av serverinspelning</translation>
     </message>
@@ -3494,42 +3468,48 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="obsolete">Om kryssrutan Registrera Server är markerad kommer detta att visa om registrering på katalogservern är gjord. Om registreringen misslyckades, välj en annan katalogserver.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="120"/>
+        <location filename="../serverdlg.cpp" line="119"/>
         <source>Enable Recorder</source>
         <translation>Starta serverinspelning</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="121"/>
+        <location filename="../serverdlg.cpp" line="120"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
         <translation>Markerad när inspelaren är aktiverad, annars avmarkerad. Inspelaren kommer att köras när en session pågår, om (inställt korrekt och) aktiverat.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="148"/>
+        <location filename="../serverdlg.cpp" line="147"/>
         <source>Current session directory text box (read-only)</source>
         <translation>Nuvarande inspelningskatalogtext (skrivskyddad)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="152"/>
+        <location filename="../serverdlg.cpp" line="151"/>
         <source>Current Session Directory</source>
         <translation>Aktuell inspelningskatalog</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="153"/>
+        <location filename="../serverdlg.cpp" line="152"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation>Aktiverad under inspelning och har den aktuella inspelningskatalogen. Inaktiverad efter inspelning eller när inspelaren inte är aktiverad.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="130"/>
+        <location filename="../serverdlg.cpp" line="129"/>
         <source>Recorder status label</source>
         <translation>Inspelningsstatusetikett</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="60"/>
+        <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder Status</source>
         <translation>Inspelningsstatus</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
         <translation>Visar inspelarens aktuella status. Dessa värden är möjliga:</translation>
     </message>
@@ -3550,17 +3530,17 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">, antingen genom kryssrutan eller SIGUSR2 som tas emot</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="142"/>
+        <location filename="../serverdlg.cpp" line="141"/>
         <source>There is no one connected to the server to record.</source>
         <translation>Det är ingen ansluten till servern att spela in.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="143"/>
+        <location filename="../serverdlg.cpp" line="142"/>
         <source>The performers are being recorded to the specified session directory.</source>
         <translation>Artisterna spelas in i den angivna sessionskatalogen.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="144"/>
+        <location filename="../serverdlg.cpp" line="143"/>
         <source>NOTE</source>
         <translation>NOTERING</translation>
     </message>
@@ -3569,32 +3549,32 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Om inspelningskatalogen inte kan användas visas problemet istället för katalogen.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="159"/>
+        <location filename="../serverdlg.cpp" line="158"/>
         <source>Server welcome message edit box</source>
         <translation>Serverns redigeringsruta för välkomstmeddelandet</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="160"/>
+        <location filename="../serverdlg.cpp" line="159"/>
         <source>Server Welcome Message</source>
         <translation>Serverns välkomstmeddelande</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="161"/>
+        <location filename="../serverdlg.cpp" line="160"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
         <translation>En välkomstmeddelandetext för servern visas i chattfönstret om en musiker kommer in på servern. Om inget meddelande är inställt är serverns välkomst inaktiverad.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Language</source>
         <translation type="unfinished">Språk</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Select the language to be used for the user interface.</source>
         <translation type="unfinished">Välj det språk som ska användas för användargränssnittet.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="171"/>
+        <location filename="../serverdlg.cpp" line="170"/>
         <source>Language combo box</source>
         <translation type="unfinished">Kombineringsknapp för språk</translation>
     </message>
@@ -3611,28 +3591,28 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="obsolete">Den anpassade katalogen är IP-adressen eller URL:en för katalogservern där serverlistan hanteras.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="201"/>
+        <location filename="../serverdlg.cpp" line="200"/>
         <source>Custom Directory line edit</source>
         <translation type="unfinished">Ändra anpassad katalog</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="245"/>
+        <location filename="../serverdlg.cpp" line="244"/>
         <source>&amp;Hide %1 server</source>
         <translation type="unfinished">&amp;Dölj %1-server</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="248"/>
+        <location filename="../serverdlg.cpp" line="247"/>
         <source>&amp;Show %1 server</source>
         <translation type="unfinished">&amp;Visa %1-server</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="253"/>
+        <location filename="../serverdlg.cpp" line="252"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
         <translation type="unfinished">%1-server</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="337"/>
+        <location filename="../serverdlg.cpp" line="336"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>Skriv ett meddelande här. Om inget meddelande är inställt är serverns välkomst inaktiverad.</translation>
     </message>
@@ -3647,12 +3627,12 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">mjukvaruuppdatering tillgänglig</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="590"/>
+        <location filename="../serverdlg.cpp" line="589"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>Inspelningen kunde inte starta. Kontrollera tillgängligt diskutrymme och behörigheter och försök igen. Fel: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="870"/>
+        <location filename="../serverdlg.cpp" line="869"/>
         <source>ERROR</source>
         <translation>FEL</translation>
     </message>
@@ -3661,23 +3641,23 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="obsolete">Visar inspelarens aktuella status.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="125"/>
+        <location filename="../serverdlg.cpp" line="124"/>
         <source>Request new recording button</source>
         <translation>Begär ny inspelningsknapp</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="126"/>
+        <location filename="../serverdlg.cpp" line="125"/>
         <source>New Recording</source>
         <translation>Ny inspelning</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="127"/>
+        <location filename="../serverdlg.cpp" line="126"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>Under en inspelningssession kan knappen användas för att starta en ny inspelning.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="241"/>
-        <location filename="../serverdlg.cpp" line="393"/>
+        <location filename="../serverdlg.cpp" line="240"/>
+        <location filename="../serverdlg.cpp" line="392"/>
         <source>E&amp;xit</source>
         <translation>&amp;Avbryt</translation>
     </message>
@@ -3702,12 +3682,12 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished"> Server</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="391"/>
+        <location filename="../serverdlg.cpp" line="390"/>
         <source>&amp;Window</source>
         <translation>&amp;Fönster</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="602"/>
+        <location filename="../serverdlg.cpp" line="601"/>
         <source>Select Main Recording Directory</source>
         <translation>Välj huvudinspelningskatalog</translation>
     </message>

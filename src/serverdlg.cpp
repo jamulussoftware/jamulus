@@ -57,22 +57,21 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     lblDirectoryType->setAccessibleName ( strDirectoryTypeAN );
     cbxDirectoryType->setAccessibleName ( strDirectoryTypeAN );
 
-    QString strDirectoryTypeWT = "<b>" + tr ( "Directory" ) + ":</b> " +
-                                 tr ( "Select '%1' not to register your server with a directory." ).arg ( DirectoryTypeToString ( AT_NONE ) ) +
-                                 "<br>" + tr ( "Select one of the genres to register with that directory." ) + "<br>" +
-                                 tr ( "Or select '%1' and specify a Custom Directory address on the "
-                                      "Options tab to register with a custom directory." )
-                                     .arg ( DirectoryTypeToString ( AT_CUSTOM ) ) +
-                                 "<br><br>" +
-                                 tr ( "For any value except '%1', this server registers "
-                                      "with a directory so that a %2 user can select this server "
-                                      "in the client connect dialog server list when they choose that directory." )
-                                     .arg ( DirectoryTypeToString ( AT_NONE ) )
-                                     .arg ( APP_NAME ) +
-                                 "<br><br>" +
-                                 tr ( "The registration of the server is renewed periodically "
+    QString strDirectoryTypeWT = tr ( "<b>Directory:</b> "
+                                      "Select '%1' not to register your server with a directory.<br>"
+                                      "Or select one of the genres to register with that directory.<br>"
+                                      "Or select '%2' and specify a Custom Directory address on the "
+                                      "Options tab to register with a custom directory.<br><br>"
+                                      "For any value except '%1', this server registers "
+                                      "with a directory so that a %3 user can select this server "
+                                      "in the client connect dialog server list when they choose that directory.<br><br>"
+                                      "The registration of the server is renewed periodically "
                                       "to make sure that all servers in the connect dialog server list are "
-                                      "actually available." );
+                                      "actually available.",
+                                      "%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus" )
+                                     .arg ( DirectoryTypeToString ( AT_NONE ) )
+                                     .arg ( DirectoryTypeToString ( AT_CUSTOM ) )
+                                     .arg ( APP_NAME );
     lblDirectoryType->setWhatsThis ( strDirectoryTypeWT );
     cbxDirectoryType->setWhatsThis ( strDirectoryTypeWT );
 

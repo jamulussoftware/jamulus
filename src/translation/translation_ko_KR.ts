@@ -3077,68 +3077,74 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>연결된 클라이언트 목록 보기</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="176"/>
+        <location filename="../serverdlg.cpp" line="60"/>
+        <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="175"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
         <translation>버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다. 선택한 값은 존재해야 하고 쓰기 가능해야 합니다(사용자 %1에 의해 실행 중인 사용자의 하위 디렉터리 생성 허용).</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="183"/>
+        <location filename="../serverdlg.cpp" line="182"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
         <translation>메인 녹음 디렉터리의 현재 값입니다. 선택한 값은 존재해야 하고 쓰기 가능해야 합니다(사용자 %1에 의해 실행 중인 사용자의 하위 디렉터리 생성 허용). 버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="195"/>
+        <location filename="../serverdlg.cpp" line="194"/>
         <source>Custom Directory address</source>
         <translation>사용자 정의 디렉터리 주소</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="196"/>
+        <location filename="../serverdlg.cpp" line="195"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
         <translation>사용자 정의 디렉터리 주소는 이 서버를 추가해야 하는 서버 목록이 있는 디렉터리의 주소입니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="203"/>
         <source>Server List Filename dialog push button</source>
         <translation>서버 목록 파일 이름 대화 상자 푸시 버튼</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="205"/>
-        <location filename="../serverdlg.cpp" line="213"/>
+        <location filename="../serverdlg.cpp" line="204"/>
+        <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename</source>
         <translation>서버 목록 파일이름</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="206"/>
+        <location filename="../serverdlg.cpp" line="205"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
         <translation>버튼을 클릭하여 서버 목록 지속성 파일 이름을 설정할 수 있는 대화 상자를 엽니다. %1 사용자는 이미 존재할 수 있지만 지정된 파일 이름을 생성할 수 있어야 하기 때문에 실행 중입니다(저장 시 덮어쓰게 됩니다).</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="212"/>
+        <location filename="../serverdlg.cpp" line="211"/>
         <source>Server List Filename text box (read-only)</source>
         <translation>서버 목록 파일 이름 텍스트 박스 (읽기 전용)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="214"/>
+        <location filename="../serverdlg.cpp" line="213"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
         <translation>서버 목록 지속성 파일 이름의 현재 값입니다. %1 사용자는 이미 존재할 수 있지만 지정된 파일 이름을 생성할 수 있어야 하기 때문에 실행 중입니다(저장 시 덮어쓰게 됩니다). 버튼을 클릭하여 서버 목록 지속성 파일 이름을 설정할 수 있는 대화 상자를 엽니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="221"/>
+        <location filename="../serverdlg.cpp" line="220"/>
         <source>Clear the server list file name button</source>
         <translation>서버 목록 파일 이름 정리 버튼</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="222"/>
+        <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear Server List Filename</source>
         <translation>서버 목록 파일이름 지우기</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="223"/>
+        <location filename="../serverdlg.cpp" line="222"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
         <translation>버튼을 클릭하여 현재 선택된 서버 목록 지속성 파일 이름을 지웁니다. 이렇게 하면 새 값을 선택할 때까지 서버 목록이 유지되지 않게 됩니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="227"/>
+        <location filename="../serverdlg.cpp" line="226"/>
         <source>Start Minimized on Operating System Start</source>
         <translation>운영 체제 시작 시 최소화로 시작</translation>
     </message>
@@ -3147,7 +3153,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">내 서버를 공개로 설정</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="80"/>
+        <location filename="../serverdlg.cpp" line="79"/>
         <source>Register Server Status</source>
         <translation>서버 상태 등록</translation>
     </message>
@@ -3156,7 +3162,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">내 서버 공개 확인란을 선택하면 디렉터리 서버에 등록이 성공했는지가 표시됩니다. 등록에 실패한 경우 다른 서버 목록을 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="228"/>
+        <location filename="../serverdlg.cpp" line="227"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
         <translation>운영 체제 시작 시 최소화로 시작 확인란을 선택하면 운영 체제가 시작될 때 서버가 시작되고 자동으로 시스템 작업 표시줄 아이콘으로 최소화됩니다.</translation>
     </message>
@@ -3189,32 +3195,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">서버 목록 선택 콤보 박스</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="87"/>
+        <location filename="../serverdlg.cpp" line="86"/>
         <source>Server Name</source>
         <translation>서버 이름</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="88"/>
+        <location filename="../serverdlg.cpp" line="87"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
         <translation>서버 이름은 클라이언트의 연결 대화 상자 서버 목록에서 서버를 식별합니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="94"/>
+        <location filename="../serverdlg.cpp" line="93"/>
         <source>Server name line edit</source>
         <translation>서버 이름 라인 편집</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="97"/>
+        <location filename="../serverdlg.cpp" line="96"/>
         <source>Location City</source>
         <translation>도시 위치</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="98"/>
+        <location filename="../serverdlg.cpp" line="97"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>이 서버가 위치한 도시를 여기에서 설정할 수 있습니다. 도시 이름을 입력하면 클라이언트의 연결 대화 상자 서버 목록에 표시됩니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="105"/>
+        <location filename="../serverdlg.cpp" line="104"/>
         <source>City where the server is located line edit</source>
         <translation>서버가 위치한 도시 라인 편집</translation>
     </message>
@@ -3231,13 +3237,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">서버가 위치한 국가 콤보 상자</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="173"/>
         <source>Display dialog to select recording directory button</source>
         <translation>녹음 디렉터리 버튼을 선택하는 대화 상자 표시</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="175"/>
-        <location filename="../serverdlg.cpp" line="182"/>
+        <location filename="../serverdlg.cpp" line="174"/>
+        <location filename="../serverdlg.cpp" line="181"/>
         <source>Main Recording Directory</source>
         <translation>메인 녹음 디렉터리</translation>
     </message>
@@ -3246,7 +3252,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다. 선택한 값은 존재하고 쓰기 가능해야 합니다(Jamulus를 실행 중인 사용자의 하위 디렉터리 생성 허용). </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="181"/>
+        <location filename="../serverdlg.cpp" line="180"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>메인 녹음 디렉터리 텍스트 박스(읽기 전용)</translation>
     </message>
@@ -3255,22 +3261,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">메인 녹음 디렉터리의 현재 값입니다. 선택한 값은 존재하고 쓰기 가능해야 합니다(Jamulus를 실행 중인 사용자의 하위 디렉터리 생성 허용). 버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="189"/>
+        <location filename="../serverdlg.cpp" line="188"/>
         <source>Clear the recording directory button</source>
         <translation>녹음 디렉터리 버튼 정리</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="190"/>
+        <location filename="../serverdlg.cpp" line="189"/>
         <source>Clear Recording Directory</source>
         <translation>녹음 디렉터리 정리</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="191"/>
+        <location filename="../serverdlg.cpp" line="190"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
         <translation>버튼을 클릭하면 현재 선택한 녹음 디렉터리가 지워집니다. 이렇게 하면 새 값이 선택될 때까지 녹음이 되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="119"/>
+        <location filename="../serverdlg.cpp" line="118"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>서버 녹화를 켜거나 끄는 체크박스</translation>
     </message>
@@ -3279,47 +3285,47 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">서버 등록 확인란을 선택하면 디렉터리 서버 등록 성공 여부를 표시합니다. 등록에 실패한 경우 다른 서버 목록을 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="120"/>
+        <location filename="../serverdlg.cpp" line="119"/>
         <source>Enable Recorder</source>
         <translation>녹음기 활성화</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="121"/>
+        <location filename="../serverdlg.cpp" line="120"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
         <translation>녹음기를 활성화하면 체크되고 그렇지 않을 땐 체크되지 않습니다. (올바르게 설정되고) 활성화된 경우 세션이 진행 중일 때 녹음기가 실행됩니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="145"/>
+        <location filename="../serverdlg.cpp" line="144"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
         <translation>녹음 디렉터리를 사용할 수 없는 경우 세션 디렉터리 대신 문제가 표시됩니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="148"/>
+        <location filename="../serverdlg.cpp" line="147"/>
         <source>Current session directory text box (read-only)</source>
         <translation>현재 세션 디렉터리 텍스트 박스 (읽기 전용)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="152"/>
+        <location filename="../serverdlg.cpp" line="151"/>
         <source>Current Session Directory</source>
         <translation>현재 세션 디렉터리</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="153"/>
+        <location filename="../serverdlg.cpp" line="152"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation>기록하는 동안 활성화되고 현재 기록 세션 디렉터리를 유지합니다. 녹음 후 또는 녹음기가 활성화되지 않은 경우 비활성화됩니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="130"/>
+        <location filename="../serverdlg.cpp" line="129"/>
         <source>Recorder status label</source>
         <translation>녹음기 상태 레이블</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder Status</source>
         <translation>녹음기 상태</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="132"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
         <translation>녹음기의 현재 상태를 표시합니다. 다음 값이 가능합니다:</translation>
     </message>
@@ -3340,17 +3346,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">, UI 체크박스 또는 수신되는 SIGUSR2에 의해</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="142"/>
+        <location filename="../serverdlg.cpp" line="141"/>
         <source>There is no one connected to the server to record.</source>
         <translation>녹음할 서버에 연결된 사용자가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="143"/>
+        <location filename="../serverdlg.cpp" line="142"/>
         <source>The performers are being recorded to the specified session directory.</source>
         <translation>연주는 지정된 세션 디렉터리에 녹음되고 있습니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="144"/>
+        <location filename="../serverdlg.cpp" line="143"/>
         <source>NOTE</source>
         <translation>NOTE</translation>
     </message>
@@ -3359,32 +3365,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">녹음 디렉터리를 사용할 수 없는 경우 디렉터리 대신 문제가 표시됩니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="159"/>
+        <location filename="../serverdlg.cpp" line="158"/>
         <source>Server welcome message edit box</source>
         <translation>서버 환영 메시지 편집 박스</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="160"/>
+        <location filename="../serverdlg.cpp" line="159"/>
         <source>Server Welcome Message</source>
         <translation>서버 환영 메시지</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="161"/>
+        <location filename="../serverdlg.cpp" line="160"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
         <translation>뮤지션이 서버에 입장하면 채팅 창에 서버 환영 텍스트 메시지가 표시됩니다. 메시지가 설정되어 있지 않으면 서버 환영이 비활성화됩니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Language</source>
         <translation>언어</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="167"/>
+        <location filename="../serverdlg.cpp" line="166"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>사용자 인터페이스에 사용할 언어를 고릅니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="171"/>
+        <location filename="../serverdlg.cpp" line="170"/>
         <source>Language combo box</source>
         <translation>언어 콤보 박스</translation>
     </message>
@@ -3401,28 +3407,28 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">사용자 정의 디렉터리는 연결 대화 상자의 서버 목록이 관리되는 디렉터리 서버의 IP 주소 또는 URL입니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="201"/>
+        <location filename="../serverdlg.cpp" line="200"/>
         <source>Custom Directory line edit</source>
         <translation>사용자 정의 디렉터리 라인 편집</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="245"/>
+        <location filename="../serverdlg.cpp" line="244"/>
         <source>&amp;Hide %1 server</source>
         <translation>%1 서버 숨기기(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="248"/>
+        <location filename="../serverdlg.cpp" line="247"/>
         <source>&amp;Show %1 server</source>
         <translation>%1 서버 표시하기(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="253"/>
+        <location filename="../serverdlg.cpp" line="252"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
         <translation>%1 서버</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="337"/>
+        <location filename="../serverdlg.cpp" line="336"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>여기에 메시지를 입력하세요. 메시지가 설정되어 있지 않으면 서버 환영이 비활성화됩니다.</translation>
     </message>
@@ -3431,22 +3437,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">소프트웨어 업그레이드 가능</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="590"/>
+        <location filename="../serverdlg.cpp" line="589"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>녹음을 시작하지 못했습니다. 사용 가능한 디스크 공간과 권한을 확인하고 다시 시도해 보세요. 오류: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
+        <location filename="../serverdlg.cpp" line="736"/>
         <source>Now a directory</source>
         <translation>현재 디렉터리</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="870"/>
+        <location filename="../serverdlg.cpp" line="869"/>
         <source>ERROR</source>
         <translation>ERROR</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="125"/>
+        <location filename="../serverdlg.cpp" line="124"/>
         <source>Request new recording button</source>
         <translation>새 녹음 요청 버튼</translation>
     </message>
@@ -3456,83 +3462,77 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>디렉터리 유형 콤보 박스</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation>디렉터리</translation>
+        <translation type="vanished">디렉터리</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation>디렉터리에 서버를 등록하지 않으려면 &apos;%1&apos; 선택하세요.</translation>
+        <translation type="vanished">디렉터리에 서버를 등록하지 않으려면 &apos;%1&apos; 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation>해당 디렉터리에 등록할 장르 중 하나를 선택합니다.</translation>
+        <translation type="vanished">해당 디렉터리에 등록할 장르 중 하나를 선택합니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation>또는 &apos;%1&apos; 선택 후 옵션 탭에서 사용자 정의 디렉터리 주소를 지정하여 사용자 정의 디렉터리에 등록하세요.</translation>
+        <translation type="vanished">또는 &apos;%1&apos; 선택 후 옵션 탭에서 사용자 정의 디렉터리 주소를 지정하여 사용자 정의 디렉터리에 등록하세요.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation>&apos;%1&apos; 제외한 모든 값에 대해 이 서버는 %2 사용자가 해당 디렉터리를 선택할 때 클라이언트 연결 대화 상자 서버 목록에서 이 서버를 선택할 수 있도록 디렉터리에 등록합니다.</translation>
+        <translation type="vanished">&apos;%1&apos; 제외한 모든 값에 대해 이 서버는 %2 사용자가 해당 디렉터리를 선택할 때 클라이언트 연결 대화 상자 서버 목록에서 이 서버를 선택할 수 있도록 디렉터리에 등록합니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation>서버 등록은 연결 대화 서버 목록의 모든 서버가 실제로 사용 가능한지 확인하기 위해 주기적으로 갱신됩니다.</translation>
+        <translation type="vanished">서버 등록은 연결 대화 서버 목록의 모든 서버가 실제로 사용 가능한지 확인하기 위해 주기적으로 갱신됩니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="81"/>
+        <location filename="../serverdlg.cpp" line="80"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
         <translation>디렉터리에 대해 &quot;%1&quot; 이외의 값을 선택하면 등록 성공 여부가 표시됩니다. 등록에 실패하는 경우 다른 디렉터리를 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="108"/>
+        <location filename="../serverdlg.cpp" line="107"/>
         <source>Country/Region</source>
         <translation>국가/지역</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="109"/>
+        <location filename="../serverdlg.cpp" line="108"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
         <translation>서버가 실행되는 국가 또는 지역을 설정합니다. 클라이언트는 연결 대화 상자의 서버 목록에 이 위치를 표시합니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="116"/>
+        <location filename="../serverdlg.cpp" line="115"/>
         <source>Combo box for location of this server</source>
         <translation>이 서버의 위치에 대한 콤보 박스</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="134"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
         <translation>녹음 디렉터리가 설정되지 않았거나 값을 사용할 수 없습니다. 옵션 탭에서 값을 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="138"/>
+        <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox.</source>
         <translation>UI 체크박스에 의해 녹음이 꺼졌습니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="140"/>
+        <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
         <translation>UI 체크박스 또는 수신 중인 SIGUSR2에 의해 녹음이 꺼졌습니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="126"/>
+        <location filename="../serverdlg.cpp" line="125"/>
         <source>New Recording</source>
         <translation>새 녹음</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="127"/>
+        <location filename="../serverdlg.cpp" line="126"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>녹음 세션 중에 버튼을 사용하여 새 녹음을 시작할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="241"/>
-        <location filename="../serverdlg.cpp" line="393"/>
+        <location filename="../serverdlg.cpp" line="240"/>
+        <location filename="../serverdlg.cpp" line="392"/>
         <source>E&amp;xit</source>
         <translation>나가기(&amp;X)</translation>
     </message>
@@ -3555,7 +3555,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>%1 서버</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="602"/>
+        <location filename="../serverdlg.cpp" line="601"/>
         <source>Select Main Recording Directory</source>
         <translation>메인 녹음 디렉터리 선택</translation>
     </message>
@@ -3584,7 +3584,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished"> 서버</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="391"/>
+        <location filename="../serverdlg.cpp" line="390"/>
         <source>&amp;Window</source>
         <translation>창(&amp;W)</translation>
     </message>

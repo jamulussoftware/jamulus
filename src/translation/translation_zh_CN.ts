@@ -2606,7 +2606,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../serverdlg.cpp" line="60"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation>&lt;b&gt;目录：&lt;/b&gt; 选择“%1”不向目录注册您的服务器。&lt;br&gt;或选择其中一种类型向该目录注册。&lt;br&gt;或选择“%2”并指定一个选项选项卡上的自定义目录地址，用于向自定义目录注册。&lt;br&gt;&lt;br&gt;对于除“%1”以外的任何值，此服务器都会向一个目录注册，以便 %3 用户可以在客户端连接对话框中选择此服务器选择该目录时的服务器列表。&lt;br&gt;&lt;br&gt;服务器的注册会定期更新，以确保连接对话服务器列表中的所有服务器实际上都可用。</translation>
+        <translation>&lt;b&gt;目录：&lt;/b&gt; 选择 &quot;%1&quot; 不向目录注册您的服务器。&lt;br&gt;或选择其中一种类型向该目录注册。&lt;br&gt;或选择 &quot;%2&quot; 并指定一个选项选项卡上的自定义目录地址，用于向自定义目录注册。&lt;br&gt;&lt;br&gt;对于除 &quot;%1&quot; 以外的任何值，此服务器都会向一个目录注册，以便 %3 用户可以在客户端连接对话框中选择此服务器选择该目录时的服务器列表。&lt;br&gt;&lt;br&gt;服务器的注册会定期更新，以确保连接对话服务器列表中的所有服务器实际上都可用。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="226"/>
@@ -2940,7 +2940,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="80"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation>当一个非“%1”的选项被作为目录选择时，此处将呈现登记情况是否成功的状态。若登记失败，则请选择一个其它的目录。</translation>
+        <translation>当一个非 &quot;%1&quot; 的选项被作为目录选择时，此处将呈现登记情况是否成功的状态。若登记失败，则请选择一个其它的目录。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="107"/>

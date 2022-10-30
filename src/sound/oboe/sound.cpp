@@ -237,7 +237,7 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
         // discard the input buffer
         const int32_t numBytes = numFrames * oboeStream->getBytesPerFrame();
 
-        memset ( audioData, 0 /* value */, numBytes );
+        vecsTmpInputAudioSndCrdStereo.resize ( numBytes, 0 );
 
         mCountCallbacksToDrain--;
     }

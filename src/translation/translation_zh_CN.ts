@@ -31,7 +31,7 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation>此应用程序使用了以下依赖库，资源或代码片段：</translation>
+        <translation>此应用程序使用了以下依赖库，资源或代码片段:</translation>
     </message>
     <message>
         <source>Country flag icons by Mark James</source>
@@ -296,7 +296,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="152"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
-        <translation>显示当前声道对应的客户端的状态指示。支持的指示有：</translation>
+        <translation>显示当前声道对应的客户端的状态指示。支持的指示有:</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="155"/>
@@ -346,7 +346,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="154"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
-        <translation>被划掉的喇叭图标：表示其它客户端把你静音了。</translation>
+        <translation>被划掉的喇叭图标:表示其它客户端把你静音了。</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="158"/>
@@ -687,7 +687,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
         <source>Shows the current audio delay status:</source>
-        <translation>指示当前音频的延迟情况：</translation>
+        <translation>指示当前音频的延迟情况:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="139"/>
@@ -860,7 +860,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="161"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation>本地抖动缓冲区状态 LED 指示当前音频/串流状态。如果变红，表示音频流被中断了。这可能由以下问题导致：</translation>
+        <translation>本地抖动缓冲区状态 LED 指示当前音频/串流状态。如果变红，表示音频流被中断了。这可能由以下问题导致:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="184"/>
@@ -1180,7 +1180,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="239"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation>打开驱动选项。注意：%1 目前仅支持采样率为 %2 的设备。您无法选择非此采样率的设备。更多帮助请见 jamulus.io。</translation>
+        <translation>打开驱动选项。注意:%1 目前仅支持采样率为 %2 的设备。您无法选择非此采样率的设备。更多帮助请见 jamulus.io。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="249"/>
@@ -1363,7 +1363,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="193"/>
         <source>128 samples: Should work for most available sound cards.</source>
-        <translation>128 采样：应该适用于大多数可用的声卡。</translation>
+        <translation>128 采样:应该适用于大多数可用的声卡。</translation>
     </message>
     <message>
         <source>256 samples: Should only be used on very slow computers or with a slow internet connection.</source>
@@ -1392,12 +1392,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="190"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
-        <translation>64 采样：提供最低的延迟但并非支持所有声卡。</translation>
+        <translation>64 采样:提供最低的延迟但并非支持所有声卡。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="196"/>
         <source>256 samples: Should only be used when 64 or 128 samples is causing issues.</source>
-        <translation>256 采样：仅当在 64 或 128 采样存在问题时使用。</translation>
+        <translation>256 采样:仅当在 64 或 128 采样存在问题时使用。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="200"/>
@@ -1472,7 +1472,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="286"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
-        <translation>设置用于连接客户端与服务器所要使用的声道数量。有三个模式可用：</translation>
+        <translation>设置用于连接客户端与服务器所要使用的声道数量。有三个模式可用:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="292"/>
@@ -2201,7 +2201,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="986"/>
         <source>Custom Directories:</source>
-        <translation>自定义目录：</translation>
+        <translation>自定义目录:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1047"/>
@@ -2344,7 +2344,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="87"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation>如果你知道服务器地址，你可以使用服务器名称/地址一栏来连接到对应的服务器。一个可选的端口号可以附在后面，通过半角冒号作为分割符。例如：%1。此位置也将显示一个最近使用过的服务器地址的列表。</translation>
+        <translation>如果你知道服务器地址，你可以使用服务器名称/地址一栏来连接到对应的服务器。一个可选的端口号可以附在后面，通过半角冒号作为分割符。例如:%1。此位置也将显示一个最近使用过的服务器地址的列表。</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
@@ -2606,7 +2606,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../serverdlg.cpp" line="60"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation>&lt;b&gt;目录：&lt;/b&gt; 选择 &quot;%1&quot; 不向目录注册您的服务器。&lt;br&gt;或选择其中一种类型向该目录注册。&lt;br&gt;或选择 &quot;%2&quot; 并指定一个选项选项卡上的自定义目录地址，用于向自定义目录注册。&lt;br&gt;&lt;br&gt;对于除 &quot;%1&quot; 以外的任何值，此服务器都会向一个目录注册，以便 %3 用户可以在客户端连接对话框中选择此服务器选择该目录时的服务器列表。&lt;br&gt;&lt;br&gt;服务器的注册会定期更新，以确保连接对话服务器列表中的所有服务器实际上都可用。</translation>
+        <translation>&lt;b&gt;目录:&lt;/b&gt; 选择 &quot;%1&quot; 不向目录注册您的服务器。&lt;br&gt;或选择其中一种类型向该目录注册。&lt;br&gt;或选择 &quot;%2&quot; 并指定一个选项选项卡上的自定义目录地址，用于向自定义目录注册。&lt;br&gt;&lt;br&gt;对于除 &quot;%1&quot; 以外的任何值，此服务器都会向一个目录注册，以便 %3 用户可以在客户端连接对话框中选择此服务器选择该目录时的服务器列表。&lt;br&gt;&lt;br&gt;服务器的注册会定期更新，以确保连接对话服务器列表中的所有服务器实际上都可用。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="226"/>
@@ -2801,7 +2801,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="131"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
-        <translation>显示当前录音功能的状态。  可能为下述值：</translation>
+        <translation>显示当前录音功能的状态。  可能为下述值:</translation>
     </message>
     <message>
         <source>No recording directory has been set or the value is not useable.</source>
@@ -3198,7 +3198,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="132"/>
         <source>Location: Region</source>
-        <translation>位置：地区</translation>
+        <translation>位置:地区</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
@@ -3288,7 +3288,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="125"/>
         <source>Location: City</source>
-        <translation>位置：城市</translation>
+        <translation>位置:城市</translation>
     </message>
 </context>
 <context>
@@ -3450,7 +3450,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/soundbase.cpp" line="117"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
-        <translation>由于以下原因，无法使用所选的音频设备：%1 将会使用之前的设备。</translation>
+        <translation>由于以下原因，无法使用所选的音频设备:%1 将会使用之前的设备。</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="158"/>
@@ -3564,7 +3564,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../global.h" line="123"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation>%1 更新已可用：&lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;前往详情和下载页面&lt;/a&gt;</translation>
+        <translation>%1 更新已可用:&lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;前往详情和下载页面&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="273"/>

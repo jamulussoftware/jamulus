@@ -234,7 +234,10 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     }
     else
     {
-        qWarning() << "Ignoring invalid serverinfo, please verify the parameter syntax.";
+        if ( !strServerInfo.isEmpty() )
+        {
+            qWarning() << "Ignoring invalid serverinfo, please verify the parameter syntax.";
+        }
     }
 
     // per definition, the very first entry is this server and this entry will

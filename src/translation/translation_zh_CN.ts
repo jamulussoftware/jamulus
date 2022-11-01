@@ -385,7 +385,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="186"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation>混音通道的标签(推子标签）</translation>
+        <translation>混音通道的标签(推子标签)</translation>
     </message>
     <message>
         <source>Mixer channel country flag</source>
@@ -622,7 +622,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="70"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation>为了恰当的使用此应用程序，当您未连接到服务器时您不会希望在音响或耳机中听到您的演唱或弹奏。您可以通过在音频声道(不是录制混音器！）中将自己静音来达到此目的。</translation>
+        <translation>为了恰当的使用此应用程序，当您未连接到服务器时您不会希望在音响或耳机中听到您的演唱或弹奏。您可以通过在音频声道(不是录制混音器！)中将自己静音来达到此目的。</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="102"/>
@@ -706,7 +706,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="170"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation>声卡的缓冲区延迟(缓冲区大小）过小(见设置窗口）。</translation>
+        <translation>声卡的缓冲区延迟(缓冲区大小)过小(见设置窗口)。</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="174"/>
@@ -1037,7 +1037,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="557"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation>已静音(别人不会听到你）</translation>
+        <translation>已静音(别人不会听到你)</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="587"/>
@@ -1259,7 +1259,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="154"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation>对于所有 %1 输入/输出声道(左右声道）均可选择对应到不同的声卡的声道。</translation>
+        <translation>对于所有 %1 输入/输出声道(左右声道)均可选择对应到不同的声卡的声道。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="173"/>
@@ -1294,7 +1294,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation>取决于当前音频数据包大小和压缩设定。请确保当前上行流量频率未超过您网络的可用上传速度(可通过类如 speedtest.net 的服务进行检测）。</translation>
+        <translation>取决于当前音频数据包大小和压缩设定。请确保当前上行流量频率未超过您网络的可用上传速度(可通过类如 speedtest.net 的服务进行检测)。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="431"/>
@@ -1329,12 +1329,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="72"/>
         <source>Local audio input fader (left/right)</source>
-        <translation>本地音频输入推子(左/右）</translation>
+        <translation>本地音频输入推子(左/右)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="76"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation>抖动缓冲区补偿了网络和声卡时值抖动。缓冲区的大小也影响了音频流的质量(发生多少丢包）和总体延迟(缓冲区越大，延迟越高）。</translation>
+        <translation>抖动缓冲区补偿了网络和声卡时值抖动。缓冲区的大小也影响了音频流的质量(发生多少丢包)和总体延迟(缓冲区越大，延迟越高)。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="81"/>
@@ -1344,7 +1344,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="90"/>
         <source>If the Auto setting is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If Auto is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
-        <translation>若选取了自动，则本地客户端和远程服务器的抖动缓冲区将根据网络情况和声卡时值抖动来自动推断。若选取了自动，则用于手动设置抖动缓冲区大小的推子也将被禁用(无法使用鼠标调节）。</translation>
+        <translation>若选取了自动，则本地客户端和远程服务器的抖动缓冲区将根据网络情况和声卡时值抖动来自动推断。若选取了自动，则用于手动设置抖动缓冲区大小的推子也将被禁用(无法使用鼠标调节)。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="96"/>
@@ -1382,7 +1382,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="123"/>
         <source>Under the Windows operating system the ASIO driver (sound card) can be selected using %1. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected. Under macOS the input and output hardware can be selected.</source>
-        <translation>在 Windows 操作系统下，ASIO 驱动(声卡）可通过 %1 进行选择。若所选的 ASIO 驱动无效，则将展示错误信息并选取上一个有效的驱动。在 macOS 中，输入和输出硬件可供选择。</translation>
+        <translation>在 Windows 操作系统下，ASIO 驱动(声卡)可通过 %1 进行选择。若所选的 ASIO 驱动无效，则将展示错误信息并选取上一个有效的驱动。在 macOS 中，输入和输出硬件可供选择。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="187"/>
@@ -1413,7 +1413,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="214"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation>实际的缓冲区延迟的设置将影响连接、当前上行带宽以及总体延迟情况。缓冲区大小越小，则指示灯亮红的概率越大(音频丢包），对上行带宽的要求也就越高，总体延迟也就越低。</translation>
+        <translation>实际的缓冲区延迟的设置将影响连接、当前上行带宽以及总体延迟情况。缓冲区大小越小，则指示灯亮红的概率越大(音频丢包)，对上行带宽的要求也就越高，总体延迟也就越低。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="233"/>
@@ -1507,7 +1507,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="332"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
-        <translation>此选项决定了新加入服务器的客户端的推子电平(音量）。若新的客户端连接到了当前服务器，若其未曾连接到此服务器并存储了其推子音量值，则其推子初始值将为此项所设置的值。</translation>
+        <translation>此选项决定了新加入服务器的客户端的推子电平(音量)。若新的客户端连接到了当前服务器，若其未曾连接到此服务器并存储了其推子音量值，则其推子初始值将为此项所设置的值。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="343"/>
@@ -1517,7 +1517,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="344"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation>此选项允许你增加输入信号的强度最多十倍(+20dB）。若你的声卡音量过低，首先尝试通过将麦克风离近的方式提高音量，调整您的声音设备或者增加您的系统输入音量设定。若这些方法仍不奏效，则在此设置增加的强度。如果您的声卡音量过高，音频有失真或削波，则请不要使用此选项，此项无助于解决这些问题，相反，您应当考虑通过离远麦克风、降低声音设备的音量或降低系统输入音量设定的方式解决此问题。</translation>
+        <translation>此选项允许你增加输入信号的强度最多十倍(+20dB)。若你的声卡音量过低，首先尝试通过将麦克风离近的方式提高音量，调整您的声音设备或者增加您的系统输入音量设定。若这些方法仍不奏效，则在此设置增加的强度。如果您的声卡音量过高，音频有失真或削波，则请不要使用此选项，此项无助于解决这些问题，相反，您应当考虑通过离远麦克风、降低声音设备的音量或降低系统输入音量设定的方式解决此问题。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="357"/>
@@ -1605,7 +1605,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>启用自激保护以检测话筒和麦克风产生正反馈循环(自激）导致的啸叫。</translation>
+        <translation>启用自激保护以检测话筒和麦克风产生正反馈循环(自激)导致的啸叫。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -2324,7 +2324,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="80"/>
         <source>Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation>永久服务器(指在服务器列表中存在超过 48 小时的服务器）会以粗体标识。</translation>
+        <translation>永久服务器(指在服务器列表中存在超过 48 小时的服务器)会以粗体标识。</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="81"/>
@@ -2732,7 +2732,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="180"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation>主录制路径文本框(只读）</translation>
+        <translation>主录制路径文本框(只读)</translation>
     </message>
     <message>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
@@ -2775,7 +2775,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="147"/>
         <source>Current session directory text box (read-only)</source>
-        <translation>当前会话目录文本框(只读）</translation>
+        <translation>当前会话目录文本框(只读)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="151"/>
@@ -2980,12 +2980,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="175"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation>点击按钮以打开可供选择录制目录位置的对话框。  所选值必须存在且可写入(允许运行 %1 的用户创建子目录）。</translation>
+        <translation>点击按钮以打开可供选择录制目录位置的对话框。  所选值必须存在且可写入(允许运行 %1 的用户创建子目录)。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="182"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation>当前录制目录路径的值。所选的值必须存在且可被写入(允许运行 %1 的用户创建子目录）。点击按钮以打开供选择主录制目录路径的对话框。</translation>
+        <translation>当前录制目录路径的值。所选的值必须存在且可被写入(允许运行 %1 的用户创建子目录)。点击按钮以打开供选择主录制目录路径的对话框。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="194"/>
@@ -3011,17 +3011,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation>点击按钮以打开供选择存储服务器列表文件位置的对话框。运行 %1 的用户需要能够能够创建此文件(若对应的文件已存在则将在保存时覆盖文件内容）。</translation>
+        <translation>点击按钮以打开供选择存储服务器列表文件位置的对话框。运行 %1 的用户需要能够能够创建此文件(若对应的文件已存在则将在保存时覆盖文件内容)。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="211"/>
         <source>Server List Filename text box (read-only)</source>
-        <translation>服务器列表文件名编辑框(只读）</translation>
+        <translation>服务器列表文件名编辑框(只读)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation>当前持久存储服务器列表的文件名。运行 %1 的用户需要能够能够创建此文件(若对应的文件已存在则将在保存时覆盖文件内容）。点击按钮以打开可供设置持久存储服务器列表的文件名的对话框。</translation>
+        <translation>当前持久存储服务器列表的文件名。运行 %1 的用户需要能够能够创建此文件(若对应的文件已存在则将在保存时覆盖文件内容)。点击按钮以打开可供设置持久存储服务器列表的文件名的对话框。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="220"/>
@@ -3417,7 +3417,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>当前输入设备的采样率并非 %1 Hz，故不兼容。请选择其它设备或尝试通过 音频-MIDI-选项(位于 应用程序&gt;辅助功能）手动设定其采样率到 %1 Hz。</translation>
+        <translation>当前输入设备的采样率并非 %1 Hz，故不兼容。请选择其它设备或尝试通过 音频-MIDI-选项(位于 应用程序&gt;辅助功能)手动设定其采样率到 %1 Hz。</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="406"/>
@@ -3427,7 +3427,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>当前输出设备的采样率并非 %1 Hz，故不兼容。请选择其它设备或尝试通过 音频-MIDI-选项(位于 应用程序&gt;辅助功能）手动设定其采样率到 %1 Hz。</translation>
+        <translation>当前输出设备的采样率并非 %1 Hz，故不兼容。请选择其它设备或尝试通过 音频-MIDI-选项(位于 应用程序&gt;辅助功能)手动设定其采样率到 %1 Hz。</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="463"/>
@@ -3569,7 +3569,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../global.h" line="273"/>
         <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
-        <translation>更多信息请通过“这是什么”查阅(帮助菜单，鼠标右键或 Shift+F1）</translation>
+        <translation>更多信息请通过“这是什么”查阅(帮助菜单，鼠标右键或 Shift+F1)</translation>
     </message>
 </context>
 </TS>

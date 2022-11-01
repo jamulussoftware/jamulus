@@ -34,7 +34,7 @@ LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_SIMPCHINESE} \
      "https://jamulus.io/wiki/Installation-for-Windows#asio"
 
 LangString ASIO_EXIT_NO_DRIVER ${LANG_SIMPCHINESE} \
-     "${APP_NAME} 需要 ASIO 音频驱动来正常工作，但在您的 PC 上未能找到。您需要首先安装一个 ASIO 驱动，例如 ASIO4ALL（更多信息请参见 jamulus.io 的 Installation for Windows 页面）。您仍希望先继续安装 ${APP_NAME} 吗？"
+     "${APP_NAME} 需要 ASIO 音频驱动来正常工作，但在您的 PC 上未能找到。您需要首先安装一个 ASIO 驱动，例如 ASIO4ALL(更多信息请参见 jamulus.io 的 Installation for Windows 页面）。您仍希望先继续安装 ${APP_NAME} 吗？"
 
 LangString JACK_DRIVER_HEADER ${LANG_SIMPCHINESE} \
      "JACK 音频连接工具"

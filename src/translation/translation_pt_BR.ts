@@ -151,7 +151,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Norueguês Bokmål</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>
@@ -189,7 +189,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation>TextLabelVersion</translation>
+        <translation>VersãoTextoRótulo</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
@@ -199,7 +199,7 @@
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
         <translatorcomment>I&apos;ll keep it untranslated for the moment</translatorcomment>
-        <translation></translation>
+        <translation>Copyright (C) 2005-2022 A Equipe de Desenvolvimento Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -376,7 +376,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="254"/>
         <source>Grp</source>
-        <translation>Grp</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="140"/>
@@ -557,7 +557,7 @@
         <location filename="../audiomixerboard.cpp" line="165"/>
         <location filename="../audiomixerboard.cpp" line="253"/>
         <source>Solo</source>
-        <translation>Solo</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1236,7 +1236,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation>Jitter</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="356"/>
@@ -1280,7 +1280,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientdlgbase.ui" line="118"/>
         <source>Reverb</source>
-        <translation>Reverb</translation>
+        <translation>Ressonância</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="202"/>
@@ -2409,7 +2409,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1242"/>
         <source>Trombone</source>
-        <translation>Trombone</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1245"/>
@@ -2419,7 +2419,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1248"/>
         <source>Tuba</source>
-        <translation>Tuba</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1251"/>
@@ -2459,7 +2459,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1272"/>
         <source>Streamer</source>
-        <translation>Streamer</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1275"/>
@@ -2504,7 +2504,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1299"/>
         <source>Congas</source>
-        <translation>Congas</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1302"/>
@@ -2534,7 +2534,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1317"/>
         <source>Banjo</source>
-        <translation>Banjo</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1320"/>
@@ -2544,7 +2544,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1323"/>
         <source>Ukulele</source>
-        <translation>Ukulele</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1326"/>
@@ -2569,7 +2569,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1338"/>
         <source>Scratching</source>
-        <translation>Scratching</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1341"/>
@@ -2726,7 +2726,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="690"/>
         <source>Jitter Buffer</source>
-        <translation>Jitter Buffer</translation>
+        <translation>Buffer de Jitter</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="702"/>
@@ -3920,7 +3920,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <location filename="../serverdlg.cpp" line="60"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Diretório:&lt;/b&gt; Selecione &apos;%1&apos; para não registrar seu servidor com um diretório.&lt;br&gt;Ou selecione um dos gêneros para registrar com esse diretório.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um endereço de Diretório personalizado na aba de Opções para registrar com um diretório personalizado.&lt;br&gt;&lt;br&gt;Para qualquer valor exceto &apos;%1&apos;, este servidor se registra com um diretório para que um usuário %3 possa selecionar este servidor na lista de servidores de diálogo de conexão do cliente quando escolher aquele diretório.&lt;br&gt;&lt;br&gt;O registro do servidor é renovado periodicamente para garantir que todos os servidores na lista de servidores de diálogo de conexão estejam realmente disponíveis.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="131"/>
@@ -4556,7 +4556,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation>O JACK não está sendo executado com uma taxa de amostras de &lt;b&gt;%1 Hz&lt;/b&gt;. Utilize uma ferramenta como &lt;i&gt;&lt;a=href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; para definir a taxa de amostras do JACK em %1 Hz.</translation>
+        <translation>O JACK não está sendo executado com uma taxa de amostras de &lt;b&gt;%1 Hz&lt;/b&gt;. Utilize uma ferramenta como &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt;para definir a taxa de amostras do JACK em %1 Hz.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>
@@ -4793,7 +4793,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../global.h" line="123"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation>Uma melhoria %1 está disponível: &lt;a style=&apos;color:red&apos; href=https://jamulus.io/upgrade?progversion=%2&apos;&gt;vá para detalhes e downloads&lt;/a&gt;</translation>
+        <translation>Uma melhoria %1 está disponível: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt; vá para detalhes e downloads&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="273"/>

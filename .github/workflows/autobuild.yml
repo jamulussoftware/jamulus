@@ -116,7 +116,7 @@ jobs:
         run:                        |
           set -eu
           build_all_targets() {
-            echo "::set-output name=build_all_targets::${1}"
+            echo "build_all_targets=${1}" >> $GITHUB_OUTPUT
             echo "Building for all targets? Result: ${1}"
             exit 0
           }

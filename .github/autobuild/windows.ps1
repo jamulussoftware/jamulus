@@ -150,8 +150,8 @@ Function Pass-Artifact-to-Job
     {
         throw "move failed with exit code $LastExitCode"
     }
-    echo "Setting Github step output name=artifact_1::${artifact}"
-    echo "::set-output name=artifact_1::${artifact}"
+    echo "Setting Github step output name=artifact_1 to ${artifact}"
+    echo "artifact_1=${artifact}" >> "$Env:GITHUB_OUTPUT"
 }
 
 switch ( $Stage )

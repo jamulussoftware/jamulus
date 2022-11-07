@@ -176,6 +176,14 @@ protected:
         CSendMessage() : vecMessage ( 0 ), iID ( PROTMESSID_ILLEGAL ), iCnt ( 0 ) {}
         CSendMessage ( const CVector<uint8_t>& nMess, const int iNCnt, const int iNID ) : vecMessage ( nMess ), iID ( iNID ), iCnt ( iNCnt ) {}
 
+        CSendMessage ( const CSendMessage& SendMess )
+        {
+            vecMessage.Init ( SendMess.vecMessage.Size() );
+            vecMessage = SendMess.vecMessage;
+            iID        = SendMess.iID;
+            iCnt       = SendMess.iCnt;
+        }
+
         CSendMessage& operator= ( const CSendMessage& NewSendMess )
         {
             vecMessage.Init ( NewSendMess.vecMessage.Size() );

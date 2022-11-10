@@ -801,7 +801,7 @@ int main ( int argc, char** argv )
 
         if ( strJsonRpcBindIP.trimmed().isEmpty() )
         {
-            qCritical() << qUtf8Printable ( QString ( "JSON-RPC is enabled but no bind address was provided, exiting." ) );
+            qCritical() << qUtf8Printable ( QString ( "JSON-RPC is enabled but the bind address provided is empty, exiting." ) );
             exit ( 1 );
         }
 

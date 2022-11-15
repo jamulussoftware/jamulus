@@ -53,6 +53,9 @@
 #include <QElapsedTimer>
 #include <QTextBoundaryFinder>
 #include <QTimer>
+#ifndef CLIENT_NO_SRV_CONNECT
+#    include <QDnsLookup>
+#endif
 #ifndef _WIN32
 #    include <QThread>
 #endif
@@ -79,8 +82,9 @@ class CClient; // forward declaration of CClient
 #endif
 
 /* Definitions ****************************************************************/
-#define METER_FLY_BACK  2
-#define INVALID_MIDI_CH -1 // invalid MIDI channel definition
+#define METER_FLY_BACK             2
+#define INVALID_MIDI_CH            -1 // invalid MIDI channel definition
+#define DNS_SRV_RESOLVE_TIMEOUT_MS 500
 
 /* Global functions ***********************************************************/
 // converting float to short
@@ -1039,6 +1043,12 @@ public:
 class NetworkUtil
 {
 public:
+    static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 );
+
+#ifndef CLIENT_NO_SRV_CONNECT
+    static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+    static bool ParseNetworkAddressWithSrvDiscovery ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+#endif
     static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 
     static QString      FixAddress ( const QString& strAddress );

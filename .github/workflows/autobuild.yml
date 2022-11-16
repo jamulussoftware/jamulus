@@ -56,6 +56,7 @@ on:
       - '.github/pull_request_template.md'
 
 name:                               Auto-Build
+permissions:                        {}
 jobs:
   create_release:
     # Check if we are doing a release or just a normal build.
@@ -69,7 +70,9 @@ jobs:
       build_all_targets:            ${{ steps.decide-build-targets.outputs.build_all_targets }}
     env:
       release_changelog_path:       ./.github_release_changelog.md
-
+    # Set permissions. We need write permissions to content for creating/removing the release
+    permissions:
+        contents:                   write
     steps:
       - name:                       Checkout code
         uses:                       actions/checkout@v3
@@ -179,6 +182,11 @@ jobs:
   release_assets:
     name:                           Build for ${{ matrix.config.config_name }}
     needs:                          create_release
+    # Set permissions to allow uploading artifact, uploading to release and allowing CodeQl to set security events
+    permissions:
+      checks:                       write
+      contents:                     write
+      security-events:              write
     strategy:
       fail-fast:                    false
       matrix:

@@ -376,7 +376,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="254"/>
         <source>Grp</source>
-        <translation></translation>
+        <translation>Grp</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="140"/>
@@ -2409,7 +2409,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1242"/>
         <source>Trombone</source>
-        <translation></translation>
+        <translation>Trombone</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1245"/>
@@ -2419,7 +2419,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1248"/>
         <source>Tuba</source>
-        <translation></translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1251"/>

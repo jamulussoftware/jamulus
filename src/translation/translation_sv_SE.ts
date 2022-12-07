@@ -119,7 +119,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Norska Bokmål</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>
@@ -1574,7 +1574,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera ljudvarning när du tar emot ett chattmeddelande och när en ny klient ansluter sig till sessionen. Det kan krävas en andra ljudenhet för att höra varningarna.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>

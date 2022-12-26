@@ -1,3 +1,7 @@
+THIS BRANCH IS NO LONGER MAINTAINED AND WILL BE REMOVED IN FUTURE.
+
+PLEASE USE THE "main" branch instead: https://github.com/jamulussoftware/jamulus
+
 [![Homepage picture](https://github.com/jamulussoftware/jamuluswebsite/blob/release/assets/img/jamulusbannersmall.png)](https://jamulus.io)
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)

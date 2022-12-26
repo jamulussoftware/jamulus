@@ -16,7 +16,7 @@ on:
 
   # For rebasing:
   push:
-    branches: [master]
+    branches: [main]
 
 permissions:
   pull-requests: write
@@ -151,7 +151,7 @@ jobs:
               gh pr comment "${existing_pr}" --body "PR has been updated for version *${upstream_version}* by the workflow *${GITHUB_WORKFLOW}* (*${GITHUB_JOB}*)."
             fi
           else
-            gh pr create --base master --head "${pr_branch}" --title "${pr_title}" --body "${body}"
+            gh pr create --base main --head "${pr_branch}" --title "${pr_title}" --body "${body}"
             echo 'When Github actions create a PR, no workflows/checks (e.g. autobuilds) run.'
             echo 'We do want autobuilds though, therefore, we push a slightly modified commit via the deploy key, which avoids this problem.'
             echo 'We have to wait some time in order to trigger a new event... Waiting 60sec now'
@@ -171,7 +171,7 @@ jobs:
       # consequences when extending these steps:
       # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
       - uses: actions/checkout@v3
-        # this checks out the upstream `master` and not the PR branch; this is fine for us
+        # this checks out the upstream `main` and not the PR branch; this is fine for us
         # as we just need a proper config for git/gh to work with.
       - env:
           pr_branch: ${{ github.event.pull_request.head.ref }}

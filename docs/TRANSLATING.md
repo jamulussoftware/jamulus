@@ -32,7 +32,7 @@ The translator must be able to carry out the following steps, each of which are 
 - Copy ("clone") their own repository to their computer, using either:
   - Command line `git`, or
   - [GitHub Desktop](https://docs.github.com/en/desktop)
-- Update their own local repo from the upstream master branch.
+- Update their own local repo from the upstream main branch.
 - Create a local branch to contain the update.
 - Use the Qt Linguist tool to edit the appropriate translation (`.ts`) file.
 - Commit the updated `.ts` file to the branch their own local git repo.
@@ -151,7 +151,7 @@ Instructions for use are in the [Qt Linguist Manual](https://doc.qt.io/qt-5/qtli
 
 #### With git command line tools
 
-The first step is to get the local repo up to date with the upstream master:
+The first step is to get the local repo up to date with the upstream main:
 
 ```
 cd projectdir/jamulus
@@ -159,15 +159,15 @@ git fetch upstream
 ```
 
 This fetches information about the current state of the upstream repo. It is now necessary to apply any upstream changes to the local repo.
-As the user will not be updating the `master` branch themselves, `git rebase` can be used to fast-forward to the current state:
+As the user will not be updating the `main` branch themselves, `git rebase` can be used to fast-forward to the current state:
 
 ```
-git checkout master
-git rebase upstream/master
+git checkout main
+git rebase upstream/main
 git push
 ```
 
-Finally, create a new branch for the changes that will be done (do not just do them on `master`).
+Finally, create a new branch for the changes that will be done (do not just do them on `main`).
 The actual name of the branch is not critical, since the branch will be deleted after being merged,
 but it's worth choosing a meaningful name:
 
@@ -181,7 +181,7 @@ The branch will be used later as the source of a pull request.
 
 #### With GitHub Desktop
 
-Select the current repository as `jamulus`, and the current branch as `master`.
+Select the current repository as `jamulus`, and the current branch as `main`.
 
 Click on "Fetch origin" to get fully up to date with upstream.
 
@@ -255,7 +255,7 @@ Other contributors may have edited your files after you began your work, which c
 git remote add upstream git@github.com:jamulussoftware/jamulus ;# add the main repo as upstream remote if you didn’t already as mentioned above
 git fetch upstream ; # Get the latest changes from the main upstream repo you added before (if needed)
 git checkout <theBranchYourWorkIsOn> ;# switch to (= checkout) the branch you want to rebase
-git rebase upstream/master ;# replay (=rebase) your changes onto the latest code (and fix conflicts if needed)
+git rebase upstream/main ;# replay (=rebase) your changes onto the latest code (and fix conflicts if needed)
 git rebase --continue # to continue the rebasing progress after having fixed the conflicts
 git push --force # Push the changes to your repo. Be aware that this will overwrite your remote branch!
 ```
@@ -269,7 +269,7 @@ Please open an issue on GitHub and introduce yourself first, even if you intend 
 
 After having opened an issue on GitHub:
 1. Fork the Jamulus repository as described above, then install Qt on your machine (See [COMPILING.md](../COMPILING.md)). (You will need `lrelease` and `lupdate` later on.)
-2. Create a branch based on the `master` branch: Locally navigate to the folder you cloned the repo to (with `cd /path/to/jamulus/repo`) and type `git checkout -b "translate-add-xx_YY"` (where xx_YY is the language code of the new language).
+2. Create a branch based on the `main` branch: Locally navigate to the folder you cloned the repo to (with `cd /path/to/jamulus/repo`) and type `git checkout -b "translate-add-xx_YY"` (where xx_YY is the language code of the new language).
 3. Open Jamulus.pro in an editor such as `nano`: `nano Jamulus.pro` and add your language file (which will be created later) in alphabetical order to the `TRANSLATIONS` variable. The format should match the other present languages.
 4. Also add `src/translation/translation_xx_YY.qm` to the DISTFILES variable similar to the other files
 5. Save and close Jamulus.pro.

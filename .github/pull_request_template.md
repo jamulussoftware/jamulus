@@ -27,9 +27,9 @@ CHANGELOG: <!-- Insert a short, end-user understandable sentence in past tense r
 
 <!-- Please tick the check boxes when done by replacing the space by an x, e.g. [x]. -->
 
--  [ ] I've verified that this Pull Request follows the [general code principles](https://github.com/jamulussoftware/jamulus/blob/master/CONTRIBUTING.md#jamulus-projectsource-code-general-principles)
+-  [ ] I've verified that this Pull Request follows the [general code principles](https://github.com/jamulussoftware/jamulus/blob/main/CONTRIBUTING.md#jamulus-projectsource-code-general-principles)
 -  [ ] I tested my code and it does what I want
--  [ ] My code follows the [style guide](https://github.com/jamulussoftware/jamulus/blob/master/CONTRIBUTING.md#source-code-consistency) <!-- You can also check if your code passes clang-format -->
+-  [ ] My code follows the [style guide](https://github.com/jamulussoftware/jamulus/blob/main/CONTRIBUTING.md#source-code-consistency) <!-- You can also check if your code passes clang-format -->
 -  [ ] I waited some time after this Pull Request was opened and all GitHub checks completed without errors. <!-- GitHub doesn't run these checks for new contributors automatically. -->
 -  [ ] I've filled all the content above
 

@@ -83,7 +83,7 @@
 
 ### 3.9.0 (2022-07-29) ###
 
-- Feature: Added **_EXPERIMENTAL_** new JSON-RPC interface to control client and server (see [docs/JSON-RPC.md](https://github.com/jamulussoftware/jamulus/blob/master/docs/JSON-RPC.md) for details) (#1975, #2505).
+- Feature: Added **_EXPERIMENTAL_** new JSON-RPC interface to control client and server (see [docs/JSON-RPC.md](https://github.com/jamulussoftware/jamulus/blob/main/docs/JSON-RPC.md) for details) (#1975, #2505).
   (contributed by @dtinth, @Rob-NY)
 
 - GUI: Translations have been updated:

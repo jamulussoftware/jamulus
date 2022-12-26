@@ -3,14 +3,14 @@ name: Coding Style Check
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - '**.cpp'
       - '**.h'
       - '**.mm'
       - '**.sh'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - '**.cpp'
       - '**.h'

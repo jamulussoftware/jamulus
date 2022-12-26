@@ -69,7 +69,7 @@ We are getting ready for the ${RELEASE} release. No further changes to translata
 We would be happy if you updated the Jamulus software translations for **${LANG}** by **${DEADLINE}**.
 
 Please either [update the translations on Hosted Weblate](https://hosted.weblate.org/projects/jamulus/) or use Git:
-- Update your fork from `jamulussoftware/jamulus` `master` and create a working branch
+- Update your fork from `jamulussoftware/jamulus` `main` and create a working branch
 - Update translations using Qt Linguist in your fork,
 - Commit and push your changes and reference this Issue,
 - Open a Pull Request before ${DEADLINE}
@@ -83,7 +83,7 @@ Fixes #<Insert this issue'"'"'s number here>
 
 ${EXTRA_TEXT}${MULTIPLE_TRANSLATORS_TEXT}
 
-Further documentation can be found in [TRANSLATING.md](https://github.com/jamulussoftware/jamulus/blob/master/docs/TRANSLATING.md).
+Further documentation can be found in [TRANSLATING.md](https://github.com/jamulussoftware/jamulus/blob/main/docs/TRANSLATING.md).
 
 Thanks for contributing to Jamulus!
 

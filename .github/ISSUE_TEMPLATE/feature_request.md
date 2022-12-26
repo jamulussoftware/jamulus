@@ -14,7 +14,7 @@ assignees: ''
 
 <!--
 List possible approaches with pros and cons, reference any relevant discussion threads if possible, and consider tagging the main participants.
-Please note the contribution guidelines (https://github.com/jamulussoftware/jamulus/blob/master/CONTRIBUTING.md), especially the part about "keeping it simple and stupid".
+Please note the contribution guidelines (https://github.com/jamulussoftware/jamulus/blob/main/CONTRIBUTING.md), especially the part about "keeping it simple and stupid".
 -->
 
 <!-- Describe the solution you'd like -->

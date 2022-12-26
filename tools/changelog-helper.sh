@@ -38,7 +38,7 @@ find_or_add_missing_entries() {
         check_or_add_pr "$id"
     done
 
-    local target_ref=origin/master
+    local target_ref=origin/main
     if git tag | grep -qxF "${target_release_tag}"; then
         # already released, use this
         target_ref="${target_release_tag}"
@@ -46,7 +46,7 @@ find_or_add_missing_entries() {
     echo
     echo "Checking if all PR references in git log since ${prev_release_tag} are included for ${target_release} based on ref ${target_ref}..."
     local milestone
-    for id in $(git log "${prev_release_tag}..master" | grep -oP '#\K(\d+)'); do
+    for id in $(git log "${prev_release_tag}..main" | grep -oP '#\K(\d+)'); do
         gh pr view "${id}" --json title &> /dev/null || continue # Skip non-PRs
         milestone=$(gh pr view "${id}" --json milestone --jq .milestone.title)
         if [[ "${milestone}" =~ "Release " ]] && [[ "${milestone}" != "Release ${target_release}" ]]; then

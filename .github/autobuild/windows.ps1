@@ -20,7 +20,7 @@ $ChocoCacheDir = 'C:\ChocoCache'
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
 $Qt32Version = "5.15.2"
 $Qt64Version = "5.15.2"
-$AqtinstallVersion = "3.0.2"
+$AqtinstallVersion = "3.1.0"
 $JackVersion = "1.9.21.20221111"
 $Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"

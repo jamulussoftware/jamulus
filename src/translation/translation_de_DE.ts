@@ -3606,7 +3606,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation>Klicke auf die Schaltfläche, um das Dialogfeld zu öffnen, in dem du den Namen der Persistenzdatei der Serverliste festlegen kannst. Der Benutzer, unter dem %1 läuft, muss in der Lage sein, die angegebene Datei zu erstellen, auch wenn sie bereits existiert (sie wird beim Speichern überschrieben).</translation>
+        <translation>Klicke auf die Schaltfläche, um das Dialogfeld zu öffnen, in dem du den Namen der Persistenzdatei der Serverliste festlegen kannst. Der Benutzer, unter dem %1 läuft, muss die angegebene Datei erstellen können, auch wenn sie bereits existiert (sie wird beim Speichern überschrieben).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="211"/>
@@ -3616,7 +3616,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation>Der aktuelle Wert des Dateinamens für die Persistenz der Serverliste. Der Benutzer, unter dem %1 läuft, muss in der Lage sein, die angegebene Datei zu erstellen, auch wenn sie bereits existiert (sie wird beim Speichern überschrieben). Klicken Sie auf die Schaltfläche , um das Dialogfeld zu öffnen, in dem Sie den Namen der Serverlisten-Persistenzdatei festlegen können.</translation>
+        <translation>Der aktuelle Wert des Dateinamens für die Persistenz der Serverliste. Der Benutzer, unter dem %1 läuft, muss die angegebene Datei erstellen können, auch wenn sie bereits existiert (sie wird beim Speichern überschrieben). Klicke auf die Schaltfläche um das Dialogfeld zu öffnen, in dem du den Namen der Serverlisten-Persistenzdatei festlegen kannst.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="220"/>

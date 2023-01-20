@@ -147,7 +147,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Norwegisch (Bokmål)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>
@@ -3547,7 +3547,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     </message>
     <message>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation type="unfinished">Oder wähle &quot;%1&quot; und gebe in der Registerkarte &quot;Optionen&quot; eine benutzerdefinierte Verzeichnisadresse an, um dich bei einem benutzerdefinierten Verzeichnis zu registrieren.</translation>
+        <translation>Oder wählen Sie &quot;%1&quot; und geben Sie auf der Registerkarte &quot;Optionen&quot; eine benutzerdefinierte Verzeichnisadresse an, um sich bei einem benutzerdefinierten Verzeichnis zu registrieren.</translation>
     </message>
     <message>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
@@ -3590,23 +3590,23 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation type="unfinished">Die Adresse des benutzerdefinierten Verzeichnisses ist die Adresse des Verzeichnisses, das die Serverliste enthält, zu der dieser Server hinzugefügt werden soll.</translation>
+        <translation>Die Adresse des benutzerdefinierten Verzeichnisses ist die Adresse des Verzeichnisses, das die Serverliste enthält, zu der dieser Server hinzugefügt werden soll.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="203"/>
         <source>Server List Filename dialog push button</source>
-        <translation type="unfinished">Serverliste Dateiname Dialog Button</translation>
+        <translation>Serverliste Dateiname Dialog Taste</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="204"/>
         <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename</source>
-        <translation type="unfinished">Serverliste Dateiname</translation>
+        <translation>Serverliste Dateiname</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation>Klicke auf die Schaltfläche, um das Dialogfeld zu öffnen, in dem du den Namen der Persistenzdatei der Serverliste festlegen kannst. Der Benutzer, unter dem %1 läuft, muss in der Lage sein, den angegebenen Dateinamen zu erstellen, auch wenn er bereits existiert (er wird beim Speichern überschrieben).</translation>
+        <translation>Klicke auf die Schaltfläche, um das Dialogfeld zu öffnen, in dem du den Namen der Persistenzdatei der Serverliste festlegen kannst. Der Benutzer, unter dem %1 läuft, muss die angegebene Datei erstellen können, auch wenn sie bereits existiert (sie wird beim Speichern überschrieben).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="211"/>
@@ -3616,17 +3616,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation>Der aktuelle Wert des Dateinamens für die Persistenz der Serverliste. Der Benutzer, unter dem %1 läuft, muss in der Lage sein, den angegebenen Dateinamen zu erstellen, auch wenn er bereits existiert (sie wird beim Speichern überschrieben). Klicken Sie auf die Schaltfläche , um das Dialogfeld zu öffnen, in dem Sie den Namen der Serverlisten-Persistenzdatei festlegen können.</translation>
+        <translation>Der aktuelle Wert des Dateinamens für die Persistenz der Serverliste. Der Benutzer, unter dem %1 läuft, muss die angegebene Datei erstellen können, auch wenn sie bereits existiert (sie wird beim Speichern überschrieben). Klicke auf die Schaltfläche um das Dialogfeld zu öffnen, in dem du den Namen der Serverlisten-Persistenzdatei festlegen kannst.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="220"/>
         <source>Clear the server list file name button</source>
-        <translation type="unfinished">Schaltfläche Dateiname der Serverliste löschen</translation>
+        <translation>Schaltfläche Dateiname der Serverliste leeren</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear Server List Filename</source>
-        <translation type="unfinished">Serverliste Dateiname Feld löschen</translation>
+        <translation>Serverliste Dateiname leeren</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
@@ -3886,7 +3886,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../serverdlg.cpp" line="60"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Verzeichnis:&lt;/b&gt; &apos;%1&apos; auswählen, um den Server nicht bei einem Verzeichnis zu registrieren.&lt;br&gt;Oder eines der Verzeichnisse auswählen, um den Server bei diesem Verzeichnis zu registrieren.&lt;br&gt;Oder &apos;%2&apos; wählen und auf der Registerkarte Optionen eine benutzerdefinierte Verzeichnisadresse angeben, um den Server bei einem benutzerdefinierten Verzeichnis zu registrieren.&lt;br&gt;&lt;br&gt;Für jeden Wert außer &apos;%1&apos; registriert sich dieser Server bei einem Verzeichnis, so dass ein %3-Benutzer diesen Server in der Serverliste des Client-Verbindungsdialogs auswählen kann, wenn er dieses Verzeichnis wählt.&lt;br&gt;&lt;br&gt;Die Registrierung des Servers wird regelmäßig erneuert, um sicherzustellen, dass alle Server in der Serverliste des Verbindungsdialogs tatsächlich verfügbar sind.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="131"/>
@@ -4231,7 +4231,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished">Benutzerdefinierte Verzeichnisadresse</translation>
+        <translation>Benutzerdefinierte Verzeichnisadresse</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>

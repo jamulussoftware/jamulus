@@ -2606,7 +2606,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../serverdlg.cpp" line="60"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;目录：&lt;/b&gt;选择 &apos;%1&apos; 不在目录中注册你的服务器。&lt;br&gt;或者选择其中一个流派在该目录中注册。&lt;br&gt;或者选择 &apos;%2&apos; 并在选项标签上指定一个自定义目录地址，在一个自定义目录中注册。&lt;br&gt;&lt;br&gt;对于除&apos;%1&apos;以外的任何值，该服务器都会与一个目录注册，这样，当 %3 的用户选择该目录时，可以在客户端连接对话服务器列表中选择该服务器。&lt;br&gt;&lt;br&gt;服务器的注册会定期更新，以确保连接对话服务器列表中的所有服务器都是实际可用的。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="226"/>

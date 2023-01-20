@@ -199,7 +199,7 @@
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
         <translatorcomment>I&apos;ll keep it untranslated for the moment</translatorcomment>
-        <translation></translation>
+        <translation>Copyright (C) 2005-2022 A equipe de desenvolvimento Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -1280,7 +1280,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientdlgbase.ui" line="118"/>
         <source>Reverb</source>
-        <translation>Reverb</translation>
+        <translation type="unfinished">Ressonância</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="202"/>
@@ -4556,7 +4556,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation>O JACK não está sendo executado com uma taxa de amostras de &lt;b&gt;%1 Hz&lt;/b&gt;. Utilize uma ferramenta como &lt;i&gt;&lt;a=href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; para definir a taxa de amostras do JACK em %1 Hz.</translation>
+        <translation>O JACK não está sendo executado com uma taxa de amostras de &lt;b&gt;%1 Hz&lt;/b&gt;. Utilize uma ferramenta como &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; para definir a taxa de amostras do JACK em %1 Hz.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>
@@ -4793,7 +4793,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../global.h" line="123"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation>Uma melhoria %1 está disponível: &lt;a style=&apos;color:red&apos; href=https://jamulus.io/upgrade?progversion=%2&apos;&gt;vá para detalhes e downloads&lt;/a&gt;</translation>
+        <translation>Uma melhoria %1 está disponível: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;vá para detalhes e downloads&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="273"/>

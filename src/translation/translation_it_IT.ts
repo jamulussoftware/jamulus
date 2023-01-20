@@ -184,13 +184,13 @@
         <translation>Versione</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2022 Volker Fischer e altri</translation>
+        <source>Copyright (C) 2005-2023 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2023 Volker Fischer e altri</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2022 Team di sviluppo Jamulus</translation>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
+        <translation>Copyright (C) 2005-2023 Team di sviluppo Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -4745,8 +4745,8 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <translation type="vanished">Iconde delle Bandiere di Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2022 Team di sviluppo Jamulus</translation>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2023 Team di sviluppo Jamulus</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

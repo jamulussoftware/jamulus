@@ -144,12 +144,12 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
+        <source>Copyright (C) 2005-2023 Volker Fischer and others</source>
         <translation type="vanished">Autorské práva (C) 2005-2020 Volker Fischer a iní</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
         <translation>Autorské práva (C) 2005-2021 The Jamulus Development Team</translation>
     </message>
     <message>
@@ -3972,7 +3972,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation type="vanished">Ikony vlajok: Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
         <translation type="vanished">Autorské práva (C) 2005-2022 The Jamulus Development Team</translation>
     </message>
     <message>

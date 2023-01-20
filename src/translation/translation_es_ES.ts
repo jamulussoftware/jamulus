@@ -192,13 +192,13 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2022 Volker Fischer y otros</translation>
+        <source>Copyright (C) 2005-2023 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2023 Volker Fischer y otros</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2022 El Equipo de Desarrollo de Jamulus</translation>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
+        <translation>Copyright (C) 2005-2023 El Equipo de Desarrollo de Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -4800,8 +4800,8 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation type="vanished">Iconos de banderas de Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2022 The Jamulus Development Team</translation>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2023 The Jamulus Development Team</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

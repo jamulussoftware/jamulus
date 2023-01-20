@@ -145,7 +145,7 @@
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
         <translation>版权所有 (C) 2005-2021 Jamulus 开发团队</translation>
     </message>
     <message>
@@ -3551,7 +3551,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">旗帜图标作者为 Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
         <translation type="vanished">版权所有 (C) 2005-2022 Jamulus 开发团队</translation>
     </message>
     <message>

@@ -133,7 +133,7 @@
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
         <translation type="unfinished">Opphavsrett © 2005–2022 Jamulus-utviklingslaget</translation>
     </message>
     <message>

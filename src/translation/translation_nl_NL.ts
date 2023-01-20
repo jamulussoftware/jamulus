@@ -147,7 +147,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Noors (Bokmål)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>
@@ -2796,7 +2796,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="986"/>
         <source>Custom Directories:</source>
-        <translation>Eigen adresboek</translation>
+        <translation>Eigen adresboek:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1025"/>
@@ -3583,12 +3583,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="175"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation>Klik op de knop om het dialoogvenster te openen waarin de opnamedirectory kan worden geselecteerd. De gekozen waarde moet bestaan ​​en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd).</translation>
+        <translation>Klik op de knop om het dialoogvenster te openen waarin de opnamedirectory kan worden geselecteerd.  De gekozen waarde moet bestaan en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="182"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation>De huidige waarde van de opnamedirectory. De gekozen waarde moet bestaan ​​en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd). Klik op de knop om het dialoogvenster te openen waarin de opnamedirectory kan worden geselecteerd.</translation>
+        <translation>De huidige waarde van de opnamedirectory. De gekozen waarde moet bestaan en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd). Klik op de knop om het dialoogvenster te openen waarin de opnamedirectory kan worden geselecteerd.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="194"/>
@@ -3890,7 +3890,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../serverdlg.cpp" line="60"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Directory:&lt;/b&gt;Kies &apos;%1&apos; om uw server niet te registreren bij een directory.&lt;br&gt;Of kies één van de genres om te registreren bij die directory.&lt;br&gt;Of kies &apos;%2&apos; en specificeer een Aangepast directory adres op het Opties tabblad om te registreren bij een aangepaste directory.&lt;br&gt;&lt;br&gt;Bij elke waarde behalve &apos;%1&apos; wordt deze server geregistreerd bij een directory, zodat een %3 gebruiker deze server kan selecteren in de client connect dialog server lijst wanneer hij die directory kiest.&lt;br&gt;&lt;br&gt;De registratie van de server wordt periodiek vernieuwd om er zeker van te zijn dat alle servers in de connect dialog server lijst daadwerkelijk beschikbaar zijn.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="131"/>

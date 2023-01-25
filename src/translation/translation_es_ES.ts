@@ -231,7 +231,7 @@
     <message>
         <location filename="../analyzerconsole.cpp" line="47"/>
         <source>Analyzer Console</source>
-        <translation>Analyzer Console</translation>
+        <translation>Consola de &amp;Análisis</translation>
     </message>
     <message>
         <location filename="../analyzerconsole.cpp" line="65"/>
@@ -927,7 +927,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="381"/>
         <source>&amp;Analyzer Console...</source>
-        <translation>&amp;Analyzer Console...</translation>
+        <translation>Consola de &amp;Análisis...</translation>
     </message>
     <message>
         <source>Use &amp;Two Rows Mixer Panel</source>
@@ -2107,17 +2107,17 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
         <source>Skin</source>
-        <translation>Skin</translation>
+        <translation>Tema</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation>Elige el skin a utilizar para la ventana principal.</translation>
+        <translation>Elige el tema a utilizar para la ventana principal.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="267"/>
         <source>Skin combo box</source>
-        <translation>Campo skin</translation>
+        <translation>Campo tema</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="286"/>
@@ -2834,7 +2834,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="220"/>
         <source>Skin</source>
-        <translation>Skin</translation>
+        <translation>Tema</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="234"/>

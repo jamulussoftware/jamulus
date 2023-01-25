@@ -34,7 +34,7 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>Qt cross-platform application framework</source>
-        <translation>Qt cross-platform application framework</translation>
+        <translation>Marco de la aplicación multiplataforma Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="607"/>
@@ -2489,7 +2489,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.cpp" line="1284"/>
         <source>Bodhran</source>
-        <translation>Bodhran</translation>
+        <translation>Bodhrán</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1287"/>
@@ -2544,7 +2544,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.cpp" line="1317"/>
         <source>Banjo</source>
-        <translation>Banjo</translation>
+        <translation>Banyo</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1320"/>

@@ -596,11 +596,9 @@ void CServerDlg::OnStopRecorder()
 void CServerDlg::OnRecordingDirClicked()
 {
     // get the current value from pServer
-    QString currentValue    = pServer->GetRecordingDir();
-    QString newRecordingDir = QFileDialog::getExistingDirectory ( this,
-                                                                  tr ( "Select Main Recording Directory" ),
-                                                                  currentValue,
-                                                                  QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog );
+    QString currentValue = pServer->GetRecordingDir();
+    QString newRecordingDir =
+        QFileDialog::getExistingDirectory ( this, tr ( "Select Main Recording Directory" ), currentValue, QFileDialog::ShowDirsOnly );
 
     if ( newRecordingDir != currentValue )
     {
@@ -624,7 +622,7 @@ void CServerDlg::OnServerListPersistenceClicked()
     QString     currentValue = pServer->GetServerListFileName();
     QFileDialog fileDialog;
     fileDialog.setAcceptMode ( QFileDialog::AcceptSave );
-    fileDialog.setOptions ( QFileDialog::DontUseNativeDialog | QFileDialog::HideNameFilterDetails );
+    fileDialog.setOptions ( QFileDialog::HideNameFilterDetails );
     fileDialog.selectFile ( currentValue );
     if ( fileDialog.exec() && fileDialog.selectedFiles().size() == 1 )
     {

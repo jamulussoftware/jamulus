@@ -81,6 +81,7 @@ win32 {
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     RC_FILE = src/res/win-mainicon.rc
     mingw* {
+        DEFINES += _WIN32_WINNT=0x0600 # solves missing inet_pton in CSocket::SendPacket
         LIBS += -lole32 \
             -luser32 \
             -ladvapi32 \

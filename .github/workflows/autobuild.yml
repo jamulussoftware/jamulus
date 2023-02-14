@@ -463,18 +463,23 @@ jobs:
           set -eu
 
           [[ "${GPG_PRIVATE_KEY:-}" ]] || {
-              echo "Missing Github secret GPG_PRIVATE_KEY. Please set it on GitHub to enable deb repository releases."
-              exit 1
+              echo "Missing Github secret GPG_PRIVATE_KEY. Please set it on GitHub to enable deb repository releases. Skipping step..."
+              echo "GPG_REPO_KEY_MISSING=true" >> ${GITHUB_ENV}
+              exit 0
           }
+
+          echo "GPG_REPO_KEY_MISSING=false" >> ${GITHUB_ENV}
           mkdir -p gpghome
           chmod 700 gpghome
           echo "${GPG_PRIVATE_KEY}" | gpg --homedir gpghome --import -
       # Unfortunately download-artifact action doesn't support wild card downloads. Thus downloading all artifacts
       - name:                       Download all artifacts
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
         uses:                       actions/download-artifact@v3
         with:
           path:                     releasedl/
-      - name:                       Create debian repository
+      - name:                       Create Debian repository
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
         run:                        |
           set -eu
 
@@ -492,6 +497,7 @@ jobs:
           popd
 
       - name:                       Upload Packages file to release
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
         id:                         deb-upload-packagesfile
         uses:                       actions/upload-release-asset@v1
         env:
@@ -502,6 +508,7 @@ jobs:
           asset_name:               Packages
           asset_content_type:       text/plain
       - name:                       Upload Release file to release
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
         id:                         deb-upload-releasefile
         uses:                       actions/upload-release-asset@v1
         env:
@@ -512,6 +519,7 @@ jobs:
           asset_name:               Release
           asset_content_type:       message/rfc822
       - name:                       Upload InRelease file to release
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
         id:                         deb-upload-inreleasefile
         uses:                       actions/upload-release-asset@v1
         env:
@@ -522,6 +530,7 @@ jobs:
           asset_name:               InRelease
           asset_content_type:       text/PGP
       - name:                       Upload Key file to release
+        if:                         env.GPG_REPO_KEY_MISSING == 'false'
         id:                         deb-upload-keyascfile
         uses:                       actions/upload-release-asset@v1
         env:

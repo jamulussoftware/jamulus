@@ -445,3 +445,89 @@ jobs:
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql
         uses:                       github/codeql-action/analyze@v2
+
+  create_deb_repo:
+    name:                           Create files for .deb repository (if requested)
+    runs-on:                        ubuntu-22.04
+    needs:                          [create_release, release_assets]
+    if:                             needs.create_release.outputs.publish_to_release == 'true'
+    # Set permissions to allow uploading artifact, uploading to release
+    permissions:
+      checks:                       write
+      contents:                     write
+    steps:
+      - name:                       Import GPG key
+        env:
+          GPG_PRIVATE_KEY:          ${{ secrets.GPG_PRIVATE_KEY }}
+        run:                        |
+          set -eu
+
+          [[ "${GPG_PRIVATE_KEY:-}" ]] || {
+              echo "Missing Github secret GPG_PRIVATE_KEY. Please set it on GitHub to enable deb repository releases."
+              exit 1
+          }
+          mkdir -p gpghome
+          chmod 700 gpghome
+          echo "${GPG_PRIVATE_KEY}" | gpg --homedir gpghome --import -
+      # Unfortunately download-artifact action doesn't support wild card downloads. Thus downloading all artifacts
+      - name:                       Download all artifacts
+        uses:                       actions/download-artifact@v3
+        with:
+          path:                     releasedl/
+      - name:                       Create debian repository
+        run:                        |
+          set -eu
+
+          # Create and cd into repo directory
+          mkdir repo
+          mv releasedl/*.deb/*.deb repo/
+          pushd repo
+
+          # create repo files
+          apt-ftparchive packages . > Packages
+          apt-ftparchive release . > Release
+          gpg --homedir "../gpghome" --armor --yes --clearsign --output InRelease --detach-sign Release
+          gpg --homedir "../gpghome" --armor --export > "key.asc"
+
+          popd
+
+      - name:                       Upload Packages file to release
+        id:                         deb-upload-packagesfile
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
+          asset_path:               repo/Packages
+          asset_name:               Packages
+          asset_content_type:       text/plain
+      - name:                       Upload Release file to release
+        id:                         deb-upload-releasefile
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
+          asset_path:               repo/Release
+          asset_name:               Release
+          asset_content_type:       message/rfc822
+      - name:                       Upload InRelease file to release
+        id:                         deb-upload-inreleasefile
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
+          asset_path:               repo/InRelease
+          asset_name:               InRelease
+          asset_content_type:       text/PGP
+      - name:                       Upload Key file to release
+        id:                         deb-upload-keyascfile
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
+          asset_path:               repo/key.asc
+          asset_name:               key.asc
+          asset_content_type:       application/pgp-keys

@@ -81,6 +81,7 @@ win32 {
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     RC_FILE = src/res/win-mainicon.rc
     mingw* {
+        DEFINES += _WIN32_WINNT=0x0600 # solves missing inet_pton in CSocket::SendPacket
         LIBS += -lole32 \
             -luser32 \
             -ladvapi32 \
@@ -681,11 +682,23 @@ contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
 DEFINES_OPUS += OPUS_BUILD=1 USE_ALLOCA=1 OPUS_HAVE_RTCD=1 HAVE_LRINTF=1 HAVE_LRINT=1
 
 DISTFILES += ChangeLog \
+    COMPILING.md \
     COPYING \
     CONTRIBUTING.md \
     README.md \
+    SECURITY.md \
+    docs/JAMULUS_PROTOCOL.md \
+    docs/JSON-RPC.md \
+    docs/README.md \
+    docs/RELATED-PROJECTS.md \
+    docs/TRANSLATING.md \
     linux/jamulus.desktop.in \
     linux/jamulus-server.desktop.in \
+    mac/Info-make-legacy.plist \
+    mac/Info-make.plist \
+    mac/Info-xcode.plist \
+    mac/Jamulus.entitlements \
+    mac/deploy_mac.sh \
     src/res/io.jamulus.jamulus.png \
     src/res/io.jamulus.jamulus.svg \
     src/res/io.jamulus.jamulusserver.svg \
@@ -1042,7 +1055,17 @@ DISTFILES += ChangeLog \
     src/res/flags/yt.png \
     src/res/flags/za.png \
     src/res/flags/zm.png \
-    src/res/flags/zw.png
+    src/res/flags/zw.png \
+    tools/changelog-helper.sh \
+    tools/check-wininstaller-translations.sh \
+    tools/checkkeys.pl \
+    tools/create-translation-issues.sh \
+    tools/generate_json_rpc_docs.py \
+    tools/get_release_contributors.py \
+    tools/qt5-to-qt6-country-code-table.py \
+    tools/update-copyright-notices.sh \
+    windows/deploy_windows.ps1 \
+    windows/installer.nsi
 
 DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/ChangeLog \

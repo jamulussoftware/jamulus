@@ -329,6 +329,7 @@ jobs:
           path: |
             C:\Qt
             C:\ChocoCache
+            C:\AutobuildCache
             ${{ github.workspace }}\libs\NSIS\NSIS-source
             ${{ github.workspace }}\libs\ASIOSDK2
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.base_command }}

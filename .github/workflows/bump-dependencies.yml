@@ -50,11 +50,9 @@ jobs:
             # The following regex captures both the *nix and the Windows variable syntax (different case, underscore):
             local_version_regex: (.*QT[0-9_]+VERSION\s*=\s*"?)(6\.[0-9.]+)("?.*)
 
-          - name: choco-jack
+          - name: jack
             changelog_name: bundled JACK (Windows-only)
-            get_upstream_version: |
-              curl -s -o /dev/null --location --range 0-5 --write-out '%{url_effective}' https://community.chocolatey.org/api/v2/package/jack/ |
-                grep -oP '.*/jack\.\K.*(?=\.nupkg)'
+            get_upstream_version: GH_REPO=jackaudio/jack2-releases gh release view --json tagName --jq .tagName | sed -re 's/^v//'
             local_version_regex: (.*JackVersion\s*=\s*"?)([0-9.]+)("?.*)
 
           - name: choco-jom

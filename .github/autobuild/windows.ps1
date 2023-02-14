@@ -60,7 +60,7 @@ Function Download-Dependency
 
     if ( !$? )
     {
-        throw "Download of "+ $Name + " (" + $Uri + ") failed with exit code $LastExitCode"
+        throw "Download of $Name ($Uri) failed with exit code $LastExitCode"
     }
 }
 
@@ -159,9 +159,9 @@ Function Ensure-JACK
     if ( !$? )
     {
         throw "64bit JACK installer failed with exit code $LastExitCode"
-    } else {
-        echo "64bit JACK installation completed successfully"
     }
+
+    echo "64bit JACK installation completed successfully"
 
     echo "Installing JACK2 32-bit..."
 
@@ -174,10 +174,9 @@ Function Ensure-JACK
     if ( !$? )
     {
         throw "32bit JACK installer failed with exit code $LastExitCode"
-    } else {
-        echo "32bit JACK installation completed successfully"
     }
 
+    echo "32bit JACK installation completed successfully"
 }
 
 Function Build-App-With-Installer

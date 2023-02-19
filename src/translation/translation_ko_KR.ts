@@ -3080,7 +3080,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../serverdlg.cpp" line="60"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;디렉터리:&lt;/b&gt; 사용자의 서버를 디렉터리에 등록하지 않으려면 &apos;%1&apos;을(를) 선택합니다.&lt;br&gt;또는 해당 디렉토리에 등록할 장르 중 하나를 선택합니다.&lt;br&gt;또는 &apos;%2&apos;를 선택하고 [옵션] 탭에서 사용자 지정 디렉터리 주소를 지정하여 사용자 지정 디렉터리에 등록하십시오.&lt;br&gt;&lt;br&gt;&apos;%1&apos;을 제외한 모든 값의 경우, %3 사용자가 해당 디렉터리를 선택할 때 클라이언트 연결 대화 상자 서버 목록에서 이 서버를 선택할 수 있도록 이 서버는 디렉터리에 등록됩니다.&lt;br&gt;&lt;br&gt;서버의 등록은 연결 대화상자 서버 목록의 모든 서버를 실제로 사용할 수 있도록 주기적으로 갱신됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="175"/>

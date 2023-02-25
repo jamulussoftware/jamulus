@@ -759,7 +759,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 void CClientSettingsDlg::showEvent ( QShowEvent* )
 {
     UpdateDisplay();
-    UpdateDirectoryServerComboBox();
+    UpdateDirectoryComboBox();
 
     // set the name
     pedtAlias->setText ( pClient->ChannelInfo.strName );
@@ -1037,7 +1037,7 @@ void CClientSettingsDlg::OnCustomDirectoriesEditingFinished()
     }
 
     // update combo box list and inform connect dialog about the new address
-    UpdateDirectoryServerComboBox();
+    UpdateDirectoryComboBox();
     emit CustomDirectoriesChanged();
 }
 
@@ -1082,7 +1082,7 @@ void CClientSettingsDlg::UpdateDisplay()
     }
 }
 
-void CClientSettingsDlg::UpdateDirectoryServerComboBox()
+void CClientSettingsDlg::UpdateDirectoryComboBox()
 {
     cbxCustomDirectories->clear();
     cbxCustomDirectories->clearEditText();

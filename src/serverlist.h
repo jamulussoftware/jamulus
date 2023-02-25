@@ -158,7 +158,7 @@ public:
     void           SetDirectoryType ( const EDirectoryType eNCSAT );
     EDirectoryType GetDirectoryType() { return DirectoryType; }
 
-    bool IsDirectoryServer() const { return bIsDirectoryServer; }
+    bool IsDirectory() const { return bIsDirectory; }
 
     ESvrRegStatus GetSvrRegStatus() { return eSvrRegStatus; }
 
@@ -176,7 +176,7 @@ public:
     bool    SetServerListFileName ( QString strFilename );
 
 protected:
-    void SetIsDirectoryServer();
+    void SetIsDirectory();
     void Unregister();
     void Register();
     void SetRegistered ( bool bIsRegister );
@@ -201,7 +201,7 @@ protected:
     QList<CServerListEntry> ServerList;
 
     QString strDirectoryAddress;
-    bool    bIsDirectoryServer;
+    bool    bIsDirectory;
 
     // server registration status
     ESvrRegStatus eSvrRegStatus;

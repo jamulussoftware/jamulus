@@ -133,7 +133,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     bEnableIPv6 ( bNEnableIPv6 ),
     ServerListFileName ( strServerListFileName ),
     strDirectoryAddress ( "" ),
-    bIsDirectoryServer ( false ),
+    bIsDirectory ( false ),
     eSvrRegStatus ( SRS_NOT_REGISTERED ),
     strMinServerVersion ( "" ), // disable version check with empty version
     pConnLessProtocol ( pNConLProt ),
@@ -190,7 +190,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
      *
      * If we are a directory, we assume that we are a permanent server.
      */
-    CServerListEntry ThisServerListEntry ( haServerAddr, ServerPublicIP, "", QLocale::system().country(), "", iNumChannels, bIsDirectoryServer );
+    CServerListEntry ThisServerListEntry ( haServerAddr, ServerPublicIP, "", QLocale::system().country(), "", iNumChannels, bIsDirectory );
 
     // parse the server info string according to definition:
     // [this server name];[this server city];[this server country as QLocale ID] (; ... ignored)
@@ -248,7 +248,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     // set the directory address - not the type, that gets done by app start up
     SetDirectoryAddress ( sNDirectoryAddress );
 
-    // whitelist parsing - only used when bIsDirectoryServer
+    // whitelist parsing - only used when bIsDirectory
     if ( !strServerListFilter.isEmpty() )
     {
         // split the different parameter strings
@@ -366,7 +366,7 @@ void CServerListManager::SetDirectoryAddress ( const QString sNDirectoryAddress 
     // now save the new name
     strDirectoryAddress = sNDirectoryAddress;
 
-    SetIsDirectoryServer();
+    SetIsDirectory();
 
     locker.unlock();
 
@@ -390,7 +390,7 @@ void CServerListManager::SetDirectoryType ( const EDirectoryType eNCSAT )
     // now update the server type
     DirectoryType = eNCSAT;
 
-    SetIsDirectoryServer();
+    SetIsDirectory();
 
     locker.unlock();
 
@@ -398,23 +398,23 @@ void CServerListManager::SetDirectoryType ( const EDirectoryType eNCSAT )
     Register();
 }
 
-void CServerListManager::SetIsDirectoryServer()
+void CServerListManager::SetIsDirectory()
 {
     // this is called with the lock set
 
     // per definition: If we are registered and the directory
     // is the localhost address, we are in directory mode.
-    bool bNIsDirectoryServer = DirectoryType == AT_CUSTOM &&
-                               ( !strDirectoryAddress.compare ( "localhost", Qt::CaseInsensitive ) || !strDirectoryAddress.compare ( "127.0.0.1" ) );
+    bool bNIsDirectory = DirectoryType == AT_CUSTOM &&
+                         ( !strDirectoryAddress.compare ( "localhost", Qt::CaseInsensitive ) || !strDirectoryAddress.compare ( "127.0.0.1" ) );
 
-    if ( bIsDirectoryServer == bNIsDirectoryServer )
+    if ( bIsDirectory == bNIsDirectory )
     {
         return;
     }
 
-    bIsDirectoryServer = bNIsDirectoryServer;
+    bIsDirectory = bNIsDirectory;
 
-    if ( bIsDirectoryServer )
+    if ( bIsDirectory )
     {
         qInfo() << qUtf8Printable ( tr ( "Now a directory" ) );
         // Load any persistent server list (create it if it is not there)
@@ -442,7 +442,7 @@ void CServerListManager::Unregister()
     QMutexLocker locker ( &Mutex );
 
     // disable service -> stop timer
-    if ( bIsDirectoryServer )
+    if ( bIsDirectory )
     {
         TimerPollList.stop();
         TimerPingServerInList.stop();
@@ -474,7 +474,7 @@ void CServerListManager::Register()
     // this is called without the lock set
     QMutexLocker locker ( &Mutex );
 
-    if ( bIsDirectoryServer )
+    if ( bIsDirectory )
     {
         // start timer for polling the server list if enabled
         // 1 minute = 60 * 1000 ms
@@ -560,7 +560,7 @@ void CServerListManager::Append ( const CHostAddress&    InetAddr,
                                   const CServerCoreInfo& ServerInfo,
                                   const QString          strVersion )
 {
-    if ( bIsDirectoryServer )
+    if ( bIsDirectory )
     {
         // if the client IP address is a private one, it's on the same LAN as the directory
         bool serverIsExternal = !NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr );
@@ -637,7 +637,7 @@ void CServerListManager::Append ( const CHostAddress&    InetAddr,
 
 void CServerListManager::Remove ( const CHostAddress& InetAddr )
 {
-    if ( bIsDirectoryServer )
+    if ( bIsDirectory )
     {
         qInfo() << qUtf8Printable ( QString ( "Requested to unregister entry for %1" ).arg ( InetAddr.toString() ) );
 
@@ -671,7 +671,7 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
 {
     QMutexLocker locker ( &Mutex );
 
-    if ( bIsDirectoryServer )
+    if ( bIsDirectory )
     {
         // if the client IP address is a private one, it's on the same LAN as the directory
         bool clientIsInternal = NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr );
@@ -771,7 +771,7 @@ bool CServerListManager::Load()
 {
     // this is called with the lock set
 
-    if ( !bIsDirectoryServer || ServerListFileName.isEmpty() )
+    if ( !bIsDirectory || ServerListFileName.isEmpty() )
     {
         // this gets called again if either of the above change
         return true;
@@ -966,7 +966,7 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
         return;
     }
 
-    if ( bIsDirectoryServer )
+    if ( bIsDirectory )
     {
         // this IS the directory, no network message to worry about
         SetSvrRegStatus ( bIsRegister ? SRS_REGISTERED : SRS_NOT_REGISTERED );

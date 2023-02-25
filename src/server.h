@@ -131,7 +131,7 @@ public:
 
     void           SetDirectoryType ( const EDirectoryType eNCSAT ) { ServerListManager.SetDirectoryType ( eNCSAT ); }
     EDirectoryType GetDirectoryType() { return ServerListManager.GetDirectoryType(); }
-    bool           IsDirectoryServer() { return ServerListManager.IsDirectoryServer(); }
+    bool           IsDirectory() { return ServerListManager.IsDirectory(); }
     ESvrRegStatus  GetSvrRegStatus() { return ServerListManager.GetSvrRegStatus(); }
 
     void             SetServerName ( const QString& strNewName ) { ServerListManager.SetServerName ( strNewName ); }
@@ -348,8 +348,8 @@ public slots:
 
     void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
     {
-        // only send empty message if not a directory server
-        if ( !ServerListManager.IsDirectoryServer() )
+        // only send empty message if not a directory
+        if ( !ServerListManager.IsDirectory() )
         {
             ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr );
         }

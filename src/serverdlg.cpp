@@ -731,7 +731,7 @@ void CServerDlg::UpdateGUIDependencies()
     QString             strStatus     = svrRegStatusToString ( eSvrRegStatus );
     QString             strFontColour = "darkGreen";
 
-    if ( pServer->IsDirectoryServer() )
+    if ( pServer->IsDirectory() )
     {
         strStatus = tr ( "Now a directory" );
     }

@@ -162,7 +162,7 @@ public:
     int              iNumMixerPanelRows;
     CVector<QString> vstrDirectoryAddress;
     EDirectoryType   eDirectoryType;
-    int              iCustomDirectoryIndex; // index of selected custom directory server
+    int              iCustomDirectoryIndex; // index of selected custom directory
     bool             bEnableFeedbackDetection;
     bool             bEnableAudioAlerts;
     bool             bCleanUpLegacyFaderSettings;

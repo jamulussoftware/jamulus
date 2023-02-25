@@ -272,8 +272,8 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "--centralserver", // no short form
-                                 "--directoryserver",
+                                 "--centralserver",   // for backwards compatibility
+                                 "--directoryserver", // also for backwards compatibility
                                  strArgument ) )
         {
             strDirectoryAddress = strArgument;

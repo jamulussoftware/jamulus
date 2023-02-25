@@ -91,7 +91,7 @@ public:
               const quint16      iPortNumber,
               const quint16      iQosNumber,
               const QString&     strHTMLStatusFileName,
-              const QString&     strDirectoryServer,
+              const QString&     strDirectoryAddress,
               const QString&     strServerListFileName,
               const QString&     strServerInfo,
               const QString&     strServerListFilter,

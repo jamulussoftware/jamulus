@@ -151,7 +151,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Bokmål Norueguês</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>
@@ -1280,7 +1280,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientdlgbase.ui" line="118"/>
         <source>Reverb</source>
-        <translation type="unfinished">Ressonância</translation>
+        <translation>Ressonância</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="202"/>

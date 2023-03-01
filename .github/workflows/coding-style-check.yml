@@ -25,13 +25,14 @@ jobs:
     name: Verify coding style
     # As this action runs with minimal permissions and does not influence the build output,
     # we perform no version pinning for the runner or the installed tools here.
+    # The clangFormatVersion is based on Ubuntu current LTS (jammy at time of writing).
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Check .cpp/.h/.mm with clang-format
       uses: DoozyX/clang-format-lint-action@c3b2c943e924028b93a707a5b1b017976ab8d50c
       with:
-        clangFormatVersion: 10
+        clangFormatVersion: 14
         # When updating the extension list, remember to update
         # Jamulus.pro's CLANG_SOURCES as well and the paths: in 'on:' list above.
         extensions: 'cpp,h,mm'

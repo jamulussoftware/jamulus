@@ -134,7 +134,7 @@ Function Ensure-JACK
 
     # Set installer parameters for silent install
 
-    $JACKInstallParms = "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"
+    $JACKInstallParms = "/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART"
 
     # Create cache directory if it doesn't exist yet
 

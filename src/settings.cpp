@@ -934,20 +934,20 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
                                     static_cast<int> ( AT_DEFAULT ),
                                     static_cast<int> ( AT_CUSTOM ),
                                     iValue ) )
-        {
-            directoryType = static_cast<EDirectoryType> ( iValue );
-        }
-        //### TODO: END ###//
+            {
+                directoryType = static_cast<EDirectoryType> ( iValue );
+            }
+            //### TODO: END ###//
 
-        else if ( GetNumericIniSet ( IniXMLDocument,
-                                     "server",
-                                     "directorytype",
-                                     static_cast<int> ( AT_NONE ),
-                                     static_cast<int> ( AT_CUSTOM ),
-                                     iValue ) )
-        {
-            directoryType = static_cast<EDirectoryType> ( iValue );
-        }
+            else if ( GetNumericIniSet ( IniXMLDocument,
+                                         "server",
+                                         "directorytype",
+                                         static_cast<int> ( AT_NONE ),
+                                         static_cast<int> ( AT_CUSTOM ),
+                                         iValue ) )
+            {
+                directoryType = static_cast<EDirectoryType> ( iValue );
+            }
 
         //### TODO: BEGIN ###//
         // compatibility to old version < 3.9.0

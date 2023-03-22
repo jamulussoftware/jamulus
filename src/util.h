@@ -126,7 +126,7 @@ public:
     CVector ( const int iNeSi ) { Init ( iNeSi ); }
     CVector ( const int iNeSi, const TData tInVa ) { Init ( iNeSi, tInVa ); }
 
-    CVector ( CVector const& ) = default;
+    CVector ( CVector const& )            = default;
     CVector& operator= ( CVector const& ) = default;
 
     void Init ( const int iNewSize );

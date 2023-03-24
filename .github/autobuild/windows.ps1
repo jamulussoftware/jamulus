@@ -22,7 +22,7 @@ $DownloadCacheDir = 'C:\AutobuildCache'
 $Qt32Version = "5.15.2"
 $Qt64Version = "5.15.2"
 $AqtinstallVersion = "3.1.2"
-$JackVersion = "1.9.21"
+$JackVersion = "1.9.22"
 $Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"
 $JomVersion = "1.1.2"
@@ -134,7 +134,7 @@ Function Ensure-JACK
 
     # Set installer parameters for silent install
 
-    $JACKInstallParms = "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"
+    $JACKInstallParms = "/SILENT", "/SUPPRESSMSGBOXES", "/NORESTART"
 
     # Create cache directory if it doesn't exist yet
 

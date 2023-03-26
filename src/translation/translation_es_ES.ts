@@ -231,7 +231,7 @@
     <message>
         <location filename="../analyzerconsole.cpp" line="47"/>
         <source>Analyzer Console</source>
-        <translation>Consola de &amp;Análisis</translation>
+        <translation>Consola de Análisis</translation>
     </message>
     <message>
         <location filename="../analyzerconsole.cpp" line="65"/>
@@ -244,7 +244,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="903"/>
         <source>Personal Mix at the Server</source>
-        <translation>Mezcla personal en el Servidor</translation>
+        <translation>Mezcla Personal en el Servidor</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="904"/>

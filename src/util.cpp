@@ -1730,7 +1730,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** Some sound samples are from Freesound";
         strVersionText += "\n *** <https://freesound.org>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Copyright (C) 2005-2023 The Jamulus Development Team";
+        strVersionText += "\n *** Copyright © 2005-2023 The Jamulus Development Team";
         strVersionText += "\n";
     }
 

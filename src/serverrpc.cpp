@@ -119,7 +119,7 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
             { "city", pServer->GetServerCity() },
             { "countryId", pServer->GetServerCountry() },
             { "welcomeMessage", pServer->GetWelcomeMessage() },
-            { "directoryServer", dsName },
+            { "directoryServer", dsName }, // TODO rename to 'directory' and update doccomment above
             { "registrationStatus", SerializeRegistrationStatus ( pServer->GetSvrRegStatus() ) },
         };
         response["result"] = result;
@@ -233,7 +233,7 @@ QJsonValue CServerRpc::SerializeRegistrationStatus ( ESvrRegStatus eSvrRegStatus
         return "registered";
 
     case SRS_SERVER_LIST_FULL:
-        return "directory_server_full";
+        return "directory_server_full"; // TODO - rename to "server_list_full"
 
     case SRS_VERSION_TOO_OLD:
         return "server_version_too_old";

@@ -199,7 +199,7 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     edtCustomDirectory->setWhatsThis ( strCustomDirectory );
     edtCustomDirectory->setAccessibleName ( tr ( "Custom Directory line edit" ) );
 
-    // server list persistence file name (directory server only)
+    // server list persistence file name (directory only)
     pbtServerListPersistence->setAccessibleName ( tr ( "Server List Filename dialog push button" ) );
     pbtServerListPersistence->setWhatsThis ( "<b>" + tr ( "Server List Filename" ) + ":</b> " +
                                              tr ( "Click the button to open the dialog that allows the "
@@ -731,7 +731,7 @@ void CServerDlg::UpdateGUIDependencies()
     QString             strStatus     = svrRegStatusToString ( eSvrRegStatus );
     QString             strFontColour = "darkGreen";
 
-    if ( pServer->IsDirectoryServer() )
+    if ( pServer->IsDirectory() )
     {
         strStatus = tr ( "Now a directory" );
     }

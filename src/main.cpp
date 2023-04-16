@@ -108,7 +108,7 @@ int main ( int argc, char** argv )
     QString      strHTMLStatusFileName       = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
-    QString      strDirectoryServer          = "";
+    QString      strDirectoryAddress         = "";
     QString      strServerListFileName       = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
@@ -258,13 +258,13 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Directory server ----------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-e", "--directoryserver", strArgument ) )
+        // Directory to register with ------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-e", "--directoryaddress", strArgument ) )
         {
-            strDirectoryServer = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
-            CommandLineOptions << "--directoryserver";
-            ServerOnlyOptions << "--directoryserver";
+            strDirectoryAddress = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- register with directory at address: %1" ).arg ( strDirectoryAddress ) );
+            CommandLineOptions << "--directoryaddress";
+            ServerOnlyOptions << "--directoryaddress";
             continue;
         }
 
@@ -272,14 +272,14 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "--centralserver", // no short form
-                                 "--centralserver",
+                                 "--centralserver",   // for backwards compatibility
+                                 "--directoryserver", // also for backwards compatibility
                                  strArgument ) )
         {
-            strDirectoryServer = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
-            CommandLineOptions << "--directoryserver";
-            ServerOnlyOptions << "--directoryserver";
+            strDirectoryAddress = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- register with directory at address: %1" ).arg ( strDirectoryAddress ) );
+            CommandLineOptions << "--directoryaddress";
+            ServerOnlyOptions << "--directoryaddress";
             continue;
         }
 
@@ -292,7 +292,7 @@ int main ( int argc, char** argv )
                                  strArgument ) )
         {
             strServerListFileName = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server persistence file: %1" ).arg ( strServerListFileName ) );
+            qInfo() << qUtf8Printable ( QString ( "- server list persistence file: %1" ).arg ( strServerListFileName ) );
             CommandLineOptions << "--directoryfile";
             ServerOnlyOptions << "--directoryfile";
             continue;
@@ -669,13 +669,13 @@ int main ( int argc, char** argv )
             if ( !strServerListFileName.isEmpty() )
             {
                 qInfo() << "Note:"
-                        << "Server list persistence file will only take effect when running as a directory server.";
+                        << "Server list persistence file will only take effect when running as a directory.";
             }
 
             if ( !strServerListFilter.isEmpty() )
             {
                 qInfo() << "Note:"
-                        << "Server list filter will only take effect when running as a directory server.";
+                        << "Server list filter will only take effect when running as a directory.";
             }
         }
         else
@@ -689,7 +689,7 @@ int main ( int argc, char** argv )
             }
             // therefore we know everything based on command line options
 
-            if ( strDirectoryServer.compare ( "localhost", Qt::CaseInsensitive ) == 0 || strDirectoryServer.compare ( "127.0.0.1" ) == 0 )
+            if ( strDirectoryAddress.compare ( "localhost", Qt::CaseInsensitive ) == 0 || strDirectoryAddress.compare ( "127.0.0.1" ) == 0 )
             {
                 if ( !strServerListFileName.isEmpty() )
                 {
@@ -751,22 +751,22 @@ int main ( int argc, char** argv )
             {
                 if ( !strServerListFileName.isEmpty() )
                 {
-                    qWarning() << "Server list persistence file will only take effect when running as a directory server.";
+                    qWarning() << "Server list persistence file will only take effect when running as a directory.";
                     strServerListFileName = "";
                 }
 
                 if ( !strServerListFilter.isEmpty() )
                 {
-                    qWarning() << "Server list filter will only take effect when running as a directory server.";
+                    qWarning() << "Server list filter will only take effect when running as a directory.";
                     strServerListFileName = "";
                 }
             }
 
-            if ( strDirectoryServer.isEmpty() )
+            if ( strDirectoryAddress.isEmpty() )
             {
                 if ( !strServerPublicIP.isEmpty() )
                 {
-                    qWarning() << "Server Public IP will only take effect when registering a server with a directory server.";
+                    qWarning() << "Server Public IP will only take effect when registering a server with a directory.";
                     strServerPublicIP = "";
                 }
             }
@@ -996,7 +996,7 @@ int main ( int argc, char** argv )
                              iPortNumber,
                              iQosNumber,
                              strHTMLStatusFileName,
-                             strDirectoryServer,
+                             strDirectoryAddress,
                              strServerListFileName,
                              strServerInfo,
                              strServerPublicIP,
@@ -1049,8 +1049,8 @@ int main ( int argc, char** argv )
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
                 // CServerListManager defaults to AT_NONE, so need to switch if
-                // strDirectoryServer is wanted
-                if ( !strDirectoryServer.isEmpty() )
+                // strDirectoryAddress is wanted
+                if ( !strDirectoryAddress.isEmpty() )
                 {
                     Server.SetDirectoryType ( AT_CUSTOM );
                 }
@@ -1093,61 +1093,60 @@ QString UsageArguments ( char** argv )
            "\n"
            "Usage: %1 [option] [option argument] ...\n"
            "\n"
-           "  -h, -?, --help        display this help text and exit\n"
-           "  -v, --version         display version information and exit\n"
+           "  -h, -?, --help          display this help text and exit\n"
+           "  -v, --version           display version information and exit\n"
            "\n"
            "Common options:\n"
-           "  -i, --inifile         initialization file name\n"
-           "                        (not supported for headless Server mode)\n"
-           "  -n, --nogui           disable GUI (\"headless\")\n"
-           "  -p, --port            set the local port number\n"
-           "      --jsonrpcport     enable JSON-RPC server, set TCP port number\n"
-           "                        (EXPERIMENTAL, APIs might still change;\n"
-           "                        only accessible from localhost)\n"
-           "      --jsonrpcsecretfile\n"
-           "                        path to a single-line file which contains a freely\n"
-           "                        chosen secret to authenticate JSON-RPC users.\n"
-           "      --jsonrpcbindip   optional network address to bind RPC server. Defaults to 127.0.0.1.\n"
-           "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
-           "                        (see the Jamulus website to enable QoS on Windows)\n"
-           "  -t, --notranslation   disable translation (use English language)\n"
-           "  -6, --enableipv6      enable IPv6 addressing (IPv4 is always enabled)\n"
+           "  -i, --inifile           initialization file name\n"
+           "                          (not supported for headless Server mode)\n"
+           "  -n, --nogui             disable GUI (\"headless\")\n"
+           "  -p, --port              set the local port number\n"
+           "      --jsonrpcport       enable JSON-RPC server, set TCP port number\n"
+           "                          (EXPERIMENTAL, APIs might still change;\n"
+           "                          only accessible from localhost)\n"
+           "      --jsonrpcsecretfile path to a single-line file which contains a freely\n"
+           "                          chosen secret to authenticate JSON-RPC users.\n"
+           "      --jsonrpcbindip     optional network address to bind RPC server. Defaults to 127.0.0.1.\n"
+           "  -Q, --qos               set the QoS value. Default is 128. Disable with 0\n"
+           "                          (see the Jamulus website to enable QoS on Windows)\n"
+           "  -t, --notranslation     disable translation (use English language)\n"
+           "  -6, --enableipv6        enable IPv6 addressing (IPv4 is always enabled)\n"
            "\n"
            "Server only:\n"
-           "  -d, --discononquit    disconnect all Clients on quit\n"
-           "  -e, --directoryserver address of the directory Server with which to register\n"
-           "                        (or 'localhost' to host a server list on this Server)\n"
-           "      --directoryfile   Remember registered Servers even if the Directory is restarted. Directory Servers only.\n"
-           "  -f, --listfilter      Server list whitelist filter.  Format:\n"
-           "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
-           "  -F, --fastupdate      use 64 samples frame size mode\n"
-           "  -l, --log             enable logging, set file name\n"
-           "  -L, --licence         show an agreement window before users can connect\n"
-           "  -m, --htmlstatus      enable HTML status file, set file name\n"
-           "  -o, --serverinfo      registration info for this Server.  Format:\n"
-           "                        [name];[city];[country as two-letter ISO country code or Qt5 QLocale ID]\n"
-           "      --serverpublicip  public IP address for this Server.  Needed when\n"
-           "                        registering with a server list hosted\n"
-           "                        behind the same NAT\n"
-           "  -P, --delaypan        start with delay panning enabled\n"
-           "  -R, --recording       set server recording directory; server will record when a session is active by default\n"
-           "      --norecord        set server not to record by default when recording is configured\n"
-           "  -s, --server          start Server\n"
-           "      --serverbindip    IP address the Server will bind to (rather than all)\n"
-           "  -T, --multithreading  use multithreading to make better use of\n"
-           "                        multi-core CPUs and support more Clients\n"
-           "  -u, --numchannels     maximum number of channels\n"
-           "  -w, --welcomemessage  welcome message to display on connect\n"
-           "                        (string or filename, HTML supported)\n"
-           "  -z, --startminimized  start minimizied\n"
+           "  -d, --discononquit      disconnect all Clients on quit\n"
+           "  -e, --directoryaddress  address of the Directory with which to register\n"
+           "                          (or 'localhost' to run as a Directory)\n"
+           "      --directoryfile     File to hold server list across Directory restarts. Directories only.\n"
+           "  -f, --listfilter        Server list whitelist filter. Directories only. Format:\n"
+           "                          [IP address 1];[IP address 2];[IP address 3]; ...\n"
+           "  -F, --fastupdate        use 64 samples frame size mode\n"
+           "  -l, --log               enable logging, set file name\n"
+           "  -L, --licence           show an agreement window before users can connect\n"
+           "  -m, --htmlstatus        enable HTML status file, set file name\n"
+           "  -o, --serverinfo        registration info for this Server.  Format:\n"
+           "                          [name];[city];[country as two-letter ISO country code or Qt5 QLocale ID]\n"
+           "      --serverpublicip    public IP address for this Server.  Needed when\n"
+           "                          registering with a server list hosted\n"
+           "                          behind the same NAT\n"
+           "  -P, --delaypan          start with delay panning enabled\n"
+           "  -R, --recording         set server recording directory; server will record when a session is active by default\n"
+           "      --norecord          set server not to record by default when recording is configured\n"
+           "  -s, --server            start Server\n"
+           "      --serverbindip      IP address the Server will bind to (rather than all)\n"
+           "  -T, --multithreading    use multithreading to make better use of\n"
+           "                          multi-core CPUs and support more Clients\n"
+           "  -u, --numchannels       maximum number of channels\n"
+           "  -w, --welcomemessage    welcome message to display on connect\n"
+           "                          (string or filename, HTML supported)\n"
+           "  -z, --startminimized    start minimizied\n"
            "\n"
            "Client only:\n"
-           "  -c, --connect         connect to given Server address on startup\n"
-           "  -j, --nojackconnect   disable auto JACK connections\n"
-           "  -M, --mutestream      prevent others on a server from hearing what I play\n"
-           "      --mutemyown       prevent me from hearing what I play in the server mix (headless only)\n"
-           "      --clientname      Client name (window title and JACK client name)\n"
-           "      --ctrlmidich      MIDI controller channel to listen\n"
+           "  -c, --connect           connect to given Server address on startup\n"
+           "  -j, --nojackconnect     disable auto JACK connections\n"
+           "  -M, --mutestream        prevent others on a server from hearing what I play\n"
+           "      --mutemyown         prevent me from hearing what I play in the server mix (headless only)\n"
+           "      --clientname        client name (window title and JACK client name)\n"
+           "      --ctrlmidich        configure MIDI controller\n"
            "\n"
            "Example: %1 -s --inifile myinifile.ini\n"
            "\n"

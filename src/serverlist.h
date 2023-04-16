@@ -10,15 +10,15 @@ Originally, if you wanted to run a server, you had to open the firewall of your
 computer at the correct ports and introduce a port forwarding at your router
 to get it work.
 
-Whilst the above can work, using a directory server simplifies the process. The user
-who wants to run a server just registers his server with a directory server
+Whilst the above can work, registering with a Directory simplifies the process.
+The user who wants to run a server just registers his server with a Directory
 and a mechanism implemented in the protocol opens the firewall, similar to STUN.
 
 REQUIREMENTS:
 
-The client sets the URL of the directory server and can get a list of all
-currently activated and registered servers. If the user clicks on the server
-of his choice, he gets connected to this server.
+The client sets the URL of the directory and can get a list of all currently
+activated and registered servers. If the user clicks on the server of his choice,
+he gets connected to this server.
 
 The server list must be available in both cases: if the client is connected to
 a server or not.
@@ -31,11 +31,11 @@ the server, etc.
 
 CONNECTION PROCESS:
 
-A server contacts the directory server and registers through some protocol mechanism.
+A server contacts the directory and registers through some protocol mechanism.
 
-If a client requests the server list from a directory server, the directory server
-sends the IP address of the client to each registered server so that they can
-immediately send a "firewall opening" UDP packet to this IP address.
+If a client requests the server list from a directory, the directory sends the
+IP address of the client to each registered server so that they can immediately
+send a "firewall opening" (i.e. outbound) UDP packet to this IP address.
 
 If the client now sends ping messages to each of the servers in the list, the
 server firewalls and routers are prepared for receiving UDP packets from this
@@ -158,7 +158,7 @@ public:
     void           SetDirectoryType ( const EDirectoryType eNCSAT );
     EDirectoryType GetDirectoryType() { return DirectoryType; }
 
-    bool IsDirectoryServer() const { return bIsDirectoryServer; }
+    bool IsDirectory() const { return bIsDirectory; }
 
     ESvrRegStatus GetSvrRegStatus() { return eSvrRegStatus; }
 
@@ -176,7 +176,7 @@ public:
     bool    SetServerListFileName ( QString strFilename );
 
 protected:
-    void SetIsDirectoryServer();
+    void SetIsDirectory();
     void Unregister();
     void Register();
     void SetRegistered ( bool bIsRegister );
@@ -201,7 +201,7 @@ protected:
     QList<CServerListEntry> ServerList;
 
     QString strDirectoryAddress;
-    bool    bIsDirectoryServer;
+    bool    bIsDirectory;
 
     // server registration status
     ESvrRegStatus eSvrRegStatus;

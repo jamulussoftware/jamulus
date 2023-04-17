@@ -280,7 +280,7 @@ Results:
 | result.city | string | The server city. |
 | result.countryId | number | The server country ID (see QLocale::Country). |
 | result.welcomeMessage | string | The server welcome message. |
-| result.directoryServer | string | The directory server to which this server requested registration, or blank if none. |
+| result.directory | string | The directory with which this server requested registration, or blank if none. |
 | result.registrationStatus | string | The server registration status as string (see ESvrRegStatus and SerializeRegistrationStatus). |
 
 

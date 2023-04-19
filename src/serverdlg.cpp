@@ -134,9 +134,9 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
              "Check the value in the Options tab." ) +
         "</dd>" + "<dt>" + SREC_NOT_ENABLED + "</dt>" + "<dd>"
 #ifdef _WIN32
-        + tr ( "Recording has been switched off by the UI checkbox." )
+        + tr ( "Recording has been switched off by the UI checkbox or JSON-RPC." )
 #else
-        + tr ( "Recording has been switched off, either by the UI checkbox or SIGUSR2 being received." )
+        + tr ( "Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC." )
 #endif
         + "</dd>" + "<dt>" + SREC_NOT_RECORDING + "</dt>" + "<dd>" + tr ( "There is no one connected to the server to record." ) + "</dd>" + "<dt>" +
         SREC_RECORDING + "</dt>" + "<dd>" + tr ( "The performers are being recorded to the specified session directory." ) + "</dd>" + "</dl>" +

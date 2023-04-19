@@ -834,7 +834,7 @@ public:
     static bool                    IsCountryCodeSupported ( unsigned short iCountryCode );
     static QLocale::Country        GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode );
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
-    // ./tools/qt5-to-qt6-country-code-table.py generates these lists:
+    // ./tools/qt5_to_qt6_country_code_table.py generates these lists:
     constexpr int const static wireFormatToQt6Table[] = {
         0,   1,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
         29,  30,  31,  32,  33,  35,  36,  37,  38,  39,  40,  41,  43,  45,  46,  48,  49,  50,  51,  53,  54,  55,  57,  56,  58,  59,  118,

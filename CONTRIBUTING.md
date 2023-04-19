@@ -20,6 +20,7 @@ If a feature or function can be accomplished in another way by another system or
 
 ### Source code consistency
 
+#### C-like languages
 Please install and run `clang-format` on your PC **before committing** to maintain a consistent coding style. You should use the version we use to validate the style in our CI [(see our coding-style-check file and look for the `clangFormatVersion`)](https://github.com/jamulussoftware/jamulus/blob/main/.github/workflows/coding-style-check.yml#L20). Our CI will fail and tell you about styling violations.
 
 There are several ways to run clang-format:
@@ -30,7 +31,7 @@ There are several ways to run clang-format:
 
 - By hand: run `clang-format -i <path/to/changed/files>`
 
-#### Style definition
+##### Style definition
 
 Please see the [.clang_format file](https://github.com/jamulussoftware/jamulus/blob/main/.clang-format) in the root folder. In summary:
 
@@ -39,6 +40,12 @@ Please see the [.clang_format file](https://github.com/jamulussoftware/jamulus/b
 - Insert a space before and after `(` and `)`. There should be no space between `)` and `;` or before an empty `()`.
 - Enclose all bodies of `if`, `else`, `while`, `for`, etc. in braces `{` and `}` on separate lines.
 - Do not use concatinations in strings with parameters. Instead use substitutions. **Do:** `QString ( tr ( "Hello, %1. Have a nice day!" ) ).arg( getName() )` **Don't:** `tr ( "Hello " ) + getName() + tr ( ". Have a nice day!" )` ...to make translation easier.
+
+#### Python
+Please install and use [pylint](https://pylint.org/) to scan any Python code.
+There is a configuration file that defines some overrides,
+and note the [Editorconfig file](.editorconfig) in the project too.
+
 
 ### Supported platforms
 

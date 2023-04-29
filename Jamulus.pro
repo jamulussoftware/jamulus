@@ -125,7 +125,7 @@ win32 {
                 libjackname = "libjack64.lib"
             }
             !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
+                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32 Bit vs. 64 Bit).")
             }
 
             HEADERS += src/sound/jack/sound.h
@@ -178,6 +178,7 @@ win32 {
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
 
     macx-xcode {
+        # As of 2023-04-15 the macOS build with Xcode only fails. This is tracked in #1841
         QMAKE_INFO_PLIST = mac/Info-xcode.plist
         XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
         XCODE_ENTITLEMENTS.value = mac/Jamulus.entitlements

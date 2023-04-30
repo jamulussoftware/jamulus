@@ -78,7 +78,7 @@ Function Install-Qt
         "$QtArch",
         "--archives", "qtbase", "qttools", "qttranslations"
     )
-    if ( $QtVersion -notmatch '^5\.' )
+    if ( $QtVersion -notmatch '5\.[0-9]+\.[0-9]+' )
     {
         # From Qt6 onwards, qtmultimedia is a module and cannot be installed
         # as an archive anymore.

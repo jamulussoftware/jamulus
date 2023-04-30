@@ -24,7 +24,7 @@ setup() {
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         local qtmultimedia=()
-        if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+        if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+ ]]; then
             # From Qt6 onwards, qtmultimedia is a module and cannot be installed
             # as an archive anymore.
             qtmultimedia=("--modules")

@@ -44,7 +44,7 @@ Please see the [.clang_format file](https://github.com/jamulussoftware/jamulus/b
 
 We support the following platforms and versions:
 
-- **Windows 7** or later
+- **Windows 10** or later
 - **macOS 10.10** or later
 - **Ubuntu 18.04** or later, **Debian 10** or later, most Linux flavors with recent enough Qt versions
 

@@ -764,7 +764,7 @@ void CServerDlg::UpdateGUIDependencies()
     edtLocationCity->setText ( pServer->GetServerCity() );
     cbxLocationCountry->setCurrentIndex ( cbxLocationCountry->findData ( static_cast<int> ( pServer->GetServerCountry() ) ) );
 
-    tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
+    tedWelcomeMessage->setPlainText ( pServer->GetWelcomeMessage() );
 
     edtCustomDirectory->setText ( pServer->GetDirectoryAddress() );
 

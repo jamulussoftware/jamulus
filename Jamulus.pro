@@ -68,6 +68,10 @@ INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/silk/fixed \
     libs/opus
 
+# As JACK is used in multiple OS, we declare it globally
+HEADERS_JACK = src/sound/jack/sound.h
+SOURCES_JACK = src/sound/jack/sound.cpp
+
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
@@ -125,11 +129,11 @@ win32 {
                 libjackname = "libjack64.lib"
             }
             !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
+                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32 Bit vs. 64 Bit).")
             }
 
-            HEADERS += src/sound/jack/sound.h
-            SOURCES += src/sound/jack/sound.cpp
+            HEADERS += $$HEADERS_JACK
+            SOURCES += $$SOURCES_JACK
             DEFINES += WITH_JACK
             DEFINES += JACK_ON_WINDOWS
             DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
@@ -178,6 +182,7 @@ win32 {
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
 
     macx-xcode {
+        # As of 2023-04-15 the macOS build with Xcode only fails. This is tracked in #1841
         QMAKE_INFO_PLIST = mac/Info-xcode.plist
         XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
         XCODE_ENTITLEMENTS.value = mac/Jamulus.entitlements
@@ -208,8 +213,8 @@ win32 {
                  error("Error: jack.h was not found at the usual place, maybe JACK is not installed")
             }
         }
-        HEADERS += src/sound/jack/sound.h
-        SOURCES += src/sound/jack/sound.cpp
+        HEADERS += $$HEADERS_JACK
+        SOURCES += $$SOURCES_JACK
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_COREAUDIO
         INCLUDEPATH += /usr/local/include
@@ -296,8 +301,8 @@ win32 {
     } else {
         message(JACK Audio Interface Enabled.)
 
-        HEADERS += src/sound/jack/sound.h
-        SOURCES += src/sound/jack/sound.cpp
+        HEADERS += $$HEADERS_JACK
+        SOURCES += $$SOURCES_JACK
 
         contains(CONFIG, "raspijamulus") {
             message(Using JACK Audio in raspijamulus.sh mode.)

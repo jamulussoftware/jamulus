@@ -150,7 +150,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © 2005-2023 L&apos;équipe de développement de Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -3089,12 +3089,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;enregistrement a été désactivé par la case à cocher de l&apos;interface utilisateur ou par JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;enregistrement a été désactivé par la case à cocher de l&apos;interface utilisateur, SIGUSR2 ou JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="175"/>
@@ -3642,7 +3642,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste des serveurs pleine dans l&apos;annuaire</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -3813,22 +3813,22 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverlist.cpp" line="419"/>
         <source>Now a directory</source>
-        <translation type="unfinished">Maintenant un annuaire</translation>
+        <translation>Maintenant un annuaire</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="425"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Plus un annuaire</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="784"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir &apos;%1&apos; en lecture/écriture. Veuillez vérifier que %2 en a la permission (et qu&apos;il y a de l&apos;espace libre).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="791"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Chargement du fichier de la liste des serveurs persistants : %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="854"/>
@@ -3838,7 +3838,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverlist.cpp" line="865"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarde de l&apos;inscription pour %1 (%2) : %3</translation>
     </message>
 </context>
 <context>

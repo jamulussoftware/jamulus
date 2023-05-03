@@ -147,7 +147,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Noors (Bokmål)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>
@@ -2796,7 +2796,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="986"/>
         <source>Custom Directories:</source>
-        <translation>Eigen adresboek</translation>
+        <translation>Eigen adresboeken</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1025"/>
@@ -2865,7 +2865,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../connectdlg.cpp" line="46"/>
         <source>Shows the servers listed by the selected directory. You can add custom directories in Advanced Settings.</source>
-        <translation>Toont de beschikbare servers in het gekozen adresboek. U kunt een eigen adresboek toevoegen in de geavanceerde instellingen.</translation>
+        <translation>Toont de beschikbare servers in het gekozen adresboek. U kunt eigen adresboeken toevoegen in de geavanceerde instellingen.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="48"/>
@@ -3573,22 +3573,22 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
-        <translation>Er is geen opnamedirectory ingesteld of de waarde is niet bruikbaar. Controleer de waarde in het tabblad Opties.</translation>
+        <translation>Er is geen opnamemap ingesteld of de waarde is niet bruikbaar. Controleer de waarde in het tabblad Opties.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
-        <translation>Als de opnamedirectory niet bruikbaar is, wordt het probleem weergegeven in plaats van de sessiedirectory.</translation>
+        <translation>Als de opnamemap niet bruikbaar is, wordt het probleem weergegeven in plaats van de sessiemap.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="175"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation>Klik op de knop om het dialoogvenster te openen waarin de opnamedirectory kan worden geselecteerd. De gekozen waarde moet bestaan ​​en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd).</translation>
+        <translation>Klik op de knop om het dialoogvenster te openen waarin de opnamemap kan worden geselecteerd. De gekozen waarde moet bestaan en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="182"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation>De huidige waarde van de opnamedirectory. De gekozen waarde moet bestaan ​​en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd). Klik op de knop om het dialoogvenster te openen waarin de opnamedirectory kan worden geselecteerd.</translation>
+        <translation>De huidige waarde van de opnamemap. De gekozen waarde moet bestaan en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd). Klik op de knop om het dialoogvenster te openen waarin de opnamemap kan worden geselecteerd.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="194"/>
@@ -3811,13 +3811,13 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="173"/>
         <source>Display dialog to select recording directory button</source>
-        <translation>Toon venster voor het instellen van de directory voor geluidsopnames</translation>
+        <translation>Toon venster voor het instellen van de map voor geluidsopnames</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="174"/>
         <location filename="../serverdlg.cpp" line="181"/>
         <source>Main Recording Directory</source>
-        <translation>Hoofddirectory voor geluidsopnames</translation>
+        <translation>Hoofdmap voor geluidsopnames</translation>
     </message>
     <message>
         <source>Click the button to open the dialog that allows the main recording directory to be selected. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
@@ -3826,7 +3826,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="180"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation>Hoofddirectory voor geluidsopnames tekstvak (alleen lezen)</translation>
+        <translation>Hoofdmap voor geluidsopnames tekstvak (alleen lezen)</translation>
     </message>
     <message>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
@@ -3835,17 +3835,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="188"/>
         <source>Clear the recording directory button</source>
-        <translation>Wis aangegeven geluidsopnamedirectory</translation>
+        <translation>Wis aangegeven geluidsopnamemap</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="189"/>
         <source>Clear Recording Directory</source>
-        <translation>Wis aangegeven geluidsopnamedirectory</translation>
+        <translation>Wis aangegeven geluidsopnamemap</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="190"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation>Klik op deze knop om de aangegeven geluidsopnamedirectory te wissen. Opnames kunnen niet worden gemaakt zonder ingestelde geluidsopnamedirectory.</translation>
+        <translation>Klik op deze knop om de aangegeven geluidsopnamemap te wissen. Opnames kunnen niet worden gemaakt zonder ingestelde geluidsopnamemap.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="118"/>
@@ -3869,17 +3869,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="147"/>
         <source>Current session directory text box (read-only)</source>
-        <translation>Huidige sessie directory tekstvak (alleen lezen)</translation>
+        <translation>Huidige sessiemap tekstvak (alleen lezen)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="151"/>
         <source>Current Session Directory</source>
-        <translation>Huidige sessie directory</translation>
+        <translation>Huidige sessiemap</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="152"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
-        <translation>Ingeschakeld tijdens geluidsopname en bevat de sessie-directory. Uitgeschakeld na geluidsopname of wanneer geluidsopname uit staat.</translation>
+        <translation>Ingeschakeld tijdens geluidsopname en bevat de sessiemap. Uitgeschakeld na geluidsopname of wanneer geluidsopname uit staat.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="129"/>
@@ -3890,7 +3890,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../serverdlg.cpp" line="60"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Adresboek:&lt;/b&gt;Kies &apos;%1&apos; om je server niet te registreren bij een adresboek.&lt;br&gt;Of kies één van de genres om te registreren bij die adresboek.&lt;br&gt;Of kies &apos;%2&apos; en specificeer een eigen adresboek adres in het Opties tabblad om te registreren bij een eigen adresboek.&lt;br&gt;&lt;br&gt;Bij elke waarde behalve &apos;%1&apos; wordt deze server geregistreerd bij een adresboek, zodat een %3 gebruiker deze server kan selecteren in de client verbindingsdialoog server lijst wanneer hij die adresboek kiest.&lt;br&gt;&lt;br&gt;De registratie van de server wordt periodiek vernieuwd om er zeker van te zijn dat alle servers in de verbindingsdialoog server lijst daadwerkelijk beschikbaar zijn.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="131"/>
@@ -3926,7 +3926,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="142"/>
         <source>The performers are being recorded to the specified session directory.</source>
-        <translation>Het geluid van de muzikanten wordt opgenomen in de aangegeven sessie-directory.</translation>
+        <translation>Het geluid van de muzikanten wordt opgenomen in de aangegeven sessiemap.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="143"/>
@@ -4069,7 +4069,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="601"/>
         <source>Select Main Recording Directory</source>
-        <translation>Selecteer hoofdgeluidsopnamedirectory</translation>
+        <translation>Selecteer hoofdgeluidsopnamemap</translation>
     </message>
     <message>
         <source>Predefined Address</source>
@@ -4286,7 +4286,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlgbase.ui" line="253"/>
         <source>Recording Directory</source>
-        <translation>Geluidsopnamedirectory</translation>
+        <translation>Geluidsopnamemap</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>

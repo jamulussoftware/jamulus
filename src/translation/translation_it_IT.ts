@@ -30,7 +30,7 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>Qt cross-platform application framework</source>
-        <translation></translation>
+        <translation>Framework per applicazioni multipiattaforma Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="607"/>
@@ -132,7 +132,7 @@
     <message>
         <location filename="../util.cpp" line="734"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Coreano</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="739"/>
@@ -147,7 +147,7 @@
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Bokmal norvegese</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="753"/>
@@ -278,7 +278,7 @@
         <location filename="../audiomixerboard.cpp" line="162"/>
         <location filename="../audiomixerboard.cpp" line="252"/>
         <source>Mute</source>
-        <translation>Mute</translation>
+        <translation>Muto</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="49"/>
@@ -467,7 +467,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="225"/>
         <source>MUTE</source>
-        <translation>MUTE</translation>
+        <translation>MUTO</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="226"/>
@@ -902,7 +902,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="170"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation>Il ritardo della scheda audio(ovvero  il buffer size) è troppo basso (vedere i Settaggi della Scheda).</translation>
+        <translation>Il ritardo del buffer della scheda audio (dimensione del buffer) è troppo piccolo (vedere la finestra Impostazioni).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="174"/>
@@ -1081,12 +1081,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="152"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation>Se questo indicatore LED diventa rosso, avrai difficoltà di ascolto mentre usi %1.</translation>
+        <translation>Se questo indicatore LED diventa rosso, non ti divertirai molto a usare %1.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="184"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation>Se questo indicatore LED  diventa rosso , il flusso audio si interromperà.</translation>
+        <translation>Se questo indicatore LED diventa rosso, il flusso audio viene interrotto.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="191"/>
@@ -1194,7 +1194,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
-        <translation>Delay</translation>
+        <translation>Ritardo</translation>
     </message>
     <message>
         <source>Buffers</source>
@@ -1362,7 +1362,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="137"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
-        <translation>Nel caso in cui vengano usati i  driver ASIO4ALL bisogna sapere che questi di solito introducono 10-30 ms di ritardo aggiuntivo. Si consiglia di usare driver ASIO nativi per la scheda audio in uso.</translation>
+        <translation>Se viene utilizzato il driver ASIO4ALL, tieni presente che questo driver di solito introduce ca. 10-30 ms di ritardo audio aggiuntivo. Si consiglia pertanto di utilizzare una scheda audio con un driver ASIO nativo.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="142"/>
@@ -3895,7 +3895,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../serverdlg.cpp" line="60"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Directory:&lt;/b&gt; Seleziona &apos;%1&apos; per non registrare il tuo server con una directory.&lt;br&gt;Oppure seleziona uno dei generi per registrarti con quella directory.&lt;br&gt;Oppure seleziona &apos;%2&apos; e specifica un Indirizzo della directory personalizzata nella scheda Opzioni per registrarsi con una directory personalizzata.&lt;br&gt;&lt;br&gt;Per qualsiasi valore tranne &apos;%1&apos;, questo server si registra con una directory in modo che un utente %3 possa selezionare questo server nella finestra di dialogo di connessione del client elenco dei server quando scelgono quella directory.&lt;br&gt;&lt;br&gt;La registrazione del server viene rinnovata periodicamente per assicurarsi che tutti i server nell&apos;elenco dei server della finestra di connessione siano effettivamente disponibili.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="131"/>

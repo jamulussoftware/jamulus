@@ -34,7 +34,7 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>Qt cross-platform application framework</source>
-        <translation>Qt cross-platform application framework</translation>
+        <translation>Marco de la aplicación multiplataforma Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="607"/>
@@ -231,7 +231,7 @@
     <message>
         <location filename="../analyzerconsole.cpp" line="47"/>
         <source>Analyzer Console</source>
-        <translation>Analyzer Console</translation>
+        <translation>Consola de Análisis</translation>
     </message>
     <message>
         <location filename="../analyzerconsole.cpp" line="65"/>
@@ -244,7 +244,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="903"/>
         <source>Personal Mix at the Server</source>
-        <translation>Mezcla personal en el Servidor</translation>
+        <translation>Mezcla Personal en el Servidor</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="904"/>
@@ -927,7 +927,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="381"/>
         <source>&amp;Analyzer Console...</source>
-        <translation>&amp;Analyzer Console...</translation>
+        <translation>Consola de &amp;Análisis...</translation>
     </message>
     <message>
         <source>Use &amp;Two Rows Mixer Panel</source>
@@ -2107,17 +2107,17 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
         <source>Skin</source>
-        <translation>Skin</translation>
+        <translation>Tema</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation>Elige el skin a utilizar para la ventana principal.</translation>
+        <translation>Elige el tema a utilizar para la ventana principal.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="267"/>
         <source>Skin combo box</source>
-        <translation>Campo skin</translation>
+        <translation>Campo tema</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="286"/>
@@ -2489,7 +2489,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.cpp" line="1284"/>
         <source>Bodhran</source>
-        <translation>Bodhran</translation>
+        <translation>Bodhrán</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1287"/>
@@ -2544,7 +2544,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.cpp" line="1317"/>
         <source>Banjo</source>
-        <translation>Banjo</translation>
+        <translation>Banyo</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1320"/>
@@ -2834,7 +2834,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="220"/>
         <source>Skin</source>
-        <translation>Skin</translation>
+        <translation>Tema</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="234"/>

@@ -202,7 +202,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © 2005-2023 El Equipo de Desarrollo de Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -3638,12 +3638,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>La grabación se ha desactivado mediante la casilla de la interfaz gráfica o JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>La grabación se ha desactivado, mediante la casilla de la interfaz gráfica, SIGUSR2 o JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -4222,7 +4222,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de Servidores llena en el Directorio</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -4417,22 +4417,22 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverlist.cpp" line="419"/>
         <source>Now a directory</source>
-        <translation type="unfinished">Ahora un directorio</translation>
+        <translation>Ahora un Directorio</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="425"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Ya no es un Directorio</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="784"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha podido abrir &apos;%1&apos; para lectura/escritura. Por favor, comprueba que %2 tiene permiso (y que hay espacio libre).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="791"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargando archivo de lista de Servidores persistentes: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="854"/>
@@ -4442,7 +4442,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverlist.cpp" line="865"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardando registro para %1 (%2): %3</translation>
     </message>
 </context>
 <context>

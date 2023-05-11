@@ -36,13 +36,14 @@ class DocumentationItem:
     def __init__(self, name, type_):
         """
         @param name: str
-        @param type: str
+        @param type_: str
         """
         self.name = name
         self.type = type_
         self.brief = DocumentationText()
         self.params = []
         self.results = []
+        self.current_tag = None
 
     def handle_tag(self, tag_name):
         """
@@ -57,7 +58,7 @@ class DocumentationItem:
             self.current_tag = DocumentationText()
             self.results.append(self.current_tag)
         else:
-            raise Exception("Unknown tag: " + tag_name)
+            raise ValueError("Unknown tag: " + tag_name)
 
     def handle_text(self, text):
         """
@@ -75,11 +76,7 @@ class DocumentationItem:
         """
         @return: Markdown-formatted str with name, brief, params and results
         """
-        output = []
-        output.append("### " + self.name)
-        output.append("")
-        output.append(str(self.brief))
-        output.append("")
+        output = ["### " + self.name, "", str(self.brief), ""]
 
         if len(self.params) > 0:
             output.append("Parameters:")
@@ -133,10 +130,8 @@ class DocumentationTable:
         """
         @return: str containing the Markdown table
         """
-        output = []
-        output.append("| Name | Type | Description |")
-        output.append("| --- | --- | --- |")
-        tag_re = re.compile(r"^\{(\w+)\}\s+([\S]+)\s+-\s+(.*)$", re.DOTALL)
+        output = ["| Name | Type | Description |", "| --- | --- | --- |"]
+        tag_re = re.compile(r"^{(\w+)}\s+(\S+)\s+-\s+(.*)$", re.DOTALL)
         for tag in self.tags:
             text = str(tag)
             # Parse tag in form of "{type} name - description"
@@ -185,7 +180,7 @@ for source_file in source_files:
 
 items.sort(key=lambda item: item.name)
 
-preamble = """
+PREAMBLE = """
 # Jamulus JSON-RPC Documentation
 
 <!--
@@ -251,7 +246,7 @@ Jamulus will also send **notifications** to the consumer:
 
 docs_path = os.path.join(repo_root, 'docs', 'JSON-RPC.md')
 with open(docs_path, "w") as f:
-    f.write(preamble)
+    f.write(PREAMBLE)
 
     f.write("## Method reference\n")
     for item in filter(lambda item: item.type == "method", items):

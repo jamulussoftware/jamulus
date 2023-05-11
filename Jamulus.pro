@@ -1067,7 +1067,7 @@ DISTFILES += ChangeLog \
     tools/create-translation-issues.sh \
     tools/generate_json_rpc_docs.py \
     tools/get_release_contributors.py \
-    tools/qt5-to-qt6-country-code-table.py \
+    tools/qt5_to_qt6_country_code_table.py \
     tools/update-copyright-notices.sh \
     windows/deploy_windows.ps1 \
     windows/installer.nsi

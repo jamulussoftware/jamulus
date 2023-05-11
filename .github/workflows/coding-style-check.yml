@@ -9,6 +9,7 @@ on:
       - '**.h'
       - '**.mm'
       - '**.sh'
+      - '**.py'
   pull_request:
     branches: [ main ]
     paths:
@@ -16,13 +17,14 @@ on:
       - '**.h'
       - '**.mm'
       - '**.sh'
+      - '**.py'
 
 permissions:
   contents: read
 
 jobs:
-  check-coding-style:
-    name: Verify coding style
+  check-c-like-style:
+    name: Verify C-like coding style
     # As this action runs with minimal permissions and does not influence the build output,
     # we perform no version pinning for the runner or the installed tools here.
     # The clangFormatVersion is based on Ubuntu current LTS (jammy at time of writing).
@@ -36,10 +38,26 @@ jobs:
         # When updating the extension list, remember to update
         # Jamulus.pro's CLANG_SOURCES as well and the paths: in 'on:' list above.
         extensions: 'cpp,h,mm'
+
+  check-bash-style:
+    name: Verify shell script (Bash) coding style
+    runs-on: ubuntu-latest
     # shellcheck is already pre-installed on ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
     - name: Check .sh with shellcheck
       run: find -name '*.sh' -not -path './libs/*' -exec shellcheck --shell=bash {} +
     - name: Install shfmt
       run: sudo snap install shfmt
     - name: Check .sh with shfmt
       run: shfmt -d .
+
+  check-python-style:
+    name: Verify Python coding style
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install pylint
+      run: pip install --user "pylint < 3.0"
+    - name: Check Python files with pylint
+      run: find ./tools -name '*.py' -print -exec pylint {} +

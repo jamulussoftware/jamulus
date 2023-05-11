@@ -1,0 +1,39 @@
+[MAIN]
+
+# Specify a score threshold under which the program will exit with error.
+fail-under=10
+
+[BASIC]
+
+# Minimum line length for functions/classes that require docstrings, shorter
+# ones are exempt.
+docstring-min-length=100
+
+
+# Good variable names which should always be accepted, separated by a comma.
+good-names=s, f, i, j, k, e, _
+
+# Include a hint for the correct naming format with invalid-name.
+include-naming-hint=yes
+
+[FORMAT]
+
+# Maximum number of characters on a single line.
+# See .editorconfig
+max-line-length=99
+
+disable=
+        # Disable enforcing constants as ALL_CAPS -
+        # pylint produces too many false positives here
+        C0103,
+        # Allow redefining names from outer scope
+        W0621,
+        # Assume utf-8 everywhere
+        W1514,
+        # Allow classes with any number of public methods
+        R0903,
+        # Allow TODOs in code
+        W0511
+
+output-format=colorized
+

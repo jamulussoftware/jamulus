@@ -1,27 +1,32 @@
 #!/usr/bin/env python3
 """
-Generates a list of Github user names who contributed to a specific release.
+Generates a list of GitHub usernames who contributed to a specific release.
 
-May need a Github Personal access token to avoid hitting rate limits.
+May need a GitHub Personal access token to avoid hitting rate limits.
 
 Usage:
 
 ## Website repo (jamulussoftware/jamuluswebsite)
 - cd jamuluswebsite
-- git log --oneline release # Find commit ID of previous version. Search for "RELEASE:"
-- /path/to/jamulussoftware/code/tools/get_release_contributors.py --from COMMIT_ID_FROM_PREVIOUS_STEP --to next-release --github-token YOUR_TOKEN --repo .
+# Find commit ID of previous version. Search for "RELEASE:"
+- git log --oneline release
+- /path/to/jamulussoftware/code/tools/get_release_contributors.py \
+    --from COMMIT_ID_FROM_PREVIOUS_STEP --to next-release \
+    --github-token YOUR_TOKEN --repo .
 
 ## Code repo (jamulussoftware/jamulus)
 - git pull -C /path/
-- ./tools/get_release_contributors.py --from r3_8_1 --to r3_8_2 --github-token YOUR_TOKEN --repo .
+- ./tools/get_release_contributors.py --from r3_8_1 --to r3_8_2 \
+    --github-token YOUR_TOKEN --repo .
 
 """
-import requests
 import argparse
 import logging
 import os
 import re
 import subprocess
+
+import requests
 import yaml
 
 logger = logging.getLogger('')
@@ -31,26 +36,28 @@ class UnexpectedGithubStatus(RuntimeError):
     """
     Exception which is raised when an API request fails.
     """
-    pass
 
 
 # List of contributor names which should be ignored (such as bots):
-ignore_list = ['@github-actions[bot]', '@imgbot[bot]', '@actions-bot', '@actions-user', '@ImgBotApp', '@dependabot[bot]', '@weblate']
+ignore_list = ['@github-actions[bot]', '@imgbot[bot]', '@actions-bot',
+               '@actions-user', '@ImgBotApp', '@dependabot[bot]', '@weblate']
 
 CHARSET = 'utf-8'
 
 
 class Authors:
     """
-    The Authors class provides methods to get the Github login of each
+    The Authors class provides methods to get the GitHub login of each
     commit in an efficient fashion.
-    It uses the Github API and caches name+email-to-login associations
+    It uses the GitHub API and caches name+email-to-login associations
     to avoid excessive API usage.
     """
 
     def __init__(self, path):
         self.keys_to_user = {}
         self.path = path
+        self.repo = None
+        self.token = None
         try:
             self.load()
         except FileNotFoundError:
@@ -64,9 +71,9 @@ class Authors:
 
     def _get_login(self, key, commit_hash):
         """
-        Returns the Github login associated with the given name+email key.
+        Returns the GitHub login associated with the given name+email key.
         A related commit hash is required in order to have a reference
-        to use in the Github API request.
+        to use in the GitHub API request.
 
         Once looked up, the results are cached in a local file.
         """
@@ -89,37 +96,36 @@ class Authors:
         login = self._get_login(key, commit_hash)
         if login:
             return f'@{login}'
-        m = re.match('\A([^@<>]+) <.*>\Z', key)
-        if m:
-            return m.group(1)
-        logger.warning(f'unable to extract github login or real name from {repr(key)}')
+        matches = re.match(r'\A([^@<>]+) <.*>\Z', key)
+        if matches:
+            return matches.group(1)
+        logger.warning("unable to extract GitHub login or real name from %r", key)
         return None
 
-    def get_user_by_commit(self, hash):
+    def get_user_by_commit(self, sha):
         """
-        Retrieves the associated Github user name for the given commit
-        hash.
+        Retrieves the associated GitHub username for the given commit hash.
         """
-        r = self._github_api_get(f'repos/jamulussoftware/{self.repo}/commits/{hash}')
-        if 200 <= r.status_code < 300:
+        resp = self._github_api_get(f'repos/jamulussoftware/{self.repo}/commits/{sha}')
+        if 200 <= resp.status_code < 300:
             try:
-                return r.json()['author']['login']
+                return resp.json()['author']['login']
             except (TypeError, KeyError):
-                logger.warning('%s has not github author, saving as empty', hash)
+                logger.warning('%s has not GitHub author, saving as empty', sha)
                 return ''
-        if r.status_code == 422:
-            logger.warning('unable to find author of %s, saving as empty', hash)
+        if resp.status_code == 422:
+            logger.warning('unable to find author of %s, saving as empty', sha)
             return ''
-        raise UnexpectedGithubStatus('status was %d' % r.status_code)
+        raise UnexpectedGithubStatus(f"status was {resp.status_code}")
 
     def _github_api_get(self, path, *args, **kwargs):
         headers = {
             'Accept': 'application/vnd.github.v3+json',
         }
         if self.token:
-            headers['Authorization'] = 'token %s' % self.token
-        r = requests.get(f'https://api.github.com/{path}', *args, headers=headers, **kwargs)
-        return r
+            headers['Authorization'] = f"token {self.token}"
+        return requests.get(f'https://api.github.com/{path}', *args, headers=headers, **kwargs,
+                            timeout=10)
 
     def get_user_by_email(self, key):
         m = re.match(r'\A[^<]+<([^<> ]+@[^<> ]+)>\Z', key)
@@ -127,21 +133,21 @@ class Authors:
             return None
         email = m.group(1)
         # Handle Github-generated email addresses via static matching:
-        m = re.match(r'\A(\d+\+)?([^+@]+)\@users\.noreply\.github\.com\Z', email)
+        m = re.match(r'\A(\d+\+)?([^+@]+)@users\.noreply\.github\.com\Z', email)
         if m:
             return m.group(2)
-        r = self._github_api_get('search/users', params={'q': f'{email} in:email'})
-        if r.status_code < 200 or r.status_code >= 300:
-            logger.warning(f'search/users for {email} failed with code {r.status_code}')
+        resp = self._github_api_get('search/users', params={'q': f'{email} in:email'})
+        if resp.status_code < 200 or resp.status_code >= 300:
+            logger.warning('search/users for %s failed with code %s', email, resp.status_code)
             return None
-        items = r.json().get('items', [])
+        items = resp.json().get('items', [])
         for item in items:
             login = item['login']
             u = self._github_api_get(f'users/{login}').json()
             if u.get('email', '') == email:
                 return login
 
-        logger.warning(f'unable to find a github profile with public email {email}')
+        logger.warning('unable to find a github profile with public email %s', email)
         return None
 
     def save(self):
@@ -193,38 +199,43 @@ def print_website_contributors(from_, to):
 
 
 def print_contributors(title, git_log_selector, from_, to):
-    contributors = [u for u in find_contributors(git_log_selector, from_, to) if u and u not in ignore_list]
+    contributors = [u for u in find_contributors(git_log_selector, from_, to) if
+                    u and u not in ignore_list]
     contributors_str = ', '.join(contributors)
-    print('%s: %s' % (title, contributors_str))
+    print(f'{title}: {contributors_str}')
 
 
-def find_contributors(git_log_selector, from_, to):
+def find_contributors(git_log_selector, from_ref, to_ref):
     """
     Uses `git log` with the provided git_log_selector to list all commits
-    starting with git reference `from_` and going until reference `to`.
+    starting with git reference `from_ref` and going until reference `to_ref`.
 
     A `git_log_selector` could just be a path such as '.'.
     `from_` and `to` can be any committish such as a commit hash or a tag.
     """
     contributors = set()
     co_author_keys = set()
-    commits = subprocess.check_output(['git', 'log', '-z', '--show-pulls', '--format=format:%H %an <%ae>%n%b', '%s..%s' % (from_, to), '--'] + git_log_selector)
+    commits = subprocess.check_output(
+        ['git', 'log', '-z', '--show-pulls', '--format=format:%H %an <%ae>%n%b',
+         f'{from_ref}..{to_ref}', '--'] + git_log_selector)
     commits = commits.decode(CHARSET)
     for commit in commits.split('\0'):
         if not commit:
             continue
-        hash, author_key = commit.split('\n', 1)[0].split(' ', 1)
-        contributor = authors.get_login_or_realname(author_key, hash)
+        sha, author_key = commit.split('\n', 1)[0].split(' ', 1)
+        contributor = authors.get_login_or_realname(author_key, sha)
         contributors.add(contributor)
-        co_authors = re.findall('Co-authored-by:\s*(\S.*(<[^ >]+>))\s*(?:$|\n)', commit, re.I)
+        co_authors = re.findall(r'Co-authored-by:\s*(\S.*(<[^ >]+>))\s*(?:$|\n)', commit, re.I)
         for co_author_full, co_author_email in co_authors:
-            logger.debug(f'checking co author {co_author_full}')
+            logger.debug('checking co author %s', co_author_full)
             contributor = authors.get_login_or_realname(co_author_full, None)
             if not contributor or not contributor.startswith('@'):
                 # try to find a previous commit by this mail address
                 # and pass this commit id to get_login_or_realname() to retrieve the
-                # associated handle from the github API.
-                commit = subprocess.check_output(['git', 'log', '--format=%H', '--max-count=1', '--author=%s' % re.escape(co_author_email)]).strip().decode(CHARSET)
+                # associated handle from the GitHub API.
+                esc_email = re.escape(co_author_email)
+                commit = subprocess.check_output(['git', 'log', '--format=%H', '--max-count=1',
+                                                  f'--author={esc_email}']).strip().decode(CHARSET)
                 if commit:
                     contributor = authors.get_login_or_realname(co_author_full, commit)
             if contributor:
@@ -237,7 +248,8 @@ def find_contributors(git_log_selector, from_, to):
         if contributor:
             contributors.add(contributor)
         else:
-            contributors.add(realname)
+            # TODO: check this is the right logic...
+            contributors.add(co_author)
     return sorted(contributors, key=str.casefold)
 
 
@@ -245,13 +257,16 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(
         description='Generates a list of Github user names who contributed to a specific release.')
     p.add_argument('--from', dest='from_', required=True,
-                   help='the first git hash or tag to include in the analysis, e.g. the tag of the previous release')
+                   help='the first git hash or tag to include in the analysis, '
+                        'e.g. the tag of the previous release')
     p.add_argument('--to', required=True,
-                   help='the last git hash or tag to include in the analysis, e.g. the (rc) tag of the target release')
+                   help='the last git hash or tag to include in the analysis, '
+                        'e.g. the (rc) tag of the target release')
     p.add_argument('--repo', required=True,
                    help='the path to the git repository to be analyzed, e.g. ./jamuluswebsite')
     p.add_argument('--github-token',
-                   help='a Github Personal Access Token; optional, but might be needed if we exceed the anonymous API requests per hour limit')
+                   help='a Github Personal Access Token; optional, but might be needed '
+                        'if we exceed the anonymous API requests per hour limit')
     p.add_argument('--verbose', '-v', action='store_true',
                    help='enable verbose output')
     p.add_argument('--quiet', '-q', action='store_true',

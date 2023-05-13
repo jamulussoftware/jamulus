@@ -53,6 +53,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     layout()->setMenuBar ( pMenu );
 #endif
 
+#if defined( Q_OS_ANDROID ) || defined( ANDROID ) || defined( Q_OS_IOS )
+    // for the Android/iOS version maximize the window
+    setWindowState ( Qt::WindowMaximized );
+#endif
+
     // Add help text to controls -----------------------------------------------
     // local audio input fader
     QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +

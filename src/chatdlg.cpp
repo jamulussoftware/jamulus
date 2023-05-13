@@ -72,6 +72,11 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 
+#if defined( Q_OS_ANDROID ) || defined( ANDROID ) || defined( Q_OS_IOS )
+    // for the Android/iOS version maximize the window
+    setWindowState ( Qt::WindowMaximized );
+#endif
+
     // Connections -------------------------------------------------------------
     QObject::connect ( edtLocalInputText, &QLineEdit::textChanged, this, &CChatDlg::OnLocalInputTextTextChanged );
 

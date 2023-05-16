@@ -56,20 +56,28 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
     /// @rpc_method jamulusserver/getClients
     /// @brief Returns the list of connected clients along with details about them.
     /// @param {object} params - No parameters (empty object).
-    /// @result {array} result.clients - The list of connected clients.
+    /// @result {number} result.connections - The number of active connections.
+    /// @result {array}  result.clients - The list of connected clients.
     /// @result {number} result.clients[*].id - The client’s channel id.
     /// @result {string} result.clients[*].address - The client’s address (ip:port).
     /// @result {string} result.clients[*].name - The client’s name.
     /// @result {number} result.clients[*].jitterBufferSize - The client’s jitter buffer size.
     /// @result {number} result.clients[*].channels - The number of audio channels of the client.
+    /// @result {number} result.clients[*].instrumentCode - The id of the instrument for this channel.
+    /// @result {string} result.clients[*].city - The city name provided by the user for this channel.
+    /// @result {number} result.clients[*].countryName - The text name of the country specified by the user for this channel (see QLocale::Country).
+    /// @result {number} result.clients[*].skillLevelCode - The skill level id provided by the user for this channel.
     pRpcServer->HandleMethod ( "jamulusserver/getClients", [=] ( const QJsonObject& params, QJsonObject& response ) {
-        QJsonArray            clients;
-        CVector<CHostAddress> vecHostAddresses;
-        CVector<QString>      vecsName;
-        CVector<int>          veciJitBufNumFrames;
-        CVector<int>          veciNetwFrameSizeFact;
+        QJsonArray                clients;
+        CVector<CHostAddress>     vecHostAddresses;
+        CVector<QString>          vecsName;
+        CVector<int>              veciJitBufNumFrames;
+        CVector<int>              veciNetwFrameSizeFact;
+        CVector<CChannelCoreInfo> vecChanInfo;
 
-        pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufNumFrames, veciNetwFrameSizeFact );
+        int connections = 0;
+
+        pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufNumFrames, veciNetwFrameSizeFact, vecChanInfo );
 
         // we assume that all vectors have the same length
         const int iNumChannels = vecHostAddresses.Size();
@@ -81,18 +89,26 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
             {
                 continue;
             }
+
             QJsonObject client{
                 { "id", i },
                 { "address", vecHostAddresses[i].toString ( CHostAddress::SM_IP_PORT ) },
                 { "name", vecsName[i] },
                 { "jitterBufferSize", veciJitBufNumFrames[i] },
                 { "channels", pServer->GetClientNumAudioChannels ( i ) },
+                { "instrumentCode", vecChanInfo[i].iInstrument },
+                { "city", vecChanInfo[i].strCity },
+                { "countryName", QLocale::countryToString ( vecChanInfo[i].eCountry ) },
+                { "skillLevelCode", vecChanInfo[i].eSkillLevel },
             };
             clients.append ( client );
+
+            ++connections;
         }
 
         // create result object
         QJsonObject result{
+            { "connections", connections },
             { "clients", clients },
         };
         response["result"] = result;

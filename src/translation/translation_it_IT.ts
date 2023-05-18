@@ -194,7 +194,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © 2005-2023 Il team di sviluppo di Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -3587,12 +3587,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>La registrazione è stata disattivata dalla casella di controllo dell&apos;interfaccia utente o da JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>La registrazione è stata disattivata dalla casella di controllo dell&apos;interfaccia utente, da SIGUSR2 o da JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -4163,7 +4163,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Elenco server completo nella directory</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -4358,22 +4358,22 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverlist.cpp" line="419"/>
         <source>Now a directory</source>
-        <translation type="unfinished">Ora una rubrica</translation>
+        <translation>Ora una directory</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="425"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è più una directory</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="784"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile aprire &apos;%1&apos; in lettura/scrittura. Verificare che %2 abbia i permessi (e che ci sia spazio libero).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="791"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Caricamento del file dell&apos;elenco dei server persistenti: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="854"/>
@@ -4383,7 +4383,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverlist.cpp" line="865"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvataggio della registrazione per %1 (%2): %3</translation>
     </message>
 </context>
 <context>

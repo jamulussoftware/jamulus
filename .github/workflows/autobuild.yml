@@ -88,7 +88,7 @@ jobs:
       - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         continue-on-error:          true
-        uses:                       dev-drprasad/delete-tag-and-release@0885ecc4123e071dd1a8be04d3a0578f5390581c
+        uses:                       dev-drprasad/delete-tag-and-release@8cd619d00037e4aeb781909c9a6b03940507d0da
         with:
           delete_release:           true
           tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}

@@ -42,7 +42,7 @@ setup() {
 build_app_as_ipa() {
     # Add the Qt binaries to the PATH:
     export PATH="${QT_DIR}/${QT_VERSION}/ios/bin:${PATH}"
-    ./ios/deploy_ios.sh -q "${QT_DIR}/${QT_VERSION}/ios/bin/qmake"
+    ./ios/deploy_ios.sh -m "${QT_DIR}/${QT_VERSION}/ios/bin/qmake"
 }
 
 pass_artifact_to_job() {

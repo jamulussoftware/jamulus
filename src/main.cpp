@@ -56,8 +56,12 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
 
 // Implementation **************************************************************
-
+#if defined( Q_OS_IOS )
+// iOS workaround for Qt6 builds. See https://stackoverflow.com/questions/25353686/you-are-creating-qapplication-before-calling-uiapplicationmain-error-on-ios
+extern "C" int qtmn( int argc, char **argv )
+#else
 int main ( int argc, char** argv )
+#endif
 {
 
 #if defined( Q_OS_MACX )

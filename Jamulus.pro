@@ -232,7 +232,7 @@ win32 {
     HEADERS += src/sound/coreaudio-ios/sound.h
     OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
-    # QMAKE_LFLAGS += -Wl,-e,_qt_main_wrapper
+    QMAKE_LFLAGS += -Wl,-e,_qt_main_wrapper
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {

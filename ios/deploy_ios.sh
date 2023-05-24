@@ -4,7 +4,7 @@ set -eu -o pipefail
 
 qmake_path=""
 
-while getopts 'hs:' flag; do
+while getopts 'hm:' flag; do
     case "${flag}" in
         m)
             qmake_path=$OPTARG

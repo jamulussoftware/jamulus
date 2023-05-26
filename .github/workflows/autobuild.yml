@@ -65,7 +65,7 @@ jobs:
     runs-on:                        ubuntu-20.04
     outputs:
       publish_to_release:           ${{ steps.get-build-vars.outputs.PUBLISH_TO_RELEASE }}
-      upload_url:                   ${{ steps.create-release.outputs.upload_url }}
+      tag_name:                     ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
       build_version:                ${{ steps.get-build-vars.outputs.BUILD_VERSION }}
       build_all_targets:            ${{ steps.decide-build-targets.outputs.build_all_targets }}
     env:
@@ -85,28 +85,28 @@ jobs:
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         run:                        ./.github/autobuild/extractVersionChangelog.pl ChangeLog ${{ steps.get-build-vars.outputs.JAMULUS_PRO_VERSION }} > ${{ env.release_changelog_path }}
 
-      - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
-        if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
-        continue-on-error:          true
-        uses:                       dev-drprasad/delete-tag-and-release@0885ecc4123e071dd1a8be04d3a0578f5390581c
-        with:
-          delete_release:           true
-          tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
-        env:
-          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-
-      - name:                       Create Release ${{steps.get-build-vars.outputs.RELEASE_TAG}}  ${{steps.get-build-vars.outputs.RELEASE_TITLE}}
+      - name:                       Create/Recreate Release ${{steps.get-build-vars.outputs.RELEASE_TAG}}  ${{steps.get-build-vars.outputs.RELEASE_TITLE}}
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         id:                         create-release
-        uses:                       actions/create-release@v1
+        run:                        |
+          set -eu
+
+          # delete release if existing
+          gh release delete "${tag_name}" || true
+
+          RELEASE_PRERELEASE_ARG=""
+          if [[ "${prerelease}" == 'true' ]]; then
+            RELEASE_PRERELEASE_ARG="--prerelease"
+          fi
+          # Actually create the release. This will print the release url if successful
+          gh release create "${tag_name}" --title "${release_name}" --notes-file "${body_path}" ${RELEASE_PRERELEASE_ARG}
+
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-        with:
           tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
           release_name:             ${{ steps.get-build-vars.outputs.RELEASE_TITLE }}
           body_path:                ${{ env.release_changelog_path }}
           prerelease:               ${{ steps.get-build-vars.outputs.IS_PRERELEASE }}
-          draft:                    false
 
       - name:                       Decide which targets to build for
         id:                         decide-build-targets
@@ -296,10 +296,13 @@ jobs:
         run:                        |
           set -eu
           apt-get -qq update
-          apt-get install -y software-properties-common sudo
+          apt-get install -y software-properties-common sudo curl
           add-apt-repository ppa:git-core/ppa
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
           apt-get -qq update
-          apt-get -qq -y install git-core
+          apt-get -qq -y install git-core gh
           # Github Runner environments usually whitelist the default checkout directory for git.
           # However, when using containers, we have to do that manually in order for git commands to work
           # (e.g. in Jamulus.pro's VERSION logic):
@@ -414,33 +417,15 @@ jobs:
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 
-      - name:                       Upload Artifact 1 to Release
-        # Every build job has at least one artifact. Therefore, no `if artifact_1` condition here.
-        # If the artifact is missing, this should fail.
+      - name:                       Deploy Artifacts to Release
         if:                         needs.create_release.outputs.publish_to_release == 'true'
-        id:                         upload-release-asset1
-        uses:                       actions/upload-release-asset@v1
+        id:                         upload-release-assets
+        run:                        >
+          gh release upload "${{ needs.create_release.outputs.tag_name }}" "deploy/${{ steps.get-artifacts.outputs.artifact_1 }}" "deploy/${{ steps.get-artifacts.outputs.artifact_2 }}" --clobber
+          ||
+          gh release upload "${{ needs.create_release.outputs.tag_name }}" "deploy/${{ steps.get-artifacts.outputs.artifact_1 }}" --clobber
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
-          asset_name:               ${{ steps.get-artifacts.outputs.artifact_1 }}
-          asset_content_type:       application/octet-stream
-
-      - name:                       Upload Artifact 2 to Release
-        if:                         >-
-                                    steps.get-artifacts.outputs.artifact_2 != '' &&
-                                    needs.create_release.outputs.publish_to_release == 'true'
-        id:                         upload-release-asset2
-        uses:                       actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
-          asset_name:               ${{ steps.get-artifacts.outputs.artifact_2 }}
-          asset_content_type:       application/octet-stream
 
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql
@@ -494,49 +479,14 @@ jobs:
           gpg --homedir "../gpghome" --armor --yes --clearsign --output InRelease --detach-sign Release
           gpg --homedir "../gpghome" --armor --export > "key.asc"
 
-          popd
+          # remove .deb files as they have been uploaded to the GitHub release already before
+          rm *.deb
 
-      - name:                       Upload Packages file to release
+          popd
+      - name:                       Upload Debian repository files to release
         if:                         env.GPG_REPO_KEY_MISSING == 'false'
-        id:                         deb-upload-packagesfile
-        uses:                       actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               repo/Packages
-          asset_name:               Packages
-          asset_content_type:       text/plain
-      - name:                       Upload Release file to release
-        if:                         env.GPG_REPO_KEY_MISSING == 'false'
-        id:                         deb-upload-releasefile
-        uses:                       actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               repo/Release
-          asset_name:               Release
-          asset_content_type:       message/rfc822
-      - name:                       Upload InRelease file to release
-        if:                         env.GPG_REPO_KEY_MISSING == 'false'
-        id:                         deb-upload-inreleasefile
-        uses:                       actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               repo/InRelease
-          asset_name:               InRelease
-          asset_content_type:       text/PGP
-      - name:                       Upload Key file to release
-        if:                         env.GPG_REPO_KEY_MISSING == 'false'
-        id:                         deb-upload-keyascfile
-        uses:                       actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               repo/key.asc
-          asset_name:               key.asc
-          asset_content_type:       application/pgp-keys
+        run:                        |
+          gh release upload "${{ needs.create_release.outputs.tag_name }}" "repo/InRelease" "repo/key.asc" "repo/Packages" "repo/Release" --clobber -R "${{ github.repository}}"
+

@@ -150,7 +150,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>版权所有 © 2005-2023 Jamulus 开发团队</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -2977,12 +2977,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>记录已被用户界面复选框或JSON-RPC关闭。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>录音已被关闭，通过用户界面复选框、SIGUSR2或JSON-RPC。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -3149,7 +3149,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器列表在目录中已满</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -3312,22 +3312,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverlist.cpp" line="419"/>
         <source>Now a directory</source>
-        <translation type="unfinished">现在是目录了</translation>
+        <translation>现在是目录</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="425"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>不再是一个目录</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="784"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开&apos;%1&apos;进行读/写。请检查%2是否有权限（以及是否有可用空间）。</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="791"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>正在加载持久化服务器列表文件：%1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="854"/>
@@ -3337,7 +3337,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverlist.cpp" line="865"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>保存%1 (%2)的注册：%3</translation>
     </message>
 </context>
 <context>

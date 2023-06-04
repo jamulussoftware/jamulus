@@ -1141,8 +1141,8 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
-        <source>Auto jitter buffer switch</source>
-        <translation>Automatický prepínač vyr. pamäte chvenia</translation>
+        <source>Auto jitter buffer check box</source>
+        <translation type="unfinished">Automatický prepínač vyr. pamäte chvenia</translation>
     </message>
     <message>
         <source>Sound Card Device</source>
@@ -1202,12 +1202,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>Povoliť malú vyrovnávaciu pamäť pre sieť</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Povoliť malú vyrovnávaciu pamäť pre sieť</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
-        <source>Enable small network buffers check box</source>
+        <source>Small network buffers check box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1430,12 +1430,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation>Ochrana pred spätnou väzbou</translation>
+        <translation type="unfinished">Ochrana pred spätnou väzbou</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
-        <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>Zapnite ochranu pred spätnou väzbou na detekciu akustickej väzby medzi mikrofónom a reproduktormi.</translation>
+        <source>Prevents acoustic feedback between microphone and speakers.</source>
+        <translation type="unfinished">Zapnite ochranu pred spätnou väzbou na detekciu akustickej väzby medzi mikrofónom a reproduktormi.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -1445,12 +1445,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation>Zvukové upozornenia</translation>
+        <translation type="unfinished">Zvukové upozornenia</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
-        <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation>Povoľte zvukové upozornenie pri prijatí správy v chate a keď sa pripojí nový klient. Pre prehratie upozornenia možno budete potrebovať ďalšie zariadenie zvuku.</translation>
+        <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
+        <translation type="unfinished">Povoľte zvukové upozornenie pri prijatí správy v chate a keď sa pripojí nový klient. Pre prehratie upozornenia možno budete potrebovať ďalšie zariadenie zvuku.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -2192,8 +2192,8 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>Povoliť malú vyr. pamäť siete</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Povoliť malú vyr. pamäť siete</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2277,7 +2277,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation>Zvukové upozornenia</translation>
+        <translation type="unfinished">Zvukové upozornenia</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2333,7 +2333,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation>Ochrana pred spätnou väzbou</translation>
+        <translation type="unfinished">Ochrana pred spätnou väzbou</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -3190,12 +3190,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
-        <source>Enable Recorder</source>
-        <translation>Povoliť nahrávanie</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Povoliť nahrávanie</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
-        <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
+        <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3593,8 +3593,8 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
-        <source>Enable delay panning</source>
-        <translation>Zapnúť posun oneskorenia</translation>
+        <source>Delay panning</source>
+        <translation type="unfinished">Zapnúť posun oneskorenia</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
@@ -3640,8 +3640,8 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
-        <source>Enable Jam Recorder</source>
-        <translation>Povoliť nahrávanie džemov</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Povoliť nahrávanie džemov</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>

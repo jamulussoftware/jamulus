@@ -88,12 +88,18 @@
                     <property name="text">
                      <string>Alias/Name</string>
                     </property>
+                    <property name="buddy">
+                     <cstring>pedtAlias</cstring>
+                    </property>
                    </widget>
                   </item>
                   <item>
                    <widget class="QLabel" name="plblInstrument">
                     <property name="text">
                      <string>Instrument</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>pcbxInstrument</cstring>
                     </property>
                    </widget>
                   </item>
@@ -102,6 +108,9 @@
                     <property name="text">
                      <string>Country/Region</string>
                     </property>
+                    <property name="buddy">
+                     <cstring>pcbxCountry</cstring>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -109,12 +118,18 @@
                     <property name="text">
                      <string>City</string>
                     </property>
+                    <property name="buddy">
+                     <cstring>pedtCity</cstring>
+                    </property>
                    </widget>
                   </item>
                   <item>
                    <widget class="QLabel" name="plblSkill">
                     <property name="text">
                      <string>Skill</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>pcbxSkill</cstring>
                     </property>
                    </widget>
                   </item>
@@ -219,12 +234,18 @@
                     <property name="text">
                      <string>Skin</string>
                     </property>
+                    <property name="buddy">
+                     <cstring>cbxSkin</cstring>
+                    </property>
                    </widget>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblMeterStyle">
                     <property name="text">
                      <string>Meter Style</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>cbxMeterStyle</cstring>
                     </property>
                    </widget>
                   </item>
@@ -233,6 +254,9 @@
                     <property name="text">
                      <string>Language</string>
                     </property>
+                    <property name="buddy">
+                     <cstring>cbxLanguage</cstring>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -240,12 +264,15 @@
                     <property name="text">
                      <string>Mixer Rows</string>
                     </property>
+                    <property name="buddy">
+                     <cstring>spnMixerRows</cstring>
+                    </property>
                    </widget>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblAudioAlerts">
                     <property name="text">
-                     <string>Audio Alerts</string>
+                     <string/>
                     </property>
                    </widget>
                   </item>
@@ -291,7 +318,7 @@
                   <item>
                    <widget class="QCheckBox" name="chbAudioAlerts">
                     <property name="text">
-                     <string>Enable</string>
+                     <string>Audio Alerts</string>
                     </property>
                    </widget>
                   </item>
@@ -347,6 +374,9 @@
             <widget class="QLabel" name="lblSoundcardDevice">
              <property name="text">
               <string>Audio Device</string>
+             </property>
+             <property name="buddy">
+              <cstring>cbxSoundcard</cstring>
              </property>
             </widget>
            </item>
@@ -463,6 +493,9 @@
                     <property name="text">
                      <string>L</string>
                     </property>
+                    <property name="buddy">
+                     <cstring>cbxLInChan</cstring>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -475,6 +508,9 @@
                     </property>
                     <property name="text">
                      <string>R</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>cbxRInChan</cstring>
                     </property>
                    </widget>
                   </item>
@@ -520,6 +556,9 @@
                     <property name="text">
                      <string>L</string>
                     </property>
+                    <property name="buddy">
+                     <cstring>cbxLOutChan</cstring>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -532,6 +571,9 @@
                     </property>
                     <property name="text">
                      <string>R</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>cbxROutChan</cstring>
                     </property>
                    </widget>
                   </item>
@@ -580,12 +622,18 @@
                  <property name="text">
                   <string>Audio Channels</string>
                  </property>
+                 <property name="buddy">
+                  <cstring>cbxAudioChannels</cstring>
+                 </property>
                 </widget>
                </item>
                <item>
                 <widget class="QLabel" name="lblAudioQuality">
                  <property name="text">
                   <string>Audio Quality</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>cbxAudioQuality</cstring>
                  </property>
                 </widget>
                </item>
@@ -841,7 +889,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="chbEnableOPUS64">
+            <widget class="QCheckBox" name="chbSmallNetworkBuffers">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -849,7 +897,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Enable Small Network Buffers</string>
+              <string>Small Network Buffers</string>
              </property>
             </widget>
            </item>
@@ -985,6 +1033,9 @@
                <property name="text">
                 <string>Custom Directories:</string>
                </property>
+               <property name="buddy">
+                <cstring>cbxCustomDirectories</cstring>
+               </property>
               </widget>
              </item>
              <item>
@@ -1011,6 +1062,9 @@
               <widget class="QLabel" name="lblNewClientLevel">
                <property name="text">
                 <string>New Client Level</string>
+               </property>
+               <property name="buddy">
+                <cstring>edtNewClientLevel</cstring>
                </property>
               </widget>
              </item>
@@ -1046,6 +1100,9 @@
                <property name="text">
                 <string>Input Boost</string>
                </property>
+               <property name="buddy">
+                <cstring>cbxInputBoost</cstring>
+               </property>
               </widget>
              </item>
              <item>
@@ -1065,13 +1122,6 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="lblDetectFeedback">
-               <property name="text">
-                <string>Feedback Protection</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QCheckBox" name="chbDetectFeedback">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1080,7 +1130,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Enable</string>
+                <string>Feedback Protection</string>
                </property>
               </widget>
              </item>
@@ -1150,6 +1200,9 @@
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="buddy">
+                   <cstring>sldAudioPan</cstring>
                   </property>
                  </widget>
                 </item>
@@ -1312,7 +1365,7 @@
   <tabstop>chbAutoJitBuf</tabstop>
   <tabstop>sldNetBuf</tabstop>
   <tabstop>sldNetBufServer</tabstop>
-  <tabstop>chbEnableOPUS64</tabstop>
+  <tabstop>chbSmallNetworkBuffers</tabstop>
   <tabstop>cbxCustomDirectories</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxInputBoost</tabstop>

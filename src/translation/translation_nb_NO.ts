@@ -1063,7 +1063,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
-        <source>Auto jitter buffer switch</source>
+        <source>Auto jitter buffer check box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1133,8 +1133,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
-        <source>Enable Small Network Buffers</source>
-        <translation type="unfinished">Skru på små nettverksmellomlagre</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Små nettverksmellomlagre</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="173"/>
@@ -1143,7 +1143,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
-        <source>Enable small network buffers check box</source>
+        <source>Small network buffers check box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1432,7 +1432,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
-        <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
+        <source>Prevents acoustic feedback between microphone and speakers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1447,7 +1447,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
-        <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
+        <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2064,8 +2064,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
-        <source>Enable Small Network Buffers</source>
-        <translation type="unfinished">Skru på små nettverksmellomlagre</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Små nettverksmellomlagre</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="859"/>
@@ -2489,12 +2489,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
-        <source>Enable Recorder</source>
-        <translation>Skru på opptak</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Opptak</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
-        <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
+        <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2897,9 +2897,10 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="unfinished">Sted: region</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="120"/>
         <location filename="../serverdlgbase.ui" line="159"/>
-        <source>Enable Jam Recorder</source>
-        <translation>Skru på samspillsopptaker</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Samspillsopptaker</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -2949,7 +2950,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
-        <source>Enable delay panning</source>
+        <source>Delay panning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

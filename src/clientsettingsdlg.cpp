@@ -114,7 +114,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     sldNetBufServer->setWhatsThis ( strJitterBufferSize );
     sldNetBufServer->setAccessibleName ( tr ( "Server jitter buffer slider control" ) );
     sldNetBufServer->setToolTip ( strJitterBufferSizeTT );
-    chbAutoJitBuf->setAccessibleName ( tr ( "Auto jitter buffer switch" ) );
+    chbAutoJitBuf->setAccessibleName ( tr ( "Auto jitter buffer check box" ) );
     chbAutoJitBuf->setToolTip ( strJitterBufferSizeTT );
 
 #if !defined( WITH_JACK )
@@ -169,14 +169,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 #endif
 
     // enable OPUS64
-    chbEnableOPUS64->setWhatsThis ( "<b>" + tr ( "Enable Small Network Buffers" ) + ":</b> " +
-                                    tr ( "Enables support for very small network audio packets. These "
-                                         "network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The "
-                                         "smaller the network buffers, the lower the audio latency. But at the same time "
-                                         "the network load and the probability of audio dropouts or sound artifacts increases." )
-                                        .arg ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) );
+    chbSmallNetworkBuffers->setWhatsThis (
+        "<b>" + tr ( "Small Network Buffers" ) + ":</b> " +
+        tr ( "Enables support for very small network audio packets. These "
+             "network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The "
+             "smaller the network buffers, the lower the audio latency. But at the same time "
+             "the network load and the probability of audio dropouts or sound artifacts increases." )
+            .arg ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) );
 
-    chbEnableOPUS64->setAccessibleName ( tr ( "Enable small network buffers check box" ) );
+    chbSmallNetworkBuffers->setAccessibleName ( tr ( "Small network buffers check box" ) );
 
     // sound card buffer delay
     QString strSndCrdBufDelay =
@@ -383,19 +384,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     spnMixerRows->setWhatsThis ( strNumMixerPanelRows );
     spnMixerRows->setAccessibleName ( tr ( "Number of Mixer Panel Rows spin box" ) );
 
-    QString strDetectFeedback = "<b>" + tr ( "Feedback Protection" ) + ":</b> " +
-                                tr ( "Enable feedback protection to detect acoustic feedback between "
-                                     "microphone and speakers." );
-    lblDetectFeedback->setWhatsThis ( strDetectFeedback );
-    chbDetectFeedback->setWhatsThis ( strDetectFeedback );
+    chbDetectFeedback->setWhatsThis ( "<b>" + tr ( "Feedback Protection" ) + ":</b> " +
+                                      tr ( "Prevents acoustic feedback between microphone and speakers." ) );
     chbDetectFeedback->setAccessibleName ( tr ( "Feedback Protection check box" ) );
 
     // audio alerts
-    QString strAudioAlerts = "<b>" + tr ( "Audio Alerts" ) + ":</b> " +
-                             tr ( "Enable audio alert when receiving a chat message and when a new client joins the session. "
-                                  "A second sound device may be required to hear the alerts." );
-    lblAudioAlerts->setWhatsThis ( strAudioAlerts );
-    chbAudioAlerts->setWhatsThis ( strAudioAlerts );
+    chbAudioAlerts->setWhatsThis ( "<b>" + tr ( "Audio Alerts" ) + ":</b> " +
+                                   tr ( "Trigger an audio alert when receiving a chat message and when a new client joins the session. "
+                                        "A second sound device may be required to hear the alerts." ) );
     chbAudioAlerts->setAccessibleName ( tr ( "Audio Alerts check box" ) );
 
     // init driver button
@@ -485,7 +481,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbDetectFeedback->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
 
     // update enable small network buffers check box
-    chbEnableOPUS64->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
+    chbSmallNetworkBuffers->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
 
     // set text for sound card buffer delay radio buttons
     rbtBufferDelayPreferred->setText ( GenSndCrdBufferDelayString ( FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES ) );
@@ -640,7 +636,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // check boxes
     QObject::connect ( chbAutoJitBuf, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnAutoJitBufStateChanged );
 
-    QObject::connect ( chbEnableOPUS64, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnEnableOPUS64StateChanged );
+    QObject::connect ( chbSmallNetworkBuffers, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnEnableOPUS64StateChanged );
 
     QObject::connect ( chbDetectFeedback, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnFeedbackDetectionChanged );
 

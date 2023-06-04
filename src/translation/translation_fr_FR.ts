@@ -1146,7 +1146,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished">Commutateur de tampon de gigue automatique</translation>
+        <translation>Case à cocher pour le tampon de gigue automatique</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1221,7 +1221,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Activer les petits tampons de réseau</translation>
+        <translation>Petits tampons de réseau</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1234,7 +1234,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished">Case-à-cocher pour activer les petits tampons de réseau</translation>
+        <translation>Case-à-cocher pour les petits tampons de réseau</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1719,12 +1719,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protection larsen</translation>
+        <translation>Protection larsen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished">Active la protection larsen pour détecter le larsen acoustique entre le microphone et les enceintes.</translation>
+        <translation>Protection larsen acoustique entre le microphone et les enceintes.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -1734,12 +1734,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Alertes audio</translation>
+        <translation>Alertes audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished">Activez l&apos;alerte audio lors de la réception d&apos;un message de chat et lorsqu&apos;un nouveau client rejoint la session. Un deuxième périphérique sonore peut être nécessaire pour entendre les alertes.</translation>
+        <translation>Active une alerte audio lors de la réception d&apos;un message de tchate et lorsqu&apos;un nouveau client rejoint la session. Un deuxième périphérique sonore pourrait être nécessaire pour entendre les alertes.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -2253,7 +2253,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Activer les petits tampons de réseau</translation>
+        <translation>Petits tampons de réseau</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2337,7 +2337,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Alertes audio</translation>
+        <translation>Alertes audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2392,7 +2392,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protection larsen</translation>
+        <translation>Protection larsen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -3306,12 +3306,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Activer l&apos;enregistreur</translation>
+        <translation>Enregistreur de bœuf</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
-        <translation type="unfinished">Coché lorsque l&apos;enregistreur est activé, sinon non coché. L&apos;enregistreur fonctionnera lorsqu&apos;une session est en cours, si (configuré correctement et) activé.</translation>
+        <translation>L&apos;enregistreur fonctionnera lorsqu&apos;une session est en cours, si (configuré correctement et) activé.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -3742,7 +3742,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished">Activer le panoramique à retardement</translation>
+        <translation>Panoramique à retardement</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
@@ -3775,7 +3775,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Activer l&apos;enregistreur de bœuf</translation>
+        <translation>Enregistreur de bœuf</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>

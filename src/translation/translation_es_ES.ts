@@ -1358,7 +1358,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished">Interruptor auto jitter buffer</translation>
+        <translation>Casilla auto jitter buffer</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1437,7 +1437,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Activar Buffers Red Pequeños</translation>
+        <translation>Buffers Red Pequeños</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1450,7 +1450,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished">Activar buffers de red pequeños</translation>
+        <translation>Casilla buffers de red pequeños</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1659,12 +1659,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protección contra Retroalimentación</translation>
+        <translation>Protección contra Retroalimentación</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished">Activa la protección contra retroalimentación para detectar retroalimentación entre el micrófono y los altavoces.</translation>
+        <translation>Evita la retroalimentación acústica entre el micrófono y los altavoces.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -1674,12 +1674,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Alertas Sonoras</translation>
+        <translation>Alertas Sonoras</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished">Activa la alerta sonora al recibir un mensaje de chat y cuando un nuevo cliente se une a la sesión. Para escuchar las alertas puede ser necesario un segundo dispositivo de audio.</translation>
+        <translation>Activa la alerta sonora al recibir un mensaje de chat y cuando un nuevo cliente se une a la sesión. Para escuchar las alertas puede ser necesario un segundo dispositivo de audio.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -2641,7 +2641,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Activar Buffers Pequeños</translation>
+        <translation>Buffers Red Pequeños</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2725,7 +2725,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Alertas Sonoras</translation>
+        <translation>Alertas Sonoras</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2780,7 +2780,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protección contra Retroalimentación</translation>
+        <translation>Protección contra Retroalimentación</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -3927,12 +3927,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Habilitar Grabación</translation>
+        <translation>Grabación de Jams</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
-        <translation type="unfinished">Activado cuando la grabación está habilitada. La grabación se ejecutará cuando una sesión esté en marcha, si está habilitada (y correctamente configurada).</translation>
+        <translation>La grabación se ejecutará cuando una sesión esté en marcha, si está habilitada (y correctamente configurada).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="147"/>
@@ -4322,7 +4322,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished">Activar paneo con retardo</translation>
+        <translation>Paneo con retardo</translation>
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
@@ -4359,7 +4359,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Activar Grabación de Jams</translation>
+        <translation>Grabación de Jams</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>

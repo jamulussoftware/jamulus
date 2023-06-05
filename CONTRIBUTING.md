@@ -46,6 +46,13 @@ Please install and use [pylint](https://pylint.org/) to scan any Python code.
 There is a configuration file that defines some overrides,
 and note the [Editorconfig file](.editorconfig) in the project too.
 
+### Licensing
+
+If you add new (source code) files, please add a header with the license to the file. This clarifies how your work is licensed. Please use the same format as in e.g. the source files in the `src/` directory. A license header must include:
+
+* A Legal copyright line
+* The Author(s)/Copyright holder(s) list
+* A Declaration of the licence, indicating how to refer to the full text if not provided
 
 ### Supported platforms
 

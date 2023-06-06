@@ -11,27 +11,27 @@
     <message>
         <location filename="../util.cpp" line="577"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
-        <translation type="unfinished">Tjeneren som samler lyddata fra hver klient mikser den og sender den til hver enkelt klient.</translation>
+        <translation>Det er en server som samler inn lyddataene fra hver klient, blander lyddataene og sender miksen tilbake til hver klient.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation>Programmet bruker følgende biblioteker, ressurser, eller kodesnutter:</translation>
+        <translation>Denne appen bruker følgende biblioteker, ressurser eller kodebiter:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>Qt cross-platform application framework</source>
-        <translation>Qt-programrammeverk på tvers av plattformer</translation>
+        <translation>Rammeverk for Qt-applikasjoner på tvers av plattformer</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="607"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="unfinished">Lydklangkode av Perry R. Cook og Gary P. Scavone</translation>
+        <translation>Etterklangskode for lyd av Perry R. Cook og Gary P. Scavone</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="611"/>
         <source>Some pixmaps are from the</source>
-        <translation type="unfinished">Noen bilder kommer fra</translation>
+        <translation>Noen pixmaps er fra</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="615"/>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation>Noen lydsampler er fra</translation>
+        <translation>Noen lydeksempler er fra</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="690"/>

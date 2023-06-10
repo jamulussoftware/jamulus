@@ -237,7 +237,13 @@ win32 {
 } else:android {
     ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     ANDROID_VERSION_NAME = $$VERSION
-    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    # Used by Play Store
+    ANDROID_VERSION_CODE = 0
+    !contains(VERSION, .*dev.*) {
+        exists(".git/config") {
+            ANDROID_VERSION_CODE = $$size($$list($$system(git log --format=format:1,lines)))
+        }
+    }
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
     # liboboe requires C++17 for std::timed_mutex

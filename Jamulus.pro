@@ -255,7 +255,7 @@ win32 {
     ANDROID_VERSION_CODE = 0
     !contains(VERSION, .*dev.*) {
         exists(".git/config") {
-            ANDROID_VERSION_CODE = $$size($$list($$system(git log --format=format:1,lines)))
+            ANDROID_VERSION_CODE = $$system(git rev-list --count HEAD)
         }
     }
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")

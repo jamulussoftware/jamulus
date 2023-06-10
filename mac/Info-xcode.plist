@@ -27,7 +27,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleIconFile</key>
-	<string>mainicon.icns</string>
+	<string>mac-mainicon.icns</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Jamulus - Created with QT</string>
 	<key>NSPrincipalClass</key>

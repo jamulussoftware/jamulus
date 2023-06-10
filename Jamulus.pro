@@ -1129,10 +1129,15 @@ contains(CONFIG, "opus_shared_lib") {
     DISTFILES += $$DISTFILES_OPUS
 
     contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
-        msvc {
+        msvc | macx-xcode {
             # According to opus/win32/config.h, "no special compiler
             # flags necessary" when using msvc.  It always supports
             # SSE intrinsics, but does not auto-vectorize.
+            # The macOS Xcode build would fail with these specific compiler flags.
+            # Thus, we omit them for macx-xcode too. This was discovered by
+            # plain testing by the Jamulus team and might mean that the
+            # optimizations are not used on macx-xcode. (See #1841, #3076)
+
             SOURCES += $$SOURCES_OPUS_ARCH
         } else {
             # Arch-specific files need special compiler flags, but we

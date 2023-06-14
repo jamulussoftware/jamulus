@@ -52,7 +52,7 @@ public:
         QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &CSettings::OnAboutToQuit );
     }
 
-    void Load ( const QList<QString> CommandLineOptions );
+    void Load ( const QList<QString>& CommandLineOptions );
     void Save();
 
     // common settings

@@ -597,20 +597,19 @@ int main ( int argc, char** argv )
         bUseGUI = false;
         qWarning() << "No GUI support compiled. Running in headless mode.";
     }
-#endif
 
-    if ( bIsClient )
+#endif
 #ifdef SERVER_ONLY
+    if ( bIsClient )
     {
         qCritical() << "Only --server mode is supported in this build.";
         exit ( 1 );
     }
+
 #else
-
-    // TODO create settings in default state, if loading from file do that next, then come back here to
-    //      override from command line options, then create client or server, letting them do the validation
-
+    if ( bIsClient )
     {
+
         if ( ServerOnlyOptions.size() != 0 )
         {
             qCritical() << qUtf8Printable ( QString ( "%1: Server only option(s) '%2' used.  Did you omit '--server'?" )

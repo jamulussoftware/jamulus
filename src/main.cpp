@@ -446,9 +446,7 @@ int main ( int argc, char** argv )
         if ( GetNumericArgument ( argc, argv, i, "-u", "--numchannels", 1, MAX_NUM_CHANNELS, rDbleArgument ) )
         {
             iNumServerChannels = static_cast<int> ( rDbleArgument );
-
             qInfo() << qUtf8Printable ( QString ( "- maximum number of channels: %1" ).arg ( iNumServerChannels ) );
-
             CommandLineOptions << "--numchannels";
             ServerOnlyOptions << "--numchannels";
             continue;
@@ -639,6 +637,7 @@ int main ( int argc, char** argv )
     else
 #endif
     {
+
         if ( ClientOnlyOptions.size() != 0 )
         {
             qCritical() << qUtf8Printable (
@@ -786,12 +785,10 @@ int main ( int argc, char** argv )
                 strServerBindIP = "";
             }
         }
-
 #ifndef NO_JSON_RPC
-        //
+
         // strJsonRpcBind address defaults to loopback and should not be empty, but
         // in the odd chance that an empty IP is passed, we'll check for it here.
-
         if ( strJsonRpcBindIP.trimmed().isEmpty() )
         {
             qCritical() << qUtf8Printable ( QString ( "JSON-RPC is enabled but the bind address provided is empty, exiting." ) );
@@ -809,7 +806,6 @@ int main ( int argc, char** argv )
                 exit ( 1 );
             }
         }
-
 #endif
     }
 
@@ -967,6 +963,7 @@ int main ( int argc, char** argv )
 
                 // show dialog
                 ClientDlg.show();
+
                 pApp->exec();
             }
             else
@@ -1009,8 +1006,8 @@ int main ( int argc, char** argv )
             {
                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
             }
-#endif
 
+#endif
 #ifndef HEADLESS
             if ( bUseGUI )
             {

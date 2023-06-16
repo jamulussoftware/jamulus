@@ -647,7 +647,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="54"/>
         <source>Input Level Meter</source>
-        <translation>Indicador nivel entrada</translation>
+        <translation>Indicador Nivel Entrada</translation>
     </message>
     <message>
         <source>The input level indicators show the input level of the two stereo channels of the current selected audio input.</source>

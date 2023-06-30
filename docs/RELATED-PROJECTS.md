@@ -1,6 +1,6 @@
 # Other projects related to Jamulus
 
-This document lists a number of third-party projects related to Jamulus, which users may find interesting.
+This document lists a number of third-party projects related to Jamulus that you may find interesting.
 
 ## jamulus-php
 
@@ -37,7 +37,7 @@ This replaces the History Graph that used to be part of the Jamulus server itsel
 [jamulus-jamexporter](https://github.com/pljones/jamulus-jamexporter) comprises two scripts:
 
 - A bash script to monitor the Jamulus recording base directory for new recordings
-- A bash script to apply some judicious rules and compression before uploading the recordings offsite
+- A bash script to apply some rules and compression before uploading the recordings offsite
 
 ## jamulus-docker
 
@@ -49,3 +49,14 @@ within a Docker container. It provides a `Dockerfile` and some documentation.
 [jamulus-server-remote](https://github.com/vdellamea/jamulus-server-remote) provides a lightweight
 web front-end for a headless Jamulus server running on Linux. It allows a user to start and stop recordings,
 and to zip them up and download them via a web browser. It is implemented in PHP.
+
+## Server add-on suite
+
+[These components](https://github.com/orgs/jamulussoftware/discussions/3085) extend the features of a Jamulus server.
+
+* [jamulus-lounge](https://github.com/dtinth/jamulus-lounge) adds a web-based interface that lets
+people listen to a Jamulus server. It connects to a server using a bot named **lobby**.
+* [gojam](https://github.com/dtinth/gojam) is an implementation of a Jamulus client written in Go.
+This tool is intended for headless streaming use-cases. Used by **jamulus-lounge**.
+* [jamviz](https://github.com/dtinth/jamviz) shows active connections of a Jamulus server that
+is running **jamulus-lounge**. Used to show activity to livestreaming audience.

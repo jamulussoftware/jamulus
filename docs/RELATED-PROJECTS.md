@@ -59,4 +59,4 @@ people listen to a Jamulus server. It connects to a server using a bot named **l
 * [gojam](https://github.com/dtinth/gojam) is an implementation of a Jamulus client written in Go.
 This tool is intended for headless streaming use-cases. Used by **jamulus-lounge**.
 * [jamviz](https://github.com/dtinth/jamviz) shows active connections of a Jamulus server that
-is running **jamulus-lounge**. Used to show activity to livestreaming audience.
+is running **jamulus-lounge**. Used to show activity to a livestreaming audience.

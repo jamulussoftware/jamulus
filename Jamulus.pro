@@ -695,7 +695,6 @@ DISTFILES += ChangeLog \
     docs/JAMULUS_PROTOCOL.md \
     docs/JSON-RPC.md \
     docs/README.md \
-    docs/RELATED-PROJECTS.md \
     docs/TRANSLATING.md \
     linux/jamulus.desktop.in \
     linux/jamulus-server.desktop.in \

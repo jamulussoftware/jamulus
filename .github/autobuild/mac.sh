@@ -2,7 +2,11 @@
 set -eu
 
 QT_DIR=/usr/local/opt/qt
-AQTINSTALL_VERSION=2.1.0
+# The following version pinnings are semi-automatically checked for
+# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
+AQTINSTALL_VERSION=3.1.6
+
+TARGET_ARCHS="${TARGET_ARCHS:-}"
 
 if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
@@ -19,7 +23,14 @@ setup() {
     else
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations
+        local qtmultimedia=()
+        if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+ ]]; then
+            # From Qt6 onwards, qtmultimedia is a module and cannot be installed
+            # as an archive anymore.
+            qtmultimedia=("--modules")
+        fi
+        qtmultimedia+=("qtmultimedia")
+        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations "${qtmultimedia[@]}"
     fi
 }
 
@@ -30,23 +41,54 @@ prepare_signing() {
     [[ -n "${MACOS_CERTIFICATE:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_ID:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_PWD:-}" ]] || return 1
-    [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
+
+    # Check for notarization (not wanted on self signed build)
+    if [[ -z "${NOTARIZATION_PASSWORD}" ]]; then
+        echo "Notarization password not found or empty. This suggests we might run a self signed build."
+        if [[ -z "${MACOS_CA_PUBLICKEY}" ]]; then
+            echo "Warning: The CA public key wasn't set or is empty. Skipping signing."
+            return 1
+        fi
+    fi
 
     echo "Signing was requested and all dependencies are satisfied"
 
     # Put the cert to a file
     echo "${MACOS_CERTIFICATE}" | base64 --decode > certificate.p12
 
+    # If set, put the CA public key into a file
+    if [[ -n "${MACOS_CA_PUBLICKEY}" ]]; then
+        echo "${MACOS_CA_PUBLICKEY}" | base64 --decode > CA.cer
+    fi
+
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
+    # Remove default re-lock timeout to avoid codesign hangs:
+    security set-keychain-settings build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security import certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -T /usr/bin/codesign
     security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
-    # Tell Github Workflow that we need notarization & stapling:
-    echo "::set-output name=macos_signed::true"
+    # Tell Github Workflow that we want signing
+    echo "macos_signed=true" >> "$GITHUB_OUTPUT"
+
+    # If set, import CA key to allow self signed key
+    if [[ -n "${MACOS_CA_PUBLICKEY}" ]]; then
+        # bypass any GUI related trusting prompt (https://developer.apple.com/forums/thread/671582)
+        echo "Importing development only CA"
+        # shellcheck disable=SC2024
+        sudo security authorizationdb read com.apple.trust-settings.admin > rights
+        sudo security authorizationdb write com.apple.trust-settings.admin allow
+        sudo security add-trusted-cert -d -r trustRoot -k "build.keychain" CA.cer
+        # shellcheck disable=SC2024
+        sudo security authorizationdb write com.apple.trust-settings.admin < rights
+    else
+        # Tell Github Workflow that we need notarization & stapling (non self signed build)
+        echo "macos_notarize=true" >> "$GITHUB_OUTPUT"
+    fi
+
     return 0
 }
 
@@ -60,14 +102,14 @@ build_app_as_dmg_installer() {
     if prepare_signing; then
         BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}")
     fi
-    ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
+    TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
 
 pass_artifact_to_job() {
     artifact="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact}"
-    echo "::set-output name=artifact_1::${artifact}"
+    echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 }
 
 case "${1:-}" in
@@ -83,4 +125,5 @@ case "${1:-}" in
     *)
         echo "Unknown stage '${1:-}'"
         exit 1
+        ;;
 esac

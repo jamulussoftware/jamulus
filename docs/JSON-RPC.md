@@ -17,6 +17,10 @@ It can be generated like this:
 $ openssl rand -base64 10 > /file/with/a/secret.txt
 ```
 
+The JSON-RPC server defaults to listening on the local loopback network interface (127.0.0.1).
+This can be optionally changed by using the `--jsonrpcbindip <ip address>` command line option.
+
+
 ## Wire protocol
 
 The JSON-RPC server is based on the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) protocol, using [streaming newline-delimited JSON over TCP](https://clue.engineering/2018/introducing-reactphp-ndjson) as the transport. There are three main types of messages being exchanged:
@@ -230,12 +234,17 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
+| result.connections | number | The number of active connections. |
 | result.clients | array | The list of connected clients. |
 | result.clients[*].id | number | The client’s channel id. |
 | result.clients[*].address | string | The client’s address (ip:port). |
 | result.clients[*].name | string | The client’s name. |
 | result.clients[*].jitterBufferSize | number | The client’s jitter buffer size. |
 | result.clients[*].channels | number | The number of audio channels of the client. |
+| result.clients[*].instrumentCode | number | The id of the instrument for this channel. |
+| result.clients[*].city | string | The city name provided by the user for this channel. |
+| result.clients[*].countryName | number | The text name of the country specified by the user for this channel (see QLocale::Country). |
+| result.clients[*].skillLevelCode | number | The skill level id provided by the user for this channel. |
 
 
 ### jamulusserver/getRecorderStatus
@@ -276,7 +285,7 @@ Results:
 | result.city | string | The server city. |
 | result.countryId | number | The server country ID (see QLocale::Country). |
 | result.welcomeMessage | string | The server welcome message. |
-| result.directoryServer | string | The directory server to which this server requested registration, or blank if none. |
+| result.directory | string | The directory with which this server requested registration, or blank if none. |
 | result.registrationStatus | string | The server registration status as string (see ESvrRegStatus and SerializeRegistrationStatus). |
 
 

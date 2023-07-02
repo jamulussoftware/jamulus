@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -23,9 +23,6 @@
 \******************************************************************************/
 
 #include "util.h"
-#ifndef SERVER_ONLY
-#    include "client.h"
-#endif
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
@@ -377,6 +374,192 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReve
     }
 }
 
+// CHighPrecisionTimer implementation ******************************************
+#ifdef _WIN32
+CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize ) : bUseDoubleSystemFrameSize ( bNewUseDoubleSystemFrameSize )
+{
+    // add some error checking, the high precision timer implementation only
+    // supports 64 and 128 samples frame size at 48 kHz sampling rate
+#    if ( SYSTEM_FRAME_SIZE_SAMPLES != 64 ) && ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES != 128 )
+#        error "Only system frame size of 64 and 128 samples is supported by this module"
+#    endif
+#    if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
+#        error "Only a system sample rate of 48 kHz is supported by this module"
+#    endif
+
+    // Since QT only supports a minimum timer resolution of 1 ms but for our
+    // server we require a timer interval of 2.333 ms for 128 samples
+    // frame size at 48 kHz sampling rate.
+    // To support this interval, we use a timer with 2 ms resolution for 128
+    // samples frame size and 1 ms resolution for 64 samples frame size.
+    // Then we fire the actual frame timer if the error to the actual
+    // required interval is minimum.
+    veciTimeOutIntervals.Init ( 3 );
+
+    // for 128 sample frame size at 48 kHz sampling rate with 2 ms timer resolution:
+    // actual intervals:  0.0  2.666  5.333  8.0
+    // quantized to 2 ms: 0    2      6      8 (0)
+    // for 64 sample frame size at 48 kHz sampling rate with 1 ms timer resolution:
+    // actual intervals:  0.0  1.333  2.666  4.0
+    // quantized to 2 ms: 0    1      3      4 (0)
+    veciTimeOutIntervals[0] = 0;
+    veciTimeOutIntervals[1] = 1;
+    veciTimeOutIntervals[2] = 0;
+
+    Timer.setTimerType ( Qt::PreciseTimer );
+
+    // connect timer timeout signal
+    QObject::connect ( &Timer, &QTimer::timeout, this, &CHighPrecisionTimer::OnTimer );
+}
+
+void CHighPrecisionTimer::Start()
+{
+    // reset position pointer and counter
+    iCurPosInVector  = 0;
+    iIntervalCounter = 0;
+
+    if ( bUseDoubleSystemFrameSize )
+    {
+        // start internal timer with 2 ms resolution for 128 samples frame size
+        Timer.start ( 2 );
+    }
+    else
+    {
+        // start internal timer with 1 ms resolution for 64 samples frame size
+        Timer.start ( 1 );
+    }
+}
+
+void CHighPrecisionTimer::Stop()
+{
+    // stop timer
+    Timer.stop();
+}
+
+void CHighPrecisionTimer::OnTimer()
+{
+    // check if maximum number of high precision timer intervals are
+    // finished
+    if ( veciTimeOutIntervals[iCurPosInVector] == iIntervalCounter )
+    {
+        // reset interval counter
+        iIntervalCounter = 0;
+
+        // go to next position in vector, take care of wrap around
+        iCurPosInVector++;
+        if ( iCurPosInVector == veciTimeOutIntervals.Size() )
+        {
+            iCurPosInVector = 0;
+        }
+
+        // minimum time error to actual required timer interval is reached,
+        // emit signal for server
+        emit timeout();
+    }
+    else
+    {
+        // next high precision timer interval
+        iIntervalCounter++;
+    }
+}
+#else // Mac and Linux
+CHighPrecisionTimer::CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize ) : bRun ( false )
+{
+    // calculate delay in ns
+    uint64_t iNsDelay;
+
+    if ( bUseDoubleSystemFrameSize )
+    {
+        iNsDelay = ( (uint64_t) DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) / (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
+    }
+    else
+    {
+        iNsDelay = ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) / (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
+    }
+
+#    if defined( __APPLE__ ) || defined( __MACOSX )
+    // calculate delay in mach absolute time
+    struct mach_timebase_info timeBaseInfo;
+    mach_timebase_info ( &timeBaseInfo );
+
+    Delay = ( iNsDelay * (uint64_t) timeBaseInfo.denom ) / (uint64_t) timeBaseInfo.numer;
+#    else
+    // set delay
+    Delay = iNsDelay;
+#    endif
+}
+
+void CHighPrecisionTimer::Start()
+{
+    // only start if not already running
+    if ( !bRun )
+    {
+        // set run flag
+        bRun = true;
+
+        // set initial end time
+#    if defined( __APPLE__ ) || defined( __MACOSX )
+        NextEnd = mach_absolute_time() + Delay;
+#    else
+        clock_gettime ( CLOCK_MONOTONIC, &NextEnd );
+
+        NextEnd.tv_nsec += Delay;
+        if ( NextEnd.tv_nsec >= 1000000000L )
+        {
+            NextEnd.tv_sec++;
+            NextEnd.tv_nsec -= 1000000000L;
+        }
+#    endif
+
+        // start thread
+        QThread::start ( QThread::TimeCriticalPriority );
+    }
+}
+
+void CHighPrecisionTimer::Stop()
+{
+    // set flag so that thread can leave the main loop
+    bRun = false;
+
+    // give thread some time to terminate
+    wait ( 5000 );
+}
+
+void CHighPrecisionTimer::run()
+{
+    // loop until the thread shall be terminated
+    while ( bRun )
+    {
+        // call processing routine by fireing signal
+
+        //### TODO: BEGIN ###//
+        // by emit a signal we leave the high priority thread -> maybe use some
+        // other connection type to have something like a true callback, e.g.
+        //     "Qt::DirectConnection" -> Can this work?
+        emit timeout();
+        //### TODO: END ###//
+
+        // now wait until the next buffer shall be processed (we
+        // use the "increment method" to make sure we do not introduce
+        // a timing drift)
+#    if defined( __APPLE__ ) || defined( __MACOSX )
+        mach_wait_until ( NextEnd );
+
+        NextEnd += Delay;
+#    else
+        clock_nanosleep ( CLOCK_MONOTONIC, TIMER_ABSTIME, &NextEnd, NULL );
+
+        NextEnd.tv_nsec += Delay;
+        if ( NextEnd.tv_nsec >= 1000000000L )
+        {
+            NextEnd.tv_sec++;
+            NextEnd.tv_nsec -= 1000000000L;
+        }
+#    endif
+    }
+}
+#endif
+
 /******************************************************************************\
 * GUI Utilities                                                                *
 \******************************************************************************/
@@ -410,21 +593,27 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                         "</font></p>" );
 
     // libraries used by this compilation
-    txvLibraries->setText ( tr ( "This app uses the following libraries, resources or code snippets:" ) + "<br><p>" +
-                            tr ( "Qt cross-platform application framework" ) +
-                            ", <i><a href=\"https://www.qt.io\">https://www.qt.io</a></i></p>"
-                            "<p>Opus Interactive Audio Codec"
-                            ", <i><a href=\"https://www.opus-codec.org\">https://www.opus-codec.org</a></i></p>"
-                            "<p>" +
-                            tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
-                            ", 1995 - 2021, <i><a href=\"https://ccrma.stanford.edu/software/stk\">"
-                            "The Synthesis ToolKit in C++ (STK)</a></i></p>"
-                            "<p>" +
-                            tr ( "Some pixmaps are from the" ) +
-                            " Open Clip Art Library (OCAL), "
-                            "<i><a href=\"https://openclipart.org\">https://openclipart.org</a></i></p>"
-                            "<p>" +
-                            tr ( "Flag icons by Mark James" ) + ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i></p>" );
+    txvLibraries->setText (
+        tr ( "This app uses the following libraries, resources or code snippets:" ) + "<br><p>" + tr ( "Qt cross-platform application framework" ) +
+        ", <i><a href=\"https://www.qt.io\">https://www.qt.io</a></i></p>"
+        "<p>Opus Interactive Audio Codec"
+        ", <i><a href=\"https://www.opus-codec.org\">https://www.opus-codec.org</a></i></p>"
+#    if defined( _WIN32 ) && !defined( WITH_JACK )
+        "<p>ASIO (Audio Stream I/O) SDK"
+        ", <i><a href=\"https://www.steinberg.net/developers/\">https://www.steinberg.net/developers</a></i><br>" +
+        "ASIO is a trademark and software of Steinberg Media Technologies GmbH</p>"
+#    endif
+        "<p>" +
+        tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
+        ", 1995 - 2021, <i><a href=\"https://ccrma.stanford.edu/software/stk\">"
+        "The Synthesis ToolKit in C++ (STK)</a></i></p>"
+        "<p>" +
+        tr ( "Some pixmaps are from the" ) +
+        " Open Clip Art Library (OCAL), "
+        "<i><a href=\"https://openclipart.org\">https://openclipart.org</a></i></p>"
+        "<p>" +
+        tr ( "Flag icons by Mark James" ) + ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i></p>" + "<p>" +
+        tr ( "Some sound samples are from" ) + " Freesound, " + "<i><a href=\"https://freesound.org\">https://freesound.org</a></i></p>" );
 
     // contributors list
     txvContributors->setText (
@@ -495,6 +684,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>RobyDati (<a href=\"https://github.com/RobyDati\">RobyDati</a>)</p>"
         "<p>Rob-NY (<a href=\"https://github.com/Rob-NY\">Rob-NY</a>)</p>"
         "<p>Thai Pangsakulyanont (<a href=\"https://github.com/dtinth\">dtinth</a>)</p>"
+        "<p>Peter Goderie (<a href=\"https://github.com/pgScorpio\">pgScorpio</a>)</p>"
+        "<p>Dan Garton (<a href=\"https://github.com/danryu\">danryu</a>)</p>"
         "<br>" +
         tr ( "For details on the contributions check out the %1" )
             .arg ( "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." ) );
@@ -513,6 +704,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                               "</b></p>"
                               "<p>Miguel de Matos (<a href=\"https://github.com/Snayler\">Snayler</a>)</p>"
                               "<p>Melcon Moraes (<a href=\"https://github.com/melcon\">melcon</a>)</p>"
+                              "<p>Manuela Silva (<a href=\"https://hosted.weblate.org/user/mansil/\">mansil</a>)</p>"
+                              "<p>gbonaspetti (<a href=\"https://hosted.weblate.org/user/gbonaspetti/\">gbonaspetti</a>)</p>"
                               "<p><b>" +
                               tr ( "Dutch" ) +
                               "</b></p>"
@@ -536,13 +729,23 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                               tr ( "Swedish" ) +
                               "</b></p>"
                               "<p>Daniel (<a href=\"https://github.com/genesisproject2020\">genesisproject2020</a>)</p>"
+                              "<p>tygyh (<a href=\"https://github.com/tygyh\">tygyh</a>)</p>"
+                              "<p>Allan Nordhøy (<a href=\"https://hosted.weblate.org/user/kingu/\">kingu</a>)</p>"
+                              "<p><b>" +
+                              tr ( "Korean" ) +
+                              "</b></p>"
+                              "<p>Jung-Kyu Park (<a href=\"https://github.com/bagjunggyu\">bagjunggyu</a>)</p>"
+                              "<p>이정희 (<a href=\"https://hosted.weblate.org/user/MarongHappy/\">MarongHappy</a>)</p>"
                               "<p><b>" +
                               tr ( "Slovak" ) +
                               "</b></p>"
                               "<p>Jose Riha (<a href=\"https://github.com/jose1711\">jose1711</a>)</p>" +
                               "<p><b>" + tr ( "Simplified Chinese" ) +
                               "</b></p>"
-                              "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>" );
+                              "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>" +
+                              "<p><b>" + tr ( "Norwegian Bokmål" ) +
+                              "</b></p>"
+                              "<p>Allan Nordhøy (<a href=\"https://hosted.weblate.org/user/kingu/\">kingu</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -687,6 +890,100 @@ QSize CMinimumStackedLayout::sizeHint() const
 * Other Classes                                                                *
 \******************************************************************************/
 // Network utility functions ---------------------------------------------------
+bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 )
+{
+    // try to get host by name, assuming
+    // that the string contains a valid host name string or IP address
+    const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
+
+    if ( HostInfo.error() != QHostInfo::NoError )
+    {
+        // qInfo() << qUtf8Printable ( QString ( "Invalid hostname" ) );
+        return false; // invalid address
+    }
+
+    foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
+    {
+        // qInfo() << qUtf8Printable ( QString ( "Resolved network address to %1 for proto %2" ) .arg ( HostAddr.toString() ) .arg (
+        // HostAddr.protocol() ) );
+        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bEnableIPv6 && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
+        {
+            InetAddr = HostAddr;
+            return true;
+        }
+    }
+    return false;
+}
+
+#ifndef CLIENT_NO_SRV_CONNECT
+bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+{
+    // init requested host address with invalid address first
+    HostAddress = CHostAddress();
+
+    QRegularExpression plainHostRegex ( "^([^\\[:0-9.][^:]*)$" );
+    if ( plainHostRegex.match ( strAddress ).capturedStart() != 0 )
+    {
+        // not a plain hostname? then don't attempt SRV lookup and fail
+        // immediately.
+        return false;
+    }
+
+    QDnsLookup* dns = new QDnsLookup();
+    dns->setType ( QDnsLookup::SRV );
+    dns->setName ( QString ( "_jamulus._udp.%1" ).arg ( strAddress ) );
+    dns->lookup();
+    // QDnsLookup::lookup() works asynchronously. Therefore, wait for
+    // it to complete here by resuming the main loop here.
+    // This is not nice and blocks the UI, but is similar to what
+    // the regular resolve function does as well.
+    QTime dieTime = QTime::currentTime().addMSecs ( DNS_SRV_RESOLVE_TIMEOUT_MS );
+    while ( QTime::currentTime() < dieTime && !dns->isFinished() )
+    {
+        QCoreApplication::processEvents ( QEventLoop::ExcludeUserInputEvents, 100 );
+    }
+    QList<QDnsServiceRecord> records = dns->serviceRecords();
+    dns->deleteLater();
+    if ( records.length() != 1 )
+    {
+        return false;
+    }
+    QDnsServiceRecord record = records.first();
+    if ( record.target() == "." || record.target() == "" )
+    {
+        // RFC2782 says that "." indicates that the service is not available.
+        // Qt strips the trailing dot, which is why we check for empty string
+        // as well. Therefore, the "." part might be redundant, but this would
+        // need further testing to confirm.
+        // End processing here (= return true), but pass back an
+        // invalid HostAddress to let the connect logic fail properly.
+        HostAddress = CHostAddress ( QHostAddress ( "." ), 0 );
+        return true;
+    }
+    qDebug() << qUtf8Printable (
+        QString ( "resolved %1 to a single SRV record: %2:%3" ).arg ( strAddress ).arg ( record.target() ).arg ( record.port() ) );
+
+    QHostAddress InetAddr;
+    if ( ParseNetworkAddressString ( record.target(), InetAddr, bEnableIPv6 ) )
+    {
+        HostAddress = CHostAddress ( InetAddr, record.port() );
+        return true;
+    }
+    return false;
+}
+
+bool NetworkUtil::ParseNetworkAddressWithSrvDiscovery ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+{
+    // Try SRV-based discovery first:
+    if ( ParseNetworkAddressSrv ( strAddress, HostAddress, bEnableIPv6 ) )
+    {
+        return true;
+    }
+    // Try regular connect via plain IP or host name lookup (A/AAAA):
+    return ParseNetworkAddress ( strAddress, HostAddress, bEnableIPv6 );
+}
+#endif
+
 bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
 {
     QHostAddress InetAddr;
@@ -768,31 +1065,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
             return false; // invalid address
         }
 
-        // try to get host by name, assuming
-        // that the string contains a valid host name string
-        const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
-
-        if ( HostInfo.error() != QHostInfo::NoError )
-        {
-            // qInfo() << qUtf8Printable ( QString ( "Invalid hostname" ) );
-            return false; // invalid address
-        }
-
-        bool bFoundAddr = false;
-
-        foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
-        {
-            // qInfo() << qUtf8Printable ( QString ( "Resolved network address to %1 for proto %2" ) .arg ( HostAddr.toString() ) .arg (
-            // HostAddr.protocol() ) );
-            if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bEnableIPv6 && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
-            {
-                InetAddr   = HostAddr;
-                bFoundAddr = true;
-                break;
-            }
-        }
-
-        if ( !bFoundAddr )
+        if ( !ParseNetworkAddressString ( strAddress, InetAddr, bEnableIPv6 ) )
         {
             // no valid address found
             // qInfo() << qUtf8Printable ( QString ( "No IP address found for hostname" ) );
@@ -1229,11 +1502,41 @@ bool CLocale::IsCountryCodeSupported ( unsigned short iCountryCode )
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
     // On newer Qt versions there might be codes which do not have a Qt5 equivalent.
     // We have no way to support those sanely right now.
+    // Before we can check that via an array lookup, we have to ensure that
+    // we are within the boundaries of that array:
+    if ( iCountryCode >= qt6CountryToWireFormatLen )
+    {
+        return false;
+    }
     return qt6CountryToWireFormat[iCountryCode] != -1;
 #else
     // All Qt5 codes are supported.
-    Q_UNUSED ( iCountryCode );
-    return true;
+    return iCountryCode <= QLocale::LastCountry;
+#endif
+}
+
+QLocale::Country CLocale::GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 2, 0 )
+    return QLocale::codeToTerritory ( sTwoLetterCode );
+#else
+    QList<QLocale> vLocaleList = QLocale::matchingLocales ( QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry );
+    QStringList    vstrLocParts;
+
+    // Qt < 6.2 does not support lookups from two-letter iso codes to
+    // QLocale::Country. Therefore, we have to loop over all supported
+    // locales and perform the matching ourselves.
+    // In the future, QLocale::codeToTerritory can be used.
+    foreach ( const QLocale qLocale, vLocaleList )
+    {
+        QStringList vstrLocParts = qLocale.name().split ( "_" );
+
+        if ( vstrLocParts.size() >= 2 && vstrLocParts.at ( 1 ).toLower() == sTwoLetterCode.toLower() )
+        {
+            return qLocale.country();
+        }
+    }
+    return QLocale::AnyCountry;
 #endif
 }
 
@@ -1373,7 +1676,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += " *** ";
     }
 
-    strVersionText += APP_NAME + QCoreApplication::tr ( ", Version " ) + VERSION;
+    strVersionText += QCoreApplication::tr ( "%1, Version %2", "%1 is app name, %2 is version number" ).arg ( APP_NAME ).arg ( VERSION );
 
     if ( bDisplayInGui )
     {
@@ -1386,7 +1689,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
 
     if ( !bDisplayInGui )
     {
-        strVersionText += QCoreApplication::tr ( "Internet Jam Session Software" );
+        strVersionText += "Internet Jam Session Software";
         strVersionText += "\n *** ";
     }
 
@@ -1394,39 +1697,40 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
 
     if ( !bDisplayInGui )
     {
-        // additional text to show in console output
+        // additional non-translated text to show in console output
+        strVersionText += "\n *** <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>";
         strVersionText += "\n *** ";
-        strVersionText += "<https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>";
+        strVersionText += "\n *** This program is free software; you can redistribute it and/or modify it under";
+        strVersionText += "\n *** the terms of the GNU General Public License as published by the Free Software";
+        strVersionText += "\n *** Foundation; either version 2 of the License, or (at your option) any later version.";
+        strVersionText += "\n *** There is NO WARRANTY, to the extent permitted by law.";
         strVersionText += "\n *** ";
+        strVersionText += "\n *** Using the following libraries, resources or code snippets:";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "This program is free software; you can redistribute it and/or modify it under" );
+        strVersionText += QString ( "\n *** Qt framework %1" ).arg ( QT_VERSION_STR );
+        strVersionText += "\n *** <https://doc.qt.io/qt-5/lgpl.html>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "the terms of the GNU General Public License as published by the Free Software" );
+        strVersionText += "\n *** Opus Interactive Audio Codec";
+        strVersionText += "\n *** <https://www.opus-codec.org>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Foundation; either version 2 of the License, or (at your option) any later version." );
+#if defined( _WIN32 ) && !defined( WITH_JACK )
+        strVersionText += "\n *** ASIO (Audio Stream I/O) SDK";
+        strVersionText += "\n *** <https://www.steinberg.net/developers>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "There is NO WARRANTY, to the extent permitted by law." );
+#endif
+        strVersionText += "\n *** Audio reverberation code by Perry R. Cook and Gary P. Scavone";
+        strVersionText += "\n *** <https://ccrma.stanford.edu/software/stk>";
         strVersionText += "\n *** ";
+        strVersionText += "\n *** Some pixmaps are from the Open Clip Art Library (OCAL)";
+        strVersionText += "\n *** <https://openclipart.org>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Using the following libraries, resources or code snippets:" );
+        strVersionText += "\n *** Flag icons by Mark James";
+        strVersionText += "\n *** <http://www.famfamfam.com>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Qt framework " ) + QT_VERSION_STR;
-        strVersionText += " <https://doc.qt.io/qt-5/lgpl.html>";
+        strVersionText += "\n *** Some sound samples are from Freesound";
+        strVersionText += "\n *** <https://freesound.org>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Opus Interactive Audio Codec" );
-        strVersionText += " <https://www.opus-codec.org>";
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" );
-        strVersionText += " <https://ccrma.stanford.edu/software/stk>";
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Some pixmaps are from the Open Clip Art Library (OCAL)" );
-        strVersionText += " <https://openclipart.org>";
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Flag icons by Mark James" );
-        strVersionText += " <http://www.famfamfam.com>";
-        strVersionText += "\n *** ";
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Copyright (C) 2005-2022 The Jamulus Development Team" );
+        strVersionText += "\n *** Copyright © 2005-2023 The Jamulus Development Team";
         strVersionText += "\n";
     }
 

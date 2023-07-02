@@ -1,0 +1,6 @@
+usr/bin/jamulus
+usr/share/applications/jamulus.desktop
+usr/share/applications/jamulus-server.desktop
+usr/share/icons/hicolor/512x512/apps/io.jamulus.jamulus.png
+usr/share/icons/hicolor/scalable/apps/io.jamulus.jamulus.svg
+usr/share/icons/hicolor/scalable/apps/io.jamulus.jamulusserver.svg

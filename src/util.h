@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -23,11 +23,42 @@
 \******************************************************************************/
 
 #pragma once
-
+#include <vector>
+#include <algorithm>
+#ifdef _WIN32
+#    include <winsock2.h>
+#    include <ws2tcpip.h>
+#    include <windows.h>
+#    include <mmsystem.h>
+#elif defined( __APPLE__ ) || defined( __MACOSX )
+// using mach timers for Mac
+#    include <mach/mach.h>
+#    include <mach/mach_error.h>
+#    include <mach/mach_time.h>
+#else
+// using mach nanosleep for Linux
+#    include <sys/time.h>
+#endif
 #include <QCoreApplication>
 #include <QUdpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
+#include <QFile>
+#include <QDirIterator>
+#include <QRegularExpression>
+#include <QTranslator>
+#include <QLibraryInfo>
+#include <QUrl>
+#include <QLocale>
+#include <QElapsedTimer>
+#include <QTextBoundaryFinder>
+#include <QTimer>
+#ifndef CLIENT_NO_SRV_CONNECT
+#    include <QDnsLookup>
+#endif
+#ifndef _WIN32
+#    include <QThread>
+#endif
 #ifndef HEADLESS
 #    include <QMessageBox>
 #    include <QMenu>
@@ -43,38 +74,17 @@
 #    include <QStackedLayout>
 #    include "ui_aboutdlgbase.h"
 #endif
-#include <QFile>
-#include <QDirIterator>
-#include <QRegularExpression>
-#include <QTranslator>
-#include <QLibraryInfo>
-#include <QUrl>
-#include <QLocale>
-#include <QElapsedTimer>
-#include <QTextBoundaryFinder>
-#include <vector>
-#include <algorithm>
+
 #include "global.h"
-#ifdef _WIN32
-#    include <winsock2.h>
-#    include <ws2tcpip.h>
-#    include <windows.h>
-#    include <mmsystem.h>
-#elif defined( __APPLE__ ) || defined( __MACOSX )
-#    include <mach/mach.h>
-#    include <mach/mach_error.h>
-#    include <mach/mach_time.h>
-#else
-#    include <sys/time.h>
-#endif
 
 #ifndef SERVER_ONLY
 class CClient; // forward declaration of CClient
 #endif
 
 /* Definitions ****************************************************************/
-#define METER_FLY_BACK  2
-#define INVALID_MIDI_CH -1 // invalid MIDI channel definition
+#define METER_FLY_BACK             2
+#define INVALID_MIDI_CH            -1 // invalid MIDI channel definition
+#define DNS_SRV_RESOLVE_TIMEOUT_MS 500
 
 /* Global functions ***********************************************************/
 // converting float to short
@@ -116,7 +126,8 @@ public:
     CVector ( const int iNeSi ) { Init ( iNeSi ); }
     CVector ( const int iNeSi, const TData tInVa ) { Init ( iNeSi, tInVa ); }
 
-    CVector ( CVector const& ) = default;
+    CVector ( CVector const& )            = default;
+    CVector& operator= ( CVector const& ) = default;
 
     void Init ( const int iNewSize );
 
@@ -639,7 +650,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
         return QCoreApplication::translate ( "CServerDlg", "Registered" );
 
     case SRS_SERVER_LIST_FULL:
-        return QCoreApplication::translate ( "CServerDlg", "Directory Server full" );
+        return QCoreApplication::translate ( "CServerDlg", "Server list full at directory" );
 
     case SRS_VERSION_TOO_OLD:
         return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
@@ -651,7 +662,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
     return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value %1" ) ).arg ( eSvrRegStatus );
 }
 
-// Directory server registration outcome ---------------------------------------
+// Directory registration outcome ----------------------------------------------
 enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
@@ -689,11 +700,12 @@ enum ESkillLevel
 class CStereoSignalLevelMeter
 {
 public:
-    // clang-format off
-// TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
-//      But tests with 128 and 64 samples frame size have shown that the meter fly back
-//      is ok for both numbers of samples frame size with a factor of 0.99.
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
+    //      But tests with 128 and 64 samples frame size have shown that the meter fly back
+    //      is ok for both numbers of samples frame size with a factor of 0.99.
+    //### TODO: END ###//
+
     CStereoSignalLevelMeter ( const bool bNIsStereoOut = true, const double dNSmoothingFactor = 0.99 ) :
         dSmoothingFactor ( dNSmoothingFactor ),
         bIsStereoOut ( bNIsStereoOut )
@@ -784,9 +796,9 @@ public:
     static EInstCategory GetCategory ( const int iInstrument );
     static void          UpdateTableOnLanguageChange() { GetTable ( true ); }
 
-    // clang-format off
-// TODO make use of instrument category (not yet implemented)
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // make use of instrument category (not yet implemented)
+    //### TODO: END ###//
 
 protected:
     class CInstPictProps
@@ -820,8 +832,9 @@ public:
     static QLocale::Country        WireFormatCountryCodeToQtCountry ( unsigned short iCountryCode );
     static unsigned short          QtCountryToWireFormatCountryCode ( const QLocale::Country eCountry );
     static bool                    IsCountryCodeSupported ( unsigned short iCountryCode );
+    static QLocale::Country        GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode );
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
-    // ./tools/qt5-to-qt6-country-code-table.py generates these lists:
+    // ./tools/qt5_to_qt6_country_code_table.py generates these lists:
     constexpr int const static wireFormatToQt6Table[] = {
         0,   1,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
         29,  30,  31,  32,  33,  35,  36,  37,  38,  39,  40,  41,  43,  45,  46,  48,  49,  50,  51,  53,  54,  55,  57,  56,  58,  59,  118,
@@ -846,6 +859,7 @@ public:
         195, 196, 114, 254, 197, 198, 201, 202, 203, 205, 206, 207, 208, 209, 210, 211, 62,  212, 213, 214, 215, 253, 216, 217, 218, 219, 220,
         221, 222, 223, 224, 226, 225, 234, 227, 228, 229, 230, 231, 232, 235, 236, 260, 237, 239, 240,
     };
+    constexpr int const static qt6CountryToWireFormatLen = sizeof ( qt6CountryToWireFormat ) / sizeof ( qt6CountryToWireFormat[0] );
 #endif
 };
 
@@ -1029,6 +1043,12 @@ public:
 class NetworkUtil
 {
 public:
+    static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 );
+
+#ifndef CLIENT_NO_SRV_CONNECT
+    static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+    static bool ParseNetworkAddressWithSrvDiscovery ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+#endif
     static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 
     static QString      FixAddress ( const QString& strAddress );
@@ -1204,7 +1224,9 @@ public:
     }
 };
 
-// Timing measurement ----------------------------------------------------------
+/******************************************************************************\
+* Timing measurement                                                           *
+\******************************************************************************/
 // intended for debugging the timing jitter of the sound card or server timer
 class CTimingMeas
 {
@@ -1259,6 +1281,64 @@ protected:
     QElapsedTimer ElapsedTimer;
     int           iCnt;
 };
+
+// High resolution timer
+#if ( defined( WIN32 ) || defined( _WIN32 ) )
+// using QTimer for Windows
+class CHighPrecisionTimer : public QObject
+{
+    Q_OBJECT
+
+public:
+    CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize );
+
+    void Start();
+    void Stop();
+    bool isActive() const { return Timer.isActive(); }
+
+protected:
+    QTimer       Timer;
+    CVector<int> veciTimeOutIntervals;
+    int          iCurPosInVector;
+    int          iIntervalCounter;
+    bool         bUseDoubleSystemFrameSize;
+
+public slots:
+    void OnTimer();
+
+signals:
+    void timeout();
+};
+#else
+
+class CHighPrecisionTimer : public QThread
+{
+    Q_OBJECT
+
+public:
+    CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize );
+
+    void Start();
+    void Stop();
+    bool isActive() { return bRun; }
+
+protected:
+    virtual void run();
+
+    bool     bRun;
+
+#    if defined( __APPLE__ ) || defined( __MACOSX )
+    uint64_t Delay;
+    uint64_t NextEnd;
+#    else
+    long     Delay;
+    timespec NextEnd;
+#    endif
+
+signals:
+    void timeout();
+};
+#endif
 
 /******************************************************************************\
 * Statistics                                                                   *

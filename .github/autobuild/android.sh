@@ -1,11 +1,13 @@
 #!/bin/bash
 set -eu
 
+# Some of the following version pinnings are semi-automatically checked for
+# updates. Update .github/workflows/bump-dependencies.yaml when renaming those:
 COMMANDLINETOOLS_VERSION=6858069
 ANDROID_NDK_VERSION=r21d
 ANDROID_PLATFORM=android-30
 ANDROID_BUILD_TOOLS=30.0.2
-AQTINSTALL_VERSION=2.1.0
+AQTINSTALL_VERSION=3.1.6
 QT_VERSION=5.15.2
 
 # Only variables which are really needed by sub-commands are exported.
@@ -15,7 +17,7 @@ ANDROID_BASEDIR="/opt/android"
 BUILD_DIR=build
 export ANDROID_SDK_ROOT="${ANDROID_BASEDIR}/android-sdk"
 COMMANDLINETOOLS_DIR="${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
-ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
+export ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
 ANDROID_NDK_HOST="linux-x86_64"
 ANDROID_SDKMANAGER="${COMMANDLINETOOLS_DIR}/bin/sdkmanager"
 export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/"
@@ -69,8 +71,20 @@ setup_qt() {
     else
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+        local qtmultimedia=()
+        if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+            # From Qt6 onwards, qtmultimedia is a module and cannot be installed
+            # as an archive anymore.
+            qtmultimedia=("--modules")
+        fi
+        qtmultimedia+=("qtmultimedia")
+
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" \
-            --archives qtbase qttools qttranslations qtandroidextras
+            --archives qtbase qttools qttranslations qtandroidextras \
+            "${qtmultimedia[@]}"
+        # Delete libraries, which we don't use, but which bloat the resulting package and might introduce unwanted dependencies.
+        find "${QT_BASEDIR}" -name 'libQt5*Quick*.so' -delete
+        rm -r "${QT_BASEDIR}/${QT_VERSION}/android/qml/"
     fi
 }
 
@@ -90,7 +104,7 @@ pass_artifact_to_job() {
     local artifact="jamulus_${JAMULUS_BUILD_VERSION}_android.apk"
     echo "Moving ${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk to deploy/${artifact}"
     mv "./${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk" "./deploy/${artifact}"
-    echo "::set-output name=artifact_1::${artifact}"
+    echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 }
 
 case "${1:-}" in
@@ -109,4 +123,5 @@ case "${1:-}" in
     *)
         echo "Unknown stage '${1:-}'"
         exit 1
+        ;;
 esac

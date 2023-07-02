@@ -1,5 +1,365 @@
+### 3.9.1dev <- NOTE: the release version number will be 3.9.2 ###
 
-### 3.8.2dev <- NOTE: the release version number will be 3.9.0 ###
+
+### 3.9.1 (2022-10-17) ###
+
+- Client: Improved performance of GUI when someone joins or leaves a server (#2738).
+  (contributed by @ann0see)
+
+- Client: Bugfix: Removed channel number from saved fader tag when `--ctrlmidich` is in use. In this release `--cleanuplegacyfadersettings` can be used on any saved fader settings that have been corrupted to attempt recovery (#2839).
+  (contributed by @pljones)
+
+- Bugfix: Correct new channel not being shown to others if it connects with null channel info (#2754, #2774).
+  (contributed by @softins)
+
+- Server: Fixed --serverinfo country code misinterpretation introduced in Jamulus 3.9.0 on Qt6-based builds such as Mac (#2829).
+  (contributed by @hoffie)
+
+- Server: Added support for ISO country codes (de, gb, nl, ...) in --serverinfo (#2841).
+  (contributed by @hoffie)
+
+- Directory: Bug: Correct default "self" address for directory, enabling use as a server (#2812).
+  (contributed by @pljones)
+
+- Directory: Bug: Use configured Directory Public IP for Client when hole-punching (#2819).
+  (contributed by @pljones)
+
+- CLI: Rephrased recording options help text on the `--help` output for clearer description of their functionality (#2832).
+  (contributed by @ann0see)
+
+- Windows: Upgraded JACK build to use JACK 1.9.21 (#2665).
+  (contributed by @ann0see)
+
+- Translations have been updated (#2835, #2852, #2856, #2915):
+  (mainly translated on @weblate by multiple translators)
+  * Chinese, by @BLumia
+  * Dutch, by @henkdegroot
+  * French, by @trebmuh, @jujudusud, J. Lavoie
+  * German, by @ann0see, Hans Spoerer
+  * Korean, by @MarongHappy
+  * Norwegian Bokmål, by @comradekingu
+  * Polish, by @SeeLook
+  * Portuguese European, by @mansil
+  * Slovak, by @jose1711
+  * Spanish, by @ignotus666
+  * Swedish, by @tygyh, @comradekingu
+
+- Translation: Added nb_NO App translation (#2849, #2852).
+  (contributed by @comradekingu, @ann0see)
+
+- Refactoring: Moved around files to clean up the repository (#2822, #2824, #2834, #2838).
+  (contributed by @ann0see)
+
+- Build: Android: Export NDK root (#2764).
+  (contributed by @pljones)
+
+- Build: Debian/Ubuntu: Fixed `.deb` Changelog generation (#2793).
+  (contributed by @hoffie)
+
+- Build: Debian/Ubuntu: Fixed displayed version for non-release builds to removed incorrect -dirty suffixes (#2802).
+  (contributed by @hoffie)
+
+- Build: Debian/Ubuntu: Renamed headless .deb file to `jamulus-headless_[version]_ubuntu_[arch].deb` for consistency with binary. This might need changes to scripts downloading this `.deb` file (#2821).
+  (contributed by @ann0see)
+
+- Build: Debian/Ubuntu: Added .deb aarch64 (Raspberry) 64bit builds (#2895).
+  (contributed by @hoffie)
+
+- Build: Mac: Combined Intel & M1 builds into a single Universal binary and improved M1 -dev build user-friendliness by introducing ad-hoc signing support (#2808, #2825).
+  (contributed by @hoffie)
+
+- Build: Bump versions: actions/upload-artifact from 2 to 3 (#2796), actions/cache from 2 to 3 (#2798), DoozyX/clang-format-lint-action from 0.12 to 0.14 (#2797), actions/checkout from 2 to 3 (#2799).
+  (contributed by @dependabot)
+
+- Build: Updated bundled Qt6 to version 6.3.2 (#2846).
+  (contributed by @github-actions)
+
+- Internal: Enabled automated dependency updates via dependabot and custom automation (#2777, #2778, #2801, #2803).
+  (contributed by @hoffie)
+
+- Internal: Hardened build scripts and tooling against silent failures (#2794).
+  (contributed by @hoffie)
+
+
+### 3.9.0 (2022-07-29) ###
+
+- Feature: Added **_EXPERIMENTAL_** new JSON-RPC interface to control client and server (see [docs/JSON-RPC.md](https://github.com/jamulussoftware/jamulus/blob/main/docs/JSON-RPC.md) for details) (#1975, #2505).
+  (contributed by @dtinth, @Rob-NY)
+
+- GUI: Translations have been updated:
+  * Chinese, by @BLumia (#2719)
+  * Dutch, by @henkdegroot (#2708)
+  * French, by @jujudusud (#2704, #2729)
+  * German, by @ann0see (#2748)
+  * Italian, by @dzpex (#2739)
+  * Korean, by @bagjunggyu (assisted by @hoffie) (#2685, #2741)
+  * Polish,  by @SeeLook (#2735)
+  * Portuguese Brazilian, by @melcon (#2728)
+  * Portuguese European, by @melcon (#2747)
+  * Slovak, by @jose1711 (#2732)
+  * Spanish, by @ignotus666 (#2706)
+
+- GUI: Client: Added instructions for setting buffers when using Pipewire (#2645).
+  (contributed by @gilgongo)
+
+- GUI: Client: Fix a bug where a blank line is shown after some client’s name in the mixer board in some conditions (#2542).
+  (contributed by @dtinth)
+
+- GUI: Client: Include ASIO references in Windows ASIO version (#2605).
+  (contributed by @henkdegroot)
+
+- GUI: Client: Removed wrongly mentioned "URL" from help texts (#2608).
+  (contributed by @ann0see)
+
+- GUI: Client: Rephrase mute options in help text (#2673).
+  (contributed by @pljones)
+
+- GUI: Client: Simplify device driver error message on Windows by removing unneeded HTML (#2496).
+  (contributed by @ann0see)
+
+- GUI: Client: What's This Text and Tooltip updated for LEDs and Connection Status (#2644).
+  (contributed by @henkdegroot)
+
+- GUI: Server: Amend server registration, added server list persistence (#2199).
+  (contributed by @pljones)
+
+- GUI: Server: Adjust Server Language combo box length to fit into layout properly (#2424).
+  (contributed by @pljones)
+
+- GUI: Server: Re-order Recorder widgets for better use of space (plus Qt6 compliance) (#2427).
+  (contributed by @pljones)
+
+- GUI: Fix (hopefully) all remaining references to "directory server" in displayed messages to say "directory" (#2710).
+  (contributed by @pljones)
+
+- GUI: Improved Country selection handling to work with Qt6 and cover 53 previously unsupported territories (#2409).
+  (contributed by @hoffie)
+
+- GUI: Improved translator experience by using substitutions instead of concatenations (#2646).
+  (contributed by @ann0see)
+
+- GUI: Removed occurrences of plain name "Jamulus" in translatable texts (#2609).
+  (contributed by @ann0see)
+
+- Accessibility: Sound Alert for new person and new chat message (#2640).
+  (contributed by @chigkim)
+
+- Accessibility: Combine all the client info, so screen reader users don't have to track down multiple places (#2638).
+  (contributed by @chigkim)
+
+- Accessibility: Added name and instrument to accessibility labels for mute, solo, group (#2639).
+  (contributed by @chigkim)
+
+- Client: Avoid losing gain changes (#2737).
+  (contributed by @hoffie)
+
+- Client: Fix potential long delay in sending fader changes to the server (#2535).
+  (contributed by @softins)
+
+- Client: Refactored JACK- and ASIO-related logic (#2443).
+  (contributed by @hoffie)
+
+- Client: Removed the translation for the CLI version text output (#2602).
+  (contributed by @henkdegroot)
+
+- Server: Fix loading of persistent server list entries (#2631).
+  (contributed by @pljones)
+
+- Server: Headless Server now unregisters correctly (#2633).
+  (contributed by @pljones)
+
+- Server: Clarify code for handling of requests for the server list (#2643).
+  (contributed by @pljones)
+
+- Server: Improvements to the start up logging for the server list filter (#2647).
+  (contributed by @pljones)
+
+- Server: Set default directory to "None" when not set in ini file or command line (#2442).
+  (contributed by @softins)
+
+- Bug Fix: Build: .deb dependency fix to allow Jamulus being installed on Ubuntu 18.04 (#2423).
+  (contributed by @hoffie)
+
+- Bug Fix: Client/Server: corrected operation of message ack timer (#2517).
+  (contributed by @softins)
+
+- Windows: Create KR translation for installer (#2669).
+  (contributed by @bagjunggyu)
+
+- Windows: The JACK build now no longer gives an ASIO related warning message on an incompatible state (#2494).
+  (contributed by @ann0see)
+
+- Linux: Added the Jamulus Server desktop icon to the Debian/Ubuntu build and fixed SVG icon installation location (#2460).
+  (contributed by @hoffie)
+
+- Linux: Removed unused `linux/deploy_linux.sh` script (#2512).
+  (contributed by @ann0see)
+
+- Linux: Ubuntu: Added new runtime dependency. You will need to added the "universe" apt repository (on Ubuntu only) (#2721).
+  (contributed by @pljones)
+
+- Linux: Updated package author information (#2652).
+  (contributed by @hoffie)
+
+- Mac: Use latest Xcode version with SDK 10.15 support (#2266).
+  (contributed by @hoffie)
+
+- Mac: Fixed non-working Save/Load Mixer Channel Setup (#2565).
+  (contributed by @softins)
+
+- Mac: Upgraded create-dmg to the latest version (#2664).
+  (contributed by @ann0see)
+
+- Android: Removed unneeded dependencies to speed up build (#2394).
+  (contributed by @ann0see)
+
+- Android: Package version has been fixed to show the actual release version (#2398).
+  (contributed by @hoffie)
+
+- Android: Improve sound driver to fix CodeQL warnings (#2457).
+  (contributed by @softins)
+
+- Android: Improved compilation and updated liboboe to 1.6.1 (#2472).
+  (contributed by @hoffie)
+
+- Android: Migrated to aqtinstall for Qt installation (#2497).
+  (contributed by @hoffie)
+
+- Documentation: Updated the link to "Running a server" web page (#2419).
+  (contributed by @jujudusud)
+
+- Documentation: Document compile time options to COMPILING.md (#2707).
+  (contributed by @ann0see)
+
+- Documentation: Added high-level technical documentation for the Jamulus protocol (#2337).
+  (contributed by @emlynmac)
+
+- Documentation: Made man page and help output more consistent. <!-- Insert a short, end-user understandable sentence in past tense right here, e.g.: Client: Fixed crash when clicking the connect button too fast --> (#2448).
+  (contributed by @gilgongo)
+
+- Documentation: Rewrite some parts of COMPILING.md and CONTRIBUTING.md to stay up to date and enable clearer contribution guidelines (#2561).
+  (contributed by @ann0see)
+
+- Build: Added nojsonrpc qmake CONFIG option to remove JSON-RPC support (#2660).
+  (contributed by @pljones)
+
+- Build: Make serveronly more comprehensive (#2551).
+  (contributed by @pljones)
+
+- Build: Rename existing define to JACK_ON_WINDOWS (#2525).
+  (contributed by @pljones)
+
+- Build: Moved CodeQL from Mac to Mac Legacy to work around signing incompatibility (#2564).
+  (contributed by @softins)
+
+- Build: Provide unsigned iOS builds for easy install on iOS devices (#2355).
+  (contributed by @ann0see)
+
+- Build: Added macOS M1 (arm64) support (#2682).
+  (contributed by @hoffie)
+
+- Build: macOS will now be built with Qt 6.3.1 for better support of modern versions of macOS. Users of macOS 10.14 or earlier must from now use the legacy build or compile from source (#2672).
+  (contributed by @ann0see)
+
+- Build: Improved grep usage in scripts #2421 (#2397).
+  (contributed by @ann0see)
+
+- Build: Removed broken QMAKE_APPLICATION_BUNDLE_NAME. logic (#2477).
+  (contributed by @hoffie)
+
+- Build: Initial support for building with Qt6 has been implemented (@dcorson-ticino-com, @softins) (#2299).
+  (contributed by @hoffie)
+
+- Build: Updated aqt to v2.1.0 due to reliability reasons (#2597).
+  (contributed by @ann0see)
+
+- Autobuild: Major overhaul, incorporating improvements in performance
+  * Coding style and static checks for shell scripts are now enforced (#2635).
+  * Build workflow download and cache optimisations (#2284, #2498, #2499, #2642).
+  * Parallelisation of build processes (#2444, #2445)
+  * Build script refactoring (#2284, #2451, #2470, #2473, #2476, #2489, #2501, #2502, #2509, #2514, #2527, #2540, #2584, #2642).
+  (contributed by @hoffie)
+
+- Autobuild: Added experimental support for armhf (Raspberry-compatible) Linux .deb packages (#2526).
+  (contributed by @hoffie)
+
+- Autobuild: Fix iOS artifact name  (#2619).
+  (contributed by @hoffie)
+
+- Autobuild: Build macOS .dmg files by create-dmg for building compatibility with further versions of macOS #2420 (#2207).
+  (contributed by @ann0see)
+
+- Autobuild: Stop the build if the audio SDK is missing (#2536).
+  (contributed by @pljones)
+
+- Autobuild: Stop running Autobuild if only documentation is updated to avoid wasting computation time (#2532).
+  (contributed by @ann0see)
+
+- Autobuild: Build Windows version on latest build environment. This upgrades the Windows build process (#2649).
+  (contributed by @ann0see)
+
+- Autobuild: Make Qt downloads on Windows more reliable by re-trying downloads (#2333).
+  (contributed by @ann0see)
+
+- Autobuild: Backport Oboe's fixes CodeQl overflow warnings (#2548).
+  (contributed by @ann0see)
+
+- Code: code restructuring to reduce cross-dependencies (CHighPrecisionTimer) (#2637).
+  (contributed by @pljones)
+
+- Internal: Improved analyze_git_references.py script (#2471).
+  (contributed by @hoffie)
+
+- Internal: Improved and reorganized git/Changelog scripts (#2656).
+  (contributed by @hoffie)
+
+- Internal: Added .editorconfig for cross-language standardized indentation and line endings (#2585).
+  (contributed by @hoffie)
+
+- Internal: Applied a consistent coding style to scripts (#2547, #2582).
+  (contributed by @hoffie)
+
+- Internal: Added `make clang_format` helper command to simplify code formatting for contributors (#2258).
+  (contributed by @hoffie)
+
+- Internal: Added debian/ folder to .gitignore file to ensure build files are not added to git (#2464).
+  (contributed by @ann0see)
+
+- Internal: Check coding style on macOS/iOS code files (.mm extension) (#1871).
+  (contributed by @ngocdh)
+
+- Internal: Use TODO and TEST comments instead of un-indenting with clang-format off/on (#2600).
+  (contributed by @pgScorpio)
+
+- Internal: Removed unneeded white-space in all files and streamline line endings (#2402).
+  (contributed by @ann0see)
+
+- Internal: Applied standard style to .md files (#2549).
+  (contributed by @ann0see)
+
+- Internal: Move sound API files into src/sound folder. Contributors will now find the sound.cpp/sound.h/sound.mm in the src/sound folder for consistency (#2575).
+  (contributed by @ann0see)
+
+- Internal: Move translation files one level up to make finding them easier for translators (#2576).
+  (contributed by @ann0see)
+
+- Internal: Moved entitlements file to mac/ folder to clean up the repo root (#2529).
+  (contributed by @ann0see)
+
+- Internal: Rename LED resources (#2621).
+  (contributed by @henkdegroot)
+
+- Internal: Improved release contributor tooling (#2411).
+  (contributed by @hoffie)
+
+- Internal: Improved Changelog release tooling (#2485, #2661).
+  (contributed by @hoffie)
+
+- Internal: Moved outdated VST code on feature branch since there hasn't been any active development for a long time (#2461).
+  (contributed by @ann0see)
+
+- Internal: Removed outdated qt-installer-windows.qs since we no longer use Travis CI (#2516).
+  (contributed by @ann0see)
 
 
 ### 3.8.2 (2022-02-20) ###
@@ -1370,3 +1730,5 @@
 ### 0.9.1 (2006-01-28) ###
 
 - initial version
+
+<!-- vim: syntax=Markdown -->

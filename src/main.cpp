@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -47,10 +47,12 @@
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
 #include <memory>
-#include "rpcserver.h"
-#include "serverrpc.h"
-#ifndef SERVER_ONLY
-#    include "clientrpc.h"
+#ifndef NO_JSON_RPC
+#    include "rpcserver.h"
+#    include "serverrpc.h"
+#    ifndef SERVER_ONLY
+#        include "clientrpc.h"
+#    endif
 #endif
 
 // Implementation **************************************************************
@@ -97,6 +99,7 @@ int main ( int argc, char** argv )
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     int          iJsonRpcPortNumber          = INVALID_PORT;
+    QString      strJsonRpcBindIP            = DEFAULT_JSON_RPC_LISTEN_ADDRESS;
     quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strMIDISetup                = "";
@@ -105,7 +108,7 @@ int main ( int argc, char** argv )
     QString      strHTMLStatusFileName       = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
-    QString      strDirectoryServer          = "";
+    QString      strDirectoryAddress         = "";
     QString      strServerListFileName       = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
@@ -114,6 +117,19 @@ int main ( int argc, char** argv )
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
     QString      strJsonRpcSecretFileName    = "";
+
+#if defined( HEADLESS ) || defined( SERVER_ONLY )
+    Q_UNUSED ( bStartMinimized )
+    Q_UNUSED ( bUseTranslation )
+    Q_UNUSED ( bShowComplRegConnList )
+    Q_UNUSED ( bShowAnalyzerConsole )
+    Q_UNUSED ( bMuteStream )
+#endif
+#if defined( SERVER_ONLY )
+    Q_UNUSED ( bMuteMeInPersonalMix )
+    Q_UNUSED ( bNoAutoJackConnect )
+    Q_UNUSED ( bCustomPortNumberGiven )
+#endif
 
 #if !defined( HEADLESS ) && defined( _WIN32 )
     if ( AttachConsole ( ATTACH_PARENT_PROCESS ) )
@@ -194,6 +210,15 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // JSON-RPC bind address ------------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "--jsonrpcbindip", "--jsonrpcbindip", strArgument ) )
+        {
+            strJsonRpcBindIP = QString ( strArgument );
+            qInfo() << qUtf8Printable ( QString ( "- JSON-RPC will bind to: %1 if enabled" ).arg ( strJsonRpcBindIP ) );
+            CommandLineOptions << "--jsonrpcbindip";
+            continue;
+        }
+
         // Quality of Service --------------------------------------------------
         if ( GetNumericArgument ( argc, argv, i, "-Q", "--qos", 0, 255, rDbleArgument ) )
         {
@@ -233,13 +258,13 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Directory server ----------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-e", "--directoryserver", strArgument ) )
+        // Directory to register with ------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-e", "--directoryaddress", strArgument ) )
         {
-            strDirectoryServer = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
-            CommandLineOptions << "--directoryserver";
-            ServerOnlyOptions << "--directoryserver";
+            strDirectoryAddress = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- register with directory at address: %1" ).arg ( strDirectoryAddress ) );
+            CommandLineOptions << "--directoryaddress";
+            ServerOnlyOptions << "--directoryaddress";
             continue;
         }
 
@@ -247,14 +272,14 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "--centralserver", // no short form
-                                 "--centralserver",
+                                 "--centralserver",   // for backwards compatibility
+                                 "--directoryserver", // also for backwards compatibility
                                  strArgument ) )
         {
-            strDirectoryServer = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
-            CommandLineOptions << "--directoryserver";
-            ServerOnlyOptions << "--directoryserver";
+            strDirectoryAddress = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- register with directory at address: %1" ).arg ( strDirectoryAddress ) );
+            CommandLineOptions << "--directoryaddress";
+            ServerOnlyOptions << "--directoryaddress";
             continue;
         }
 
@@ -267,7 +292,7 @@ int main ( int argc, char** argv )
                                  strArgument ) )
         {
             strServerListFileName = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server persistence file: %1" ).arg ( strServerListFileName ) );
+            qInfo() << qUtf8Printable ( QString ( "- server list persistence file: %1" ).arg ( strServerListFileName ) );
             CommandLineOptions << "--directoryfile";
             ServerOnlyOptions << "--directoryfile";
             continue;
@@ -475,7 +500,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argv, i, "-M", "--mutestream" ) )
         {
             bMuteStream = true;
-            qInfo() << "- mute stream activated";
+            qInfo() << "- others on a server will not hear you (mutestream active)";
             CommandLineOptions << "--mutestream";
             ClientOnlyOptions << "--mutestream";
             continue;
@@ -488,7 +513,7 @@ int main ( int argc, char** argv )
                                "--mutemyown" ) )
         {
             bMuteMeInPersonalMix = true;
-            qInfo() << "- mute me in my personal mix";
+            qInfo() << "- you will not hear yourself in the server mix (mutemyown active)";
             CommandLineOptions << "--mutemyown";
             ClientOnlyOptions << "--mutemyown";
             continue;
@@ -557,6 +582,20 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Clean up legacy fader settings --------------------------------------
+        // Undocumented temporary command line argument: Clean up fader settings
+        // corrupted by bug #2680.  Only needs to be used once (per file).
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--cleanuplegacyfadersettings", // no short form
+                               "--cleanuplegacyfadersettings" ) )
+        {
+            qInfo() << "- will clean up legacy fader settings on load";
+            CommandLineOptions << "--cleanuplegacyfadersettings";
+            ClientOnlyOptions << "--cleanuplegacyfadersettings";
+            continue;
+        }
+
         // Unknown option ------------------------------------------------------
         qCritical() << qUtf8Printable ( QString ( "%1: Unknown option '%2' -- use '--help' for help" ).arg ( argv[0] ).arg ( argv[i] ) );
 
@@ -574,24 +613,19 @@ int main ( int argc, char** argv )
         bUseGUI = false;
         qWarning() << "No GUI support compiled. Running in headless mode.";
     }
-    Q_UNUSED ( bStartMinimized )       // avoid compiler warnings
-    Q_UNUSED ( bShowComplRegConnList ) // avoid compiler warnings
-    Q_UNUSED ( bShowAnalyzerConsole )  // avoid compiler warnings
-    Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
-#ifdef SERVER_ONLY
     if ( bIsClient )
+#ifdef SERVER_ONLY
     {
         qCritical() << "Only --server mode is supported in this build.";
         exit ( 1 );
     }
-#endif
+#else
 
     // TODO create settings in default state, if loading from file do that next, then come back here to
     //      override from command line options, then create client or server, letting them do the validation
 
-    if ( bIsClient )
     {
         if ( ServerOnlyOptions.size() != 0 )
         {
@@ -617,6 +651,7 @@ int main ( int argc, char** argv )
         }
     }
     else
+#endif
     {
         if ( ClientOnlyOptions.size() != 0 )
         {
@@ -625,6 +660,7 @@ int main ( int argc, char** argv )
             exit ( 1 );
         }
 
+#ifndef HEADLESS
         if ( bUseGUI )
         {
             // by definition, when running with the GUI we always default to registering somewhere but
@@ -633,16 +669,17 @@ int main ( int argc, char** argv )
             if ( !strServerListFileName.isEmpty() )
             {
                 qInfo() << "Note:"
-                        << "Server list persistence file will only take effect when running as a directory server.";
+                        << "Server list persistence file will only take effect when running as a directory.";
             }
 
             if ( !strServerListFilter.isEmpty() )
             {
                 qInfo() << "Note:"
-                        << "Server list filter will only take effect when running as a directory server.";
+                        << "Server list filter will only take effect when running as a directory.";
             }
         }
         else
+#endif
         {
             // the inifile is not supported for the headless server mode
             if ( !strIniFileName.isEmpty() )
@@ -652,7 +689,7 @@ int main ( int argc, char** argv )
             }
             // therefore we know everything based on command line options
 
-            if ( strDirectoryServer.compare ( "localhost", Qt::CaseInsensitive ) == 0 || strDirectoryServer.compare ( "127.0.0.1" ) == 0 )
+            if ( strDirectoryAddress.compare ( "localhost", Qt::CaseInsensitive ) == 0 || strDirectoryAddress.compare ( "127.0.0.1" ) == 0 )
             {
                 if ( !strServerListFileName.isEmpty() )
                 {
@@ -714,22 +751,22 @@ int main ( int argc, char** argv )
             {
                 if ( !strServerListFileName.isEmpty() )
                 {
-                    qWarning() << "Server list persistence file will only take effect when running as a directory server.";
+                    qWarning() << "Server list persistence file will only take effect when running as a directory.";
                     strServerListFileName = "";
                 }
 
                 if ( !strServerListFilter.isEmpty() )
                 {
-                    qWarning() << "Server list filter will only take effect when running as a directory server.";
+                    qWarning() << "Server list filter will only take effect when running as a directory.";
                     strServerListFileName = "";
                 }
             }
 
-            if ( strDirectoryServer.isEmpty() )
+            if ( strDirectoryAddress.isEmpty() )
             {
                 if ( !strServerPublicIP.isEmpty() )
                 {
-                    qWarning() << "Server Public IP will only take effect when registering a server with a directory server.";
+                    qWarning() << "Server Public IP will only take effect when registering a server with a directory.";
                     strServerPublicIP = "";
                 }
             }
@@ -756,6 +793,31 @@ int main ( int argc, char** argv )
                 strServerBindIP = "";
             }
         }
+
+#ifndef NO_JSON_RPC
+        //
+        // strJsonRpcBind address defaults to loopback and should not be empty, but
+        // in the odd chance that an empty IP is passed, we'll check for it here.
+
+        if ( strJsonRpcBindIP.trimmed().isEmpty() )
+        {
+            qCritical() << qUtf8Printable ( QString ( "JSON-RPC is enabled but the bind address provided is empty, exiting." ) );
+            exit ( 1 );
+        }
+
+        // This means of testing the validity of IP addresses is far from perfect but
+        // we do it here as an upfront check.  The downstream network calls will error
+        // out on malformed addresses not caught here.
+        {
+            QHostAddress InetAddr;
+            if ( !InetAddr.setAddress ( strJsonRpcBindIP ) )
+            {
+                qCritical() << qUtf8Printable ( QString ( "The JSON-RPC address specified is not valid, exiting. " ) );
+                exit ( 1 );
+            }
+        }
+
+#endif
     }
 
     // Application/GUI setup ---------------------------------------------------
@@ -764,11 +826,11 @@ int main ( int argc, char** argv )
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
 #    if defined( Q_OS_IOS )
-    bUseGUI        = true;
-    bIsClient      = true; // Client only - TODO: maybe a switch in interface to change to server?
+    bUseGUI   = true;
+    bIsClient = true; // Client only - TODO: maybe a switch in interface to change to server?
 
     // bUseMultithreading = true;
-    QApplication* pApp = new QApplication ( argc, argv );
+    QApplication* pApp       = new QApplication ( argc, argv );
 #    else
     QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
 #    endif
@@ -812,13 +874,19 @@ int main ( int argc, char** argv )
     Q_INIT_RESOURCE ( resources );
 
 #ifndef SERVER_ONLY
-    // clang-format off
-// TEST -> activate the following line to activate the test bench,
-//CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
-// clang-format on
+    //### TEST: BEGIN ###//
+    // activate the following line to activate the test bench,
+    // CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
+    //### TEST: END ###//
 #endif
 
-    CRpcServer* pRpcServer = nullptr;
+#ifdef NO_JSON_RPC
+    if ( iJsonRpcPortNumber != INVALID_PORT || !strJsonRpcSecretFileName.isEmpty() )
+    {
+        qWarning() << "No JSON-RPC support in this build.";
+    }
+#else
+    CRpcServer*   pRpcServer = nullptr;
 
     if ( iJsonRpcPortNumber != INVALID_PORT )
     {
@@ -847,13 +915,14 @@ int main ( int argc, char** argv )
         qWarning() << "- JSON-RPC: This interface is experimental and is subject to breaking changes even on patch versions "
                       "(not subject to semantic versioning) during the initial phase.";
 
-        pRpcServer = new CRpcServer ( pApp, iJsonRpcPortNumber, strJsonRpcSecret );
+        pRpcServer = new CRpcServer ( pApp, strJsonRpcBindIP, iJsonRpcPortNumber, strJsonRpcSecret );
         if ( !pRpcServer->Start() )
         {
             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) );
             exit ( 1 );
         }
     }
+#endif
 
     try
     {
@@ -882,10 +951,12 @@ int main ( int argc, char** argv )
                 CInstPictures::UpdateTableOnLanguageChange();
             }
 
+#    ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
                 new CClientRpc ( &Client, pRpcServer, pRpcServer );
             }
+#    endif
 
 #    ifndef HEADLESS
             if ( bUseGUI )
@@ -925,7 +996,7 @@ int main ( int argc, char** argv )
                              iPortNumber,
                              iQosNumber,
                              strHTMLStatusFileName,
-                             strDirectoryServer,
+                             strDirectoryAddress,
                              strServerListFileName,
                              strServerInfo,
                              strServerPublicIP,
@@ -940,10 +1011,12 @@ int main ( int argc, char** argv )
                              bEnableIPv6,
                              eLicenceType );
 
+#ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
             }
+#endif
 
 #ifndef HEADLESS
             if ( bUseGUI )
@@ -976,8 +1049,8 @@ int main ( int argc, char** argv )
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
                 // CServerListManager defaults to AT_NONE, so need to switch if
-                // strDirectoryServer is wanted
-                if ( !strDirectoryServer.isEmpty() )
+                // strDirectoryAddress is wanted
+                if ( !strDirectoryAddress.isEmpty() )
                 {
                     Server.SetDirectoryType ( AT_CUSTOM );
                 }
@@ -1020,60 +1093,60 @@ QString UsageArguments ( char** argv )
            "\n"
            "Usage: %1 [option] [option argument] ...\n"
            "\n"
-           "  -h, -?, --help        display this help text and exit\n"
-           "  -v, --version         display version information and exit\n"
+           "  -h, -?, --help          display this help text and exit\n"
+           "  -v, --version           display version information and exit\n"
            "\n"
            "Common options:\n"
-           "  -i, --inifile         initialization file name\n"
-           "                        (not supported for headless Server mode)\n"
-           "  -n, --nogui           disable GUI (\"headless\")\n"
-           "  -p, --port            set the local port number\n"
-           "      --jsonrpcport     enable JSON-RPC server, set TCP port number\n"
-           "                        (EXPERIMENTAL, APIs might still change;\n"
-           "                        only accessible from localhost)\n"
-           "      --jsonrpcsecretfile\n"
-           "                        path to a single-line file which contains a freely\n"
-           "                        chosen secret to authenticate JSON-RPC users.\n"
-           "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
-           "                        (see the Jamulus website to enable QoS on Windows)\n"
-           "  -t, --notranslation   disable translation (use English language)\n"
-           "  -6, --enableipv6      enable IPv6 addressing (IPv4 is always enabled)\n"
+           "  -i, --inifile           initialization file name\n"
+           "                          (not supported for headless Server mode)\n"
+           "  -n, --nogui             disable GUI (\"headless\")\n"
+           "  -p, --port              set the local port number\n"
+           "      --jsonrpcport       enable JSON-RPC server, set TCP port number\n"
+           "                          (EXPERIMENTAL, APIs might still change;\n"
+           "                          only accessible from localhost)\n"
+           "      --jsonrpcsecretfile path to a single-line file which contains a freely\n"
+           "                          chosen secret to authenticate JSON-RPC users.\n"
+           "      --jsonrpcbindip     optional network address to bind RPC server. Defaults to 127.0.0.1.\n"
+           "  -Q, --qos               set the QoS value. Default is 128. Disable with 0\n"
+           "                          (see the Jamulus website to enable QoS on Windows)\n"
+           "  -t, --notranslation     disable translation (use English language)\n"
+           "  -6, --enableipv6        enable IPv6 addressing (IPv4 is always enabled)\n"
            "\n"
            "Server only:\n"
-           "  -d, --discononquit    disconnect all Clients on quit\n"
-           "  -e, --directoryserver address of the directory Server with which to register\n"
-           "                        (or 'localhost' to host a server list on this Server)\n"
-           "      --directoryfile   Remember registered Servers even if the Directory is restarted. Directory Servers only.\n"
-           "  -f, --listfilter      Server list whitelist filter.  Format:\n"
-           "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
-           "  -F, --fastupdate      use 64 samples frame size mode\n"
-           "  -l, --log             enable logging, set file name\n"
-           "  -L, --licence         show an agreement window before users can connect\n"
-           "  -m, --htmlstatus      enable HTML status file, set file name\n"
-           "  -o, --serverinfo      registration info for this Server.  Format:\n"
-           "                        [name];[city];[country as Qt5 QLocale ID]\n"
-           "      --serverpublicip  public IP address for this Server.  Needed when\n"
-           "                        registering with a server list hosted\n"
-           "                        behind the same NAT\n"
-           "  -P, --delaypan        start with delay panning enabled\n"
-           "  -R, --recording       sets directory to contain recorded jams\n"
-           "      --norecord        disables recording (when enabled by default by -R)\n"
-           "  -s, --server          start Server\n"
-           "      --serverbindip    IP address the Server will bind to (rather than all)\n"
-           "  -T, --multithreading  use multithreading to make better use of\n"
-           "                        multi-core CPUs and support more Clients\n"
-           "  -u, --numchannels     maximum number of channels\n"
-           "  -w, --welcomemessage  welcome message to display on connect\n"
-           "                        (string or filename, HTML supported)\n"
-           "  -z, --startminimized  start minimizied\n"
+           "  -d, --discononquit      disconnect all Clients on quit\n"
+           "  -e, --directoryaddress  address of the Directory with which to register\n"
+           "                          (or 'localhost' to run as a Directory)\n"
+           "      --directoryfile     File to hold server list across Directory restarts. Directories only.\n"
+           "  -f, --listfilter        Server list whitelist filter. Directories only. Format:\n"
+           "                          [IP address 1];[IP address 2];[IP address 3]; ...\n"
+           "  -F, --fastupdate        use 64 samples frame size mode\n"
+           "  -l, --log               enable logging, set file name\n"
+           "  -L, --licence           show an agreement window before users can connect\n"
+           "  -m, --htmlstatus        enable HTML status file, set file name\n"
+           "  -o, --serverinfo        registration info for this Server.  Format:\n"
+           "                          [name];[city];[country as two-letter ISO country code or Qt5 QLocale ID]\n"
+           "      --serverpublicip    public IP address for this Server.  Needed when\n"
+           "                          registering with a server list hosted\n"
+           "                          behind the same NAT\n"
+           "  -P, --delaypan          start with delay panning enabled\n"
+           "  -R, --recording         set server recording directory; server will record when a session is active by default\n"
+           "      --norecord          set server not to record by default when recording is configured\n"
+           "  -s, --server            start Server\n"
+           "      --serverbindip      IP address the Server will bind to (rather than all)\n"
+           "  -T, --multithreading    use multithreading to make better use of\n"
+           "                          multi-core CPUs and support more Clients\n"
+           "  -u, --numchannels       maximum number of channels\n"
+           "  -w, --welcomemessage    welcome message to display on connect\n"
+           "                          (string or filename, HTML supported)\n"
+           "  -z, --startminimized    start minimizied\n"
            "\n"
            "Client only:\n"
-           "  -c, --connect         connect to given Server address on startup\n"
-           "  -j, --nojackconnect   disable auto JACK connections\n"
-           "  -M, --mutestream      starts the application in muted state\n"
-           "      --mutemyown       mute me in my personal mix (headless only)\n"
-           "      --clientname      Client name (window title and JACK client name)\n"
-           "      --ctrlmidich      MIDI controller channel to listen\n"
+           "  -c, --connect           connect to given Server address on startup\n"
+           "  -j, --nojackconnect     disable auto JACK connections\n"
+           "  -M, --mutestream        prevent others on a server from hearing what I play\n"
+           "      --mutemyown         prevent me from hearing what I play in the server mix (headless only)\n"
+           "      --clientname        client name (window title and JACK client name)\n"
+           "      --ctrlmidich        configure MIDI controller\n"
            "\n"
            "Example: %1 -s --inifile myinifile.ini\n"
            "\n"

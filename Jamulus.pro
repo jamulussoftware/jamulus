@@ -1,4 +1,4 @@
-VERSION = 3.8.2dev
+VERSION = 3.9.1dev
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -39,14 +39,19 @@ contains(CONFIG, "headless") {
     QT -= gui
 } else {
     QT += widgets
+    QT += multimedia
 }
 
+# Hint: When adding new translations, make sure to update
+# DISTFILES (above) and src/resources.qrc as well.
 LRELEASE_DIR = src/translation
 TRANSLATIONS = src/translation/translation_de_DE.ts \
     src/translation/translation_fr_FR.ts \
+    src/translation/translation_ko_KR.ts \
     src/translation/translation_pt_PT.ts \
     src/translation/translation_pt_BR.ts \
     src/translation/translation_es_ES.ts \
+    src/translation/translation_nb_NO.ts \
     src/translation/translation_nl_NL.ts \
     src/translation/translation_pl_PL.ts \
     src/translation/translation_sk_SK.ts \
@@ -63,6 +68,10 @@ INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/silk/fixed \
     libs/opus
 
+# As JACK is used in multiple OS, we declare it globally
+HEADERS_JACK = src/sound/jack/sound.h
+SOURCES_JACK = src/sound/jack/sound.cpp
+
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
@@ -74,8 +83,9 @@ DEFINES += QT_NO_DEPRECATED_WARNINGS
 win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
-    RC_FILE = windows/mainicon.rc
+    RC_FILE = src/res/win-mainicon.rc
     mingw* {
+        DEFINES += _WIN32_WINNT=0x0600 # solves missing inet_pton in CSocket::SendPacket
         LIBS += -lole32 \
             -luser32 \
             -ladvapi32 \
@@ -119,11 +129,11 @@ win32 {
                 libjackname = "libjack64.lib"
             }
             !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
+                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32 Bit vs. 64 Bit).")
             }
 
-            HEADERS += linux/sound.h
-            SOURCES += linux/sound.cpp
+            HEADERS += $$HEADERS_JACK
+            SOURCES += $$SOURCES_JACK
             DEFINES += WITH_JACK
             DEFINES += JACK_ON_WINDOWS
             DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
@@ -133,19 +143,19 @@ win32 {
             message(Using ASIO.)
             message(Please review the ASIO SDK licence.)
 
-            !exists(windows/ASIOSDK2) {
-                error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
+            !exists(libs/ASIOSDK2/common) {
+                error("Error: ASIOSDK2 must be placed in Jamulus \\libs folder such that e.g. \\libs\ASIOSDK2\common exists.")
             }
             # Important: Keep those ASIO includes local to this build target in
             # order to avoid poisoning other builds license-wise.
-            HEADERS += windows/sound.h
-            SOURCES += windows/sound.cpp \
-                windows/ASIOSDK2/common/asio.cpp \
-                windows/ASIOSDK2/host/asiodrivers.cpp \
-                windows/ASIOSDK2/host/pc/asiolist.cpp
-            INCLUDEPATH += windows/ASIOSDK2/common \
-                windows/ASIOSDK2/host \
-                windows/ASIOSDK2/host/pc
+            HEADERS += src/sound/asio/sound.h
+            SOURCES += src/sound/asio/sound.cpp \
+                libs/ASIOSDK2/common/asio.cpp \
+                libs/ASIOSDK2/host/asiodrivers.cpp \
+                libs/ASIOSDK2/host/pc/asiolist.cpp
+            INCLUDEPATH += libs/ASIOSDK2/common \
+                libs/ASIOSDK2/host \
+                libs/ASIOSDK2/host/pc
         }
     }
 
@@ -155,15 +165,15 @@ win32 {
 
         DEFINES += SERVER_BUNDLE
         TARGET = $${TARGET}Server
-        MACOSX_BUNDLE_ICON.files = mac/jamulus-server-icon-2020.icns
-        RC_FILE = mac/jamulus-server-icon-2020.icns
+        MACOSX_BUNDLE_ICON.files = src/res/mac-jamulus-server.icns
+        RC_FILE = src/res/mac-jamulus-server.icns
     } else {
-        MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
-        RC_FILE = mac/mainicon.icns
+        MACOSX_BUNDLE_ICON.files = src/res/mac-mainicon.icns
+        RC_FILE = src/res/mac-mainicon.icns
     }
 
-    HEADERS += mac/activity.h mac/badgelabel.h
-    OBJECTIVE_SOURCES += mac/activity.mm mac/badgelabel.mm
+    HEADERS += src/mac/activity.h src/mac/badgelabel.h
+    OBJECTIVE_SOURCES += src/mac/activity.mm src/mac/badgelabel.mm
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
 
@@ -172,6 +182,7 @@ win32 {
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
 
     macx-xcode {
+        # As of 2023-04-15 the macOS build with Xcode only fails. This is tracked in #1841
         QMAKE_INFO_PLIST = mac/Info-xcode.plist
         XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
         XCODE_ENTITLEMENTS.value = mac/Jamulus.entitlements
@@ -199,27 +210,27 @@ win32 {
         message(Using JACK.)
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
-                 error("Error: jack.h was not found at the usual place, maybe jack is not installed")
+                 error("Error: jack.h was not found at the usual place, maybe JACK is not installed")
             }
         }
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
+        HEADERS += $$HEADERS_JACK
+        SOURCES += $$SOURCES_JACK
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_COREAUDIO
         INCLUDEPATH += /usr/local/include
         LIBS += /usr/local/lib/libjack.dylib
     } else {
         message(Using CoreAudio.)
-        HEADERS += mac/sound.h
-        SOURCES += mac/sound.cpp
+        HEADERS += src/sound/coreaudio-mac/sound.h
+        SOURCES += src/sound/coreaudio-mac/sound.cpp
     }
 
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info.plist
-    OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
-    HEADERS += ios/ios_app_delegate.h
-    HEADERS += ios/sound.h
-    OBJECTIVE_SOURCES += ios/sound.mm
+    OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
+    HEADERS += src/ios/ios_app_delegate.h
+    HEADERS += src/sound/coreaudio-ios/sound.h
+    OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
@@ -240,10 +251,10 @@ win32 {
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
 
-    HEADERS += android/sound.h
+    HEADERS += src/sound/oboe/sound.h
 
-    SOURCES += android/sound.cpp \
-        android/androiddebug.cpp
+    SOURCES += src/sound/oboe/sound.cpp \
+        src/android/androiddebug.cpp
 
     LIBS += -lOpenSLES
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
@@ -283,18 +294,18 @@ win32 {
     # we assume that stdint.h is always present in a Linux system
     DEFINES += HAVE_STDINT_H
 
-    # only include jack support if CONFIG serveronly is not set
+    # only include JACK support if CONFIG serveronly is not set
     contains(CONFIG, "serveronly") {
         message(Restricting build to server-only due to CONFIG+=serveronly.)
         DEFINES += SERVER_ONLY
     } else {
-        message(Jack Audio Interface Enabled.)
+        message(JACK Audio Interface Enabled.)
 
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
+        HEADERS += $$HEADERS_JACK
+        SOURCES += $$SOURCES_JACK
 
         contains(CONFIG, "raspijamulus") {
-            message(Using Jack Audio in raspijamulus.sh mode.)
+            message(Using JACK Audio in raspijamulus.sh mode.)
             LIBS += -ljack
         } else {
             CONFIG += link_pkgconfig
@@ -322,29 +333,29 @@ win32 {
         }
         APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
         desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in distributions/jamulus-server.desktop.in
-        desktop.files = distributions/jamulus.desktop distributions/jamulus-server.desktop
+        QMAKE_SUBSTITUTES += linux/jamulus.desktop.in linux/jamulus-server.desktop.in
+        desktop.files = linux/jamulus.desktop linux/jamulus-server.desktop
 
         isEmpty(ICONSDIR) {
             ICONSDIR = share/icons/hicolor/512x512/apps
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/jamulus.png
+        icons.files = src/res/io.jamulus.jamulus.png
 
         isEmpty(ICONSDIR_SVG) {
             ICONSDIR_SVG = share/icons/hicolor/scalable/apps/
         }
         ICONSDIR_SVG = $$absolute_path($$ICONSDIR_SVG, $$PREFIX)
         icons_svg.path = $$ICONSDIR_SVG
-        icons_svg.files = distributions/jamulus.svg distributions/jamulus-server.svg
+        icons_svg.files = src/res/io.jamulus.jamulus.svg src/res/io.jamulus.jamulusserver.svg
 
         isEmpty(MANDIR) {
             MANDIR = share/man/man1
         }
         MANDIR = $$absolute_path($$MANDIR, $$PREFIX)
         man.path = $$MANDIR
-        man.files = distributions/Jamulus.1
+        man.files = linux/Jamulus.1
 
         INSTALLS += target desktop icons icons_svg man
     }
@@ -372,8 +383,6 @@ HEADERS += src/buffer.h \
     src/server.h \
     src/serverlist.h \
     src/serverlogging.h \
-    src/serverrpc.h \
-    src/rpcserver.h \
     src/settings.h \
     src/socket.h \
     src/util.h \
@@ -384,8 +393,7 @@ HEADERS += src/buffer.h \
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
-        src/clientrpc.h \
-        src/soundbase.h \
+        src/sound/soundbase.h \
         src/testbench.h
 }
 
@@ -482,8 +490,6 @@ SOURCES += src/buffer.cpp \
     src/server.cpp \
     src/serverlist.cpp \
     src/serverlogging.cpp \
-    src/serverrpc.cpp \
-    src/rpcserver.cpp \
     src/settings.cpp \
     src/signalhandler.cpp \
     src/socket.cpp \
@@ -494,8 +500,7 @@ SOURCES += src/buffer.cpp \
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
-        src/clientrpc.cpp \
-        src/soundbase.cpp \
+        src/sound/soundbase.cpp \
 }
 
 SOURCES_GUI = src/serverdlg.cpp
@@ -682,19 +687,32 @@ contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
 DEFINES_OPUS += OPUS_BUILD=1 USE_ALLOCA=1 OPUS_HAVE_RTCD=1 HAVE_LRINTF=1 HAVE_LRINT=1
 
 DISTFILES += ChangeLog \
+    COMPILING.md \
     COPYING \
     CONTRIBUTING.md \
     README.md \
-    distributions/jamulus.desktop.in \
-    distributions/jamulus-server.desktop.in \
-    distributions/jamulus.png \
-    distributions/jamulus.svg \
-    distributions/jamulus-server.svg \
+    SECURITY.md \
+    docs/JAMULUS_PROTOCOL.md \
+    docs/JSON-RPC.md \
+    docs/README.md \
+    docs/TRANSLATING.md \
+    linux/jamulus.desktop.in \
+    linux/jamulus-server.desktop.in \
+    mac/Info-make-legacy.plist \
+    mac/Info-make.plist \
+    mac/Info-xcode.plist \
+    mac/Jamulus.entitlements \
+    mac/deploy_mac.sh \
+    src/res/io.jamulus.jamulus.png \
+    src/res/io.jamulus.jamulus.svg \
+    src/res/io.jamulus.jamulusserver.svg \
     src/translation/translation_de_DE.qm \
     src/translation/translation_fr_FR.qm \
+    src/translation/translation_ko_KR.qm \
     src/translation/translation_pt_PT.qm \
     src/translation/translation_pt_BR.qm \
     src/translation/translation_es_ES.qm \
+    src/translation/translation_nb_NO.qm \
     src/translation/translation_nl_NL.qm \
     src/translation/translation_pl_PL.qm \
     src/translation/translation_it_IT.qm \
@@ -1041,7 +1059,17 @@ DISTFILES += ChangeLog \
     src/res/flags/yt.png \
     src/res/flags/za.png \
     src/res/flags/zm.png \
-    src/res/flags/zw.png
+    src/res/flags/zw.png \
+    tools/changelog-helper.sh \
+    tools/check-wininstaller-translations.sh \
+    tools/checkkeys.pl \
+    tools/create-translation-issues.sh \
+    tools/generate_json_rpc_docs.py \
+    tools/get_release_contributors.py \
+    tools/qt5_to_qt6_country_code_table.py \
+    tools/update-copyright-notices.sh \
+    windows/deploy_windows.ps1 \
+    windows/installer.nsi
 
 DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/ChangeLog \
@@ -1058,6 +1086,24 @@ contains(CONFIG, "headless") {
     HEADERS += $$HEADERS_GUI
     SOURCES += $$SOURCES_GUI
     FORMS += $$FORMS_GUI
+}
+
+contains(CONFIG, "nojsonrpc") {
+    message(JSON-RPC support excluded from build.)
+    DEFINES += NO_JSON_RPC
+} else {
+    HEADERS += \
+        src/rpcserver.h \
+        src/serverrpc.h
+    SOURCES += \
+        src/rpcserver.cpp \
+        src/serverrpc.cpp
+    contains(CONFIG, "serveronly") {
+        message("server only, skipping client rpc")
+    } else {
+        HEADERS += src/clientrpc.h
+        SOURCES += src/clientrpc.cpp
+    }
 }
 
 # use external OPUS library if requested
@@ -1082,10 +1128,15 @@ contains(CONFIG, "opus_shared_lib") {
     DISTFILES += $$DISTFILES_OPUS
 
     contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
-        msvc {
+        msvc | macx-xcode {
             # According to opus/win32/config.h, "no special compiler
             # flags necessary" when using msvc.  It always supports
             # SSE intrinsics, but does not auto-vectorize.
+            # The macOS Xcode build would fail with these specific compiler flags.
+            # Thus, we omit them for macx-xcode too. This was discovered by
+            # plain testing by the Jamulus team and might mean that the
+            # optimizations are not used on macx-xcode. (See #1841, #3076)
+
             SOURCES += $$SOURCES_OPUS_ARCH
         } else {
             # Arch-specific files need special compiler flags, but we
@@ -1127,6 +1178,6 @@ contains(CONFIG, "disable_version_check") {
 # be sure to update .github/workflows/coding-style-check.yml and .clang-format-ignore as well.
 CLANG_FORMAT_SOURCES = $$files(*.cpp, true) $$files(*.mm, true) $$files(*.h, true)
 CLANG_FORMAT_SOURCES = $$find(CLANG_FORMAT_SOURCES, ^\(android|ios|mac|linux|src|windows\)/)
-CLANG_FORMAT_SOURCES ~= s!^\(windows/\(nsProcess|ASIOSDK2\)/|src/res/qrc_resources\.cpp\)\S*$!!g
+CLANG_FORMAT_SOURCES ~= s!^\(libs/.*/|src/res/qrc_resources\.cpp\)\S*$!!g
 clang_format.commands = 'clang-format -i $$CLANG_FORMAT_SOURCES'
 QMAKE_EXTRA_TARGETS += clang_format

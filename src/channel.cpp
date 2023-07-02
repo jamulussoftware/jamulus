@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -59,11 +59,11 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
     // Connections -------------------------------------------------------------
 
-    // clang-format off
-// TODO if we later do not fire vectors in the emits, we can remove this again
-qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
-qRegisterMetaType<CHostAddress> ( "CHostAddress" );
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // if we later do not fire vectors in the emits, we can remove this again
+    qRegisterMetaType<CVector<uint8_t>> ( "CVector<uint8_t>" );
+    qRegisterMetaType<CHostAddress> ( "CHostAddress" );
+    //### TODO: END ###//
 
     QObject::connect ( &Protocol, &CProtocol::MessReadyForSending, this, &CChannel::OnSendProtMessage );
 
@@ -334,11 +334,11 @@ float CChannel::GetPan ( const int iChanID )
 
 void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
 {
-    bIsIdentified = true; // Indicate we have received channel info
-
-    // apply value (if different from previous one)
-    if ( ChannelInfo != NChanInf )
+    // apply value (if a new channel or different from previous one)
+    if ( !bIsIdentified || ChannelInfo != NChanInf )
     {
+        bIsIdentified = true; // Indicate we have received channel info
+
         ChannelInfo = NChanInf;
 
         // fire message that the channel info has changed

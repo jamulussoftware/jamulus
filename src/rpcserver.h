@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2021-2022
+ * Copyright (c) 2021-2023
  *
  * Author(s):
  *  dtinth
@@ -44,7 +44,7 @@ class CRpcServer : public QObject
     Q_OBJECT
 
 public:
-    CRpcServer ( QObject* parent, int iPort, QString secret );
+    CRpcServer ( QObject* parent, QString strBindIP, int iPort, QString secret );
     virtual ~CRpcServer();
 
     bool Start();
@@ -64,6 +64,7 @@ public:
     static const int iErrUnauthenticated      = 401;
 
 private:
+    QString     strBindIP;
     int         iPort;
     QString     strSecret;
     QTcpServer* pTransportServer;

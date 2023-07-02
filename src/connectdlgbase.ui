@@ -37,7 +37,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cbxDirectoryServer"/>
+      <widget class="QComboBox" name="cbxDirectory"/>
      </item>
      <item>
       <widget class="QLabel" name="lblFilter">

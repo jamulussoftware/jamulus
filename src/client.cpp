@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -62,6 +62,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bFraSiFactSafeSupported ( false ),
     eGUIDesign ( GD_ORIGINAL ),
     eMeterStyle ( MT_LED_STRIPE ),
+    bEnableAudioAlerts ( false ),
     bEnableOPUS64 ( false ),
     bJitterBufferOK ( true ),
     bEnableIPv6 ( bNEnableIPv6 ),
@@ -117,6 +118,8 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &Channel, &CChannel::ReqChanInfo, this, &CClient::OnReqChanInfo );
 
+    // The first ConClientListMesReceived handler performs the necessary cleanup and has to run first:
+    QObject::connect ( &Channel, &CChannel::ConClientListMesReceived, this, &CClient::OnConClientListMesReceived );
     QObject::connect ( &Channel, &CChannel::ConClientListMesReceived, this, &CClient::ConClientListMesReceived );
 
     QObject::connect ( &Channel, &CChannel::Disconnected, this, &CClient::Disconnected );
@@ -260,6 +263,15 @@ void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
 
 void CClient::OnNewConnection()
 {
+    // The oldGain and newGain arrays are used to avoid sending duplicate gain change messages.
+    // As these values depend on the channel IDs of a specific server, we have
+    // to reset those upon connect.
+    // We reset to 1 because this is what the server part sets by default.
+    for ( int iId = 0; iId < MAX_NUM_CHANNELS; iId++ )
+    {
+        oldGain[iId] = newGain[iId] = 1;
+    }
+
     // a new connection was successfully initiated, send infos and request
     // connected clients list
     Channel.SetRemoteInfo ( ChannelInfo );
@@ -273,10 +285,37 @@ void CClient::OnNewConnection()
     Channel.CreateReqConnClientsList();
     CreateServerJitterBufferMessage();
 
-    // clang-format off
-// TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
-Channel.CreateReqChannelLevelListMes();
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+    Channel.CreateReqChannelLevelListMes();
+    //### TODO: END ###//
+}
+
+void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
+{
+    // Upon receiving a new client list, we have to reset oldGain and newGain
+    // entries for unused channels. This ensures that a disconnected channel
+    // does not leave behind wrong cached gain values which would leak into
+    // any new channel which reused this channel id.
+    int iNumConnectedClients = vecChanInfo.Size();
+
+    // Save what channel IDs are in use:
+    bool bChanIdInUse[MAX_NUM_CHANNELS] = {};
+    for ( int i = 0; i < iNumConnectedClients; i++ )
+    {
+        bChanIdInUse[vecChanInfo[i].iChanID] = true;
+    }
+
+    // Reset all gains for unused channel IDs:
+    for ( int iId = 0; iId < MAX_NUM_CHANNELS; iId++ )
+    {
+        if ( !bChanIdInUse[iId] )
+        {
+            // reset oldGain and newGain as this channel id is currently unused and will
+            // start with a server-side gain at 1 (100%) again.
+            oldGain[iId] = newGain[iId] = 1;
+        }
+    }
 }
 
 void CClient::CreateServerJitterBufferMessage()
@@ -438,7 +477,11 @@ void CClient::StartDelayTimer()
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     CHostAddress HostAddress;
+#ifdef CLIENT_NO_SRV_CONNECT
     if ( NetworkUtil().ParseNetworkAddress ( strNAddr, HostAddress, bEnableIPv6 ) )
+#else
+    if ( NetworkUtil().ParseNetworkAddressWithSrvDiscovery ( strNAddr, HostAddress, bEnableIPv6 ) )
+#endif
     {
         // apply address to the channel
         Channel.SetAddress ( HostAddress );
@@ -1088,13 +1131,13 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
     // process audio data
     pMyClientObj->ProcessSndCrdAudioData ( psData );
 
-    // clang-format off
-/*
-// TEST do a soundcard jitter measurement
-static CTimingMeas JitterMeas ( 1000, "test2.dat" );
-JitterMeas.Measure();
-*/
-    // clang-format on
+    //### TEST: BEGIN ###//
+    // do a soundcard jitter measurement
+    /*
+    static CTimingMeas JitterMeas ( 1000, "test2.dat" );
+    JitterMeas.Measure();
+    */
+    //### TEST: END ###//
 }
 
 void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )

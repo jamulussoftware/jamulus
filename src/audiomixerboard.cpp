@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -29,7 +29,8 @@
 \******************************************************************************/
 CChannelFader::CChannelFader ( QWidget* pNW ) :
     eDesign ( GD_STANDARD ),
-    BitmapMutedIcon ( QString::fromUtf8 ( ":/png/fader/res/mutediconorange.png" ) )
+    BitmapMutedIcon ( QString::fromUtf8 ( ":/png/fader/res/mutediconorange.png" ) ),
+    bMIDICtrlUsed ( false )
 {
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
@@ -676,7 +677,14 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
     // Label text --------------------------------------------------------------
 
-    QString             strModText = cChanInfo.strName;
+    QString strModText = cChanInfo.strName;
+
+    // show channel numbers if --ctrlmidich is used (#241, #95)
+    if ( bMIDICtrlUsed )
+    {
+        strModText.prepend ( QString().setNum ( cChanInfo.iChanID ) + ":" );
+    }
+
     QTextBoundaryFinder tbfName ( QTextBoundaryFinder::Grapheme, cChanInfo.strName );
     int                 iBreakPos;
 
@@ -862,6 +870,11 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     plblLabel->setToolTip ( strToolTip );
     plblLabel->setAccessibleName ( strAliasAccessible );
     plblLabel->setAccessibleDescription ( tr ( "Alias" ) );
+    pcbMute->setAccessibleName ( "Mute " + strAliasAccessible + ", " + strInstrumentAccessible );
+    pcbSolo->setAccessibleName ( "Solo " + strAliasAccessible + ", " + strInstrumentAccessible );
+    pcbGroup->setAccessibleName ( "Group " + strAliasAccessible + ", " + strInstrumentAccessible );
+    dynamic_cast<QWidget*> ( plblLabel->parent() )
+        ->setAccessibleName ( strAliasAccessible + ", " + strInstrumentAccessible + ", " + strLocationAccessible );
 }
 
 /******************************************************************************\
@@ -900,7 +913,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
 
     vecAvgLevels.Init ( MAX_NUM_CHANNELS, 0.0f );
 
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i] = new CChannelFader ( this );
         vecpChanFader[i]->Hide();
@@ -925,7 +938,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
 
 CAudioMixerBoard::~CAudioMixerBoard()
 {
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         delete vecpChanFader[i];
     }
@@ -934,7 +947,7 @@ CAudioMixerBoard::~CAudioMixerBoard()
 template<unsigned int slotId>
 inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 {
-    int iCurChanID = slotId - 1;
+    size_t iCurChanID = slotId - 1;
 
     void ( CAudioMixerBoard::*pGainValueChanged ) ( float, bool, bool, bool, double ) = &CAudioMixerBoardSlots<slotId>::OnChGainValueChanged;
 
@@ -987,7 +1000,7 @@ void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
     }
 
     // apply GUI design to child GUI controls
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->SetGUIDesign ( eNewDesign );
     }
@@ -996,7 +1009,7 @@ void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
 void CAudioMixerBoard::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
 {
     // apply GUI design to child GUI controls
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->SetMeterStyle ( eNewMeterStyle );
     }
@@ -1006,7 +1019,7 @@ void CAudioMixerBoard::SetDisplayPans ( const bool eNDP )
 {
     bDisplayPans = eNDP;
 
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->SetDisplayPans ( eNDP && bIsPanSupported );
     }
@@ -1024,7 +1037,7 @@ void CAudioMixerBoard::HideAll()
     StoreAllFaderSettings();
 
     // make all controls invisible
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->SetChannelLevel ( 0 );
         vecpChanFader[i]->SetDisplayChannelLevel ( false );
@@ -1068,49 +1081,50 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     QMutexLocker locker ( &Mutex );
 
     // create a pair list of lower strings and fader ID for each channel
-    QList<QPair<QString, int>> PairList;
-    int                        iNumVisibleFaders = 0;
-    int                        iMyFader          = -1;
+    QList<QPair<QString, size_t>> PairList;
+    int                           iNumVisibleFaders = 0;
+    int                           iMyFader          = -1;
 
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( vecpChanFader[i]->GetIsMyOwnFader() )
         {
-            iMyFader = i;
+            iMyFader = static_cast<int> ( i );
         }
 
         if ( eChSortType == ST_BY_NAME )
         {
-            PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
+            PairList << QPair<QString, size_t> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
         }
         else if ( eChSortType == ST_BY_CITY )
         {
-            PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedCity().toLower(), i );
+            PairList << QPair<QString, size_t> ( vecpChanFader[i]->GetReceivedCity().toLower(), i );
         }
         else if ( eChSortType == ST_BY_INSTRUMENT )
         {
             // sort first "by instrument" and second "by name" by adding the name after the instrument
-            PairList << QPair<QString, int> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ) +
-                                                  vecpChanFader[i]->GetReceivedName().toLower(),
-                                              i );
+            PairList << QPair<QString, size_t> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ) +
+                                                     vecpChanFader[i]->GetReceivedName().toLower(),
+                                                 i );
         }
         else if ( eChSortType == ST_BY_GROUPID )
         {
             if ( vecpChanFader[i]->GetGroupID() == INVALID_INDEX )
             {
                 // put channels without a group at the end
-                PairList << QPair<QString, int> ( "z", i ); // group IDs are numbers, use letter to put it at the end
+                PairList << QPair<QString, size_t> ( "z", i ); // group IDs are numbers, use letter to put it at the end
             }
             else
             {
-                PairList << QPair<QString, int> ( QString::number ( vecpChanFader[i]->GetGroupID() ), i );
+                PairList << QPair<QString, size_t> ( QString::number ( vecpChanFader[i]->GetGroupID() ), i );
             }
         }
         else // ST_NO_SORT
         {
             // per definition for no sort: faders are sorted in the order they appeared (note that we
             // pad to a total of 11 characters with zeros to make sure the sorting is done correctly)
-            PairList << QPair<QString, int> ( QString ( "%1" ).arg ( vecpChanFader[i]->GetRunningNewClientCnt(), 11, 10, QLatin1Char ( '0' ) ), i );
+            PairList << QPair<QString, size_t> ( QString ( "%1" ).arg ( vecpChanFader[i]->GetRunningNewClientCnt(), 11, 10, QLatin1Char ( '0' ) ),
+                                                 i );
         }
 
         // count the number of visible faders
@@ -1128,7 +1142,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     {
         for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
         {
-            if ( iMyFader == PairList[i].second )
+            if ( iMyFader == static_cast<int> ( PairList[i].second ) )
             {
                 PairList.move ( i, 0 );
                 break;
@@ -1147,7 +1161,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        const int iCurFaderID = PairList[i].second;
+        const size_t iCurFaderID = PairList[i].second;
 
         if ( vecpChanFader[iCurFaderID]->IsVisible() )
         {
@@ -1168,7 +1182,7 @@ void CAudioMixerBoard::UpdateTitle()
 
     if ( eRecorderState == RS_RECORDING )
     {
-        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+        strTitlePrefix = QString ( "[%1] " ).arg ( tr ( "RECORDING ACTIVE" ) );
     }
 
     // replace & signs with && (See Qt documentation for QLabel)
@@ -1178,7 +1192,7 @@ void CAudioMixerBoard::UpdateTitle()
     QString strEscServerName = strServerName;
     strEscServerName.replace ( "&", "&&" );
 
-    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strEscServerName );
+    setTitle ( strTitlePrefix + tr ( "Personal Mix at: %1" ).arg ( strEscServerName ) );
     setAccessibleName ( title() );
 }
 
@@ -1192,7 +1206,7 @@ void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
 {
     // get number of connected clients
-    const int iNumConnectedClients = vecChanInfo.Size();
+    const size_t iNumConnectedClients = vecChanInfo.size();
 
     Mutex.lock();
     {
@@ -1203,94 +1217,104 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
             UpdateTitle();
         }
 
-        // search for channels with are already present and preserve their gain
+        // search for channels which are already present and preserve their gain
         // setting, for all other channels reset gain
-        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+
+        // get all channels which are in use/not in use.
+        // We use the array index of vecChanInfo if the fader is in use,
+        // else INVALID_INDEX to specify it is not in use
+        // so must use "int" for the array type.
+        int iFaderNumber[MAX_NUM_CHANNELS];
+
+        for ( size_t iChanID = 0; iChanID < MAX_NUM_CHANNELS; iChanID++ )
         {
-            bool bFaderIsUsed = false;
+            iFaderNumber[iChanID] = INVALID_INDEX;
+        }
 
-            for ( int j = 0; j < iNumConnectedClients; j++ )
+        for ( size_t iFader = 0; iFader < iNumConnectedClients; iFader++ )
+        {
+            // ideally "iChanID" in CChannelInfo would be size_t if it can never be INVALID_INDEX
+            // as assumed here
+            iFaderNumber[vecChanInfo[iFader].iChanID] = static_cast<int> ( iFader );
+        }
+
+        // Hide all unused faders and initialize used ones
+        for ( size_t iChanID = 0; iChanID < MAX_NUM_CHANNELS; iChanID++ )
+        {
+            if ( iFaderNumber[iChanID] == INVALID_INDEX )
             {
-                // check if current fader is used
-                if ( vecChanInfo[j].iChanID == i )
+                // current fader is not used
+                StoreFaderSettings ( vecpChanFader[iChanID] );
+
+                vecpChanFader[iChanID]->Hide();
+                continue;
+            }
+            size_t idxVecpChan = static_cast<size_t> ( iFaderNumber[iChanID] );
+
+            // current fader is used
+            if ( !vecpChanFader[iChanID]->IsVisible() )
+            {
+                // the fader was not in use,
+                // reset everything for new client
+                vecpChanFader[iChanID]->Reset();
+                vecAvgLevels[iChanID] = 0.0f;
+
+                if ( static_cast<int> ( iChanID ) == iMyChannelID )
                 {
-                    // check if fader was already in use -> preserve gain value
-                    if ( !vecpChanFader[i]->IsVisible() )
-                    {
-                        // the fader was not in use, reset everything for new client
-                        vecpChanFader[i]->Reset();
-                        vecAvgLevels[i] = 0.0f;
+                    // this is my own fader --> set fader property
+                    vecpChanFader[iChanID]->SetIsMyOwnFader();
+                }
 
-                        // check if this is my own fader and set fader property
-                        if ( i == iMyChannelID )
-                        {
-                            vecpChanFader[i]->SetIsMyOwnFader();
-                        }
+                // keep track of each new client
+                // for "no sorting" channel sort order new clients are added
+                // to the right-hand side of the mixer (#673)
+                vecpChanFader[iChanID]->SetRunningNewClientCnt ( iRunningNewClientCnt++ );
 
-                        // set and increment the running new client counter needed for sorting (per definition:
-                        // a fader for a new client shall always be inserted at the right-hand-side if no other
-                        // sorting type is selected (i.e. "no sorting" is active) (#673)
-                        vecpChanFader[i]->SetRunningNewClientCnt ( iRunningNewClientCnt++ );
+                // show fader
+                vecpChanFader[iChanID]->Show();
 
-                        // show fader
-                        vecpChanFader[i]->Show();
-
-                        // Set the default initial fader level. Check first that
-                        // this is not the initialization (i.e. previously there
-                        // were no faders visible) to avoid that our own level is
-                        // adjusted. If we have received our own channel ID, then
-                        // we can adjust the level even if no fader was visible.
-                        // The fader level of 100 % is the default in the
-                        // server, in that case we do not have to do anything here.
-                        if ( ( !bNoFaderVisible || ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != i ) ) ) &&
-                             ( pSettings->iNewClientFaderLevel != 100 ) )
-                        {
-                            // the value is in percent -> convert range
-                            vecpChanFader[i]->SetFaderLevel ( pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
-                        }
-                    }
-
-                    // restore gain (if new name is different from the current one)
-                    if ( vecpChanFader[i]->GetReceivedName().compare ( vecChanInfo[j].strName ) )
-                    {
-                        // the text has actually changed, search in the list of
-                        // stored settings if we have a matching entry
-                        int  iStoredFaderLevel;
-                        int  iStoredPanValue;
-                        bool bStoredFaderIsSolo;
-                        bool bStoredFaderIsMute;
-                        int  iGroupID;
-
-                        if ( GetStoredFaderSettings ( vecChanInfo[j].strName,
-                                                      iStoredFaderLevel,
-                                                      iStoredPanValue,
-                                                      bStoredFaderIsSolo,
-                                                      bStoredFaderIsMute,
-                                                      iGroupID ) )
-                        {
-                            vecpChanFader[i]->SetFaderLevel ( iStoredFaderLevel, true ); // suppress group update
-                            vecpChanFader[i]->SetPanValue ( iStoredPanValue );
-                            vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
-                            vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
-                            vecpChanFader[i]->SetGroupID ( iGroupID ); // Must be the last to be set in the fader!
-                        }
-                    }
-
-                    // set the channel infos
-                    vecpChanFader[i]->SetChannelInfos ( vecChanInfo[j] );
-
-                    bFaderIsUsed = true;
+                // Set the default initial fader level. Check first that
+                // this is not the initialization (i.e. previously there
+                // were no faders visible) to avoid that our own level is
+                // adjusted. If we have received our own channel ID, then
+                // we can adjust the level even if no fader was visible.
+                // The fader level of 100 % is the default in the
+                // server, in that case we do not have to do anything here.
+                if ( ( !bNoFaderVisible || ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != static_cast<int> ( iChanID ) ) ) ) &&
+                     ( pSettings->iNewClientFaderLevel != 100 ) )
+                {
+                    // the value is in percent -> convert range
+                    vecpChanFader[iChanID]->SetFaderLevel ( pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
                 }
             }
 
-            // if current fader is not used, hide it
-            if ( !bFaderIsUsed )
+            if ( vecpChanFader[iChanID]->GetReceivedName().compare ( vecChanInfo[idxVecpChan].strName ) )
             {
-                // before hiding the fader, store its level (if some conditions are fulfilled)
-                StoreFaderSettings ( vecpChanFader[i] );
+                // the text has actually changed, search in the list of
+                // stored settings if we have a matching entry
+                int  iStoredFaderLevel;
+                int  iStoredPanValue;
+                bool bStoredFaderIsSolo;
+                bool bStoredFaderIsMute;
+                int  iGroupID;
 
-                vecpChanFader[i]->Hide();
+                if ( GetStoredFaderSettings ( vecChanInfo[idxVecpChan].strName,
+                                              iStoredFaderLevel,
+                                              iStoredPanValue,
+                                              bStoredFaderIsSolo,
+                                              bStoredFaderIsMute,
+                                              iGroupID ) )
+                {
+                    vecpChanFader[iChanID]->SetFaderLevel ( iStoredFaderLevel, true ); // suppress group update
+                    vecpChanFader[iChanID]->SetPanValue ( iStoredPanValue );
+                    vecpChanFader[iChanID]->SetFaderIsSolo ( bStoredFaderIsSolo );
+                    vecpChanFader[iChanID]->SetFaderIsMute ( bStoredFaderIsMute );
+                    vecpChanFader[iChanID]->SetGroupID ( iGroupID ); // Must be the last to be set in the fader!
+                }
             }
+
+            // set the channel infos
+            vecpChanFader[iChanID]->SetChannelInfos ( vecChanInfo[idxVecpChan] );
         }
 
         // update the solo states since if any channel was on solo and a new client
@@ -1306,7 +1330,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
     ChangeFaderOrder ( eChSortType );
 
     // emit status of connected clients
-    emit NumClientsChanged ( iNumConnectedClients );
+    emit NumClientsChanged ( static_cast<int> ( iNumConnectedClients ) );
 }
 
 void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx, const int iValue )
@@ -1314,9 +1338,9 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx, const int iValue )
     // only apply new fader level if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iChannelIdx )]->IsVisible() )
         {
-            vecpChanFader[iChannelIdx]->SetFaderLevel ( iValue );
+            vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetFaderLevel ( iValue );
         }
     }
 }
@@ -1326,9 +1350,9 @@ void CAudioMixerBoard::SetPanValue ( const int iChannelIdx, const int iValue )
     // only apply new pan value if channel index is valid and the panner is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) && bDisplayPans )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iChannelIdx )]->IsVisible() )
         {
-            vecpChanFader[iChannelIdx]->SetPanValue ( iValue );
+            vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetPanValue ( iValue );
         }
     }
 }
@@ -1339,9 +1363,9 @@ void CAudioMixerBoard::SetFaderIsSolo ( const int iChannelIdx, const bool bIsSol
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
 
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iChannelIdx )]->IsVisible() )
         {
-            vecpChanFader[iChannelIdx]->SetFaderIsSolo ( bIsSolo );
+            vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetFaderIsSolo ( bIsSolo );
         }
     }
 }
@@ -1351,9 +1375,9 @@ void CAudioMixerBoard::SetFaderIsMute ( const int iChannelIdx, const bool bIsMut
     // only apply mute if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iChannelIdx )]->IsVisible() )
         {
-            vecpChanFader[iChannelIdx]->SetFaderIsMute ( bIsMute );
+            vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetFaderIsMute ( bIsMute );
         }
     }
 }
@@ -1362,10 +1386,10 @@ void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
 {
     QMutexLocker locker ( &Mutex );
 
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         // only apply to visible faders and not to my own channel fader
-        if ( vecpChanFader[i]->IsVisible() && ( i != iMyChannelID ) )
+        if ( vecpChanFader[i]->IsVisible() && ( static_cast<int> ( i ) != iMyChannelID ) )
         {
             // the value is in percent -> convert range, also use the group
             // update flag to make sure the group values are all set to the
@@ -1391,19 +1415,19 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     levels.resize ( MAX_NUM_FADER_GROUPS + 1 );
 
     // compute min/max level per group and number of channels per group
-    for ( int i = 0; i < MAX_NUM_CHANNELS; ++i )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; ++i )
     {
         // only apply to visible faders (and not to my own channel fader)
-        if ( vecpChanFader[i]->IsVisible() && ( i != iMyChannelID ) )
+        if ( vecpChanFader[i]->IsVisible() && ( static_cast<int> ( i ) != iMyChannelID ) )
         {
             // map averaged meter output level to decibels
             // (invert CStereoSignalLevelMeter::CalcLogResultForMeter)
             float leveldB = vecAvgLevels[i] * ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER ) / NUM_STEPS_LED_BAR + LOW_BOUND_SIG_METER;
 
-            int group = vecpChanFader[i]->GetGroupID();
-            if ( group == INVALID_INDEX )
+            size_t group = MAX_NUM_FADER_GROUPS;
+            if ( vecpChanFader[i]->GetGroupID() != INVALID_INDEX )
             {
-                group = MAX_NUM_FADER_GROUPS;
+                group = static_cast<size_t> ( vecpChanFader[i]->GetGroupID() );
             }
 
             if ( leveldB >= AUTO_FADER_NOISE_THRESHOLD_DB )
@@ -1416,7 +1440,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     }
 
     // sort levels for later median computation
-    for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
+    for ( size_t i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
     {
         std::sort ( levels[i].begin(), levels[i].end() );
     }
@@ -1442,7 +1466,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     float vecTargetChannelLevel[MAX_NUM_FADER_GROUPS + 1];
     float levelOffset = 0.0f;
     float minFader    = 0.0f;
-    for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
+    for ( size_t i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
     {
         // compute the target level for each channel in the current group
         // (prevent clipping when each channel in this group contributes at
@@ -1450,7 +1474,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
         vecTargetChannelLevel[i] = vecChannelsPerGroup[i] > 0 ? targetLevelPerGroup - 20.0f * log10 ( vecChannelsPerGroup[i] ) : 0.0f;
 
         // get median level
-        int cntChannels = levels[i].Size();
+        size_t cntChannels = levels[i].size();
         if ( cntChannels == 0 )
         {
             continue;
@@ -1481,10 +1505,10 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     }
 
     // adjust all levels
-    for ( int i = 0; i < MAX_NUM_CHANNELS; ++i )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; ++i )
     {
         // only apply to visible faders (and not to my own channel fader)
-        if ( vecpChanFader[i]->IsVisible() && ( i != iMyChannelID ) )
+        if ( vecpChanFader[i]->IsVisible() && ( static_cast<int> ( i ) != iMyChannelID ) )
         {
             // map averaged meter output level to decibels
             // (invert CStereoSignalLevelMeter::CalcLogResultForMeter)
@@ -1525,11 +1549,21 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     }
 }
 
+void CAudioMixerBoard::SetMIDICtrlUsed ( const bool bMIDICtrlUsed )
+{
+    QMutexLocker locker ( &Mutex );
+
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        vecpChanFader[i]->SetMIDICtrlUsed ( bMIDICtrlUsed );
+    }
+}
+
 void CAudioMixerBoard::StoreAllFaderSettings()
 {
     QMutexLocker locker ( &Mutex );
 
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         StoreFaderSettings ( vecpChanFader[i] );
     }
@@ -1545,7 +1579,7 @@ void CAudioMixerBoard::LoadAllFaderSettings()
     bool bStoredFaderIsMute;
     int  iGroupID;
 
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( GetStoredFaderSettings ( vecpChanFader[i]->GetReceivedName(),
                                       iStoredFaderLevel,
@@ -1568,9 +1602,9 @@ void CAudioMixerBoard::SetRemoteFaderIsMute ( const int iChannelIdx, const bool 
     // only apply remote mute state if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iChannelIdx )]->IsVisible() )
         {
-            vecpChanFader[iChannelIdx]->SetRemoteFaderIsMute ( bIsMute );
+            vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetRemoteFaderIsMute ( bIsMute );
         }
     }
 }
@@ -1580,7 +1614,7 @@ void CAudioMixerBoard::UpdateSoloStates()
     // first check if any channel has a solo state active
     bool bAnyChannelIsSolo = false;
 
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         // check if fader is in use and has solo state active
         if ( vecpChanFader[i]->IsVisible() && vecpChanFader[i]->IsSolo() )
@@ -1591,7 +1625,7 @@ void CAudioMixerBoard::UpdateSoloStates()
     }
 
     // now update the solo state of all active faders
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( vecpChanFader[i]->IsVisible() )
         {
@@ -1607,6 +1641,7 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
                                          const bool   bSuppressServerUpdate,
                                          const double dLevelRatio )
 {
+    size_t stChannelIdx = static_cast<size_t> ( iChannelIdx );
     // update current gain
     if ( !bSuppressServerUpdate )
     {
@@ -1616,13 +1651,13 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
     // if this fader is selected, all other in the group must be updated as
     // well (note that we do not have to update if this is already a group update
     // to avoid an infinite loop)
-    if ( ( vecpChanFader[iChannelIdx]->GetGroupID() != INVALID_INDEX ) && !bIsGroupUpdate )
+    if ( ( vecpChanFader[stChannelIdx]->GetGroupID() != INVALID_INDEX ) && !bIsGroupUpdate )
     {
-        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
         {
             // update rest of faders selected
-            if ( vecpChanFader[i]->IsVisible() && ( vecpChanFader[i]->GetGroupID() == vecpChanFader[iChannelIdx]->GetGroupID() ) &&
-                 ( i != iChannelIdx ) && ( dLevelRatio >= 0 ) )
+            if ( vecpChanFader[i]->IsVisible() && ( vecpChanFader[i]->GetGroupID() == vecpChanFader[stChannelIdx]->GetGroupID() ) &&
+                 ( i != stChannelIdx ) && ( dLevelRatio >= 0 ) )
             {
                 // synchronize faders with moving fader level (it is important
                 // to set the group flag to avoid infinite looping)
@@ -1654,9 +1689,9 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
         pSettings->vecStoredFaderIsSolo[0]  = pChanFader->IsSolo();
         pSettings->vecStoredFaderIsMute[0]  = pChanFader->IsMute();
         pSettings->vecStoredFaderGroupID[0] = pChanFader->GetGroupID();
-        int iTempListCnt                    = 1; // current fader is on top, other faders index start at 1
+        size_t iTempListCnt                 = 1; // current fader is on top, other faders index start at 1
 
-        for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        for ( size_t iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
             // first check if we still have space in our data storage
             if ( iTempListCnt < MAX_NUM_STORED_FADER_SETTINGS )
@@ -1664,7 +1699,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
                 // check for the old index of the current entry (this has to be
                 // skipped), note that per definition: the old index is an illegal
                 // index in case the entry was not present in the vector before
-                if ( iIdx != iOldIdx )
+                if ( static_cast<int> ( iIdx ) != iOldIdx )
                 {
                     pSettings->vecStoredFaderLevels[iTempListCnt]  = viOldStoredFaderLevels[iIdx];
                     pSettings->vecStoredPanValues[iTempListCnt]    = viOldStoredPanValues[iIdx];
@@ -1689,7 +1724,7 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const QString& strName,
     // only do the check if the name string is not empty
     if ( !strName.isEmpty() )
     {
-        for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        for ( size_t iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
             // check if fader text is already known in the list
             if ( !pSettings->vecStoredFaderTags[iIdx].compare ( strName ) )
@@ -1713,10 +1748,10 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const QString& strName,
 
 void CAudioMixerBoard::SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel )
 {
-    const int iNumChannelLevels = vecChannelLevel.Size();
-    int       i                 = 0;
+    const size_t iNumChannelLevels = vecChannelLevel.size();
+    size_t       i                 = 0;
 
-    for ( int iChId = 0; iChId < MAX_NUM_CHANNELS; iChId++ )
+    for ( size_t iChId = 0; iChId < MAX_NUM_CHANNELS; iChId++ )
     {
         if ( vecpChanFader[iChId]->IsVisible() && ( i < iNumChannelLevels ) )
         {

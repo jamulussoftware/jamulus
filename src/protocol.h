@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -127,10 +127,10 @@ public:
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
 
-    // clang-format off
-// TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
-void CreateReqChannelLevelListMes();
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+    void CreateReqChannelLevelListMes();
+    //### TODO: END ###//
 
     void CreateVersionAndOSMes();
     void CreateRecorderStateMes ( const ERecorderState eRecorderState );
@@ -175,6 +175,14 @@ protected:
     public:
         CSendMessage() : vecMessage ( 0 ), iID ( PROTMESSID_ILLEGAL ), iCnt ( 0 ) {}
         CSendMessage ( const CVector<uint8_t>& nMess, const int iNCnt, const int iNID ) : vecMessage ( nMess ), iID ( iNID ), iCnt ( iNCnt ) {}
+
+        CSendMessage ( const CSendMessage& SendMess )
+        {
+            vecMessage.Init ( SendMess.vecMessage.Size() );
+            vecMessage = SendMess.vecMessage;
+            iID        = SendMess.iID;
+            iCnt       = SendMess.iCnt;
+        }
 
         CSendMessage& operator= ( const CSendMessage& NewSendMess )
         {

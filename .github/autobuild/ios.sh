@@ -2,7 +2,9 @@
 set -eu
 
 QT_DIR=/usr/local/opt/qt
-AQTINSTALL_VERSION=2.1.0
+# The following version pinnings are semi-automatically checked for
+# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
+AQTINSTALL_VERSION=3.1.6
 
 if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
@@ -20,8 +22,15 @@ setup() {
         echo "Installing Qt"
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         # Install actual ios Qt:
-        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios "${QT_VERSION}" --archives qtbase qttools qttranslations
-        if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+        local qtmultimedia=()
+        if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+ ]]; then
+            # From Qt6 onwards, qtmultimedia is a module and cannot be installed
+            # as an archive anymore.
+            qtmultimedia=("--modules")
+        fi
+        qtmultimedia+=("qtmultimedia")
+        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios "${QT_VERSION}" --archives qtbase qttools qttranslations "${qtmultimedia[@]}"
+        if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+  ]]; then
             # Starting with Qt6, ios' qtbase install does no longer include a real qmake binary.
             # Instead, it is a script which invokes the mac desktop qmake.
             # As of aqtinstall 2.1.0 / 04/2022, desktop qtbase has to be installed manually:
@@ -114,4 +123,5 @@ case "${1:-}" in
     *)
         echo "Unknown stage '${1:-}'"
         exit 1
+        ;;
 esac

@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -24,193 +24,6 @@
 
 #include "server.h"
 
-// CHighPrecisionTimer implementation ******************************************
-#ifdef _WIN32
-CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize ) : bUseDoubleSystemFrameSize ( bNewUseDoubleSystemFrameSize )
-{
-    // add some error checking, the high precision timer implementation only
-    // supports 64 and 128 samples frame size at 48 kHz sampling rate
-#    if ( SYSTEM_FRAME_SIZE_SAMPLES != 64 ) && ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES != 128 )
-#        error "Only system frame size of 64 and 128 samples is supported by this module"
-#    endif
-#    if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
-#        error "Only a system sample rate of 48 kHz is supported by this module"
-#    endif
-
-    // Since QT only supports a minimum timer resolution of 1 ms but for our
-    // server we require a timer interval of 2.333 ms for 128 samples
-    // frame size at 48 kHz sampling rate.
-    // To support this interval, we use a timer with 2 ms resolution for 128
-    // samples frame size and 1 ms resolution for 64 samples frame size.
-    // Then we fire the actual frame timer if the error to the actual
-    // required interval is minimum.
-    veciTimeOutIntervals.Init ( 3 );
-
-    // for 128 sample frame size at 48 kHz sampling rate with 2 ms timer resolution:
-    // actual intervals:  0.0  2.666  5.333  8.0
-    // quantized to 2 ms: 0    2      6      8 (0)
-    // for 64 sample frame size at 48 kHz sampling rate with 1 ms timer resolution:
-    // actual intervals:  0.0  1.333  2.666  4.0
-    // quantized to 2 ms: 0    1      3      4 (0)
-    veciTimeOutIntervals[0] = 0;
-    veciTimeOutIntervals[1] = 1;
-    veciTimeOutIntervals[2] = 0;
-
-    Timer.setTimerType ( Qt::PreciseTimer );
-
-    // connect timer timeout signal
-    QObject::connect ( &Timer, &QTimer::timeout, this, &CHighPrecisionTimer::OnTimer );
-}
-
-void CHighPrecisionTimer::Start()
-{
-    // reset position pointer and counter
-    iCurPosInVector  = 0;
-    iIntervalCounter = 0;
-
-    if ( bUseDoubleSystemFrameSize )
-    {
-        // start internal timer with 2 ms resolution for 128 samples frame size
-        Timer.start ( 2 );
-    }
-    else
-    {
-        // start internal timer with 1 ms resolution for 64 samples frame size
-        Timer.start ( 1 );
-    }
-}
-
-void CHighPrecisionTimer::Stop()
-{
-    // stop timer
-    Timer.stop();
-}
-
-void CHighPrecisionTimer::OnTimer()
-{
-    // check if maximum number of high precision timer intervals are
-    // finished
-    if ( veciTimeOutIntervals[iCurPosInVector] == iIntervalCounter )
-    {
-        // reset interval counter
-        iIntervalCounter = 0;
-
-        // go to next position in vector, take care of wrap around
-        iCurPosInVector++;
-        if ( iCurPosInVector == veciTimeOutIntervals.Size() )
-        {
-            iCurPosInVector = 0;
-        }
-
-        // minimum time error to actual required timer interval is reached,
-        // emit signal for server
-        emit timeout();
-    }
-    else
-    {
-        // next high precision timer interval
-        iIntervalCounter++;
-    }
-}
-#else // Mac and Linux
-CHighPrecisionTimer::CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize ) : bRun ( false )
-{
-    // calculate delay in ns
-    uint64_t iNsDelay;
-
-    if ( bUseDoubleSystemFrameSize )
-    {
-        iNsDelay = ( (uint64_t) DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) / (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
-    }
-    else
-    {
-        iNsDelay = ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) / (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
-    }
-
-#    if defined( __APPLE__ ) || defined( __MACOSX )
-    // calculate delay in mach absolute time
-    struct mach_timebase_info timeBaseInfo;
-    mach_timebase_info ( &timeBaseInfo );
-
-    Delay = ( iNsDelay * (uint64_t) timeBaseInfo.denom ) / (uint64_t) timeBaseInfo.numer;
-#    else
-    // set delay
-    Delay = iNsDelay;
-#    endif
-}
-
-void CHighPrecisionTimer::Start()
-{
-    // only start if not already running
-    if ( !bRun )
-    {
-        // set run flag
-        bRun = true;
-
-        // set initial end time
-#    if defined( __APPLE__ ) || defined( __MACOSX )
-        NextEnd = mach_absolute_time() + Delay;
-#    else
-        clock_gettime ( CLOCK_MONOTONIC, &NextEnd );
-
-        NextEnd.tv_nsec += Delay;
-        if ( NextEnd.tv_nsec >= 1000000000L )
-        {
-            NextEnd.tv_sec++;
-            NextEnd.tv_nsec -= 1000000000L;
-        }
-#    endif
-
-        // start thread
-        QThread::start ( QThread::TimeCriticalPriority );
-    }
-}
-
-void CHighPrecisionTimer::Stop()
-{
-    // set flag so that thread can leave the main loop
-    bRun = false;
-
-    // give thread some time to terminate
-    wait ( 5000 );
-}
-
-void CHighPrecisionTimer::run()
-{
-    // loop until the thread shall be terminated
-    while ( bRun )
-    {
-        // call processing routine by fireing signal
-
-        // clang-format off
-// TODO by emit a signal we leave the high priority thread -> maybe use some
-//      other connection type to have something like a true callback, e.g.
-//      "Qt::DirectConnection" -> Can this work?
-        // clang-format on
-
-        emit timeout();
-
-        // now wait until the next buffer shall be processed (we
-        // use the "increment method" to make sure we do not introduce
-        // a timing drift)
-#    if defined( __APPLE__ ) || defined( __MACOSX )
-        mach_wait_until ( NextEnd );
-
-        NextEnd += Delay;
-#    else
-        clock_nanosleep ( CLOCK_MONOTONIC, TIMER_ABSTIME, &NextEnd, NULL );
-
-        NextEnd.tv_nsec += Delay;
-        if ( NextEnd.tv_nsec >= 1000000000L )
-        {
-            NextEnd.tv_sec++;
-            NextEnd.tv_nsec -= 1000000000L;
-        }
-#    endif
-    }
-}
-#endif
-
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strLoggingFileName,
@@ -218,7 +31,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const quint16      iPortNumber,
                    const quint16      iQosNumber,
                    const QString&     strHTMLStatusFileName,
-                   const QString&     strDirectoryServer,
+                   const QString&     strDirectoryAddress,
                    const QString&     strServerListFileName,
                    const QString&     strServerInfo,
                    const QString&     strServerListFilter,
@@ -243,7 +56,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     strServerHTMLFileListName ( strHTMLStatusFileName ),
     HighPrecisionTimer ( bNUseDoubleSystemFrameSize ),
     ServerListManager ( iPortNumber,
-                        strDirectoryServer,
+                        strDirectoryAddress,
                         strServerListFileName,
                         strServerInfo,
                         strServerPublicIP,
@@ -756,11 +569,11 @@ void CServer::Stop()
 
 void CServer::OnTimer()
 {
-    // clang-format off
-/*
-static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TEST do a timer jitter measurement
-*/
-    // clang-format on
+    //### TEST: BEGIN ###//
+    // uncomment next line to do a timer Jitter measurement
+    // static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure();
+    //### TEST: END ###//
+
     // Get data from all connected clients -------------------------------------
     // some inits
     int  iNumClients          = 0; // init connected client counter
@@ -1344,11 +1157,12 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
         // OPUS encoding
         if ( pCurOpusEncoder != nullptr )
         {
-            // clang-format off
-// TODO find a better place than this: the setting does not change all the time so for speed
-//      optimization it would be better to set it only if the network frame size is changed
-opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
-            // clang-format on
+            //### TODO: BEGIN ###//
+            // find a better place than this: the setting does not change all the time so for speed
+            // optimization it would be better to set it only if the network frame size is changed
+            opus_custom_encoder_ctl ( pCurOpusEncoder,
+                                      OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+            //### TODO: END ###//
 
             for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
             {
@@ -1655,16 +1469,18 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf, const int iNum
     return bNewConnection;
 }
 
-void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-                               CVector<QString>&      vecsName,
-                               CVector<int>&          veciJitBufNumFrames,
-                               CVector<int>&          veciNetwFrameSizeFact )
+void CServer::GetConCliParam ( CVector<CHostAddress>&     vecHostAddresses,
+                               CVector<QString>&          vecsName,
+                               CVector<int>&              veciJitBufNumFrames,
+                               CVector<int>&              veciNetwFrameSizeFact,
+                               CVector<CChannelCoreInfo>& vecChanInfo )
 {
     // init return values
     vecHostAddresses.Init ( iMaxNumChannels );
     vecsName.Init ( iMaxNumChannels );
     veciJitBufNumFrames.Init ( iMaxNumChannels );
     veciNetwFrameSizeFact.Init ( iMaxNumChannels );
+    vecChanInfo.Init ( iMaxNumChannels );
 
     // check all possible channels
     for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -1676,6 +1492,7 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
             vecsName[i]              = vecChannels[i].GetName();
             veciJitBufNumFrames[i]   = vecChannels[i].GetSockBufNumFrames();
             veciNetwFrameSizeFact[i] = vecChannels[i].GetNetwFrameSizeFact();
+            vecChanInfo[i]           = vecChannels[i].GetChanInfo();
         }
     }
 }

@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -38,7 +38,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
-    bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
     bDetectFeedback ( false ),
     bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
@@ -151,7 +150,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-                                "you will not have much fun using the application." ) +
+                                "you will not have much fun using %1." )
+                               .arg ( APP_NAME ) +
                            TOOLTIP_COM_END_TEXT );
 
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
@@ -181,14 +181,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     lblBuffers->setWhatsThis ( strLEDBuffers );
     ledBuffers->setWhatsThis ( strLEDBuffers );
+    ledBuffers->setToolTip ( tr ( "If this LED indicator turns red, "
+                                  "the audio stream is interrupted." ) +
+                             TOOLTIP_COM_END_TEXT );
 
     ledBuffers->setAccessibleName ( tr ( "Local Jitter Buffer status LED indicator" ) );
 
-    // current connection status parameter
-    QString strConnStats = "<b>" +
-                           tr ( "Current Connection Status "
-                                "Parameter" ) +
-                           ":</b> " +
+    // current connection status details
+    QString strConnStats = "<b>" + tr ( "Current Connection Status" ) + ":</b> " +
                            tr ( "The Ping Time is the time required for the audio "
                                 "stream to travel from the client to the server and back again. This "
                                 "delay is introduced by the network and should be about "
@@ -203,12 +203,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblPingVal->setWhatsThis ( strConnStats );
     lblDelay->setWhatsThis ( strConnStats );
     lblDelayVal->setWhatsThis ( strConnStats );
-    ledDelay->setWhatsThis ( strConnStats );
-    ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-                                "you will not have much fun using "
-                                "the %1 software." )
-                               .arg ( APP_NAME ) +
-                           TOOLTIP_COM_END_TEXT );
     lblPingVal->setText ( "---" );
     lblPingUnit->setText ( "" );
     lblDelayVal->setText ( "---" );
@@ -223,6 +217,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // set the settings pointer to the mixer board (must be done early)
     MainMixerBoard->SetSettingsPointer ( pSettings );
     MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
+
+    // Pass through flag for MIDICtrlUsed
+    MainMixerBoard->SetMIDICtrlUsed ( !strMIDISetup.isEmpty() );
 
     // reset mixer board
     MainMixerBoard->HideAll();
@@ -258,6 +255,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
+
+    // track number of clients to detect joins/leaves for audio alerts
+    iClients = 0;
 
     // prepare Mute Myself info label (invisible by default)
     lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
@@ -827,6 +827,12 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
+    if ( pSettings->bEnableAudioAlerts )
+    {
+        QSoundEffect* sf = new QSoundEffect();
+        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_message.wav" ) );
+        sf->play();
+    }
     ChatDlg.AddChatText ( strChatText );
 
     // Open chat dialog. If a server welcome message is received, we force
@@ -866,21 +872,23 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
 
 void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
-    // show channel numbers if --ctrlmidich is used (#241, #95)
-    if ( bMIDICtrlUsed )
-    {
-        for ( int i = 0; i < vecChanInfo.Size(); i++ )
-        {
-            vecChanInfo[i].strName.prepend ( QString().setNum ( vecChanInfo[i].iChanID ) + ":" );
-        }
-    }
-
     // update mixer board with the additional client infos
     MainMixerBoard->ApplyNewConClientList ( vecChanInfo );
 }
 
 void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
+    if ( pSettings->bEnableAudioAlerts && iNewNumClients > iClients )
+    {
+        QSoundEffect* sf = new QSoundEffect();
+        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_user.wav" ) );
+        sf->play();
+    }
+
+    // iNewNumClients will be zero on the first trigger of this signal handler when connecting to a new server.
+    // Subsequent triggers will thus sound the alert (if enabled).
+    iClients = iNewNumClients;
+
     // update window title
     SetMyWindowTitle ( iNewNumClients );
 }
@@ -1267,11 +1275,11 @@ void CClientDlg::Disconnect()
     TimerDetectFeedback.stop();
     bDetectFeedback = false;
 
-    // clang-format off
-// TODO is this still required???
-// immediately update status bar
-OnTimerStatus();
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // is this still required???
+    // immediately update status bar
+    OnTimerStatus();
+    //### TODO: END ###//
 
     // reset LEDs
     ledBuffers->Reset();
@@ -1350,7 +1358,6 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
             "QCheckBox {              color:          rgb(220, 220, 220);"
             "                         font:           bold; }" );
-
 #ifdef _WIN32
         // Workaround QT-Windows problem: This should not be necessary since in the
         // background frame the style sheet for QRadioButton was already set. But it
@@ -1442,31 +1449,39 @@ void CClientDlg::SetMixerBoardDeco ( const ERecorderState newRecorderState, cons
     eLastRecorderState = newRecorderState;
     eLastDesign        = eNewDesign;
 
+    // set base style
+    QString sTitleStyle = "QGroupBox::title { subcontrol-origin: margin;"
+                          "                   subcontrol-position: left top;"
+                          "                   left: 7px;";
+
     if ( newRecorderState == RS_RECORDING )
     {
-        MainMixerBoard->setStyleSheet ( "QGroupBox::title { subcontrol-origin: margin; "
-                                        "                   subcontrol-position: left top;"
-                                        "                   left: 7px;"
-                                        "                   color: rgb(255,255,255);"
-                                        "                   background-color: rgb(255,0,0); }" );
+        sTitleStyle += "color: rgb(255,255,255);"
+                       "background-color: rgb(255,0,0); }";
     }
     else
     {
         if ( eNewDesign == GD_ORIGINAL )
         {
-            MainMixerBoard->setStyleSheet ( "QGroupBox::title { subcontrol-origin: margin;"
-                                            "                   subcontrol-position: left top;"
-                                            "                   left: 7px;"
-                                            "                   color: rgb(220,220,220); }" );
+            // no need to set the background color for dark mode in fancy skin, as the background is already dark.
+            sTitleStyle += "color: rgb(220,220,220); }";
         }
         else
         {
-            MainMixerBoard->setStyleSheet ( "QGroupBox::title { subcontrol-origin: margin;"
-                                            "                   subcontrol-position: left top;"
-                                            "                   left: 7px;"
-                                            "                   color: rgb(0,0,0); }" );
+            if ( palette().color ( QPalette::Window ) == QColor::fromRgbF ( 0.196078, 0.196078, 0.196078, 1 ) )
+            {
+                // Dark mode on macOS/Linux needs a light color
+
+                sTitleStyle += "color: rgb(220,220,220); }";
+            }
+            else
+            {
+                sTitleStyle += "color: rgb(0,0,0); }";
+            }
         }
     }
+
+    MainMixerBoard->setStyleSheet ( sTitleStyle );
 }
 
 void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor )

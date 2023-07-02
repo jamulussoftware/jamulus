@@ -1,0 +1,33 @@
+# See https://editorconfig.org/
+# This file is used by editors, but also by automation such as `shfmt`.
+
+# This is the top-most .editorconfig file
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{cpp,h,mm,nsi,pro,ps1,py,sh}]
+indent_style = space
+indent_size = 4
+
+[*.{yaml,yml}]
+indent_style = space
+indent_size = 2
+
+[*.sh]
+shell_variant      = bash
+binary_next_line   = false
+switch_case_indent = true
+space_redirects    = true
+keep_padding       = true
+function_next_line = false
+
+[libs/**]
+ignore = true
+
+[*.py]
+# This is the widest that is still PEP-8 compliant
+max_line_length = 99

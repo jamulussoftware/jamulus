@@ -1,9 +1,10 @@
 name: Check JSON-RPC docs
 
+permissions: {}
 on:
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - 'tools/generate_json_rpc_docs.py'
       - 'src/*rpc*.cpp'
@@ -12,11 +13,9 @@ jobs:
   check-json-rpc-docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: ./tools/generate_json_rpc_docs.py
-      - env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+      - run: |
           [[ -z "$(git status --porcelain=v1)" ]] && exit 0
           echo "Please run ./tools/generate_json_rpc_docs.py to regenerate docs/JSON-RPC.md"
           exit 1

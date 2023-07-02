@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -87,6 +87,8 @@ public:
     bool   GetIsMyOwnFader() { return bIsMyOwnFader; }
     void   UpdateSoloState ( const bool bNewOtherSoloState );
 
+    void SetMIDICtrlUsed ( const bool isMIDICtrlUsed ) { bMIDICtrlUsed = isMIDICtrlUsed; }
+
 protected:
     void UpdateGroupIDDependencies();
     void SetMute ( const bool bState );
@@ -129,6 +131,7 @@ protected:
     EGUIDesign  eDesign;
     EMeterStyle eMeterStyle;
     QPixmap     BitmapMutedIcon;
+    bool        bMIDICtrlUsed;
 
 public slots:
     void OnLevelValueChanged ( int value )
@@ -225,6 +228,8 @@ public:
 
     void MuteMyChannel();
 
+    void SetMIDICtrlUsed ( const bool bMIDICtrlUsed );
+
 protected:
     class CMixerBoardScrollArea : public QScrollArea
     {
@@ -261,7 +266,7 @@ protected:
     bool                    bDisplayPans;
     bool                    bIsPanSupported;
     bool                    bNoFaderVisible;
-    int                     iMyChannelID;
+    int                     iMyChannelID;         // must use int (not size_t) so INVALID_INDEX can be stored
     int                     iRunningNewClientCnt; // integer type is sufficient, will never overrun for its purpose
     int                     iNumMixerPanelRows;
     QString                 strServerName;

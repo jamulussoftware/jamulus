@@ -8,6 +8,9 @@ param (
     # - Do not update ASIO SDK without checking for license-related changes.
     # - Do not copy (parts of) the ASIO SDK into the Jamulus source tree without
     #   further consideration as it would make the license situation more complicated.
+    #
+    # The following version pinnings are semi-automatically checked for
+    # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
     [string] $NsisName = "nsis-3.08",
@@ -55,17 +58,34 @@ Function Clean-Build-Environment
 
 # For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
 Function Get-RedirectedUrl {
-
     param(
         [Parameter(Mandatory=$true)]
-        [String]$URL
+        [string] $url
     )
 
-    $request = [System.Net.WebRequest]::Create($url)
-    $request.AllowAutoRedirect=$true
-    $response=$request.GetResponse()
-    $response.ResponseUri.AbsoluteUri
-    $response.Close()
+    $numAttempts = 10
+    $sleepTime = 10
+    $maxSleepTime = 80
+    for ($attempt = 1; $attempt -le $numAttempts; $attempt++) {
+        try {
+            $request = [System.Net.WebRequest]::Create($url)
+            $request.AllowAutoRedirect=$true
+            $response=$request.GetResponse()
+            $response.ResponseUri.AbsoluteUri
+            $response.Close()
+            return
+        } catch {
+            if ($attempt -lt $numAttempts) {
+                Write-Warning "Caught error: $_"
+                Write-Warning "Get-RedirectedUrl: Fetch attempt #${attempt}/${numAttempts} for $url failed, trying again in ${sleepTime}s"
+                Start-Sleep -Seconds $sleepTime
+                $sleepTime = [Math]::Min($sleepTime * 2, $maxSleepTime)
+                continue
+            }
+            Write-Error "Get-RedirectedUrl: All ${numAttempts} fetch attempts for $url failed, failing whole call"
+            throw
+        }
+    }
 }
 
 function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/51692402
@@ -109,7 +129,11 @@ Function Install-Dependency
         [string] $Destination
     )
 
-    if (Test-Path -Path "$WindowsPath\$Destination") { return }
+    if (Test-Path -Path "$WindowsPath\$Destination")
+    {
+        echo "Using ${WindowsPath}\${Destination} from previous run (e.g. actions/cache)"
+        return
+    }
 
     $TempFileName = [System.IO.Path]::GetTempFileName() + ".zip"
     $TempDir = [System.IO.Path]::GetTempPath()
@@ -135,13 +159,13 @@ Function Install-Dependencies
     }
     Initialize-Module-Here -m "VSSetup"
     Install-Dependency -Uri $NsisUrl `
-        -Name $NsisName -Destination "NSIS"
+        -Name $NsisName -Destination "..\libs\NSIS\NSIS-source"
 
     if ($BuildOption -Notmatch "jack") {
         # Don't download ASIO SDK on Jamulus JACK builds to save
         # resources and to be extra-sure license-wise.
         Install-Dependency -Uri $AsioSDKUrl `
-            -Name $AsioSDKName -Destination "ASIOSDK2"
+            -Name $AsioSDKName -Destination "..\libs\ASIOSDK2"
     }
 }
 
@@ -301,7 +325,7 @@ Function Build-Installer
 
     if ($BuildOption -ne "")
     {
-        Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+        Invoke-Native-Command -Command "$RootPath\libs\NSIS\NSIS-source\makensis" `
             -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
             "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
             "/DBUILD_OPTION=$BuildOption", `
@@ -309,7 +333,7 @@ Function Build-Installer
     }
     else
     {
-        Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+        Invoke-Native-Command -Command "$RootPath\libs\NSIS\NSIS-source\makensis" `
             -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
             "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
             "$WindowsPath\installer.nsi")
@@ -319,7 +343,7 @@ Function Build-Installer
 # Build and copy NS-Process dll
 Function Build-NSProcess
 {
-    if (!(Test-Path -path "$WindowsPath\nsProcess.dll")) {
+    if (!(Test-Path -path "$RootPath\libs\NSIS\nsProcess.dll")) {
 
         echo "Building nsProcess..."
 
@@ -327,11 +351,11 @@ Function Build-NSProcess
         Initialize-Build-Environment -BuildArch "x86"
 
         Invoke-Native-Command -Command "msbuild" `
-            -Arguments ("$WindowsPath\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
+            -Arguments ("$RootPath\libs\NSIS\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
             "/p:Platform=Win32")
 
-        Move-Item -Path "$WindowsPath\nsProcess\Release\nsProcess.dll" -Destination "$WindowsPath\nsProcess.dll" -Force
-        Remove-Item -Path "$WindowsPath\nsProcess\Release\" -Force -Recurse
+        Move-Item -Path "$RootPath\libs\NSIS\nsProcess\Release\nsProcess.dll" -Destination "$RootPath\libs\NSIS\nsProcess.dll" -Force
+        Remove-Item -Path "$RootPath\libs\NSIS\nsProcess\Release\" -Force -Recurse
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }
 }

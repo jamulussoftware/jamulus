@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2023
  *
  * Author(s):
  *  Volker Fischer
@@ -306,7 +306,7 @@ CONNECTION LESS MESSAGES
       NOTE: In the PROTMESSID_CLM_SERVER_LIST list, this field will be empty
       as only the initial IP address should be used by the client.  Where
       necessary, that value will contain the server internal address.
-      When running a directory server and a registered server behind the same
+      When running a directory and a registered server behind the same
       NAT, this field is used the other way round: It will contain the public
       IP in this case which will be served to clients from the Internet.
 
@@ -422,11 +422,11 @@ CONNECTION LESS MESSAGES
     - "status":
       Values of ESvrRegResult:
       0 - success
-      1 - failed due to directory server list being full
+      1 - failed due to directory's server list being full
       2 - your server version is too old
       3 - registration requirements not fulfilled
 
-    Note: the directory server may send this message in response to a
+    Note: the directory may send this message in response to a
           PROTMESSID_CLM_REGISTER_SERVER request.
           Where not received, the registering server may only retry up to
           five times for one registration request at 500ms intervals.
@@ -619,12 +619,10 @@ void CProtocol::CreateAndImmSendConLessMessage ( const int iID, const CVector<ui
 
 void CProtocol::ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData, const int iRecCounter, const int iRecID )
 {
-    // clang-format off
-/*
-// TEST channel implementation: randomly delete protocol messages (50 % loss)
-if ( rand() < ( RAND_MAX / 2 ) ) return false;
-*/
-    // clang-format on
+    //### TEST: BEGIN ###//
+    // channel implementation: randomly delete protocol messages (50 % loss)
+    // if ( rand() < ( RAND_MAX / 2 ) ) return false;
+    //### TEST: END ###//
 
     // In case we received a message and returned an answer but our answer
     // did not make it to the receiver, he will resend his message. We check
@@ -842,12 +840,11 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
 void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData, const int iRecID, const CHostAddress& InetAddr )
 {
-    // clang-format off
-/*
-// TEST channel implementation: randomly delete protocol messages (50 % loss)
-if ( rand() < ( RAND_MAX / 2 ) ) return false;
-*/
-    // clang-format on
+    //### TEST: BEGIN ###//
+    // Test channel implementation: randomly delete protocol messages (50 % loss)
+
+    // if ( rand() < ( RAND_MAX / 2 ) ) return false;
+    //### TEST: END ###//
 
     // check which type of message we received and do action
     switch ( iRecID )
@@ -2646,12 +2643,11 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
 
     // Extract actual data -----------------------------------------------------
 
-    // clang-format off
-// TODO this memory allocation is done in the real time thread but should be
-//      done in the low priority protocol management thread
-    // clang-format on
-
+    //### TODO: BEGIN ###//
+    // this memory allocation is done in the real time thread but should be
+    // done in the low priority protocol management thread
     vecbyMesBodyData.Init ( iLenBy );
+    //### TODO: END ###//
 
     iCurPos = MESS_HEADER_LENGTH_BYTE; // start from beginning of data
 

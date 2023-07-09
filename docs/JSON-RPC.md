@@ -29,7 +29,7 @@ The JSON-RPC server is based on the [JSON-RPC 2.0](https://www.jsonrpc.org/speci
 - A **response** from Jamulus to the consumer.
 - A **notification** from Jamulus to the consumer.
 
-**Tip:** On Linux, you can use the `nc` CLI tool. On Windows, you can download and use the `ncat` CLI tool.
+**Tip:** On Linux, you can connect to the JSON-RPC endpoint using the `nc` CLI tool. On Windows, you can download and use the `ncat` CLI tool.
 
 ## Example
 

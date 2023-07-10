@@ -31,7 +31,12 @@ The JSON-RPC server is based on the [JSON-RPC 2.0](https://www.jsonrpc.org/speci
 
 **Tip:** On Linux, you can connect to a JSON-RPC server using the `nc` CLI tool. On Windows, you can download and use the `ncat` CLI tool.  This snippet uses [jayson](https://www.npmjs.com/package/jayson) to connect using Node.js:
 
+<pre>const jayson = require("jayson/promise");
+const client = new jayson.client.tcp({ host: "127.0.0.1", port: 22100 });
 
+client.request('jamulusserver/getServerInfo', {})
+.then(console.log)
+.catch(console.error)</pre>
 ## Example
 
 After opening a TCP connection to the JSON-RPC server, the connection must be authenticated:

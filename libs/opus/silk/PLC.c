@@ -156,7 +156,7 @@ static OPUS_INLINE void silk_PLC_update(
         silk_memset( psPLC->LTPCoef_Q14, 0, LTP_ORDER * sizeof( opus_int16 ));
     }
 
-    /* Save LPC coefficients */
+    /* Save LPC coeficients */
     silk_memcpy( psPLC->prevLPC_Q12, psDecCtrl->PredCoef_Q12[ 1 ], psDec->LPC_order * sizeof( opus_int16 ) );
     psPLC->prevLTP_scale_Q14 = psDecCtrl->LTP_scale_Q14;
 
@@ -257,7 +257,7 @@ static OPUS_INLINE void silk_PLC_conceal(
     /* LPC concealment. Apply BWE to previous LPC */
     silk_bwexpander( psPLC->prevLPC_Q12, psDec->LPC_order, SILK_FIX_CONST( BWE_COEF, 16 ) );
 
-    /* Preload LPC coefficients to array on stack. Gives small performance gain */
+    /* Preload LPC coeficients to array on stack. Gives small performance gain */
     silk_memcpy( A_Q12, psPLC->prevLPC_Q12, psDec->LPC_order * sizeof( opus_int16 ) );
 
     /* First Lost frame */
@@ -328,10 +328,8 @@ static OPUS_INLINE void silk_PLC_conceal(
         for( j = 0; j < LTP_ORDER; j++ ) {
             B_Q14[ j ] = silk_RSHIFT( silk_SMULBB( harm_Gain_Q15, B_Q14[ j ] ), 15 );
         }
-        if ( psDec->indices.signalType != TYPE_NO_VOICE_ACTIVITY ) {
-            /* Gradually reduce excitation gain */
-            rand_scale_Q14 = silk_RSHIFT( silk_SMULBB( rand_scale_Q14, rand_Gain_Q15 ), 15 );
-        }
+        /* Gradually reduce excitation gain */
+        rand_scale_Q14 = silk_RSHIFT( silk_SMULBB( rand_scale_Q14, rand_Gain_Q15 ), 15 );
 
         /* Slowly increase pitch lag */
         psPLC->pitchL_Q8 = silk_SMLAWB( psPLC->pitchL_Q8, psPLC->pitchL_Q8, PITCH_DRIFT_FAC_Q16 );

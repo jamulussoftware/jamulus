@@ -205,8 +205,7 @@ Function Pass-Artifact-to-Job
     }
 
     $artifact = "jamulus_${JamulusVersion}_win${ArtifactSuffix}.exe"
-
-    echo "Copying artifact to ${artifact}"
+    echo "Copying artifact to .\deploy\${artifact}"
     move ".\deploy\Jamulus*installer-win.exe" ".\deploy\${artifact}"
     if ( !$? )
     {

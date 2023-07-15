@@ -13,8 +13,8 @@ param (
     # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
-    [string] $NsisName = "nsis-3.08",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.08/nsis-3.08.zip",
+    [string] $NsisName = "nsis-3.09",
+    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.09/nsis-3.09.zip",
     [string] $BuildOption = ""
 )
 

@@ -230,8 +230,8 @@ jobs:
             base_command:           QT_VERSION=6.5.2 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
-            # Latest Xcode which runs on macos-11:
-            xcode_version:          13.4.1
+            # Default Xcode which runs on macos-12:
+            xcode_version:          14.2.0
             is_main_build_target:   true
 
           # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
@@ -241,10 +241,9 @@ jobs:
             base_command:           QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
             # Enable CodeQL on mac legacy as this version does not get signed
             run_codeql:             true
-            # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
-            # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
+            # For Qt5 on Mac, we need to use an unsupported SDK version as macOS 12 doesn't
+            # support Xcode 12.1 which still ships SDK 10.15.
             # https://developer.apple.com/support/xcode/
-            # Xcode 12.1.1 is the most-recent 12.1.x release:
             # https://xcodereleases.com/
             xcode_version:          14.2.0
             is_main_build_target:   true
@@ -257,6 +256,8 @@ jobs:
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:
             run_codeql:             false
+            # Unfortunately, more modern Xcode versions no longer seem to support
+            # Qt 5.15.2. Therefore upgrading to Qt6 is needed in the medium term (#2711)
             xcode_version:          12.5.1
 
           - config_name:            Windows (artifact+codeQL)

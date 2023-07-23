@@ -154,7 +154,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2005-2023 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -3132,12 +3132,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagrywanie zostało wyłączone przez pole wyboru UI lub JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagrywanie zostało wyłączone, przez pole wyboru UI, SIGUSR2 lub JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="175"/>
@@ -3685,7 +3685,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista serwerów pełna w katalogu</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -3861,17 +3861,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../serverlist.cpp" line="425"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie ma już katalogu</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="784"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można otworzyć &apos;%1&apos; do odczytu/zapisu. Sprawdź, czy %2 ma uprawnienia (i czy jest wolne miejsce).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="791"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ładowanie pliku z listą trwałych serwerów: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="854"/>
@@ -3881,7 +3881,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../serverlist.cpp" line="865"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisywanie rejestracji dla %1 (%2): %3</translation>
     </message>
 </context>
 <context>

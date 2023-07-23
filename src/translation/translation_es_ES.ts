@@ -202,7 +202,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © 2005-2023 El Equipo de Desarrollo de Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -647,7 +647,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="54"/>
         <source>Input Level Meter</source>
-        <translation>Indicador nivel entrada</translation>
+        <translation>Indicador Nivel Entrada</translation>
     </message>
     <message>
         <source>The input level indicators show the input level of the two stereo channels of the current selected audio input.</source>
@@ -1358,7 +1358,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished">Interruptor auto jitter buffer</translation>
+        <translation>Casilla auto jitter buffer</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1437,7 +1437,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Activar Buffers Red Pequeños</translation>
+        <translation>Buffers Red Pequeños</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1450,7 +1450,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished">Activar buffers de red pequeños</translation>
+        <translation>Casilla buffers de red pequeños</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1659,12 +1659,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protección contra Retroalimentación</translation>
+        <translation>Protección contra Retroalimentación</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished">Activa la protección contra retroalimentación para detectar retroalimentación entre el micrófono y los altavoces.</translation>
+        <translation>Evita la retroalimentación acústica entre el micrófono y los altavoces.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -1674,12 +1674,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Alertas Sonoras</translation>
+        <translation>Alertas Sonoras</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished">Activa la alerta sonora al recibir un mensaje de chat y cuando un nuevo cliente se une a la sesión. Para escuchar las alertas puede ser necesario un segundo dispositivo de audio.</translation>
+        <translation>Activa la alerta sonora al recibir un mensaje de chat y cuando un nuevo cliente se une a la sesión. Para escuchar las alertas puede ser necesario un segundo dispositivo de audio.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -2641,7 +2641,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Activar Buffers Pequeños</translation>
+        <translation>Buffers Red Pequeños</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2725,7 +2725,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Alertas Sonoras</translation>
+        <translation>Alertas Sonoras</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2780,7 +2780,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protección contra Retroalimentación</translation>
+        <translation>Protección contra Retroalimentación</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -3638,12 +3638,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>La grabación se ha desactivado mediante la casilla de la interfaz gráfica o JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>La grabación se ha desactivado, mediante la casilla de la interfaz gráfica, SIGUSR2 o JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -3927,12 +3927,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Habilitar Grabación</translation>
+        <translation>Grabación de Jams</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
-        <translation type="unfinished">Activado cuando la grabación está habilitada. La grabación se ejecutará cuando una sesión esté en marcha, si está habilitada (y correctamente configurada).</translation>
+        <translation>La grabación se ejecutará cuando una sesión esté en marcha, si está habilitada (y correctamente configurada).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="147"/>
@@ -4222,7 +4222,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de Servidores llena en el Directorio</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -4322,7 +4322,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished">Activar paneo con retardo</translation>
+        <translation>Paneo con retardo</translation>
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
@@ -4359,7 +4359,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Activar Grabación de Jams</translation>
+        <translation>Grabación de Jams</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
@@ -4417,22 +4417,22 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverlist.cpp" line="419"/>
         <source>Now a directory</source>
-        <translation type="unfinished">Ahora un directorio</translation>
+        <translation>Ahora un Directorio</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="425"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Ya no es un Directorio</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="784"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha podido abrir &apos;%1&apos; para lectura/escritura. Por favor, comprueba que %2 tiene permiso (y que hay espacio libre).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="791"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargando archivo de lista de Servidores persistentes: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="854"/>
@@ -4442,7 +4442,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverlist.cpp" line="865"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardando registro para %1 (%2): %3</translation>
     </message>
 </context>
 <context>

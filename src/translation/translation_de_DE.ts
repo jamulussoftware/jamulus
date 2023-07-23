@@ -190,7 +190,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © 2005-2023 The Jamulus Development Team</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -1334,7 +1334,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished">Automatik für die Netzwerkpuffergröße aktivieren</translation>
+        <translation>Automatik für Netzwerkpuffergröße Checkbox</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1413,7 +1413,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Aktiviere kleine Netzwerkpuffer</translation>
+        <translation>Kleine Netzwerkpuffer</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1426,7 +1426,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished">Aktiviere kleine Netzwerkpuffer Schalter</translation>
+        <translation>Kleine Netzwerkpuffer checkbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1635,12 +1635,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Feedback-Schutz</translation>
+        <translation>Feedback-Schutz</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished">Aktiviere den Feedback-Schutz, um ein akustisches Feedback zwischen Mikrofon und Lautsprechern zu erkennen.</translation>
+        <translation>Aktiviere den Feedback-Schutz, um ein akustisches Feedback zwischen Mikrofon und Lautsprechern zu erkennen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -1650,12 +1650,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Audiohinweise</translation>
+        <translation>Audiohinweise</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished">Aktiviert Audiohinweise beim Empfang einer Chat-Nachricht bzw. wenn ein neuer Client beitritt. Möglicherweise ist ein zweites Audiogerät erforderlich, um die Hinweise zu hören.</translation>
+        <translation>Aktiviert Audiohinweise beim Empfang einer Chat-Nachricht bzw. wenn ein neuer Client beitritt. Möglicherweise ist ein zweites Audiogerät erforderlich, um die Hinweise zu hören.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -2613,7 +2613,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Aktiviere kleine Netzwerkpuffer</translation>
+        <translation>Kleine Netzwerkpuffer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2697,7 +2697,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Audiohinweise</translation>
+        <translation>Audiohinweise</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2753,7 +2753,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Feedback-Schutz</translation>
+        <translation>Feedback-Schutz</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -3574,12 +3574,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="137"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Aufnahme wurde über die Checkbox in der grafischen Oberfläche oder JSON-RPC ausgeschaltet.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Aufnahme wurde über die Checkbox in der grafischen Oberfläche, SIGUSR2 oder JSON-RPC ausgeschaltet.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -3867,12 +3867,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Aktiviere die Aufnahmefunktion</translation>
+        <translation>Aufnahmefunktion</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
-        <translation type="unfinished">Angehakt, wenn die Aufnahmefunktion aktiviert ist. Die Aufnahme wird automatisch gestartet, wenn eine Jam-Session läuft.</translation>
+        <translation>Aktiviert, wenn die Aufnahmefunktion aktiviert ist. Die Aufnahme wird automatisch gestartet, wenn eine Jam-Session läuft.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="147"/>
@@ -4162,7 +4162,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverliste des Verzeichnisses voll</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -4262,7 +4262,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished">Aktiviere verzögertes Panning</translation>
+        <translation>Verzögertes Panning</translation>
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
@@ -4299,7 +4299,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Aktiviere die Aufnahmefunktion</translation>
+        <translation>Aufnahmefunktion</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
@@ -4353,22 +4353,22 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverlist.cpp" line="419"/>
         <source>Now a directory</source>
-        <translation type="unfinished">Jetzt ein Verzeichnis</translation>
+        <translation>Jetzt ein Verzeichnis</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="425"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Verzeichnis mehr</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="784"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>Konnte &apos;%1&apos; nicht zum Lesen/Schreiben öffnen. Checke, dass %2 korrekte Berechtigungen hat (und genug Speicher frei ist).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="791"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Lade Persistenzdatei für Serverliste: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="854"/>
@@ -4378,7 +4378,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverlist.cpp" line="865"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere Registrierung für %1 (%2): %3</translation>
     </message>
 </context>
 <context>

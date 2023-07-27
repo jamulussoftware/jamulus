@@ -59,7 +59,7 @@
     <message>
         <location filename="../util.cpp" line="691"/>
         <source>Github Contributors list</source>
-        <translation>liste de contributeurs sur GitHub</translation>
+        <translation>Liste de contributeurs sur GitHub</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="694"/>

@@ -339,7 +339,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="166"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation>En cochant la case Solo, le canal audio est réglé sur solo, ce qui signifie que tous les autres canaux non cochés seront en sourdine. Il est possible de mettre plus d&apos;un canal en solo.</translation>
+        <translation>En cochant la case Solo, le canal audio peut être réglé sur solo, ce qui signifie que tous les canaux qui ne sont pas cochés, sont en sourdine. Il est possible de mettre plus d&apos;un canal en solo.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="172"/>
@@ -349,7 +349,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="173"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation>Avec la case à cocher Grp, on peut définir un groupe de canaux audio. Tous les curseurs de canaux d&apos;un groupe sont déplacés en conservant leurs niveaux relatifs si l&apos;un des curseurs du groupe est déplacé.</translation>
+        <translation>Avec la case à cocher Grp, un groupe de canaux audio peut être défini. Tous les chariots de canaux d&apos;un groupe sont déplacés en synchronisation proportionnelle si l&apos;un des chariots du groupe est déplacé.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="176"/>
@@ -513,7 +513,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="54"/>
         <source>Type a message here</source>
-        <translation>Saisissez votre message ici</translation>
+        <translation>Saisissez un message ici</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="58"/>
@@ -578,12 +578,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="78"/>
         <source>Simulates an analog LED level meter.</source>
-        <translation>Simule un indicateur de niveau analogique à diodes.</translation>
+        <translation>Simule un indicateur de niveau analogique à diode.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="95"/>
         <source>Connect/Disconnect Button</source>
-        <translation>Bouton Connecter/Déconnecter</translation>
+        <translation>Bouton connecter/déconnecter</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="99"/>
@@ -601,7 +601,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="55"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
-        <translation>Ceci indique le niveau des deux canaux stéréo de votre entrée audio.</translation>
+        <translation>Ceci indique le niveau des deux canaux stéréo pour votre entrée audio.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="62"/>
@@ -620,12 +620,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="102"/>
         <source>Reverb effect</source>
-        <translation>Réverbération</translation>
+        <translation>Effet de réverbération</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="103"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
-        <translation>La réverbération peut être appliquée à un canal audio mono local ou aux deux canaux en mode stéréo. La sélection du canal mono et le niveau de réverbération peuvent être modifiés. Par exemple, si un signal de microphone est envoyé sur le canal audio droit de la carte son et qu&apos;un effet de réverbération doit être appliqué, réglez le sélecteur de canal à droite et déplacez le curseur vers le haut jusqu&apos;au niveau de réverbération souhaité.</translation>
+        <translation>La réverbération peut être appliquée à un canal audio mono local ou aux deux canaux en mode stéréo. La sélection du canal mono et le niveau de réverbération peuvent être modifiés. Par exemple, si un signal de microphone est envoyé sur le canal audio droit de la carte son et qu&apos;un effet de réverbération doit être appliqué, réglez le sélecteur de canal à droite et déplacez le chariot vers le haut jusqu&apos;à ce que le niveau de réverbération souhaité soit atteint.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="114"/>
@@ -664,7 +664,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="133"/>
         <source>The delay is perfect for a jam session.</source>
-        <translation>Ce retard est parfait pour une séance de bœufs.</translation>
+        <translation>Ce délai est parfait pour une séance de bœufs.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="138"/>
@@ -679,17 +679,17 @@
     <message>
         <location filename="../clientdlg.cpp" line="152"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation>Si ce témoin lumineux devient rouge, ça va pas être le pied avec %1.</translation>
+        <translation>Si ce témoin lumineux devient rouge, ça ne sera pas génial d&apos;utiliser %1.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="157"/>
         <source>Delay status LED indicator</source>
-        <translation>LED d&apos;état du retard</translation>
+        <translation>Indicateur diode lumineuse d&apos;état de délai</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="96"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
-        <translation>Ouvre une fenêtre dans laquelle vous pouvez sélectionner un serveur auquel vous connecter. Si vous êtes déjà connecté, ce bouton mettra fin à la session.</translation>
+        <translation>Ouvre une fenêtre dans laquelle vous pouvez sélectionner un serveur auquel vous connecter. Si vous êtes connecté, appuyer sur ce bouton mettra fin à la session.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
@@ -699,12 +699,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="139"/>
         <source>A session is still possible but it may be harder to play.</source>
-        <translation>Une session est quand-même possible mais il sera sûrement plus difficile de jouer.</translation>
+        <translation>Une session est toujours possible mais il sera probablement plus difficile de jouer.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="145"/>
         <source>The delay is too large for jamming.</source>
-        <translation>Le retard est trop important pour bœuffer.</translation>
+        <translation>Le délai est trop important pour bœuffer.</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>

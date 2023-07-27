@@ -124,7 +124,7 @@
     <message>
         <location filename="../util.cpp" line="754"/>
         <source>About %1</source>
-        <translation>À propos %1</translation>
+        <translation>À propos de %1</translation>
     </message>
     <message>
         <source>About </source>
@@ -201,7 +201,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="904"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation>Lorsque vous êtes connecté à un serveur, les contrôles vous permettent de régler votre mixage local sans affecter ce que les autres entendent de vous. Le titre indique le nom du serveur et, lorsque c&apos;est le cas, s&apos;il est en train d&apos;enregistrer.</translation>
+        <translation>Lorsque vous êtes connecté à un serveur, ces contrôles vous permettent de régler votre mixage local sans affecter ce que les autres entendent de vous. Le titre indique le nom du serveur et, lorsque c&apos;est le cas, s&apos;il est en train d&apos;enregistrer.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="977"/>
@@ -229,7 +229,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="139"/>
         <source>Channel Level</source>
-        <translation>Niveau de canal</translation>
+        <translation>Niveau du canal</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="142"/>
@@ -239,7 +239,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="145"/>
         <source>Mixer Fader</source>
-        <translation>Chariot du mixeur</translation>
+        <translation>Curseur de mixage</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="148"/>
@@ -289,12 +289,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="178"/>
         <source>Fader Tag</source>
-        <translation>Étiquette de chariot</translation>
+        <translation>Étiquette de curseur</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="179"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation>L&apos;étiquette de chariot identifie le client connecté. Votre nom, une image de votre instrument et le drapeau de votre emplacement peuvent être définis dans la fenêtre principale.</translation>
+        <translation>L&apos;étiquette de curseur identifie le client connecté. Votre nom, une image de votre instrument et le drapeau de votre emplacement peuvent être définis dans la fenêtre principale.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="188"/>
@@ -309,7 +309,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="140"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
-        <translation>Affiche le niveau audio pré-chariot de ce canal.  Tous les clients connectés au serveur se verront attribuer un niveau audio, la même valeur pour chaque client.</translation>
+        <translation>Affiche le niveau audio pré-curseur de ce canal.  Tous les clients connectés au serveur se verront attribuer un niveau audio, la même valeur pour chaque client.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="67"/>
@@ -324,7 +324,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="146"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
-        <translation>Ajuste le niveau audio de ce canal. Tous les clients connectés au serveur se verront attribuer un chariot audio, affiché sur chaque client, pour ajuster le mixage local.</translation>
+        <translation>Ajuste le niveau audio de ce canal. Tous les clients connectés au serveur se verront attribuer un curseur audio, affiché sur chaque client, pour ajuster le mixage local.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="154"/>
@@ -334,12 +334,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="158"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation>Règle le panoramique de gauche à droite du canal. Fonctionne uniquement en mode stéréo ou de préférence en mode entrée mono/sortie stéréo.</translation>
+        <translation>Règle le panoramique du canal de gauche à droite. Fonctionne uniquement en mode stéréo ou de préférence en mode entrée mono/sortie stéréo.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="166"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation>En cochant la case Solo, le canal audio peut être réglé sur solo, ce qui signifie que tous les canaux qui ne sont pas cochés, sont en sourdine. Il est possible de mettre plus d&apos;un canal en solo.</translation>
+        <translation>En cochant la case Solo, le canal audio est réglé sur solo, ce qui signifie que tous les autres canaux non cochés seront en sourdine. Il est possible de mettre plus d&apos;un canal en solo.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="172"/>
@@ -349,7 +349,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="173"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation>Avec la case à cocher Grp, un groupe de canaux audio peut être défini. Tous les chariots de canaux d&apos;un groupe sont déplacés en synchronisation proportionnelle si l&apos;un des chariots du groupe est déplacé.</translation>
+        <translation>Avec la case à cocher Grp, on peut définir un groupe de canaux audio. Tous les curseurs de canaux d&apos;un groupe sont déplacés en conservant leurs niveaux relatifs si l&apos;un des curseurs du groupe est déplacé.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="176"/>
@@ -363,12 +363,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="184"/>
         <source>Mixer channel instrument picture</source>
-        <translation>Image d&apos;instrument de canal de mixeur</translation>
+        <translation>Image d&apos;instrument du canal de mixeur</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="186"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation>Label de canal de mixeur (étiquette de chariot)</translation>
+        <translation>Label de canal de mixeur (étiquette de curseur)</translation>
     </message>
     <message>
         <source>Mixer channel country flag</source>
@@ -412,7 +412,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="796"/>
         <source>Alias/Name</source>
-        <translation>Pseudo/nom</translation>
+        <translation>Pseudo/Nom</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="803"/>
@@ -429,12 +429,12 @@
         <location filename="../audiomixerboard.cpp" line="845"/>
         <location filename="../audiomixerboard.cpp" line="851"/>
         <source>Skill Level</source>
-        <translation>Niveau de compétence</translation>
+        <translation>Virtuosité</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="872"/>
         <source>Alias</source>
-        <translation>Alias</translation>
+        <translation>Pseudo</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="838"/>
@@ -508,12 +508,12 @@
     <message>
         <location filename="../chatdlg.cpp" line="44"/>
         <source>New chat text edit box</source>
-        <translation>Nouvelle boite d&apos;édition de texte de tchate</translation>
+        <translation>Nouvelle boîte d&apos;édition de texte de tchate</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="54"/>
         <source>Type a message here</source>
-        <translation>Écrivez un message ici</translation>
+        <translation>Saisissez votre message ici</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="58"/>

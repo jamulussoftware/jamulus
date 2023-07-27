@@ -1,4 +1,4 @@
-### 3.9.1dev <- NOTE: the release version number will be 3.10.0 ###
+### 3.9.1nightly1 <- NOTE: the release version number will be 3.10.0 ###
 
 - Mac: The legacy build now uses the macOS 13.1 SDK which is unsupported by Qt 5.9.9. We still provide the legacy build, but from now on consider it as deprecated. You are advised to upgrade your OS (#3066).
   (contributed by @ann0see)

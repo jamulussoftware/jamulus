@@ -578,12 +578,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="78"/>
         <source>Simulates an analog LED level meter.</source>
-        <translation>Simule un indicateur de niveau analogique à diode.</translation>
+        <translation>Simule un indicateur de niveau analogique à diodes.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="95"/>
         <source>Connect/Disconnect Button</source>
-        <translation>Bouton connecter/déconnecter</translation>
+        <translation>Bouton Connecter/Déconnecter</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="99"/>
@@ -601,7 +601,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="55"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
-        <translation>Ceci indique le niveau des deux canaux stéréo pour votre entrée audio.</translation>
+        <translation>Ceci indique le niveau des deux canaux stéréo de votre entrée audio.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="62"/>
@@ -620,12 +620,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="102"/>
         <source>Reverb effect</source>
-        <translation>Effet Réverbe</translation>
+        <translation>Réverbération</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="103"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
-        <translation>La réverbération peut être appliquée à un canal audio mono local ou aux deux canaux en mode stéréo. La sélection du canal mono et le niveau de réverbération peuvent être modifiés. Par exemple, si un signal de microphone est envoyé sur le canal audio droit de la carte son et qu&apos;un effet de réverbération doit être appliqué, réglez le sélecteur de canal à droite et déplacez le chariot vers le haut jusqu&apos;à ce que le niveau de réverbération souhaité soit atteint.</translation>
+        <translation>La réverbération peut être appliquée à un canal audio mono local ou aux deux canaux en mode stéréo. La sélection du canal mono et le niveau de réverbération peuvent être modifiés. Par exemple, si un signal de microphone est envoyé sur le canal audio droit de la carte son et qu&apos;un effet de réverbération doit être appliqué, réglez le sélecteur de canal à droite et déplacez le curseur vers le haut jusqu&apos;au niveau de réverbération souhaité.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="114"/>
@@ -664,7 +664,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="133"/>
         <source>The delay is perfect for a jam session.</source>
-        <translation>Le délai est parfait pour une séance de bœufs.</translation>
+        <translation>Ce retard est parfait pour une séance de bœufs.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="138"/>
@@ -679,17 +679,17 @@
     <message>
         <location filename="../clientdlg.cpp" line="152"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation>Si ce témoin lumineux devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser %1.</translation>
+        <translation>Si ce témoin lumineux devient rouge, ça va pas être le pied avec %1.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="157"/>
         <source>Delay status LED indicator</source>
-        <translation>Indicateur diode lumineuse d&apos;état de délai</translation>
+        <translation>LED d&apos;état du retard</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="96"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
-        <translation>Ouvre une fenêtre dans laquelle vous pouvez sélectionner un serveur auquel vous connecter. Si vous êtes connecté, le fait d&apos;appuyer sur ce bouton mettra fin à la session.</translation>
+        <translation>Ouvre une fenêtre dans laquelle vous pouvez sélectionner un serveur auquel vous connecter. Si vous êtes déjà connecté, ce bouton mettra fin à la session.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
@@ -699,12 +699,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="139"/>
         <source>A session is still possible but it may be harder to play.</source>
-        <translation>Une session est toujours possible mais il sera probablement plus difficile de jouer.</translation>
+        <translation>Une session est quand-même possible mais il sera sûrement plus difficile de jouer.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="145"/>
         <source>The delay is too large for jamming.</source>
-        <translation>Le délai est trop important pour bœuffer.</translation>
+        <translation>Le retard est trop important pour bœuffer.</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
@@ -717,7 +717,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="170"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation>Le délai du tampon de la carte son (taille du tampon) est trop petit (voir la fenêtre des paramètres).</translation>
+        <translation>Le retard de tampon de la carte son (taille du tampon) est trop petit (voir la fenêtre des paramètres).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="174"/>
@@ -784,7 +784,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="729"/>
         <source>%1 Directory</source>
-        <translation>%1 Répertoire</translation>
+        <translation>Répertoire de %1</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1171"/>
@@ -824,7 +824,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
         <source>Delay Status LED</source>
-        <translation>Voyant d&apos;état de délai</translation>
+        <translation>Voyant d&apos;état du retard</translation>
     </message>
     <message>
         <source>Buffers Status LED</source>
@@ -847,12 +847,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation>Le temps de ping est le temps nécessaire au flux audio pour aller du client au serveur et revenir. Ce délai est introduit par le réseau et doit être d&apos;environ 20 à 30 ms. Si ce délai est supérieur à environ 50 ms, la distance qui vous sépare du serveur est trop importante ou votre connexion internet n&apos;est pas suffisante.</translation>
+        <translation>Le temps de ping est le temps nécessaire au flux audio pour aller du client au serveur et revenir. Ce délai est induit par le réseau et doit être d&apos;environ 20 à 30 ms. Si ce délai est supérieur à environ 50 ms, la distance qui vous sépare du serveur est trop importante ou votre connexion internet est insuffisante.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="199"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation>Le délai global est calculé à partir du temps de ping actuel et du délai introduit par les paramètres actuels de la mémoire tampon.</translation>
+        <translation>Le retard global est calculé à partir du temps de ping actuel et du délai introduit par les paramètres actuels de la mémoire tampon.</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
@@ -865,12 +865,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="290"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation>&amp;Charger la configuration des canaux du mixeur...</translation>
+        <translation>&amp;Charger une configuration de canaux de mixage...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="292"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation>&amp;Sauvegarder la configuration des canaux du mixeur...</translation>
+        <translation>&amp;Sauvegarder la configuration de canaux de mixage...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="387"/>
@@ -899,7 +899,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="315"/>
         <source>O&amp;wn Fader First</source>
-        <translation>&amp;Chariot personnel en premier</translation>
+        <translation>&amp;Curseur personnel en premier</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="323"/>
@@ -924,7 +924,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="303"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation>Régler tous &amp;les chariots sur le niveau d&apos;un nouveau client</translation>
+        <translation>Régler tous &amp;les curseurs sur le niveau d&apos;un nouveau client</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="160"/>
@@ -944,7 +944,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="188"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation>Indicateur du voyant d&apos;état du tampon de gigue local</translation>
+        <translation>LED d&apos;état du tampon de gigue local</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="191"/>
@@ -954,7 +954,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="308"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation>Auto-ajuster tous les &amp;chariots</translation>
+        <translation>Auto-ajuster tous les &amp;curseurs</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -1025,7 +1025,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
-        <translation>Délai</translation>
+        <translation>Retard</translation>
     </message>
     <message>
         <source>Buffers</source>
@@ -1131,17 +1131,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="87"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation>Le réglage du tampon de gigue est donc un compromis entre la qualité audio et le délai global.</translation>
+        <translation>Le réglage du tampon de gigue est donc un compromis entre la qualité audio et le retard global.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="112"/>
         <source>Local jitter buffer slider control</source>
-        <translation>Chariot de contrôle de la mémoire tampon de la gigue locale</translation>
+        <translation>Curseur de contrôle de la mémoire tampon de la gigue locale</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="115"/>
         <source>Server jitter buffer slider control</source>
-        <translation>Chariot de contrôle de la mémoire tampon de la gigue du serveur</translation>
+        <translation>Curseur de contrôle de la mémoire tampon de la gigue du serveur</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
@@ -1187,12 +1187,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="149"/>
         <source>Sound Card Channel Mapping</source>
-        <translation>Cartographie des canaux de la carte son</translation>
+        <translation>Correspondance des canaux de la carte son</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="150"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation>Si la carte son sélectionnée offre plus d&apos;un canal d&apos;entrée ou de sortie, les paramètres de cartographie des canaux d&apos;entrées et de sorties sont visibles.</translation>
+        <translation>Si la carte son sélectionnée offre plus d&apos;un canal d&apos;entrée ou de sortie, les paramètres de correspondance des canaux d&apos;entrées et de sorties sont visibles.</translation>
     </message>
     <message>
         <source>For each </source>
@@ -1239,12 +1239,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
         <source>Sound Card Buffer Delay</source>
-        <translation>Délai de temporisation de l&apos;interface audio</translation>
+        <translation>Retard du tampon de l&apos;interface audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation>Le paramètre de délai de mise en mémoire tampon est un paramètre fondamental de %1. Ce paramètre a une influence sur de nombreuses propriétés de la connexion.</translation>
+        <translation>Le paramètre de retard de mise en mémoire tampon est un paramètre fondamental de %1. Ce paramètre a une influence sur de nombreuses propriétés de la connexion.</translation>
     </message>
     <message>
         <source>Three buffer sizes are supported</source>
@@ -1261,7 +1261,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="219"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation>Le réglage de la mémoire tampon est donc un compromis entre la qualité audio et le délai global.</translation>
+        <translation>Le réglage de la mémoire tampon est donc un compromis entre la qualité audio et le retard global.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="260"/>
@@ -1344,7 +1344,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="340"/>
         <source>New client level edit box</source>
-        <translation>Nouvelle boîte d&apos;édition de niveau des nouveaux clients</translation>
+        <translation>Boîte d&apos;édition du niveau des nouveaux clients</translation>
     </message>
     <message>
         <source>Custom Directory Server Address</source>
@@ -1371,12 +1371,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="307"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
-        <translation> mode augmentera le débit de données de votre flux. Assurez-vous que votre débit montant ne dépasse pas la vitesse de téléchargement disponible de votre connexion internet.</translation>
+        <translation> mode augmentera le débit de données de votre flux. Assurez-vous que votre taux montant ne dépasse pas la vitesse d&apos;envoi disponible de votre connexion internet.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="431"/>
         <source>Mono-in/Stereo-out</source>
-        <translation>Mono-entrée/stéréo-sortie</translation>
+        <translation>Entrée Mono/Sortie Stéréo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>

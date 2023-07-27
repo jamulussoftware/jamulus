@@ -1395,7 +1395,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="58"/>
         <source>Local Audio Input Fader</source>
-        <translation>Chariot d&apos;entrée audio locale</translation>
+        <translation>Curseur d&apos;entrée audio locale</translation>
     </message>
     <message>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
@@ -1418,27 +1418,27 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="72"/>
         <source>Local audio input fader (left/right)</source>
-        <translation>Chariot d&apos;entrée audio locale (gauche/droite)</translation>
+        <translation>Curseur d&apos;entrée audio locale (gauche/droite)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="76"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation>Le tampon de gigue compense les gigues de synchronisation du réseau et de la carte son. La taille de la mémoire tampon influence donc la qualité du flux audio (le nombre de désynchronisations) et le délai global (plus la mémoire tampon est grande, plus le délai est important).</translation>
+        <translation>Le tampon de gigue compense les gigues de synchronisation du réseau et de la carte son. La taille de la mémoire tampon influence donc la qualité du flux audio (le nombre de désynchronisations) et le retard global (plus la mémoire tampon est grande, plus le retard est important).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="81"/>
         <source>You can set the jitter buffer size manually for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.</source>
-        <translation>Vous pouvez définir manuellement la taille du tampon de gigue pour le client local et le serveur distant. Pour la mémoire tampon de gigue locale, les désynchronisations dans le flux audio sont indiquées par le voyant situé sous les chariots de taille de la mémoire tampon de gigue. Si le voyant devient rouge, cela signifie qu&apos;il y a eu un dépassement ou une sous-utilisation de la mémoire tampon et que le flux audio est interrompu.</translation>
+        <translation>Vous pouvez définir manuellement la taille du tampon de gigue pour le client local et le serveur distant. Pour la mémoire tampon de gigue locale, les désynchronisations dans le flux audio sont indiquées par le voyant situé sous les curseurs de taille de la mémoire tampon de gigue. Le voyant qui devient rouge indique qu&apos;un dépassement ou une sous-utilisation de la mémoire tampon a eu lieu et que le flux audio a été interrompu.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="90"/>
         <source>If the Auto setting is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If Auto is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
-        <translation>Si le paramètre Auto est activé, les tampons de gigue du client local et du serveur distant sont automatiquement réglés en fonction des mesures de la gigue de synchronisation du réseau et de la carte son. Si le paramètre Auto est activé, les chariots de la taille des tampons de gigue sont désactivés (ils ne peuvent pas être déplacés avec la souris).</translation>
+        <translation>Si le paramètre Auto est activé, les tampons de gigue du client local et du serveur distant sont automatiquement réglés en fonction des mesures de la gigue de synchronisation du réseau et de la carte son. Les curseurs de la taille des tampons de gigue sont alors désactivés (ils ne peuvent pas être déplacés avec la souris).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="96"/>
         <source>If the Auto setting is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the Auto setting and to lower the jitter buffer size manually by using the sliders until your personal acceptable amount of dropouts is reached. The LED indicator will display the audio dropouts of the local jitter buffer with a red light.</source>
-        <translation>Si le paramètre Auto est activé, les tampons réseau du client local et du serveur distant sont réglés sur une valeur prudente pour minimiser la probabilité d&apos;interruption de l&apos;audio. Pour régler le délai/latence audio, il est recommandé de désactiver le paramètre Auto et de réduire manuellement la taille du tampon de gigue en utilisant les chariots jusqu&apos;à ce que le nombre d&apos;interruptions soit acceptable. L&apos;indicateur LED affichera les désynchronisations audio du tampon de gigue local avec un voyant rouge.</translation>
+        <translation>Si le paramètre Auto est activé, les tampons réseau du client local et du serveur distant sont réglés sur une valeur prudente pour minimiser la probabilité d&apos;interruption de l&apos;audio. Pour régler manuellement le retard/latence audio, il faut désactiver le paramètre Auto et réduire la taille du tampon de gigue en utilisant les curseurs jusqu&apos;à ce que le nombre d&apos;interruptions soit acceptable. L&apos;indicateur LED affichera les désynchronisations audio du tampon de gigue local avec un voyant rouge.</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
@@ -1464,7 +1464,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
         <source>Skin</source>
-        <translation>thème graphique</translation>
+        <translation>Thème graphique</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
@@ -1479,7 +1479,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation>Sélectionnez le style d&apos;indicateur à utiliser pour les indicateurs de niveaux. Les options barres (étroites) et diodes lumineuses (rondes, petites) ne s&apos;appliquent qu&apos;au tableau de mixage. Lorsque l&apos;option Barre (étroite) est sélectionnée, les indicateurs d&apos;entrées sont réglés sur barres (larges). Lorsque l&apos;option diodes lumineuses (rondes, petites) est sélectionnée, les indicateurs d&apos;entrées sont réglés sur diodes lumineuses (rondes, grandes). Les autres options s&apos;appliquent au tableau de mixage et aux indicateurs d&apos;entrées.</translation>
+        <translation>Sélectionnez le style d&apos;indicateurs à utiliser pour les indicateurs de niveaux. Les options barres (étroites) et diodes lumineuses (rondes, petites) ne s&apos;appliquent qu&apos;au tableau de mixage. Lorsque l&apos;option Barre (étroite) est sélectionnée, les indicateurs d&apos;entrées sont réglés sur barres (larges). Lorsque l&apos;option diodes lumineuses (rondes, petites) est sélectionnée, les indicateurs d&apos;entrées sont réglés sur diodes lumineuses (rondes, grandes). Les autres options s&apos;appliquent au tableau de mixage et aux indicateurs d&apos;entrées.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="280"/>
@@ -1538,17 +1538,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="332"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
-        <translation>Ce paramètre définit le niveau du chariot d&apos;un client nouvellement connecté en pourcentage. Si un nouveau client se connecte au serveur actuel, il obtiendra le niveau de chariot initial spécifié si aucun autre niveau de chariot provenant d&apos;une connexion précédente de ce client n&apos;a déjà été enregistré.</translation>
+        <translation>Ce paramètre définit le niveau du curseur d&apos;un client nouvellement connecté en pourcentage. Si un nouveau client se connecte au serveur actuel, il obtiendra le niveau de curseur initial spécifié si aucun autre niveau de curseur provenant d&apos;une connexion précédente de ce client n&apos;a déjà été enregistré.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="343"/>
         <source>Input Boost</source>
-        <translation>Amplification de l&apos;entrée</translation>
+        <translation>Amplification d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="344"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation>Ce paramètre vous permet d&apos;augmenter le niveau de votre signal d&apos;entrée par des facteurs allant jusqu&apos;à 10 (+20dB). Si votre son est trop faible, essayez d&apos;abord d&apos;augmenter le niveau en vous rapprochant du microphone, en réglant votre équipement de sonorisation ou en augmentant les niveaux dans les paramètres d&apos;entrée de votre système d&apos;exploitation. Ce n&apos;est qu&apos;en cas d&apos;échec que vous pouvez définir un facteur ici. Si votre son est trop fort, s&apos;il est déformé et s&apos;il y a de l&apos;écrêtage, cette option ne vous aidera pas. Ne l&apos;utilisez pas. La distorsion sera toujours présente. Diminuez plutôt votre niveau d&apos;entrée en vous éloignant de votre microphone, en réglant votre équipement de sonorisation ou en diminuant les paramètres d&apos;entrée de votre système d&apos;exploitation.</translation>
+        <translation>Ce paramètre vous permet d&apos;augmenter le niveau de votre signal d&apos;entrée par des facteurs allant jusqu&apos;à 10 (+20dB). Si votre son est trop faible, essayez d&apos;abord d&apos;augmenter le niveau en vous rapprochant du microphone, en réglant votre matériel audio ou en augmentant les niveaux dans les paramètres d&apos;entrée de votre système d&apos;exploitation. Ce n&apos;est qu&apos;en cas d&apos;échec que vous pouvez définir un facteur ici. Si votre son est trop fort, s&apos;il est déformé et s&apos;il y a de l&apos;écrêtage, cette option ne vous aidera pas. Ne l&apos;utilisez pas. La distorsion sera toujours présente. Diminuez plutôt votre niveau d&apos;entrée en vous éloignant de votre microphone, en réglant votre matériel ou en abaissant le niveau dans les paramètres d&apos;entrée de votre système d&apos;exploitation.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="357"/>
@@ -1636,12 +1636,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="208"/>
         <source>If no buffer size is selected and all settings are disabled, this means a buffer size in use by the driver which does not match the values. %1 will still work with this setting but may have restricted performance.</source>
-        <translation>Si aucune taille de tampon n&apos;est sélectionnée et que tous les paramètres sont désactivés, cela signifie que la taille de tampon utilisée par le pilote ne correspond pas aux valeurs. %1 fonctionnera toujours avec ce paramètre, mais ses performances seront peut-être limitées.</translation>
+        <translation>Si aucune taille de tampon n&apos;est sélectionnée et que tous les paramètres sont désactivés, cela signifie que la taille de tampon utilisée par le pilote ne correspond pas aux valeurs. %1 fonctionnera toujours avec cette configuration, mais ses performances seront peut-être limitées.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="214"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation>Le délai réel de la mémoire tampon a une influence sur la connexion, le débit de téléchargement actuel et le délai global. Plus la taille de la mémoire tampon est faible, plus la probabilité d&apos;un voyant rouge dans l&apos;indicateur d&apos;état (désynchronisation) est élevée, plus le débit de téléchargement est élevé et plus le délai global est faible.</translation>
+        <translation>Le retard réel de la mémoire tampon a une influence sur la connexion, le débit d&apos;envoi actuel et le retard global. Plus la taille du tampon est faible, plus la probabilité d&apos;un voyant rouge dans l&apos;indicateur d&apos;état (désynchronisation) est élevée, plus le débit d&apos;envoi est élevé et plus le retard global est faible.</translation>
     </message>
     <message>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
@@ -1669,7 +1669,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="277"/>
         <source>Meter Style combo box</source>
-        <translation>Choix déroulant de style d&apos;indicateur</translation>
+        <translation>Choix déroulant de style d&apos;indicateurs</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
@@ -1694,12 +1694,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Audio Upstream Rate</source>
-        <translation>Débit ascendant du flux audio</translation>
+        <translation>Débit montant du flux audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation>Cela dépend de la taille actuelle des paquets audio et du paramètre de compression. Assurez-vous que le débit en amont n&apos;est pas supérieur à votre vitesse de téléchargement sur Internet (vérifiez-le avec un service tel que speedtest.net).</translation>
+        <translation>Cela dépend de la taille actuelle des paquets audio et du paramètre de compression. Assurez-vous que le débit montant n&apos;est pas supérieur à votre vitesse d&apos;envoi sur Internet (vérifiez-le avec un service tel que speedtest.net).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="381"/>
@@ -1729,7 +1729,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
         <source>Feedback Protection check box</source>
-        <translation>Case à cocher protection larsen</translation>
+        <translation>Case à cocher protection anti-larsen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
@@ -1838,7 +1838,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="512"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation>Ce que vous définissez ici apparaîtra sur votre chariot sur la table de mixage lorsque vous êtes connecté à un serveur %1. Cette balise sera également affichée sur chaque client connecté au même serveur que vous.</translation>
+        <translation>Ce que vous définissez ici apparaîtra sur votre curseur sur la table de mixage lorsque vous serez connecté à un serveur %1. Cette information sera également affichée sur chaque client connecté au même serveur que vous.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="523"/>
@@ -1960,12 +1960,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="844"/>
         <source>Buffer Delay</source>
-        <translation>Délai de temporisation</translation>
+        <translation>Retard de tampon</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="849"/>
         <source>Buffer Delay: </source>
-        <translation>Délai de temporisation : </translation>
+        <translation>Retard de tampon : </translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1274"/>
@@ -2210,7 +2210,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../util.cpp" line="1418"/>
         <source>Conductor</source>
-        <translation>Conducteur</translation>
+        <translation>Chef d&apos;orchestre</translation>
     </message>
 </context>
 <context>
@@ -2258,7 +2258,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
         <source>Buffer Delay</source>
-        <translation>Délai de temporisation</translation>
+        <translation>Délai de tampon</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="103"/>
@@ -2327,7 +2327,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="227"/>
         <source>Meter Style</source>
-        <translation>Style d&apos;indicateur</translation>
+        <translation>Style d&apos;indicateurs</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="241"/>
@@ -2378,7 +2378,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="883"/>
         <source>kbps</source>
-        <translation>kbps</translation>
+        <translation>kb/s</translation>
     </message>
     <message>
         <source>ms</source>
@@ -2387,7 +2387,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1047"/>
         <source>Input Boost</source>
-        <translation>Amplification de l&apos;entrée</translation>
+        <translation>Amplification d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>

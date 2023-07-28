@@ -233,10 +233,6 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                         .arg ( slServInfoSeparateParams[2] )
                                         .arg ( QLocale::countryToString ( ThisServerListEntry.eCountry ) ) );
     }
-    else
-    {
-        qWarning() << "Ignoring invalid serverinfo, please verify the parameter syntax.";
-    }
 
     // per definition, the very first entry is this server and this entry will
     // never be deleted

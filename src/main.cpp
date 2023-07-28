@@ -660,6 +660,13 @@ int main ( int argc, char** argv )
             exit ( 1 );
         }
 
+        if ( ServerOnlyOptions.contains ( "--serverinfo" ) && strServerInfo.split ( ";" ).count() < 3 )
+        {
+            qWarning() << qUtf8Printable (
+                QString ( "\"--serverinfo '%1'\": must contain [name];[city];[country] - value will be ignored" ).arg ( strServerInfo ) );
+            strServerInfo = "";
+        }
+
 #ifndef HEADLESS
         if ( bUseGUI )
         {

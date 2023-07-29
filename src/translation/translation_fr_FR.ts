@@ -2248,7 +2248,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="501"/>
         <source>Output Channel Mapping</source>
-        <translation>Mappage des canaux de sortie</translation>
+        <translation>Correspondance des canaux de sortie</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>

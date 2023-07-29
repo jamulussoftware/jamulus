@@ -154,7 +154,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2023 Zespół programistów Jamulus-a</translation>
+        <translation>Copyright © 2005-2023 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>

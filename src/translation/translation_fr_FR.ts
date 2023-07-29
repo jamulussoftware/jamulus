@@ -2231,7 +2231,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="444"/>
         <source>Input Channel Mapping</source>
-        <translation>Mappage des canaux d&apos;entrée</translation>
+        <translation>Correspondance des canaux d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="464"/>
@@ -3109,12 +3109,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="194"/>
         <source>Custom Directory address</source>
-        <translation>Adresse personnalisée de l&apos;annuaire</translation>
+        <translation>Adresse d&apos;annuaire personnalisée</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation>L&apos;adresse personnalisée de l&apos;annuaire est l&apos;adresse de l&apos;annuaire contenant la liste des serveurs à laquelle ce serveur doit être ajouté.</translation>
+        <translation>L&apos;adresse d&apos;annuaire personnalisée est l&apos;adresse de l&apos;annuaire contenant la liste des serveurs à laquelle ce serveur doit être ajouté.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="203"/>
@@ -3183,7 +3183,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="227"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation>Si la case &quot;Démarrage minimisé au démarrage du système d&apos;exploitation&quot; est cochée, le serveur sera exécuter au démarrage du système d&apos;exploitation et sera automatiquement réduit à une icône de la barre des tâches du système.</translation>
+        <translation>Si la case &quot;Démarrage minimisé au démarrage du système d&apos;exploitation&quot; est cochée, le serveur sera lancé au démarrage du système d&apos;exploitation et sera automatiquement réduit en icône de la barre de tâches du système.</translation>
     </message>
     <message>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
@@ -3258,7 +3258,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="173"/>
         <source>Display dialog to select recording directory button</source>
-        <translation>Afficher le boite de dialogue pour sélectionner le bouton du répertoire d&apos;enregistrement</translation>
+        <translation>Afficher la boîte de dialogue pour sélectionner le bouton du répertoire d&apos;enregistrement</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="174"/>
@@ -3341,7 +3341,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder Status</source>
-        <translation>Statut de l&apos;enregistreur</translation>
+        <translation>État de l&apos;enregistreur</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="131"/>

@@ -3458,7 +3458,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="589"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
-        <translation>L&apos;enregistreur n&apos;a pas réussi à démarrer. Veuillez vérifier l&apos;espace disque disponible et les permissions et réessayer. Erreur : </translation>
+        <translation>L&apos;enregistreur n&apos;a pas pu démarrer. Vérifier l&apos;espace disque disponible et les permissions puis réessayer. Erreur : </translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="867"/>

@@ -2258,7 +2258,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
         <source>Buffer Delay</source>
-        <translation>Délai de tampon</translation>
+        <translation>Délai de temporisation</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="103"/>
@@ -2327,7 +2327,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="227"/>
         <source>Meter Style</source>
-        <translation>Style d&apos;indicateurs</translation>
+        <translation>Style d&apos;indicateur</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="241"/>
@@ -2387,7 +2387,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1047"/>
         <source>Input Boost</source>
-        <translation>Amplification d&apos;entrée</translation>
+        <translation>Amplification de l&apos;entrée</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>

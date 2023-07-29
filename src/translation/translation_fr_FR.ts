@@ -2460,7 +2460,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="986"/>
         <source>Custom Directories:</source>
-        <translation>Adresse personnalisée de l&apos;annuaire :</translation>
+        <translation>Annuaires personnalisés :</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1025"/>
@@ -3367,7 +3367,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="141"/>
         <source>There is no one connected to the server to record.</source>
-        <translation>Il n&apos;y a personne connecté au serveur pour enregistrer.</translation>
+        <translation>Personne n&apos;est connecté au serveur à enregistrer.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="142"/>
@@ -3428,7 +3428,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="200"/>
         <source>Custom Directory line edit</source>
-        <translation>Modification de la ligne de l&apos;annuaire personnalisé</translation>
+        <translation>Modification de la ligne d&apos;annuaire personnalisé</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="244"/>

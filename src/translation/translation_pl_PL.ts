@@ -1217,7 +1217,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Pole wyboru prawego kanału wyjściowego</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="172"/>
+        <location filename="../clientsettingsdlg.cpp" line="173"/>
         <source>Small Network Buffers</source>
         <translation type="unfinished">Używaj małych buforów sieciowych</translation>
     </message>
@@ -1226,17 +1226,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeśli jest włączona jest obsługa bardzo małych sieciowych pakietów audio. Bardzo małe pakiety sieciowe są rzeczywiście wykorzystywane tylko wtedy, gdy opóźnienie bufora karty dźwiękowej jest mniejsze niż </translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="179"/>
+        <location filename="../clientsettingsdlg.cpp" line="180"/>
         <source>Small network buffers check box</source>
         <translation type="unfinished">Pole wyboru Włącz Małe Bufory Sieciowe</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="183"/>
+        <location filename="../clientsettingsdlg.cpp" line="184"/>
         <source>Sound Card Buffer Delay</source>
         <translation>Opóźnienie Bufora Karty Dźwiękowej</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="184"/>
+        <location filename="../clientsettingsdlg.cpp" line="185"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
         <translation>Ustawienie bufora opóźnień jest kluczowe w programie %1. Ma to wpływ na wiele cech połączenia.</translation>
     </message>
@@ -1249,7 +1249,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Niektóre sterowniki kart dźwiękowych nie pozwalają na zmianę opóźnienia bufora z poziomu aplikacji. W tym przypadku ustawienie opóźnienia bufora jest wyłączone i musi zostać zmienione za pomocą sterownika karty dźwiękowej. W systemie Windows, naciśnij przycisk Ustawienia ASIO, aby otworzyć panel ustawień ASIO. W systemie Linux, aby zmienić rozmiar bufora użyj programu do konfiguracji serwera JACK.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="219"/>
+        <location filename="../clientsettingsdlg.cpp" line="220"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
         <translation>Wartość bufora odchyleń jest więc kompromisem pomiędzy jakością dźwięku a całkowitym opóźnieniem.</translation>
     </message>
@@ -1258,7 +1258,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeśli ustawienia opóźnienia bufora są wyłączone, sterownik audio nie może modyfikować tego ustawienia z poziomu programu. W systemie Windows naciśnij przycisk Ustawienia ASIO, aby otworzyć panel ustawień sterownika. W systemie Linux, użyj narzędzia konfiguracyjnego JACK-a do zmiany rozmiaru bufora.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="233"/>
+        <location filename="../clientsettingsdlg.cpp" line="234"/>
         <source>Sound card driver settings</source>
         <translation>Ustawienia sterownika karty dźwiękowej</translation>
     </message>
@@ -1279,27 +1279,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Hz. Nie da się wybrać urządzenia/sterownika które tego nie obsługuje. Aby znaleźć więcej pomocy, zobacz stronę jamulus.io.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="208"/>
+        <location filename="../clientsettingsdlg.cpp" line="209"/>
         <source>If no buffer size is selected and all settings are disabled, this means a buffer size in use by the driver which does not match the values. %1 will still work with this setting but may have restricted performance.</source>
         <translation>Gdy rozmiar bufora nie jest wybrany, a wszystkie ustawienia są zablokowane, oznacza to, że sterownik używa nieobsługiwanego rozmiaru bufora. %1 będzie działał z tymi ustawieniami ale jego fukcjonalność może być ograniczona.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="214"/>
+        <location filename="../clientsettingsdlg.cpp" line="215"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
         <translation>Rzeczywiste opóźnienie bufora ma wpływ na status połączenia, bieżącą prędkość wysyłania i całkowite opóźnienie. Im mniejsza wielkość bufora, tym większe prawdopodobieństwo pojawienia się czerwonej kontrolki we wskaźniku statusu (drop-out) i tym większa szybkość wysyłania danych oraz tym mniejsze ogólne opóźnienie.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="252"/>
+        <location filename="../clientsettingsdlg.cpp" line="253"/>
         <source>128 samples setting radio button</source>
         <translation>przycisk wyboru 128-samplowego bufora</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="255"/>
+        <location filename="../clientsettingsdlg.cpp" line="256"/>
         <source>256 samples setting radio button</source>
         <translation>przycisk wyboru 256-samplowego bufora</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="270"/>
+        <location filename="../clientsettingsdlg.cpp" line="271"/>
         <source>Meter Style</source>
         <translation>Styl miarki</translation>
     </message>
@@ -1308,47 +1308,47 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Wybierz styl miarki używanej do poziomów. Opcje „Zwężony pasek” i „Mała dioda” mają zastosowanie tylko do miksera. Gdy zaznaczone jest „Zwęzony pasek” - wskaźniki wejścia są ustawione do paska. Zaznaczenie „Małej diody” spowoduje dopasowywanie wskaźników do diody. Pozostałe opcje mają zastosowanie zarówno do miksera jak i wskaźników wejścia.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="277"/>
+        <location filename="../clientsettingsdlg.cpp" line="278"/>
         <source>Meter Style combo box</source>
         <translation>Lista wyboru stylu miarki</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="280"/>
+        <location filename="../clientsettingsdlg.cpp" line="281"/>
         <source>Language</source>
         <translation>Język</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="280"/>
+        <location filename="../clientsettingsdlg.cpp" line="281"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>Wybierz język interfejsu użytkownika.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="282"/>
+        <location filename="../clientsettingsdlg.cpp" line="283"/>
         <source>Language combo box</source>
         <translation>Lista wyboru języka</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="360"/>
+        <location filename="../clientsettingsdlg.cpp" line="361"/>
         <source>Custom Directories</source>
         <translation>Własne serwery</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="361"/>
+        <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
         <translation>Jeżeli potrzebujesz dodać dodatkowe serwery do listy w oknie połączeń, wpisz adresy tutaj.&lt;br&gt;Żeby usunąć wartość, zaznacz ją i skasuj, a następnie kliknij poza elementem listy.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="368"/>
+        <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Custom Directories combo box</source>
         <translation>Lista wyboru własnych serwerów</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="371"/>
+        <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Audio Upstream Rate</source>
         <translation>Szybkość wysyłania audio</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="372"/>
+        <location filename="../clientsettingsdlg.cpp" line="373"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
         <translation>Zależy od aktualnego rozmiaru bufora audio i wybranej jakości dźwięku. Upewnij się, że szybkość wysyłania nie jest wyższa niż dostępna u ciebie prędkość wychodząca (upload) połączenia internetowego (można to sprawdzić np. na speedtest.net).</translation>
     </message>
@@ -1373,35 +1373,35 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Małe diody</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="470"/>
-        <location filename="../clientsettingsdlg.cpp" line="609"/>
-        <location filename="../clientsettingsdlg.cpp" line="617"/>
+        <location filename="../clientsettingsdlg.cpp" line="466"/>
+        <location filename="../clientsettingsdlg.cpp" line="605"/>
+        <location filename="../clientsettingsdlg.cpp" line="613"/>
         <location filename="../util.cpp" line="1271"/>
         <source>None</source>
         <translation>Brak</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="507"/>
+        <location filename="../clientsettingsdlg.cpp" line="503"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
         <translation>Wpisz swoje imię lub przezwisko, żeby inni muzycy, z którymi chesz grać wiedzieli kim jesteś. Możesz także dodać ikonę instrumentu, na którym grasz oraz flagę kraju/regionu i miasto, z którego pochodzisz, a także poziom umiejętności.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="512"/>
+        <location filename="../clientsettingsdlg.cpp" line="508"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
         <translation>To co zostanie tu wpisane pojawi się na suwaku miksera podczas połączenia z serwerem %1. Ta etykieta będzie także wyświetlana u innych muzyków podłączonych do tego samego serwera.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="523"/>
+        <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Country/region flag button</source>
         <translation>Przycisk wyboru flagi kraju/regionu</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="1189"/>
+        <location filename="../clientsettingsdlg.cpp" line="1185"/>
         <source>Center</source>
         <translation>Środek</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="1201"/>
+        <location filename="../clientsettingsdlg.cpp" line="1197"/>
         <source>R</source>
         <translation>P</translation>
     </message>
@@ -1410,17 +1410,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Przycisk ustawień ASIO</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="445"/>
+        <location filename="../clientsettingsdlg.cpp" line="441"/>
         <source>Fancy</source>
         <translation>Fantazyjna</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="446"/>
+        <location filename="../clientsettingsdlg.cpp" line="442"/>
         <source>Compact</source>
         <translation>Kompaktowa</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="285"/>
+        <location filename="../clientsettingsdlg.cpp" line="286"/>
         <source>Audio Channels</source>
         <translation>Kanały Audio</translation>
     </message>
@@ -1440,22 +1440,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Może być wybrany inny kanał aktualnej karty dźwiękowej dla każdego wejściowego i wyjściowego strumienia programu %1 (prawy i lewy kanał).</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="173"/>
+        <location filename="../clientsettingsdlg.cpp" line="174"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
         <translation>Włącza obsługę bardzo małych pakietów internetowych z danymi audio. Właściwie to te małe pakiety są używane tylko jeżeli opóźnienie bufora jest mniejsze niż %1 sampli. Im mniejsze bufory sieciowe tym niższe opóźnienie audio ale jednocześnie zwiększa się obciążenie sieci i prawdopodobieństwo występowania przerw i zniekształceń dźwięku.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="187"/>
+        <location filename="../clientsettingsdlg.cpp" line="188"/>
         <source>Three buffer sizes can be selected</source>
         <translation>Można wybrać spośród trzech różnych rozmairów bufora</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="190"/>
+        <location filename="../clientsettingsdlg.cpp" line="191"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
         <translation>64 sample: daje najmniejsze opóźnienie ale nie działa ze wszystkimi kartami dźwiękowymi.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="196"/>
+        <location filename="../clientsettingsdlg.cpp" line="197"/>
         <source>256 samples: Should only be used when 64 or 128 samples is causing issues.</source>
         <translation>256 sample: używać tylko gdy 64 lub 128 powoduje problemy.</translation>
     </message>
@@ -1472,98 +1472,98 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeżeli ustawienia opóźnienia bufora są zablokowane oznacza to, że sterownik audio nie pozwala na ich zmianę z poziomu %1-a. Aby otworzyć okno ustawień sterownika w systemie Windows - naciśnij  przycisk ustawienia ASIO. W systemie Linux do zmiany bufora opóźnień użyj programu do konfiguracji serwera JACK.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="200"/>
-        <location filename="../clientsettingsdlg.cpp" line="222"/>
+        <location filename="../clientsettingsdlg.cpp" line="201"/>
+        <location filename="../clientsettingsdlg.cpp" line="223"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
         <translation>Niektóre sterowniki kart dźwiękowych nie pozwalają na zmianę opóźnienia bufora z poziomu %1. W tym przypadku ustawienie opóźnienia bufora jest wyłączone i musi zostać zmienione za pomocą sterownika karty dźwiękowej. Aby dopasować rozmiar bufora, użyj odpowiedniego narzędzia dla swojego sterownika. Na przykład dla sterownika ASIO, naciśnij przycisk „Ustawienia ASIO” aby otworzyć panel ustawień tego sterownika. Gdy używany jest JACK, do zmiany rozmiaru bufora można wykorzystać program QjackCtl. Inne interfejsy, takie jak np. PipeWire będą wymagały odpowiednio innego narzędzia. Szczegóły proszę sprawdzić w ich dokomentacji.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="234"/>
+        <location filename="../clientsettingsdlg.cpp" line="235"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
         <translation>Otwiera ustawienia sterownika karty dźwiękowej. Niktóre sterowniki pozwalają na zmianę ustawień bufora, a inne jak ASIO4ALL pozwalają wybrać wejścia i wyjścia. Więcej informacji można znaleść na stronie jamulus.io.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="239"/>
+        <location filename="../clientsettingsdlg.cpp" line="240"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
         <translation>Otwiera ustawienia sterownika. Uwaga: aktualnie %1 obsługuje tylko urządzenia z częstotliwością próbkowania %2 Hz. Nie będzie można wybrać sterownika/urządzenia nieobsługującego tej częstotliwośći. Więcej informacji można znaleść na stronie jamulus.io.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="271"/>
+        <location filename="../clientsettingsdlg.cpp" line="272"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
         <translation>Wybierz styl miarki używanej do poziomów. Opcje „Pasek” (zwężony) i „Diody” (małe, zaokrąglone) mają zastosowanie tylko do miksera. Gdy zaznaczony jest „Pasek” (zwężony) - wskaźniki wejścia są ustawione do paska (szeroki). Zaznaczenie „Diody” (małe) spowoduje dopasowywanie wskaźników do dużych diod. Pozostałe opcje mają zastosowanie zarówno do miksera jak i wskaźników wejścia.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="291"/>
+        <location filename="../clientsettingsdlg.cpp" line="292"/>
         <source>and</source>
         <translation>i</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="307"/>
+        <location filename="../clientsettingsdlg.cpp" line="308"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
         <translation> tryb ten zwiększy szybkość przesyłania danych w strumieniu. Upewnij się, że prędkość przesyłania danych nie przekracza dostępnej prędkości przesyłania połączenia internetowego.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="318"/>
+        <location filename="../clientsettingsdlg.cpp" line="319"/>
         <source>Audio channels combo box</source>
         <translation>Pole wyboru kanałów audio</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="321"/>
+        <location filename="../clientsettingsdlg.cpp" line="322"/>
         <source>Audio Quality</source>
         <translation>Jakość Audio</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="328"/>
+        <location filename="../clientsettingsdlg.cpp" line="329"/>
         <source>Audio quality combo box</source>
         <translation>Pole ustawień jakości audio</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="331"/>
+        <location filename="../clientsettingsdlg.cpp" line="332"/>
         <source>New Client Level</source>
         <translation>Poziom nowego klienta</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="340"/>
+        <location filename="../clientsettingsdlg.cpp" line="341"/>
         <source>New client level edit box</source>
         <translation>Pole edycji poziomu nowego klienta</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="394"/>
+        <location filename="../clientsettingsdlg.cpp" line="392"/>
         <source>Audio Alerts</source>
         <translation type="unfinished">Alarmy dźwiękowe</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="395"/>
+        <location filename="../clientsettingsdlg.cpp" line="393"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
         <translation type="unfinished">Stosuj sygnały dźwiękowe dla przychodzących wiadomości czatu oraz kiedy dołącza nowy uczestnik sesji. Może być wymagane dodatkowe urządzenie dźwiękowe by je słyszeć.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="399"/>
+        <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Audio Alerts check box</source>
         <translation>Pole wyboru dla alarmów dźwiękowych</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="451"/>
+        <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Bar (narrow)</source>
         <translation>Pasek (zwężony)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="452"/>
+        <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>Bar (wide)</source>
         <translation>Pasek (szeroki)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="453"/>
+        <location filename="../clientsettingsdlg.cpp" line="449"/>
         <source>LEDs (stripe)</source>
         <translation>Diody (pasek)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="454"/>
+        <location filename="../clientsettingsdlg.cpp" line="450"/>
         <source>LEDs (round, small)</source>
         <translation>Diody (małe, zaokrąglone)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="455"/>
+        <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>LEDs (round, big)</source>
         <translation>Diody (zaokrąglone, duże)</translation>
     </message>
@@ -1594,7 +1594,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="66"/>
-        <location filename="../clientsettingsdlg.cpp" line="1196"/>
+        <location filename="../clientsettingsdlg.cpp" line="1192"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -1629,12 +1629,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Rzeczywiste opóźnienie bufora ma wpływ na status połączenia, bieżącą prędkość wysyłania i całkowite opóźnienie. Im mniejsza wielkość bufora, tym większe prawdopodobieństwo pojawienia się czerwonej kontrolki we wskaźniku statusu (drop-out) i tym większa szybkość wysyłania danych oraz tym mniejsze jest ogólne opóźnienie.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="249"/>
+        <location filename="../clientsettingsdlg.cpp" line="250"/>
         <source>64 samples setting radio button</source>
         <translation>przycisk wyboru 64-samplowego bufora</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="260"/>
+        <location filename="../clientsettingsdlg.cpp" line="261"/>
         <source>ASIO Device Settings push button</source>
         <translation>Przycisk ustawień ASIO</translation>
     </message>
@@ -1659,20 +1659,20 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Ustawienia ASIO</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="291"/>
-        <location filename="../clientsettingsdlg.cpp" line="430"/>
+        <location filename="../clientsettingsdlg.cpp" line="292"/>
+        <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="431"/>
+        <location filename="../clientsettingsdlg.cpp" line="427"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-in/Stereo-out</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="291"/>
-        <location filename="../clientsettingsdlg.cpp" line="306"/>
-        <location filename="../clientsettingsdlg.cpp" line="432"/>
+        <location filename="../clientsettingsdlg.cpp" line="292"/>
+        <location filename="../clientsettingsdlg.cpp" line="307"/>
+        <location filename="../clientsettingsdlg.cpp" line="428"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
@@ -1710,7 +1710,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">64 sample: preferowane ustawienie. Oferuje najniższe opóźnienie ale nie jest obsługiwane przez wszystkie karty dźwiękowe.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="193"/>
+        <location filename="../clientsettingsdlg.cpp" line="194"/>
         <source>128 samples: Should work for most available sound cards.</source>
         <translation>128 sampli: powinno działać na większości z dostępnych kart dźwiękowych.</translation>
     </message>
@@ -1731,22 +1731,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeśli ustawienia opóźnienia bufora są wyłączone, sterownik audio nie może modyfikować tego ustawienia z poziomu programu. W systemie Windows naciśnij przycisk ASIO Setup, aby otworzyć panel ustawień sterownika. W systemie Linux, użyj narzędzia konfiguracyjnego Jack do zmiany rozmiaru bufora.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="265"/>
+        <location filename="../clientsettingsdlg.cpp" line="266"/>
         <source>Skin</source>
         <translation>Skórka</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="265"/>
+        <location filename="../clientsettingsdlg.cpp" line="266"/>
         <source>Select the skin to be used for the main window.</source>
         <translation>Wybierz skórkę dla głównego okna aplikacji.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="267"/>
+        <location filename="../clientsettingsdlg.cpp" line="268"/>
         <source>Skin combo box</source>
         <translation>Lista wyboru skórki</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="286"/>
+        <location filename="../clientsettingsdlg.cpp" line="287"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
         <translation>Wybiera liczbę kanałów audio, które mają być używane do komunikacji między klientem a serwerem. Dostępne są trzy tryby:</translation>
     </message>
@@ -1755,52 +1755,52 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">i </translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="292"/>
+        <location filename="../clientsettingsdlg.cpp" line="293"/>
         <source>These modes use one and two audio channels respectively.</source>
         <translation>Tryby te wykorzystują odpowiednio jeden i dwa kanały audio.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="297"/>
+        <location filename="../clientsettingsdlg.cpp" line="298"/>
         <source>Mono in/Stereo-out</source>
         <translation>wejście mono/wyjście stereo</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="298"/>
+        <location filename="../clientsettingsdlg.cpp" line="299"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
         <translation>Sygnał audio wysyłany do serwera jest mono, ale sygnał zwrotny jest stereo. Jest to przydatne, jeśli karta dźwiękowa ma instrument na jednym kanale wejściowym i mikrofon na drugim. W tym przypadku dwa sygnały wejściowe mogą być miksowane do jednego kanału mono, ale miks serwera jest słyszalny w trybie stereo.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="306"/>
+        <location filename="../clientsettingsdlg.cpp" line="307"/>
         <source>Enabling </source>
         <translation>Włączanie </translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="312"/>
+        <location filename="../clientsettingsdlg.cpp" line="313"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
         <translation>W trybie strumieniowania stereo w oknie głównym nie będzie dostępny wybór kanału audio dla efektu pogłosu, ponieważ w tym przypadku efekt jest stosowany do obu kanałów.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="322"/>
+        <location filename="../clientsettingsdlg.cpp" line="323"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
         <translation>Im wyższa jakość dźwięku, tym większa szybkość transmisji danych strumienia audio. Upewnij się, że prędkość przesyłania danych nie przekracza dostępnej przepustowości połączenia internetowego.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="332"/>
+        <location filename="../clientsettingsdlg.cpp" line="333"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
         <translation>To ustawienie definiuje poziom sygnału nowo podłączonego klienta w procentach. Jeśli nowy klient połączy się z aktualnym serwerem, otrzyma ten początkowy poziom sygnału, o ile żaden inny poziom z poprzedniego połączenia tego klienta nie był wcześniej zapisany.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="343"/>
+        <location filename="../clientsettingsdlg.cpp" line="344"/>
         <source>Input Boost</source>
         <translation>Wzmocnienie Wejścia</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="344"/>
+        <location filename="../clientsettingsdlg.cpp" line="345"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
         <translation>Ta opcja pozwala na stopniowe zwiększenie poziomu twojego sygnału wejściowego aż do 10 (+20dB). Kiedy twój dźwięk jest zbyt cichy, najpierw spróbuj zwiększyć głośność zbliżając się do mikrofonu, ustawiając lepiej sprzęt audio lub zwiększając poziomy w ustawieniach wejścia dźwięku w swoim systemie operacyjnym. Dopiero gdy wszystko powyższe zawiedzie, ustaw to wzmocnienie tutaj. Jednak gdy twój dźwięk jest zbyt głośny, zniekształcony lub urywany, ta opcja nie pomoże. Wtedy jej nie używaj. Zniekształcenia i tak pozostaną. Zamiast tego obniż poziom sygnału wejściowego odsuwając się od mikrofonu, zmieniając ustawienia twoich urządzeń dźwiękowych lub ściszając poziomy wejścia w swoim systemie.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="357"/>
+        <location filename="../clientsettingsdlg.cpp" line="358"/>
         <source>Input Boost combo box</source>
         <translation>Kontrolka Wzmocnienia Wejścia</translation>
     </message>
@@ -1821,53 +1821,53 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Całkowite opóźnienie jest obliczane na podstawie bieżącego czasu ping i opóźnienia wprowadzonego przez bieżące ustawienia bufora.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="381"/>
+        <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Number of Mixer Panel Rows</source>
         <translation>Liczba rzędów panelu miksera</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="381"/>
+        <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
         <translation>Dostosuj liczbę rzędów w panelu miksera.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="384"/>
+        <location filename="../clientsettingsdlg.cpp" line="385"/>
         <source>Number of Mixer Panel Rows spin box</source>
         <translation>Pole wyboru liczby rzędów panelu miksera</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="386"/>
+        <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Feedback Protection</source>
         <translation type="unfinished">Ochrona przed sprzęganiem</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="387"/>
+        <location filename="../clientsettingsdlg.cpp" line="388"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
         <translation type="unfinished">Wykrywaj sprzężenia akustyczne między miktofonem a głośnikami.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="391"/>
+        <location filename="../clientsettingsdlg.cpp" line="389"/>
         <source>Feedback Protection check box</source>
         <translation>Pole wyboru wykrywania sprzężeń</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="403"/>
+        <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>ASIO Device Settings</source>
         <translation>Ustawienia urządzeń ASIO</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="437"/>
+        <location filename="../clientsettingsdlg.cpp" line="433"/>
         <source>Low</source>
         <translation>Niska</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="438"/>
-        <location filename="../clientsettingsdlg.cpp" line="444"/>
+        <location filename="../clientsettingsdlg.cpp" line="434"/>
+        <location filename="../clientsettingsdlg.cpp" line="440"/>
         <source>Normal</source>
         <translation>Standardowa</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="439"/>
+        <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>High</source>
         <translation>Wysoka</translation>
     </message>
@@ -1928,7 +1928,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">preferowany</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="506"/>
+        <location filename="../clientsettingsdlg.cpp" line="502"/>
         <source>Musician Profile</source>
         <translation>Profil muzyka</translation>
     </message>
@@ -1941,12 +1941,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Podane tutaj informacje pojawią się przy twoim suwaku na mikserze w czasie połączenia z serwerem Jamulus-a. Taka etykieta pokaże się także u każdego uczestnika podłączonego do tego samego serwera.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="519"/>
+        <location filename="../clientsettingsdlg.cpp" line="515"/>
         <source>Alias or name edit box</source>
         <translation>Pole edycji nazwy lub pseudonimu</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="521"/>
+        <location filename="../clientsettingsdlg.cpp" line="517"/>
         <source>Instrument picture button</source>
         <translation>Przycisk wyboru instrumentu</translation>
     </message>
@@ -1955,43 +1955,43 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Przycisk wyboru flagi</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="525"/>
+        <location filename="../clientsettingsdlg.cpp" line="521"/>
         <source>City edit box</source>
         <translation>Pole edycji miasta</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="527"/>
+        <location filename="../clientsettingsdlg.cpp" line="523"/>
         <source>Skill level combo box</source>
         <translation>Lista wyboru poziomu umiejętności</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="621"/>
+        <location filename="../clientsettingsdlg.cpp" line="617"/>
         <source>Beginner</source>
         <translation>Początkujący</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="625"/>
+        <location filename="../clientsettingsdlg.cpp" line="621"/>
         <source>Intermediate</source>
         <translation>Średniozaawansowany</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="629"/>
+        <location filename="../clientsettingsdlg.cpp" line="625"/>
         <source>Expert</source>
         <translation>Ekspert</translation>
     </message>
     <message>
+        <location filename="../clientsettingsdlg.cpp" line="781"/>
         <location filename="../clientsettingsdlg.cpp" line="785"/>
-        <location filename="../clientsettingsdlg.cpp" line="789"/>
         <source>Size: </source>
         <translation>Rozmiar: </translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="844"/>
+        <location filename="../clientsettingsdlg.cpp" line="840"/>
         <source>Buffer Delay</source>
         <translation>Opóźnienie bufora</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="849"/>
+        <location filename="../clientsettingsdlg.cpp" line="845"/>
         <source>Buffer Delay: </source>
         <translation>Opóźnienie bufora: </translation>
     </message>
@@ -2269,59 +2269,59 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Urządzenie</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="444"/>
+        <location filename="../clientsettingsdlgbase.ui" line="474"/>
         <source>Input Channel Mapping</source>
         <translation>Mapowanie kanału wejścia</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="464"/>
-        <location filename="../clientsettingsdlgbase.ui" line="521"/>
+        <location filename="../clientsettingsdlgbase.ui" line="494"/>
+        <location filename="../clientsettingsdlgbase.ui" line="557"/>
         <source>L</source>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="477"/>
-        <location filename="../clientsettingsdlgbase.ui" line="534"/>
+        <location filename="../clientsettingsdlgbase.ui" line="510"/>
+        <location filename="../clientsettingsdlgbase.ui" line="573"/>
         <source>R</source>
         <translation>P</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="501"/>
+        <location filename="../clientsettingsdlgbase.ui" line="537"/>
         <source>Output Channel Mapping</source>
         <translation>Mapowanie kanału wyjścia</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="852"/>
+        <location filename="../clientsettingsdlgbase.ui" line="900"/>
         <source>Small Network Buffers</source>
         <translation type="unfinished">Zezwalaj na małe bufory sieciowe</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="622"/>
+        <location filename="../clientsettingsdlgbase.ui" line="670"/>
         <source>Buffer Delay</source>
         <translation>Opóźnienie bufora</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="103"/>
+        <location filename="../clientsettingsdlgbase.ui" line="109"/>
         <source>Country/Region</source>
         <translation>Kraj/Region</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="634"/>
+        <location filename="../clientsettingsdlgbase.ui" line="682"/>
         <source>(preferred)</source>
         <translation>(preferowane)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="647"/>
+        <location filename="../clientsettingsdlgbase.ui" line="695"/>
         <source>(default)</source>
         <translation>(domyślne)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="660"/>
+        <location filename="../clientsettingsdlgbase.ui" line="708"/>
         <source>(safe)</source>
         <translation>(bezpieczne)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="394"/>
+        <location filename="../clientsettingsdlgbase.ui" line="424"/>
         <source>Driver Setup</source>
         <translation>Konfiguracja sterownika</translation>
     </message>
@@ -2341,7 +2341,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Imię/przezwisko</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="96"/>
+        <location filename="../clientsettingsdlgbase.ui" line="99"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
     </message>
@@ -2350,109 +2350,107 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Kraj</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="110"/>
+        <location filename="../clientsettingsdlgbase.ui" line="119"/>
         <source>City</source>
         <translation>Miasto</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="117"/>
+        <location filename="../clientsettingsdlgbase.ui" line="129"/>
         <source>Skill</source>
         <translation>Umiejętności</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="210"/>
+        <location filename="../clientsettingsdlgbase.ui" line="225"/>
         <source>User Interface</source>
         <translation>Interfejs użytkownika</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="227"/>
+        <location filename="../clientsettingsdlgbase.ui" line="245"/>
         <source>Meter Style</source>
         <translation>Styl miarki</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="241"/>
+        <location filename="../clientsettingsdlgbase.ui" line="265"/>
         <source>Mixer Rows</source>
         <translation>Rzędy miksera</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="248"/>
+        <location filename="../clientsettingsdlgbase.ui" line="321"/>
         <source>Audio Alerts</source>
         <translation type="unfinished">Alarmy dźwiękowe</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="339"/>
+        <location filename="../clientsettingsdlgbase.ui" line="366"/>
         <source>Audio/Network Setup</source>
         <translation>Ustawienia dźwięku/sieci</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="349"/>
+        <location filename="../clientsettingsdlgbase.ui" line="376"/>
         <source>Audio Device</source>
         <translation>Urządzenie dźwiękowe</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="690"/>
+        <location filename="../clientsettingsdlgbase.ui" line="738"/>
         <source>Jitter Buffer</source>
         <translation>Bufor odchyleń</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="702"/>
+        <location filename="../clientsettingsdlgbase.ui" line="750"/>
         <source>Auto</source>
         <translation>Automatyczny</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="711"/>
+        <location filename="../clientsettingsdlgbase.ui" line="759"/>
         <source>Local</source>
         <translation>Lokalny</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="724"/>
+        <location filename="../clientsettingsdlgbase.ui" line="772"/>
         <source>Server</source>
         <translation>Serwer</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="741"/>
-        <location filename="../clientsettingsdlgbase.ui" line="754"/>
+        <location filename="../clientsettingsdlgbase.ui" line="789"/>
+        <location filename="../clientsettingsdlgbase.ui" line="802"/>
         <source>Size</source>
         <translation>Rozmiar</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="883"/>
+        <location filename="../clientsettingsdlgbase.ui" line="931"/>
         <source>kbps</source>
         <translation>kbps</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="986"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1034"/>
         <source>Custom Directories:</source>
         <translation>Serwery zbiorcze:</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1047"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1101"/>
         <source>Input Boost</source>
         <translation>Wzmocnienie wejścia</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1070"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1133"/>
         <source>Feedback Protection</source>
         <translation type="unfinished">Ochrona przed sprzęganiem</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="294"/>
-        <location filename="../clientsettingsdlgbase.ui" line="1083"/>
         <source>Enable</source>
-        <translation>Zastosuj</translation>
+        <translation type="vanished">Zastosuj</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1138"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1188"/>
         <source>Input Balance</source>
         <translation>Balans wejściowy</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1149"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1199"/>
         <source>Pan</source>
         <translation>Panorama</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1229"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1282"/>
         <source>Center</source>
         <translation>Środek</translation>
     </message>
@@ -2461,12 +2459,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Różne</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="581"/>
+        <location filename="../clientsettingsdlgbase.ui" line="623"/>
         <source>Audio Channels</source>
         <translation>Kanały audio</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="588"/>
+        <location filename="../clientsettingsdlgbase.ui" line="633"/>
         <source>Audio Quality</source>
         <translation>Jakość audio</translation>
     </message>
@@ -2475,7 +2473,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Miara</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="945"/>
+        <location filename="../clientsettingsdlgbase.ui" line="993"/>
         <source>Advanced Setup</source>
         <translation>Ustawienia zaawansowane</translation>
     </message>
@@ -2484,22 +2482,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Własny Adres Serwera Zbiorczego:</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1013"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1064"/>
         <source>New Client Level</source>
         <translation>Poziom dołączającego się uczestnika</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="220"/>
+        <location filename="../clientsettingsdlgbase.ui" line="235"/>
         <source>Skin</source>
         <translation>Skórka</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="234"/>
+        <location filename="../clientsettingsdlgbase.ui" line="255"/>
         <source>Language</source>
         <translation>Język</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1025"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1079"/>
         <source>%</source>
         <translation>%</translation>
     </message>
@@ -2508,12 +2506,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="obsolete">Własny adres serwera centralnego:</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="859"/>
+        <location filename="../clientsettingsdlgbase.ui" line="907"/>
         <source>Audio Stream Rate</source>
         <translation>Prędkość strumienia audio</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="893"/>
+        <location filename="../clientsettingsdlgbase.ui" line="941"/>
         <source>val</source>
         <translation>wartość</translation>
     </message>
@@ -3109,99 +3107,104 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CServerDlg</name>
     <message>
-        <location filename="../serverdlg.cpp" line="48"/>
+        <location filename="../serverdlg.cpp" line="51"/>
         <source>Client List</source>
         <translation>Lista użytkowników</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="49"/>
+        <location filename="../serverdlg.cpp" line="52"/>
         <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
         <translation>Lista użytkowników wyświetla wszystkich użytkowników obecnie połączonych z tym serwerem. Informacje takie jak IP użytkownika oraz nazwa są wyświetlane dla każdego połączonego użytkownika.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="53"/>
+        <location filename="../serverdlg.cpp" line="56"/>
         <source>Connected clients list view</source>
         <translation>Widok listy podłączonych użytkowników</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="60"/>
+        <location filename="../serverdlg.cpp" line="63"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
         <translation>&lt;b&gt;Katalog:&lt;/b&gt;Wybierz &apos;%1&apos;, aby nie rejestrować serwera w katalogu.&lt;br&gt;lub wybierz jeden z gatunków, aby zarejestrować się w tym katalogu.&lt;br&gt;lub wybierz &apos;%2&apos; i podaj adres Niestandardowy katalog w zakładce Opcje, aby zarejestrować się w niestandardowym katalogu.&lt;br&gt;&lt;br&gt;Dla każdej wartości oprócz &apos;%1&apos;, ten serwer rejestruje się z katalogiem, aby użytkownik %3 mógł wybrać ten serwer na liście serwerów okna dialogowego client connect, gdy wybiera ten katalog.&lt;br&gt;&lt;br&gt;Rejestracja serwera jest odnawiana okresowo, aby upewnić się, że wszystkie serwery na liście serwerów okna dialogowego connect są rzeczywiście dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="137"/>
+        <location filename="../serverdlg.cpp" line="123"/>
+        <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
         <translation>Nagrywanie zostało wyłączone przez pole wyboru UI lub JSON-RPC.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="139"/>
+        <location filename="../serverdlg.cpp" line="141"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
         <translation>Nagrywanie zostało wyłączone, przez pole wyboru UI, SIGUSR2 lub JSON-RPC.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="175"/>
+        <location filename="../serverdlg.cpp" line="177"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
         <translation>Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego %1.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="182"/>
+        <location filename="../serverdlg.cpp" line="184"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
         <translation>Aktualny głowny katalog nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego %1. Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="194"/>
+        <location filename="../serverdlg.cpp" line="196"/>
         <source>Custom Directory address</source>
         <translation>Własny adres serwera zbiorczego</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="195"/>
+        <location filename="../serverdlg.cpp" line="197"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
         <translation>Własny adres serwera zbiorczego to adres serwera, na którym zarządzana jest lista serwerów w oknie dialogowym połączenia.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="203"/>
+        <location filename="../serverdlg.cpp" line="205"/>
         <source>Server List Filename dialog push button</source>
         <translation>Przycisk dla nazwy pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="204"/>
-        <location filename="../serverdlg.cpp" line="212"/>
+        <location filename="../serverdlg.cpp" line="206"/>
+        <location filename="../serverdlg.cpp" line="214"/>
         <source>Server List Filename</source>
         <translation>Nazwa pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="205"/>
+        <location filename="../serverdlg.cpp" line="207"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
         <translation>Otwiera okno dialogowe wyboru nazwy pliku z listą serwerów. Użytkownik uruchamiający %1-a musi mieć prawo do tworzenia plików (gdy plik już istnieje, zostanie nadpisany).</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="211"/>
+        <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename text box (read-only)</source>
         <translation>Pole tekstowe z nazwą pliku listy serwerów (tylko do odczytu)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="213"/>
+        <location filename="../serverdlg.cpp" line="215"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
         <translation>Obecna nazwa pliku z listą serwerów. Użytkownik uruchamiający %1-a musi mieć prawo do tworzenia plików (gdy plik już istnieje, zostanie nadpisany). Naciśnij przycisk aby otwierzyć okno dialogowe wyboru nazwy pliku z listą serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="220"/>
+        <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear the server list file name button</source>
         <translation>Przycisk kasowania nazwy pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="221"/>
+        <location filename="../serverdlg.cpp" line="223"/>
         <source>Clear Server List Filename</source>
         <translation>Wyczyść nazwę pliku z listą serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="222"/>
+        <location filename="../serverdlg.cpp" line="224"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
         <translation>Naciśnij aby wyczyść nazwę pliku z listą serwerów. Lista serwerów nie będzie isnieć dopóki nie zostanie podana nowa nazwa.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="226"/>
+        <location filename="../serverdlg.cpp" line="228"/>
         <source>Start Minimized on Operating System Start</source>
         <translation>Uruchom w tle przy włączeniu systemu operacyjnego</translation>
     </message>
@@ -3210,7 +3213,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Ustaw serwer jako publiczny</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="79"/>
+        <location filename="../serverdlg.cpp" line="82"/>
         <source>Register Server Status</source>
         <translation>Zarejetruj status serwera</translation>
     </message>
@@ -3243,27 +3246,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Pole wyboru listy serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="86"/>
+        <location filename="../serverdlg.cpp" line="89"/>
         <source>Server Name</source>
         <translation>Nazwa serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="93"/>
+        <location filename="../serverdlg.cpp" line="96"/>
         <source>Server name line edit</source>
         <translation>Pole edycji nazwy serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="96"/>
+        <location filename="../serverdlg.cpp" line="99"/>
         <source>Location City</source>
         <translation>Lokalizacja serwera - miasto</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="97"/>
+        <location filename="../serverdlg.cpp" line="100"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>W tym okne można ustawić nazwę miasta, w którym znajduje się serwer. Jeżeli nazwa miasta jest wprowadzona, zostanie wyświetlona w oknie dialogowym połączenia, na liście dostępnych serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="104"/>
+        <location filename="../serverdlg.cpp" line="107"/>
         <source>City where the server is located line edit</source>
         <translation>Pole wyboru miasta, w którym zlokalizowany jest serwer</translation>
     </message>
@@ -3280,13 +3283,13 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Pole wyboru kraju, w którym zlokalizowany jest serwer</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="173"/>
+        <location filename="../serverdlg.cpp" line="175"/>
         <source>Display dialog to select recording directory button</source>
         <translation>Wyświetla okno wyboru katalogu nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="174"/>
-        <location filename="../serverdlg.cpp" line="181"/>
+        <location filename="../serverdlg.cpp" line="176"/>
+        <location filename="../serverdlg.cpp" line="183"/>
         <source>Main Recording Directory</source>
         <translation>Główny katalog nagrywania</translation>
     </message>
@@ -3295,7 +3298,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego Jamulus-a. </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="180"/>
+        <location filename="../serverdlg.cpp" line="182"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>Pole tekstowe katalogu nagrywania (tylko do odczytu)</translation>
     </message>
@@ -3304,22 +3307,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Aktualny głowny katalog nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego Jamulus-a. Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="188"/>
+        <location filename="../serverdlg.cpp" line="190"/>
         <source>Clear the recording directory button</source>
         <translation>Przycisk czyszczenia katalogu nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="189"/>
+        <location filename="../serverdlg.cpp" line="191"/>
         <source>Clear Recording Directory</source>
         <translation>Wyczyść katalog nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="190"/>
+        <location filename="../serverdlg.cpp" line="192"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
         <translation>Naciśnij przycisk aby wyczyścić wybraną ścieżkę katalogu. Nagrywanie będzie niemożliwe dopóki nowa ścieżka nie zostanie podana.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="118"/>
+        <location filename="../serverdlg.cpp" line="121"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>Pole wyboru do włączania lub wyłączania nagrywania na serwerze</translation>
     </message>
@@ -3328,37 +3331,36 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeżeli pole wyboru „Rejestruj serwer” jest zaznaczone, wyświetli się komunikat o powowdzeniu rejestracji na serwerze. Gdy rejestracja się nie uda, proszę wybrać inny katalog serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="119"/>
+        <location filename="../serverdlg.cpp" line="122"/>
         <source>Jam Recorder</source>
         <translation type="unfinished">Nagrywanie włączone</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="120"/>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
-        <translation type="unfinished">Zaznaczone kiedy nagrywanie jest możliwe. Nagrywanie rozpocznie się razem z sesją, jeżeli jest ustawione prawidłowo i dostępne.</translation>
+        <translation type="obsolete">Zaznaczone kiedy nagrywanie jest możliwe. Nagrywanie rozpocznie się razem z sesją, jeżeli jest ustawione prawidłowo i dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="147"/>
+        <location filename="../serverdlg.cpp" line="149"/>
         <source>Current session directory text box (read-only)</source>
         <translation>Pole tekstowe aktualnego katalogu sesji (tylko do odczytu)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="151"/>
+        <location filename="../serverdlg.cpp" line="153"/>
         <source>Current Session Directory</source>
         <translation>Katalog sesji bieżących</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="152"/>
+        <location filename="../serverdlg.cpp" line="154"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation>Dostępne podczas nagrywania, przechowuje ścieżkę do aktualnego katalogu nagrywania. Wyłączone po nagraniu lub gdy rejestrator nie jest włączony.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="129"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder status label</source>
         <translation>Etykieta statusu nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="56"/>
+        <location filename="../serverdlg.cpp" line="59"/>
         <source>Directory Type combo box</source>
         <translation>Lista wyboru typu serwera</translation>
     </message>
@@ -3387,17 +3389,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Rejestracja serwerów jest odnawiana okresowo żeby mieć pweność, że wszystkie serwery na liście są dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="80"/>
+        <location filename="../serverdlg.cpp" line="83"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
         <translation>Kiedy podana nazwa jest różna niż „%1” zostanie wyświetlone czy rejestracja się powiodła. Gdy się nie powiedzie, proszę wybrać inny katalog serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="131"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>Recorder Status</source>
         <translation>Status nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="133"/>
+        <location filename="../serverdlg.cpp" line="135"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
         <translation>Nie wybrano katalogu nagrywania lub nie da się go używać. Proszę sprawdzić na karcie Opcje.</translation>
     </message>
@@ -3410,27 +3412,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Nagrywanie zostało wyłączone przez użytkownika lub otrzymano komunikat SIGUSR2.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="144"/>
+        <location filename="../serverdlg.cpp" line="146"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
         <translation>Gdy nie da się używać katalogu nagrywania, zostanie to wyświetlone w miejscu katalogu sesji.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="166"/>
+        <location filename="../serverdlg.cpp" line="168"/>
         <source>Language</source>
         <translation>Język</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="166"/>
+        <location filename="../serverdlg.cpp" line="168"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>Wybierz język interfejsu użytkownika.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="170"/>
+        <location filename="../serverdlg.cpp" line="172"/>
         <source>Language combo box</source>
         <translation>Lista wyboru języka</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="734"/>
+        <location filename="../serverdlg.cpp" line="737"/>
         <source>Now a directory</source>
         <translation>Bieżący serwer</translation>
     </message>
@@ -3447,65 +3449,65 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Niestandardowy adres serwera zbiorczego to adres IP lub adres URL serwera, na którym zarządzana jest lista serwerów w oknie dialogowym połączenia.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="200"/>
+        <location filename="../serverdlg.cpp" line="202"/>
         <source>Custom Directory line edit</source>
         <translation>Pole edycji własnych serwerów</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="244"/>
+        <location filename="../serverdlg.cpp" line="246"/>
         <source>&amp;Hide %1 server</source>
         <translation>&amp;Ukryj serwer %1</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="247"/>
+        <location filename="../serverdlg.cpp" line="249"/>
         <source>&amp;Show %1 server</source>
         <translation>&amp;Pokaż serwer %1</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="252"/>
+        <location filename="../serverdlg.cpp" line="254"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
         <translation>serwer %1-a</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="41"/>
+        <location filename="../serverdlg.cpp" line="44"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
         <translation>Serwer %1-a</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="589"/>
+        <location filename="../serverdlg.cpp" line="591"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>Nie dało się nagrywać. Sprawdź dostępne miejsce na dysku i prawa dostępu i spróbuj ponownie. Błąd: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="601"/>
+        <location filename="../serverdlg.cpp" line="603"/>
         <source>Select Main Recording Directory</source>
         <translation>Wybierz katalog nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="867"/>
+        <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>BŁĄD</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="124"/>
+        <location filename="../serverdlg.cpp" line="126"/>
         <source>Request new recording button</source>
         <translation>Nowy przycisk nagrywania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="125"/>
+        <location filename="../serverdlg.cpp" line="127"/>
         <source>New Recording</source>
         <translation>Nowe nagranie</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="126"/>
+        <location filename="../serverdlg.cpp" line="128"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>Podczas sesji nagraniowej można użyć przycisku w celu rozpoczęcia nowego nagrania.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="240"/>
-        <location filename="../serverdlg.cpp" line="392"/>
+        <location filename="../serverdlg.cpp" line="242"/>
+        <location filename="../serverdlg.cpp" line="394"/>
         <source>E&amp;xit</source>
         <translation>&amp;Wyjdź</translation>
     </message>
@@ -3546,7 +3548,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished"> Serwer</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="227"/>
+        <location filename="../serverdlg.cpp" line="229"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
         <translation>Jeśli pole wyboru start zminimalizowany na starcie systemu operacyjnego jest zaznaczone, serwer zostanie uruchomiony po uruchomieniu systemu operacyjnego i zostanie automatycznie zminimalizowany do ikony paska zadań systemowych.</translation>
     </message>
@@ -3555,27 +3557,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeśli pole wyboru „Ustaw serwer jako publiczny” jest zaznaczone, serwer ten rejestruje się na serwerze zbiorczym, tak aby wszyscy użytkownicy aplikacji mogli zobaczyć go na liście i połączyć się z nim. Rejestracja serwera jest okresowo odnawiana, aby upewnić się, że wszystkie serwery na liście są rzeczywiście dostępne.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="87"/>
+        <location filename="../serverdlg.cpp" line="90"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
         <translation>Nazwa serwera identyfikuje twój serwer w oknie dialogowym połączenia na liście dostępnych serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="107"/>
+        <location filename="../serverdlg.cpp" line="110"/>
         <source>Country/Region</source>
         <translation>Kraj/Region</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="108"/>
+        <location filename="../serverdlg.cpp" line="111"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
         <translation>Ustaw kraj lub region gdzie znajduje się serwer. Inni będą widzieć tą nazwę lokalizacji w oknie z listą serwerów.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="115"/>
+        <location filename="../serverdlg.cpp" line="118"/>
         <source>Combo box for location of this server</source>
         <translation>Lista rozwijana położenia tego serwera</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="131"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
         <translation>Wyświetla aktualny stan nagrywania. Możliwe są następujące wartości:</translation>
     </message>
@@ -3596,17 +3598,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">, albo przez pole wyboru lub sygnał SIGUSR2</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="141"/>
+        <location filename="../serverdlg.cpp" line="143"/>
         <source>There is no one connected to the server to record.</source>
         <translation>Nikt nie jest podłączony do serwera żeby nagrywać.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="142"/>
+        <location filename="../serverdlg.cpp" line="144"/>
         <source>The performers are being recorded to the specified session directory.</source>
         <translation>Wykonawcy są nagrywani do wybranego katalogu.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="143"/>
+        <location filename="../serverdlg.cpp" line="145"/>
         <source>NOTE</source>
         <translation>UWAGA</translation>
     </message>
@@ -3615,22 +3617,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeżeli nie da się korzystać z katalogu nagrywania, problem będzie wyświetlony zamiast ściżki.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="158"/>
+        <location filename="../serverdlg.cpp" line="160"/>
         <source>Server welcome message edit box</source>
         <translation>Pole edycji tekstu powitania na serwerze</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="159"/>
+        <location filename="../serverdlg.cpp" line="161"/>
         <source>Server Welcome Message</source>
         <translation>Tekst powitania na serwerze</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="160"/>
+        <location filename="../serverdlg.cpp" line="162"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
         <translation>Tekst powitania pojawi się w oknie czatu kidy muzyk połaczy sie z serwerem. Jeżli tekst nie jest podany okno czatu nie zostanie wyświetlone po połączeniu.</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="336"/>
+        <location filename="../serverdlg.cpp" line="338"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>Wpisz tutaj tekst. Jeżli tekst nie jest podany okno czatu nie zostanie wyświetlone po połączeniu.</translation>
     </message>
@@ -3639,7 +3641,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">dostępna aktualizacja oprogramowania</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="390"/>
+        <location filename="../serverdlg.cpp" line="392"/>
         <source>&amp;Window</source>
         <translation>&amp;Okno</translation>
     </message>
@@ -3854,32 +3856,32 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="419"/>
+        <location filename="../serverlist.cpp" line="415"/>
         <source>Now a directory</source>
         <translation type="unfinished">Bieżący serwer</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="425"/>
+        <location filename="../serverlist.cpp" line="421"/>
         <source>No longer a directory</source>
         <translation>Nie ma już katalogu</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="784"/>
+        <location filename="../serverlist.cpp" line="780"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
         <translation>Nie można otworzyć &apos;%1&apos; do odczytu/zapisu. Sprawdź, czy %2 ma uprawnienia (i czy jest wolne miejsce).</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="791"/>
+        <location filename="../serverlist.cpp" line="787"/>
         <source>Loading persistent server list file: %1</source>
         <translation>Ładowanie pliku z listą trwałych serwerów: %1</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="854"/>
+        <location filename="../serverlist.cpp" line="850"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Nie da się zapisywać do „%1”</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="865"/>
+        <location filename="../serverlist.cpp" line="861"/>
         <source>Saving registration for %1 (%2): %3</source>
         <translation>Zapisywanie rejestracji dla %1 (%2): %3</translation>
     </message>

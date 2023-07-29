@@ -1136,18 +1136,18 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>右输出声道选择框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="172"/>
+        <location filename="../clientsettingsdlg.cpp" line="173"/>
         <source>Small Network Buffers</source>
         <translatorcomment>Small Network Buffers 的作用不确定，暂定译法</translatorcomment>
         <translation>启用小网络缓冲区</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="179"/>
+        <location filename="../clientsettingsdlg.cpp" line="180"/>
         <source>Small network buffers check box</source>
         <translation>小网络缓冲区复选框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="183"/>
+        <location filename="../clientsettingsdlg.cpp" line="184"/>
         <source>Sound Card Buffer Delay</source>
         <translation>声卡缓冲区延迟</translation>
     </message>
@@ -1168,7 +1168,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">实际缓冲区延迟将影响连接状况、当前上传速率和总体延迟情况。缓冲区大小越小则状态指示亮红灯（断线）的概率将更高，上行带宽速率将更高，总体延迟则将更低。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="219"/>
+        <location filename="../clientsettingsdlg.cpp" line="220"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
         <translation>缓冲区设置则是在音质和总体延迟之间的权衡。</translation>
     </message>
@@ -1177,67 +1177,67 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">若缓冲区延迟设置被禁用，则是因为音频驱动禁止 %1 修改此选项。在 Windows 中，按下 ASIO 驱动设置按钮来打开设置面板。在 Linux 中，使用 JACK 配置工具来调整缓冲区大小。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="234"/>
+        <location filename="../clientsettingsdlg.cpp" line="235"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
         <translation>这将打开您声卡的驱动选项。一些驱动允许您调整缓冲区选项，其它类如 ASIO4ALL 则允许您选择音频的输入输出设备。更多信息可从 jamulus.io 了解。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="239"/>
+        <location filename="../clientsettingsdlg.cpp" line="240"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
         <translation>打开驱动选项。注意：%1 目前仅支持采样率为 %2 的设备。您无法选择非此采样率的设备。更多帮助请见 jamulus.io。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="249"/>
+        <location filename="../clientsettingsdlg.cpp" line="250"/>
         <source>64 samples setting radio button</source>
         <translation>64 采样设置单选按钮</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="252"/>
+        <location filename="../clientsettingsdlg.cpp" line="253"/>
         <source>128 samples setting radio button</source>
         <translation>128 采样设置单选按钮</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="255"/>
+        <location filename="../clientsettingsdlg.cpp" line="256"/>
         <source>256 samples setting radio button</source>
         <translation>256 采样设置单选按钮</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="271"/>
+        <location filename="../clientsettingsdlg.cpp" line="272"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
         <translation>选择音量计量表所使用的计量表样式。窄条和圆形小 LED 选项仅在混音版有效。选择窄条时，输入音量计量表将被设置为条状。选择圆形小 LED 时，输入音量计量表将使用圆形大 LED。其余选项均可同时应用于混音版和输入音量计量表。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="285"/>
+        <location filename="../clientsettingsdlg.cpp" line="286"/>
         <source>Audio Channels</source>
         <translation>音频通道</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="291"/>
+        <location filename="../clientsettingsdlg.cpp" line="292"/>
         <source>and</source>
         <translation>和</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="318"/>
+        <location filename="../clientsettingsdlg.cpp" line="319"/>
         <source>Audio channels combo box</source>
         <translation>声道选择框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="321"/>
+        <location filename="../clientsettingsdlg.cpp" line="322"/>
         <source>Audio Quality</source>
         <translation>音频质量</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="328"/>
+        <location filename="../clientsettingsdlg.cpp" line="329"/>
         <source>Audio quality combo box</source>
         <translation>音频质量选择框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="331"/>
+        <location filename="../clientsettingsdlg.cpp" line="332"/>
         <source>New Client Level</source>
         <translation>新客户端音量</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="340"/>
+        <location filename="../clientsettingsdlg.cpp" line="341"/>
         <source>New client level edit box</source>
         <translation>新客户端音量编辑框</translation>
     </message>
@@ -1246,13 +1246,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">自定义目录服务器地址</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="512"/>
+        <location filename="../clientsettingsdlg.cpp" line="508"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
         <translation>当你连接到一个 %1 服务器时，你填写到这里的内容会显示在代表你的那个推子上。此标签也会呈现在其它连接到相同服务器的客户端上。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="291"/>
-        <location filename="../clientsettingsdlg.cpp" line="430"/>
+        <location filename="../clientsettingsdlg.cpp" line="292"/>
+        <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>Mono</source>
         <translation>单声道</translation>
     </message>
@@ -1266,49 +1266,49 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>对于所有 %1 输入/输出声道（左右声道）均可选择对应到不同的声卡的声道。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="173"/>
+        <location filename="../clientsettingsdlg.cpp" line="174"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
         <translation>启用超小网络音频数据包的支持。这些网络包仅会在声卡缓冲区延迟小于 %1 采样率时才启用。网络缓冲区越小，则音频延迟越低。但于此同时网络负载和产生音频中断或声音伪影的可能性将会增加。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="307"/>
+        <location filename="../clientsettingsdlg.cpp" line="308"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
         <translation> 模式将增加您的媒体流数据频率。请确保您的上传速率未超过您实际可用的网络上传速率。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="360"/>
+        <location filename="../clientsettingsdlg.cpp" line="361"/>
         <source>Custom Directories</source>
         <translation>自定义目录</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="361"/>
+        <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
         <translation>如果您需要在连接对话框的分类目录下拉框中添加额外的分类目录，即可在这里填写位置。&lt;br&gt;若要移除一个值，先将其选中，然后在输入框中删除对应的文字，在将输入焦点移出控件即可。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="368"/>
+        <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Custom Directories combo box</source>
         <translation>自定义分类目录下拉框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="371"/>
+        <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Audio Upstream Rate</source>
         <translation>音频流上行速度</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="372"/>
+        <location filename="../clientsettingsdlg.cpp" line="373"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
         <translation>取决于当前音频数据包大小和压缩设定。请确保当前上行流量频率未超过您网络的可用上传速度（可通过类如 speedtest.net 的服务进行检测）。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="431"/>
+        <location filename="../clientsettingsdlg.cpp" line="427"/>
         <source>Mono-in/Stereo-out</source>
         <translation>单声道输入/立体声输出</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="291"/>
-        <location filename="../clientsettingsdlg.cpp" line="306"/>
-        <location filename="../clientsettingsdlg.cpp" line="432"/>
+        <location filename="../clientsettingsdlg.cpp" line="292"/>
+        <location filename="../clientsettingsdlg.cpp" line="307"/>
+        <location filename="../clientsettingsdlg.cpp" line="428"/>
         <source>Stereo</source>
         <translation>立体声</translation>
     </message>
@@ -1326,7 +1326,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="66"/>
-        <location filename="../clientsettingsdlg.cpp" line="1196"/>
+        <location filename="../clientsettingsdlg.cpp" line="1192"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -1356,7 +1356,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>若选取了自动，则本地客户端和远程服务器的抖动缓冲区将设为保守可使得音频丢包率最低的值。若要调整音频延迟，则推荐您禁用自动设置并手动使用滑块调低抖动缓冲区大小直到达到您满意的效果。本地音频抖动丢包时 LED 标识将指示红灯。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="184"/>
+        <location filename="../clientsettingsdlg.cpp" line="185"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
         <translation>缓冲区延迟设定是 %1 的一个基础设置项。此选项会对很多连接相关的属性有影响。</translation>
     </message>
@@ -1365,7 +1365,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">64 采样：建议的设置。提供最低的延迟但并非支持所有声卡。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="193"/>
+        <location filename="../clientsettingsdlg.cpp" line="194"/>
         <source>128 samples: Should work for most available sound cards.</source>
         <translation>128 采样：应该适用于大多数可用的声卡。</translation>
     </message>
@@ -1389,63 +1389,63 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>在 Windows 操作系统下，ASIO 驱动（声卡）可通过 %1 进行选择。若所选的 ASIO 驱动无效，则将展示错误信息并选取上一个有效的驱动。在 macOS 中，输入和输出硬件可供选择。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="187"/>
+        <location filename="../clientsettingsdlg.cpp" line="188"/>
         <source>Three buffer sizes can be selected</source>
         <translation>三种缓冲区大小可供选择</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="190"/>
+        <location filename="../clientsettingsdlg.cpp" line="191"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
         <translation>64 采样：提供最低的延迟但并非支持所有声卡。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="196"/>
+        <location filename="../clientsettingsdlg.cpp" line="197"/>
         <source>256 samples: Should only be used when 64 or 128 samples is causing issues.</source>
         <translation>256 采样：仅当在 64 或 128 采样存在问题时使用。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="200"/>
-        <location filename="../clientsettingsdlg.cpp" line="222"/>
+        <location filename="../clientsettingsdlg.cpp" line="201"/>
+        <location filename="../clientsettingsdlg.cpp" line="223"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
         <translation>部分声卡驱动不允许缓冲区延迟被调整到 %1。在此情况下，缓冲区延迟设置项会被禁用，此时需要从相应的显卡驱动中修改缓冲区大小的设置。例如，如果使用 ASIO，则使用“ASIO 设备选项”按钮来打开驱动设置面板，或是使用 JACK 时，使用类如 QjackCtl 的工具来调整缓冲区大小。其它音频介质，如 Pipewire，则需要使用其对应的设置工具来调整。请参照对应声卡驱动或音频介质的文档。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="208"/>
+        <location filename="../clientsettingsdlg.cpp" line="209"/>
         <source>If no buffer size is selected and all settings are disabled, this means a buffer size in use by the driver which does not match the values. %1 will still work with this setting but may have restricted performance.</source>
         <translation>如果没有选择缓冲区大小且所有设置均被禁用，则表明驱动所使用的缓冲区大小与提供的值不匹配。在此设定下，%1 仍将可供使用，但可能存在受限的性能。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="214"/>
+        <location filename="../clientsettingsdlg.cpp" line="215"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
         <translation>实际的缓冲区延迟的设置将影响连接、当前上行带宽以及总体延迟情况。缓冲区大小越小，则指示灯亮红的概率越大（音频丢包），对上行带宽的要求也就越高，总体延迟也就越低。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="233"/>
+        <location filename="../clientsettingsdlg.cpp" line="234"/>
         <source>Sound card driver settings</source>
         <translation>声卡驱动选项</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="260"/>
+        <location filename="../clientsettingsdlg.cpp" line="261"/>
         <source>ASIO Device Settings push button</source>
         <translation>ASIO 驱动设置按钮</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="265"/>
+        <location filename="../clientsettingsdlg.cpp" line="266"/>
         <source>Skin</source>
         <translation>皮肤</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="265"/>
+        <location filename="../clientsettingsdlg.cpp" line="266"/>
         <source>Select the skin to be used for the main window.</source>
         <translation>选择用于主窗口的皮肤。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="267"/>
+        <location filename="../clientsettingsdlg.cpp" line="268"/>
         <source>Skin combo box</source>
         <translation>皮肤选择框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="270"/>
+        <location filename="../clientsettingsdlg.cpp" line="271"/>
         <source>Meter Style</source>
         <translation>计量表样式</translation>
     </message>
@@ -1454,127 +1454,127 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">选择音量计量表所使用的计量表样式。窄条和小 LED 选项仅在混音版有效。选择窄条时，输入音量计量表将被设置为条状。选择小 LED 时，输入音量计量表将使用圆 LED。其余选项均可同时应用于混音版和输入音量计量表。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="277"/>
+        <location filename="../clientsettingsdlg.cpp" line="278"/>
         <source>Meter Style combo box</source>
         <translation>计量表样式下拉框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="280"/>
+        <location filename="../clientsettingsdlg.cpp" line="281"/>
         <source>Language</source>
         <translation>语言(Lang)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="280"/>
+        <location filename="../clientsettingsdlg.cpp" line="281"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>选择用于用户界面的语言。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="282"/>
+        <location filename="../clientsettingsdlg.cpp" line="283"/>
         <source>Language combo box</source>
         <translation>语言选择框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="286"/>
+        <location filename="../clientsettingsdlg.cpp" line="287"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
         <translation>设置用于连接客户端与服务器所要使用的声道数量。有三个模式可用：</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="292"/>
+        <location filename="../clientsettingsdlg.cpp" line="293"/>
         <source>These modes use one and two audio channels respectively.</source>
         <translation>这些模式分别使用一个和两个声道。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="297"/>
+        <location filename="../clientsettingsdlg.cpp" line="298"/>
         <source>Mono in/Stereo-out</source>
         <translation>单声道输入/立体声输出</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="298"/>
+        <location filename="../clientsettingsdlg.cpp" line="299"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
         <translation>发送到服务器的音频信号是单声道但接收到的是立体声。当您的声卡其中一个输入声道用于乐器而另一个用于麦克风的场景下很实用。在此情况下，两个输入信号可以合并为单声道但服务器混音仍可听到立体声。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="306"/>
+        <location filename="../clientsettingsdlg.cpp" line="307"/>
         <source>Enabling </source>
         <translation>启用 </translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="312"/>
+        <location filename="../clientsettingsdlg.cpp" line="313"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
         <translation>在立体声媒体流模式时，由于混响效果将被应用到所有的两个声道，故主窗口将不提供选择混响效果所应用到的声道的功能。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="322"/>
+        <location filename="../clientsettingsdlg.cpp" line="323"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
         <translation>音质越高，音频流带宽使用率也会越高。请确保您的上传速率未超过实际网络连接可用的带宽。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="332"/>
+        <location filename="../clientsettingsdlg.cpp" line="333"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
         <translation>此选项决定了新加入服务器的客户端的推子电平（音量）。若新的客户端连接到了当前服务器，若其未曾连接到此服务器并存储了其推子音量值，则其推子初始值将为此项所设置的值。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="343"/>
+        <location filename="../clientsettingsdlg.cpp" line="344"/>
         <source>Input Boost</source>
         <translation>输入增强</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="344"/>
+        <location filename="../clientsettingsdlg.cpp" line="345"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
         <translation>此选项允许你增加输入信号的强度最多十倍（+20dB）。若你的声卡音量过低，首先尝试通过将麦克风离近的方式提高音量，调整您的声音设备或者增加您的系统输入音量设定。若这些方法仍不奏效，则在此设置增加的强度。如果您的声卡音量过高，音频有失真或削波，则请不要使用此选项，此项无助于解决这些问题，相反，您应当考虑通过离远麦克风、降低声音设备的音量或降低系统输入音量设定的方式解决此问题。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="357"/>
+        <location filename="../clientsettingsdlg.cpp" line="358"/>
         <source>Input Boost combo box</source>
         <translation>输入增强选择框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="394"/>
+        <location filename="../clientsettingsdlg.cpp" line="392"/>
         <source>Audio Alerts</source>
         <translation>音频提示</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="395"/>
+        <location filename="../clientsettingsdlg.cpp" line="393"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
         <translation>收到聊天消息以及新客户端加入会话时触发音频警报。可能需要第二个声音设备来听到警报。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="399"/>
+        <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Audio Alerts check box</source>
         <translation>音频提示勾选框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="451"/>
+        <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Bar (narrow)</source>
         <translation>窄条</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="452"/>
+        <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>Bar (wide)</source>
         <translation>条状</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="453"/>
+        <location filename="../clientsettingsdlg.cpp" line="449"/>
         <source>LEDs (stripe)</source>
         <translation>条纹 LED</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="454"/>
+        <location filename="../clientsettingsdlg.cpp" line="450"/>
         <source>LEDs (round, small)</source>
         <translation>圆形小 LED</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="455"/>
+        <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>LEDs (round, big)</source>
         <translation>圆形大 LED</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="507"/>
+        <location filename="../clientsettingsdlg.cpp" line="503"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
         <translation>在此填写您的名字或别名以便合奏的其他乐手知道您是谁。您也可以添加乐器的图片以及您所在国家或地区的旗帜。您还可以添加您的城市和水平程度的相关信息。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="523"/>
+        <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Country/region flag button</source>
         <translation>国家/地区旗帜按钮</translation>
     </message>
@@ -1587,63 +1587,63 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">目录服务器地址下拉框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="381"/>
+        <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Number of Mixer Panel Rows</source>
         <translation>混音面板行数</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="381"/>
+        <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
         <translation>调整用于呈现混音面板的行数。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="384"/>
+        <location filename="../clientsettingsdlg.cpp" line="385"/>
         <source>Number of Mixer Panel Rows spin box</source>
         <translation>混音面板行数数字框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="386"/>
+        <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Feedback Protection</source>
         <translation>反馈保护</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="387"/>
+        <location filename="../clientsettingsdlg.cpp" line="388"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
         <translation>防止麦克风和扬声器之间的声反馈。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="391"/>
+        <location filename="../clientsettingsdlg.cpp" line="389"/>
         <source>Feedback Protection check box</source>
         <translation>自激保护勾选框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="403"/>
+        <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>ASIO Device Settings</source>
         <translation>ASIO 驱动设置</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="437"/>
+        <location filename="../clientsettingsdlg.cpp" line="433"/>
         <source>Low</source>
         <translation>低</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="438"/>
-        <location filename="../clientsettingsdlg.cpp" line="444"/>
+        <location filename="../clientsettingsdlg.cpp" line="434"/>
+        <location filename="../clientsettingsdlg.cpp" line="440"/>
         <source>Normal</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="439"/>
+        <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>High</source>
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="445"/>
+        <location filename="../clientsettingsdlg.cpp" line="441"/>
         <source>Fancy</source>
         <translation>精致</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="446"/>
+        <location filename="../clientsettingsdlg.cpp" line="442"/>
         <source>Compact</source>
         <translation>紧凑</translation>
     </message>
@@ -1668,9 +1668,9 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">小 LED</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="470"/>
-        <location filename="../clientsettingsdlg.cpp" line="609"/>
-        <location filename="../clientsettingsdlg.cpp" line="617"/>
+        <location filename="../clientsettingsdlg.cpp" line="466"/>
+        <location filename="../clientsettingsdlg.cpp" line="605"/>
+        <location filename="../clientsettingsdlg.cpp" line="613"/>
         <location filename="../util.cpp" line="1271"/>
         <source>None</source>
         <translation>无</translation>
@@ -1680,7 +1680,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">偏好</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="506"/>
+        <location filename="../clientsettingsdlg.cpp" line="502"/>
         <source>Musician Profile</source>
         <translation>乐手信息</translation>
     </message>
@@ -1689,12 +1689,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">在此填写您的名字或别名以便合奏的其他乐手知道您是谁。您也可以添加乐器的图片以及您所在地的旗帜。您还可以添加您的城市和水平程度的相关信息。</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="519"/>
+        <location filename="../clientsettingsdlg.cpp" line="515"/>
         <source>Alias or name edit box</source>
         <translation>名称或别名编辑框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="521"/>
+        <location filename="../clientsettingsdlg.cpp" line="517"/>
         <source>Instrument picture button</source>
         <translation>乐器图片按钮</translation>
     </message>
@@ -1703,53 +1703,53 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">地区旗帜按钮</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="525"/>
+        <location filename="../clientsettingsdlg.cpp" line="521"/>
         <source>City edit box</source>
         <translation>城市编辑框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="527"/>
+        <location filename="../clientsettingsdlg.cpp" line="523"/>
         <source>Skill level combo box</source>
         <translation>水平程度选择框</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="621"/>
+        <location filename="../clientsettingsdlg.cpp" line="617"/>
         <source>Beginner</source>
         <translation>新手</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="625"/>
+        <location filename="../clientsettingsdlg.cpp" line="621"/>
         <source>Intermediate</source>
         <translation>中级</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="629"/>
+        <location filename="../clientsettingsdlg.cpp" line="625"/>
         <source>Expert</source>
         <translation>专家</translation>
     </message>
     <message>
+        <location filename="../clientsettingsdlg.cpp" line="781"/>
         <location filename="../clientsettingsdlg.cpp" line="785"/>
-        <location filename="../clientsettingsdlg.cpp" line="789"/>
         <source>Size: </source>
         <translation>大小: </translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="844"/>
+        <location filename="../clientsettingsdlg.cpp" line="840"/>
         <source>Buffer Delay</source>
         <translation>缓冲区延迟</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="849"/>
+        <location filename="../clientsettingsdlg.cpp" line="845"/>
         <source>Buffer Delay: </source>
         <translation>缓冲区延迟: </translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="1189"/>
+        <location filename="../clientsettingsdlg.cpp" line="1185"/>
         <source>Center</source>
         <translation>中心</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="1201"/>
+        <location filename="../clientsettingsdlg.cpp" line="1197"/>
         <source>R</source>
         <translation>右</translation>
     </message>
@@ -2051,59 +2051,59 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">设备</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="444"/>
+        <location filename="../clientsettingsdlgbase.ui" line="474"/>
         <source>Input Channel Mapping</source>
         <translation>输入声道映射</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="464"/>
-        <location filename="../clientsettingsdlgbase.ui" line="521"/>
+        <location filename="../clientsettingsdlgbase.ui" line="494"/>
+        <location filename="../clientsettingsdlgbase.ui" line="557"/>
         <source>L</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="477"/>
-        <location filename="../clientsettingsdlgbase.ui" line="534"/>
+        <location filename="../clientsettingsdlgbase.ui" line="510"/>
+        <location filename="../clientsettingsdlgbase.ui" line="573"/>
         <source>R</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="501"/>
+        <location filename="../clientsettingsdlgbase.ui" line="537"/>
         <source>Output Channel Mapping</source>
         <translation>输出声道映射</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="852"/>
+        <location filename="../clientsettingsdlgbase.ui" line="900"/>
         <source>Small Network Buffers</source>
         <translation>小型网络缓冲区</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="622"/>
+        <location filename="../clientsettingsdlgbase.ui" line="670"/>
         <source>Buffer Delay</source>
         <translation>缓冲区延迟</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="103"/>
+        <location filename="../clientsettingsdlgbase.ui" line="109"/>
         <source>Country/Region</source>
         <translation>国家/地区</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="634"/>
+        <location filename="../clientsettingsdlgbase.ui" line="682"/>
         <source>(preferred)</source>
         <translation>(偏好)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="647"/>
+        <location filename="../clientsettingsdlgbase.ui" line="695"/>
         <source>(default)</source>
         <translation>(默认)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="660"/>
+        <location filename="../clientsettingsdlgbase.ui" line="708"/>
         <source>(safe)</source>
         <translation>(安全)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="394"/>
+        <location filename="../clientsettingsdlgbase.ui" line="424"/>
         <source>Driver Setup</source>
         <translation>驱动选项</translation>
     </message>
@@ -2123,7 +2123,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>别名/名称</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="96"/>
+        <location filename="../clientsettingsdlgbase.ui" line="99"/>
         <source>Instrument</source>
         <translation>乐器</translation>
     </message>
@@ -2132,144 +2132,142 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">国家或地区</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="110"/>
+        <location filename="../clientsettingsdlgbase.ui" line="119"/>
         <source>City</source>
         <translation>城市</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="117"/>
+        <location filename="../clientsettingsdlgbase.ui" line="129"/>
         <source>Skill</source>
         <translation>水平</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="210"/>
+        <location filename="../clientsettingsdlgbase.ui" line="225"/>
         <source>User Interface</source>
         <translation>用户界面</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="227"/>
+        <location filename="../clientsettingsdlgbase.ui" line="245"/>
         <source>Meter Style</source>
         <translation>计量表样式</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="241"/>
+        <location filename="../clientsettingsdlgbase.ui" line="265"/>
         <source>Mixer Rows</source>
         <translation>混音器行数</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="248"/>
+        <location filename="../clientsettingsdlgbase.ui" line="321"/>
         <source>Audio Alerts</source>
         <translation>音频警报</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="339"/>
+        <location filename="../clientsettingsdlgbase.ui" line="366"/>
         <source>Audio/Network Setup</source>
         <translation>音频/网络选项</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="349"/>
+        <location filename="../clientsettingsdlgbase.ui" line="376"/>
         <source>Audio Device</source>
         <translation>音频设备</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="690"/>
+        <location filename="../clientsettingsdlgbase.ui" line="738"/>
         <source>Jitter Buffer</source>
         <translation>抖动缓冲</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="702"/>
+        <location filename="../clientsettingsdlgbase.ui" line="750"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="711"/>
+        <location filename="../clientsettingsdlgbase.ui" line="759"/>
         <source>Local</source>
         <translation>本地</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="724"/>
+        <location filename="../clientsettingsdlgbase.ui" line="772"/>
         <source>Server</source>
         <translation>服务器</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="741"/>
-        <location filename="../clientsettingsdlgbase.ui" line="754"/>
+        <location filename="../clientsettingsdlgbase.ui" line="789"/>
+        <location filename="../clientsettingsdlgbase.ui" line="802"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="883"/>
+        <location filename="../clientsettingsdlgbase.ui" line="931"/>
         <source>kbps</source>
         <translation>kbps</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="986"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1034"/>
         <source>Custom Directories:</source>
         <translation>自定义目录：</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1047"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1101"/>
         <source>Input Boost</source>
         <translation>输入增强</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1070"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1133"/>
         <source>Feedback Protection</source>
         <translation>反馈保护</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="294"/>
-        <location filename="../clientsettingsdlgbase.ui" line="1083"/>
         <source>Enable</source>
-        <translation>启用</translation>
+        <translation type="vanished">启用</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1138"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1188"/>
         <source>Input Balance</source>
         <translation>输入平衡</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1149"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1199"/>
         <source>Pan</source>
         <translation>左右平衡</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1229"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1282"/>
         <source>Center</source>
         <translation>中心</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="581"/>
+        <location filename="../clientsettingsdlgbase.ui" line="623"/>
         <source>Audio Channels</source>
         <translation>音频通道</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="588"/>
+        <location filename="../clientsettingsdlgbase.ui" line="633"/>
         <source>Audio Quality</source>
         <translation>音频质量</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="945"/>
+        <location filename="../clientsettingsdlgbase.ui" line="993"/>
         <source>Advanced Setup</source>
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1013"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1064"/>
         <source>New Client Level</source>
         <translation>新客户端音量</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="220"/>
+        <location filename="../clientsettingsdlgbase.ui" line="235"/>
         <source>Skin</source>
         <translation>皮肤</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="234"/>
+        <location filename="../clientsettingsdlgbase.ui" line="255"/>
         <source>Language</source>
         <translation>语言(Lang)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1025"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1079"/>
         <source>%</source>
         <translation>%</translation>
     </message>
@@ -2278,12 +2276,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">自定义目录服务器地址:</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="859"/>
+        <location filename="../clientsettingsdlgbase.ui" line="907"/>
         <source>Audio Stream Rate</source>
         <translation>音频流速度</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="893"/>
+        <location filename="../clientsettingsdlgbase.ui" line="941"/>
         <source>val</source>
         <translation>值</translation>
     </message>
@@ -2592,28 +2590,28 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CServerDlg</name>
     <message>
-        <location filename="../serverdlg.cpp" line="48"/>
+        <location filename="../serverdlg.cpp" line="51"/>
         <source>Client List</source>
         <translation>客户端列表</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="49"/>
+        <location filename="../serverdlg.cpp" line="52"/>
         <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
         <translation>客户端列表显示了所有连接到此服务器的客户端。例如 IP 地址和名称等信息由各个客户端提供。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="53"/>
+        <location filename="../serverdlg.cpp" line="56"/>
         <source>Connected clients list view</source>
         <translation>已连接的客户端列表视图</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="60"/>
+        <location filename="../serverdlg.cpp" line="63"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
         <translation>&lt;b&gt;目录：&lt;/b&gt;选择 &apos;%1&apos; 不在目录中注册你的服务器。&lt;br&gt;或者选择其中一个流派在该目录中注册。&lt;br&gt;或者选择 &apos;%2&apos; 并在选项标签上指定一个自定义目录地址，在一个自定义目录中注册。&lt;br&gt;&lt;br&gt;对于除&apos;%1&apos;以外的任何值，该服务器都会与一个目录注册，这样，当 %3 的用户选择该目录时，可以在客户端连接对话服务器列表中选择该服务器。&lt;br&gt;&lt;br&gt;服务器的注册会定期更新，以确保连接对话服务器列表中的所有服务器都是实际可用的。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="226"/>
+        <location filename="../serverdlg.cpp" line="228"/>
         <source>Start Minimized on Operating System Start</source>
         <translation>操作系统启动时以最小化状态启动</translation>
     </message>
@@ -2622,12 +2620,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">将我的服务器置为公开</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="79"/>
+        <location filename="../serverdlg.cpp" line="82"/>
         <source>Register Server Status</source>
         <translation>登记服务器状态</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="227"/>
+        <location filename="../serverdlg.cpp" line="229"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
         <translation>如果选中了操作系统启动时以最小化状态启动勾选框，服务器程序将随操作系统启动时自动启动并最小化至系统任务栏。</translation>
     </message>
@@ -2664,32 +2662,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">服务器列表下拉框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="86"/>
+        <location filename="../serverdlg.cpp" line="89"/>
         <source>Server Name</source>
         <translation>服务器名称</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="87"/>
+        <location filename="../serverdlg.cpp" line="90"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
         <translation>服务器名称在客户端的连接对话框的服务器列表中对应服务器的显示标识。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="93"/>
+        <location filename="../serverdlg.cpp" line="96"/>
         <source>Server name line edit</source>
         <translation>服务器名称编辑框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="96"/>
+        <location filename="../serverdlg.cpp" line="99"/>
         <source>Location City</source>
         <translation>所处城市</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="97"/>
+        <location filename="../serverdlg.cpp" line="100"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>设置服务器所处于的城市。如果输入了城市名称，其将被显示在客户端的连接对话框的服务器列表中。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="104"/>
+        <location filename="../serverdlg.cpp" line="107"/>
         <source>City where the server is located line edit</source>
         <translation>服务器所位于的城市的编辑框</translation>
     </message>
@@ -2702,28 +2700,28 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">录制已因界面的勾选框或因程序收到 SIGUSR2 信号而关闭。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="166"/>
+        <location filename="../serverdlg.cpp" line="168"/>
         <source>Language</source>
         <translation>语言(Lang)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="166"/>
+        <location filename="../serverdlg.cpp" line="168"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>选择用于用户界面的语言。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="170"/>
+        <location filename="../serverdlg.cpp" line="172"/>
         <source>Language combo box</source>
         <translation>语言选择框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="173"/>
+        <location filename="../serverdlg.cpp" line="175"/>
         <source>Display dialog to select recording directory button</source>
         <translation>打开可供选择录制存储位置的对话框的按钮</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="174"/>
-        <location filename="../serverdlg.cpp" line="181"/>
+        <location filename="../serverdlg.cpp" line="176"/>
+        <location filename="../serverdlg.cpp" line="183"/>
         <source>Main Recording Directory</source>
         <translation>主要录制目录</translation>
     </message>
@@ -2732,7 +2730,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">点击按钮以打开供选择主要录制目录路径的对话框。所选值必须存在且可写（允许运行 Jamulus 所使用的用户创建子目录）。 </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="180"/>
+        <location filename="../serverdlg.cpp" line="182"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>主录制路径文本框（只读）</translation>
     </message>
@@ -2741,22 +2739,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">当前录制目录路径的值。所选的值必须存在且可被写入（允许运行 Jamulus 的用户创建子目录）。点击按钮以打开供选择主录制目录路径的对话框。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="188"/>
+        <location filename="../serverdlg.cpp" line="190"/>
         <source>Clear the recording directory button</source>
         <translation>清除录制目录按钮</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="189"/>
+        <location filename="../serverdlg.cpp" line="191"/>
         <source>Clear Recording Directory</source>
         <translation>清除录制目录</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="190"/>
+        <location filename="../serverdlg.cpp" line="192"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
         <translation>点击按钮以清除当前所选择的录制路径。在设置新的位置之前将不再可以开始新的录制。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="118"/>
+        <location filename="../serverdlg.cpp" line="121"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>开启或关闭录制的勾选框</translation>
     </message>
@@ -2765,43 +2763,42 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">如果登记服务器勾选框被勾选，这里将展示到目录服务器的登记是否成功。若登记失败，请选择其它服务器列表。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="119"/>
+        <location filename="../serverdlg.cpp" line="122"/>
         <source>Jam Recorder</source>
         <translation>Jam 录音器</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="120"/>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
-        <translation>如果（设置正确且）选中，则记录器将在会话正在进行时运行。</translation>
+        <translation type="vanished">如果（设置正确且）选中，则记录器将在会话正在进行时运行。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="147"/>
+        <location filename="../serverdlg.cpp" line="149"/>
         <source>Current session directory text box (read-only)</source>
         <translation>当前会话目录文本框（只读）</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="151"/>
+        <location filename="../serverdlg.cpp" line="153"/>
         <source>Current Session Directory</source>
         <translation>当前会话目录</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="152"/>
+        <location filename="../serverdlg.cpp" line="154"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translatorcomment>这句话原文可能有问题</translatorcomment>
         <translation>用于存储录制时当前会话所录制到的位置，录制未进行时且未开启录制功能时此项将不可用。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="129"/>
+        <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder status label</source>
         <translation>录制状态标签</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="131"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>Recorder Status</source>
         <translation>录音器状态</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="131"/>
+        <location filename="../serverdlg.cpp" line="133"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
         <translation>显示当前录音功能的状态。  可能为下述值：</translation>
     </message>
@@ -2814,17 +2811,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">录制已被关闭</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="141"/>
+        <location filename="../serverdlg.cpp" line="143"/>
         <source>There is no one connected to the server to record.</source>
         <translation>没有人连接到服务器以供录制。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="142"/>
+        <location filename="../serverdlg.cpp" line="144"/>
         <source>The performers are being recorded to the specified session directory.</source>
         <translation>演奏已被录制到会话所对应的目录中。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="143"/>
+        <location filename="../serverdlg.cpp" line="145"/>
         <source>NOTE</source>
         <translation>注意</translation>
     </message>
@@ -2833,17 +2830,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">若录制路径不可用，则问题原因将显示在这里。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="158"/>
+        <location filename="../serverdlg.cpp" line="160"/>
         <source>Server welcome message edit box</source>
         <translation>服务器欢迎信息编辑框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="159"/>
+        <location filename="../serverdlg.cpp" line="161"/>
         <source>Server Welcome Message</source>
         <translation>服务器欢迎信息</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="160"/>
+        <location filename="../serverdlg.cpp" line="162"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
         <translation>当新的乐手加入服务器时，欢迎信息将会显示在聊天窗口中。若未设置欢迎信息，则服务器欢迎功能将为关闭状态。</translation>
     </message>
@@ -2860,33 +2857,33 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">自定义目录指用于提供连接对话框中所展示的服务器列表信息的自定义的目录服务器的 IP 地址或 URL。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="200"/>
+        <location filename="../serverdlg.cpp" line="202"/>
         <source>Custom Directory line edit</source>
         <translation>自定义目录编辑框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="244"/>
+        <location filename="../serverdlg.cpp" line="246"/>
         <source>&amp;Hide %1 server</source>
         <translation>隐藏 %1 服务器(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="247"/>
+        <location filename="../serverdlg.cpp" line="249"/>
         <source>&amp;Show %1 server</source>
         <translation>显示 %1 服务器(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="252"/>
+        <location filename="../serverdlg.cpp" line="254"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
         <translation>%1 服务器</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="336"/>
+        <location filename="../serverdlg.cpp" line="338"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>在此输入消息文字。若未设定消息文字，服务器欢迎信息将为关闭状态。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="41"/>
+        <location filename="../serverdlg.cpp" line="44"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
         <translation>%1 服务器</translation>
@@ -2896,22 +2893,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="obsolete">软件更新可用</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="589"/>
+        <location filename="../serverdlg.cpp" line="591"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>录音功能启动失败。请检查可用的磁盘空间和权限然后再试一次。错误信息: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="867"/>
+        <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="124"/>
+        <location filename="../serverdlg.cpp" line="126"/>
         <source>Request new recording button</source>
         <translation>用于创建新的录制的按钮</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="56"/>
+        <location filename="../serverdlg.cpp" line="59"/>
         <source>Directory Type combo box</source>
         <translation>分类目录类型下拉框</translation>
     </message>
@@ -2940,124 +2937,129 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">服务器的登记情况会周期性的刷新，以确保连接对话框中列出的服务器都确实可用。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="80"/>
+        <location filename="../serverdlg.cpp" line="83"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
         <translation>当一个非“%1”的选项被作为目录选择时，此处将呈现登记情况是否成功的状态。若登记失败，则请选择一个其它的目录。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="107"/>
+        <location filename="../serverdlg.cpp" line="110"/>
         <source>Country/Region</source>
         <translation>国家/地区</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="108"/>
+        <location filename="../serverdlg.cpp" line="111"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
         <translation>设置当前服务器所位于的国家或地区。客户端将在服务器列表对话框中展示此位置信息。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="115"/>
+        <location filename="../serverdlg.cpp" line="118"/>
         <source>Combo box for location of this server</source>
         <translation>服务器位置的选择框</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="125"/>
+        <location filename="../serverdlg.cpp" line="123"/>
+        <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serverdlg.cpp" line="127"/>
         <source>New Recording</source>
         <translation>创建新录制</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="126"/>
+        <location filename="../serverdlg.cpp" line="128"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>在一次录制会话中，此按钮可供开始新的录制。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="133"/>
+        <location filename="../serverdlg.cpp" line="135"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
         <translation>未设置录音目录或设置的值不可用。请在设置选项卡中检查对应的选项。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="137"/>
+        <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
         <translation>记录已被用户界面复选框或JSON-RPC关闭。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="139"/>
+        <location filename="../serverdlg.cpp" line="141"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
         <translation>录音已被关闭，通过用户界面复选框、SIGUSR2或JSON-RPC。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="144"/>
+        <location filename="../serverdlg.cpp" line="146"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
         <translation>如果录制目录不可用，问题将会被显示在此位置。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="175"/>
+        <location filename="../serverdlg.cpp" line="177"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
         <translation>点击按钮以打开可供选择录制目录位置的对话框。  所选值必须存在且可写入（允许运行 %1 的用户创建子目录）。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="182"/>
+        <location filename="../serverdlg.cpp" line="184"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
         <translation>当前录制目录路径的值。所选的值必须存在且可被写入（允许运行 %1 的用户创建子目录）。点击按钮以打开供选择主录制目录路径的对话框。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="194"/>
+        <location filename="../serverdlg.cpp" line="196"/>
         <source>Custom Directory address</source>
         <translation>自定义目录服务器地址</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="195"/>
+        <location filename="../serverdlg.cpp" line="197"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
         <translation>自定义目录指用于提供连接对话框中所展示的服务器列表信息的自定义的目录服务器的地址或。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="203"/>
+        <location filename="../serverdlg.cpp" line="205"/>
         <source>Server List Filename dialog push button</source>
         <translation>服务器列表文件名对话框按钮</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="204"/>
-        <location filename="../serverdlg.cpp" line="212"/>
+        <location filename="../serverdlg.cpp" line="206"/>
+        <location filename="../serverdlg.cpp" line="214"/>
         <source>Server List Filename</source>
         <translation>服务器列表文件名</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="205"/>
+        <location filename="../serverdlg.cpp" line="207"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
         <translation>点击按钮以打开供选择存储服务器列表文件位置的对话框。运行 %1 的用户需要能够能够创建此文件（若对应的文件已存在则将在保存时覆盖文件内容）。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="211"/>
+        <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename text box (read-only)</source>
         <translation>服务器列表文件名编辑框（只读）</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="213"/>
+        <location filename="../serverdlg.cpp" line="215"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
         <translation>当前持久存储服务器列表的文件名。运行 %1 的用户需要能够能够创建此文件（若对应的文件已存在则将在保存时覆盖文件内容）。点击按钮以打开可供设置持久存储服务器列表的文件名的对话框。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="220"/>
+        <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear the server list file name button</source>
         <translation>清除服务器列表文件名的按钮</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="221"/>
+        <location filename="../serverdlg.cpp" line="223"/>
         <source>Clear Server List Filename</source>
         <translation>清除服务器列表文件名</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="222"/>
+        <location filename="../serverdlg.cpp" line="224"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
         <translation>点击按钮来清除当前所选的服务器列表持久化存储的文件名。这将导致服务器列表不再持久存储到本地，直至一个新的文件名被设置。</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="240"/>
-        <location filename="../serverdlg.cpp" line="392"/>
+        <location filename="../serverdlg.cpp" line="242"/>
+        <location filename="../serverdlg.cpp" line="394"/>
         <source>E&amp;xit</source>
         <translation>退出(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="734"/>
+        <location filename="../serverdlg.cpp" line="737"/>
         <source>Now a directory</source>
         <translation>现在是目录了</translation>
     </message>
@@ -3078,12 +3080,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished"> 服务器</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="390"/>
+        <location filename="../serverdlg.cpp" line="392"/>
         <source>&amp;Window</source>
         <translation>窗口(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="601"/>
+        <location filename="../serverdlg.cpp" line="603"/>
         <source>Select Main Recording Directory</source>
         <translation>选择录制存储位置</translation>
     </message>
@@ -3310,32 +3312,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="419"/>
+        <location filename="../serverlist.cpp" line="415"/>
         <source>Now a directory</source>
         <translation>现在是目录</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="425"/>
+        <location filename="../serverlist.cpp" line="421"/>
         <source>No longer a directory</source>
         <translation>不再是一个目录</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="784"/>
+        <location filename="../serverlist.cpp" line="780"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
         <translation>无法打开&apos;%1&apos;进行读/写。请检查%2是否有权限（以及是否有可用空间）。</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="791"/>
+        <location filename="../serverlist.cpp" line="787"/>
         <source>Loading persistent server list file: %1</source>
         <translation>正在加载持久化服务器列表文件：%1</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="854"/>
+        <location filename="../serverlist.cpp" line="850"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>不能写入到 &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../serverlist.cpp" line="865"/>
+        <location filename="../serverlist.cpp" line="861"/>
         <source>Saving registration for %1 (%2): %3</source>
         <translation>保存%1 (%2)的注册：%3</translation>
     </message>

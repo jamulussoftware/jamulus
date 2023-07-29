@@ -1636,12 +1636,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="208"/>
         <source>If no buffer size is selected and all settings are disabled, this means a buffer size in use by the driver which does not match the values. %1 will still work with this setting but may have restricted performance.</source>
-        <translation>Si aucune taille de tampon n&apos;est sélectionnée et que tous les paramètres sont désactivés, cela signifie que la taille de tampon utilisée par le pilote ne correspond pas aux valeurs. %1 fonctionnera toujours avec cette configuration, mais ses performances seront peut-être limitées.</translation>
+        <translation>Si aucune taille de tampon n&apos;est sélectionnée et que tous les paramètres sont désactivés, cela signifie que la taille de tampon utilisée par le pilote ne correspond pas aux valeurs. %1 fonctionnera toujours avec ce paramètre, mais ses performances seront peut-être limitées.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="214"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation>Le retard réel de la mémoire tampon a une influence sur la connexion, le débit d&apos;envoi actuel et le retard global. Plus la taille du tampon est faible, plus la probabilité d&apos;un voyant rouge dans l&apos;indicateur d&apos;état (désynchronisation) est élevée, plus le débit d&apos;envoi est élevé et plus le retard global est faible.</translation>
+        <translation>Le délai réel de la mémoire tampon a une influence sur la connexion, le débit de téléversement actuel et le délai global. Plus la taille du  tampon est faible, plus la probabilité d&apos;un voyant rouge dans l&apos;indicateur d&apos;état (désynchronisation) est élevée, plus le débit de téléversement est élevé et plus le délai global est faible.</translation>
     </message>
     <message>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
@@ -1669,7 +1669,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="277"/>
         <source>Meter Style combo box</source>
-        <translation>Choix déroulant de style d&apos;indicateurs</translation>
+        <translation>Choix déroulant de style d&apos;indicateur</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
@@ -1699,7 +1699,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation>Cela dépend de la taille actuelle des paquets audio et du paramètre de compression. Assurez-vous que le débit montant n&apos;est pas supérieur à votre vitesse d&apos;envoi sur Internet (vérifiez-le avec un service tel que speedtest.net).</translation>
+        <translation>Cela dépend de la taille actuelle des paquets audio et du paramètre de compression. Assurez-vous que le débit en amont n&apos;est pas supérieur à votre vitesse de téléversement sur Internet (vérifiez-le avec un service tel que speedtest.net).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="381"/>
@@ -1838,7 +1838,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="512"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation>Ce que vous définissez ici apparaîtra sur votre curseur sur la table de mixage lorsque vous serez connecté à un serveur %1. Cette information sera également affichée sur chaque client connecté au même serveur que vous.</translation>
+        <translation>Ce que vous définissez ici apparaîtra sur votre chariot sur la table de mixage lorsque vous serez connecté à un serveur %1. Cette information sera également affichée sur chaque client connecté au même serveur que vous.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="523"/>
@@ -1960,12 +1960,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="844"/>
         <source>Buffer Delay</source>
-        <translation>Retard de tampon</translation>
+        <translation>Retard de temporisation</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="849"/>
         <source>Buffer Delay: </source>
-        <translation>Retard de tampon : </translation>
+        <translation>Retard de temporisation : </translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1274"/>

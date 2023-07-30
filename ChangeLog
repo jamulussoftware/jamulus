@@ -54,7 +54,7 @@
 - RPC: Rename `directoryServer` to `directory` in `jamulusserver/getServerProfile` response (#3048).
   (contributed by @pljones)
 
-- Translations updated from Hosted Weblate (#3059, #2921, #2923, #2998).
+- Translations updated from Hosted Weblate (#3113, #3059, #2921, #2923, #2998).
   (contributed by @weblate)
 
 - Translation: Document translation process shift to Weblate. Translators can from now one use Weblate for translations (#2880).
@@ -62,6 +62,9 @@
 
 - Docs: Removed docs/RELATED-PROJECTS.md from repository. The up to date version is now on jamulus.io (#3091).
   (contributed by @mcfnord)
+
+- Updated Opus to v1.4 (#3099)
+  (contributed by @ann0see)
 
 - Build: Updated bundled Qt6 to version 6.5.2 (#3110).
   (contributed by @app/github-actions)
@@ -74,6 +77,9 @@ DoozyX/clang-format-lint-action to 0.16 (#3053), dev-drprasad/delete-tag-and-rel
   (contributed by @app/dependabot)
 
 - Build: Enabled signing of macOS binary if a self signed certificate is given (#2944).
+  (contributed by @ann0see)
+
+- Build: macOS now uses the 13.1 SDK for better compatibility with modern macOS versions (#3106)
   (contributed by @ann0see)
 
 - Build: Updated clang version to Ubuntu LTS version (#3020).

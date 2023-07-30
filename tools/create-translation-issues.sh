@@ -54,6 +54,8 @@ if ! gh auth status &> /dev/null; then
     exit 1
 fi
 
+LOGGED_IN_AS=$(gh auth status | grep Logged | sed -e 's/^.*Logged in .*as //' -e 's/ ([^)]*)$//')
+
 RELEASE=$1
 DEADLINE=$2
 TYPE=$3
@@ -78,7 +80,6 @@ TRANSLATORS_BY_LANG[app_pt_PT]="Snayler"
 TRANSLATORS_BY_LANG[app_sk_SK]="jose1711"
 TRANSLATORS_BY_LANG[app_sv_SE]="genesisproject2020"
 TRANSLATORS_BY_LANG[app_zh_CN]="BLumia"
-TRANSLATORS_BY_LANG[app_ko_KR]="bagjunggyu"
 # Web translators:
 TRANSLATORS_BY_LANG[web_de]="Helondeth,ewarning"
 TRANSLATORS_BY_LANG[web_es]="ignotus666"
@@ -204,8 +205,8 @@ create_translation_issue_for_lang() {
 
     translators=${TRANSLATORS_BY_LANG[${TYPE}_${lang}]-}
     if [[ -z $translators ]]; then
-        echo "Warning: Can't create issue for $lang - who is responsible? Skipping." > /dev/stderr
-        return
+        echo "Assigning translator: $LOGGED_IN_AS - please re-assign as necessary" > /dev/stderr
+        translators="$LOGGED_IN_AS"
     fi
 
     local title="Update ${lang} ${TYPE} translation for ${RELEASE}"

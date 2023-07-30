@@ -1,4 +1,4 @@
-### 3.9.1dev <- NOTE: the release version number will be 3.10.0 ###
+### 3.10.0rc1 <- NOTE: the release version number will be 3.10.0 ###
 
 - Client: Added SRV-based virtual hosting support (#2930).
   (contributed by @hoffie)

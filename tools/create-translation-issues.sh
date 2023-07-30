@@ -205,7 +205,7 @@ create_translation_issue_for_lang() {
 
     translators=${TRANSLATORS_BY_LANG[${TYPE}_${lang}]-}
     if [[ -z $translators ]]; then
-        echo "Assigning translator: $LOGGED_IN_AS - please re-assign as necessary" > /dev/stderr
+        echo "No translator for $lang, assigning $LOGGED_IN_AS - please re-assign as necessary" > /dev/stderr
         translators="$LOGGED_IN_AS"
     fi
 
@@ -230,7 +230,8 @@ create_translation_issue_for_lang() {
 
     # Check for an existing issue
     local existing_issue
-    existing_issue=$(gh issue list --milestone "$MILESTONE" --state all --search "$title" --json number --jq '.[0].number' || true)
+
+    existing_issue=$(gh issue list --milestone "$MILESTONE" --state all --json number,title --jq '. | map(select(.title == "'"$title"'")) | .[0].number' || true)
 
     # If there's no existing issue, create one
     if [[ -z $existing_issue ]]; then

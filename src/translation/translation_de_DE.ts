@@ -441,7 +441,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="226"/>
         <source>SOLO</source>
-        <translation></translation>
+        <translation>SOLO</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="227"/>

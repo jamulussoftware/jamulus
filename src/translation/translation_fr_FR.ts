@@ -3087,7 +3087,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation type="unfinished"></translation>
+        <translation>Si cette case est cochée, l&apos;enregistreur fonctionnera pendant qu&apos;une session est en cours (si la configuration est correcte).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>

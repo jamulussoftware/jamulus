@@ -3567,7 +3567,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn diese Option aktiviert ist, wird der Recorder aktuelle Jams aufzeichnen (falls er korrekt konfiguriert ist).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="135"/>

@@ -177,7 +177,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation></translation>
+        <translation>TextLabelVersion</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2023 Volker Fischer and others</source>
@@ -311,7 +311,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="155"/>
         <source>Status indicator label</source>
-        <translation>Statusanzeige</translation>
+        <translation>Label Statusanzeige</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="157"/>
@@ -1286,7 +1286,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientdlgbase.ui" line="609"/>
         <source>Update check</source>
-        <translation>Update check</translation>
+        <translation>Update Check</translation>
     </message>
     <message>
         <source>MUTED (You are not sending any audio to the server)</source>
@@ -2116,7 +2116,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="298"/>
         <source>Mono in/Stereo-out</source>
-        <translation></translation>
+        <translation>Mono in/Stereo-out</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="299"/>
@@ -3577,12 +3577,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation>Die Aufnahme wurde über die Checkbox in der grafischen Oberfläche oder JSON-RPC ausgeschaltet.</translation>
+        <translation>Die Aufzeichnung wurde über die UI-Checkbox oder durch JSON-RPC ausgeschaltet.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="141"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation>Die Aufnahme wurde über die Checkbox in der grafischen Oberfläche, SIGUSR2 oder JSON-RPC ausgeschaltet.</translation>
+        <translation>Die Aufzeichnung wurde über die UI-Checkbox in der grafischen Oberfläche, SIGUSR2 oder JSON-RPC ausgeschaltet.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="146"/>
@@ -4273,7 +4273,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
         <source>Update check</source>
-        <translation>Update check</translation>
+        <translation>Update Check</translation>
     </message>
     <message>
         <source>Make My Server Public (Register My Server in the Server List)</source>
@@ -4365,7 +4365,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverlist.cpp" line="780"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation>Konnte &apos;%1&apos; nicht zum Lesen/Schreiben öffnen. Checke, dass %2 korrekte Berechtigungen hat (und genug Speicher frei ist).</translation>
+        <translation>Konnte &apos;%1&apos; nicht zum Lesen/Schreiben öffnen. Überprüfe ob %2 korrekte Berechtigungen hat (und genug Speicher frei ist).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="787"/>

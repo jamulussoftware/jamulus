@@ -2105,7 +2105,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Audio Alerts check box</source>
-        <translation>Audiowaarschuwingen checkbox</translation>
+        <translation>Audiowaarschuwingen selectievakje</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>

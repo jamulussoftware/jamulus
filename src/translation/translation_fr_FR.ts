@@ -26,7 +26,7 @@
     <message>
         <location filename="../util.cpp" line="577"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
-        <translation>Un serveur collecte les données audio de chaque client, les mixe et renvoie le résultat à chaque client.</translation>
+        <translation>Il y a un serveur qui collecte  les données audio de chaque client, les mixe et renvoie le résultat  à chaque client.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="597"/>

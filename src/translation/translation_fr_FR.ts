@@ -368,7 +368,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="186"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation>Label de canal de mixeur (étiquette de curseur)</translation>
+        <translation>Label de canal de mixeur (étiquette de chariot)</translation>
     </message>
     <message>
         <source>Mixer channel country flag</source>
@@ -899,7 +899,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="315"/>
         <source>O&amp;wn Fader First</source>
-        <translation>&amp;Curseur personnel en premier</translation>
+        <translation>&amp;Chariot personnel en premier</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="323"/>
@@ -954,7 +954,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="308"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation>Auto-ajuster tous les &amp;curseurs</translation>
+        <translation>Auto-ajuster tous les &amp;chariots</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -1395,7 +1395,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="58"/>
         <source>Local Audio Input Fader</source>
-        <translation>Curseur d&apos;entrée audio locale</translation>
+        <translation>Chariot d&apos;entrée audio locale</translation>
     </message>
     <message>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
@@ -1418,7 +1418,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="72"/>
         <source>Local audio input fader (left/right)</source>
-        <translation>Curseur d&apos;entrée audio locale (gauche/droite)</translation>
+        <translation>Chariot d&apos;entrée audio locale (gauche/droite)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="76"/>
@@ -1428,7 +1428,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="81"/>
         <source>You can set the jitter buffer size manually for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.</source>
-        <translation>Vous pouvez définir manuellement la taille du tampon de gigue pour le client local et le serveur distant. Pour la mémoire tampon de gigue locale, les désynchronisations dans le flux audio sont indiquées par le voyant situé sous les curseurs de taille de la mémoire tampon de gigue. Le voyant qui devient rouge indique qu&apos;un dépassement ou une sous-utilisation de la mémoire tampon a eu lieu et que le flux audio a été interrompu.</translation>
+        <translation>Vous pouvez définir manuellement la taille du tampon de gigue pour le client local et le serveur distant. Pour la mémoire tampon de gigue locale, les désynchronisations dans le flux audio sont indiquées par le voyant situé sous les chariots de taille de la mémoire tampon de gigue. Le voyant qui devient rouge indique qu&apos;un dépassement ou une sous-utilisation de la mémoire tampon a eu lieu et que le flux audio a été interrompu.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="90"/>
@@ -1538,7 +1538,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="333"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
-        <translation>Ce paramètre définit le niveau du curseur d&apos;un client nouvellement connecté en pourcentage. Si un nouveau client se connecte au serveur actuel, il obtiendra le niveau de curseur initial spécifié si aucun autre niveau de curseur provenant d&apos;une connexion précédente de ce client n&apos;a déjà été enregistré.</translation>
+        <translation>Ce paramètre définit le niveau du chariot d&apos;un client nouvellement connecté en pourcentage. Si un nouveau client se connecte au serveur actuel, il obtiendra le niveau de chariot initial spécifié si aucun autre niveau de chariot provenant d&apos;une connexion précédente de ce client n&apos;a déjà été enregistré.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="344"/>
@@ -1641,7 +1641,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="215"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation>Le délai réel de la mémoire tampon a une influence sur la connexion, le débit de téléversement actuel et le délai global. Plus la taille du  tampon est faible, plus la probabilité d&apos;un voyant rouge dans l&apos;indicateur d&apos;état (désynchronisation) est élevée, plus le débit de téléversement est élevé et plus le délai global est faible.</translation>
+        <translation>Le délai réel de la mémoire tampon a une influence sur la connexion, le débit de téléversement actuel et le délai global. Plus la taille du tampon est faible, plus la probabilité d&apos;un voyant rouge dans l&apos;indicateur d&apos;état (désynchronisation) est élevée, plus le débit de téléversement est élevé et plus le délai global est faible.</translation>
     </message>
     <message>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>

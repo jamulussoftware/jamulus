@@ -298,9 +298,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Edit menu  --------------------------------------------------------------
     QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
-    pEditMenu->addAction ( tr ( "Clear &All Stored Solo and Mute Settings" ), this, SLOT ( OnClearAllStoredSoloMuteSettings() ) );
+    QMenu* pFaderMenu = new QMenu ( tr ( "Stored &Fader Settings" ), this );
 
-    pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ),
+    pEditMenu->addMenu ( pFaderMenu );
+
+    pFaderMenu->addAction ( tr ( "Clear &All Stored Fader Settings" ), this, SLOT ( OnClearFaderAllSettings() ) );
+    pFaderMenu->addAction ( tr ( "Clear Stored &Level Settings" ), this, SLOT ( OnClearFaderLevelSettings() ) );
+    pFaderMenu->addAction ( tr ( "Clear Stored &Solo Settings" ), this, SLOT ( OnClearFaderSoloSettings() ) );
+    pFaderMenu->addAction ( tr ( "Clear Stored &Mute Settings" ), this, SLOT ( OnClearFaderMuteSettings() ) );
+    pFaderMenu->addAction ( tr ( "Clear Stored &Group ID Settings" ), this, SLOT ( OnClearFaderGroupIdSettings() ) );
+
+    pEditMenu->addAction ( tr ( "Set Current Faders to New Client &Level" ),
                            this,
                            SLOT ( OnSetAllFadersToNewClientLevel() ),
                            QKeySequence ( Qt::CTRL + Qt::Key_L ) );
@@ -759,13 +767,44 @@ void CClientDlg::OnConnectDisconBut()
     }
 }
 
-void CClientDlg::OnClearAllStoredSoloMuteSettings()
+// if we are in an active connection, we first have to store all fader settings in
+// the settings struct, clear the solo and mute states and then apply the settings again
+void CClientDlg::OnClearFaderAllSettings()
 {
-    // if we are in an active connection, we first have to store all fader settings in
-    // the settings struct, clear the solo and mute states and then apply the settings again
     MainMixerBoard->StoreAllFaderSettings();
+    pSettings->vecStoredFaderLevels.Reset ( false );
+    pSettings->vecStoredFaderLevels.Reset ( false );
     pSettings->vecStoredFaderIsSolo.Reset ( false );
     pSettings->vecStoredFaderIsMute.Reset ( false );
+    pSettings->vecStoredFaderTags.Reset ( QString() );
+    MainMixerBoard->LoadAllFaderSettings();
+}
+
+void CClientDlg::OnClearFaderLevelSettings()
+{
+    MainMixerBoard->StoreAllFaderSettings();
+    pSettings->vecStoredFaderLevels.Reset ( false );
+    MainMixerBoard->LoadAllFaderSettings();
+}
+
+void CClientDlg::OnClearFaderSoloSettings()
+{
+    MainMixerBoard->StoreAllFaderSettings();
+    pSettings->vecStoredFaderIsSolo.Reset ( false );
+    MainMixerBoard->LoadAllFaderSettings();
+}
+
+void CClientDlg::OnClearFaderMuteSettings()
+{
+    MainMixerBoard->StoreAllFaderSettings();
+    pSettings->vecStoredFaderIsMute.Reset ( false );
+    MainMixerBoard->LoadAllFaderSettings();
+}
+
+void CClientDlg::OnClearFaderGroupIdSettings()
+{
+    MainMixerBoard->StoreAllFaderSettings();
+    pSettings->vecStoredFaderGroupID.Reset ( false );
     MainMixerBoard->LoadAllFaderSettings();
 }
 

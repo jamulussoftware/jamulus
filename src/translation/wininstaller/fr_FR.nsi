@@ -13,7 +13,7 @@ LangString OLD_WRONG_VER_FOUND ${LANG_FRENCH} \
     "Nous avons détecté une ancienne version de ${APP_NAME} dans votre dossier Program Files 32 bits. Il est fortement recommandé de le supprimer avant d'installer une nouvelle version de ${APP_NAME}. Voulez-vous le supprimer maintenant ? "
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_FRENCH} \
-    "Si vous continuez sans le supprimer, votre installation risque d'être interrompue ! Êtes-vous sûr de ne pas vouloir supprimer l'ancienne version ? "
+    "Si vous continuez sans le supprimer, votre installation risque d'être non-fonctionnelle ! Êtes-vous sûr de ne pas vouloir supprimer l'ancienne version ?"
 
 LangString OLD_VER_REMOVE_FAILED ${LANG_FRENCH} \
      "Désolé, nous n'avons pas pu désinstaller l'ancienne version. Nous essaierons d'installer la nouvelle version, mais vous pouvez également appuyer sur Annuler et essayer de supprimer l'ancienne version par vous-même."
@@ -25,7 +25,7 @@ LangString ASIO_DRIVER_SUB ${LANG_FRENCH} \
      "Pour utiliser ${APP_NAME}, vous avez besoin d'un pilote ASIO"
 
 LangString ASIO_DRIVER_EXPLAIN ${LANG_FRENCH} \
-     "${APP_NAME} a besoin d'un pilote ASIO pour fournir un son à faible latence. Plus d'informations : "
+     "${APP_NAME} a besoin d'un pilote ASIO pour fournir de l'audio à faible latence. Plus d'informations : "
 
 LangString ASIO_DRIVER_MORE_INFO ${LANG_FRENCH} \
      "Plus d'informations à propos d'ASIO sur jamulus.io"
@@ -40,7 +40,7 @@ LangString JACK_DRIVER_HEADER ${LANG_FRENCH} \
      "Kit de connexion audio JACK"
 
 LangString JACK_DRIVER_SUB ${LANG_FRENCH} \
-     "Pour utiliser cette version de ${APP_NAME}, vous devez utiliser le kit de connexion audio JACK."
+     "Pour utiliser cette version de ${APP_NAME}, vous devez utiliser le kit de connexion audio JACK"
 
 LangString JACK_DRIVER_EXPLAIN ${LANG_FRENCH} \
      "Cette version de ${APP_NAME} utilise le kit de connexion audio JACK. Veuillez vous assurer que ce kit a été installé ou téléchargez la version standard de ${APP_NAME} sur jamulus.io qui utilise ASIO."

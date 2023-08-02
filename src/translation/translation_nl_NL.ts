@@ -1418,7 +1418,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="180"/>
         <source>Small network buffers check box</source>
-        <translation>Selectievakje kleine netwerkbuffers</translation>
+        <translation>Kleine netwerkbuffers selectievakje</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>

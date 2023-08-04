@@ -366,7 +366,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="157"/>
         <source>Panning</source>
-        <translation>Bilanciamento</translation>
+        <translation>Panoramica</translation>
     </message>
     <message>
         <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
@@ -443,7 +443,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="176"/>
         <source>Group button</source>
-        <translation>Raggruppa</translation>
+        <translation>Pulsante Raggruppa</translation>
     </message>
     <message>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</source>
@@ -1834,7 +1834,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="298"/>
         <source>Mono in/Stereo-out</source>
-        <translation>Mono in/Stereo-out</translation>
+        <translation>Ingresso Mono/Uscita Stereo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="299"/>
@@ -2035,7 +2035,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>
         <source>Number of Mixer Panel Rows spin box</source>
-        <translation>Numero di Righe su cui disporre il Mixer</translation>
+        <translation>Box Numero di Righe su cui disporre il Mixer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
@@ -2168,7 +2168,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="502"/>
         <source>Musician Profile</source>
-        <translation>Profilo del Musicista</translation>
+        <translation>Profilo Musicista</translation>
     </message>
     <message>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
@@ -2191,7 +2191,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="517"/>
         <source>Instrument picture button</source>
-        <translation>Immagine dello strumento</translation>
+        <translation>Pulsante Immagine dello strumento</translation>
     </message>
     <message>
         <source>Country flag button</source>
@@ -2231,7 +2231,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="840"/>
         <source>Buffer Delay</source>
-        <translation>Buffer Delay</translation>
+        <translation>Ritardo del Buffer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="845"/>
@@ -2404,7 +2404,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1325"/>
         <source>Clarinet</source>
-        <translation>Clarinet</translation>
+        <translation>Clarinetto</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1328"/>
@@ -2419,7 +2419,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1334"/>
         <source>Cello</source>
-        <translation>Cello</translation>
+        <translation>Violoncello</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1337"/>
@@ -2429,7 +2429,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1340"/>
         <source>Recorder</source>
-        <translation>Recorder</translation>
+        <translation>Registratore</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1343"/>
@@ -2479,7 +2479,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1370"/>
         <source>Congas</source>
-        <translation>Congas</translation>
+        <translation>Conga</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1373"/>
@@ -2607,7 +2607,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="670"/>
         <source>Buffer Delay</source>
-        <translation>Buffer Delay</translation>
+        <translation>Ritardo del Buffer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="109"/>
@@ -2722,7 +2722,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../clientsettingsdlgbase.ui" line="789"/>
         <location filename="../clientsettingsdlgbase.ui" line="802"/>
         <source>Size</source>
-        <translation>Livello</translation>
+        <translation>Dimensione</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="931"/>
@@ -2907,7 +2907,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlg.cpp" line="83"/>
         <source>Server list view</source>
-        <translation>Lista dei Server</translation>
+        <translation>Vista della Lista dei Server</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="86"/>
@@ -3776,7 +3776,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="96"/>
         <source>Server name line edit</source>
-        <translation>Nome del server</translation>
+        <translation>Modifica del Nome del server</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="99"/>

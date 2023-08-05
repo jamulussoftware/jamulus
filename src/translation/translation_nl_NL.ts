@@ -1172,7 +1172,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientdlg.cpp" line="1153"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation>Uw geluidskaart werkt niet goed. Open het Instellingsvenster en controleer apparaatselectie en bestuurprogramma-instellingen.</translation>
+        <translation>Uw geluidskaart werkt niet goed. Open het Instellingsvenster en controleer apparaatselectie en besturingsprogramma-instellingen.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1224"/>
@@ -1995,7 +1995,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="122"/>
         <source>Audio Device</source>
-        <translation>Audio apparaat</translation>
+        <translation>Audioapparaat</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="123"/>
@@ -2687,7 +2687,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="376"/>
         <source>Audio Device</source>
-        <translation>Audio apparaat</translation>
+        <translation>Audioapparaat</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="738"/>
@@ -4510,7 +4510,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../sound/asio/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation>Het geselecteerde audio apparaat is niet langer aanwezig in het system. Controleer uw audio apparaat.</translation>
+        <translation>Het geselecteerde audioapparaat is niet langer aanwezig in het system. Controleer uw audioapparaat.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="76"/>

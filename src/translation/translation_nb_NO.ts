@@ -138,7 +138,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Opphavsrett © 2005–2023 Jamulus-utviklingslaget</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -1413,12 +1413,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Number of Mixer Panel Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Antall mikserpanelrader</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Juster antall rader brukt i mikserpanelet.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>
@@ -1633,17 +1633,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1289"/>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Klaviatur</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1292"/>
         <source>Synthesizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthesizer</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1295"/>
         <source>Grand Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Flygel</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1298"/>
@@ -1713,7 +1713,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1337"/>
         <source>Double Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrabass</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1340"/>
@@ -1738,7 +1738,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1352"/>
         <source>Keyboard+Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation>Klaviatur+vokal</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1355"/>
@@ -1803,7 +1803,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1391"/>
         <source>Mandolin</source>
-        <translation type="unfinished"></translation>
+        <translation>Mandolin</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1394"/>
@@ -1921,7 +1921,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="109"/>
         <source>Country/Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Land/region</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="119"/>
@@ -1970,7 +1970,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="366"/>
         <source>Audio/Network Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Lyd-/nettverksoppsett</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="376"/>

@@ -1104,12 +1104,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="150"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis valgt lydkortsenhet tilbyr mer enn én inn- eller utgangskanal, vil inngangskanaltilknytning og utgangskanaltilknytningsinnstillinger bli synlige.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="154"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">For hver %1-inn-/utgangskanal (venstre og høyre kanal) kan en lydkortskanal på selv et annet kort velges.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="162"/>

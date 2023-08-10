@@ -1679,17 +1679,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="361"/>
         <source>Custom Directories</source>
-        <translation>Adresse personnalisée de l&apos;annuaire</translation>
+        <translation>Annuaires personnalisés</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
-        <translation>Si vous devez ajouter des annuaires supplémentaires à la liste déroulante Annuaire de la boîte de dialogue Connexion, vous pouvez saisir les adresses ici.&lt;br&gt;Pour supprimer une valeur, sélectionnez-la, supprimez le texte dans la zone de saisie, puis déplacez la curseur en dehors.</translation>
+        <translation>Si vous devez ajouter des annuaires supplémentaires à la liste déroulante de l&apos;annuaire de la boîte de dialogue Connexion, vous pouvez saisir les adresses ici.&lt;br&gt;Pour supprimer une valeur, sélectionnez-la, supprimez le texte dans la zone de saisie, puis déplacez le focus hors du contrôle.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Custom Directories combo box</source>
-        <translation>Choix déroulant adresse personnalisée de l&apos;annuaire</translation>
+        <translation>Choix déroulant des annuaires personnalisés</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
@@ -1704,12 +1704,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Number of Mixer Panel Rows</source>
-        <translation>Nombre de rangées de panneaux de mixeurs</translation>
+        <translation>Nombre de rangées du panneau de mixeur</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
-        <translation>Ajustez le nombre de rangées utilisées dans le panneau du mixeur.</translation>
+        <translation>Ajustez le nombre de rangées utilisées pour arranger le panneau du mixeur.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>
@@ -1760,7 +1760,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <location filename="../clientsettingsdlg.cpp" line="434"/>
         <location filename="../clientsettingsdlg.cpp" line="440"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation>Normale</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
@@ -1833,7 +1833,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="503"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation>Inscrivez ici votre nom ou un pseudonyme pour que les autres musiciens avec lesquels vous voulez jouer sachent qui vous êtes. Vous pouvez également ajouter une illustration de l&apos;instrument dont vous jouez, un drapeau du pays ou de la région où vous vous trouvez ainsi que votre ville et votre niveau de compétence sur votre instrument.</translation>
+        <translation>Inscrivez ici votre nom ou un pseudonyme pour que les autres musiciens avec lesquels vous voulez jouer sachent qui vous êtes. Vous pouvez également ajouter une illustration de l&apos;instrument dont vous jouez et un drapeau du pays ou de la région où vous vous trouvez. Votre ville et votre niveau de compétence sur votre instrument peuvent également être ajoutés.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="508"/>
@@ -1929,7 +1929,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="521"/>
         <source>City edit box</source>
-        <translation>Boîte d&apos;édition de ville</translation>
+        <translation>Boîte d&apos;édition de la ville</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="523"/>
@@ -2263,7 +2263,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="109"/>
         <source>Country/Region</source>
-        <translation>Pays/Région</translation>
+        <translation>Pays/région</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="682"/>
@@ -2347,7 +2347,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="376"/>
         <source>Audio Device</source>
-        <translation>Interface audio</translation>
+        <translation>Périphérique audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="738"/>
@@ -2507,7 +2507,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../connectdlg.cpp" line="48"/>
         <source>Directory combo box</source>
-        <translation>Choix déroulant annuaire</translation>
+        <translation>Choix déroulant de l&apos;annuaire</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="57"/>
@@ -2517,7 +2517,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../connectdlg.cpp" line="68"/>
         <source>Uncheck to collapse the server list to show just the server details. Check to show everyone on the servers.</source>
-        <translation>Décochez cette case pour réduire la liste des serveurs et n&apos;afficher que les détails du serveur. Cochez la case pour afficher tous les serveurs.</translation>
+        <translation>Décochez cette case pour réduire la liste des serveurs et n&apos;afficher que les détails du serveur. Cochez cette case pour afficher chaque personne sur les serveurs.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="74"/>
@@ -2537,7 +2537,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../connectdlg.cpp" line="81"/>
         <source>You can add custom directories in Advanced Settings.</source>
-        <translation>Vous pouvez ajouter des serveurs annuaires personnalisés dans paramètres avancés.</translation>
+        <translation>Vous pouvez ajouter des annuaires personnalisés dans paramètres avancés.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="83"/>
@@ -2749,7 +2749,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../util.cpp" line="872"/>
         <source>Please restart the application for the language change to take effect.</source>
-        <translation>Veuillez relancer l&apos;application pour que le changement de langue prenne effet.</translation>
+        <translation>Veuillez relancer l&apos;application pour que le changement de langue soit pris en compte.</translation>
     </message>
 </context>
 <context>
@@ -3071,7 +3071,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="52"/>
         <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
-        <translation>La liste des clients affiche tous les clients qui sont actuellement connectés à ce serveur. Certaines informations sur les clients, telles que les adresses IP et le nom, sont données pour chaque client connecté.</translation>
+        <translation>La liste des clients affiche tous les clients qui sont actuellement connectés à ce serveur. Certaines informations à propos des clients, telles que les adresses IP et le nom, sont données pour chaque client connecté.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="56"/>
@@ -3122,13 +3122,13 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <source>Server List Filename dialog push button</source>
-        <translation>Bouton poussoir de la boîte de dialogue nom du fichier liste de serveurs</translation>
+        <translation>Bouton poussoir de la boîte de dialogue du nom du fichier de la liste de serveurs</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>Server List Filename</source>
-        <translation>Nom du fichier liste de serveurs</translation>
+        <translation>Nom du fichier de la liste de serveurs</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="207"/>
@@ -3138,12 +3138,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename text box (read-only)</source>
-        <translation>Zone de texte du fichier de la liste de serveurs (en lecture seule)</translation>
+        <translation>Zone de texte du nom de fichier de la liste de serveurs (en lecture seule)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="215"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation>La valeur actuelle du nom du fichier de persistance de la liste des serveurs. L&apos;utilisateur %1 doit être en mesure de créer le nom de fichier spécifié, même s&apos;il existe déjà (il sera écrasé lors de la sauvegarde). Cliquez sur le bouton pour ouvrir la boîte de dialogue qui permet de définir le nom du fichier de persistance de la liste de serveurs.</translation>
+        <translation>La valeur actuelle du nom du fichier de persistance de la liste des serveurs. L&apos;utilisateur %1 doit être en mesure de créer le nom de fichier spécifié, même s&apos;il existait déjà (il sera écrasé lors de la sauvegarde). Cliquez sur le bouton pour ouvrir la boîte de dialogue qui permet de définir le nom du fichier de persistance de la liste de serveurs.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
@@ -3158,7 +3158,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="224"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
-        <translation>Cliquez sur le bouton pour effacer le nom du fichier de persistance de la liste de serveurs actuellement sélectionné. Cela empêchera la persistance de la liste de serveurs jusqu&apos;à ce qu&apos;une nouvelle valeur soit sélectionnée.</translation>
+        <translation>Cliquez sur le bouton pour effacer le nom du fichier de persistance de la liste de serveurs actuellement sélectionné. Cela empêchera la persistance de la liste de serveurs jusqu&apos;à ce qu&apos;une nouvelle valeur ne soit sélectionnée.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="228"/>
@@ -3186,7 +3186,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="229"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation>Si la case &quot;Démarrage minimisé au démarrage du système d&apos;exploitation&quot; est cochée, le serveur sera lancé au démarrage du système d&apos;exploitation et sera automatiquement réduit en icône de la barre de tâches du système.</translation>
+        <translation>Si la case de démarrage minimisé au démarrage du système d&apos;exploitation est cochée, le serveur sera lancé au démarrage du système d&apos;exploitation et sera automatiquement réduit en icône de la barre de tâches du système.</translation>
     </message>
     <message>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
@@ -3295,7 +3295,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="192"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation>Cliquez sur le bouton pour effacer le répertoire d&apos;enregistrement actuellement sélectionné. Cela empêchera l&apos;enregistrement jusqu&apos;à ce qu&apos;une nouvelle valeur soit sélectionnée.</translation>
+        <translation>Cliquez sur le bouton pour effacer le répertoire d&apos;enregistrement actuellement sélectionné. Cela empêchera l&apos;enregistrement jusqu&apos;à ce qu&apos;une nouvelle valeur ne soit sélectionnée.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="121"/>
@@ -3338,7 +3338,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder status label</source>
-        <translation>Étiquette de statut d&apos;enregistreur</translation>
+        <translation>Étiquette de l&apos;état de l&apos;enregistreur</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
@@ -3374,7 +3374,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
         <source>The performers are being recorded to the specified session directory.</source>
-        <translation>Les interprètes sont enregistrés dans le répertoire de session spécifié.</translation>
+        <translation>Les musiciens sont enregistrés dans le répertoire de session spécifié.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
@@ -3413,7 +3413,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="172"/>
         <source>Language combo box</source>
-        <translation>Choix déroulant langue</translation>
+        <translation>Choix déroulant de la langue</translation>
     </message>
     <message>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as).</source>
@@ -3430,7 +3430,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="202"/>
         <source>Custom Directory line edit</source>
-        <translation>Modification de la ligne d&apos;annuaire personnalisé</translation>
+        <translation>Modification de la ligne de l&apos;annuaire personnalisé</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="246"/>
@@ -3451,7 +3451,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="338"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation>Tapez un message ici. Si aucun message n&apos;est défini, l&apos;accueil du serveur est désactivé.</translation>
+        <translation>Saisissez un message ici. Si aucun message n&apos;est défini, l&apos;accueil du serveur est désactivé.</translation>
     </message>
     <message>
         <source>software upgrade available</source>
@@ -3460,7 +3460,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="591"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
-        <translation>L&apos;enregistreur n&apos;a pas pu démarrer. Vérifier l&apos;espace disque disponible et les permissions puis réessayer. Erreur : </translation>
+        <translation>L&apos;enregistreur n&apos;a pas pu démarrer. Veuillez vérifier l&apos;espace disque disponible et les permissions puis réessayer. Erreur : </translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="870"/>
@@ -3475,7 +3475,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="59"/>
         <source>Directory Type combo box</source>
-        <translation>Liste déroulante type d&apos;annuaire</translation>
+        <translation>Liste déroulante du type d&apos;annuaire</translation>
     </message>
     <message>
         <source>Directory</source>
@@ -3504,12 +3504,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="83"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation>Lorsqu&apos;une valeur autre que &quot;%1&quot; est choisie pour le répertoire, cela indique si l&apos;enregistrement a réussi. Si l&apos;enregistrement a échoué, veuillez choisir un autre répertoire.</translation>
+        <translation>Lorsqu&apos;une valeur autre que &quot;%1&quot; est choisie pour l’annuaire, cela indique si l&apos;inscription a réussi. Si l&apos;inscription a échoué, veuillez choisir un autre annuaire.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="110"/>
         <source>Country/Region</source>
-        <translation>Pays/Région</translation>
+        <translation>Pays/région</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="111"/>
@@ -3519,7 +3519,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="118"/>
         <source>Combo box for location of this server</source>
-        <translation>Liste déroulante pour le pays où le serveur est situé</translation>
+        <translation>Liste déroulante pour le pays de ce serveur</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="135"/>
@@ -3679,7 +3679,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlgbase.ui" line="34"/>
         <source>Client IP:Port</source>
-        <translation>IP Client:Port</translation>
+        <translation>IP client:Port</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="39"/>
@@ -3709,7 +3709,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlgbase.ui" line="132"/>
         <source>Location: Region</source>
-        <translation>Emplacement : Région</translation>
+        <translation>Emplacement : région</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
@@ -3734,7 +3734,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation>Nom du fichier liste de serveurs</translation>
+        <translation>Nom du fichier de la liste de serveurs</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
@@ -3974,7 +3974,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <location filename="../sound/asio/sound.cpp" line="206"/>
         <location filename="../sound/asio/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation>Le périphérique audio sélectionné est incompatible car le format d&apos;échantillon audio requis n&apos;est pas disponible. Veuillez utiliser un autre appareil.</translation>
+        <translation>Le périphérique audio sélectionné est incompatible puisque le format d&apos;échantillon audio requis n&apos;est pas disponible. Veuillez utiliser un autre périphérique.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="554"/>
@@ -4090,7 +4090,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="727"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation>La taille de la mémoire tampon du périphérique audio d&apos;entrée et de sortie actuel ne peut pas être définie sur une valeur commune. Veuillez sélectionner des périphériques d&apos;entrée/sortie différents dans les paramètres de votre système.</translation>
+        <translation>Les tailles de tampon du périphérique audio d&apos;entrée et de sortie actuel ne peuvent pas être définies sur une valeur commune. Veuillez sélectionner des périphériques d&apos;entrée/sortie différents dans les paramètres de votre système.</translation>
     </message>
 </context>
 <context>
@@ -4135,12 +4135,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../sound/soundbase.cpp" line="158"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
-        <translation>Le périphérique audio précédemment sélectionné n&apos;est plus disponible ou le pilote est passé à un état incompatible. Nous allons essayer de trouver un périphérique audio valide, mais ce nouveau périphérique audio peut provoquer un effet larsen. Avant de vous connecter à un serveur, veuillez vérifier les paramètres de votre périphérique audio.</translation>
+        <translation>Le périphérique audio précédemment sélectionné n&apos;est plus disponible ou le pilote est passé dans un état incompatible. Nous allons essayer de trouver un périphérique audio valide, mais ce nouveau périphérique audio pourrait provoquer un effet larsen. Avant de vous connecter à un serveur, veuillez vérifier les paramètres de votre périphérique audio.</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="171"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation>&lt;b&gt;%1 n&apos;a pas trouvé de périphérique audio utilisable %2.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
+        <translation>&lt;b&gt;%1 n&apos;a pas trouvé de périphérique audio %2 utilisable.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="182"/>
@@ -4184,7 +4184,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../util.cpp" line="1696"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
-        <translation>Publié sous la licence GNU General Public License version 2 ou ultérieure (GPLv2)</translation>
+        <translation>Publié sous la licence publique générale GNU (GPL) version 2 ou ultérieure (GPLv2)</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>
@@ -4240,7 +4240,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../global.h" line="123"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation>A %1 une mise à jour est disponible : &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;rendez-vous dans détails et téléchargements&lt;/a&gt;</translation>
+        <translation>Une mise à jour de %1 est disponible : &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;rendez-vous dans détails et téléchargements&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="273"/>

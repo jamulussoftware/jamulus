@@ -10,7 +10,7 @@ LangString RUNNING_APP_MSG ${LANG_FRENCH} \
     "${APP_NAME} est en cours d'exécution. Veuillez le fermer et relancer l'installation."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_FRENCH} \
-    "Nous avons détecté une ancienne version de ${APP_NAME} dans votre dossier Program Files 32 bits. Il est fortement recommandé de le supprimer avant d'installer une nouvelle version de ${APP_NAME}. Voulez-vous le supprimer maintenant ? "
+    "Nous avons détecté une ancienne version de ${APP_NAME} dans votre dossier Program Files 32 bits. Il est fortement recommandé de la supprimer avant d'installer une nouvelle version de ${APP_NAME}. Voulez-vous la supprimer maintenant ? "
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_FRENCH} \
     "Si vous continuez sans le supprimer, votre installation risque d'être non-fonctionnelle ! Êtes-vous sûr de ne pas vouloir supprimer l'ancienne version ?"
@@ -34,7 +34,7 @@ LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_FRENCH} \
      "https://jamulus.io/fr/wiki/Installation-for-Windows#asio"
 
 LangString ASIO_EXIT_NO_DRIVER ${LANG_FRENCH} \
-     "${APP_NAME} a besoin d'un pilote audio ASIO pour fonctionner, mais nous n'avons pas pu en trouver sur votre PC. Vous devriez en installer un comme ASIO4ALL (Plus d'informations sur jamulus.io sous Installation sous Windows). Voulez-vous tout de même continuer l'installation de ${APP_NAME} en premier ? "
+     "${APP_NAME} a besoin d'un pilote audio ASIO pour fonctionner, mais nous n'avons pas pu en trouver un sur votre PC. Vous devriez en installer un comme ASIO4ALL (plus d'informations sur jamulus.io sous Installation sous Windows). Voulez-vous tout de même continuer l'installation de ${APP_NAME} en premier ? "
 
 LangString JACK_DRIVER_HEADER ${LANG_FRENCH} \
      "Kit de connexion audio JACK"

@@ -29,6 +29,7 @@
 #include <QSettings>
 #include <QDir>
 #ifndef HEADLESS
+#    include <QApplication>
 #    include <QMessageBox>
 #endif
 #include "global.h"
@@ -50,6 +51,31 @@ public:
         strFileName ( "" )
     {
         QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &CSettings::OnAboutToQuit );
+#ifndef HEADLESS
+
+        // The Jamulus App will be created as either a QCoreApplication or QApplication (a subclass of QGuiApplication).
+        // State signals are only delivered to QGuiApplications, so we determine here whether we instantiated the GUI.
+        const QGuiApplication* pGApp = dynamic_cast<const QGuiApplication*> ( QCoreApplication::instance() );
+
+        if ( pGApp != nullptr )
+        {
+#    ifndef QT_NO_SESSIONMANAGER
+            QObject::connect (
+                pGApp,
+                &QGuiApplication::saveStateRequest,
+                this,
+                [=] ( QSessionManager& ) { Save(); },
+                Qt::DirectConnection );
+
+#    endif
+            QObject::connect ( pGApp, &QGuiApplication::applicationStateChanged, this, [=] ( Qt::ApplicationState state ) {
+                if ( Qt::ApplicationActive != state )
+                {
+                    Save();
+                }
+            } );
+        }
+#endif
     }
 
     void Load ( const QList<QString>& CommandLineOptions );

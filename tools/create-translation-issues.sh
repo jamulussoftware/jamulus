@@ -71,7 +71,7 @@ declare -A TRANSLATORS_BY_LANG
 # App translators:
 TRANSLATORS_BY_LANG[app_de_DE]="rolamos"
 TRANSLATORS_BY_LANG[app_es_ES]="ignotus666"
-TRANSLATORS_BY_LANG[app_fr_FR]="jujudusud, trebmuh"
+TRANSLATORS_BY_LANG[app_fr_FR]="jujudusud,trebmuh"
 TRANSLATORS_BY_LANG[app_it_IT]="dzpex"
 TRANSLATORS_BY_LANG[app_nl_NL]="henkdegroot,jerogee"
 TRANSLATORS_BY_LANG[app_pl_PL]="SeeLook"

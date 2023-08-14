@@ -151,7 +151,7 @@
     <message>
         <location filename="../util.cpp" line="746"/>
         <source>Norwegian Bokmål</source>
-        <translation>Bokmål Norueguês</translation>
+        <translation>Norueguês Bokmål</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="754"/>
@@ -3605,7 +3605,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation>Quando marcado, o gravador será executado enquanto uma sessão estiver em andamento (se configurado corretamente).</translation>
+        <translation>Quando marcada, o gravador será executado enquanto uma sessão estiver em andamento (se configurado corretamente).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="135"/>
@@ -3615,7 +3615,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation>A gravação foi desativada pela caixa de seleção da IU ou JSON-RPC.</translation>
+        <translation>A gravação foi desativada pela caixa de seleção da interface do usuário ou pelo JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="141"/>
@@ -3934,7 +3934,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <location filename="../serverdlg.cpp" line="63"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation>&lt;b&gt;Diretório:&lt;/b&gt; Selecione &apos;%1&apos; para não registrar seu servidor com um diretório.&lt;br&gt;Ou selecione um dos gêneros para registrar com esse diretório.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um Endereço do diretório personalizado na guia Opções para registrar com um diretório personalizado.&lt;br&gt;&lt;br&gt;Para qualquer valor, exceto &apos;%1&apos;, este servidor é registrado com um diretório para que um usuário %3 possa selecionar este servidor na caixa de diálogo de conexão do cliente lista de servidores quando eles escolhem esse diretório.&lt;br&gt;&lt;br&gt;O registro do servidor é renovado periodicamente para garantir que todos os servidores na lista de servidores do diálogo de conexão estejam realmente disponíveis.</translation>
+        <translation>&lt;b&gt;Diretório:&lt;/b&gt; Selecione &apos;%1&apos; para não registrar seu servidor com um diretório.&lt;br&gt;Ou selecione um dos gêneros para registrar-se com esse diretório.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um endereço de Diretório Personalizado na aba Opções para registrar-se com um diretório personalizado.&lt;br&gt;&lt;br&gt;Para qualquer valor exceto &apos;%1&apos;, este servidor registra-se com um diretório para que um usuário %3 possa escolher este servidor na lista de servidores do diálogo de conexão do cliente, quando escolher aquele diretório.&lt;br&gt;&lt;br&gt;O registro do servidor é renovado periodicamente para garantir que todos os servidores na lista de servidores de diálogo de conexão estejam realmente disponíveis.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
@@ -4409,7 +4409,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../serverlist.cpp" line="787"/>
         <source>Loading persistent server list file: %1</source>
-        <translation>Carregando arquivo de lista de servidor persistente: %1</translation>
+        <translation>Carregando arquivo de lista de servidores persistentes: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="850"/>
@@ -4419,7 +4419,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../serverlist.cpp" line="861"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation>Salvando registro para %1 (%2): %3</translation>
+        <translation>Salvando o registro para %1 (%2): %3</translation>
     </message>
 </context>
 <context>

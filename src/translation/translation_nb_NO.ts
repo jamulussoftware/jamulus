@@ -6,7 +6,7 @@
     <message>
         <location filename="../util.cpp" line="574"/>
         <source>This app enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation type="unfinished">Programmet lar musikere spille sammen over Internett.</translation>
+        <translation>Programmet lar musikere spille sammen over Internett.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="577"/>

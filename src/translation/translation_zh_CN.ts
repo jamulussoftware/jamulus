@@ -2959,7 +2959,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation>选中时，录制将会在会话过程中进行（若配置正确）。</translation>
+        <translation>选中后，记录盒将在会话进行时运行（如果设置正确）。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="127"/>

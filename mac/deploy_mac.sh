@@ -109,7 +109,10 @@ build_installer_image() {
 
     # Install create-dmg via brew. brew needs to be installed first.
     # Download and later install. This is done to make caching possible
-    brew_install_pinned "create-dmg" "1.1.0"
+    # brew_install_pinned "create-dmg" "1.1.0"
+
+    # FIXME: Currently caching is disabled due to an error in the extract step
+    brew install create-dmg
 
     # Get Jamulus version
     local app_version

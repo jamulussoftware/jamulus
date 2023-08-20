@@ -3577,7 +3577,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation>Die Aufzeichnung wurde über die UI-Checkbox oder durch JSON-RPC ausgeschaltet.</translation>
+        <translation>Die Aufzeichnung wurde über die UI-Checkbox oder JSON-RPC ausgeschaltet.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="141"/>

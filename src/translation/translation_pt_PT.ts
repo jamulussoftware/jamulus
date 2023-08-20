@@ -151,7 +151,7 @@
     <message>
         <location filename="../util.cpp" line="746"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Norueguês Bokmål</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="754"/>
@@ -202,7 +202,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © 2005-2023 A equipe de desenvolvimento Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -1346,7 +1346,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished">Interruptor do jitter buffer automático</translation>
+        <translation>Interruptor do jitter buffer automático</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1425,7 +1425,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlg.cpp" line="173"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Activar Buffers de Rede Pequenos</translation>
+        <translation>Buffers de Rede Pequenos</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1438,7 +1438,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlg.cpp" line="180"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished">Caixa de activação de buffers de rede pequenos</translation>
+        <translation>Caixa de ativação de buffers de rede pequenos</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>
@@ -4560,7 +4560,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation>JACK não está em execução com uma taxa de amostras de &lt;b&gt;%1 Hz&lt;/b&gt;. Por favor, use uma ferramenta, como &lt;i&gt;&lt;a=href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; para definir a taxa de amostras de JACK para %1 Hz.</translation>
+        <translation>JACK não está em execução com uma taxa de amostras de &lt;b&gt;%1 Hz&lt;/b&gt;. Por favor, use uma ferramenta, como &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; para definir a taxa de amostras de JACK para %1 Hz.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>
@@ -4797,7 +4797,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../global.h" line="123"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation>Está disponível uma atualização %1: &lt;a style=&apos;color:red&apos; href=https://jamulus.io/upgrade?progversion=%2&apos;&gt;vá para detalhes e transferências&lt;/a&gt;</translation>
+        <translation>Está disponível uma atualização %1: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;vá para detalhes e transferências&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="273"/>

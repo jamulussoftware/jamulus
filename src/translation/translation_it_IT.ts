@@ -366,7 +366,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="157"/>
         <source>Panning</source>
-        <translation>Bilanciamento</translation>
+        <translation>Panoramica</translation>
     </message>
     <message>
         <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
@@ -443,7 +443,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="176"/>
         <source>Group button</source>
-        <translation>Raggruppa</translation>
+        <translation>Pulsante Raggruppa</translation>
     </message>
     <message>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</source>
@@ -1335,7 +1335,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished">Switch Jitter Buffer Automatico</translation>
+        <translation>Switch Jitter Buffer Automatico</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1414,7 +1414,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="173"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Abilita Riduzione Buffer di Rete</translation>
+        <translation>Abilita Riduzione del Buffer di Rete</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1427,7 +1427,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="180"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished">Check Box per abilitare la riduzione dei pacchetti di rete</translation>
+        <translation>Check Box per abilitare la riduzione dei pacchetti di rete</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>
@@ -1834,7 +1834,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="298"/>
         <source>Mono in/Stereo-out</source>
-        <translation>Mono in/Stereo-out</translation>
+        <translation>Ingresso Mono/Uscita Stereo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="299"/>
@@ -2035,17 +2035,17 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>
         <source>Number of Mixer Panel Rows spin box</source>
-        <translation>Numero di Righe su cui disporre il Mixer</translation>
+        <translation>Box Numero di Righe su cui disporre il Mixer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protezione dai Larser</translation>
+        <translation>Protezione dai Larser</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="388"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished">Abilita la protezione dai larsen per rilevare il feedback acustico tra il microfono e gli altoparlanti.</translation>
+        <translation>Abilita la protezione dai larsen tra il microfono e gli altoparlanti.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="389"/>
@@ -2055,12 +2055,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="392"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Avvisi Audio</translation>
+        <translation>Avvisi Audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="393"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished">Abilita gli avvisi audio quando ricevi un messaggio in chat e quando un nuovo utente entra nella sessione. Sarà necessario un secondo device audio per ascoltare questi avvisi.</translation>
+        <translation>Abilita gli avvisi audio quando ricevi un messaggio in chat e quando un nuovo utente entra nella sessione. Sarà necessario un secondo device audio per ascoltare questi avvisi.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
@@ -2168,7 +2168,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="502"/>
         <source>Musician Profile</source>
-        <translation>Profilo del Musicista</translation>
+        <translation>Profilo Musicista</translation>
     </message>
     <message>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
@@ -2191,7 +2191,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="517"/>
         <source>Instrument picture button</source>
-        <translation>Immagine dello strumento</translation>
+        <translation>Pulsante Immagine dello strumento</translation>
     </message>
     <message>
         <source>Country flag button</source>
@@ -2231,7 +2231,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="840"/>
         <source>Buffer Delay</source>
-        <translation>Buffer Delay</translation>
+        <translation>Ritardo del Buffer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="845"/>
@@ -2404,7 +2404,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1325"/>
         <source>Clarinet</source>
-        <translation>Clarinet</translation>
+        <translation>Clarinetto</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1328"/>
@@ -2419,7 +2419,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1334"/>
         <source>Cello</source>
-        <translation>Cello</translation>
+        <translation>Violoncello</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1337"/>
@@ -2429,7 +2429,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1340"/>
         <source>Recorder</source>
-        <translation>Recorder</translation>
+        <translation>Registratore</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1343"/>
@@ -2479,7 +2479,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1370"/>
         <source>Congas</source>
-        <translation>Congas</translation>
+        <translation>Conga</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1373"/>
@@ -2602,12 +2602,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="900"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Abilita riduzione dimensione Buffer</translation>
+        <translation>Abilita riduzione dimensione Buffer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="670"/>
         <source>Buffer Delay</source>
-        <translation>Buffer Delay</translation>
+        <translation>Ritardo del Buffer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="109"/>
@@ -2686,7 +2686,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="321"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Avvisi Audio</translation>
+        <translation>Avvisi Audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="366"/>
@@ -2722,7 +2722,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../clientsettingsdlgbase.ui" line="789"/>
         <location filename="../clientsettingsdlgbase.ui" line="802"/>
         <source>Size</source>
-        <translation>Livello</translation>
+        <translation>Dimensione</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="931"/>
@@ -2742,7 +2742,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1133"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protezione dai Larsen</translation>
+        <translation>Protezione dai Larsen</translation>
     </message>
     <message>
         <source>Enable</source>
@@ -2907,7 +2907,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlg.cpp" line="83"/>
         <source>Server list view</source>
-        <translation>Lista dei Server</translation>
+        <translation>Vista della Lista dei Server</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="86"/>
@@ -3580,7 +3580,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation type="unfinished"></translation>
+        <translation>Quando è selezionata, il registratore funziona fino a quando è attiva una sessione (se impostata correttamente).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="135"/>
@@ -3776,7 +3776,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="96"/>
         <source>Server name line edit</source>
-        <translation>Nome del server</translation>
+        <translation>Modifica del Nome del server</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="99"/>
@@ -3879,7 +3879,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="122"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Abilita Registrazione</translation>
+        <translation>Abilita Registrazione</translation>
     </message>
     <message>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
@@ -4265,7 +4265,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished">Abilita bilanciamento del delay</translation>
+        <translation>Abilita bilanciamento del delay</translation>
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
@@ -4302,7 +4302,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Abilita Registrazione Jam</translation>
+        <translation>Abilita Registrazione Jam</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>

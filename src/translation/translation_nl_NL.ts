@@ -194,7 +194,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © 2005-2023 Het Jamulus Development Team</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -1172,7 +1172,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientdlg.cpp" line="1153"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation>Uw geluidskaart werkt niet goed. Open het Instellingsvenster en controleer apparaatselectie en bestuurprogramma-instellingen.</translation>
+        <translation>Uw geluidskaart werkt niet goed. Open het Instellingsvenster en controleer apparaatselectie en besturingsprogramma-instellingen.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1224"/>
@@ -1326,7 +1326,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished">Automatische jitterbufferschakelaar</translation>
+        <translation>Automatische jitterbuffer selectievakje</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1405,7 +1405,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="173"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Kleine netwerkbuffers inschakelen</translation>
+        <translation>Kleine netwerkbuffers</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1418,7 +1418,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="180"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished">Schakel het selectievakje kleine netwerkbuffers in</translation>
+        <translation>Kleine netwerkbuffers selectievakje</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>
@@ -1835,7 +1835,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="174"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation>Schakelt het gebruik van zeer kleine netwerkaudiopakketten in. Deze netwerkpakketten worden alleen gebruikt indien de geluidskaart buffer kleiner is dan %1 samples. Hoe kleiner de netwerkbuffers, des te kleiner de audio-vertraging. Maar tegelijkertijd neemt de netwerkbelasting toe en neemt ook de kans op audio-uitval toe.</translation>
+        <translation>Maakt ondersteuning mogelijk voor zeer kleine netwerkaudiopakketten. Deze netwerkpakketten worden alleen gebruikt indien de geluidskaart buffer kleiner is dan %1 samples. Hoe kleiner de netwerkbuffers, des te kleiner de audio-vertraging. Maar tegelijkertijd neemt de netwerkbelasting toe en neemt ook de kans op audio-uitval toe.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="185"/>
@@ -1995,7 +1995,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="122"/>
         <source>Audio Device</source>
-        <translation>Audio apparaat</translation>
+        <translation>Audioapparaat</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="123"/>
@@ -2080,12 +2080,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Feedback bescherming</translation>
+        <translation>Feedback bescherming</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="388"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished">Schakel feedback bescherming in om de akoetische feedback tussen de microfoon en luidsprekers te detecteren.</translation>
+        <translation>Voorkomt akoestische terugkoppeling tussen microfoon en luidsprekers.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="389"/>
@@ -2095,17 +2095,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="392"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Audiowaarschuwingen</translation>
+        <translation>Audiowaarschuwingen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="393"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished">Schakel audiowaarschuwing in bij ontvangst van een chatbericht en wanneer een nieuwe client deelneemt aan de sessie. Er kan een tweede geluidsapparaat nodig zijn om de waarschuwingen te horen.</translation>
+        <translation>Krijg een audiowaarschuwing bij ontvangst van een chatbericht en wanneer een nieuwe client deelneemt aan de sessie. Er kan een tweede geluidsapparaat nodig zijn om de waarschuwingen te horen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Audio Alerts check box</source>
-        <translation>Audiowaarschuwingen checkbox</translation>
+        <translation>Audiowaarschuwingen selectievakje</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -2465,12 +2465,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.cpp" line="1367"/>
         <source>Viola</source>
-        <translation>Viola</translation>
+        <translation>Altviool</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1370"/>
         <source>Congas</source>
-        <translation>Congas</translation>
+        <translation>Conga&apos;s</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1373"/>
@@ -2593,7 +2593,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="900"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Kleine netwerkbuffers inschakelen</translation>
+        <translation>Kleine netwerkbuffers</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="670"/>
@@ -2677,7 +2677,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="321"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Audiowaarschuwingen</translation>
+        <translation>Audiowaarschuwingen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="366"/>
@@ -2687,7 +2687,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="376"/>
         <source>Audio Device</source>
-        <translation>Audio apparaat</translation>
+        <translation>Audioapparaat</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="738"/>
@@ -2732,7 +2732,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1133"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Feedback bescherming</translation>
+        <translation>Feedback bescherming</translation>
     </message>
     <message>
         <source>Enable</source>
@@ -3575,7 +3575,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation type="unfinished"></translation>
+        <translation>Als deze optie is aangevinkt wordt er een opname gemaakt wanneer er een sessie bezig is (als deze correct is ingesteld).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="135"/>
@@ -3585,12 +3585,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Opname is uitgeschakeld door het UI selectievakje of JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="141"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Opname is uitgeschakeld door het UI selectievakje, SIGUSR2 of JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="146"/>
@@ -3850,12 +3850,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="190"/>
         <source>Clear the recording directory button</source>
-        <translation>Wis aangegeven geluidsopnamemap</translation>
+        <translation>Wis de geluidsopnamemap knop</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="191"/>
         <source>Clear Recording Directory</source>
-        <translation>Wis aangegeven geluidsopnamemap</translation>
+        <translation>Wis geluidsopnamemap</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="192"/>
@@ -3874,7 +3874,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="122"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Geluidsopname inschakelen</translation>
+        <translation>Geluidsopname</translation>
     </message>
     <message>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
@@ -4172,7 +4172,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverlijst vol bij adresboek</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -4272,7 +4272,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished">Delay panning inschakelen</translation>
+        <translation>Delay panning</translation>
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
@@ -4309,7 +4309,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Activeer geluidsopname</translation>
+        <translation>Geluidsopname</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
@@ -4367,22 +4367,22 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverlist.cpp" line="415"/>
         <source>Now a directory</source>
-        <translation type="unfinished">Nu een adresboek</translation>
+        <translation>Nu een adresboek</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="421"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Niet langer een adresboek</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="780"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon &apos;%1&apos; niet openen voor lezen/schrijven. Controleer of %2 toestemming heeft (en of er vrije ruimte is).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="787"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Laden van persistente serverlijst bestand: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="850"/>
@@ -4392,7 +4392,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverlist.cpp" line="861"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Registratie opslaan voor %1 (%2): %3</translation>
     </message>
 </context>
 <context>
@@ -4510,7 +4510,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../sound/asio/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation>Het geselecteerde audio apparaat is niet langer aanwezig in het system. Controleer uw audio apparaat.</translation>
+        <translation>Het geselecteerde audioapparaat is niet langer aanwezig in het system. Controleer uw audioapparaat.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="76"/>

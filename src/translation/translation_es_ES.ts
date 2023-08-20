@@ -3631,7 +3631,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuando está activado, la grabadora se ejecutará mientras haya una sesión en marcha (si está bien configurada).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="135"/>

@@ -150,7 +150,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation type="unfinished">Copyright © 2005-2023 The Jamulus Development Team</translation>
+        <translation>저작권 © 2005-2023 Jamulus 개발팀</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -1146,7 +1146,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished">지터 버퍼 자동 스위치</translation>
+        <translation>자동 지터 버퍼 확인란</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1221,7 +1221,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="173"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">소규모 네트워크 버퍼 활성화</translation>
+        <translation>소규모 네트워크 버퍼</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1234,7 +1234,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="180"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished">소규모 네트워크 버퍼 활성화 체크 박스</translation>
+        <translation>소규모 네트워크 버퍼 확인란</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>
@@ -1719,12 +1719,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">피드백 보호</translation>
+        <translation>피드백 보호</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="388"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished">피드백 보호를 활성화하여 마이크와 스피커 간의 음향 피드백을 감지합니다.</translation>
+        <translation>마이크와 스피커 간의 음향 피드백을 방지합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="389"/>
@@ -1739,7 +1739,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="393"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished"></translation>
+        <translation>대화 메시지를 수신할 때와 새 클라이언트가 세션에 참여할 때 오디오 경고를 트리거합니다. 경고를 들으려면 두 번째 사운드 장치가 필요할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
@@ -2253,7 +2253,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="900"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">소규모 네트워크 버퍼 활성화</translation>
+        <translation>소규모 네트워크 버퍼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="670"/>
@@ -2392,7 +2392,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1133"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">피드백 보호</translation>
+        <translation>피드백 보호</translation>
     </message>
     <message>
         <source>Enable</source>
@@ -3087,17 +3087,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation type="unfinished"></translation>
+        <translation>이 옵션을 선택하면, 세션이 진행되는 동안 녹음기가 실행됩니다( 올바르게 설정된 경우).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>녹음이 UI 확인란 또는 JSON-RPC에 의해 꺼졌습니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="141"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>녹음이 UI 확인란, SIGUSR2 또는 JSON-RPC에 의해 꺼졌습니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="177"/>
@@ -3304,7 +3304,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="122"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">녹음기 활성화</translation>
+        <translation>Jam 녹음기</translation>
     </message>
     <message>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
@@ -3644,7 +3644,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>디렉터리에 서버 목록이 가득 찼습니다</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -3740,7 +3740,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished">지연 패닝 활성화</translation>
+        <translation>지연 패닝</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
@@ -3773,7 +3773,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">잼 녹음기 활성화</translation>
+        <translation>Jam 녹음기</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
@@ -3811,22 +3811,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverlist.cpp" line="415"/>
         <source>Now a directory</source>
-        <translation type="unfinished">현재 디렉터리</translation>
+        <translation>현재 디렉터리</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="421"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>더 이상 디렉터리가 아닙니다</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="780"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>읽기/쓰기를 위해 &apos;%1&apos;을(를) 열 수 없습니다. %2에 권한이 있는지(및 여유 공간이 있는지) 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="787"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>영구 서버 목록 파일 불러오는 중: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="850"/>
@@ -3836,7 +3836,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverlist.cpp" line="861"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1(%2)에 대한 등록 저장하는 중: %3</translation>
     </message>
 </context>
 <context>

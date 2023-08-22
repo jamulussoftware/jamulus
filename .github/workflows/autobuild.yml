@@ -401,7 +401,7 @@ jobs:
                                     needs.create_release.outputs.publish_to_release == 'true' &&
                                     steps.build.outputs.macos_notarize == 'true'
         id:                         notarize-macOS-app
-        uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
+        uses:                       lando/notarize-action@4f5869b09386e8336802159031e4189e0919ae20
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
           primary-bundle-id:        io.jamulus.Jamulus
@@ -414,7 +414,7 @@ jobs:
                                     needs.create_release.outputs.publish_to_release == 'true' &&
                                     steps.build.outputs.macos_notarize == 'true'
         id:                         staple-macOS-app
-        uses:                       devbotsxyz/xcode-staple@ae68b22ca35d15864b7f7923e1a166533b2944bf
+        uses:                       BoundfoxStudios/action-xcode-staple@cd6c16fb6a3dfb365203a41343926f81e813afad
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 

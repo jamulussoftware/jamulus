@@ -2468,7 +2468,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="110"/>
         <source>Country/Region</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Land/region</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="111"/>

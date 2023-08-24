@@ -54,8 +54,20 @@
 - RPC: Rename `directoryServer` to `directory` in `jamulusserver/getServerProfile` response (#3048).
   (contributed by @pljones)
 
-- Translations updated from Hosted Weblate (#3113, #3059, #2921, #2923, #2998).
-  (contributed by @weblate)
+- Translations have been updated (#3119, #3150, #3113, #3059, #2921, #2923, #2998):
+  (mainly translated on @weblate by multiple translators)
+  * Chinese, by @yangyangdaji, Jason Li, @BLumia, SoulGI, @MarongHappy, Kingo Bingo
+	* Dutch, by @henkdegroot, @jerone
+	* French, by @trebmuh, @jujudusud, @cosas
+	* German, by @ann0see, Ettore Atalan, Iva Hristova, Katja Flinzner
+	* Italian, by @dzpex, Gico2006, Massimo Pissarello
+	* Korean, by @MarongHappy
+	* Norwegian Bokmål, by @comradekingu, Wdt@.+_-
+	* Polish, by Eryk Michalak, Cloudburst
+	* Portuguese Brazilian, by @melcon, @gbonaspetti, Adonias Almeida, Zer0-Zer0, Felipe Nogueira
+	* Portuguese European, by @melcon
+	* Spanish, by @ignotus666, gallegonovato
+	* Swedish, by Skarvinius
 
 - Translation: Document translation process shift to Weblate. Translators can from now one use Weblate for translations (#2880).
   (contributed by @ann0see)

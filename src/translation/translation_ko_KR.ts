@@ -664,7 +664,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="133"/>
         <source>The delay is perfect for a jam session.</source>
-        <translation>지연 상태가 잼 세션에 딱 적합합니다.</translation>
+        <translation>딜레이 상태가 잼 세션에 적합합니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="138"/>
@@ -684,7 +684,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="157"/>
         <source>Delay status LED indicator</source>
-        <translation>지연 상태 LED 표시등</translation>
+        <translation>딜레이 상태 LED 표시등</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="96"/>
@@ -694,7 +694,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
         <source>Shows the current audio delay status:</source>
-        <translation>현재 오디오 지연 상태를 표시합니다:</translation>
+        <translation>현재 오디오 딜레이 상태를 표시합니다:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="139"/>
@@ -704,7 +704,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="145"/>
         <source>The delay is too large for jamming.</source>
-        <translation>재밍을 하기에는 지연이 너무 큽니다.</translation>
+        <translation>재밍을 하기에는 딜레이가 너무 큽니다.</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
@@ -717,7 +717,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="170"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation>사운드 카드 버퍼 지연(버퍼 크기)이 너무 작습니다(설정 창 참조).</translation>
+        <translation>사운드 카드 버퍼 딜레이(버퍼 크기)가 너무 작습니다(설정 창 참조).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="174"/>
@@ -824,7 +824,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
         <source>Delay Status LED</source>
-        <translation>지연 상태 LED</translation>
+        <translation>딜레이 상태 LED</translation>
     </message>
     <message>
         <source>Buffers Status LED</source>
@@ -847,12 +847,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation>Ping 시간은 오디오 스트림이 클라이언트에서 서버로 이동하고 다시 돌아오는 데 필요한 시간입니다. 이 지연은 네트워크에 의해 발생하며 약 20-30ms 여야 합니다. 이 지연 시간이 약 50ms보다 크면 서버와의 거리가 너무 멀거나 인터넷 연결이 충분하지 않은 것입니다.</translation>
+        <translation>Ping 시간은 오디오 스트림이 클라이언트에서 서버로 이동하고 다시 돌아오는 데 필요한 시간입니다. 이 딜레이는 네트워크에 의해 발생하며 약 20-30ms 여야 합니다. 이 딜레이가 약 50ms보다 크면 서버와의 거리가 너무 멀거나 인터넷 연결이 충분하지 않은 것입니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="199"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation>전체 지연은 현재 Ping 시간과 현재 버퍼 설정에 의해 생성된 지연으로 계산됩니다.</translation>
+        <translation>전체 딜레이는 현재 핑 시간과 현재 버퍼 설정으로 인한 딜레이로 계산됩니다.</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
@@ -1025,7 +1025,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
-        <translation>지연</translation>
+        <translation>딜레이</translation>
     </message>
     <message>
         <source>Buffers</source>
@@ -1131,7 +1131,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="87"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation>지터 버퍼 설정은 오디오 품질과 전체 지연 사이의 균형을 맞추는 작업입니다.</translation>
+        <translation>지터 버퍼 설정은 오디오 음질과 전체 딜레이 사이의 균형을 맞추는 작업입니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="112"/>
@@ -1177,7 +1177,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="137"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
-        <translation>ASIO4ALL 드라이버를 사용하는 경우 이 드라이버는 일반적으로 약 10-30ms의 추가 오디오 지연을 일으킵니다. 그러므로 기본 ASIO 드라이버와 함께 사운드 카드를 사용하는 것이 좋습니다.</translation>
+        <translation>ASIO4ALL 드라이버를 사용하는 경우 이 드라이버는 일반적으로 약 10-30ms의 추가 오디오 딜레이를 일으킵니다. 그러므로 기본 ASIO 드라이버와 함께 사운드 카드를 사용하는 것이 좋습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="142"/>
@@ -1239,12 +1239,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>
         <source>Sound Card Buffer Delay</source>
-        <translation>사운드 카드 버퍼 지연</translation>
+        <translation>사운드 카드 버퍼 딜레이</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="185"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation>버퍼 지연 설정은 %1의 기본 설정값입니다. 이 설정은 많은 연결에 영향을 줍니다.</translation>
+        <translation>버퍼 딜레이 설정의 기본적인 설정은 %1입니다. 이 설정은 많은 연결 속성에 영향을 줍니다.</translation>
     </message>
     <message>
         <source>Three buffer sizes are supported</source>
@@ -1261,7 +1261,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="220"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation>그러므로 버퍼 설정은 오디오 품질과 전체 지연 사이의 균형을 맞추는 작업입니다.</translation>
+        <translation>따라서 버퍼 설정은 오디오 음질과 전체 딜레이 사이의 균형을 맞추는 작업입니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="261"/>
@@ -1423,7 +1423,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="76"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation>지터 버퍼는 네트워크 및 사운드 카드 타이밍 지터를 보완합니다. 따라서 버퍼의 크기는 오디오 스트림의 품질(드롭아웃 발생 수)과 전체 지연(버퍼가 길수록 지연이 높아짐)에 영향을 줍니다.</translation>
+        <translation>지터 버퍼는 네트워크 및 사운드 카드 타이밍 지터를 보완합니다. 따라서 버퍼의 크기는 오디오 스트림의 품질(드롭아웃 발생 수)과 전체 딜레이(버퍼가 길수록 지연이 높아짐)에 영향을 줍니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="81"/>
@@ -1438,7 +1438,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="96"/>
         <source>If the Auto setting is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the Auto setting and to lower the jitter buffer size manually by using the sliders until your personal acceptable amount of dropouts is reached. The LED indicator will display the audio dropouts of the local jitter buffer with a red light.</source>
-        <translation>Auto 설정이 활성화되면 오디오 드롭아웃 가능성을 최소화하기 위해 로컬 클라이언트와 원격 서버의 네트워크 버퍼가 보수적인 값으로 설정됩니다. 오디오 지연/대기 시간을 조정하려면 자동 설정을 비활성화하고 개인이 허용하는 드롭아웃 양에 도달할 때까지 슬라이더를 사용하여 수동으로 지터 버퍼 크기를 낮추는 것이 좋습니다. LED 표시기는 로컬 지터 버퍼의 오디오 드롭아웃을 빨간색으로 표시합니다.</translation>
+        <translation>Auto 설정이 활성화되면 오디오 드롭아웃 가능성을 최소화하기 위해 로컬 클라이언트와 원격 서버의 네트워크 버퍼가 보수적인 값으로 설정됩니다. 오디오 딜레이/레이턴시을 조정하려면 자동 설정을 비활성화하고 개인이 허용하는 드롭아웃 양에 도달할 때까지 슬라이더를 사용하여 수동으로 지터 버퍼 크기를 낮추는 것이 좋습니다. LED 표시기는 로컬 지터 버퍼의 오디오 드롭아웃을 빨간색으로 표시합니다.</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
@@ -1587,7 +1587,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="174"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation>매우 작은 네트워크 오디오 패킷에 대한 지원을 활성화합니다. 이러한 네트워크 패킷은 사운드 카드 버퍼 지연이 %1 샘플보다 작은 경우에만 실제로 사용됩니다. 네트워크 버퍼가 작을수록 오디오 대기 시간이 낮아집니다. 그러나 동시에 네트워크 로드와 오디오 드롭아웃 또는 사운드 아티팩트의 가능성이 증가합니다.</translation>
+        <translation>매우 작은 네트워크 오디오 패킷에 대한 지원을 활성화합니다. 이러한 네트워크 패킷은 사운드 카드 버퍼 딜레이가 %1 샘플보다 작은 경우에만 실제로 사용됩니다. 네트워크 버퍼가 작을수록 오디오 대기 시간이 낮아집니다. 그러나 동시에 네트워크 로드와 오디오 드롭아웃 또는 사운드 아티팩트의 가능성이 증가합니다.</translation>
     </message>
     <message>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
@@ -1631,7 +1631,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="201"/>
         <location filename="../clientsettingsdlg.cpp" line="223"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
-        <translation>일부 사운드 카드 드라이버는 버퍼 지연이 %1 내에서 변경되는 것을 허용하지 않습니다. 이 경우 버퍼 지연 설정이 비활성화되고 사운드 카드 드라이버를 사용하여 변경해야 합니다. 이 버퍼 크기를 조정하려면 사용 중인 인터페이스에 적절한 도구를 사용하십시오. 예를 들어 ASIO를 사용하는 경우 &quot;ASIO 장치 설정&quot; 버튼을 사용하여 드라이버 설정 패널을 열거나 JACK을 사용하는 경우 QjackCtl과 같은 도구를 사용하여 버퍼 크기를 조정합니다. Pipewire와 같은 다른 인터페이스는 적절한 도구를 사용해야 합니다. 인터페이스 매뉴얼을 참조하십시오.</translation>
+        <translation>일부 사운드 카드 드라이버는 버퍼 딜레이가 %1 내에서 변경되는 것을 허용하지 않습니다. 이 경우 버퍼 딜레이 설정이 비활성화되고 사운드 카드 드라이버를 사용하여 변경해야 합니다. 이 버퍼 크기를 조정하려면 사용 중인 인터페이스에 적절한 도구를 사용하십시오. 예를 들어 ASIO를 사용하는 경우 &quot;ASIO 장치 설정&quot; 버튼을 사용하여 드라이버 설정 패널을 열거나 JACK을 사용하는 경우 QjackCtl과 같은 도구를 사용하여 버퍼 크기를 조정합니다. Pipewire와 같은 다른 인터페이스는 적절한 도구를 사용해야 합니다. 인터페이스 매뉴얼을 참조하십시오.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="209"/>
@@ -1641,7 +1641,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="215"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation>실제 버퍼 지연은 연결, 현재 업로드 속도 및 전체 지연에 영향을 미칩니다. 버퍼 크기가 작을수록 상태 표시기에서 빨간색 표시등(드롭아웃)이 발생할 확률이 높아지고 업로드 속도가 빨라지고 전체 지연이 낮아집니다.</translation>
+        <translation>실제 버퍼 딜레이는 연결, 현재 업로드 속도 및 전체 딜레이에 영향을 미칩니다. 버퍼 크기가 작을수록 상태 표시기에 빨간색 불이 들어올 확률(드롭 아웃)이 높아지며 업로드 속도가 빨라지고 전체 딜레이가 줄어듭니다.</translation>
     </message>
     <message>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
@@ -1960,12 +1960,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="840"/>
         <source>Buffer Delay</source>
-        <translation>버퍼 지연</translation>
+        <translation>버퍼 딜레이</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="845"/>
         <source>Buffer Delay: </source>
-        <translation>버퍼 지연: </translation>
+        <translation>버퍼 딜레이: </translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1274"/>
@@ -2258,7 +2258,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="670"/>
         <source>Buffer Delay</source>
-        <translation>버퍼 지연</translation>
+        <translation>버퍼 딜레이</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="109"/>
@@ -3740,7 +3740,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation>지연 패닝</translation>
+        <translation>딜레이 패닝</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>

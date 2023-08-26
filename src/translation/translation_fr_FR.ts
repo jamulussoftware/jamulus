@@ -746,7 +746,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="311"/>
         <source>&amp;View</source>
-        <translation>&amp;Affichage</translation>
+        <translation>Afficha&amp;ge</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="286"/>

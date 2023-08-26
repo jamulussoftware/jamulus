@@ -593,7 +593,7 @@
         <location filename="../chatdlg.cpp" line="64"/>
         <location filename="../chatdlg.cpp" line="69"/>
         <source>&amp;Close</source>
-        <translation>&amp;Schließen</translation>
+        <translation>S&amp;chließen</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="145"/>
@@ -627,7 +627,7 @@
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="vanished">&amp;Schließen</translation>
+        <translation type="vanished">S&amp;chließen</translation>
     </message>
 </context>
 <context>

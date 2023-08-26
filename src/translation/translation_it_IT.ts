@@ -2015,7 +2015,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Audio Upstream Rate</source>
-        <translation>Audio Upstream Rate</translation>
+        <translation>Velocità upstream audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="373"/>
@@ -2236,7 +2236,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="845"/>
         <source>Buffer Delay: </source>
-        <translation>Buffer Delay: </translation>
+        <translation>Ritardo buffer: </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1185"/>
@@ -2642,7 +2642,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="79"/>
         <source>Musician&apos;s Profile</source>
-        <translation>Profilo del Musicista</translation>
+        <translation>Profilo del musicista</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="89"/>
@@ -3045,7 +3045,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlgbase.ui" line="76"/>
         <source>Ping Time</source>
-        <translation>Ping Time</translation>
+        <translation>Tempo di ping</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="81"/>

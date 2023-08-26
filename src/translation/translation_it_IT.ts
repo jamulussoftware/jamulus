@@ -543,7 +543,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="863"/>
         <source>Musician Profile</source>
-        <translation>Profilo del Musicista</translation>
+        <translation>Profilo musicista</translation>
     </message>
 </context>
 <context>
@@ -2168,7 +2168,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="502"/>
         <source>Musician Profile</source>
-        <translation>Profilo Musicista</translation>
+        <translation>Profilo musicista</translation>
     </message>
     <message>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>

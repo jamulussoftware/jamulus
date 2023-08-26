@@ -148,7 +148,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="120"/>
         <source>&amp;Libraries</source>
-        <translation>&amp;Bibliotek</translation>
+        <translation>Bib&amp;liotek</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="134"/>
@@ -158,7 +158,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="148"/>
         <source>&amp;Translation</source>
-        <translation>&amp;Oversettelse</translation>
+        <translation>Over&amp;settelse</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="198"/>
@@ -503,7 +503,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="60"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation>T&amp;øm sludringshistorikk</translation>
+        <translation>&amp;Tøm sludringshistorikk</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="64"/>
@@ -741,7 +741,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="290"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation type="unfinished">&amp;Last inn kanalmikserinnstillingene...</translation>
+        <translation type="unfinished">Last &amp;inn kanalmikserinnstillingene...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="292"/>
@@ -786,7 +786,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="320"/>
         <source>N&amp;o User Sorting</source>
-        <translation>&amp;Ingen brukersortering</translation>
+        <translation>Ingen brukers&amp;ortering</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="323"/>
@@ -821,7 +821,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="387"/>
         <source>Sett&amp;ings</source>
-        <translation type="unfinished">&amp;Innstillinger</translation>
+        <translation type="unfinished">I&amp;nnstillinger</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="389"/>
@@ -958,7 +958,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
-        <translation>&amp;Forstum deg selv</translation>
+        <translation>Forstu&amp;m deg selv</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="505"/>

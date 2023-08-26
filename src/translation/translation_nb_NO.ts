@@ -736,17 +736,17 @@
     <message>
         <location filename="../clientdlg.cpp" line="286"/>
         <source>&amp;Connection Setup...</source>
-        <translation>&amp;Tilkoblingsoppsett …</translation>
+        <translation>&amp;Tilkoblingsoppsett...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="290"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation type="unfinished">&amp;Last inn kanalmikserinnstillingene …</translation>
+        <translation type="unfinished">&amp;Last inn kanalmikserinnstillingene...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="292"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation type="unfinished">&amp;Lagre kanalmikserinnstillingene …</translation>
+        <translation type="unfinished">&amp;Lagre kanalmikserinnstillingene...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="296"/>
@@ -811,12 +811,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="376"/>
         <source>C&amp;hat...</source>
-        <translation type="unfinished">&amp;Sludring …</translation>
+        <translation type="unfinished">&amp;Sludring...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="381"/>
         <source>&amp;Analyzer Console...</source>
-        <translation type="unfinished">&amp;Analysatorkonsoll …</translation>
+        <translation type="unfinished">&amp;Analysatorkonsoll...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="387"/>
@@ -826,17 +826,17 @@
     <message>
         <location filename="../clientdlg.cpp" line="389"/>
         <source>My &amp;Profile...</source>
-        <translation type="unfinished">Min &amp;profil …</translation>
+        <translation type="unfinished">Min &amp;profil...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="391"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation type="unfinished">Lyd/&amp;nettverksinnstillinger …</translation>
+        <translation type="unfinished">Lyd/&amp;nettverksinnstillinger...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="393"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation type="unfinished">A&amp;vanserte innstillinger …</translation>
+        <translation type="unfinished">A&amp;vanserte innstillinger...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="729"/>
@@ -2293,12 +2293,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../util.cpp" line="803"/>
         <location filename="../util.cpp" line="808"/>
         <source>Getting &amp;Started...</source>
-        <translation>&amp;Begynn …</translation>
+        <translation>&amp;Begynn...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="804"/>
         <source>Software &amp;Manual...</source>
-        <translation>&amp;Programvaremanual</translation>
+        <translation>&amp;Programvaremanual...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="811"/>
@@ -2308,12 +2308,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="813"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">&amp;Om Jamulus …</translation>
+        <translation type="unfinished">&amp;Om Jamulus...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="815"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">Om &amp;Qt …</translation>
+        <translation type="unfinished">Om &amp;Qt...</translation>
     </message>
     <message>
         <location filename="../util.h" line="435"/>

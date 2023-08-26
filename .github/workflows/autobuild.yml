@@ -407,6 +407,7 @@ jobs:
           primary-bundle-id:        io.jamulus.Jamulus
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
+          appstore-connect-team-id:  ${{ secrets.NOTARIZATION_TEAM_ID }}
 
       - name:                       Staple macOS Release Build
         if:                         >-

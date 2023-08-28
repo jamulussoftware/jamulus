@@ -864,7 +864,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="387"/>
         <source>Sett&amp;ings</source>
-        <translation>Na&amp;stavenia</translation>
+        <translation>&amp;Nastavenia</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="729"/>

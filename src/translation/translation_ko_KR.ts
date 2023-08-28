@@ -1007,7 +1007,7 @@
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
         <translation>오디오 피드백 또는 큰 신호가 감지되었습니다.
 
-채널을 음소거하고 &apos;내 음소거&apos;를 활성화했습니다. 피드백 문제를 먼저 해결하고 나중에 음소거를 해제하세요.</translation>
+채널을 음소거하고 &apos;직접 음소거&apos;를 활성화했습니다. 피드백 문제를 먼저 해결하고 나중에 음소거를 해제하세요.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1153"/>
@@ -1065,7 +1065,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
-        <translation>음소거하기(&amp;M)</translation>
+        <translation>직접 음소거(&amp;M)</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="505"/>

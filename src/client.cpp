@@ -1257,7 +1257,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             if ( bMuteOutStream )
             {
                 iUnused = opus_custom_encode ( CurOpusEncoder,
-                                               &vecZeros[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                               &vecZeros[static_cast<size_t> ( i * iNumAudioChannels * iOPUSFrameSizeSamples )],
                                                iOPUSFrameSizeSamples,
                                                &vecCeltData[0],
                                                iCeltNumCodedBytes );
@@ -1265,7 +1265,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             else
             {
                 iUnused = opus_custom_encode ( CurOpusEncoder,
-                                               &vecsStereoSndCrd[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                               &vecsStereoSndCrd[static_cast<size_t> ( i * iNumAudioChannels * iOPUSFrameSizeSamples )],
                                                iOPUSFrameSizeSamples,
                                                &vecCeltData[0],
                                                iCeltNumCodedBytes );
@@ -1311,7 +1311,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             iUnused = opus_custom_decode ( CurOpusDecoder,
                                            pCurCodedData,
                                            iCeltNumCodedBytes,
-                                           &vecsStereoSndCrd[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                           &vecsStereoSndCrd[static_cast<size_t> ( i * iNumAudioChannels * iOPUSFrameSizeSamples )],
                                            iOPUSFrameSizeSamples );
         }
     }

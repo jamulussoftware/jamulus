@@ -1679,7 +1679,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="361"/>
         <source>Custom Directories</source>
-        <translation>사용자 정의 디렉터리</translation>
+        <translation>사용자 지정 디렉터리</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>

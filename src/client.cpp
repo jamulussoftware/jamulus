@@ -1256,19 +1256,11 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         {
             if ( bMuteOutStream )
             {
-                iUnused = opus_custom_encode ( CurOpusEncoder,
-                                               &vecZeros[j],
-                                               iOPUSFrameSizeSamples,
-                                               &vecCeltData[0],
-                                               iCeltNumCodedBytes );
+                iUnused = opus_custom_encode ( CurOpusEncoder, &vecZeros[j], iOPUSFrameSizeSamples, &vecCeltData[0], iCeltNumCodedBytes );
             }
             else
             {
-                iUnused = opus_custom_encode ( CurOpusEncoder,
-                                               &vecsStereoSndCrd[j],
-                                               iOPUSFrameSizeSamples,
-                                               &vecCeltData[0],
-                                               iCeltNumCodedBytes );
+                iUnused = opus_custom_encode ( CurOpusEncoder, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples, &vecCeltData[0], iCeltNumCodedBytes );
             }
         }
 
@@ -1308,11 +1300,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // OPUS decoding
         if ( CurOpusDecoder != nullptr )
         {
-            iUnused = opus_custom_decode ( CurOpusDecoder,
-                                           pCurCodedData,
-                                           iCeltNumCodedBytes,
-                                           &vecsStereoSndCrd[j],
-                                           iOPUSFrameSizeSamples );
+            iUnused = opus_custom_decode ( CurOpusDecoder, pCurCodedData, iCeltNumCodedBytes, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples );
         }
     }
 

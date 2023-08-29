@@ -1249,7 +1249,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
-    for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
+    for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )
     {
         // OPUS encoding
         if ( CurOpusEncoder != nullptr )
@@ -1257,7 +1257,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             if ( bMuteOutStream )
             {
                 iUnused = opus_custom_encode ( CurOpusEncoder,
-                                               &vecZeros[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                               &vecZeros[j],
                                                iOPUSFrameSizeSamples,
                                                &vecCeltData[0],
                                                iCeltNumCodedBytes );
@@ -1265,7 +1265,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             else
             {
                 iUnused = opus_custom_encode ( CurOpusEncoder,
-                                               &vecsStereoSndCrd[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                               &vecsStereoSndCrd[j],
                                                iOPUSFrameSizeSamples,
                                                &vecCeltData[0],
                                                iCeltNumCodedBytes );
@@ -1283,7 +1283,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         vecsStereoSndCrdMuteStream = vecsStereoSndCrd;
     }
 
-    for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
+    for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )
     {
         // receive a new block
         const bool bReceiveDataOk = ( Channel.GetData ( vecbyNetwData, iCeltNumCodedBytes ) == GS_BUFFER_OK );
@@ -1311,7 +1311,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             iUnused = opus_custom_decode ( CurOpusDecoder,
                                            pCurCodedData,
                                            iCeltNumCodedBytes,
-                                           &vecsStereoSndCrd[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                           &vecsStereoSndCrd[j],
                                            iOPUSFrameSizeSamples );
         }
     }

@@ -2,8 +2,8 @@ We're excited to announce the availability of Jamulus 3.10.0!
 
 Some highlights include:
 - A new repository for Debian/Ubuntu users for automated upgrades. Please see the [Linux install page on the website](https://jamulus.io/wiki/Installation-for-Linux) for the setup.
-- We've added SRV-based virtual hosting support for experience user experience with servers running on non default ports.
-- An improved JSON-RPC API on the Server side to get more information about connected clients
+- SRV-based virtual hosting support for improved user experience with servers running on non default ports.
+- An improved JSON-RPC API on the Server side to get more information about connected clients.
 
 Notes:
 - Please note that Jamulus 3.10.0 will from now on only support Windows 10 and 11 due to the upgrade to Qt 6.

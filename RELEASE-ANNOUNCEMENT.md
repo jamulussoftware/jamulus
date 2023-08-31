@@ -1,17 +1,18 @@
 We're excited to announce the availability of Jamulus 3.10.0!
 
 Some highlights include:
-- <!-- highlight 1 -->
-- <!-- highlight 2 -->
-- <!-- highlight 3 -->
+- A new repository for Debian/Ubuntu users for automated upgrades. Please see the [Linux install page on the website](https://jamulus.io/wiki/Installation-for-Linux) for the setup.
+- We've added SRV-based virtual hosting support for experience user experience with servers running on non default ports.
+- An improved JSON-RPC API on the Server side to get more information about connected clients
 
 Notes:
-- <!-- note 1 -->
-- <!-- note 2 -->
-- <!-- note 3 -->
+- Please note that Jamulus 3.10.0 will from now on only support Windows 10 and 11 due to the upgrade to Qt 6.
+- The macOS legacy build is now considered deprecated and may be removed in future due to the lack of support for outdated Xcode versions on GitHub actions
+- The CLI argument `--directoryserver` has been renamed to `--directoryaddress`. Please update your configuration.
+- If you compile Jamulus from source, please update the branch you are compiling from.
 
-<!-- if needed: Besides that, numerous usability improvements, enhancements, bugfixes and optimizations have been integrated. -->
-Please find all the details in the [Changelog](https://github.com/jamulussoftware/jamulus/releases/<!-- link to changelog-->).
+Besides that, numerous usability improvements, enhancements, bugfixes and optimizations have been integrated.
+Please find all the details in the [Changelog](https://github.com/jamulussoftware/jamulus/releases/r3_10_0).
 
 ## Downloads
 

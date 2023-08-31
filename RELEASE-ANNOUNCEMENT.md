@@ -9,7 +9,7 @@ Notes:
 - Please note that Jamulus 3.10.0 will from now on only support Windows 10 and 11 due to the upgrade to Qt 6.
 - The macOS legacy build is now considered deprecated and may be removed in future due to the lack of support for outdated Xcode versions on GitHub actions
 - The CLI argument `--directoryserver` has been renamed to `--directoryaddress`. Please update your configuration.
-- If you compile Jamulus from source, please update the branch you are compiling from.
+- If you compile Jamulus from source, please update the branch you are compiling from to `main`. See [this announcement for more information](https://github.com/orgs/jamulussoftware/discussions/2984)
 
 Besides that, numerous usability improvements, enhancements, bugfixes and optimizations have been integrated.
 Please find all the details in the [Changelog](https://github.com/jamulussoftware/jamulus/releases/r3_10_0).

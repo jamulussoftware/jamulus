@@ -1,5 +1,38 @@
 ### 3.9.1dev <- NOTE: The release version number will be 3.10.0 ###
 
+- Build: Updated bundled Qt6 to version 6.4.0 (#2892).
+  (contributed by @github-actions)
+
+- Build: Mac: Keep the signing-related keychain unlocked (#2927).
+  (contributed by @hoffie)
+
+- Build: Updated bundled JACK (Windows-only) to version 1.9.21.20221111 (#2960).
+  (contributed by @github-actions)
+
+- Build: Updated bundled Qt6 to version 6.4.1 (#2961).
+  (contributed by @github-actions)
+
+- Build: Updated bundled Qt6 to version 6.4.2 (#2991).
+  (contributed by @github-actions)
+
+- Build: Updated bundled Qt6 to version 6.4.3 (#3025).
+  (contributed by @github-actions)
+
+- Build: Updated bundled Qt6 to version 6.5.1 (#3070).
+  (contributed by @github-actions)
+
+- Docs: Added JSON-RPC server connection tips (#3101).
+  (contributed by @mcfnord)
+
+- Added trebmuh to create-translation-issues.sh (#3147).
+  (contributed by @jujudusud)
+
+- GUI: Fix some accelerator key conflicts, and fix ellipses in Norwegian (#3156).
+  (contributed by @softins)
+
+- Client: (Refactor) Prevent multiplication result converting to larger type (#3164).
+  (contributed by @softins)
+
 - Client: Added SRV-based virtual hosting support (#2930).
   (contributed by @hoffie)
 
@@ -54,7 +87,7 @@
 - RPC: Rename `directoryServer` to `directory` in `jamulusserver/getServerProfile` response (#3048).
   (contributed by @pljones)
 
-- Translations have been updated (#3119, #3150, #3113, #3059, #2921, #2923, #2998):
+- Translations have been updated (#3155, #3119, #3150, #3113, #3059, #2921, #2923, #2998):
   (mainly translated on @weblate by multiple translators)
   * Chinese, by @yangyangdaji, Jason Li, @BLumia, SoulGI, @MarongHappy, Kingo Bingo
 	* Dutch, by @henkdegroot, @jerone

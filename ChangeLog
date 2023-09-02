@@ -1,21 +1,9 @@
 ### 3.9.1dev <- NOTE: The release version number will be 3.10.0 ###
 
-- Build: Updated bundled Qt6 to version 6.4.0 (#2892).
-  (contributed by @github-actions)
-
 - Build: Mac: Keep the signing-related keychain unlocked (#2927).
   (contributed by @hoffie)
 
 - Build: Updated bundled JACK (Windows-only) to version 1.9.21.20221111 (#2960).
-  (contributed by @github-actions)
-
-- Build: Updated bundled Qt6 to version 6.4.1 (#2961).
-  (contributed by @github-actions)
-
-- Build: Updated bundled Qt6 to version 6.4.2 (#2991).
-  (contributed by @github-actions)
-
-- Build: Updated bundled Qt6 to version 6.4.3 (#3025).
   (contributed by @github-actions)
 
 - Build: Updated bundled Qt6 to version 6.5.1 (#3070).

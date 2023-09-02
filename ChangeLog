@@ -24,7 +24,7 @@
 - Docs: Added JSON-RPC server connection tips (#3101).
   (contributed by @mcfnord)
 
-- Added trebmuh to create-translation-issues.sh (#3147).
+- Translation: Added trebmuh to create-translation-issues.sh (#3147).
   (contributed by @jujudusud)
 
 - GUI: Fix some accelerator key conflicts, and fix ellipses in Norwegian (#3156).

@@ -28,8 +28,11 @@ _Windows users: Please note that in the first days after release SmartScreen wil
 ## Debian/Ubuntu
 
 _On Ubuntu you need to [enable the universe repository](https://askubuntu.com/questions/148638/how-do-i-enable-the-universe-repository/227788#227788) first._
-1. Setup the repository and install Jamulus via `apt` from your terminal: `cd /tmp; curl https://raw.githubusercontent.com/jamulussoftware/jamulus/main/linux/setup_repo.sh > setup_repo.sh; chmod +x setup_repo.sh; sudo ./setup_repo.sh` (only needed once).
-2. Install Jamulus normally via `sudo apt install jamulus` or the headless version via `sudo apt install jamulus-headless`.
+1. Setup the repository (only needed once):\\
+  ```bash
+  cd /tmp; curl https://raw.githubusercontent.com/jamulussoftware/jamulus/main/linux/setup_repo.sh > setup_repo.sh; chmod +x setup_repo.sh; sudo ./setup_repo.sh
+  ```
+2. Install Jamulus via `sudo apt install jamulus` or the headless version via `sudo apt install jamulus-headless`.
 
 You can also [manually install Jamulus as described on jamulus.io](https://jamulus.io/wiki/Installation-for-Linux)
 

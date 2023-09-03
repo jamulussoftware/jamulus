@@ -19,8 +19,8 @@ Please find all the details in the [Changelog](https://github.com/jamulussoftwar
 ### Windows
 _Windows users: Please note that in the first days after release SmartScreen will probably display warnings about this release being unknown upon download and/or execution of the installer._
 
-**[↓ Windows (ASIO)](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_win.exe)** (ASIO version)
-**[↓ Windows (JACK)](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_win_jack.exe)**
+* **[↓ Windows (ASIO)](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_win.exe)**
+* **[↓ Windows (JACK)](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_win_jack.exe)**
 
 ## macOS
 

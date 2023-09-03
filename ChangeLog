@@ -1,5 +1,23 @@
 ### 3.9.1dev <- NOTE: The release version number will be 3.10.0 ###
 
+- Build: Mac: Keep the signing-related keychain unlocked (#2927).
+  (contributed by @hoffie)
+
+- Build: Updated bundled Qt6 to version 6.5.1 (#3070).
+  (contributed by @github-actions)
+
+- Docs: Added JSON-RPC server connection tips (#3101).
+  (contributed by @mcfnord)
+
+- Translation: Added trebmuh to create-translation-issues.sh (#3147).
+  (contributed by @jujudusud)
+
+- GUI: Fix some accelerator key conflicts, and fix ellipses in Norwegian (#3156).
+  (contributed by @softins)
+
+- Client: (Refactor) Prevent multiplication result converting to larger type (#3164).
+  (contributed by @softins)
+
 - Client: Added SRV-based virtual hosting support (#2930).
   (contributed by @hoffie)
 
@@ -54,20 +72,20 @@
 - RPC: Rename `directoryServer` to `directory` in `jamulusserver/getServerProfile` response (#3048).
   (contributed by @pljones)
 
-- Translations have been updated (#3119, #3150, #3113, #3059, #2921, #2923, #2998):
+- Translations have been updated (#3158, #3155, #3119, #3150, #3113, #3059, #2921, #2923, #2998):
   (mainly translated on @weblate by multiple translators)
   * Chinese, by @yangyangdaji, Jason Li, @BLumia, SoulGI, @MarongHappy, Kingo Bingo
-	* Dutch, by @henkdegroot, @jerone
-	* French, by @trebmuh, @jujudusud, @cosas
-	* German, by @ann0see, Ettore Atalan, Iva Hristova, Katja Flinzner
-	* Italian, by @dzpex, Gico2006, Massimo Pissarello
-	* Korean, by @MarongHappy
-	* Norwegian Bokmål, by @comradekingu, Wdt@.+_-
-	* Polish, by Eryk Michalak, Cloudburst
-	* Portuguese Brazilian, by @melcon, @gbonaspetti, Adonias Almeida, Zer0-Zer0, Felipe Nogueira
-	* Portuguese European, by @melcon
-	* Spanish, by @ignotus666, gallegonovato
-	* Swedish, by Skarvinius
+  * Dutch, by @henkdegroot, @jerone
+  * French, by @trebmuh, @jujudusud, @cosas
+  * German, by @ann0see, Ettore Atalan, Iva Hristova, Katja Flinzner
+  * Italian, by @dzpex, Gico2006, Massimo Pissarello
+  * Korean, by @MarongHappy
+  * Norwegian Bokmål, by @comradekingu, Wdt@.+_-
+  * Polish, by Eryk Michalak, Cloudburst
+  * Portuguese Brazilian, by @melcon, @gbonaspetti, Adonias Almeida, Zer0-Zer0, Felipe Nogueira
+  * Portuguese European, by @melcon
+  * Spanish, by @ignotus666, gallegonovato
+  * Swedish, by Skarvinius
 
 - Translation: Document translation process shift to Weblate. Translators can from now one use Weblate for translations (#2880).
   (contributed by @ann0see)
@@ -84,8 +102,7 @@
 - Build: Updated Windows Installer base (NSIS) to version 3.09 (#3097).
   (contributed by @app/github-actions)
 
-- Build: Updated build dependencies: maxim-lobanov/setup-xcode to 1.5.1 (#2936),
-DoozyX/clang-format-lint-action to 0.16 (#3053), dev-drprasad/delete-tag-and-release to 0885ecc4123e071dd1a8be04d3a0578f5390581c (#3027).
+- Build: Updated build dependencies: maxim-lobanov/setup-xcode to 1.5.1 (#2936), DoozyX/clang-format-lint-action to 0.16 (#3053), dev-drprasad/delete-tag-and-release to 0885ecc4123e071dd1a8be04d3a0578f5390581c (#3027).
   (contributed by @app/dependabot)
 
 - Build: Enabled signing of macOS binary if a self signed certificate is given (#2944).
@@ -109,10 +126,8 @@ DoozyX/clang-format-lint-action to 0.16 (#3053), dev-drprasad/delete-tag-and-rel
 - Refactor: use `size_t` for vector and array indexes that must not be negative (#2893).
   (contributed by @pljones)
 
-- Internal: Moved main branch from `master` to `main`. If you compile Jamulus
-from source, you will need to update your local repository. See [discussion
-#2984](https://github.com/orgs/jamulussoftware/discussions/2984) for more information. (#2840)
-	(contributed by @pljones, @ann0see)
+- Internal: Moved main branch from `master` to `main`. If you compile Jamulus from source, you will need to update your local repository. See [discussion #2984](https://github.com/orgs/jamulussoftware/discussions/2984) for more information. (#2840)
+  (contributed by @pljones, @ann0see)
 
 - Internal: Clarified licensing terms for Autobuild scripts (#3077).
   (contributed by @ann0see)

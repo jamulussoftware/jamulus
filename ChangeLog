@@ -1,4 +1,4 @@
-### 3.9.1dev <- NOTE: The release version number will be 3.10.0 ###
+### 3.10.0 (2023-09-03) ###
 
 - Build: Mac: Keep the signing-related keychain unlocked (#2927).
   (contributed by @hoffie)

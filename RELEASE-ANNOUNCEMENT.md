@@ -26,15 +26,14 @@ _Windows users: Please note that in the first days after release SmartScreen wil
 **[↓ Android](<!-- direct link to Android version -->)** (experimental)
 **[↓ iOS](<!-- direct link to iOS version -->)** (experimental. Unsigned: Needs to be signed before installation on device. Please see the [iOS install page](https://jamulus.io/wiki/Installation-for-iOS))
 
-
-[Alternative Sourceforge mirror](https://sourceforge.net/projects/llcon/files/latest/download)
 [Source code](<!-- direct link to source code -->)
 
 
 Thanks to everyone who did their part to make this release happen:
-- Code contributors: <!-- in alphabetical order; see shell script to get contributors in jamulussoftware/jamulus -->
-- Application translators: <!-- in alphabetical order; see shell script to get contributors in jamulussoftware/jamulus -->
-- Website contributors/translators: <!-- in alphabetical order; see shell script to get contributors in jamulussoftware/jamulus -->
+- Code contributors: @ann0see, @comradekingu, @danryu, @declension, @hoffie, @ignotus666, @jujudusud, @mcfnord, @pljones, @Rob-NY, @softins
+
+- Application translators: @adoniasalmeida, @ann0see, @BLumia, @bugith, @C10udburst, @comradekingu, @cup113, @dzpex, @fnogcps, @gallegonovato, @gbonaspetti, @gnu-ewm, @ignotus666, @jerone, @mapi68, @MarongHappy, @melcon, @pljones, @softins, @SoulGI, @trebmuh, @Wdtwsm777, @yangyangdaji, @henkdegroot, @ignotus666, Iva Hristova
+- Website contributors/translators: @ann0see, @gilgongo, @henkdegroot, @ignotus666, @jujudusud, @mcfnord, @pljones, @Rob-NY, @trebmuh, Augusto Kakuja Santos, Ettore Atalan
 - ... and lots of people who brought new ideas or suggestions, guided their local colleagues or helped in various other ways!
 
 

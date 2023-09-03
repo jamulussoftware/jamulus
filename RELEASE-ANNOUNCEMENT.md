@@ -51,7 +51,7 @@ You can either download the source code or fork the [Github repository](https://
 Thanks to everyone who did their part to make this release happen:
 - Code contributors: @ann0see, @comradekingu, @danryu, @declension, @hoffie, @ignotus666, @jujudusud, @mcfnord, @pljones, @Rob-NY, @softins
 
-- Application translators: @adoniasalmeida, @ann0see, @BLumia, @bugith, @C10udburst, @comradekingu, @cup113, @dzpex, @fnogcps, @gallegonovato, @gbonaspetti, @gnu-ewm, @ignotus666, @jerone, @mapi68, @MarongHappy, @melcon, @pljones, @softins, @SoulGI, @trebmuh, @Wdtwsm777, @yangyangdaji, @henkdegroot, @ignotus666, Iva Hristova
+- Application translators: @adoniasalmeida, @ann0see, @BLumia, @bugith, @C10udburst, @comradekingu, @cosas, @cup113, @dzpex, @fnogcps, @gallegonovato, @gbonaspetti, @gnu-ewm, @ignotus666, @jerone, @jujudusud, @mapi68, @MarongHappy, @melcon, @pljones, @softins, @SoulGI, @trebmuh, @Wdtwsm777 (Wdt@.+_-), @yangyangdaji, @henkdegroot, @ignotus666, @Skarvinius, Iva Hristova, Kingo Bingo, Katja Flinzner, Gico2006, Massimo Pissarello, Zer0-Zer0
 - Website contributors/translators: @ann0see, @gilgongo, @henkdegroot, @ignotus666, @jujudusud, @mcfnord, @pljones, @Rob-NY, @trebmuh, Augusto Kakuja Santos, Ettore Atalan
 - ... and lots of people who brought new ideas or suggestions, guided their local colleagues or helped in various other ways!
 

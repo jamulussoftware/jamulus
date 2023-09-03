@@ -18,13 +18,18 @@ Please find all the details in the [Changelog](https://github.com/jamulussoftwar
 
 _Windows users: Please note that in the first days after release SmartScreen will probably display warnings about this release being unknown upon download and/or execution of the installer. Let us know when you do not see this warning anymore and we will update this announcement accordingly._
 
-**[↓ Windows](<!-- direct link to Windows version -->)** (ASIO version), alternative: [↓ JACK version](<!-- direct link to JACK version -->)
-**[↓ macOS (Universal)](<!-- direct link to macOS SIGNED Universal version -->)**
-**[↓ Debian/Ubuntu (amd64)](<!-- direct link to .deb [GUI] version -->)**, alternative: [↓ headless version](<!-- direct link to .deb [headless] version -->)
-**[↓ Debian/Ubuntu (armhf)](<!-- direct link to .deb [GUI] armhf version -->)**, alternative: [↓ headless version](<!-- direct link to .deb [headless] armhf version -->)
-**[↓ Debian/Ubuntu (arm64)](<!-- direct link to .deb [GUI] armhf version -->)**, alternative: [↓ headless version](<!-- direct link to .deb [headless] arm64 version -->)
-**[↓ Android](<!-- direct link to Android version -->)** (experimental)
-**[↓ iOS](<!-- direct link to iOS version -->)** (experimental. Unsigned: Needs to be signed before installation on device. Please see the [iOS install page](https://jamulus.io/wiki/Installation-for-iOS))
+* **[↓ Windows](<!-- direct link to Windows version -->)** (ASIO version)
+  * alternative: [↓ JACK version](<!-- direct link to JACK version -->)
+* **[↓ macOS (Universal)](<!-- direct link to macOS SIGNED Universal version -->)**
+* **[↓ Debian/Ubuntu (amd64)](<!-- direct link to .deb [GUI] version -->)**
+  * alternative: [↓ headless version](<!-- direct link to .deb [headless] version -->)
+* **[↓ Debian/Ubuntu (armhf)](<!-- direct link to .deb [GUI] armhf version -->)**
+  * alternative: [↓ headless version](<!-- direct link to .deb [headless] armhf version -->)
+* **[↓ Debian/Ubuntu (arm64)](<!-- direct link to .deb [GUI] armhf version -->)**
+  * alternative: [↓ headless version](<!-- direct link to .deb [headless] arm64 version -->)
+* **[↓ Android](<!-- direct link to Android version -->)** (experimental)
+* **[↓ iOS](<!-- direct link to iOS version -->)** (experimental)
+  Unsigned: Needs to be signed before installation on device. Please see the [iOS install page](https://jamulus.io/wiki/Installation-for-iOS)).
 
 [Source code](<!-- direct link to source code -->)
 

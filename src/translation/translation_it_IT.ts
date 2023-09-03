@@ -543,7 +543,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="863"/>
         <source>Musician Profile</source>
-        <translation>Profilo del Musicista</translation>
+        <translation>Profilo musicista</translation>
     </message>
 </context>
 <context>
@@ -2015,7 +2015,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Audio Upstream Rate</source>
-        <translation>Audio Upstream Rate</translation>
+        <translation>Velocità upstream audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="373"/>
@@ -2168,7 +2168,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="502"/>
         <source>Musician Profile</source>
-        <translation>Profilo Musicista</translation>
+        <translation>Profilo musicista</translation>
     </message>
     <message>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
@@ -2236,7 +2236,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="845"/>
         <source>Buffer Delay: </source>
-        <translation>Buffer Delay: </translation>
+        <translation>Ritardo buffer: </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1185"/>
@@ -2642,7 +2642,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="79"/>
         <source>Musician&apos;s Profile</source>
-        <translation>Profilo del Musicista</translation>
+        <translation>Profilo del musicista</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="89"/>
@@ -3045,7 +3045,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlgbase.ui" line="76"/>
         <source>Ping Time</source>
-        <translation>Ping Time</translation>
+        <translation>Tempo di ping</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="81"/>

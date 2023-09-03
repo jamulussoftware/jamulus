@@ -16,14 +16,26 @@ Please find all the details in the [Changelog](https://github.com/jamulussoftwar
 
 ## Downloads
 
+### Windows
 _Windows users: Please note that in the first days after release SmartScreen will probably display warnings about this release being unknown upon download and/or execution of the installer. Let us know when you do not see this warning anymore and we will update this announcement accordingly._
 
-* **[↓ Windows](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_win.exe)** (ASIO version)
-  * alternative: [↓ JACK version](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_win_jack.exe)
-* **[↓ macOS (Universal, Currently unsigned)](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_mac.dmg)**
-* **Debian/Ubuntu** Setup the repository and install Jamulus via `apt` from your terminal: `cd /tmp; curl https://raw.githubusercontent.com/jamulussoftware/jamulus/main/linux/setup_repo.sh > setup_repo.sh; chmod +x setup_repo.sh; sudo ./setup_repo.sh` (only needed once). Then install Jamulus normally via `sudo apt install jamulus` or the headless version via `sudo apt install jamulus-headless`. On Ubuntu you need to [enable the universe repository](https://askubuntu.com/questions/148638/how-do-i-enable-the-universe-repository/227788#227788) first. You can also [manually install Jamulus as described on jamulus.io](https://jamulus.io/wiki/Installation-for-Linux)
-* **[↓ Android](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_android.apk)** (experimental)
-* **[↓ iOS](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_iOSUnsigned.ipa)** (experimental)
+**[↓ Windows](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_win.exe)** (ASIO version)
+ * alternative: [↓ JACK version](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_win_jack.exe)
+
+## macOS
+**[↓ macOS (Universal, Currently unsigned)](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_mac.dmg)**
+
+## Debian/Ubuntu
+
+_On Ubuntu you need to [enable the universe repository](https://askubuntu.com/questions/148638/how-do-i-enable-the-universe-repository/227788#227788) first._
+1. Setup the repository and install Jamulus via `apt` from your terminal: `cd /tmp; curl https://raw.githubusercontent.com/jamulussoftware/jamulus/main/linux/setup_repo.sh > setup_repo.sh; chmod +x setup_repo.sh; sudo ./setup_repo.sh` (only needed once).
+2. Install Jamulus normally via `sudo apt install jamulus` or the headless version via `sudo apt install jamulus-headless`.
+
+You can also [manually install Jamulus as described on jamulus.io](https://jamulus.io/wiki/Installation-for-Linux)
+
+## Experimental
+* **[↓ Android](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_android.apk)**
+* **[↓ iOS](https://github.com/jamulussoftware/jamulus/releases/download/r3_10_0/jamulus_3.10.0_iOSUnsigned.ipa)**
   Unsigned: Needs to be signed before installation on device. Please see the [iOS install page](https://jamulus.io/wiki/Installation-for-iOS)).
 
 [Source code](https://github.com/jamulussoftware/jamulus/archive/refs/tags/r3_10_0.zip)

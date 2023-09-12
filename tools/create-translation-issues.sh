@@ -56,15 +56,15 @@ fi
 
 LOGGED_IN_AS=$(gh auth status | grep Logged | sed -e 's/^.*Logged in .*as //' -e 's/ ([^)]*)$//')
 
-# shellcheck disable=SC2034  # shellcheck can't know that this will be used with envsubst, so "unused" variable is correct here.
-START_DATE=$(date -Idate)
-
 RELEASE=$1
 DEADLINE=$2
 TYPE=$3
 EXTRA_TEXT=${4:-}
 MILESTONE="Release ${RELEASE}"
 PROJECT=Tracking
+
+# shellcheck disable=SC2034  # shellcheck can't know that this will be used with envsubst, so "unused" variable is correct here.
+START_DATE=$(date -Idate)
 
 # Syntax:
 # TRANSLATORS_BY_LANG[TYPE_LANG]="github-handle1,github-handle2"
@@ -230,6 +230,7 @@ create_translation_issue_for_lang() {
             SPLIT_TRANSLATORS=$(sed -re 's/^/@/; s/,/, @/g' <<< "$translators") \
             TITLE="$title" \
             TRANSLATE_BRANCH=next-release \
+            START_DATE="$START_DATE" \
             envsubst <<< "$body_template"
     )
 

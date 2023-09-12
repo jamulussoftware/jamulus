@@ -56,6 +56,9 @@ fi
 
 LOGGED_IN_AS=$(gh auth status | grep Logged | sed -e 's/^.*Logged in .*as //' -e 's/ ([^)]*)$//')
 
+# shellcheck disable=SC2034  # shellcheck can't know that this will be used with envsubst, so "unused" variable is correct here.
+START_DATE=$(date -Idate)
+
 RELEASE=$1
 DEADLINE=$2
 TYPE=$3
@@ -113,7 +116,9 @@ Further documentation can be found in [TRANSLATING.md](https://github.com/jamulu
 
 Thanks for contributing to Jamulus!
 
-<a href="https://hosted.weblate.org/engage/jamulus/"><img src="https://hosted.weblate.org/widgets/jamulus/-/jamulus-app/multi-auto.svg" alt="Translation status" /></a>'
+<a href="https://hosted.weblate.org/engage/jamulus/"><img src="https://hosted.weblate.org/widgets/jamulus/-/jamulus-app/multi-auto.svg" alt="Translation status" /></a>
+
+**[Weblate progress](https://hosted.weblate.org/changes/browse/jamulus/jamulus-app/${LANG}/?start_date=${START_DATE})**'
 
 # shellcheck disable=SC2016  # shellcheck can't know that this will be used with envsubst, so verbatim variables are correct here.
 BODY_TEMPLATE_WEB='Hi ${SPLIT_TRANSLATORS},

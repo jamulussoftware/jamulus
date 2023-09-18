@@ -593,27 +593,45 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                         "</font></p>" );
 
     // libraries used by this compilation
-    txvLibraries->setText (
-        tr ( "This app uses the following libraries, resources or code snippets:" ) + "<br><p>" + tr ( "Qt cross-platform application framework" ) +
-        ", <i><a href=\"https://www.qt.io\">https://www.qt.io</a></i></p>"
-        "<p>Opus Interactive Audio Codec"
-        ", <i><a href=\"https://www.opus-codec.org\">https://www.opus-codec.org</a></i></p>"
-#    if defined( _WIN32 ) && !defined( WITH_JACK )
-        "<p>ASIO (Audio Stream I/O) SDK"
-        ", <i><a href=\"https://www.steinberg.net/developers/\">https://www.steinberg.net/developers</a></i><br>" +
-        "ASIO is a trademark and software of Steinberg Media Technologies GmbH</p>"
+    txvLibraries->setText ( tr ( "This app uses the following libraries, resources or code snippets:" ) + "<p>" +
+                            tr ( "Qt cross-platform application framework" ) + QString ( " %1" ).arg ( QT_VERSION_STR ) +
+                            ", <i><a href=\"https://www.qt.io\">https://www.qt.io</a></i>"
+                            "</p>"
+                            "<p>"
+                            "Opus Interactive Audio Codec"
+                            ", <i><a href=\"https://www.opus-codec.org\">https://www.opus-codec.org</a></i>"
+                            "</p>"
+#    ifndef SERVER_ONLY
+#        if defined( _WIN32 ) && !defined( WITH_JACK )
+                            "<p>"
+                            "ASIO (Audio Stream I/O) SDK"
+                            ", <i><a href=\"https://www.steinberg.net/developers/\">https://www.steinberg.net/developers</a></i>"
+                            "<br>"
+                            "ASIO is a trademark and software of Steinberg Media Technologies GmbH"
+                            "</p>"
+#        endif
+#        ifndef HEADLESS
+                            "<p>" +
+                            tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
+                            ", 1995 - 2021"
+                            ", The Synthesis ToolKit in C++ (STK)"
+                            ", <i><a href=\"https://ccrma.stanford.edu/software/stk\">https://ccrma.stanford.edu/software/stk</a></i>"
+                            "</p>"
+                            "<p>" +
+                            QString ( tr ( "Some pixmaps are from the %1" ) ).arg ( "Open Clip Art Library (OCAL)" ) +
+                            ", <i><a href=\"https://openclipart.org\">https://openclipart.org</a></i>"
+                            "</p>"
+                            "<p>" +
+                            tr ( "Flag icons by Mark James" ) +
+                            ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i>"
+                            "</p>"
+                            "<p>" +
+                            QString ( tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" ) +
+                            ", <i><a href=\"https://freesound.org\">https://freesound.org</a></i>"
+                            "</p>"
+#        endif
 #    endif
-        "<p>" +
-        tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
-        ", 1995 - 2021, <i><a href=\"https://ccrma.stanford.edu/software/stk\">"
-        "The Synthesis ToolKit in C++ (STK)</a></i></p>"
-        "<p>" +
-        tr ( "Some pixmaps are from the" ) +
-        " Open Clip Art Library (OCAL), "
-        "<i><a href=\"https://openclipart.org\">https://openclipart.org</a></i></p>"
-        "<p>" +
-        tr ( "Flag icons by Mark James" ) + ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i></p>" + "<p>" +
-        tr ( "Some sound samples are from" ) + " Freesound, " + "<i><a href=\"https://freesound.org\">https://freesound.org</a></i></p>" );
+    );
 
     // contributors list
     txvContributors->setText (
@@ -1705,31 +1723,38 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** Foundation; either version 2 of the License, or (at your option) any later version.";
         strVersionText += "\n *** There is NO WARRANTY, to the extent permitted by law.";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Using the following libraries, resources or code snippets:";
+
+        strVersionText += "\n *** " + QCoreApplication::tr ( "This app uses the following libraries, resources or code snippets:" );
         strVersionText += "\n *** ";
-        strVersionText += QString ( "\n *** Qt framework %1" ).arg ( QT_VERSION_STR );
-        strVersionText += "\n *** <https://doc.qt.io/qt-5/lgpl.html>";
+        strVersionText += "\n *** " + QCoreApplication::tr ( "Qt cross-platform application framework" ) + QString ( " %1" ).arg ( QT_VERSION_STR );
+        strVersionText += "\n *** <https://www.qt.io>";
         strVersionText += "\n *** ";
         strVersionText += "\n *** Opus Interactive Audio Codec";
         strVersionText += "\n *** <https://www.opus-codec.org>";
         strVersionText += "\n *** ";
-#if defined( _WIN32 ) && !defined( WITH_JACK )
+#ifndef SERVER_ONLY
+#    if defined( _WIN32 ) && !defined( WITH_JACK )
         strVersionText += "\n *** ASIO (Audio Stream I/O) SDK";
         strVersionText += "\n *** <https://www.steinberg.net/developers>";
+        strVersionText += "\n *** ASIO is a trademark and software of Steinberg Media Technologies GmbH";
         strVersionText += "\n *** ";
-#endif
-        strVersionText += "\n *** Audio reverberation code by Perry R. Cook and Gary P. Scavone";
+#    endif
+#    ifndef HEADLESS
+        strVersionText += "\n *** " + QCoreApplication::tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
+                          ", 1995 - 2021, The Synthesis ToolKit in C++ (STK)";
         strVersionText += "\n *** <https://ccrma.stanford.edu/software/stk>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Some pixmaps are from the Open Clip Art Library (OCAL)";
+        strVersionText += "\n *** " + QString ( QCoreApplication::tr ( "Some pixmaps are from the %1" ) ).arg ( " Open Clip Art Library (OCAL)" );
         strVersionText += "\n *** <https://openclipart.org>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Flag icons by Mark James";
+        strVersionText += "\n *** " + QCoreApplication::tr ( "Flag icons by Mark James" );
         strVersionText += "\n *** <http://www.famfamfam.com>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** Some sound samples are from Freesound";
+        strVersionText += "\n *** " + QString ( QCoreApplication::tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" );
         strVersionText += "\n *** <https://freesound.org>";
         strVersionText += "\n *** ";
+#    endif
+#endif
         strVersionText += "\n *** Copyright © 2005-2023 The Jamulus Development Team";
         strVersionText += "\n";
     }

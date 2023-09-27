@@ -25,7 +25,7 @@
 #include "settings.h"
 
 /* Implementation *************************************************************/
-void CSettings::Load ( const QList<QString> CommandLineOptions )
+void CSettings::Load ( const QList<QString>& CommandLineOptions )
 {
     // prepare file name for loading initialization data from XML file and read
     // data from file if possible

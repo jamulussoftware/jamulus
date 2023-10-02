@@ -165,7 +165,6 @@ public:
     int              iCustomDirectoryIndex; // index of selected custom directory
     bool             bEnableFeedbackDetection;
     bool             bEnableAudioAlerts;
-    bool             bCleanUpLegacyFaderSettings;
 
     // window position/state settings
     QByteArray vecWindowPosSettings;
@@ -179,9 +178,6 @@ public:
 protected:
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
     virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) override;
-
-    // Code for #2680 clean up
-    QString CleanUpLegacyFaderSetting ( QString strFaderTag, int iIdx );
 
     void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
     void WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument );

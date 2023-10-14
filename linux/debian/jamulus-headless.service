@@ -16,8 +16,7 @@ IOSchedulingPriority=0
 
 #### Change this to publish this server, set genre, location and other parameters.
 #### See https://jamulus.io/wiki/Command-Line-Options ####
-ExecStart=/bin/sh -c 'exec /usr/bin/jamulus-headless -s -n'
-
+ExecStart=/usr/bin/jamulus-headless -s -n
 
 Restart=on-failure
 RestartSec=30

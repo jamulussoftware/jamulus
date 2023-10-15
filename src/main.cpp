@@ -932,13 +932,6 @@ int main ( int argc, char** argv )
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
 
-            // load translation
-            if ( bUseGUI && bUseTranslation )
-            {
-                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                CInstPictures::UpdateTableOnLanguageChange();
-            }
-
 #    ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
@@ -949,6 +942,13 @@ int main ( int argc, char** argv )
 #    ifndef HEADLESS
             if ( bUseGUI )
             {
+                // load translation
+                if ( bUseTranslation )
+                {
+                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                    CInstPictures::UpdateTableOnLanguageChange();
+                }
+
                 // GUI object
                 CClientDlg ClientDlg ( &Client,
                                        &Settings,
@@ -1015,7 +1015,7 @@ int main ( int argc, char** argv )
                 Settings.Load ( CommandLineOptions );
 
                 // load translation
-                if ( bUseGUI && bUseTranslation )
+                if ( bUseTranslation )
                 {
                     CLocale::LoadTranslation ( Settings.strLanguage, pApp );
                 }

@@ -1398,7 +1398,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Custom Directories combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Komboboks for egendefinerte mapper</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
@@ -1906,7 +1906,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="79"/>
         <source>Musician&apos;s Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Musikerprofil</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="89"/>
@@ -2578,7 +2578,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="160"/>
         <source>Server welcome message edit box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigeringsboks for tjenervelkomstmelding</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="161"/>
@@ -2705,7 +2705,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="228"/>
         <source>Start Minimized on Operating System Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Start minimert sammen med operativsystemet</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="229"/>

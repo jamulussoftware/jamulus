@@ -6,4 +6,7 @@ set -e
 
 adduser --system --quiet --home /nonexistent --no-create-home jamulus
 
+mkdir /etc/jamulus
+touch /etc/jamulus/welcome.html
+
 #DEBHELPER#

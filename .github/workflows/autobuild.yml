@@ -227,7 +227,7 @@ jobs:
           - config_name:            MacOS (artifacts)
             target_os:              macos
             building_on_os:         macos-12
-            base_command:           QT_VERSION=6.5.2 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
+            base_command:           QT_VERSION=6.6.0 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
             # Default Xcode which runs on macos-12:

@@ -446,9 +446,7 @@ int main ( int argc, char** argv )
         if ( GetNumericArgument ( argc, argv, i, "-u", "--numchannels", 1, MAX_NUM_CHANNELS, rDbleArgument ) )
         {
             iNumServerChannels = static_cast<int> ( rDbleArgument );
-
             qInfo() << qUtf8Printable ( QString ( "- maximum number of channels: %1" ).arg ( iNumServerChannels ) );
-
             CommandLineOptions << "--numchannels";
             ServerOnlyOptions << "--numchannels";
             continue;
@@ -599,20 +597,19 @@ int main ( int argc, char** argv )
         bUseGUI = false;
         qWarning() << "No GUI support compiled. Running in headless mode.";
     }
-#endif
 
-    if ( bIsClient )
+#endif
 #ifdef SERVER_ONLY
+    if ( bIsClient )
     {
         qCritical() << "Only --server mode is supported in this build.";
         exit ( 1 );
     }
+
 #else
-
-    // TODO create settings in default state, if loading from file do that next, then come back here to
-    //      override from command line options, then create client or server, letting them do the validation
-
+    if ( bIsClient )
     {
+
         if ( ServerOnlyOptions.size() != 0 )
         {
             qCritical() << qUtf8Printable ( QString ( "%1: Server only option(s) '%2' used.  Did you omit '--server'?" )
@@ -639,6 +636,7 @@ int main ( int argc, char** argv )
     else
 #endif
     {
+
         if ( ClientOnlyOptions.size() != 0 )
         {
             qCritical() << qUtf8Printable (
@@ -786,12 +784,10 @@ int main ( int argc, char** argv )
                 strServerBindIP = "";
             }
         }
-
 #ifndef NO_JSON_RPC
-        //
+
         // strJsonRpcBind address defaults to loopback and should not be empty, but
         // in the odd chance that an empty IP is passed, we'll check for it here.
-
         if ( strJsonRpcBindIP.trimmed().isEmpty() )
         {
             qCritical() << qUtf8Printable ( QString ( "JSON-RPC is enabled but the bind address provided is empty, exiting." ) );
@@ -809,7 +805,6 @@ int main ( int argc, char** argv )
                 exit ( 1 );
             }
         }
-
 #endif
     }
 
@@ -937,13 +932,6 @@ int main ( int argc, char** argv )
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
 
-            // load translation
-            if ( bUseGUI && bUseTranslation )
-            {
-                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                CInstPictures::UpdateTableOnLanguageChange();
-            }
-
 #    ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
@@ -954,6 +942,13 @@ int main ( int argc, char** argv )
 #    ifndef HEADLESS
             if ( bUseGUI )
             {
+                // load translation
+                if ( bUseTranslation )
+                {
+                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                    CInstPictures::UpdateTableOnLanguageChange();
+                }
+
                 // GUI object
                 CClientDlg ClientDlg ( &Client,
                                        &Settings,
@@ -967,6 +962,7 @@ int main ( int argc, char** argv )
 
                 // show dialog
                 ClientDlg.show();
+
                 pApp->exec();
             }
             else
@@ -1009,8 +1005,8 @@ int main ( int argc, char** argv )
             {
                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
             }
-#endif
 
+#endif
 #ifndef HEADLESS
             if ( bUseGUI )
             {
@@ -1019,7 +1015,7 @@ int main ( int argc, char** argv )
                 Settings.Load ( CommandLineOptions );
 
                 // load translation
-                if ( bUseGUI && bUseTranslation )
+                if ( bUseTranslation )
                 {
                     CLocale::LoadTranslation ( Settings.strLanguage, pApp );
                 }

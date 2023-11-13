@@ -7,8 +7,6 @@ if [[ ${EUID} -ne 0 ]]; then
      exit 1
 fi
 
-# Test for Ubuntu version
-
 if [ -x "$(command -v lsb_release)" ]; then
     ISUBUNTU=`lsb_release -is`
 else
@@ -17,22 +15,26 @@ else
 fi;
 
 if [[ $ISUBUNTU == "Ubuntu" ]]; then
-
     UBUNTU_VERSION=`lsb_release -sr`
     echo "Ubuntu version: ${UBUNTU_VERSION}"
-
     SUBSTRING=$(echo $UBUNTU_VERSION| cut -d'.' -f 1)
+else
+    echo "This is not Ubuntu"
+    # Could test for Debian here, or issue a prompt Continue at your own risk y/N?
+    exit 1
+fi;
 
-    if [[ $SUBSTRING -lt 22 ]]; then
+
+if [[ $SUBSTRING -lt 22 ]]; then
 cat << EOM
 WARNING: Ubuntu versions less that 22.04 have a bug in their apt version for signed repositories.
 Not adding jamulus repo. Either install the deb file manually [see https://jamulus.io/wiki/Installation-for-Linux]
 or update your system to at least Ubuntu 22.04
 EOM
     exit 1
-    fi;
 fi;
 
+# We have an acceptable Ubuntu version, continuing
 
 REPO_FILE=/etc/apt/sources.list.d/jamulus.list
 KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc

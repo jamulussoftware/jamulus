@@ -11,7 +11,7 @@ if [ -x "$(command -v lsb_release)" ]; then
     ISUBUNTU=`lsb_release -is`
 else
     echo "lsb_release not found. Cannot determine Linux distribution (or this is not Linux)."
-#    exit 1
+    exit 1
 fi;
 
 if [[ $ISUBUNTU == "Ubuntu" ]]; then

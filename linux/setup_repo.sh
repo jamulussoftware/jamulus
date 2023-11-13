@@ -8,9 +8,14 @@ if [[ ${EUID} -ne 0 ]]; then
 fi
 
 # Test for Ubuntu version
-ISUBUNTU=`lsb_release -is`
 
-if [[ $ISUBUNTU -eq "Ubuntu" ]]; then
+if [ -x "$(command -v lsb_release)" ]; then
+    ISUBUNTU=`lsb_release -is`
+else
+    echo "lsb_release not found. Cannot determine Linux distribution (or this is not Linux)."
+fi;
+
+if [[ $ISUBUNTU == "Ubuntu" ]]; then
 
     UBUNTU_VERSION=`lsb_release -sr`
     echo "Ubuntu version: ${UBUNTU_VERSION}"
@@ -23,9 +28,10 @@ WARNING: Ubuntu versions less that 22.04 have a bug in their apt version for sig
 Not adding jamulus repo. Either install the deb file manually [see https://jamulus.io/wiki/Installation-for-Linux]
 or update your system to at least Ubuntu 22.04
 EOM
-    exit 1 
+    exit 1
     fi;
 fi;
+
 
 REPO_FILE=/etc/apt/sources.list.d/jamulus.list
 KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc

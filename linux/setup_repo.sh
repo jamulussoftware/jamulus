@@ -11,19 +11,14 @@ if [ -x "$(command -v lsb_release)" ]; then
     ISUBUNTU=`lsb_release -is`
 else
     echo "lsb_release not found. Cannot determine Linux distribution (or this is not Linux)."
-    exit 1
+#    exit 1
 fi;
 
 if [[ $ISUBUNTU == "Ubuntu" ]]; then
+
     UBUNTU_VERSION=`lsb_release -sr`
     echo "Ubuntu version: ${UBUNTU_VERSION}"
     SUBSTRING=$(echo $UBUNTU_VERSION| cut -d'.' -f 1)
-else
-    echo "This is not Ubuntu"
-    # Could test for Debian here, or issue a prompt Continue at your own risk y/N?
-    exit 1
-fi;
-
 
 if [[ $SUBSTRING -lt 22 ]]; then
 cat << EOM
@@ -32,6 +27,17 @@ Not adding jamulus repo. Either install the deb file manually [see https://jamul
 or update your system to at least Ubuntu 22.04
 EOM
     exit 1
+fi;
+
+else
+    echo "This is not Ubuntu, it is ${ISUBUNTU}"
+    echo "Do you wish to install anyway?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) break;;
+        No ) exit 1;;
+    esac
+done
 fi;
 
 # We have an acceptable Ubuntu version, continuing

@@ -14,6 +14,22 @@ else
     exit 1
 fi;
 
+apt --version > /dev/null
+if [[ $? -eq 0 ]]; then
+    APT_VERSION=`apt --version`
+    APT_MAJOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 1)
+    APT_MINOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 2)
+    echo "Apt version: ${APT_VERSION}"
+else
+    echo "Apt is not available."
+    exit 1
+fi;
+
+if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.4" | bc -l) )); then
+    echo "Apt version incompatible."
+    exit 1
+fi;
+
 if [[ $ISUBUNTU == "Ubuntu" ]]; then
 
     UBUNTU_VERSION=`lsb_release -sr`

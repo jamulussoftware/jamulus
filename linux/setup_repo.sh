@@ -26,7 +26,7 @@ else
 fi;
 
 if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.4" | bc -l) )); then
-    echo "Apt version incompatible."
+    echo "Apt version incompatible. Cannot install repository, but you can use the .deb package to manually install."
     exit 1
 fi;
 

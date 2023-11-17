@@ -7,12 +7,7 @@ if [[ ${EUID} -ne 0 ]]; then
      exit 1
 fi
 
-if [ -x "$(command -v lsb_release)" ]; then
-    ISUBUNTU=`lsb_release -is`
-else
-    echo "lsb_release not found. Cannot determine Linux distribution (or this is not Linux)."
-    exit 1
-fi;
+# Check for apt version >= 2.4.0 (if found, assuming Debian-based compatible with repo)
 
 apt --version > /dev/null
 if [[ $? -eq 0 ]]; then
@@ -30,33 +25,7 @@ if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.4" | bc -l) )); then
     exit 1
 fi;
 
-if [[ $ISUBUNTU == "Ubuntu" ]]; then
-
-    UBUNTU_VERSION=`lsb_release -sr`
-    echo "Ubuntu version: ${UBUNTU_VERSION}"
-    SUBSTRING=$(echo $UBUNTU_VERSION| cut -d'.' -f 1)
-
-if [[ $SUBSTRING -lt 22 ]]; then
-cat << EOM
-WARNING: Ubuntu versions less that 22.04 have a bug in their apt version for signed repositories.
-Not adding jamulus repo. Either install the deb file manually [see https://jamulus.io/wiki/Installation-for-Linux]
-or update your system to at least Ubuntu 22.04
-EOM
-    exit 1
-fi;
-
-else
-    echo "This is not Ubuntu, it is ${ISUBUNTU}"
-    echo "Do you wish to install anyway?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes ) break;;
-        No ) exit 1;;
-    esac
-done
-fi;
-
-# We have an acceptable Ubuntu version, continuing
+# We have an acceptable Apt version, continuing
 
 REPO_FILE=/etc/apt/sources.list.d/jamulus.list
 KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc

@@ -21,7 +21,7 @@ else
 fi;
 
 if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.4" | bc -l) )); then
-    echo "Apt version incompatible. Cannot install repository, but you can use the .deb package to manually install."
+    echo "Your apt version is incompatible. You cannot install this repository. Please update your OS or use the .deb package from the Website to manually install Jamulus."
     exit 1
 fi;
 

@@ -16,7 +16,7 @@ if [[ $? -eq 0 ]]; then
     APT_MINOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 2)
     echo "Apt version: ${APT_VERSION}"
 else
-    echo "Apt is not available."
+    echo "This script is only compatible with Debian based distributions which have apt, but apt is not available. Please check that your OS is supported."
     exit 1
 fi;
 

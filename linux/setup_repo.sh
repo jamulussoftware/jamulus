@@ -11,9 +11,9 @@ fi
 
 apt --version > /dev/null
 if [[ $? -eq 0 ]]; then
-    APT_VERSION=`apt --version`
-    APT_MAJOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 1)
-    APT_MINOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 2)
+    APT_VERSION=$(apt --version)
+    APT_MAJOR=$(echo "$APT_VERSION" | cut -d' ' -f 2 | cut -d'.' -f 1)
+    APT_MINOR=$(echo "$APT_VERSION" | cut -d' ' -f 2 | cut -d'.' -f 2)
     echo "Apt version: ${APT_VERSION}"
 else
     echo "This script is only compatible with Debian based distributions which have apt, but apt is not available. Please check that your OS is supported."

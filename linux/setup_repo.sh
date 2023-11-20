@@ -25,7 +25,7 @@ if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.2" | bc -l) )); then
     echo "Do you wish to install anyway?"
     select yn in "Yes" "No"; do
         case $yn in
-            Yes ) echo "Proceeding with override"; break;;
+            Yes ) echo "Proceeding with override. You have been warned!"; break;;
             No ) exit 1;;
         esac
     done

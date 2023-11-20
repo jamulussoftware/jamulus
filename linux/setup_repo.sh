@@ -9,12 +9,9 @@ fi
 
 # Check for apt version >= 2.4.0 (if found, assuming Debian-based compatible with repo)
 
-apt --version > /dev/null
-if [[ $? -eq 0 ]]; then
-    APT_VERSION=$(apt --version)
-    APT_MAJOR=$(echo "$APT_VERSION" | cut -d' ' -f 2 | cut -d'.' -f 1)
-    APT_MINOR=$(echo "$APT_VERSION" | cut -d' ' -f 2 | cut -d'.' -f 2)
-    echo "Apt version: ${APT_VERSION}"
+if APT_VERSION="$(apt --version)"; then
+    APT_MAJOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 1)
+    APT_MINOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 2)
 else
     echo "This script is only compatible with Debian based distributions which have apt, but apt is not available. Please check that your OS is supported."
     exit 1

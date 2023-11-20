@@ -18,7 +18,7 @@ else
     exit 1
 fi;
 
-if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.4" | bc -l) )); then
+if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.2" | bc -l) )); then
     echo "Your apt version is incompatible. You may not be able install this repository. "
     echo "See issue: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095"
     echo "Please update your OS or use the .deb package from the Website to manually install Jamulus."

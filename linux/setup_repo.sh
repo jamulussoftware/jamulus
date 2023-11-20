@@ -8,6 +8,7 @@ if [[ ${EUID} -ne 0 ]]; then
 fi
 
 # Check for apt version >= 2.4.0 (if found, assuming Debian-based compatible with repo)
+# Issue: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095
 
 if APT_VERSION="$(apt --version)"; then
     APT_MAJOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 1)
@@ -18,8 +19,16 @@ else
 fi;
 
 if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.4" | bc -l) )); then
-    echo "Your apt version is incompatible. You cannot install this repository. Please update your OS or use the .deb package from the Website to manually install Jamulus."
-    exit 1
+    echo "Your apt version is incompatible. You may not be able install this repository. "
+    echo "See issue: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095"
+    echo "Please update your OS or use the .deb package from the Website to manually install Jamulus."
+    echo "Do you wish to install anyway?"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes ) echo "Proceeding with override"; break;;
+            No ) exit 1;;
+        esac
+    done
 fi;
 
 # We have an acceptable Apt version, continuing

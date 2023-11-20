@@ -11,8 +11,8 @@ fi
 # Issue: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095
 
 if APT_VERSION="$(apt --version)"; then
-    APT_MAJOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 1)
-    APT_MINOR=$(echo $APT_VERSION| cut -d' ' -f 2 | cut -d'.' -f 2)
+    APT_MAJOR=$(echo "$APT_VERSION"| cut -d' ' -f 2 | cut -d'.' -f 1)
+    APT_MINOR=$(echo "$APT_VERSION"| cut -d' ' -f 2 | cut -d'.' -f 2)
 else
     echo "This script is only compatible with Debian based distributions which have apt, but apt is not available. Please check that your OS is supported."
     exit 1

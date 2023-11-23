@@ -24,6 +24,7 @@ if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.2" | bc -l) )); then
     echo "Also of interest: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095"
     echo "Please update your OS or use the .deb package from the Website to manually install Jamulus."
     echo "Do you wish to attempt to install the repository anyway?"
+    echo "(not recommended, as you might need to fix your apt configuration)"
     select yn in "Yes" "No"; do
         case $yn in
             Yes ) 

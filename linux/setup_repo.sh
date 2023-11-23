@@ -7,7 +7,7 @@ if [[ ${EUID} -ne 0 ]]; then
      exit 1
 fi
 
-# Check for apt version >= 2.4.0 (if found, assuming Debian-based compatible with repo)
+# Check for apt version >= 2.2.0 (if found, assuming Debian-based compatible with repo)
 # Issue: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095
 
 if APT_VERSION="$(apt --version)"; then

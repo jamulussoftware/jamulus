@@ -33,7 +33,7 @@ if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.2" | bc -l) )); then
             ;;
             No ) 
             echo "Exiting."
-            exit 1
+            exit 0
             ;;
         esac
     done

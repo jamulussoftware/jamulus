@@ -25,13 +25,17 @@ if (( $(echo "${APT_MAJOR}.${APT_MINOR} < 2.2" | bc -l) )); then
     echo "Do you wish to install anyway?"
     select yn in "Yes" "No"; do
         case $yn in
-            Yes ) echo "Proceeding with override. You have been warned!"; break;;
-            No ) exit 1;;
+            Yes ) 
+            echo "Proceeding with override. You have been warned!"
+            break
+            ;;
+            No ) 
+            echo "Exiting."
+            exit 1
+            ;;
         esac
     done
 fi;
-
-# We have an acceptable Apt version, continuing
 
 REPO_FILE=/etc/apt/sources.list.d/jamulus.list
 KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc

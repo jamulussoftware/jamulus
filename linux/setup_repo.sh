@@ -3,41 +3,40 @@
 # This script installs a Jamulus repository to Debian based systems
 
 if [[ ${EUID} -ne 0 ]]; then
-    echo "Error: This script must be run as root."
-    exit 1
+	echo "Error: This script must be run as root."
+	exit 1
 fi
 
 # Check for apt version >= 2.2.0 (if found, assuming Debian-based compatible with repo)
 # Issue: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095
 
 if APT_VERSION="$(apt --version)"; then
-    APT_MAJOR=$(echo "$APT_VERSION" | cut -d' ' -f 2 | cut -d'.' -f 1)
-    APT_MINOR=$(echo "$APT_VERSION" | cut -d' ' -f 2 | cut -d'.' -f 2)
+	APT_MAJOR=$(echo "$APT_VERSION" | cut -d' ' -f 2 | cut -d'.' -f 1)
+	APT_MINOR=$(echo "$APT_VERSION" | cut -d' ' -f 2 | cut -d'.' -f 2)
 else
-    echo "This script is only compatible with Debian based distributions which have apt."
-    echo "It seems apt is not available. Please check that your OS is supported."
-    exit 1
+	echo "This script is only compatible with Debian based distributions which have apt, but apt is not available. Please check that your OS is supported."
+	exit 1
 fi
 
 if (($(echo "${APT_MAJOR}.${APT_MINOR} < 2.2" | bc -l))); then
-    echo "Your apt version is incompatible. You may not be able install this repository. "
-    echo "See: https://github.com/orgs/jamulussoftware/discussions/3180"
-    echo "Also of interest: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095"
-    echo "Please update your OS or use the .deb package from the Website to manually install Jamulus."
-    echo "Do you wish to attempt to install the repository anyway?"
-    echo "(not recommended, as you might need to fix your apt configuration)"
-    select yn in "Yes" "No"; do
-        case $yn in
-        Yes)
-            echo "Proceeding with override. You have been warned!"
-            break
-            ;;
-        No)
-            echo "Exiting."
-            exit 0
-            ;;
-        esac
-    done
+	echo "Your apt version is incompatible. You may not be able install this repository. "
+	echo "See: https://github.com/orgs/jamulussoftware/discussions/3180"
+	echo "Also of interest: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095"
+	echo "Please update your OS or use the .deb package from the Website to manually install Jamulus."
+	echo "Do you wish to attempt to install the repository anyway?"
+	echo "(not recommended, as you might need to fix your apt configuration)"
+	select yn in "Yes" "No"; do
+		case $yn in
+		Yes)
+			echo "Proceeding with override. You have been warned!"
+			break
+			;;
+		No)
+			echo "Exiting."
+			exit 0
+			;;
+		esac
+	done
 fi
 
 REPO_FILE=/etc/apt/sources.list.d/jamulus.list
@@ -51,8 +50,8 @@ curl --fail --show-error -sLo "${KEY_FILE}" https://github.com/${GITHUB_REPOSITO
 
 CURL_EXITCODE=$?
 if [[ ${CURL_EXITCODE} -ne 0 ]]; then
-    echo "Error: Download of gpg key failed. Please try again later."
-    exit ${CURL_EXITCODE}
+	echo "Error: Download of gpg key failed. Please try again later."
+	exit ${CURL_EXITCODE}
 fi
 
 echo "Running apt update..."

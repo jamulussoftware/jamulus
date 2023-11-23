@@ -27,14 +27,14 @@ if (($(echo "${APT_MAJOR}.${APT_MINOR} < 2.2" | bc -l))); then
     echo "(not recommended, as you might need to fix your apt configuration)"
     select yn in "Yes" "No"; do
         case $yn in
-           Yes)
-              echo "Proceeding with override. You have been warned!"
-              break
-              ;;
+            Yes)
+                echo "Proceeding with override. You have been warned!"
+                break
+                ;;
             No)
-              echo "Exiting."
-              exit 0
-              ;;
+                echo "Exiting."
+                exit 0
+                ;;
         esac
     done
 fi

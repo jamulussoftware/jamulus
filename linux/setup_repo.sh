@@ -44,7 +44,7 @@ KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc
 GITHUB_REPOSITORY="jamulussoftware/jamulus"
 
 echo "Setting up Jamulus repo at ${REPO_FILE}..."
-echo "deb https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/ ./" >${REPO_FILE}
+echo "deb https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/ ./" > ${REPO_FILE}
 echo "Installing Jamulus GPG key at ${KEY_FILE}..."
 curl --fail --show-error -sLo "${KEY_FILE}" https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/key.asc
 

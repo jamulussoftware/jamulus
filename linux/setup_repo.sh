@@ -19,10 +19,12 @@ else
 fi
 
 if [[ ${APT_MAJOR} -lt 2 || ( ${APT_MAJOR} -eq 2 && ${APT_MINOR} -lt 2 ) ]]; then
-    echo "Your apt version is incompatible. You may not be able install this repository. "
-    echo "See: https://github.com/orgs/jamulussoftware/discussions/3180"
+    echo "This repository is not compatible with your apt version."
+    echo "You can install Jamulus manually using the .deb package from "
+    echo "https://github.com/jamulussoftware/jamulus/releases or update your OS."
+    echo "For more information see: https://github.com/orgs/jamulussoftware/discussions/3180"
     echo "Also of interest: https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1950095"
-    echo "Please update your OS or use the .deb package from the Website to manually install Jamulus."
+    echo
     echo "Do you wish to attempt to install the repository anyway?"
     echo "(not recommended, as you might need to fix your apt configuration)"
     select yn in "Yes" "No"; do

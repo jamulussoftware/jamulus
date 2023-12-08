@@ -18,7 +18,7 @@ else
     exit 1
 fi
 
-if [[ ${APT_MAJOR} -lt 2 || ( ${APT_MAJOR} -eq 2 && ${APT_MINOR} -lt 2 ) ]]; then
+if [[ ${APT_MAJOR} -lt 2 || (${APT_MAJOR} -eq 2 && ${APT_MINOR} -lt 2)   ]]; then
     echo "This repository is not compatible with your apt version."
     echo "You can install Jamulus manually using the .deb package from "
     echo "https://github.com/jamulussoftware/jamulus/releases or update your OS."

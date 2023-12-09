@@ -183,7 +183,7 @@ Function Ensure-JACK
 
     $JACKInstallPath = "${DownloadCacheDir}\JACK64.exe"
 
-    & $JACKInstallPath $JACKInstallParms
+    Start-Process -Wait $JACKInstallPath -ArgumentList "$JACKInstallParms"
 
     if ( !$? )
     {
@@ -198,7 +198,7 @@ Function Ensure-JACK
 
     $JACKInstallPath = "${DownloadCacheDir}\JACK32.exe"
 
-    & $JACKInstallPath $JACKInstallParms
+    Start-Process -Wait $JACKInstallPath -ArgumentList "$JACKInstallParms"
 
     if ( !$? )
     {

@@ -39,6 +39,10 @@ param(
 # Fail early on all errors
 $ErrorActionPreference = "Stop"
 
+# Invoke-WebRequest is really slow by default because it renders a progress bar.
+# Disabling this, improves vastly performance:
+$ProgressPreference = 'SilentlyContinue'
+
 $QtDir = 'C:\Qt'
 $ChocoCacheDir = 'C:\ChocoCache'
 $DownloadCacheDir = 'C:\AutobuildCache'

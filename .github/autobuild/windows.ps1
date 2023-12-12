@@ -39,6 +39,10 @@ param(
 # Fail early on all errors
 $ErrorActionPreference = "Stop"
 
+# Invoke-WebRequest is really slow by default because it renders a progress bar.
+# Disabling this, improves vastly performance:
+$ProgressPreference = 'SilentlyContinue'
+
 $QtDir = 'C:\Qt'
 $ChocoCacheDir = 'C:\ChocoCache'
 $DownloadCacheDir = 'C:\AutobuildCache'
@@ -179,7 +183,7 @@ Function Ensure-JACK
 
     $JACKInstallPath = "${DownloadCacheDir}\JACK64.exe"
 
-    & $JACKInstallPath $JACKInstallParms
+    Start-Process -Wait $JACKInstallPath -ArgumentList "$JACKInstallParms"
 
     if ( !$? )
     {
@@ -194,7 +198,7 @@ Function Ensure-JACK
 
     $JACKInstallPath = "${DownloadCacheDir}\JACK32.exe"
 
-    & $JACKInstallPath $JACKInstallParms
+    Start-Process -Wait $JACKInstallPath -ArgumentList "$JACKInstallParms"
 
     if ( !$? )
     {

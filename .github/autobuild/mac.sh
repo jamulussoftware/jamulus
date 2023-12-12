@@ -29,7 +29,7 @@ set -eu
 QT_DIR=/usr/local/opt/qt
 # The following version pinnings are semi-automatically checked for
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-AQTINSTALL_VERSION=3.1.7
+AQTINSTALL_VERSION=3.1.11
 
 TARGET_ARCHS="${TARGET_ARCHS:-}"
 

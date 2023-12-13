@@ -120,7 +120,9 @@ build_installer_image() {
 
     # Build installer image
 
-    create-dmg \
+    # This gets rid of CodeQL's virally infecting dylib preloads which break hdiutil's helper
+    # /System/Library/PrivateFrameworks/DiskImages.framework/Resources/diskimages-helper.
+    sudo -u "$USER" create-dmg \
         --volname "${client_target_name} Installer" \
         --background "${resources_path}/installerbackground.png" \
         --window-pos 200 400 \

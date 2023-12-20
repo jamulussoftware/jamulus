@@ -49,7 +49,7 @@ $DownloadCacheDir = 'C:\AutobuildCache'
 # The following version pinnings are semi-automatically checked for
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
 $Qt32Version = "5.15.2"
-$Qt64Version = "6.6.0"
+$Qt64Version = "6.6.1"
 $AqtinstallVersion = "3.1.11"
 $JackVersion = "1.9.22"
 $Msvc32Version = "win32_msvc2019"

@@ -180,17 +180,17 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2023 Volker Fischer und andere</translation>
+        <source>Copyright (C) 2005-2024 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2024 Volker Fischer und andere</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2023 beim Jamulus Entwicklungs Team</translation>
+        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2024 beim Jamulus Entwicklungs Team</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation>Copyright © 2005-2023 The Jamulus Development Team</translation>
+        <source>Copyright © 2005-2024 The Jamulus Development Team</source>
+        <translation>Copyright © 2005-2024 The Jamulus Development Team</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -4775,8 +4775,8 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <translation type="vanished">Die Bilder der Länderflaggen sind von Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2023 beim Jamulus Entwicklungs Team</translation>
+        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2024 beim Jamulus Entwicklungs Team</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

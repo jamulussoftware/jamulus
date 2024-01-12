@@ -144,17 +144,17 @@
         <translation></translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2023 Volker Fischer i inni</translation>
+        <source>Copyright (C) 2005-2024 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2024 Volker Fischer i inni</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2023 Zespół programistów Jamulus-a</translation>
+        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2024 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation>Copyright © 2005-2023 Zespół programistów Jamulus-a</translation>
+        <source>Copyright © 2005-2024 The Jamulus Development Team</source>
+        <translation>Copyright © 2005-2024 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -4282,8 +4282,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Ikony flag: Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2023 Zespół programistów Jamulus-a</translation>
+        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2024 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

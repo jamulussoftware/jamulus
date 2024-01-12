@@ -132,12 +132,12 @@
         <translation type="unfinished">Versjon</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
         <translation type="obsolete">Opphavsrett © 2005–2022 Jamulus-utviklingslaget</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2023 The Jamulus Development Team</source>
+        <source>Copyright © 2005-2024 The Jamulus Development Team</source>
         <translation>Opphavsrett © 2005–2023 Jamulus-utviklingslaget</translation>
     </message>
     <message>

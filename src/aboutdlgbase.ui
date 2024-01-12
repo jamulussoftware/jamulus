@@ -69,7 +69,7 @@
        <item>
         <widget class="QLabel" name="lblCopyright">
          <property name="text">
-          <string>Copyright © 2005-2023 The Jamulus Development Team</string>
+          <string>Copyright © 2005-2024 The Jamulus Development Team</string>
          </property>
          <property name="wordWrap">
           <bool>false</bool>

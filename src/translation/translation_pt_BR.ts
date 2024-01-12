@@ -192,18 +192,18 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2023 Volker Fischer e outros</translation>
+        <source>Copyright (C) 2005-2024 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2024 Volker Fischer e outros</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
         <translatorcomment>I&apos;ll keep it untranslated for the moment</translatorcomment>
-        <translation type="vanished">Copyright (C) 2005-2023 A equipe de desenvolvimento Jamulus</translation>
+        <translation type="vanished">Copyright (C) 2005-2024 A equipe de desenvolvimento Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2023 The Jamulus Development Team</source>
-        <translation>Copyright © 2005-2023 A equipe de desenvolvimento Jamulus</translation>
+        <source>Copyright © 2005-2024 The Jamulus Development Team</source>
+        <translation>Copyright © 2005-2024 A equipe de desenvolvimento Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -231,8 +231,8 @@
         <translation type="vanished">Autor: Volker Fischer</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023</source>
-        <translation type="vanished">Copyright (C) 2005-2023</translation>
+        <source>Copyright (C) 2005-2024</source>
+        <translation type="vanished">Copyright (C) 2005-2024</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="198"/>
@@ -4823,8 +4823,8 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation type="vanished">Ícones de bandeiras por Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2023 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2023 Equipe de Desenvolvimento Jamulus</translation>
+        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2024 Equipe de Desenvolvimento Jamulus</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

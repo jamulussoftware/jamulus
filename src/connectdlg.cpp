@@ -42,9 +42,9 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     // Add help text to controls -----------------------------------------------
     // directory
-    QString strDirectoryWT = "<b>" + tr ( "Directory" ) + ":</b> " +
-                             tr ( "Shows the servers listed by the selected directory. "
-                                  "You can add custom directories in Advanced Settings." );
+    QString strDirectoryWT = "<b>" + tr ( "Directory" ) + ":</b> " + tr ( "The list of available directories." ) + "<br/>" +
+                             tr ( "Select a directory to list the servers registered with it." ) + "<br/>" +
+                             tr ( "You can add custom directories in Advanced Settings." );
     lblDirectory->setWhatsThis ( strDirectoryWT );
     lblDirectory->setToolTip ( strDirectoryWT );
     cbxDirectory->setWhatsThis ( strDirectoryWT );

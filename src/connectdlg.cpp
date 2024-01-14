@@ -45,13 +45,13 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QString strDirectoryWT = "<b>" + tr ( "Directory" ) + ":</b> " +
                              tr ( "Shows the servers listed by the selected directory. "
                                   "You can add custom directories in Advanced Settings." );
-    QString strDirectoryAN = tr ( "Directory combo box" );
-
-    lblList->setWhatsThis ( strDirectoryWT );
-    lblList->setToolTip ( strDirectoryWT );
-    lblList->setAccessibleName ( strDirectoryAN );
+    lblDirectory->setWhatsThis ( strDirectoryWT );
+    lblDirectory->setToolTip ( strDirectoryWT );
     cbxDirectory->setWhatsThis ( strDirectoryWT );
     cbxDirectory->setToolTip ( strDirectoryWT );
+
+    QString strDirectoryAN = tr ( "Directory combo box" );
+    lblDirectory->setAccessibleName ( strDirectoryAN );
     cbxDirectory->setAccessibleName ( strDirectoryAN );
 
     // filter

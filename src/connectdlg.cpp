@@ -42,9 +42,9 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     // Add help text to controls -----------------------------------------------
     // directory
-    QString strDirectoryWT = "<b>" + tr ( "Directory" ) + ":</b> " +
-                             tr ( "Shows the servers listed by the selected directory. "
-                                  "You can add custom directories in Advanced Settings." );
+    QString strDirectoryWT = "<b>" + tr ( "Directory" ) + ":</b> " + tr ( "The list of available directories." ) + "<br/>" +
+                             tr ( "Select a directory to list the servers registered with it." ) + "<br/>" +
+                             tr ( "You can add custom directories in Advanced Settings." );
     lblDirectory->setWhatsThis ( strDirectoryWT );
     lblDirectory->setToolTip ( strDirectoryWT );
     cbxDirectory->setWhatsThis ( strDirectoryWT );
@@ -77,16 +77,19 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     chbExpandAll->setAccessibleName ( tr ( "Show all musicians check box" ) );
 
     // server list view
-    QString strServersWT = "<b>" + tr ( "Server List" ) + ":</b> " +
-                           tr ( "The Connection Setup window lists the available servers registered with "
-                                "the selected directory. Use the Directory dropdown to change the directory, "
-                                "find the server you want to join in the server list, click on it, and "
-                                "then click the Connect button to connect. Alternatively, double click on "
-                                "the server name to connect." ) +
-                           "<br>" + tr ( "Permanent servers (those that have been listed for longer than 48 hours) are shown in bold." ) + "<br>" +
-                           tr ( "You can add custom directories in Advanced Settings." );
-    lvwServers->setWhatsThis ( strServersWT );
-    lvwServers->setToolTip ( strServersWT );
+    lvwServers->setWhatsThis ( "<b>" + tr ( "Server List" ) + ":</b> " +
+                               tr ( "The Connection Setup window lists the available servers registered with "
+                                    "the selected directory. Use the Directory dropdown to change the directory, "
+                                    "find the server you want to join in the server list, click on it, and "
+                                    "then click the Connect button to connect. Alternatively, double click on "
+                                    "the server name to connect." ) +
+                               "<br>" + tr ( "Permanent servers (those that have been listed for longer than 48 hours) are shown in bold." ) +
+                               "<br>" + tr ( "You can add custom directories in Advanced Settings." ) );
+
+    lvwServers->setToolTip ( "<b>" + tr ( "Server List" ) + ":</b> " +
+                             tr ( "The list of servers registered with the selected directory. "
+                                  "Click the server you want to join, then click the Connect button or "
+                                  "double click the server to connect." ) );
 
     lvwServers->setAccessibleName ( tr ( "Server list view" ) );
 

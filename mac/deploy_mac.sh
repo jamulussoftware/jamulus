@@ -120,7 +120,17 @@ build_installer_image() {
 
     # Build installer image
 
-    create-dmg \
+    # When this script is run on Github's CI with CodeQL enabled, CodeQL adds dynamic library
+    # shims via environment variables, so that it can monitor the compilation of code.
+    # In order for these settings to propagate to compilation called via shell/bash scripts,
+    # the CodeQL libs seem automatically to create the same environment variables in sub-shells,
+    # even when called via 'env'. This was determined by experimentation.
+    # Unfortunately, the CodeQL libraries are not compatible with the hdiutil program called
+    # by create-dmg. In order to prevent the automatic propagation of the environment, we use
+    # sudo to the same user in order to invoke create-dmg with a guaranteed clean environment.
+    #
+    # /System/Library/PrivateFrameworks/DiskImages.framework/Resources/diskimages-helper.
+    sudo -u "$USER" create-dmg \
         --volname "${client_target_name} Installer" \
         --background "${resources_path}/installerbackground.png" \
         --window-pos 200 400 \

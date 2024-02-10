@@ -124,7 +124,7 @@
     <message>
         <location filename="../util.cpp" line="754"/>
         <source>About %1</source>
-        <translation type="unfinished">Om %1</translation>
+        <translation>Cirka %1</translation>
     </message>
     <message>
         <source>About </source>
@@ -539,7 +539,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="145"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation type="unfinished">Vill du öppna länken &apos;%1&apos; i din webbläsare?</translation>
+        <translation>Vill du öppna länken &apos;%1&apos; i din webbläsare?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>
@@ -928,7 +928,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientdlg.cpp" line="160"/>
         <source>Local Jitter Buffer Status LED</source>
-        <translation type="unfinished">LED för lokal jitterbufferstatus</translation>
+        <translation>LED för lokal jitterbufferstatus</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="161"/>
@@ -943,7 +943,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientdlg.cpp" line="188"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation type="unfinished">LED-indikator för lokal jitterbufferstatus</translation>
+        <translation>LED-indikator för lokal jitterbufferstatus</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the %1 software.</source>
@@ -967,7 +967,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientdlg.cpp" line="387"/>
         <source>Sett&amp;ings</source>
-        <translation type="unfinished">&amp;Inställningar</translation>
+        <translation>&amp;Inställningar</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="391"/>

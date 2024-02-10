@@ -715,12 +715,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pingtid er tiden det tar for lydstrømmen å sendes fra klienten til tjeneren, og så tilbake igjen. Forsinkelsen introduseres av nettverket, og bør være ca. 20–30 ms. Hvis forsinkelsen er mer enn 50 ms er avstanden din til tjeneren for stor, eller så er ikke tilknytningen din til Internett tilstrekkelig.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="199"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helhetlig forsinkelse regnes ut fra nåværende pingtid og forsinkelsen som introdusert av nåværende hurtiglagersinnstillinger.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="231"/>
@@ -1144,12 +1144,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="180"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Små nettverkshurtiglagre-avkryssningsboks</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>
         <source>Sound Card Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lydkorthurtiglager-forsinkelse</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="185"/>
@@ -1398,7 +1398,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Custom Directories combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Komboboks for egendefinerte mapper</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
@@ -1853,27 +1853,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="591"/>
         <source>Any Genre 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhver sjanger 2</translation>
     </message>
     <message>
         <location filename="../util.h" line="594"/>
         <source>Any Genre 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhver sjanger 3</translation>
     </message>
     <message>
         <location filename="../util.h" line="597"/>
         <source>Genre Rock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rock-sjanger</translation>
     </message>
     <message>
         <location filename="../util.h" line="600"/>
         <source>Genre Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jazz-sjanger</translation>
     </message>
     <message>
         <location filename="../util.h" line="603"/>
         <source>Genre Classical/Folk</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klassisk/folkemusikk-sjanger</translation>
     </message>
     <message>
         <location filename="../util.h" line="606"/>
@@ -1888,7 +1888,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="612"/>
         <source>Any Genre 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhver sjanger 1</translation>
     </message>
 </context>
 <context>
@@ -1906,7 +1906,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="79"/>
         <source>Musician&apos;s Profile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Musikerprofil</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="89"/>
@@ -2578,7 +2578,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="160"/>
         <source>Server welcome message edit box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigeringsboks for tjenervelkomstmelding</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="161"/>
@@ -2705,7 +2705,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="228"/>
         <source>Start Minimized on Operating System Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Start minimert sammen med operativsystemet</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="229"/>

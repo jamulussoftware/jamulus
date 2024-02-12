@@ -101,6 +101,7 @@ public slots:
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
     void OnCustomDirectoriesChanged();
     void OnConnectClicked();
+    void OnDeleteServerAddrClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
 

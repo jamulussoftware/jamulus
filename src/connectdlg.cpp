@@ -96,6 +96,11 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     cbxServerAddr->setAccessibleName ( tr ( "Server address edit box" ) );
     cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server address. It also stores old addresses in the combo box list." ) );
 
+    butDeleteServerAddr->setAccessibleName ( tr ( "Delete server address button" ) );
+    butDeleteServerAddr->setWhatsThis ( "<b>" + tr ( "Delete Server Address" ) + ":</b> " +
+                                        tr ( "Click the button to clear the currently selected server address "
+                                             "and delete it from the list of stored servers." ) );
+
     UpdateDirectoryComboBox();
 
     // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
@@ -178,6 +183,9 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QObject::connect ( butCancel, &QPushButton::clicked, this, &CConnectDlg::close );
 
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CConnectDlg::OnConnectClicked );
+
+    // tool buttons
+    QObject::connect ( butDeleteServerAddr, &QPushButton::clicked, this, &CConnectDlg::OnDeleteServerAddrClicked );
 
     // timers
     QObject::connect ( &TimerPing, &QTimer::timeout, this, &CConnectDlg::OnTimerPing );
@@ -729,6 +737,31 @@ void CConnectDlg::OnConnectClicked()
 
     // tell the parent window that the connection shall be initiated
     done ( QDialog::Accepted );
+}
+
+void CConnectDlg::OnDeleteServerAddrClicked()
+{
+    if ( cbxServerAddr->currentText().isEmpty() )
+    {
+        return;
+    }
+
+    // move later items down one
+    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS - 1; iLEIdx++ )
+    {
+        while ( pSettings->vstrIPAddress[iLEIdx].compare ( cbxServerAddr->currentText() ) == 0 )
+        {
+            for ( int jLEIdx = iLEIdx + 1; jLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; jLEIdx++ )
+            {
+                pSettings->vstrIPAddress[jLEIdx - 1] = pSettings->vstrIPAddress[jLEIdx];
+            }
+        }
+    }
+    // empty last entry
+    pSettings->vstrIPAddress[MAX_NUM_SERVER_ADDR_ITEMS - 1] = QString();
+
+    // redisplay to pick up updated list
+    showEvent ( nullptr );
 }
 
 void CConnectDlg::OnTimerPing()

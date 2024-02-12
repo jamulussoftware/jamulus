@@ -594,7 +594,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 
     // libraries used by this compilation
     txvLibraries->setText ( tr ( "This app uses the following libraries, resources or code snippets:" ) + "<p>" +
-                            tr ( "Qt cross-platform application framework" ) + QString ( " %1" ).arg ( QT_VERSION_STR ) +
+                            tr ( "Qt cross-platform application framework" ) + QString ( " %1 " ).arg ( QT_VERSION_STR ) + tr ( "(build)" ) +
+                            QString ( ", %1 " ).arg ( qVersion() ) + tr ( "(runtime)" ) +
                             ", <i><a href=\"https://www.qt.io\">https://www.qt.io</a></i>"
                             "</p>"
                             "<p>"
@@ -1726,7 +1727,8 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
 
         strVersionText += "\n *** " + QCoreApplication::tr ( "This app uses the following libraries, resources or code snippets:" );
         strVersionText += "\n *** ";
-        strVersionText += "\n *** " + QCoreApplication::tr ( "Qt cross-platform application framework" ) + QString ( " %1" ).arg ( QT_VERSION_STR );
+        strVersionText += "\n *** " + QCoreApplication::tr ( "Qt cross-platform application framework" ) + QString ( " %1 " ).arg ( QT_VERSION_STR ) +
+                          QCoreApplication::tr ( "(build)" ) + QString ( ", %1 " ).arg ( qVersion() ) + QCoreApplication::tr ( "(runtime)" );
         strVersionText += "\n *** <https://www.qt.io>";
         strVersionText += "\n *** ";
         strVersionText += "\n *** Opus Interactive Audio Codec";

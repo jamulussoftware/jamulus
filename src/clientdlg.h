@@ -53,7 +53,7 @@
 #include "connectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
 #    include "mac/badgelabel.h"
 #endif
 

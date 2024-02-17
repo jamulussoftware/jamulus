@@ -943,7 +943,7 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 
     setWindowTitle ( strWinTitle );
 
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
     // for MacOS only we show the number of connected clients as a
     // badge label text if more than one user is connected
     if ( iNumClients > 1 )

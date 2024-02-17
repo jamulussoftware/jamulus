@@ -42,7 +42,7 @@
 #ifdef ANDROID
 #    include <QtAndroidExtras/QtAndroid>
 #endif
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
@@ -60,7 +60,7 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 int main ( int argc, char** argv )
 {
 
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
     // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
     qt_set_sequence_auto_mnemonic ( true );
@@ -74,7 +74,7 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-#if ( defined( SERVER_BUNDLE ) && defined( Q_OS_MACX ) ) || defined( SERVER_ONLY )
+#if ( defined( SERVER_BUNDLE ) && defined( Q_OS_MACOS ) ) || defined( SERVER_ONLY )
     // if we are on MacOS and we are building a server bundle or requested build with serveronly, start Jamulus in server mode
     bool bIsClient = false;
     qInfo() << "- Starting in server mode by default (due to compile time option)";
@@ -585,7 +585,7 @@ int main ( int argc, char** argv )
 
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
-#if !( defined( Q_OS_MACX ) )
+#if !( defined( Q_OS_MACOS ) )
         exit ( 1 );
 #endif
     }
@@ -850,7 +850,7 @@ int main ( int argc, char** argv )
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
     // On OSX we need to declare an activity to ensure the process doesn't get
     // throttled by OS level Nap, Sleep, and Thread Priority systems.
     CActivity activity;
@@ -1065,7 +1065,7 @@ int main ( int argc, char** argv )
         }
     }
 
-#if defined( Q_OS_MACX )
+#if defined( Q_OS_MACOS )
     activity.EndActivity();
 #endif
 

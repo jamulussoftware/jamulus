@@ -60,7 +60,7 @@ We support the following platforms and versions:
 
 - **Windows 10** or later
 - **macOS 10.10** or later
-- **Ubuntu 18.04** or later, **Debian 10** or later, most Linux flavors with recent enough Qt versions
+- **Ubuntu 20.04** or later, **Debian 11** or later, most Linux flavors with recent enough Qt versions. (Currently, it may still build on Ubuntu 18.04 and Debian 10, but the binaries built by Github will not run on those versions)
 
 _While Android and iOS aren't officially supported, please don't break their builds._
 

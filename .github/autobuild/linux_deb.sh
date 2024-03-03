@@ -75,7 +75,7 @@ setup_cross_compiler() {
     if [[ "${TARGET_ARCH}" == amd64 ]]; then
         return
     fi
-    local GCC_VERSION=7  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
+    local GCC_VERSION=9  # 9 is the default on 20.04, there is no reason not to update once 20.04 is out of support
     sudo apt install -qq -y --no-install-recommends "g++-${GCC_VERSION}-${ABI_NAME}" "qt5-qmake:${TARGET_ARCH}" "qtbase5-dev:${TARGET_ARCH}" "libjack-jackd2-dev:${TARGET_ARCH}" "qtmultimedia5-dev:${TARGET_ARCH}"
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10

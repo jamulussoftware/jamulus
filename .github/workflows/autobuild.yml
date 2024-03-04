@@ -75,7 +75,7 @@ jobs:
         contents:                   write
     steps:
       - name:                       Checkout code
-        uses:                       actions/checkout@v3
+        uses:                       actions/checkout@v4
 
       - name:                       Determine release version, type and prerelease variables
         run:                        ./.github/autobuild/get_build_vars.py
@@ -312,7 +312,7 @@ jobs:
           git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
       - name:                       Checkout code
-        uses:                       actions/checkout@v3
+        uses:                       actions/checkout@v4
         with:
           submodules:               true
           fetch-depth:              ${{ matrix.config.checkout_fetch_depth || '1' }}

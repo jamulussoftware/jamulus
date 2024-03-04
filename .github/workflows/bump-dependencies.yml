@@ -80,7 +80,7 @@ jobs:
             local_version_regex: (.*["\/]asiosdk_)([^"]+?)(".*|\.zip.*)
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ssh-key: ${{ secrets.BUMP_DEPENDENCIES_SSH_DEPLOY_KEY || 'fail-due-to-missing-ssh-key-as-secret' }}
           fetch-depth: '0'  # we create/compare new branches and therefore require full history
@@ -168,7 +168,7 @@ jobs:
       # This job runs via pull_request_target. Please check for any security
       # consequences when extending these steps:
       # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         # this checks out the upstream `main` and not the PR branch; this is fine for us
         # as we just need a proper config for git/gh to work with.
       - env:

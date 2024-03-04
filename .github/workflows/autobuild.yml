@@ -319,7 +319,7 @@ jobs:
 
       - name:                       Cache Mac dependencies
         if:                         matrix.config.target_os == 'macos'
-        uses:                       actions/cache@v3
+        uses:                       actions/cache@v4
         with:
           path: |
             /usr/local/opt/qt
@@ -328,7 +328,7 @@ jobs:
 
       - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'
-        uses:                       actions/cache@v3
+        uses:                       actions/cache@v4
         with:
           path: |
             C:\Qt
@@ -340,7 +340,7 @@ jobs:
 
       - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'
-        uses:                       actions/cache@v3
+        uses:                       actions/cache@v4
         with:
           path: |
             /opt/Qt

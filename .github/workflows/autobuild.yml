@@ -355,7 +355,7 @@ jobs:
 
       - name:                       Initialize CodeQL
         if:                         matrix.config.run_codeql
-        uses:                       github/codeql-action/init@v2
+        uses:                       github/codeql-action/init@v3
         with:
           languages: 'cpp'
 
@@ -431,7 +431,7 @@ jobs:
 
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql
-        uses:                       github/codeql-action/analyze@v2
+        uses:                       github/codeql-action/analyze@v3
 
   create_deb_repo:
     name:                           Create files for .deb repository (if requested)

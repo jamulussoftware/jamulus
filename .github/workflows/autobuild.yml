@@ -379,7 +379,7 @@ jobs:
       - name:                       Upload Artifact 1 to Job
         # Every build job has at least one artifact. Therefore, no `if` here.
         # If the artifact is missing, this should fail.
-        uses:                       actions/upload-artifact@v3
+        uses:                       actions/upload-artifact@v4
         with:
           name:                     ${{ steps.get-artifacts.outputs.artifact_1 }}
           path:                     deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
@@ -388,7 +388,7 @@ jobs:
 
       - name:                       Upload Artifact 2 to Job
         if:                         steps.get-artifacts.outputs.artifact_2
-        uses:                       actions/upload-artifact@v3
+        uses:                       actions/upload-artifact@v4
         with:
           name:                     ${{ steps.get-artifacts.outputs.artifact_2 }}
           path:                     deploy/${{ steps.get-artifacts.outputs.artifact_2 }}

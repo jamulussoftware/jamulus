@@ -462,7 +462,7 @@ jobs:
       # Unfortunately download-artifact action doesn't support wild card downloads. Thus downloading all artifacts
       - name:                       Download all artifacts
         if:                         env.GPG_REPO_KEY_MISSING == 'false'
-        uses:                       actions/download-artifact@v3
+        uses:                       actions/download-artifact@v4
         with:
           path:                     releasedl/
       - name:                       Create Debian repository

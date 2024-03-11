@@ -7,13 +7,34 @@ resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
 cert_name=""
+macapp_cert_name=""
+macinst_cert_name=""
+keychain_pass=""
 
-while getopts 'hs:' flag; do
+while getopts 'hs:k:a:i:' flag; do
     case "${flag}" in
         s)
             cert_name=$OPTARG
             if [[ -z "$cert_name" ]]; then
                 echo "Please add the name of the certificate to use: -s \"<name>\""
+            fi
+            ;;
+        a)
+            macapp_cert_name=$OPTARG
+            if [[ -z "$macapp_cert_name" ]]; then
+                echo "Please add the name of the codesigning certificate to use: -a \"<name>\""
+            fi
+            ;;
+        i)
+            macinst_cert_name=$OPTARG
+            if [[ -z "$macinst_cert_name" ]]; then
+                echo "Please add the name of the installer signing certificate to use: -i \"<name>\""
+            fi
+            ;;
+        k)
+            keychain_pass=$OPTARG
+            if [[ -z "$keychain_pass" ]]; then
+                echo "Please add keychain password to use: -k \"<name>\""
             fi
             ;;
         h)
@@ -83,6 +104,25 @@ build_app() {
     else
         macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
     fi
+
+    ## Build installer pkg file - for submission to App Store
+    if [[ -z "$macapp_cert_name" ]]; then
+        echo "No cert to sign for App Store, bypassing..."
+    else
+        # Clone the build directory to leave the adhoc signed app untouched
+        cp -a "${build_path}" "${build_path}_storesign"
+
+        # Add Qt deployment deps and codesign the app for App Store submission
+        macdeployqt "${build_path}_storesign/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
+
+        # Create pkg installer and sign for App Store submission
+        productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Jamulus_${JAMULUS_BUILD_VERSION}.pkg"
+
+        # move created pkg file to prep for download
+        mv "${build_path}/Jamulus_${JAMULUS_BUILD_VERSION}.pkg" "${deploy_path}"
+    fi
+
+    # move app bundle to prep for dmg creation
     mv "${build_path}/${target_name}.app" "${deploy_path}"
 
     # Cleanup
@@ -114,10 +154,6 @@ build_installer_image() {
     # FIXME: Currently caching is disabled due to an error in the extract step
     brew install create-dmg
 
-    # Get Jamulus version
-    local app_version
-    app_version=$(sed -nE 's/^VERSION *= *(.*)$/\1/p' "${project_path}")
-
     # Build installer image
 
     # When this script is run on Github's CI with CodeQL enabled, CodeQL adds dynamic library
@@ -141,7 +177,7 @@ build_installer_image() {
         --icon "${client_target_name}.app" 630 210 \
         --icon "${server_target_name}.app" 530 210 \
         --eula "${root_path}/COPYING" \
-        "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
+        "${deploy_path}/${client_target_name}-${JAMULUS_BUILD_VERSION}-installer-mac.dmg" \
         "${deploy_path}/"
 }
 

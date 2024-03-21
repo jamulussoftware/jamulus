@@ -303,5 +303,5 @@ public slots:
         Protocol.Reset();
     }
 
-    void OnSendCLMessage ( CHostAddress, CVector<uint8_t> vecMessage ) { OnSendProtMessage ( vecMessage ); }
+    void OnSendCLMessage ( const CHostAddress&, CVector<uint8_t> vecMessage ) { OnSendProtMessage ( vecMessage ); }
 };

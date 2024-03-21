@@ -68,7 +68,7 @@ signals:
     void ClientDisconnected ( int iChID );
     void AudioFrame ( const int              iChID,
                       const QString          stChName,
-                      const CHostAddress     RecHostAddr,
+                      const CHostAddress&    RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
 };

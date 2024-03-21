@@ -106,8 +106,8 @@ public slots:
     void OnTimerReRequestServList();
 
 signals:
-    void ReqServerListQuery ( CHostAddress InetAddr );
-    void CreateCLServerListPingMes ( CHostAddress InetAddr );
-    void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
-    void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
+    void ReqServerListQuery ( const CHostAddress& InetAddr );
+    void CreateCLServerListPingMes ( const CHostAddress& InetAddr );
+    void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr );
+    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr );
 };

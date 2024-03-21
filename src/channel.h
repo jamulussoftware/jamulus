@@ -70,7 +70,7 @@ public:
 
     void PutProtocolData ( const int iRecCounter, const int iRecID, const CVector<uint8_t>& vecbyMesBodyData, const CHostAddress& RecHostAddr );
 
-    EPutDataStat PutAudioData ( const CVector<uint8_t>& vecbyData, const int iNumBytes, CHostAddress RecHostAddr );
+    EPutDataStat PutAudioData ( const CVector<uint8_t>& vecbyData, const int iNumBytes, const CHostAddress& RecHostAddr );
 
     EGetDataStat GetData ( CVector<uint8_t>& vecbyData, const int iNumBytes );
 
@@ -83,7 +83,7 @@ public:
     void SetEnable ( const bool bNEnStat );
     bool IsEnabled() { return bIsEnabled; }
 
-    void                SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
+    void                SetAddress ( const CHostAddress& NAddr ) { InetAddr = NAddr; }
     const CHostAddress& GetAddress() const { return InetAddr; }
 
     void ResetInfo()
@@ -250,12 +250,12 @@ public slots:
         Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
     }
 
-    void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+    void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& RecHostAddr )
     {
         PutProtocolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
     }
 
-    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& RecHostAddr )
     {
         emit DetectedCLMessage ( vecbyMesBodyData, iRecID, RecHostAddr );
     }
@@ -282,7 +282,7 @@ signals:
     void RecorderStateReceived ( ERecorderState eRecorderState );
     void Disconnected();
 
-    void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr );
+    void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, const CHostAddress& RecHostAddr );
 
     void ParseMessageBody ( CVector<uint8_t> vecbyMesBodyData, int iRecCounter, int iRecID );
 };

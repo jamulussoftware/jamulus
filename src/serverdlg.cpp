@@ -661,7 +661,7 @@ void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReaso
     }
 }
 
-void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion )
+void CServerDlg::OnCLVersionAndOSReceived ( const CHostAddress&, COSUtil::EOpSystemType, QString strVersion )
 {
     // update check
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )

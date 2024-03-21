@@ -375,7 +375,7 @@ void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, vecChannels[iChID].GetAddress() );
 }
 
-void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAddr )
+void CServer::OnNewConnection ( int iChID, int iTotChans, const CHostAddress& RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -453,7 +453,7 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
     Logging.AddNewConnection ( RecHostAddr.InetAddr, iTotChans );
 }
 
-void CServer::OnServerFull ( CHostAddress RecHostAddr )
+void CServer::OnServerFull ( const CHostAddress& RecHostAddr )
 {
     // note: no mutex required here
 
@@ -461,14 +461,14 @@ void CServer::OnServerFull ( CHostAddress RecHostAddr )
     ConnLessProtocol.CreateCLServerFullMes ( RecHostAddr );
 }
 
-void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+void CServer::OnSendCLProtMessage ( const CHostAddress& InetAddr, CVector<uint8_t> vecMessage )
 {
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, InetAddr );
 }
 
-void CServer::OnCLDisconnection ( CHostAddress InetAddr )
+void CServer::OnCLDisconnection ( const CHostAddress& InetAddr )
 {
     // check if the given address is actually a client which is connected to
     // this server, if yes, disconnect it
@@ -1422,7 +1422,7 @@ void CServer::DumpChannels ( const QString& title )
     }
 }
 
-void CServer::OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+void CServer::OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -1430,7 +1430,7 @@ void CServer::OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMe
     ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
 }
 
-void CServer::OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+void CServer::OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
 

@@ -41,7 +41,7 @@ using namespace recorder;
  * Creates a file for the raw PCM data and sets up a QDataStream to which to write received frames.
  * The data is stored Little Endian.
  */
-CJamClient::CJamClient ( const qint64 frame, const int _numChannels, const QString name, const CHostAddress address, const QDir recordBaseDir ) :
+CJamClient::CJamClient ( const qint64 frame, const int _numChannels, const QString name, const CHostAddress& address, const QDir recordBaseDir ) :
     startFrame ( frame ),
     numChannels ( static_cast<uint16_t> ( _numChannels ) ),
     name ( name ),
@@ -227,7 +227,7 @@ void CJamSession::DisconnectClient ( int iChID )
  */
 void CJamSession::Frame ( const int              iChID,
                           const QString          name,
-                          const CHostAddress     address,
+                          const CHostAddress&    address,
                           const int              numAudioChannels,
                           const CVector<int16_t> data,
                           int                    iServerFrameSizeSamples )
@@ -593,7 +593,7 @@ void CJamRecorder::OnDisconnected ( int iChID )
  */
 void CJamRecorder::OnFrame ( const int              iChID,
                              const QString          name,
-                             const CHostAddress     address,
+                             const CHostAddress&    address,
                              const int              numAudioChannels,
                              const CVector<int16_t> data )
 {

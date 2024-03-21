@@ -315,11 +315,11 @@ signals:
     void SvrRegStatusChanged();
     void AudioFrame ( const int              iChID,
                       const QString          stChName,
-                      const CHostAddress     RecHostAddr,
+                      const CHostAddress&    RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
 
-    void CLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
+    void CLVersionAndOSReceived ( const CHostAddress& InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
 
     // pass through from jam controller
     void RestartRecorder();
@@ -330,24 +330,24 @@ signals:
 public slots:
     void OnTimer();
 
-    void OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAddr );
+    void OnNewConnection ( int iChID, int iTotChans, const CHostAddress& RecHostAddr );
 
-    void OnServerFull ( CHostAddress RecHostAddr );
+    void OnServerFull ( const CHostAddress& RecHostAddr );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( const CHostAddress& InetAddr, CVector<uint8_t> vecMessage );
 
-    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
+    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& RecHostAddr );
 
-    void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
+    void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& RecHostAddr );
 
-    void OnCLPingReceived ( CHostAddress InetAddr, int iMs ) { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
+    void OnCLPingReceived ( const CHostAddress& InetAddr, int iMs ) { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
 
-    void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int )
+    void OnCLPingWithNumClientsReceived ( const CHostAddress& InetAddr, int iMs, int )
     {
         ConnLessProtocol.CreateCLPingWithNumClientsMes ( InetAddr, iMs, GetNumberOfConnectedClients() );
     }
 
-    void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
+    void OnCLSendEmptyMes ( const CHostAddress& TargetInetAddr )
     {
         // only send empty message if not a directory
         if ( !ServerListManager.IsDirectory() )
@@ -356,31 +356,31 @@ public slots:
         }
     }
 
-    void OnCLReqServerList ( CHostAddress InetAddr ) { ServerListManager.RetrieveAll ( InetAddr ); }
+    void OnCLReqServerList ( const CHostAddress& InetAddr ) { ServerListManager.RetrieveAll ( InetAddr ); }
 
-    void OnCLReqVersionAndOS ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
+    void OnCLReqVersionAndOS ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
 
-    void OnCLReqConnClientsList ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
+    void OnCLReqConnClientsList ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
 
-    void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo )
+    void OnCLRegisterServerReceived ( const CHostAddress& InetAddr, const CHostAddress& LInetAddr, CServerCoreInfo ServerInfo )
     {
         ServerListManager.Append ( InetAddr, LInetAddr, ServerInfo );
     }
 
-    void OnCLRegisterServerExReceived ( CHostAddress    InetAddr,
-                                        CHostAddress    LInetAddr,
-                                        CServerCoreInfo ServerInfo,
+    void OnCLRegisterServerExReceived ( const CHostAddress& InetAddr,
+                                        const CHostAddress& LInetAddr,
+                                        CServerCoreInfo     ServerInfo,
                                         COSUtil::EOpSystemType,
                                         QString strVersion )
     {
         ServerListManager.Append ( InetAddr, LInetAddr, ServerInfo, strVersion );
     }
 
-    void OnCLRegisterServerResp ( CHostAddress /* unused */, ESvrRegResult eResult ) { ServerListManager.StoreRegistrationResult ( eResult ); }
+    void OnCLRegisterServerResp ( const CHostAddress& /* unused */, ESvrRegResult eResult ) { ServerListManager.StoreRegistrationResult ( eResult ); }
 
-    void OnCLUnregisterServerReceived ( CHostAddress InetAddr ) { ServerListManager.Remove ( InetAddr ); }
+    void OnCLUnregisterServerReceived ( const CHostAddress& InetAddr ) { ServerListManager.Remove ( InetAddr ); }
 
-    void OnCLDisconnection ( CHostAddress InetAddr );
+    void OnCLDisconnection ( const CHostAddress& InetAddr );
 
     void OnAboutToQuit();
 

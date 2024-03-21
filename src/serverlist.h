@@ -181,7 +181,7 @@ protected:
     void Register();
     void SetRegistered ( bool bIsRegister );
 
-    int  IndexOf ( CHostAddress haSearchTerm );
+    int  IndexOf ( const CHostAddress& haSearchTerm );
     bool Load();
     void Save();
     void SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus );

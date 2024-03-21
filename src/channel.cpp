@@ -526,7 +526,7 @@ void CChannel::PutProtocolData ( const int iRecCounter, const int iRecID, const 
     }
 }
 
-EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData, const int iNumBytes, CHostAddress RecHostAddr )
+EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData, const int iNumBytes, const CHostAddress& RecHostAddr )
 {
     // init return state
     EPutDataStat eRet = PS_GEN_ERROR;

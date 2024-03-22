@@ -192,7 +192,7 @@ Requests server list.
 
 Parameters:
 
-| Name | Type | Description
+| Name | Type | Description |
 | --- | --- | --- |
 | params.directory | string | URL of directory, e.g. anygenre1.jamulus.io:22124 |
 
@@ -473,7 +473,7 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params.servers | array | The server list. |
-| params.servers[*].id | url | The server's URL. |
+| params.servers[*].url | url | The server's URL. |
 | params.servers[*].name | string | The server’s name. |
 | params.servers[*].countryId | number | The servers’s country ID (see QLocale::Country). |
 | params.servers[*].city | string | The server’s city. |

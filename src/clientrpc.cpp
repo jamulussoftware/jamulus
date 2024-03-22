@@ -97,9 +97,9 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @rpc_notification jamulusclient/serverListReceived
     /// @brief Emitted when the server list is received.
     /// @param {array} params.servers - The server list.
-    /// @param {string} params.servers[*].address - IP Address
+    /// @param {string} params.servers[*].url - IP Address
     /// @param {string} params.servers[*].name - Server name
-    /// @param {number} params.servers[*].country - Server country code
+    /// @param {number} params.servers[*].countryId - Server country code
     /// @param {string} params.servers[*].city - Server city
     connect ( pClient->getConnLessProtocol(), &CProtocol::CLServerListReceived, [=] ( CHostAddress /* unused */, CVector<CServerInfo> vecServerInfo ) {
         QJsonArray arrServerInfo;
@@ -108,7 +108,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
             QJsonObject objServerInfo{
                 { "url", serverInfo.HostAddr.toString() },
                 { "name", serverInfo.strName },
-                { "country", serverInfo.eCountry },
+                { "countryI", serverInfo.eCountry },
                 { "city", serverInfo.strCity },
             };
             arrServerInfo.append ( objServerInfo );

@@ -286,6 +286,8 @@ public:
         Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit );
     }
 
+    CProtocol* getConnLessProtocol() { return &ConnLessProtocol; }
+
     // settings
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;

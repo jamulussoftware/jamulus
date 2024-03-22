@@ -199,6 +199,7 @@ Parameters:
 Results:
 
 | Name | Type | Description |
+| --- | --- | --- |
 | result | string | "ok" or "error" if invalid URL |
 
 ### jamulusclient/sendChatText

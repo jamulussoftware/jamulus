@@ -2582,6 +2582,16 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, con
 /******************************************************************************\
 * Message generation and parsing                                               *
 \******************************************************************************/
+int CProtocol::GetBodyLength ( const CVector<uint8_t>& vecbyData )
+{
+    int iCurPos = 5; // position of length calculation
+
+    // 2 bytes length
+    const int iLenBy = static_cast<int> ( GetValFromStream ( vecbyData, iCurPos, 2 ) );
+
+    return iLenBy + 2; // remaining length to read, including CRC
+}
+
 bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
                                     CVector<uint8_t>&       vecbyMesBodyData,

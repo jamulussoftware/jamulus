@@ -106,7 +106,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
         for ( const auto& serverInfo : vecServerInfo )
         {
             QJsonObject objServerInfo{
-                { "address", serverInfo.HostAddr.toString() },
+                { "url", serverInfo.HostAddr.toString() },
                 { "name", serverInfo.strName },
                 { "country", serverInfo.eCountry },
                 { "city", serverInfo.strCity },
@@ -124,11 +124,11 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {object} params - No parameters (empty object).
     connect ( pClient, &CClient::Disconnected, [=]() { pRpcServer->BroadcastNotification ( "jamulusclient/disconnected", QJsonObject{} ); } );
 
-    /// @rpc_method jamulus/getServerList
-    /// @brief Returns the list of public servers
+    /// @rpc_method jamulus/pollServerList
+    /// @brief Request list of servers in a directory
     /// @param {string} params.directory - URL of directory to query, e.g. anygenre1.jamulus.io:22124.
-    /// @result {string} result - Always "ok".
-    pRpcServer->HandleMethod ( "jamulus/getServerList", [=] ( const QJsonObject& params, QJsonObject& response ) {
+    /// @result {string} result - "ok" or "error" if bad arguments.
+    pRpcServer->HandleMethod ( "jamulus/pollServerList", [=] ( const QJsonObject& params, QJsonObject& response ) {
         auto jsonDirectoryIp = params["directory"];
         if ( !jsonDirectoryIp.isString() )
         {
@@ -144,6 +144,11 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
         {
             // send the request for the server list
             pClient->CreateCLReqServerListMes( haDirectoryAddress );
+            response["result"] = "ok";
+        }
+        else
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a valid url" );
         }
 
         response["result"] = "ok";

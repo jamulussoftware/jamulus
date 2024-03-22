@@ -94,10 +94,61 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
                                             } );
     } );
 
+    /// @rpc_notification jamulusclient/serverListReceived
+    /// @brief Emitted when the server list is received.
+    /// @param {array} params.servers - The server list.
+    /// @param {string} params.servers[*].address - IP Address
+    /// @param {string} params.servers[*].name - Server name
+    /// @param {number} params.servers[*].country - Server country code
+    /// @param {string} params.servers[*].city - Server city
+    connect ( pClient->getConnLessProtocol(), &CProtocol::CLServerListReceived, [=] ( CHostAddress /* unused */, CVector<CServerInfo> vecServerInfo ) {
+        QJsonArray arrServerInfo;
+        for ( const auto& serverInfo : vecServerInfo )
+        {
+            QJsonObject objServerInfo{
+                { "address", serverInfo.HostAddr.toString() },
+                { "name", serverInfo.strName },
+                { "country", serverInfo.eCountry },
+                { "city", serverInfo.strCity },
+            };
+            arrServerInfo.append ( objServerInfo );
+        }
+        pRpcServer->BroadcastNotification ( "jamulusclient/serverListReceived",
+                                            QJsonObject{
+                                                { "servers", arrServerInfo },
+                                            } );
+    } );
+
     /// @rpc_notification jamulusclient/disconnected
     /// @brief Emitted when the client is disconnected from the server.
     /// @param {object} params - No parameters (empty object).
     connect ( pClient, &CClient::Disconnected, [=]() { pRpcServer->BroadcastNotification ( "jamulusclient/disconnected", QJsonObject{} ); } );
+
+    /// @rpc_method jamulus/getServerList
+    /// @brief Returns the list of public servers
+    /// @param {string} params.directory - URL of directory to query, e.g. anygenre1.jamulus.io:22124.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulus/getServerList", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonDirectoryIp = params["directory"];
+        if ( !jsonDirectoryIp.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a string" );
+            return;
+        }
+
+        CHostAddress haDirectoryAddress;
+        if ( NetworkUtil().ParseNetworkAddress (
+                jsonDirectoryIp.toString(),
+                haDirectoryAddress,
+                false ) )
+        {
+            // send the request for the server list
+            pClient->CreateCLReqServerListMes( haDirectoryAddress );
+        }
+
+        response["result"] = "ok";
+        Q_UNUSED ( params );
+    } );
 
     /// @rpc_method jamulus/getMode
     /// @brief Returns the current mode, i.e. whether Jamulus is running as a server or client.

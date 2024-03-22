@@ -154,6 +154,8 @@ public:
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
 
+    static int GetBodyLength ( const CVector<uint8_t>& vecbyData );
+
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
                                     CVector<uint8_t>&       vecbyMesBodyData,

@@ -97,7 +97,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @rpc_notification jamulusclient/serverListReceived
     /// @brief Emitted when the server list is received.
     /// @param {array} params.servers - The server list.
-    /// @param {string} params.servers[*].url - IP Address
+    /// @param {string} params.servers[*].address - Socket address (ip_address:port)
     /// @param {string} params.servers[*].name - Server name
     /// @param {number} params.servers[*].countryId - Server country code
     /// @param {string} params.servers[*].city - Server city
@@ -106,9 +106,9 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
         for ( const auto& serverInfo : vecServerInfo )
         {
             QJsonObject objServerInfo{
-                { "url", serverInfo.HostAddr.toString() },
+                { "address", serverInfo.HostAddr.toString() },
                 { "name", serverInfo.strName },
-                { "countryI", serverInfo.eCountry },
+                { "countryId", serverInfo.eCountry },
                 { "city", serverInfo.strCity },
             };
             arrServerInfo.append ( objServerInfo );
@@ -126,9 +126,9 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
 
     /// @rpc_method jamulus/pollServerList
     /// @brief Request list of servers in a directory
-    /// @param {string} params.directory - URL of directory to query, e.g. anygenre1.jamulus.io:22124.
+    /// @param {string} params.directory - socket address of directory to query, e.g. anygenre1.jamulus.io:22124.
     /// @result {string} result - "ok" or "error" if bad arguments.
-    pRpcServer->HandleMethod ( "jamulus/pollServerList", [=] ( const QJsonObject& params, QJsonObject& response ) {
+    pRpcServer->HandleMethod ( "jamulusclient/pollServerList", [=] ( const QJsonObject& params, QJsonObject& response ) {
         auto jsonDirectoryIp = params["directory"];
         if ( !jsonDirectoryIp.isString() )
         {
@@ -148,7 +148,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
         }
         else
         {
-            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a valid url" );
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a valid socket address" );
         }
 
         response["result"] = "ok";

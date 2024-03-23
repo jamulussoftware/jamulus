@@ -188,19 +188,19 @@ Results:
 
 ### jamulusclient/pollServerList
 
-Requests server list.
+Requests the server list from a specified directory.
 
 Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params.directory | string | URL of directory, e.g. anygenre1.jamulus.io:22124 |
+| params.directory | string | Socket address of directory, e.g. anygenre1.jamulus.io:22124 |
 
 Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | "ok" or "error" if invalid URL |
+| result | string | "ok" or "error" if invalid socket address |
 
 ### jamulusclient/sendChatText
 
@@ -474,7 +474,7 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params.servers | array | The server list. |
-| params.servers[*].url | url | The server's URL. |
+| params.servers[*].address | string | The server's socket address. |
 | params.servers[*].name | string | The server’s name. |
 | params.servers[*].countryId | number | The servers’s country ID (see QLocale::Country). |
 | params.servers[*].city | string | The server’s city. |

@@ -194,7 +194,7 @@ Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params.directory | string | Socket address of directory, e.g. anygenre1.jamulus.io:22124 |
+| params.directory | string | Socket address of directory (hostname:port), e.g. anygenre1.jamulus.io:22124 |
 
 Results:
 
@@ -217,6 +217,40 @@ Results:
 | Name | Type | Description |
 | --- | --- | --- |
 | result | string | Always "ok". |
+
+
+### jamulusclient/connect
+
+Connect client to a server.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.address | string | Server socket address (hostname:port) |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | "ok" or error if invalid address.
+
+
+### jamulusclient/disconnect
+
+Disconnect client from server.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok".
 
 
 ### jamulusclient/setName
@@ -474,10 +508,23 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params.servers | array | The server list. |
-| params.servers[*].address | string | The server's socket address. |
+| params.servers[*].address | string | The server's socket address (hostname:port). |
 | params.servers[*].name | string | The server’s name. |
-| params.servers[*].countryId | number | The servers’s country ID (see QLocale::Country). |
+| params.servers[*].country | string | The servers’s country. |
 | params.servers[*].city | string | The server’s city. |
+
+
+### jamulusclient/serverInfoReceived
+
+Emitted when a server info is received.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.servers[*].address | string | The server's socket address (hostname:port). |
+| params.servers[*].pingTime | number | The round-trip ping time in ms. |
+| params.servers[*].numClients | number | The quantity of clients connected to the server . |
 
 
 ### jamulusclient/connected

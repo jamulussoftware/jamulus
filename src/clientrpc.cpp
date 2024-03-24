@@ -53,7 +53,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {number} params.clients[*].id - The channel ID.
     /// @param {string} params.clients[*].name - The musician’s name.
     /// @param {string} params.clients[*].skillLevel - The musician’s skill level (beginner, intermediate, expert, or null).
-    /// @param {number} params.clients[*].countryId - The musician’s country ID (see QLocale::Country).
+    /// @param {string} params.clients[*].country - The musician’s country.
     /// @param {string} params.clients[*].city - The musician’s city.
     /// @param {number} params.clients[*].instrumentId - The musician’s instrument ID (see CInstPictures::GetTable).
     connect ( pClient, &CClient::ConClientListMesReceived, [=] ( CVector<CChannelInfo> vecChanInfo ) {
@@ -64,7 +64,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
                 { "id", chanInfo.iChanID },
                 { "name", chanInfo.strName },
                 { "skillLevel", SerializeSkillLevel ( chanInfo.eSkillLevel ) },
-                { "countryId", chanInfo.eCountry },
+                { "country", QLocale::countryToString ( chanInfo.eCountry ) },
                 { "city", chanInfo.strCity },
                 { "instrumentId", chanInfo.iInstrument },
             };
@@ -99,7 +99,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {array} params.servers - The server list.
     /// @param {string} params.servers[*].address - Socket address (ip_address:port)
     /// @param {string} params.servers[*].name - Server name
-    /// @param {number} params.servers[*].countryId - Server country code
+    /// @param {string} params.servers[*].country - Server country
     /// @param {string} params.servers[*].city - Server city
     connect ( pClient->getConnLessProtocol(), &CProtocol::CLServerListReceived, [=] ( CHostAddress /* unused */, CVector<CServerInfo> vecServerInfo ) {
         QJsonArray arrServerInfo;
@@ -108,14 +108,29 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
             QJsonObject objServerInfo{
                 { "address", serverInfo.HostAddr.toString() },
                 { "name", serverInfo.strName },
-                { "countryId", serverInfo.eCountry },
+                { "country", QLocale::countryToString ( serverInfo.eCountry) },
                 { "city", serverInfo.strCity },
             };
             arrServerInfo.append ( objServerInfo );
+            pClient->CreateCLServerListPingMes ( serverInfo.HostAddr );
         }
         pRpcServer->BroadcastNotification ( "jamulusclient/serverListReceived",
                                             QJsonObject{
                                                 { "servers", arrServerInfo },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusclient/serverInfoReceived
+    /// @brief Emitted when a server info is received.
+    /// @param {string} params.address - The server socket address
+    /// @param {number} params.pingtime - The round-trip ping time in ms
+    /// @param {number} params.numClients - The quantity of clients connected to the server
+    connect (pClient, &CClient::CLPingTimeWithNumClientsReceived, [=] ( CHostAddress InetAddr, int iPingTime, int iNumClients ) {
+        pRpcServer->BroadcastNotification ( "jamulusclient/serverInfoReceived",
+                                            QJsonObject{
+                                                {"address", InetAddr.toString()},
+                                                {"pingTime", iPingTime},
+                                                {"numClients", iNumClients}
                                             } );
     } );
 
@@ -152,6 +167,45 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
         }
 
         response["result"] = "ok";
+    } );
+
+    /// @rpc_method jamulusclient/connect
+    /// @brief Disconnect client from server
+    /// @param {string} params.address - Server socket address (ip_addr:port).
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusclient/connect", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonAddr = params["address"];
+        if ( !jsonAddr.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: address is not a string" );
+            return;
+        }
+
+        if ( pClient->SetServerAddr(jsonAddr.toString()) )
+        {
+            if ( !pClient->IsRunning() )
+            {
+                pClient->Start();
+            }
+            response["result"] = "ok";
+        }
+        else
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( 1, "Bad server address" );
+        }
+    } );
+
+    /// @rpc_method jamulusclient/disconnect
+    /// @brief Disconnect client from server
+    /// @param {object} params - No parameters (empty object).
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusclient/disconnect", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        if ( pClient->IsRunning() )
+        {
+            pClient->Stop();
+        }
+
+        response["result"] = "ok";
         Q_UNUSED ( params );
     } );
 
@@ -181,7 +235,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @result {number} result.id - The channel ID.
     /// @result {string} result.name - The musician’s name.
     /// @result {string} result.skillLevel - The musician’s skill level (beginner, intermediate, expert, or null).
-    /// @result {number} result.countryId - The musician’s country ID (see QLocale::Country).
+    /// @result {string} result.country - The musician’s country.
     /// @result {string} result.city - The musician’s city.
     /// @result {number} result.instrumentId - The musician’s instrument ID (see CInstPictures::GetTable).
     /// @result {string} result.skillLevel - Your skill level (beginner, intermediate, expert, or null).
@@ -189,7 +243,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
         QJsonObject result{
             // TODO: We cannot include "id" here is pClient->ChannelInfo is a CChannelCoreInfo which lacks that field.
             { "name", pClient->ChannelInfo.strName },
-            { "countryId", pClient->ChannelInfo.eCountry },
+            { "country", QLocale::countryToString ( pClient->ChannelInfo.eCountry ) },
             { "city", pClient->ChannelInfo.strCity },
             { "instrumentId", pClient->ChannelInfo.iInstrument },
             { "skillLevel", SerializeSkillLevel ( pClient->ChannelInfo.eSkillLevel ) },

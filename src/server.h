@@ -340,9 +340,9 @@ public slots:
 
     void OnServerFull ( CHostAddress RecHostAddr );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection );
 
-    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
+    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection );
 
     void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
 
@@ -362,11 +362,14 @@ public slots:
         }
     }
 
-    void OnCLReqServerList ( CHostAddress InetAddr ) { ServerListManager.RetrieveAll ( InetAddr ); }
+    void OnCLReqServerList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection ) { ServerListManager.RetrieveAll ( InetAddr, pTcpConnection ); }
 
     void OnCLReqVersionAndOS ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
 
-    void OnCLReqConnClientsList ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
+    void OnCLReqConnClientsList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection )
+    {
+        ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList(), pTcpConnection );
+    }
 
     void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo )
     {

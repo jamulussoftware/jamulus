@@ -24,6 +24,7 @@
 
 #include "tcpserver.h"
 
+#include "protocol.h"
 #include "server.h"
 #include "channel.h"
 
@@ -34,7 +35,7 @@ CTcpServer::CTcpServer ( CServer* pNServP, const QString& strServerBindIP, int i
     bEnableIPv6 ( bEnableIPv6 ),
     pTcpServer ( new QTcpServer ( this ) )
 {
-    ////    connect ( this, &CTcpServer::ProtocolCLMessageReceived, pServer, &CServer::OnProtocolCLMessageReceived );
+    connect ( this, &CTcpServer::ProtocolCLMessageReceived, pServer, &CServer::OnProtocolCLMessageReceived );
     connect ( pTcpServer, &QTcpServer::newConnection, this, &CTcpServer::OnNewConnection );
 }
 
@@ -157,14 +158,14 @@ void CTcpServer::OnNewConnection()
             {
                 //### TODO: BEGIN ###//
                 // a copy of the vector is used -> avoid malloc in real-time routine
-                //// emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, peerAddress, pSocket );
+                emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, pTcpConnection->tcpAddress, pTcpConnection );
                 //### TODO: END ###//
             }
             else
             {
                 //### TODO: BEGIN ###//
                 // a copy of the vector is used -> avoid malloc in real-time routine
-                // emit ProtocolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, peerAddress, pSocket );
+                // emit ProtocolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, pTcpConnection->tcpAddress, pTcpConnection );
                 //### TODO: END ###//
             }
         }

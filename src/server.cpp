@@ -468,11 +468,19 @@ void CServer::OnServerFull ( CHostAddress RecHostAddr )
     ConnLessProtocol.CreateCLServerFullMes ( RecHostAddr );
 }
 
-void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection )
 {
     // the protocol queries me to call the function to send the message
     // send it through the network
-    Socket.SendPacket ( vecMessage, InetAddr );
+    if ( pTcpConnection )
+    {
+        // send to the connected socket directly
+        pTcpConnection->pTcpSocket->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
+    }
+    else
+    {
+        Socket.SendPacket ( vecMessage, InetAddr );
+    }
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )
@@ -1429,12 +1437,12 @@ void CServer::DumpChannels ( const QString& title )
     }
 }
 
-void CServer::OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+void CServer::OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection )
 {
     QMutexLocker locker ( &Mutex );
 
     // connection less messages are always processed
-    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
+    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr, pTcpConnection );
 }
 
 void CServer::OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )

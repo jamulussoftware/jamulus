@@ -249,11 +249,19 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
 }
 
-void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection )
 {
     // the protocol queries me to call the function to send the message
     // send it through the network
-    Socket.SendPacket ( vecMessage, InetAddr );
+    if ( pTcpConnection )
+    {
+        // send to the connected socket directly
+        pTcpConnection->pTcpSocket->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
+    }
+    else
+    {
+        Socket.SendPacket ( vecMessage, InetAddr );
+    }
 }
 
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
@@ -268,10 +276,10 @@ void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
     }
 }
 
-void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr )
+void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection )
 {
     // connection less messages are always processed
-    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
+    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr, pTcpConnection );
 }
 
 void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )

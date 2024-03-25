@@ -663,7 +663,7 @@ void CServerListManager::Remove ( const CHostAddress& InetAddr )
  and allow the client connect dialogue instead to use the IP and Port from which the list was received.
 
  */
-void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
+void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -722,8 +722,12 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
         // send the server list to the client, since we do not know that the client
         // has a UDP fragmentation issue, we send both lists, the reduced and the
         // normal list after each other
-        pConnLessProtocol->CreateCLRedServerListMes ( InetAddr, vecServerInfo );
-        pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo );
+        if ( !pTcpConnection )
+        {
+            // no need for reduced list if on TCP
+            pConnLessProtocol->CreateCLRedServerListMes ( InetAddr, vecServerInfo );
+        }
+        pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo, pTcpConnection );
     }
 }
 

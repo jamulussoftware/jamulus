@@ -32,14 +32,14 @@
 #include <memory>
 
 #include "global.h"
-#include "protocol.h"
 #include "util.h"
 
 // The header files channel.h and server.h require to include this header file
 // so we get a cyclic dependency. To solve this issue, a prototype of the
 // channel class and server class is defined here.
-class CServer;  // forward declaration of CServer
-class CChannel; // forward declaration of CChannel
+class CServer;        // forward declaration of CServer
+class CChannel;       // forward declaration of CChannel
+class CTcpConnection; // forward declaration of CTcpConnection
 
 /* Classes ********************************************************************/
 class CTcpServer : public QObject
@@ -60,7 +60,7 @@ private:
     QTcpServer*   pTcpServer;
 
 signals:
-    void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr, QTcpSocket* pTcpSocket );
+    void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr, CTcpConnection* pTcpConnection );
 
 protected slots:
     void OnNewConnection();

@@ -148,7 +148,7 @@ Results:
 | result.skillLevel | string | The musician’s skill level (beginner, intermediate, expert, or null). |
 | result.countryId | number | The musician’s country ID (see QLocale::Country). |
 | result.city | string | The musician’s city. |
-| result.instrumentId | number | The musician’s instrument ID (see CInstPictures::GetTable). |
+| result.instrument | string | The musician’s instrument. |
 | result.skillLevel | string | Your skill level (beginner, intermediate, expert, or null). |
 
 
@@ -308,9 +308,9 @@ Results:
 | result.clients[*].name | string | The client’s name. |
 | result.clients[*].jitterBufferSize | number | The client’s jitter buffer size. |
 | result.clients[*].channels | number | The number of audio channels of the client. |
-| result.clients[*].instrumentCode | number | The id of the instrument for this channel. |
+| result.clients[*].instrument | string | The instrument name provided by the user for this channel. |
 | result.clients[*].city | string | The city name provided by the user for this channel. |
-| result.clients[*].countryName | number | The text name of the country specified by the user for this channel (see QLocale::Country). |
+| result.clients[*].countryName | string | The country name provided by the user for this channel. |
 | result.clients[*].skillLevelCode | number | The skill level id provided by the user for this channel. |
 
 
@@ -494,9 +494,9 @@ Parameters:
 | params.clients[*].id | number | The channel ID. |
 | params.clients[*].name | string | The musician’s name. |
 | params.clients[*].skillLevel | string | The musician’s skill level (beginner, intermediate, expert, or null). |
-| params.clients[*].countryId | number | The musician’s country ID (see QLocale::Country). |
+| params.clients[*].country | string | The musician’s country. |
 | params.clients[*].city | string | The musician’s city. |
-| params.clients[*].instrumentId | number | The musician’s instrument ID (see CInstPictures::GetTable). |
+| params.clients[*].instrument | string | The musician’s instrument. |
 
 
 ### jamulusclient/serverListReceived
@@ -547,5 +547,16 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params | object | No parameters (empty object). |
+
+
+### jamulusclient/recorderState
+
+Emitted when the client is connected to a server who's recorder state changes.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.state | number | The recorder state (see ERecorderState). |
 
 

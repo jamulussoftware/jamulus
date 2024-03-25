@@ -55,7 +55,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {string} params.clients[*].skillLevel - The musician’s skill level (beginner, intermediate, expert, or null).
     /// @param {string} params.clients[*].country - The musician’s country.
     /// @param {string} params.clients[*].city - The musician’s city.
-    /// @param {number} params.clients[*].instrumentId - The musician’s instrument ID (see CInstPictures::GetTable).
+    /// @param {string} params.clients[*].instrument - The musician’s instrument.
     connect ( pClient, &CClient::ConClientListMesReceived, [=] ( CVector<CChannelInfo> vecChanInfo ) {
         QJsonArray arrChanInfo;
         for ( const auto& chanInfo : vecChanInfo )
@@ -66,7 +66,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
                 { "skillLevel", SerializeSkillLevel ( chanInfo.eSkillLevel ) },
                 { "country", QLocale::countryToString ( chanInfo.eCountry ) },
                 { "city", chanInfo.strCity },
-                { "instrumentId", chanInfo.iInstrument },
+                { "instrument", CInstPictures::GetName ( chanInfo.iInstrument ) },
             };
             arrChanInfo.append ( objChanInfo );
         }
@@ -138,6 +138,16 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @brief Emitted when the client is disconnected from the server.
     /// @param {object} params - No parameters (empty object).
     connect ( pClient, &CClient::Disconnected, [=]() { pRpcServer->BroadcastNotification ( "jamulusclient/disconnected", QJsonObject{} ); } );
+
+    /// @rpc_notification jamulusclient/recorderState
+    /// @brief Emitted when the client is connected to a server who's recorder state changes.
+    /// @param {number} params.state - The recorder state
+    connect ( pClient, &CClient::RecorderStateReceived, [=] ( const ERecorderState newRecorderState ) {
+        pRpcServer->BroadcastNotification ( "jamulusclient/recorderState",
+                                            QJsonObject{
+                                                {"state", newRecorderState}
+                                            } );
+    } );
 
     /// @rpc_method jamulus/pollServerList
     /// @brief Request list of servers in a directory
@@ -237,7 +247,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @result {string} result.skillLevel - The musician’s skill level (beginner, intermediate, expert, or null).
     /// @result {string} result.country - The musician’s country.
     /// @result {string} result.city - The musician’s city.
-    /// @result {number} result.instrumentId - The musician’s instrument ID (see CInstPictures::GetTable).
+    /// @result {number} result.instrument - The musician’s instrument.
     /// @result {string} result.skillLevel - Your skill level (beginner, intermediate, expert, or null).
     pRpcServer->HandleMethod ( "jamulusclient/getChannelInfo", [=] ( const QJsonObject& params, QJsonObject& response ) {
         QJsonObject result{
@@ -245,7 +255,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
             { "name", pClient->ChannelInfo.strName },
             { "country", QLocale::countryToString ( pClient->ChannelInfo.eCountry ) },
             { "city", pClient->ChannelInfo.strCity },
-            { "instrumentId", pClient->ChannelInfo.iInstrument },
+            { "instrument", CInstPictures::GetName ( pClient->ChannelInfo.iInstrument ) },
             { "skillLevel", SerializeSkillLevel ( pClient->ChannelInfo.eSkillLevel ) },
         };
         response["result"] = result;

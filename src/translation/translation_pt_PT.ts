@@ -2072,12 +2072,12 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protecção Contra Feedback</translation>
+        <translation>Proteção de feedback</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="388"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished">Active a protecção contra feedback para detectar feedback acústico entre o microfone e as colunas.</translation>
+        <translation>Evita o feedback acústico entre o microfone e os altifalantes.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="389"/>
@@ -2087,12 +2087,12 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlg.cpp" line="392"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Alertas de Áudio</translation>
+        <translation>Alertas de Áudio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="393"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished">Ative o alerta de áudio ao receber uma mensagem de bate-papo e quando um novo cliente ingressar na sessão. Um segundo dispositivo de som pode ser necessário para ouvir os alertas.</translation>
+        <translation>Ative o alerta de áudio quando receber uma mensagem de conversação e quando um novo cliente se juntar à sessão. Pode ser necessário um segundo dispositivo de som para ouvir os alertas.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
@@ -2589,7 +2589,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="900"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Activar Buffers de Rede Pequenos</translation>
+        <translation>Buffers de rede pequenos</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="670"/>
@@ -2673,7 +2673,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="321"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Alertas de Áudio</translation>
+        <translation>Alertas de Áudio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="366"/>
@@ -2729,7 +2729,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1133"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Protecção Contra Feedback</translation>
+        <translation>Proteção de feedback</translation>
     </message>
     <message>
         <source>Enable</source>
@@ -3563,7 +3563,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation type="unfinished"></translation>
+        <translation>Quando selecionado, o gravador funcionará enquanto estiver a decorrer uma sessão (se estiver corretamente configurado).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="135"/>
@@ -3573,12 +3573,12 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>A gravação foi desativada pela caixa de verificação da interface do utilizador ou pelo JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="141"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>A gravação foi desativada, através da caixa de verificação da interface do utilizador, SIGUSR2 ou JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="146"/>
@@ -3862,7 +3862,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="122"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Activar Gravador</translation>
+        <translation>Gravador de Jam</translation>
     </message>
     <message>
         <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
@@ -3892,7 +3892,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <location filename="../serverdlg.cpp" line="63"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Diretório:&lt;/b&gt; Seleccione &apos;%1&apos; para não registar o seu servidor com um diretório.&lt;br&gt;Ou selecione um dos géneros para se registar nesse diretório.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um endereço de Diretório Personalizado no separador Opções para se registar num diretório personalizado.&lt;br&gt;&lt;br&gt;Para qualquer valor exceto &quot;%1&quot;, este servidor regista-se num diretório para que um utilizador %3 possa selecionar este servidor na lista de servidores da caixa de diálogo de ligação do cliente quando escolher esse diretório.&lt;br&gt;&lt;br&gt;O registo do servidor é renovado periodicamente para garantir que todos os servidores da lista de servidores da caixa de diálogo de ligação estão realmente disponíveis.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
@@ -4160,7 +4160,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de servidores cheia no diretório</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -4260,7 +4260,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished">Activar Panorâmica do Delay</translation>
+        <translation>Atraso de panorâmica</translation>
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
@@ -4297,7 +4297,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Activar Gravador</translation>
+        <translation>Gravador de Jam</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
@@ -4355,22 +4355,22 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverlist.cpp" line="415"/>
         <source>Now a directory</source>
-        <translation type="unfinished">Agora um diretório</translation>
+        <translation>Agora um diretório</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="421"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Deixou de ser um diretório</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="780"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível abrir &apos;%1&apos; para leitura/escrita. Por favor, verifique se %2 tem permissão (e se há espaço livre).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="787"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A carregar ficheiro de lista de servidores persistentes: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="850"/>
@@ -4380,7 +4380,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverlist.cpp" line="861"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>A guardar o registo para %1 (%2): %3</translation>
     </message>
 </context>
 <context>

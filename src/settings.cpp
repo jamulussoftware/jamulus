@@ -875,6 +875,7 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
             directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
         }
         else
+        {
             //### TODO: END ###//
 
             // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
@@ -892,15 +893,19 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
             }
             //### TODO: END ###//
 
-            else if ( GetNumericIniSet ( IniXMLDocument,
-                                         "server",
-                                         "directorytype",
-                                         static_cast<int> ( AT_NONE ),
-                                         static_cast<int> ( AT_CUSTOM ),
-                                         iValue ) )
+            else
             {
-                directoryType = static_cast<EDirectoryType> ( iValue );
+                if ( GetNumericIniSet ( IniXMLDocument,
+                                        "server",
+                                        "directorytype",
+                                        static_cast<int> ( AT_NONE ),
+                                        static_cast<int> ( AT_CUSTOM ),
+                                        iValue ) )
+                {
+                    directoryType = static_cast<EDirectoryType> ( iValue );
+                }
             }
+        }
 
         //### TODO: BEGIN ###//
         // compatibility to old version < 3.9.0

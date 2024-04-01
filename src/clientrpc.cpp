@@ -101,37 +101,36 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {string} params.servers[*].name - Server name
     /// @param {string} params.servers[*].country - Server country
     /// @param {string} params.servers[*].city - Server city
-    connect ( pClient->getConnLessProtocol(), &CProtocol::CLServerListReceived, [=] ( CHostAddress /* unused */, CVector<CServerInfo> vecServerInfo ) {
-        QJsonArray arrServerInfo;
-        for ( const auto& serverInfo : vecServerInfo )
-        {
-            QJsonObject objServerInfo{
-                { "address", serverInfo.HostAddr.toString() },
-                { "name", serverInfo.strName },
-                { "country", QLocale::countryToString ( serverInfo.eCountry) },
-                { "city", serverInfo.strCity },
-            };
-            arrServerInfo.append ( objServerInfo );
-            pClient->CreateCLServerListPingMes ( serverInfo.HostAddr );
-        }
-        pRpcServer->BroadcastNotification ( "jamulusclient/serverListReceived",
-                                            QJsonObject{
-                                                { "servers", arrServerInfo },
-                                            } );
-    } );
+    connect ( pClient->getConnLessProtocol(),
+              &CProtocol::CLServerListReceived,
+              [=] ( CHostAddress /* unused */, CVector<CServerInfo> vecServerInfo ) {
+                  QJsonArray arrServerInfo;
+                  for ( const auto& serverInfo : vecServerInfo )
+                  {
+                      QJsonObject objServerInfo{
+                          { "address", serverInfo.HostAddr.toString() },
+                          { "name", serverInfo.strName },
+                          { "country", QLocale::countryToString ( serverInfo.eCountry ) },
+                          { "city", serverInfo.strCity },
+                      };
+                      arrServerInfo.append ( objServerInfo );
+                      pClient->CreateCLServerListPingMes ( serverInfo.HostAddr );
+                  }
+                  pRpcServer->BroadcastNotification ( "jamulusclient/serverListReceived",
+                                                      QJsonObject{
+                                                          { "servers", arrServerInfo },
+                                                      } );
+              } );
 
     /// @rpc_notification jamulusclient/serverInfoReceived
     /// @brief Emitted when a server info is received.
     /// @param {string} params.address - The server socket address
     /// @param {number} params.pingtime - The round-trip ping time in ms
     /// @param {number} params.numClients - The quantity of clients connected to the server
-    connect (pClient, &CClient::CLPingTimeWithNumClientsReceived, [=] ( CHostAddress InetAddr, int iPingTime, int iNumClients ) {
-        pRpcServer->BroadcastNotification ( "jamulusclient/serverInfoReceived",
-                                            QJsonObject{
-                                                {"address", InetAddr.toString()},
-                                                {"pingTime", iPingTime},
-                                                {"numClients", iNumClients}
-                                            } );
+    connect ( pClient, &CClient::CLPingTimeWithNumClientsReceived, [=] ( CHostAddress InetAddr, int iPingTime, int iNumClients ) {
+        pRpcServer->BroadcastNotification (
+            "jamulusclient/serverInfoReceived",
+            QJsonObject{ { "address", InetAddr.toString() }, { "pingTime", iPingTime }, { "numClients", iNumClients } } );
     } );
 
     /// @rpc_notification jamulusclient/disconnected
@@ -143,10 +142,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @brief Emitted when the client is connected to a server who's recorder state changes.
     /// @param {number} params.state - The recorder state
     connect ( pClient, &CClient::RecorderStateReceived, [=] ( const ERecorderState newRecorderState ) {
-        pRpcServer->BroadcastNotification ( "jamulusclient/recorderState",
-                                            QJsonObject{
-                                                {"state", newRecorderState}
-                                            } );
+        pRpcServer->BroadcastNotification ( "jamulusclient/recorderState", QJsonObject{ { "state", newRecorderState } } );
     } );
 
     /// @rpc_method jamulus/pollServerList
@@ -162,18 +158,16 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
         }
 
         CHostAddress haDirectoryAddress;
-        if ( NetworkUtil().ParseNetworkAddress (
-                jsonDirectoryIp.toString(),
-                haDirectoryAddress,
-                false ) )
+        if ( NetworkUtil().ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, false ) )
         {
             // send the request for the server list
-            pClient->CreateCLReqServerListMes( haDirectoryAddress );
+            pClient->CreateCLReqServerListMes ( haDirectoryAddress );
             response["result"] = "ok";
         }
         else
         {
-            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a valid socket address" );
+            response["error"] =
+                CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a valid socket address" );
         }
 
         response["result"] = "ok";
@@ -191,7 +185,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
             return;
         }
 
-        if ( pClient->SetServerAddr(jsonAddr.toString()) )
+        if ( pClient->SetServerAddr( jsonAddr.toString() ) )
         {
             if ( !pClient->IsRunning() )
             {

@@ -271,9 +271,7 @@ public:
         Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit );
     }
 
-    CProtocol * getConnLessProtocol() {
-        return &ConnLessProtocol;
-    }
+    CProtocol * getConnLessProtocol() { return &ConnLessProtocol; }
 
     // settings
     CChannelCoreInfo ChannelInfo;

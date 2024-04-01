@@ -185,7 +185,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
             return;
         }
 
-        if ( pClient->SetServerAddr( jsonAddr.toString() ) )
+        if ( pClient->SetServerAddr ( jsonAddr.toString() ) )
         {
             if ( !pClient->IsRunning() )
             {

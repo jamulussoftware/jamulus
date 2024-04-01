@@ -197,8 +197,10 @@ Results:
 | result.id | number | The channel ID. |
 | result.name | string | The musician’s name. |
 | result.skillLevel | string | The musician’s skill level (beginner, intermediate, expert, or null). |
+| result.countryId | string | The musician’s country ID (see QLocale::Country). |
 | result.country | string | The musician’s country. |
 | result.city | string | The musician’s city. |
+| result.instrumentId | number | The musician’s instrument ID (see QLocale::Country). |
 | result.instrument | number | The musician’s instrument. |
 | result.skillLevel | string | Your skill level (beginner, intermediate, expert, or null). |
 
@@ -495,8 +497,10 @@ Parameters:
 | params.clients[*].id | number | The channel ID. |
 | params.clients[*].name | string | The musician’s name. |
 | params.clients[*].skillLevel | string | The musician’s skill level (beginner, intermediate, expert, or null). |
+| params.clients[*].countryId | number | The musician’s country ID (see QLocale::Country). |
 | params.clients[*].country | string | The musician’s country. |
 | params.clients[*].city | string | The musician’s city. |
+| params.clients[*].instrumentId | string | The musician’s instrument ID (see QLocale::Country).. |
 | params.clients[*].instrument | string | The musician’s instrument. |
 
 
@@ -557,6 +561,7 @@ Parameters:
 | params.servers | array | The server list. |
 | params.servers[*].address | string | Socket address (ip_address:port) |
 | params.servers[*].name | string | Server name |
+| params.servers[*].countryId | string | Server country ID (see QLocale::Country). |
 | params.servers[*].country | string | Server country |
 | params.servers[*].city | string | Server city |
 

@@ -53,8 +53,10 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {number} params.clients[*].id - The channel ID.
     /// @param {string} params.clients[*].name - The musician’s name.
     /// @param {string} params.clients[*].skillLevel - The musician’s skill level (beginner, intermediate, expert, or null).
+    /// @param {number} params.clients[*].countryId - The musician’s country ID (see QLocale::Country).
     /// @param {string} params.clients[*].country - The musician’s country.
     /// @param {string} params.clients[*].city - The musician’s city.
+    /// @param {string} params.clients[*].instrumentId - The musician’s instrument ID (see QLocale::Country)..
     /// @param {string} params.clients[*].instrument - The musician’s instrument.
     connect ( pClient, &CClient::ConClientListMesReceived, [=] ( CVector<CChannelInfo> vecChanInfo ) {
         QJsonArray arrChanInfo;
@@ -64,8 +66,10 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
                 { "id", chanInfo.iChanID },
                 { "name", chanInfo.strName },
                 { "skillLevel", SerializeSkillLevel ( chanInfo.eSkillLevel ) },
+                { "countryId", chanInfo.eCountry },
                 { "country", QLocale::countryToString ( chanInfo.eCountry ) },
                 { "city", chanInfo.strCity },
+                { "instrumentId", chanInfo.iInstrument },
                 { "instrument", CInstPictures::GetName ( chanInfo.iInstrument ) },
             };
             arrChanInfo.append ( objChanInfo );
@@ -99,6 +103,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {array} params.servers - The server list.
     /// @param {string} params.servers[*].address - Socket address (ip_address:port)
     /// @param {string} params.servers[*].name - Server name
+    /// @param {string} params.servers[*].countryId - Server country ID (see QLocale::Country).
     /// @param {string} params.servers[*].country - Server country
     /// @param {string} params.servers[*].city - Server city
     connect ( pClient->getConnLessProtocol(),
@@ -110,6 +115,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
                       QJsonObject objServerInfo{
                           { "address", serverInfo.HostAddr.toString() },
                           { "name", serverInfo.strName },
+                          { "countryId", serverInfo.eCountry },
                           { "country", QLocale::countryToString ( serverInfo.eCountry ) },
                           { "city", serverInfo.strCity },
                       };
@@ -239,16 +245,20 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @result {number} result.id - The channel ID.
     /// @result {string} result.name - The musician’s name.
     /// @result {string} result.skillLevel - The musician’s skill level (beginner, intermediate, expert, or null).
+    /// @result {string} result.countryId - The musician’s country ID (see QLocale::Country).
     /// @result {string} result.country - The musician’s country.
     /// @result {string} result.city - The musician’s city.
+    /// @result {number} result.instrumentId - The musician’s instrument ID (see QLocale::Country).
     /// @result {number} result.instrument - The musician’s instrument.
     /// @result {string} result.skillLevel - Your skill level (beginner, intermediate, expert, or null).
     pRpcServer->HandleMethod ( "jamulusclient/getChannelInfo", [=] ( const QJsonObject& params, QJsonObject& response ) {
         QJsonObject result{
             // TODO: We cannot include "id" here is pClient->ChannelInfo is a CChannelCoreInfo which lacks that field.
             { "name", pClient->ChannelInfo.strName },
+            { "countryId", pClient->ChannelInfo.eCountry },
             { "country", QLocale::countryToString ( pClient->ChannelInfo.eCountry ) },
             { "city", pClient->ChannelInfo.strCity },
+            { "instrumentId",  pClient->ChannelInfo.iInstrument },
             { "instrument", CInstPictures::GetName ( pClient->ChannelInfo.iInstrument ) },
             { "skillLevel", SerializeSkillLevel ( pClient->ChannelInfo.eSkillLevel ) },
         };

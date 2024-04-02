@@ -56,7 +56,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {number} params.clients[*].countryId - The musician’s country ID (see QLocale::Country).
     /// @param {string} params.clients[*].country - The musician’s country.
     /// @param {string} params.clients[*].city - The musician’s city.
-    /// @param {string} params.clients[*].instrumentId - The musician’s instrument ID (see CInstPictures::GetTable).
+    /// @param {number} params.clients[*].instrumentId - The musician’s instrument ID (see CInstPictures::GetTable).
     /// @param {string} params.clients[*].instrument - The musician’s instrument.
     connect ( pClient, &CClient::ConClientListMesReceived, [=] ( CVector<CChannelInfo> vecChanInfo ) {
         QJsonArray arrChanInfo;
@@ -103,7 +103,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {array} params.servers - The server list.
     /// @param {string} params.servers[*].address - Socket address (ip_address:port)
     /// @param {string} params.servers[*].name - Server name
-    /// @param {string} params.servers[*].countryId - Server country ID (see QLocale::Country).
+    /// @param {number} params.servers[*].countryId - Server country ID (see QLocale::Country).
     /// @param {string} params.servers[*].country - Server country
     /// @param {string} params.servers[*].city - Server city
     connect ( pClient->getConnLessProtocol(),
@@ -245,11 +245,11 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @result {number} result.id - The channel ID.
     /// @result {string} result.name - The musician’s name.
     /// @result {string} result.skillLevel - The musician’s skill level (beginner, intermediate, expert, or null).
-    /// @result {string} result.countryId - The musician’s country ID (see QLocale::Country).
+    /// @result {number} result.countryId - The musician’s country ID (see QLocale::Country).
     /// @result {string} result.country - The musician’s country.
     /// @result {string} result.city - The musician’s city.
     /// @result {number} result.instrumentId - The musician’s instrument ID (see CInstPictures::GetTable).
-    /// @result {number} result.instrument - The musician’s instrument.
+    /// @result {string} result.instrument - The musician’s instrument.
     /// @result {string} result.skillLevel - Your skill level (beginner, intermediate, expert, or null).
     pRpcServer->HandleMethod ( "jamulusclient/getChannelInfo", [=] ( const QJsonObject& params, QJsonObject& response ) {
         QJsonObject result{

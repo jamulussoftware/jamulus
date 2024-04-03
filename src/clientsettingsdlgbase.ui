@@ -1039,11 +1039,40 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="cbxCustomDirectories">
-               <property name="editable">
-                <bool>true</bool>
-               </property>
-              </widget>
+              <layout class="QHBoxLayout">
+               <item>
+                <widget class="QComboBox" name="cbxCustomDirectories">
+                 <property name="editable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="butDeleteCustomDirectory">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Ignored">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string notr="true">⌫</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
              <item>
               <spacer name="verticalSpacer_4">
@@ -1053,7 +1082,7 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>13</height>
+                 <height>40</height>
                 </size>
                </property>
               </spacer>
@@ -1367,6 +1396,7 @@
   <tabstop>sldNetBufServer</tabstop>
   <tabstop>chbSmallNetworkBuffers</tabstop>
   <tabstop>cbxCustomDirectories</tabstop>
+  <tabstop>butDeleteCustomDirectory</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxInputBoost</tabstop>
   <tabstop>chbDetectFeedback</tabstop>

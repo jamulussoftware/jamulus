@@ -401,7 +401,7 @@ jobs:
                                     needs.create_release.outputs.publish_to_release == 'true' &&
                                     steps.build.outputs.macos_notarize == 'true'
         id:                         notarize-macOS-app
-        uses:                       lando/notarize-action@4f5869b09386e8336802159031e4189e0919ae20
+        uses:                       lando/notarize-action@bd2f055b8685623053d14594e9c5742c912befaf
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
           primary-bundle-id:        io.jamulus.Jamulus

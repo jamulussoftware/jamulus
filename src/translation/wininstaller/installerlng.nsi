@@ -37,3 +37,6 @@
 
 !insertmacro MUI_LANGUAGE "Korean"
 !include "${ROOT_PATH}\src\translation\wininstaller\ko_KR.nsi"
+
+!insertmacro MUI_LANGUAGE "Russian"
+!include "${ROOT_PATH}\src\translation\wininstaller\ru_RU.nsi"

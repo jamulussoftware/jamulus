@@ -2,6 +2,7 @@
 Jamulus
 Jamulus.ini
 Makefile
+Makefile.*
 *.pro.user*
 **.cppe
 **.he
@@ -17,7 +18,11 @@ Makefile
 moc_*.cpp
 ui_*.h
 moc_predefs.h
-src/res/qrc_resources.cpp
+.qm/
+*.qm
+qmake_qmake_qm_files.qrc
+qrc_qmake_qmake_qm_files.cpp
+qrc_resources.cpp
 libs/ASIOSDK2
 windows/VC_redist.x64.exe
 windows/vc_redist.x86.exe

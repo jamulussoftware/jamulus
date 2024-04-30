@@ -314,7 +314,8 @@ jobs:
       - name:                       Checkout code
         uses:                       actions/checkout@v4
         with:
-          submodules:               true
+          # only Android needs the oboe submodule, so don't fetch it for other builds
+          submodules:               ${{ matrix.config.target_os == 'android' }}
           fetch-depth:              ${{ matrix.config.checkout_fetch_depth || '1' }}
 
       - name:                       Cache Mac dependencies

@@ -528,7 +528,7 @@ Parameters:
 
 ### jamulusclient/recorderState
 
-Emitted when the client is connected to a server who's recorder state changes.
+Emitted when a server's recorder state changes.
 
 Parameters:
 

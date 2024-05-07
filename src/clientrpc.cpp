@@ -180,7 +180,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     } );
 
     /// @rpc_method jamulusclient/connect
-    /// @brief Disconnect client from server
+    /// @brief Connect client to server
     /// @param {string} params.address - Server socket address (ip_addr:port).
     /// @result {string} result - Always "ok".
     pRpcServer->HandleMethod ( "jamulusclient/connect", [=] ( const QJsonObject& params, QJsonObject& response ) {
@@ -253,7 +253,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @result {string} result.skillLevel - Your skill level (beginner, intermediate, expert, or null).
     pRpcServer->HandleMethod ( "jamulusclient/getChannelInfo", [=] ( const QJsonObject& params, QJsonObject& response ) {
         QJsonObject result{
-            // TODO: We cannot include "id" here is pClient->ChannelInfo is a CChannelCoreInfo which lacks that field.
+            // TODO: We cannot include "id" here as pClient->ChannelInfo is a CChannelCoreInfo which lacks that field.
             { "name", pClient->ChannelInfo.strName },
             { "countryId", pClient->ChannelInfo.eCountry },
             { "country", QLocale::countryToString ( pClient->ChannelInfo.eCountry ) },

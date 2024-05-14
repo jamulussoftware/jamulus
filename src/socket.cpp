@@ -365,6 +365,8 @@ void CSocket::OnDataReceived()
         use the signal/slot mechanism (i.e. we use messages for that).
     */
 
+    CHostAddress RecHostAddr;
+
     // read block from network interface and query address of sender
     uSockAddr UdpSocketAddr;
 #ifdef _WIN32

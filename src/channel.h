@@ -250,12 +250,12 @@ public slots:
         Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
     }
 
-    void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& RecHostAddr )
+    void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
     {
         PutProtocolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
     }
 
-    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& RecHostAddr )
+    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
     {
         emit DetectedCLMessage ( vecbyMesBodyData, iRecID, RecHostAddr );
     }
@@ -282,7 +282,7 @@ signals:
     void RecorderStateReceived ( ERecorderState eRecorderState );
     void Disconnected();
 
-    void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, const CHostAddress& RecHostAddr );
+    void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr );
 
     void ParseMessageBody ( CVector<uint8_t> vecbyMesBodyData, int iRecCounter, int iRecID );
 };

@@ -82,7 +82,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {array} params.channelLevelList - The channel level list.
     ///  Each item corresponds to the respective client retrieved from the jamulusclient/clientListReceived notification.
     /// @param {number} params.channelLevelList[*] - The channel level, an integer between 0 and 9.
-    connect ( pClient, &CClient::CLChannelLevelListReceived, [=] ( const CHostAddress& /* unused */, CVector<uint16_t> vecLevelList ) {
+    connect ( pClient, &CClient::CLChannelLevelListReceived, [=] ( CHostAddress /* unused */, CVector<uint16_t> vecLevelList ) {
         QJsonArray arrLevelList;
         for ( const auto& level : vecLevelList )
         {

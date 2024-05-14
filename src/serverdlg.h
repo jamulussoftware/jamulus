@@ -123,7 +123,7 @@ public slots:
     void OnSvrRegStatusChanged() { UpdateGUIDependencies(); }
     void OnRecordingSessionStarted ( QString sessionDir ) { UpdateRecorderStatus ( sessionDir ); }
     void OnStopRecorder();
-    void OnCLVersionAndOSReceived ( const CHostAddress&, COSUtil::EOpSystemType, QString strVersion );
+    void OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion );
 
     // Our timer
     void OnTimer();

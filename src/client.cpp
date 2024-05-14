@@ -223,14 +223,14 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
 }
 
-void CClient::OnSendCLProtMessage ( const CHostAddress& InetAddr, CVector<uint8_t> vecMessage )
+void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
 {
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, InetAddr );
 }
 
-void CClient::OnInvalidPacketReceived ( const CHostAddress& RecHostAddr )
+void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
 {
     // message could not be parsed, check if the packet comes
     // from the server we just connected -> if yes, send
@@ -242,7 +242,7 @@ void CClient::OnInvalidPacketReceived ( const CHostAddress& RecHostAddr )
     }
 }
 
-void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, const CHostAddress& RecHostAddr )
+void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr )
 {
     // connection less messages are always processed
     ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
@@ -334,7 +334,7 @@ void CClient::CreateServerJitterBufferMessage()
     }
 }
 
-void CClient::OnCLPingReceived ( const CHostAddress& InetAddr, int iMs )
+void CClient::OnCLPingReceived ( CHostAddress InetAddr, int iMs )
 {
     // make sure we are running and the server address is correct
     if ( IsRunning() && ( InetAddr == Channel.GetAddress() ) )
@@ -350,7 +350,7 @@ void CClient::OnCLPingReceived ( const CHostAddress& InetAddr, int iMs )
     }
 }
 
-void CClient::OnCLPingWithNumClientsReceived ( const CHostAddress& InetAddr, int iMs, int iNumClients )
+void CClient::OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients )
 {
     // take care of wrap arounds (if wrapping, do not use result)
     const int iCurDiff = EvaluatePingMessage ( iMs );

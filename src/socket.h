@@ -98,15 +98,15 @@ signals:
     void NewConnection(); // for the client
 
     void NewConnection ( int iChID, int iTotChans,
-                         const CHostAddress& RecHostAddr ); // for the server
+                         CHostAddress RecHostAddr ); // for the server
 
-    void ServerFull ( const CHostAddress& RecHostAddr );
+    void ServerFull ( CHostAddress RecHostAddr );
 
-    void InvalidPacketReceived ( const CHostAddress& RecHostAddr );
+    void InvalidPacketReceived ( CHostAddress RecHostAddr );
 
-    void ProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& HostAdr );
+    void ProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
 
-    void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, const CHostAddress& HostAdr );
+    void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
 };
 
 /* Socket which runs in a separate high priority thread --------------------- */
@@ -212,7 +212,7 @@ protected:
     CSocket       Socket;
 
 signals:
-    void InvalidPacketReceived ( const CHostAddress& RecHostAddr );
+    void InvalidPacketReceived ( CHostAddress RecHostAddr );
 };
 
 // overlay generic, IPv4 and IPv6 sockaddr structures

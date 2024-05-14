@@ -70,7 +70,7 @@ CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQ
     QObject::connect ( this, &CSocket::ProtocolCLMessageReceived, pServer, &CServer::OnProtocolCLMessageReceived );
 
     QObject::connect ( this,
-                       static_cast<void ( CSocket::* ) ( int, int, const CHostAddress& )> ( &CSocket::NewConnection ),
+                       static_cast<void ( CSocket::* ) ( int, int, CHostAddress )> ( &CSocket::NewConnection ),
                        pServer,
                        &CServer::OnNewConnection );
 

@@ -375,26 +375,26 @@ protected:
 protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
-    void OnInvalidPacketReceived ( const CHostAddress& RecHostAddr );
+    void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
 
-    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, const CHostAddress& RecHostAddr );
+    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr );
 
     void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
     void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
     void OnNewConnection();
-    void OnCLDisconnection ( const CHostAddress& InetAddr )
+    void OnCLDisconnection ( CHostAddress InetAddr )
     {
         if ( InetAddr == Channel.GetAddress() )
         {
             emit Disconnected();
         }
     }
-    void OnCLPingReceived ( const CHostAddress& InetAddr, int iMs );
+    void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
 
-    void OnSendCLProtMessage ( const CHostAddress& InetAddr, CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
 
-    void OnCLPingWithNumClientsReceived ( const CHostAddress& InetAddr, int iMs, int iNumClients );
+    void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
     void OnControllerInFaderLevel ( int iChannelIdx, int iValue );
@@ -415,17 +415,17 @@ signals:
     void PingTimeReceived ( int iPingTime );
     void RecorderStateReceived ( ERecorderState eRecorderState );
 
-    void CLServerListReceived ( const CHostAddress& InetAddr, CVector<CServerInfo> vecServerInfo );
+    void CLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
 
-    void CLRedServerListReceived ( const CHostAddress& InetAddr, CVector<CServerInfo> vecServerInfo );
+    void CLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
 
-    void CLConnClientsListMesReceived ( const CHostAddress& InetAddr, CVector<CChannelInfo> vecChanInfo );
+    void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
 
-    void CLPingTimeWithNumClientsReceived ( const CHostAddress& InetAddr, int iPingTime, int iNumClients );
+    void CLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients );
 
-    void CLVersionAndOSReceived ( const CHostAddress& InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
+    void CLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
 
-    void CLChannelLevelListReceived ( const CHostAddress& InetAddr, CVector<uint16_t> vecLevelList );
+    void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
     void Disconnected();
     void SoundDeviceChanged ( QString strError );

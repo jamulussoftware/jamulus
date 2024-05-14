@@ -301,7 +301,7 @@ public slots:
 signals:
     // transmitting
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
-    void CLMessReadyForSending ( const CHostAddress& InetAddr, CVector<uint8_t> vecMessage );
+    void CLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
 
     // receiving
     void ChangeJittBufSize ( int iNewJitBufSize );
@@ -325,24 +325,24 @@ signals:
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void RecorderStateReceived ( ERecorderState eRecorderState );
 
-    void CLPingReceived ( const CHostAddress& InetAddr, int iMs );
-    void CLPingWithNumClientsReceived ( const CHostAddress& InetAddr, int iMs, int iNumClients );
-    void CLRegisterServerReceived ( const CHostAddress& InetAddr, const CHostAddress& LInetAddr, CServerCoreInfo ServerInfo );
-    void CLRegisterServerExReceived ( const CHostAddress&    InetAddr,
-                                      const CHostAddress&    LInetAddr,
+    void CLPingReceived ( CHostAddress InetAddr, int iMs );
+    void CLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
+    void CLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo );
+    void CLRegisterServerExReceived ( CHostAddress           InetAddr,
+                                      CHostAddress           LInetAddr,
                                       CServerCoreInfo        ServerInfo,
                                       COSUtil::EOpSystemType eOSType,
                                       QString                strVersion );
-    void CLUnregisterServerReceived ( const CHostAddress& InetAddr );
-    void CLServerListReceived ( const CHostAddress& InetAddr, CVector<CServerInfo> vecServerInfo );
-    void CLRedServerListReceived ( const CHostAddress& InetAddr, CVector<CServerInfo> vecServerInfo );
-    void CLReqServerList ( const CHostAddress& InetAddr );
-    void CLSendEmptyMes ( const CHostAddress& TargetInetAddr );
-    void CLDisconnection ( const CHostAddress& InetAddr );
-    void CLVersionAndOSReceived ( const CHostAddress& InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
-    void CLReqVersionAndOS ( const CHostAddress& InetAddr );
-    void CLConnClientsListMesReceived ( const CHostAddress& InetAddr, CVector<CChannelInfo> vecChanInfo );
-    void CLReqConnClientsList ( const CHostAddress& InetAddr );
-    void CLChannelLevelListReceived ( const CHostAddress& InetAddr, CVector<uint16_t> vecLevelList );
-    void CLRegisterServerResp ( const CHostAddress& InetAddr, ESvrRegResult eStatus );
+    void CLUnregisterServerReceived ( CHostAddress InetAddr );
+    void CLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
+    void CLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
+    void CLReqServerList ( CHostAddress InetAddr );
+    void CLSendEmptyMes ( CHostAddress TargetInetAddr );
+    void CLDisconnection ( CHostAddress InetAddr );
+    void CLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
+    void CLReqVersionAndOS ( CHostAddress InetAddr );
+    void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
+    void CLReqConnClientsList ( CHostAddress InetAddr );
+    void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
+    void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
 };

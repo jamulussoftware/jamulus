@@ -805,7 +805,7 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVer
 #endif
 }
 
-void CClientDlg::OnCLVersionAndOSReceived ( const CHostAddress&, COSUtil::EOpSystemType, QString strVersion )
+void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion )
 {
     // update check
 #if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
@@ -1187,7 +1187,7 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
     ClientSettingsDlg.UpdateSoundDeviceChannelSelectionFrame();
 }
 
-void CClientDlg::OnCLPingTimeWithNumClientsReceived ( const CHostAddress& InetAddr, int iPingTime, int iNumClients )
+void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients )
 {
     // update connection dialog server list
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );

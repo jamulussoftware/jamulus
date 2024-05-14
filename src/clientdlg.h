@@ -137,7 +137,7 @@ public slots:
 
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );
-    void OnCLPingTimeWithNumClientsReceived ( const CHostAddress& InetAddr, int iPingTime, int iNumClients );
+    void OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients );
 
     void OnControllerInFaderLevel ( const int iChannelIdx, const int iValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx, iValue ); }
 
@@ -151,7 +151,7 @@ public slots:
 
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVersion );
 
-    void OnCLVersionAndOSReceived ( const CHostAddress&, COSUtil::EOpSystemType, QString strVersion );
+    void OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion );
 
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();
@@ -199,25 +199,25 @@ public slots:
 
     void OnNewLocalInputText ( QString strChatText ) { pClient->CreateChatTextMes ( strChatText ); }
 
-    void OnReqServerListQuery ( const CHostAddress& InetAddr ) { pClient->CreateCLReqServerListMes ( InetAddr ); }
+    void OnReqServerListQuery ( CHostAddress InetAddr ) { pClient->CreateCLReqServerListMes ( InetAddr ); }
 
-    void OnCreateCLServerListPingMes ( const CHostAddress& InetAddr ) { pClient->CreateCLServerListPingMes ( InetAddr ); }
+    void OnCreateCLServerListPingMes ( CHostAddress InetAddr ) { pClient->CreateCLServerListPingMes ( InetAddr ); }
 
-    void OnCreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr ) { pClient->CreateCLServerListReqVerAndOSMes ( InetAddr ); }
+    void OnCreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr ) { pClient->CreateCLServerListReqVerAndOSMes ( InetAddr ); }
 
-    void OnCreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr ) { pClient->CreateCLServerListReqConnClientsListMes ( InetAddr ); }
+    void OnCreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr ) { pClient->CreateCLServerListReqConnClientsListMes ( InetAddr ); }
 
-    void OnCLServerListReceived ( const CHostAddress& InetAddr, CVector<CServerInfo> vecServerInfo )
+    void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
     {
         ConnectDlg.SetServerList ( InetAddr, vecServerInfo );
     }
 
-    void OnCLRedServerListReceived ( const CHostAddress& InetAddr, CVector<CServerInfo> vecServerInfo )
+    void OnCLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
     {
         ConnectDlg.SetServerList ( InetAddr, vecServerInfo, true );
     }
 
-    void OnCLConnClientsListMesReceived ( const CHostAddress& InetAddr, CVector<CChannelInfo> vecChanInfo )
+    void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo )
     {
         ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo );
     }
@@ -226,7 +226,7 @@ public slots:
 
     void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted ) { MainMixerBoard->SetRemoteFaderIsMute ( iChanID, bIsMuted ); }
 
-    void OnCLChannelLevelListReceived ( const CHostAddress& /* unused */, CVector<uint16_t> vecLevelList )
+    void OnCLChannelLevelListReceived ( CHostAddress /* unused */, CVector<uint16_t> vecLevelList )
     {
         MainMixerBoard->SetChannelLevels ( vecLevelList );
     }

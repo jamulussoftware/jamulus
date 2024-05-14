@@ -119,7 +119,7 @@ public:
 
     void Frame ( const int              iChID,
                  const QString          name,
-                 const CHostAddress&    address,
+                 const CHostAddress     address,
                  const int              numAudioChannels,
                  const CVector<int16_t> data,
                  int                    iServerFrameSizeSamples );
@@ -214,7 +214,7 @@ public slots:
     /**
      * @brief Handle a frame of data to process
      */
-    void OnFrame ( const int iChID, const QString name, const CHostAddress& address, const int numAudioChannels, const CVector<int16_t> data );
+    void OnFrame ( const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data );
 };
 
 } // namespace recorder

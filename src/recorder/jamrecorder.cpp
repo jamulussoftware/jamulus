@@ -227,7 +227,7 @@ void CJamSession::DisconnectClient ( int iChID )
  */
 void CJamSession::Frame ( const int              iChID,
                           const QString          name,
-                          const CHostAddress&    address,
+                          const CHostAddress     address,
                           const int              numAudioChannels,
                           const CVector<int16_t> data,
                           int                    iServerFrameSizeSamples )
@@ -593,7 +593,7 @@ void CJamRecorder::OnDisconnected ( int iChID )
  */
 void CJamRecorder::OnFrame ( const int              iChID,
                              const QString          name,
-                             const CHostAddress&    address,
+                             const CHostAddress     address,
                              const int              numAudioChannels,
                              const CVector<int16_t> data )
 {

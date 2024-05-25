@@ -74,7 +74,7 @@ class CJamClient : public QObject
     Q_OBJECT
 
 public:
-    CJamClient ( const qint64 frame, const int numChannels, const QString name, const CHostAddress address, const QDir recordBaseDir );
+    CJamClient ( const qint64 frame, const int numChannels, const QString name, const CHostAddress& address, const QDir recordBaseDir );
 
     void Frame ( const QString name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples );
 

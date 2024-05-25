@@ -70,7 +70,7 @@ public:
 
     void PutProtocolData ( const int iRecCounter, const int iRecID, const CVector<uint8_t>& vecbyMesBodyData, const CHostAddress& RecHostAddr );
 
-    EPutDataStat PutAudioData ( const CVector<uint8_t>& vecbyData, const int iNumBytes, CHostAddress RecHostAddr );
+    EPutDataStat PutAudioData ( const CVector<uint8_t>& vecbyData, const int iNumBytes, const CHostAddress& RecHostAddr );
 
     EGetDataStat GetData ( CVector<uint8_t>& vecbyData, const int iNumBytes );
 
@@ -83,7 +83,7 @@ public:
     void SetEnable ( const bool bNEnStat );
     bool IsEnabled() { return bIsEnabled; }
 
-    void                SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
+    void                SetAddress ( const CHostAddress& NAddr ) { InetAddr = NAddr; }
     const CHostAddress& GetAddress() const { return InetAddr; }
 
     void ResetInfo()

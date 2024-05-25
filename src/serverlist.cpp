@@ -727,7 +727,7 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
     }
 }
 
-int CServerListManager::IndexOf ( CHostAddress haSearchTerm )
+int CServerListManager::IndexOf ( const CHostAddress& haSearchTerm )
 {
     // Called with lock set.
 

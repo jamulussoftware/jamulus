@@ -78,9 +78,6 @@ protected:
     QMutex Mutex;
 
     CVector<uint8_t> vecbyRecBuf;
-    CHostAddress     RecHostAddr;
-    QHostAddress     SenderAddress;
-    quint16          SenderPort;
 
     CChannel* pChannel; // for client
     CServer*  pServer;  // for server

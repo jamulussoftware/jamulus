@@ -365,6 +365,8 @@ void CSocket::OnDataReceived()
         use the signal/slot mechanism (i.e. we use messages for that).
     */
 
+    CHostAddress RecHostAddr;
+
     // read block from network interface and query address of sender
     uSockAddr UdpSocketAddr;
 #ifdef _WIN32
@@ -381,6 +383,7 @@ void CSocket::OnDataReceived()
         return;
     }
 
+    // convert address of client
     if ( UdpSocketAddr.sa.sa_family == AF_INET6 )
     {
         if ( IN6_IS_ADDR_V4MAPPED ( &( UdpSocketAddr.sa6.sin6_addr ) ) )
@@ -396,7 +399,6 @@ void CSocket::OnDataReceived()
     }
     else
     {
-        // convert address of client
         RecHostAddr.InetAddr.setAddress ( ntohl ( UdpSocketAddr.sa4.sin_addr.s_addr ) );
         RecHostAddr.iPort = ntohs ( UdpSocketAddr.sa4.sin_port );
     }

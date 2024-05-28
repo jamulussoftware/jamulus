@@ -44,7 +44,7 @@
     <message>
         <location filename="../util.cpp" line="611"/>
         <source>Some pixmaps are from the</source>
-        <translation>Alguns pixmaps são do</translation>
+        <translation>Alguns mapas de píxeis são do</translation>
     </message>
     <message>
         <source>Country flag icons from Mark James</source>
@@ -53,12 +53,12 @@
     <message>
         <location filename="../util.cpp" line="574"/>
         <source>This app enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation>Esta aplicação permite que os músicos realizem sessões &apos;&apos;jam&apos;&apos; em tempo real pela Internet.</translation>
+        <translation>Esta aplicação permite que os músicos realizem sessões &apos;&apos;jam&apos;&apos; em tempo real na Internet.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="577"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
-        <translation>Existe um servidor que reúne os dados de áudio de cada cliente, mistura os dados de áudio e envia a mistura de volta para cada cliente.</translation>
+        <translation>Existe um servidor que recolhe os dados de áudio de cada cliente, mistura os dados de áudio e envia a mistura de volta para cada cliente.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="597"/>
@@ -151,7 +151,7 @@
     <message>
         <location filename="../util.cpp" line="746"/>
         <source>Norwegian Bokmål</source>
-        <translation>Norueguês Bokmål</translation>
+        <translation>Norueguês (Bokmål)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="754"/>
@@ -3814,13 +3814,13 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="175"/>
         <source>Display dialog to select recording directory button</source>
-        <translation>Mostrar diálogo para selecionar botão do directorio de gravação</translation>
+        <translation>Exibir janela para selecionar o botão da pasta de gravação</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
         <location filename="../serverdlg.cpp" line="183"/>
         <source>Main Recording Directory</source>
-        <translation>Diretório Principal das Gravações</translation>
+        <translation>Pasta Principal das Gravações</translation>
     </message>
     <message>
         <source>Click the button to open the dialog that allows the main recording directory to be selected. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
@@ -3829,7 +3829,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="182"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation>Caixa de texto do diretório das gravações (só de leitura)</translation>
+        <translation>Caixa de texto da pasta principal das gravações (só de leitura)</translation>
     </message>
     <message>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
@@ -3838,22 +3838,22 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="190"/>
         <source>Clear the recording directory button</source>
-        <translation>Botão para limpar diretório de gravações</translation>
+        <translation>Botão para limpar a pasta de gravações</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="191"/>
         <source>Clear Recording Directory</source>
-        <translation>Limpar diretório de gravações</translation>
+        <translation>Limpar Pasta de Gravações</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="192"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation>Carregue no botão para limpar o valor do diretório selecionado actualmente. Isto irá prevenir gravações até que um novo valor seja selecionado.</translation>
+        <translation>Carregue no botão para limpar o valor da pasta de gravação atualmente selecionada. Isto irá prevenir gravações até que seja selecionado um novo valor.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="121"/>
         <source>Checkbox to turn on or off server recording</source>
-        <translation>Caixa de selecção para ligar ou desligar a gravação no servidor</translation>
+        <translation>Caixa de seleção para ligar ou desligar a gravação no servidor</translation>
     </message>
     <message>
         <source>If the Register Server check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
@@ -3876,23 +3876,23 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="153"/>
         <source>Current Session Directory</source>
-        <translation>Pasta da Sessão Acual</translation>
+        <translation>Pasta da Sessão Atual</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="154"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
-        <translation>Activo durante a gravação e exibe a pasta da gravação actual. Inactivo depois de gravação ou quando o gravador não estiver ligado.</translation>
+        <translation>Ativado durante a gravação e exibe a pasta da gravação atual. Desativado depois da gravação ou quando o gravador não estiver ativado.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder status label</source>
-        <translation>Etiqueta do estado do Gravador</translation>
+        <translation>Etiqueta do estado do gravador</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation>&lt;b&gt;Diretório:&lt;/b&gt; Seleccione &apos;%1&apos; para não registar o seu servidor com um diretório.&lt;br&gt;Ou selecione um dos géneros para se registar nesse diretório.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um endereço de Diretório Personalizado no separador Opções para se registar num diretório personalizado.&lt;br&gt;&lt;br&gt;Para qualquer valor exceto &quot;%1&quot;, este servidor regista-se num diretório para que um utilizador %3 possa selecionar este servidor na lista de servidores da caixa de diálogo de ligação do cliente quando escolher esse diretório.&lt;br&gt;&lt;br&gt;O registo do servidor é renovado periodicamente para garantir que todos os servidores da lista de servidores da caixa de diálogo de ligação estão realmente disponíveis.</translation>
+        <translation>&lt;b&gt;Pasta:&lt;/b&gt; Selecione &apos;%1&apos; para não registar o seu servidor com uma pasta.&lt;br&gt;Ou selecione um dos géneros para registar com essa pasta.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um endereço de &apos;Pasta Personalizada&apos; no separador das &apos;Opções&apos; para registar com uma pasta personalizada.&lt;br&gt;&lt;br&gt;Para qualquer valor exceto &quot;%1&quot;, este servidor regista com uma pasta para que um utilizador %3 possa selecionar este servidor na lista de servidores da janela de ligação do cliente quando eles escolhem essa pasta.&lt;br&gt;&lt;br&gt;O registo do servidor é renovado periodicamente para garantir que todos os servidores da lista de servidores da janela de ligação estão realmente disponíveis.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
@@ -3902,7 +3902,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
-        <translation>Mostra o estado actual do gravadro. Os valores possíveis são:</translation>
+        <translation>Exibe o estado atual do gravador. São possíveis os valores seguintes:</translation>
     </message>
     <message>
         <source>No recording directory has been set or the value is not useable.</source>
@@ -3928,12 +3928,12 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
         <source>The performers are being recorded to the specified session directory.</source>
-        <translation>Os artistas estão a ser gravados para o diretório de sessão especificado.</translation>
+        <translation>Os artistas estão a ser gravados para a pasta de sessão especificada.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
         <source>NOTE</source>
-        <translation>NOTE</translation>
+        <translation>NOTA</translation>
     </message>
     <message>
         <source>If the recording directory is not useable, the problem will be displayed in place of the directory.</source>
@@ -3942,17 +3942,17 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="160"/>
         <source>Server welcome message edit box</source>
-        <translation>Caixa de edição da mensagem de Boas-Vindas do Servidor</translation>
+        <translation>Caixa de edição da mensagem de boas-vindas do servidor</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="161"/>
         <source>Server Welcome Message</source>
-        <translation>Mesagem de Boas-Vindas do Servidor</translation>
+        <translation>Mensagem de Boas-Vindas do Servidor</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="162"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
-        <translation>Uma mensagem de boas vindas do servidor é exibida na janela de mensagens quando um utilizador entra no servidor. Se não houver nenhuma mensagem definida, a mensagem do servidor ficará inactiva.</translation>
+        <translation>Uma mensagem de boas-vindas do servidor é exibida na janela de mensagens quando um utilizador entra no servidor. Se não for definida nenhuma mensagem, esta mensagem estará desativada.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="168"/>
@@ -3962,7 +3962,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="168"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation>Selecione o idioma a ser utilizado na interface do usuário.</translation>
+        <translation>Selecione o idioma a ser utilizado na interface do utilizador.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="172"/>
@@ -3984,7 +3984,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="202"/>
         <source>Custom Directory line edit</source>
-        <translation>Caixa de edição do Diretório Personalizado</translation>
+        <translation>Edição da linha da pasta personalizada</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="246"/>
@@ -4005,7 +4005,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="338"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation>Insira uma mensagem aqui. Se não houver nenhuma mensagem definida, a mensagem do servidor ficará inactiva.</translation>
+        <translation>Insira uma mensagem aqui. Se não houver nenhuma mensagem definida, a mensagem do servidor ficará desativada.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="44"/>
@@ -4020,7 +4020,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="591"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
-        <translation>O Gravador falhou a inicialização. Por favor verifique se tem espaço em disco e permições e tente de novo. Erro: </translation>
+        <translation>O gravador falhou a inicialização. Por favor, verifique se tem espaço em disco e permissões e tente de novo. Erro: </translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="870"/>
@@ -4071,7 +4071,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="603"/>
         <source>Select Main Recording Directory</source>
-        <translation>Seleciona o Diretório Principal das Gravações</translation>
+        <translation>Selecionar Pasta Principal de Gravações</translation>
     </message>
     <message>
         <source>Predefined Address</source>
@@ -4095,7 +4095,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.h" line="54"/>
         <source>Not enabled</source>
-        <translation>Desactivado</translation>
+        <translation>Desativado</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -4135,7 +4135,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../util.h" line="638"/>
         <source>Bad address</source>
-        <translation>Endereço incorrecto</translation>
+        <translation>Endereço incorreto</translation>
     </message>
     <message>
         <location filename="../util.h" line="641"/>
@@ -4145,7 +4145,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../util.h" line="644"/>
         <source>Registration failed</source>
-        <translation>Falha no registo</translation>
+        <translation>Registo falhou</translation>
     </message>
     <message>
         <location filename="../util.h" line="647"/>
@@ -4160,7 +4160,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation>Lista de servidores cheia no diretório</translation>
+        <translation>Lista de servidores cheia na pasta</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -4195,7 +4195,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="34"/>
         <source>Client IP:Port</source>
-        <translation>IP do Cliente:Porta</translation>
+        <translation>IP do cliente:Porta</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="39"/>
@@ -4245,17 +4245,17 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation>End. de Diretório Personalizado</translation>
+        <translation>End. de Pasta Personalizado</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation>Arquivo da Lista de Servidores</translation>
+        <translation>Nome de Ficheiro da Lista de Servidores</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
         <source>Start Minimized on Windows Start</source>
-        <translation>Iniciar Minimizado com o Sistema Operativo</translation>
+        <translation>Iniciar Minimizado no Início do Windows</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
@@ -4292,7 +4292,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="253"/>
         <source>Recording Directory</source>
-        <translation>Diretório das Gravações</translation>
+        <translation>Pasta de Gravações</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
@@ -4360,7 +4360,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverlist.cpp" line="421"/>
         <source>No longer a directory</source>
-        <translation>Deixou de ser um diretório</translation>
+        <translation>Já não é uma diretoria</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="780"/>

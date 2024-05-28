@@ -1,22 +1,22 @@
 ; Portuguese translation
 
 LangString DESKTOP_SET_SHORTCUT ${LANG_PORTUGUESE} \
-    "Criar Atalho no Ambiente de Trabalho"
+    "Criar atalho no Ambiente de Trabalho"
 
 LangString INVALID_FOLDER_MSG ${LANG_PORTUGUESE} \
     "A pasta de destino já existe. Por favor, selecione uma nova pasta de destino."
 
 LangString RUNNING_APP_MSG ${LANG_PORTUGUESE} \
-    "O ${APP_NAME} está em execução. Por favor, feche-o e execute o instalador novamente."
+    "${APP_NAME} está em execução. Por favor, feche-a e execute o instalador novamente."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_PORTUGUESE} \
-    "Nós detetamos uma versão antiga do ${APP_NAME} na sua pasta de Ficheiros de Programas 32 Bits. É altamente recomendado a sua remoção antes de instalar uma nova versão do ${APP_NAME}. Deseja removê-la agora?"
+    "Nós detetamos uma versão antiga do ${APP_NAME} na sua pasta de Programas (x86). É altamente recomendado a sua remoção antes de instalar uma nova versão do ${APP_NAME}. Deseja removê-la agora?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_PORTUGUESE} \
-    "Se continuar sem remover a instalação antiga, a sua instalação poderá ser corrompida! Tem a certeza que não deseja remover a versão antiga?"
+    "Se continuar sem a remover, a sua instalação poderá ser corrompida! Tem a certeza que não deseja remover a versão antiga?"
 
 LangString OLD_VER_REMOVE_FAILED ${LANG_PORTUGUESE} \
-     "As nossas desculpas, mas não foi possível remover a versão antiga. Nós iremos tentar instalar a nova versão, mas pode também clicar em Cancelar e tentar remover a versão antiga manualmente."
+     "Desculpe, não foi possível desinstalar a versão antiga. Nós iremos tentar instalar a nova versão, mas pode também clicar em cancelar e tentar remover a versão antiga manualmente."
 
 LangString ASIO_DRIVER_HEADER ${LANG_PORTUGUESE} \
      "Controlador ASIO"

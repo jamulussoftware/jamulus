@@ -237,11 +237,11 @@ jobs:
           # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
           - config_name:            MacOS Legacy (artifacts+CodeQL)
             target_os:              macos
-            building_on_os:         macos-12
+            building_on_os:         macos-13
             base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
             # Enable CodeQL on mac legacy as this version does not get signed
             run_codeql:             true
-            # For Qt5 on Mac, we need to use an unsupported SDK version as macOS 12 doesn't
+            # For Qt5 on Mac, we need to use an unsupported SDK version as macOS 13 doesn't
             # support Xcode 12.1 which still ships SDK 10.15.
             # https://developer.apple.com/support/xcode/
             # https://xcodereleases.com/

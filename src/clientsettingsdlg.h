@@ -83,7 +83,7 @@ public slots:
     void OnAutoJitBufStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
     void OnFeedbackDetectionChanged ( int value );
-    void OnCustomDirectoriesEditingFinished();
+    void OnCustomDirectoriesChanged ( bool bDelete );
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnInputBoostChanged();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );

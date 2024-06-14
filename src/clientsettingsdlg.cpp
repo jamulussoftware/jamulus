@@ -360,13 +360,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // custom directories
     QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
                                    tr ( "If you need to add additional directories to the Connect dialog Directory drop down, "
-                                        "you can enter the addresses here.<br>"
-                                        "To remove a value, select it, delete the text in the input box, "
-                                        "then move focus out of the control." );
+                                        "you can enter the addresses here.<br>" );
 
     lblCustomDirectories->setWhatsThis ( strCustomDirectories );
     cbxCustomDirectories->setWhatsThis ( strCustomDirectories );
     cbxCustomDirectories->setAccessibleName ( tr ( "Custom Directories combo box" ) );
+
+    butDeleteCustomDirectory->setAccessibleName ( tr ( "Delete custom directory button" ) );
+    butDeleteCustomDirectory->setWhatsThis ( "<b>" + tr ( "Delete Custom Directory" ) + ":</b> " +
+                                             tr ( "Click the button to delete the currently selected custom directory." ) );
 
     // current connection status parameter
     QString strConnStats = "<b>" + tr ( "Audio Upstream Rate" ) + ":</b> " +
@@ -691,12 +693,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        this,
                        &CClientSettingsDlg::OnMeterStyleActivated );
 
-    QObject::connect ( cbxCustomDirectories->lineEdit(), &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnCustomDirectoriesEditingFinished );
-
-    QObject::connect ( cbxCustomDirectories,
-                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-                       this,
-                       &CClientSettingsDlg::OnCustomDirectoriesEditingFinished );
+    QObject::connect ( cbxCustomDirectories->lineEdit(), &QLineEdit::editingFinished, this, [this] {
+        CClientSettingsDlg::OnCustomDirectoriesChanged ( false );
+    } );
 
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CClientSettingsDlg::OnLanguageChanged );
 
@@ -710,6 +709,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // Driver Setup button is only available for Windows when JACK is not used
     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverSetupClicked );
 #endif
+
+    QObject::connect ( butDeleteCustomDirectory, &QPushButton::clicked, this, [this] { CClientSettingsDlg::OnCustomDirectoriesChanged ( true ); } );
 
     // misc
     // sliders
@@ -1009,29 +1010,32 @@ void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
 
 void CClientSettingsDlg::OnFeedbackDetectionChanged ( int value ) { pSettings->bEnableFeedbackDetection = value == Qt::Checked; }
 
-void CClientSettingsDlg::OnCustomDirectoriesEditingFinished()
+void CClientSettingsDlg::OnCustomDirectoriesChanged ( bool bDelete )
 {
-    if ( cbxCustomDirectories->currentText().isEmpty() && cbxCustomDirectories->currentData().isValid() )
+    if ( bDelete )
     {
-        // if the user has selected an entry in the combo box list and deleted the text in the input field,
-        // and then focus moves off the control without selecting a new entry,
-        // we delete the corresponding entry in the vector
-        pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()] = "";
-    }
-    else if ( cbxCustomDirectories->currentData().isValid() && pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()].compare (
-                                                                   NetworkUtil::FixAddress ( cbxCustomDirectories->currentText() ) ) == 0 )
-    {
-        // if the user has selected another entry in the combo box list without changing anything,
-        // there is no need to update any list
-        return;
+        if ( !cbxCustomDirectories->currentData().isValid() )
+        {
+            // no selected directory to delete
+            return;
+        }
+        // delete the selected directory
+        pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()] = QString();
     }
     else
     {
+
+        if ( cbxCustomDirectories->currentText().isEmpty() ||
+             ( cbxCustomDirectories->currentData().isValid() && pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()].compare (
+                                                                    NetworkUtil::FixAddress ( cbxCustomDirectories->currentText() ) ) == 0 ) )
+        {
+            // no need to add a already added directory
+            return;
+        }
         // store new address at the top of the list, if the list was already
         // full, the last element is thrown out
         pSettings->vstrDirectoryAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxCustomDirectories->currentText() ) );
     }
-
     // update combo box list and inform connect dialog about the new address
     UpdateDirectoryComboBox();
     emit CustomDirectoriesChanged();

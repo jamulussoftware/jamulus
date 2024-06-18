@@ -258,7 +258,7 @@ jobs:
             run_codeql:             false
             # Unfortunately, more modern Xcode versions no longer seem to support
             # Qt 5.15.2. Therefore upgrading to Qt6 is needed in the medium term (#2711)
-            xcode_version:          12.5.1
+            xcode_version:          13.4.1
 
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows

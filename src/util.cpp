@@ -1602,7 +1602,11 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
 QMap<QString, QString> CLocale::GetAvailableTranslations()
 {
     QMap<QString, QString> TranslMap;
-    QDirIterator           DirIter ( ":/translations" );
+
+    // Since we use "embed_translations" in Jamulus.pro, this resource prefix must
+    // match the default prefix used by qmake when generating the resource file.
+    // That prefix is "i18n" (standard abbreviation for internationalisation).
+    QDirIterator DirIter ( ":/i18n" );
 
     // add english language (default which is in the actual source code)
     TranslMap["en"] = ""; // empty file name means that the translation load fails and we get the default english language
@@ -1612,8 +1616,9 @@ QMap<QString, QString> CLocale::GetAvailableTranslations()
         // get alias of translation file
         const QString strCurFileName = DirIter.next();
 
-        // extract only language code (must be at the end, separated with a "_")
-        const QString strLoc = strCurFileName.right ( strCurFileName.length() - strCurFileName.indexOf ( "_" ) - 1 );
+        // extract only language code "xx_XX" from "translation_xx_XX.qm"
+        const int     lang   = strCurFileName.indexOf ( "_" ) + 1;
+        const QString strLoc = strCurFileName.mid ( lang, strCurFileName.indexOf ( "." ) - lang );
 
         TranslMap[strLoc] = strCurFileName;
     }

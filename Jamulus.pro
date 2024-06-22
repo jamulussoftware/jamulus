@@ -1,5 +1,11 @@
 VERSION = 3.10.0dev
 
+# Using lrelease and embed_translations only works for Qt 5.12 or later.
+# See https://github.com/jamulussoftware/jamulus/pull/3288 for these changes.
+lessThan(QT_MAJOR_VERSION, 5) | equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 12) {
+    error(Jamulus requires at least Qt5.12. See https://github.com/jamulussoftware/jamulus/pull/3288)
+}
+
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
     message(The target name is jamulus instead of Jamulus.)
@@ -22,7 +28,8 @@ contains(VERSION, .*dev.*) {
 
 CONFIG += qt \
     thread \
-    lrelease
+    lrelease \
+    embed_translations
 
 QT += network \
     xml \
@@ -42,9 +49,8 @@ contains(CONFIG, "headless") {
     QT += multimedia
 }
 
-# Hint: When adding new translations, make sure to update
-# DISTFILES (above) and src/resources.qrc as well.
-LRELEASE_DIR = src/translation
+# Do not set LRELEASE_DIR explicitly when using embed_translations.
+# It doesn't work with multiple targets or architectures.
 TRANSLATIONS = src/translation/translation_de_DE.ts \
     src/translation/translation_fr_FR.ts \
     src/translation/translation_ko_KR.ts \
@@ -357,7 +363,8 @@ win32 {
     }
 }
 
-RCC_DIR = src/res
+# Do not set RCC_DIR explicitly when using embed_translations.
+# It doesn't work with multiple targets or architectures.
 RESOURCES += src/resources.qrc
 
 FORMS_GUI = src/aboutdlgbase.ui \
@@ -702,19 +709,6 @@ DISTFILES += ChangeLog \
     src/res/io.jamulus.jamulus.png \
     src/res/io.jamulus.jamulus.svg \
     src/res/io.jamulus.jamulusserver.svg \
-    src/translation/translation_de_DE.qm \
-    src/translation/translation_fr_FR.qm \
-    src/translation/translation_ko_KR.qm \
-    src/translation/translation_pt_PT.qm \
-    src/translation/translation_pt_BR.qm \
-    src/translation/translation_es_ES.qm \
-    src/translation/translation_nb_NO.qm \
-    src/translation/translation_nl_NL.qm \
-    src/translation/translation_pl_PL.qm \
-    src/translation/translation_it_IT.qm \
-    src/translation/translation_sv_SE.qm \
-    src/translation/translation_sk_SK.qm \
-    src/translation/translation_zh_CN.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

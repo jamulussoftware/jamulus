@@ -35,7 +35,6 @@ override_dh_auto_configure:
 	mkdir -p build-nox && cd build-nox && $(QMAKE) "CONFIG+=headless serveronly" TARGET=jamulus-headless PREFIX=/usr ../Jamulus.pro
 
 override_dh_auto_build:
-	cd src/translation && lrelease *.ts
 	cd build-gui && make -j "$$(nproc)"
 	cd build-nox && make -j "$$(nproc)"
 

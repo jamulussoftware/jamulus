@@ -3,7 +3,7 @@ VERSION = 3.10.0dev
 # Using lrelease and embed_translations only works for Qt 5.12 or later.
 # See https://github.com/jamulussoftware/jamulus/pull/3288 for these changes.
 lessThan(QT_MAJOR_VERSION, 5) | equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 12) {
-    error(Jamulus requires at least Qt5.12)
+    error(Jamulus requires at least Qt5.12. See https://github.com/jamulussoftware/jamulus/pull/3288)
 }
 
 # use target name which does not use a capital letter at the beginning

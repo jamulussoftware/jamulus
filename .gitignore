@@ -30,7 +30,9 @@ libs/NSIS/nsProcess.dll
 windows/NSIS
 libs/NSIS/nsProcess/Release/
 debug/
+debug-*/
 release/
+release-*/
 build/
 deploy/
 build-gui/
@@ -48,6 +50,7 @@ linux/jamulus.desktop
 linux/jamulus-server.desktop
 .xcode
 Debug-iphoneos/
+Release-iphoneos/
 Jamulus.xcodeproj
 jamulus_plugin_import.cpp
 .github_release_changelog.md

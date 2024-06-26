@@ -55,7 +55,7 @@ build_app() {
             "QMAKE_APPLE_DEVICE_ARCHS=${target_arch}" "QT_ARCH=${target_arch}" \
             "${@:2}"
         make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
-        target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+        target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile.Release")
         if [[ ${#target_archs_array[@]} -gt 1 ]]; then
             # When building for multiple architectures, move the binary to a safe place to avoid overwriting/cleaning by the other passes.
             mv "${build_path}/${target_name}.app/Contents/MacOS/${target_name}" "${deploy_path}/${target_name}.arch_${target_arch}"

@@ -36,13 +36,13 @@ void CSettings::Load ( const QList<QString>& CommandLineOptions )
     ReadSettingsFromXML ( IniXMLDocument, CommandLineOptions );
 }
 
-void CSettings::Save()
+void CSettings::Save ( bool isAboutToQuit )
 {
     // create XML document for storing initialization parameters
     QDomDocument IniXMLDocument;
 
     // write the settings in the XML file
-    WriteSettingsToXML ( IniXMLDocument );
+    WriteSettingsToXML ( IniXMLDocument, isAboutToQuit );
 
     // prepare file name for storing initialization data in XML file and store
     // XML data in file
@@ -614,8 +614,9 @@ void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocum
     }
 }
 
-void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
+void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit )
 {
+    Q_UNUSED ( isAboutToQuit )
     int iIdx;
 
     // IP addresses
@@ -944,7 +945,7 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 }
 
-void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
+void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit )
 {
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "server", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );
@@ -985,6 +986,9 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // delay panning
     SetFlagIniSet ( IniXMLDocument, "server", "delaypan", pServer->IsDelayPanningEnabled() );
 
-    // we MUST do this after saving the value and Save() is only called OnAboutToQuit()
-    pServer->SetDirectoryType ( AT_NONE );
+    // we MUST do this after saving the value and Save() is called OnAboutToQuit()
+    if ( isAboutToQuit )
+    {
+        pServer->SetDirectoryType ( AT_NONE );
+    }
 }

@@ -64,14 +64,14 @@ public:
                 pGApp,
                 &QGuiApplication::saveStateRequest,
                 this,
-                [=] ( QSessionManager& ) { Save(); },
+                [=] ( QSessionManager& ) { Save ( false ); },
                 Qt::DirectConnection );
 
 #    endif
             QObject::connect ( pGApp, &QGuiApplication::applicationStateChanged, this, [=] ( Qt::ApplicationState state ) {
                 if ( Qt::ApplicationActive != state )
                 {
-                    Save();
+                    Save ( false );
                 }
             } );
         }
@@ -79,14 +79,14 @@ public:
     }
 
     void Load ( const QList<QString>& CommandLineOptions );
-    void Save();
+    void Save ( bool isAboutToQuit );
 
     // common settings
     QByteArray vecWindowPosMain;
     QString    strLanguage;
 
 protected:
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument )                                                  = 0;
+    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit )                              = 0;
     virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) = 0;
 
     void ReadFromFile ( const QString& strCurFileName, QDomDocument& XMLDocument );
@@ -131,7 +131,7 @@ protected:
     QString strFileName;
 
 public slots:
-    void OnAboutToQuit() { Save(); }
+    void OnAboutToQuit() { Save ( true ); }
 };
 
 #ifndef SERVER_ONLY
@@ -202,7 +202,7 @@ public:
     bool       bOwnFaderFirst;
 
 protected:
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
+    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit ) override;
     virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& ) override;
 
     void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
@@ -221,7 +221,7 @@ public:
     }
 
 protected:
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
+    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit ) override;
     virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) override;
 
     CServer* pServer;

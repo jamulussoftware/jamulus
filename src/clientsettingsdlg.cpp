@@ -366,9 +366,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxCustomDirectories->setWhatsThis ( strCustomDirectories );
     cbxCustomDirectories->setAccessibleName ( tr ( "Custom Directories combo box" ) );
 
-    butDeleteCustomDirectory->setAccessibleName ( tr ( "Delete custom directory button" ) );
-    butDeleteCustomDirectory->setWhatsThis ( "<b>" + tr ( "Delete Custom Directory" ) + ":</b> " +
+    tbtDeleteCustomDirectory->setAccessibleName ( tr ( "Delete custom directory button" ) );
+    tbtDeleteCustomDirectory->setWhatsThis ( "<b>" + tr ( "Delete Custom Directory" ) + ":</b> " +
                                              tr ( "Click the button to delete the currently selected custom directory." ) );
+    tbtDeleteCustomDirectory->setText ( u8"\u232B" );
 
     // current connection status parameter
     QString strConnStats = "<b>" + tr ( "Audio Upstream Rate" ) + ":</b> " +
@@ -710,7 +711,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverSetupClicked );
 #endif
 
-    QObject::connect ( butDeleteCustomDirectory, &QPushButton::clicked, this, [this] { CClientSettingsDlg::OnCustomDirectoriesChanged ( true ); } );
+    // tool buttons
+    QObject::connect ( tbtDeleteCustomDirectory, &QToolButton::clicked, this, [this] { CClientSettingsDlg::OnCustomDirectoriesChanged ( true ); } );
 
     // misc
     // sliders

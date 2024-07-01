@@ -48,7 +48,7 @@ setup() {
     else
         echo "Installing Qt..."
         # We may need to create the Qt installation directory and chown it to the runner user to fix permissions
-        sudo mkdir "${QT_DIR}"
+        sudo mkdir -p "${QT_DIR}"
         sudo chown "$(whoami)" "${QT_DIR}"
         # Create and enter virtual environment
         python3 -m venv venv

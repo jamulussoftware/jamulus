@@ -15,7 +15,7 @@ IOSchedulingClass=realtime
 IOSchedulingPriority=0
 
 #### Change this to publish this server, set genre, location and other parameters.
-#### See https://jamulus.io/wiki/Command-Line-Options ####
+#### See https://jamulus.io/wiki/Running-a-Server#server-mode-related-options ####
 ExecStart=/usr/bin/jamulus-headless -s -n
 
 Restart=on-failure

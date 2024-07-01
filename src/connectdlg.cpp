@@ -96,10 +96,11 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     cbxServerAddr->setAccessibleName ( tr ( "Server address edit box" ) );
     cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server address. It also stores old addresses in the combo box list." ) );
 
-    butDeleteServerAddr->setAccessibleName ( tr ( "Delete server address button" ) );
-    butDeleteServerAddr->setWhatsThis ( "<b>" + tr ( "Delete Server Address" ) + ":</b> " +
+    tbtDeleteServerAddr->setAccessibleName ( tr ( "Delete server address button" ) );
+    tbtDeleteServerAddr->setWhatsThis ( "<b>" + tr ( "Delete Server Address" ) + ":</b> " +
                                         tr ( "Click the button to clear the currently selected server address "
                                              "and delete it from the list of stored servers." ) );
+    tbtDeleteServerAddr->setText ( u8"\u232B" );
 
     UpdateDirectoryComboBox();
 
@@ -185,7 +186,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CConnectDlg::OnConnectClicked );
 
     // tool buttons
-    QObject::connect ( butDeleteServerAddr, &QPushButton::clicked, this, &CConnectDlg::OnDeleteServerAddrClicked );
+    QObject::connect ( tbtDeleteServerAddr, &QToolButton::clicked, this, &CConnectDlg::OnDeleteServerAddrClicked );
 
     // timers
     QObject::connect ( &TimerPing, &QTimer::timeout, this, &CConnectDlg::OnTimerPing );

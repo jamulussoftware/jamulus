@@ -1048,32 +1048,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="butDeleteCustomDirectory">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Maximum" vsizetype="Ignored">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>24</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string notr="true">⌫</string>
-                 </property>
-                 <property name="autoDefault">
-                  <bool>false</bool>
-                 </property>
-                </widget>
+                <widget class="QToolButton" name="tbtDeleteCustomDirectory"/>
                </item>
               </layout>
              </item>

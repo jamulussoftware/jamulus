@@ -368,6 +368,12 @@ jobs:
           MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
           MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
           MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
+          MAC_STORE_APP_CERT:       ${{ secrets.MACAPP_CERT}}
+          MAC_STORE_APP_CERT_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
+          MAC_STORE_APP_CERT_ID:    ${{ secrets.MACAPP_CERT_ID }}
+          MAC_STORE_INST_CERT:      ${{ secrets.MACAPP_INST_CERT}}
+          MAC_STORE_INST_CERT_PWD:  ${{ secrets.MACAPP_INST_CERT_PWD }}
+          MAC_STORE_INST_CERT_ID:   ${{ secrets.MACAPP_INST_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
           MACOS_CA_PUBLICKEY:       ${{ secrets.MACOS_CA_PUBKEY }}
@@ -429,6 +435,20 @@ jobs:
           gh release upload "${{ needs.create_release.outputs.tag_name }}" "deploy/${{ steps.get-artifacts.outputs.artifact_1 }}" --clobber
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+
+      ## RELEASE PROCEDURE FOR: macOS App Store - storesigned pkg
+      - name:                       Validate and Upload macOS Storesign Pkg
+        if:                         >-
+                                    steps.build.outputs.macos_store == 'true' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
+        id:                         macos_validate_upload
+        run:                        ${{ matrix.config.base_command }} appstore-submit
+        env:
+          ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
+          NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
+          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          APPLE_TEAM_ID:            XXXXXXXXXXX
 
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql

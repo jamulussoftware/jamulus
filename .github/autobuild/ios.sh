@@ -61,6 +61,11 @@ setup() {
             # As of aqtinstall 2.1.0 / 04/2022, desktop qtbase has to be installed manually:
             python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase
         fi
+
+        # Suppress deprecation of Legacy Build System for now.
+        # TODO: Legacy Build System is removed in xcode 14. Need to migrate
+        # to the Modern Build System instead.
+        /usr/libexec/PlistBuddy -c "Add :DisableBuildSystemDeprecationDiagnostic bool true" /usr/local/opt/qt/"${QT_VERSION}"/ios/mkspecs/macx-xcode/WorkspaceSettings.xcsettings
     fi
 }
 

@@ -50,7 +50,7 @@ $DownloadCacheDir = 'C:\AutobuildCache'
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
 $Qt32Version = "5.15.2"
 $Qt64Version = "6.6.3"
-$AqtinstallVersion = "3.1.15"
+$AqtinstallVersion = "3.1.16"
 $JackVersion = "1.9.22"
 $Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"

@@ -226,12 +226,12 @@ jobs:
 
           - config_name:            MacOS (artifacts)
             target_os:              macos
-            building_on_os:         macos-12
+            building_on_os:         macos-14
             base_command:           QT_VERSION=6.6.3 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
-            # Default Xcode which runs on macos-12:
-            xcode_version:          14.2.0
+            # Latest Xcode which runs on macos-14:
+            xcode_version:          15.4.0
             is_main_build_target:   true
 
           # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
@@ -323,7 +323,7 @@ jobs:
         uses:                       actions/cache@v4
         with:
           path: |
-            /usr/local/opt/qt
+            /opt/qt
             ~/Library/Cache/jamulus-homebrew-bottles
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/mac.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.base_command }}
 

@@ -71,12 +71,24 @@ setup() {
 }
 
 prepare_signing() {
+    ##  Certificate types in use:
+    # - MACOS_CERTIFICATE - Developer ID Application - for codesigning for adhoc release
+    # - MAC_STORE_APP_CERT - Mac App Distribution - codesigning for App Store submission
+    # - MAC_STORE_INST_CERT - Mac Installer Distribution - for signing installer pkg file for App Store submission
+
     [[ "${SIGN_IF_POSSIBLE:-0}" == "1" ]] || return 1
 
     # Signing was requested, now check all prerequisites:
     [[ -n "${MACOS_CERTIFICATE:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_ID:-}" ]] || return 1
     [[ -n "${MACOS_CERTIFICATE_PWD:-}" ]] || return 1
+    [[ -n "${MAC_STORE_APP_CERT:-}" ]] || return 1
+    [[ -n "${MAC_STORE_APP_CERT_ID:-}" ]] || return 1
+    [[ -n "${MAC_STORE_APP_CERT_PWD:-}" ]] || return 1
+    [[ -n "${MAC_STORE_INST_CERT:-}" ]] || return 1
+    [[ -n "${MAC_STORE_INST_CERT_ID:-}" ]] || return 1
+    [[ -n "${MAC_STORE_INST_CERT_PWD:-}" ]] || return 1
+    [[ -n "${NOTARIZATION_PASSWORD:-}" ]] || return 1
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
 
     # Check for notarization (not wanted on self signed build)
@@ -90,8 +102,16 @@ prepare_signing() {
 
     echo "Signing was requested and all dependencies are satisfied"
 
-    # Put the cert to a file
-    echo "${MACOS_CERTIFICATE}" | base64 --decode > certificate.p12
+    ## Put the certs to files
+    echo "${MACOS_CERTIFICATE}" | base64 --decode > macos_certificate.p12
+
+    # If distribution cert is present, set for store signing + submission
+    if [[ -n "${MAC_STORE_APP_CERT}" ]]; then
+        echo "${MAC_STORE_APP_CERT}" | base64 --decode > macapp_certificate.p12
+        echo "${MAC_STORE_INST_CERT}" | base64 --decode > macinst_certificate.p12
+        # Tell Github Workflow that we are building for store submission
+        echo "macos_store=true" >> "$GITHUB_OUTPUT"
+    fi
 
     # If set, put the CA public key into a file
     if [[ -n "${MACOS_CA_PUBLICKEY}" ]]; then
@@ -104,8 +124,10 @@ prepare_signing() {
     # Remove default re-lock timeout to avoid codesign hangs:
     security set-keychain-settings build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
-    security import certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -T /usr/bin/codesign
-    security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+    security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign
+    security import macapp_certificate.p12 -k build.keychain -P "${MAC_STORE_APP_CERT_PWD}" -A -T /usr/bin/codesign
+    security import macinst_certificate.p12 -k build.keychain -P "${MAC_STORE_INST_CERT_PWD}" -A -T /usr/bin/productbuild
+    security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
 
     # Tell Github Workflow that we want signing
     echo "macos_signed=true" >> "$GITHUB_OUTPUT"
@@ -136,7 +158,7 @@ build_app_as_dmg_installer() {
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
     if prepare_signing; then
-        BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}")
+        BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MAC_STORE_INST_CERT_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
     TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
@@ -146,6 +168,27 @@ pass_artifact_to_job() {
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact}"
     echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
+
+    artifact2="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.pkg"
+    for file in ./deploy/Jamulus_*.pkg; do
+        if [ -f "${file}" ]; then
+            echo "Moving build artifact2 to deploy/${artifact2}"
+            mv "${file}" "./deploy/${artifact2}"
+            echo "artifact_2=${artifact2}" >> "$GITHUB_OUTPUT"
+        fi
+    done
+}
+
+appstore_submit() {
+    echo "Submitting package to AppStore Connect..."
+    # test the signature of package
+    pkgutil --check-signature "${ARTIFACT_PATH}"
+
+    xcrun notarytool submit "${ARTIFACT_PATH}" \
+        --apple-id "${NOTARIZATION_USERNAME}" \
+        --team-id "${APPLE_TEAM_ID}" \
+        --password "${NOTARIZATION_PASSWORD}" \
+        --wait
 }
 
 case "${1:-}" in
@@ -157,6 +200,9 @@ case "${1:-}" in
         ;;
     get-artifacts)
         pass_artifact_to_job
+        ;;
+    appstore-submit)
+        appstore_submit
         ;;
     *)
         echo "Unknown stage '${1:-}'"

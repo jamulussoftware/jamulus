@@ -1374,7 +1374,7 @@
   <tabstop>sldNetBufServer</tabstop>
   <tabstop>chbSmallNetworkBuffers</tabstop>
   <tabstop>cbxCustomDirectories</tabstop>
-  <tabstop>butDeleteCustomDirectory</tabstop>
+  <tabstop>tbtDeleteCustomDirectory</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxInputBoost</tabstop>
   <tabstop>chbDetectFeedback</tabstop>

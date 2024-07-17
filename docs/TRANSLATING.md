@@ -273,12 +273,7 @@ After having opened an issue on GitHub:
 3. Open Jamulus.pro in an editor such as `nano`: `nano Jamulus.pro` and add your language file (which will be created later) in alphabetical order to the `TRANSLATIONS` variable. The format should match the other present languages.
 4. Save and close Jamulus.pro.
 5. Now move back to the repository root and run `lupdate Jamulus.pro`. This will create a new language file `src/translation/translation_xx_YY.ts` for your new language.
-6. If the source files have changed since the other language `.ts` files were last updated, the `lupdate` above will create updates to all of them. You can check if this has happened with `git status` and look for files flagged as "modified". You don't want to update them all in your pull request, so you need to restore all except your new language file. The easiest way to do this is to stash your own file, restore everything else, and then un-stash your own file, as follows:
-```
-git stash -- src/translation/translation_xx_YY.ts
-git restore src
-git stash pop
-```
+6. If the source files have changed since the other language `.ts` files were last updated, then as well as creating the new language file, `lupdate` above will create updates to all the existing language files. You can check if this has happened with `git status` and look for files flagged as "modified". You don't want to update them all in your pull request, so you need to undo the changes to the existing files. The easiest way to do this is with the command `git restore src`. This will not affect the new language file just created, as `git` doesn't yet know about it. It must be done _before_ adding the new language file to `git` in the next step below.
 7. Finally, add, commit and push the changes to your repository with the following commands: `git add Jamulus.pro src/translation/translation_xx_YY.ts`, `git commit -m "Translation: Add empty xx_YY translation"`, `git push`
 8. Open a pull request from your repo to the main repo with a brief description that you plan to translate Jamulus to your language
 9. Once the pull request is merged, Weblate should pick up the new language.

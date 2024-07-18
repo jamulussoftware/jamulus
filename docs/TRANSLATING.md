@@ -193,7 +193,7 @@ Do not click on **Publish branch** just yet.
 
 Open Qt Linguist, and navigate to the directory `src/translation` within your project directory.
 
-In this directory are translation source files for each language, each with a `.ts` suffix. Don't worry about the `.qm` files, as they are compiled when building the release code.
+In this directory are translation source files for each language, each with a `.ts` suffix.
 
 Open the `.ts` file for the language being worked on.
 
@@ -268,16 +268,15 @@ The following section describes how to add a new language and what to do or wait
 Please open an issue on GitHub and introduce yourself first, even if you intend to add the translation files yourself.
 
 After having opened an issue on GitHub:
-1. Fork the Jamulus repository as described above, then install Qt on your machine (See [COMPILING.md](../COMPILING.md)). (You will need `lrelease` and `lupdate` later on.)
+1. Fork the Jamulus repository as described above, then install Qt on your machine (See [COMPILING.md](../COMPILING.md)). (You will need `lupdate` later on.)
 2. Create a branch based on the `main` branch: Locally navigate to the folder you cloned the repo to (with `cd /path/to/jamulus/repo`) and type `git checkout -b "translate-add-xx_YY"` (where xx_YY is the language code of the new language).
 3. Open Jamulus.pro in an editor such as `nano`: `nano Jamulus.pro` and add your language file (which will be created later) in alphabetical order to the `TRANSLATIONS` variable. The format should match the other present languages.
-4. Also add `src/translation/translation_xx_YY.qm` to the DISTFILES variable similar to the other files
-5. Save and close Jamulus.pro.
-6. Add the `.qm` file in `src/resources.qrc` similar to other languages.
-7. Now move back to the repository root and run `lupdate Jamulus.pro`. Afterwards, run `lrelease Jamulus.pro` which should create all of the necessary files.
-8. Finally, add, commit and push the changes to your repository with the following commands: `git add Jamulus.pro src/translation/translation_xx_YY.* src/resources.qrc`, `git commit -m "Translation: Add empty xx_YY translation"`, `git push`
-9. Open a pull request from your repo to the main repo with a brief description that you plan to translate Jamulus to your language
-10. Once the pull request is merged, Weblate should pick up the new language.
+4. Save and close Jamulus.pro.
+5. Now move back to the repository root and run `lupdate Jamulus.pro`. This will create a new language file `src/translation/translation_xx_YY.ts` for your new language.
+6. If the source files have changed since the other language `.ts` files were last updated, then as well as creating the new language file, `lupdate` above will create updates to all the existing language files. You can check if this has happened with `git status` and look for files flagged as "modified". You don't want to update them all in your pull request, so you need to undo the changes to the existing files. The easiest way to do this is with the command `git restore src`. This will not affect the new language file just created, as `git` doesn't yet know about it. It must be done _before_ adding the new language file to `git` in the next step below.
+7. Finally, add, commit and push the changes to your repository with the following commands: `git add Jamulus.pro src/translation/translation_xx_YY.ts`, `git commit -m "Translation: Add empty xx_YY translation"`, `git push`
+8. Open a pull request from your repo to the main repo with a brief description that you plan to translate Jamulus to your language
+9. Once the pull request is merged, Weblate should pick up the new language.
 
 ### Adding a translation to the Windows installer
 

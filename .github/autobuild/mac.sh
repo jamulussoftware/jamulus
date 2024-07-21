@@ -107,7 +107,7 @@ prepare_signing() {
     # Set up a keychain for the build:
     security create-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security default-keychain -s build.keychain
-    # # Remove default re-lock timeout to avoid codesign hangs:
+    # Remove default re-lock timeout to avoid codesign hangs:
     security set-keychain-settings build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security import macos_certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -A -T /usr/bin/codesign
@@ -182,13 +182,12 @@ pass_artifact_to_job() {
     echo "artifact_1=${artifact}" >> "$GITHUB_OUTPUT"
 
     artifact2="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.pkg"
-    for file in ./deploy/Jamulus_*.pkg; do
-        if [ -f "${file}" ]; then
-            echo "Moving build artifact2 to deploy/${artifact2}"
-            mv "${file}" "./deploy/${artifact2}"
-            echo "artifact_2=${artifact2}" >> "$GITHUB_OUTPUT"
-        fi
-    done
+    file=(./deploy/Jamulus_*.pkg)
+    if [ -f "${file[0]}" ]; then
+        echo "Moving build artifact2 to deploy/${artifact2}"
+        mv "${file[0]}" "./deploy/${artifact2}"
+        echo "artifact_2=${artifact2}" >> "$GITHUB_OUTPUT"
+    fi
 }
 
 appstore_submit() {

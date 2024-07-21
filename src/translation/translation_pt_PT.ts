@@ -3892,7 +3892,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <location filename="../serverdlg.cpp" line="63"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation>&lt;b&gt;Pasta:&lt;/b&gt; Selecione &apos;%1&apos; para não registar o seu servidor com uma pasta.&lt;br&gt;Ou selecione um dos géneros para registar com essa pasta.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um endereço de &apos;Pasta Personalizada&apos; no separador das &apos;Opções&apos; para registar com uma pasta personalizada.&lt;br&gt;&lt;br&gt;Para qualquer valor exceto &quot;%1&quot;, este servidor regista com uma pasta para que um utilizador %3 possa selecionar este servidor na lista de servidores da janela de ligação do cliente quando eles escolhem essa pasta.&lt;br&gt;&lt;br&gt;O registo do servidor é renovado periodicamente para garantir que todos os servidores da lista de servidores da janela de ligação estão realmente disponíveis.</translation>
+        <translation>&lt;b&gt;Diretoria:&lt;/b&gt; Selecione &apos;%1&apos; para não registar o seu servidor com uma diretoria.&lt;br&gt;Ou selecione um dos géneros para registar com essa diretoria.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um endereço de &apos;Diretoria Personalizada&apos; no separador das &apos;Opções&apos; para registar com um diretoria personalizada.&lt;br&gt;&lt;br&gt;Para qualquer valor exceto &quot;%1&quot;, este servidor regista com uma diretoria para que um utilizador %3 possa selecionar este servidor na lista de servidores da janela de ligação do cliente quando eles escolhem essa diretoria.&lt;br&gt;&lt;br&gt;O registo do servidor é renovado periodicamente para garantir que todos os servidores da lista de servidores da janela de ligação estão realmente disponíveis.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
@@ -3984,7 +3984,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="202"/>
         <source>Custom Directory line edit</source>
-        <translation>Edição da linha da pasta personalizada</translation>
+        <translation>Caixa de edição do Diretório Personalizado</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="246"/>
@@ -4160,7 +4160,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../util.h" line="653"/>
         <source>Server list full at directory</source>
-        <translation>Lista de servidores cheia na pasta</translation>
+        <translation>Lista de servidores cheia na diretoria</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -4245,7 +4245,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation>End. de Pasta Personalizado</translation>
+        <translation>End. de Diretório Personalizado</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>

@@ -1,5 +1,113 @@
 ### 3.10.0dev <- NOTE: the release version number will be 3.11.0 ###
 
+- Refactor src/main.cpp (#3191).
+  (contributed by @pljones)
+
+- Refactor some `CHostAddress` parameters to be const references (#3259).
+  (contributed by @softins)
+
+- Client/Server: Improved start up logging (#3117).
+  (contributed by @pljones)
+
+- Client: Added "delete server" button to connect dialog (#3159).
+  (contributed by @pljones)
+
+- Client/Server: Display Qt versions for both build and runtime (#3231).
+  (contributed by @softins)
+
+- Client: Added "Delete Entry" button to Advanced Settings, Custom Directories (#3260).
+  (contributed by @AdamGLIN)
+
+- Client: Fixed the display of delete buttons on Mac (#3305).
+  (contributed by @softins)
+
+- Server: Fix systemd ExecStart command line to support start/stop recording signal (#3187).
+  (contributed by @rdica)
+
+- Server: Only de-register on quit (#3302).
+  (contributed by @pljones)
+
+- Android: save settings on app state change (#3144).
+  (contributed by @pljones)
+
+- Translations updated from Hosted Weblate (#3193).
+  (contributed by @weblate)
+
+- Translations updated from Hosted Weblate (#3246).
+  (contributed by @weblate)
+
+- Documentation: Improved link for Server CLI options (#3303).
+  (contributed by @gilgongo)
+
+- Documentation: updated TRANSLATING.md for current build process (#3312).
+  (contributed by @softins)
+
+- Build: adds macOS signed pkg build automation (#2624).
+  (contributed by @danryu)
+
+- Build: Bump actions/checkout from 3 to 4 (#3168).
+  (contributed by @app/dependabot)
+
+- Build: Bump maxim-lobanov/setup-xcode from 1.5.1 to 1.6.0 (#3181).
+  (contributed by @app/dependabot)
+
+- Build: Updated bundled Qt6 to version 6.6.0 (#3182).
+  (contributed by @app/github-actions)
+
+- Build: Ensure apt version >=2.4 to prove that the system is Debian based (using apt and dpkg) and can validate the repo (#3199).
+  (contributed by @houbsta)
+
+- Build: Updated bundled Qt6 to version 6.6.1 (#3204).
+  (contributed by @app/github-actions)
+
+- Build: Bump actions/download-artifact from 3 to 4 (#3211).
+  (contributed by @app/dependabot)
+
+- Build: Bump github/codeql-action from 2 to 3 (#3212).
+  (contributed by @app/dependabot)
+
+- Build: Bump actions/upload-artifact from 3 to 4 (#3213).
+  (contributed by @app/dependabot)
+
+- Build: Bump DoozyX/clang-format-lint-action from 0.16 to 0.17 (#3215).
+  (contributed by @app/dependabot)
+
+- Build: Replace deprecated Q_OS_MACX with Q_OS_MACOS (Jamulus now requires building with Qt >= 5.7.1) (#3227).
+  (contributed by @softins)
+
+- Build: Bump actions/cache from 3 to 4 (#3232).
+  (contributed by @app/dependabot)
+
+- Build: Updated Mac Legacy build to use Qt 5.15.2, now compatible with MacOS 10.13 (High Sierra) or newer (#3235).
+  (contributed by @softins)
+
+- Build: Updated bundled Qt6 to version 6.6.3 (#3236).
+  (contributed by @app/github-actions)
+
+- Build: Updated Windows Installer base (NSIS) to version 3.10 (#3254).
+  (contributed by @app/github-actions)
+
+- Build: Generate qm files and embedded resource during build (#3288).
+  (contributed by @softins)
+
+- Build: checkout of submodules only needed for Android (#3289).
+  (contributed by @softins)
+
+- Build: Updated the build runner for iOS in Github from macos-11 to macos-12 (#3292).
+  (contributed by @softins)
+
+- Build: Upgrade main macOS build to macOS 14 and Apple Silicon build (#3297).
+  (contributed by @ann0see)
+
+- Build: Place build files in separate directories instead of project root (#3299).
+  (contributed by @softins)
+
+- Autobuild: Prevent CodeQL-induced build failures for MacOS (#3223).
+  (contributed by @softins)
+
+- Autobuild: Build Linux releases on Ubuntu 20.04 instead of 18.04 (#3229).
+  (contributed by @softins)
+
 
 ### 3.10.0 (2023-09-03) ###
 

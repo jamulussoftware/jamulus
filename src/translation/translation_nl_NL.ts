@@ -33,23 +33,14 @@
         <translation>Qt cross-platform applicatieframework</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="597"/>
-        <source>(build)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="598"/>
-        <source>(runtime)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="616"/>
+        <location filename="../util.cpp" line="607"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
         <translation>Audio reverberatiecode door Perry R. Cook en Gary P. Scavone</translation>
     </message>
     <message>
+        <location filename="../util.cpp" line="611"/>
         <source>Some pixmaps are from the</source>
-        <translation type="vanished">Sommige pixmaps zijn van de</translation>
+        <translation>Sommige pixmaps zijn van de</translation>
     </message>
     <message>
         <source>Country flag icons from Mark James</source>
@@ -66,7 +57,7 @@
         <translation>Een server verzamelt de audiodata van elke client, mixt deze en stuurt de mix weer terug naar iedere client.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="596"/>
+        <location filename="../util.cpp" line="597"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
         <translation>Deze applicatie gebruikt de volgende libraries, bronnen of code snippets:</translation>
     </message>
@@ -79,96 +70,87 @@
         <translation type="vanished">Voor details over de bijdragen, zie de </translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="626"/>
+        <location filename="../util.cpp" line="615"/>
         <source>Flag icons by Mark James</source>
         <translation>Vlag-iconen van Mark James</translation>
     </message>
     <message>
+        <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation type="vanished">Sommige geluiden komen van</translation>
+        <translation>Sommige geluiden komen van</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="622"/>
-        <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="630"/>
-        <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="709"/>
+        <location filename="../util.cpp" line="690"/>
         <source>For details on the contributions check out the %1</source>
         <translation>Voor details over de bijdragen, zie de %1</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="710"/>
+        <location filename="../util.cpp" line="691"/>
         <source>Github Contributors list</source>
         <translation>Github bijdragerslijst</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="713"/>
+        <location filename="../util.cpp" line="694"/>
         <source>Spanish</source>
         <translation>Spaans</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="717"/>
+        <location filename="../util.cpp" line="698"/>
         <source>French</source>
         <translation>Frans</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="722"/>
+        <location filename="../util.cpp" line="703"/>
         <source>Portuguese</source>
         <translation>Portugees</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="729"/>
+        <location filename="../util.cpp" line="710"/>
         <source>Dutch</source>
         <translation>Nederlands</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="734"/>
+        <location filename="../util.cpp" line="715"/>
         <source>Italian</source>
         <translation>Italiaans</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="738"/>
+        <location filename="../util.cpp" line="719"/>
         <source>German</source>
         <translation>Duits</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="743"/>
+        <location filename="../util.cpp" line="724"/>
         <source>Polish</source>
         <translation>Pools</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="748"/>
+        <location filename="../util.cpp" line="729"/>
         <source>Swedish</source>
         <translation>Zweeds</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="754"/>
+        <location filename="../util.cpp" line="735"/>
         <source>Korean</source>
         <translation>Koreaans</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="759"/>
+        <location filename="../util.cpp" line="740"/>
         <source>Slovak</source>
         <translation>Slowaaks</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="762"/>
+        <location filename="../util.cpp" line="743"/>
         <source>Simplified Chinese</source>
         <translation>Chinees (vereenvoudigd)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="765"/>
+        <location filename="../util.cpp" line="746"/>
         <source>Norwegian Bokmål</source>
         <translation>Noors (Bokmål)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="773"/>
+        <location filename="../util.cpp" line="754"/>
         <source>About %1</source>
         <translation>Over %1</translation>
     </message>
@@ -1503,17 +1485,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>en</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="362"/>
-        <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clientsettingsdlg.cpp" line="375"/>
+        <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Audio Upstream Rate</source>
         <translation>Audio upstream snelheid</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="376"/>
+        <location filename="../clientsettingsdlg.cpp" line="373"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
         <translation>Deze is afhankelijk van de huidige audio pakket grootte en compressie instelling. Zorg ervoor dat de upstream snelheid niet groter is dan uw beschikbare internet upload snelheid (controleer dit met een service zoals speedtest.net).</translation>
     </message>
@@ -1538,35 +1515,35 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Kleine LED&apos;s</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="469"/>
-        <location filename="../clientsettingsdlg.cpp" line="608"/>
-        <location filename="../clientsettingsdlg.cpp" line="616"/>
-        <location filename="../util.cpp" line="1290"/>
+        <location filename="../clientsettingsdlg.cpp" line="466"/>
+        <location filename="../clientsettingsdlg.cpp" line="605"/>
+        <location filename="../clientsettingsdlg.cpp" line="613"/>
+        <location filename="../util.cpp" line="1271"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="506"/>
+        <location filename="../clientsettingsdlg.cpp" line="503"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
         <translation>Stel hier uw naam of een alias in zodat de andere muzikanten met wie u wilt spelen weten wie u bent. Daarnaast kunt u een afbeelding toevoegen van het instrument dat u bespeelt en een vlag van het land of regio waarin u zich bevindt. De stad waar u woont en uw vaardigheidsniveau kunnen ook worden toegevoegd.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="511"/>
+        <location filename="../clientsettingsdlg.cpp" line="508"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
         <translation>Wat u hier instelt verschijnt bij uw fader op het mengpaneel indien u verbonden met een %1 server. Deze tag zal ook worden getoond aan andere muzikanten die met deze server verbonden zijn.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="522"/>
+        <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Country/region flag button</source>
         <translation>Land/regio vlag knop</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="1191"/>
+        <location filename="../clientsettingsdlg.cpp" line="1185"/>
         <source>Center</source>
         <translation>Midden</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="1203"/>
+        <location filename="../clientsettingsdlg.cpp" line="1197"/>
         <source>R</source>
         <translation>R</translation>
     </message>
@@ -1770,7 +1747,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="292"/>
-        <location filename="../clientsettingsdlg.cpp" line="429"/>
+        <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
@@ -1780,14 +1757,14 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation> modus verhoogt de bandbreedte van de audiostream. Zorg ervoor dat deze niet hoger staat dan de beschikbare bandbreedte van uw internetverbinding.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="430"/>
+        <location filename="../clientsettingsdlg.cpp" line="427"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-in/stereo-uit</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="292"/>
         <location filename="../clientsettingsdlg.cpp" line="307"/>
-        <location filename="../clientsettingsdlg.cpp" line="431"/>
+        <location filename="../clientsettingsdlg.cpp" line="428"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
@@ -1809,7 +1786,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="66"/>
-        <location filename="../clientsettingsdlg.cpp" line="1198"/>
+        <location filename="../clientsettingsdlg.cpp" line="1192"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -2076,127 +2053,113 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Eigen adresboeken</translation>
     </message>
     <message>
+        <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
-        <translation type="vanished">Als u extra adresboeken wilt toevoegen aan de adresboek keuze in het verbindingsvenster, dan kunt u hier de adressen invoeren.&lt;br&gt;Als u een waarde wilt verwijderen, selecteert u deze, verwijdert u de tekst in het invoervak en verplaatst u de focus uit de vak.</translation>
+        <translation>Als u extra adresboeken wilt toevoegen aan de adresboek keuze in het verbindingsvenster, dan kunt u hier de adressen invoeren.&lt;br&gt;Als u een waarde wilt verwijderen, selecteert u deze, verwijdert u de tekst in het invoervak en verplaatst u de focus uit de vak.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="367"/>
+        <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Custom Directories combo box</source>
         <translation>Eigen adresboeken combobox</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="369"/>
-        <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clientsettingsdlg.cpp" line="370"/>
-        <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clientsettingsdlg.cpp" line="371"/>
-        <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clientsettingsdlg.cpp" line="385"/>
+        <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Number of Mixer Panel Rows</source>
         <translation>Aantal mengpaneel rijen</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="385"/>
+        <location filename="../clientsettingsdlg.cpp" line="382"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
         <translation>Stel het aantal rijen in dat gebruikt wordt in het mengpaneel.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="388"/>
+        <location filename="../clientsettingsdlg.cpp" line="385"/>
         <source>Number of Mixer Panel Rows spin box</source>
         <translation>Aantal rijen in het mengpaneel spinbox</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="390"/>
+        <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Feedback Protection</source>
         <translation>Feedback bescherming</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="391"/>
+        <location filename="../clientsettingsdlg.cpp" line="388"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
         <translation>Voorkomt akoestische terugkoppeling tussen microfoon en luidsprekers.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="392"/>
+        <location filename="../clientsettingsdlg.cpp" line="389"/>
         <source>Feedback Protection check box</source>
         <translation>Feedback bescherming selectievakje</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="395"/>
+        <location filename="../clientsettingsdlg.cpp" line="392"/>
         <source>Audio Alerts</source>
         <translation>Audiowaarschuwingen</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="396"/>
+        <location filename="../clientsettingsdlg.cpp" line="393"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
         <translation>Krijg een audiowaarschuwing bij ontvangst van een chatbericht en wanneer een nieuwe client deelneemt aan de sessie. Er kan een tweede geluidsapparaat nodig zijn om de waarschuwingen te horen.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="398"/>
+        <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Audio Alerts check box</source>
         <translation>Audiowaarschuwingen selectievakje</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="402"/>
+        <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>ASIO Device Settings</source>
         <translation>ASIO Apparaatinstellingen</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="436"/>
+        <location filename="../clientsettingsdlg.cpp" line="433"/>
         <source>Low</source>
         <translation>Laag</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="437"/>
-        <location filename="../clientsettingsdlg.cpp" line="443"/>
+        <location filename="../clientsettingsdlg.cpp" line="434"/>
+        <location filename="../clientsettingsdlg.cpp" line="440"/>
         <source>Normal</source>
         <translation>Normaal</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="438"/>
+        <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>High</source>
         <translation>Hoog</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="444"/>
+        <location filename="../clientsettingsdlg.cpp" line="441"/>
         <source>Fancy</source>
         <translation>Fancy</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="445"/>
+        <location filename="../clientsettingsdlg.cpp" line="442"/>
         <source>Compact</source>
         <translation>Compact</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="450"/>
+        <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Bar (narrow)</source>
         <translation>Balk (smal)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="451"/>
+        <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>Bar (wide)</source>
         <translation>Balk (breed)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="452"/>
+        <location filename="../clientsettingsdlg.cpp" line="449"/>
         <source>LEDs (stripe)</source>
         <translation>LED&apos;s (streep)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="453"/>
+        <location filename="../clientsettingsdlg.cpp" line="450"/>
         <source>LEDs (round, small)</source>
         <translation>LED&apos;s (rond, klein)</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="454"/>
+        <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>LEDs (round, big)</source>
         <translation>LED&apos;s (rond, groot)</translation>
     </message>
@@ -2265,7 +2228,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">voorkeur</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="505"/>
+        <location filename="../clientsettingsdlg.cpp" line="502"/>
         <source>Musician Profile</source>
         <translation>Muzikantenprofiel</translation>
     </message>
@@ -2278,12 +2241,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Wat u hier instelt verschijnt bij uw fader op het mengpaneel indien verbonden met een Jamulus-server. Deze tag zal ook worden getoond aan andere muzikanten die met deze server verbonden zijn.</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="518"/>
+        <location filename="../clientsettingsdlg.cpp" line="515"/>
         <source>Alias or name edit box</source>
         <translation>Alias of naam bewerkingsvak</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="520"/>
+        <location filename="../clientsettingsdlg.cpp" line="517"/>
         <source>Instrument picture button</source>
         <translation>Afbeelding van het instrument</translation>
     </message>
@@ -2292,43 +2255,43 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Landvlag knop</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="524"/>
+        <location filename="../clientsettingsdlg.cpp" line="521"/>
         <source>City edit box</source>
         <translation>Stad bewerkingsvak</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="526"/>
+        <location filename="../clientsettingsdlg.cpp" line="523"/>
         <source>Skill level combo box</source>
         <translation>Vaardigheidsniveau combobox</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="620"/>
+        <location filename="../clientsettingsdlg.cpp" line="617"/>
         <source>Beginner</source>
         <translation>Beginner</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="624"/>
+        <location filename="../clientsettingsdlg.cpp" line="621"/>
         <source>Intermediate</source>
         <translation>Gemiddeld</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="628"/>
+        <location filename="../clientsettingsdlg.cpp" line="625"/>
         <source>Expert</source>
         <translation>Gevorderd</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="784"/>
-        <location filename="../clientsettingsdlg.cpp" line="788"/>
+        <location filename="../clientsettingsdlg.cpp" line="781"/>
+        <location filename="../clientsettingsdlg.cpp" line="785"/>
         <source>Size: </source>
         <translation>Grootte: </translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="843"/>
+        <location filename="../clientsettingsdlg.cpp" line="840"/>
         <source>Buffer Delay</source>
         <translation>Buffervertraging</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="848"/>
+        <location filename="../clientsettingsdlg.cpp" line="845"/>
         <source>Buffer Delay: </source>
         <translation>Buffervertraging: </translation>
     </message>
@@ -2345,247 +2308,247 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Ok</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1293"/>
+        <location filename="../util.cpp" line="1274"/>
         <source>Drum Set</source>
         <translation>Drumstel</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1296"/>
+        <location filename="../util.cpp" line="1277"/>
         <source>Djembe</source>
         <translation>Djembe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1299"/>
+        <location filename="../util.cpp" line="1280"/>
         <source>Electric Guitar</source>
         <translation>Elektrische gitaar</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1302"/>
+        <location filename="../util.cpp" line="1283"/>
         <source>Acoustic Guitar</source>
         <translation>Akoestische gitaar</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1305"/>
+        <location filename="../util.cpp" line="1286"/>
         <source>Bass Guitar</source>
         <translation>Basgitaar</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1308"/>
+        <location filename="../util.cpp" line="1289"/>
         <source>Keyboard</source>
         <translation>Toetsenbord</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1311"/>
+        <location filename="../util.cpp" line="1292"/>
         <source>Synthesizer</source>
         <translation>Synthesizer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1314"/>
+        <location filename="../util.cpp" line="1295"/>
         <source>Grand Piano</source>
         <translation>Piano</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1317"/>
+        <location filename="../util.cpp" line="1298"/>
         <source>Accordion</source>
         <translation>Accordeon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1320"/>
+        <location filename="../util.cpp" line="1301"/>
         <source>Vocal</source>
         <translation>Zang</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1323"/>
+        <location filename="../util.cpp" line="1304"/>
         <source>Microphone</source>
         <translation>Microfoon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1326"/>
+        <location filename="../util.cpp" line="1307"/>
         <source>Harmonica</source>
         <translation>Harmonica</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1329"/>
+        <location filename="../util.cpp" line="1310"/>
         <source>Trumpet</source>
         <translation>Trompet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1332"/>
+        <location filename="../util.cpp" line="1313"/>
         <source>Trombone</source>
         <translation>Trombone</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1335"/>
+        <location filename="../util.cpp" line="1316"/>
         <source>French Horn</source>
         <translation>Hoorn</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1338"/>
+        <location filename="../util.cpp" line="1319"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1341"/>
+        <location filename="../util.cpp" line="1322"/>
         <source>Saxophone</source>
         <translation>Saxofoon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1344"/>
+        <location filename="../util.cpp" line="1325"/>
         <source>Clarinet</source>
         <translation>Klarinet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1347"/>
+        <location filename="../util.cpp" line="1328"/>
         <source>Flute</source>
         <translation>Fluit</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1350"/>
+        <location filename="../util.cpp" line="1331"/>
         <source>Violin</source>
         <translation>Viool</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1353"/>
+        <location filename="../util.cpp" line="1334"/>
         <source>Cello</source>
         <translation>Cello</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1356"/>
+        <location filename="../util.cpp" line="1337"/>
         <source>Double Bass</source>
         <translation>Contrabas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1359"/>
+        <location filename="../util.cpp" line="1340"/>
         <source>Recorder</source>
         <translation>Opnemer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1362"/>
+        <location filename="../util.cpp" line="1343"/>
         <source>Streamer</source>
         <translation>Streamer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1365"/>
+        <location filename="../util.cpp" line="1346"/>
         <source>Listener</source>
         <translation>Luisteraar</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1368"/>
+        <location filename="../util.cpp" line="1349"/>
         <source>Guitar+Vocal</source>
         <translation>Gitaar+zang</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1371"/>
+        <location filename="../util.cpp" line="1352"/>
         <source>Keyboard+Vocal</source>
         <translation>Toetsenbord+zang</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1374"/>
+        <location filename="../util.cpp" line="1355"/>
         <source>Bodhran</source>
         <translation>Bodhran</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1377"/>
+        <location filename="../util.cpp" line="1358"/>
         <source>Bassoon</source>
         <translation>Fagot</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1380"/>
+        <location filename="../util.cpp" line="1361"/>
         <source>Oboe</source>
         <translation>Hobo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1383"/>
+        <location filename="../util.cpp" line="1364"/>
         <source>Harp</source>
         <translation>Harp</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1386"/>
+        <location filename="../util.cpp" line="1367"/>
         <source>Viola</source>
         <translation>Altviool</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1389"/>
+        <location filename="../util.cpp" line="1370"/>
         <source>Congas</source>
         <translation>Conga&apos;s</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1392"/>
+        <location filename="../util.cpp" line="1373"/>
         <source>Bongo</source>
         <translation>Bongo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1395"/>
+        <location filename="../util.cpp" line="1376"/>
         <source>Vocal Bass</source>
         <translation>Bas (stem)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1398"/>
+        <location filename="../util.cpp" line="1379"/>
         <source>Vocal Tenor</source>
         <translation>Tenor (stem)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1401"/>
+        <location filename="../util.cpp" line="1382"/>
         <source>Vocal Alto</source>
         <translation>Alt (stem)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1404"/>
+        <location filename="../util.cpp" line="1385"/>
         <source>Vocal Soprano</source>
         <translation>Sopraan (stem)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1407"/>
+        <location filename="../util.cpp" line="1388"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1410"/>
+        <location filename="../util.cpp" line="1391"/>
         <source>Mandolin</source>
         <translation>Mandoline</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1413"/>
+        <location filename="../util.cpp" line="1394"/>
         <source>Ukulele</source>
         <translation>Ukelele</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1416"/>
+        <location filename="../util.cpp" line="1397"/>
         <source>Bass Ukulele</source>
         <translation>Ukelele-bas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1419"/>
+        <location filename="../util.cpp" line="1400"/>
         <source>Vocal Baritone</source>
         <translation>Bariton (stem)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1422"/>
+        <location filename="../util.cpp" line="1403"/>
         <source>Vocal Lead</source>
         <translation>Leadzanger</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1425"/>
+        <location filename="../util.cpp" line="1406"/>
         <source>Mountain Dulcimer</source>
         <translation>Dulcimer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1428"/>
+        <location filename="../util.cpp" line="1409"/>
         <source>Scratching</source>
         <translation>Scratchen</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1431"/>
+        <location filename="../util.cpp" line="1412"/>
         <source>Rapping</source>
         <translation>Rappen</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1434"/>
+        <location filename="../util.cpp" line="1415"/>
         <source>Vibraphone</source>
         <translation>Vibrafoon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1437"/>
+        <location filename="../util.cpp" line="1418"/>
         <source>Conductor</source>
         <translation>Dirigent</translation>
     </message>
@@ -2762,12 +2725,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">ms</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1108"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1101"/>
         <source>Input Boost</source>
         <translation>Ingangsversterking</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1140"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1133"/>
         <source>Feedback Protection</source>
         <translation>Feedback bescherming</translation>
     </message>
@@ -2776,17 +2739,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Inschakelen</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1195"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1188"/>
         <source>Input Balance</source>
         <translation>Ingangsbalans</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1206"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1199"/>
         <source>Pan</source>
         <translation>Balans</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1289"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1282"/>
         <source>Center</source>
         <translation>Midden</translation>
     </message>
@@ -2818,7 +2781,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Eigen adresboek server adres:</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1071"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1064"/>
         <source>New Client Level</source>
         <translation>Nieuw client-niveau</translation>
     </message>
@@ -2838,7 +2801,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Eigen adresboeken</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlgbase.ui" line="1086"/>
+        <location filename="../clientsettingsdlgbase.ui" line="1079"/>
         <source>%</source>
         <translation>%</translation>
     </message>
@@ -2957,21 +2920,6 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Bevat het huidige serveradres. Het slaat ook oude adressen op in de keuzelijst.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="99"/>
-        <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../connectdlg.cpp" line="100"/>
-        <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../connectdlg.cpp" line="101"/>
-        <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The IP address or URL of the server running the </source>
         <translation type="vanished">Het IP-adres of de URL van de server waarop de </translation>
     </message>
@@ -3049,7 +2997,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Als u het IP-adres of de URL van de server weet, dan kunt u daar verbinding mee maken door deze in te voeren in het Servernaam/Adres veld. Een optioneel poortnummer kan worden toegevoegd na het IP-adres of de URL met een dubbele punt als scheidingsteken, b.v. %1. Het veld laat ook een lijst zien met de meest recent gebruikte serveradressen.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="155"/>
+        <location filename="../connectdlg.cpp" line="149"/>
         <source>Filter text, or # for occupied servers</source>
         <translation>Filter op tekst of gebruik # voor bezette servers</translation>
     </message>
@@ -3114,12 +3062,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Servernaam/Adres</translation>
     </message>
     <message>
-        <location filename="../connectdlgbase.ui" line="133"/>
+        <location filename="../connectdlgbase.ui" line="130"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Annuleren</translation>
     </message>
     <message>
-        <location filename="../connectdlgbase.ui" line="140"/>
+        <location filename="../connectdlgbase.ui" line="137"/>
         <source>&amp;Connect</source>
         <translation>&amp;Verbinden</translation>
     </message>
@@ -3127,33 +3075,33 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../util.cpp" line="815"/>
+        <location filename="../util.cpp" line="796"/>
         <source>&amp;Help</source>
         <translation>&amp;Hulp</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="822"/>
-        <location filename="../util.cpp" line="827"/>
+        <location filename="../util.cpp" line="803"/>
+        <location filename="../util.cpp" line="808"/>
         <source>Getting &amp;Started...</source>
         <translation>&amp;Aan de slag...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="823"/>
+        <location filename="../util.cpp" line="804"/>
         <source>Software &amp;Manual...</source>
         <translation>Gebruikers&amp;handleiding...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="830"/>
+        <location filename="../util.cpp" line="811"/>
         <source>What&apos;s &amp;This</source>
         <translation>Wat Is &amp;Dit</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="832"/>
+        <location filename="../util.cpp" line="813"/>
         <source>&amp;About Jamulus...</source>
         <translation>&amp;Over Jamulus...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="834"/>
+        <location filename="../util.cpp" line="815"/>
         <source>About &amp;Qt...</source>
         <translation>Over &amp;Qt...</translation>
     </message>
@@ -3170,12 +3118,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../util.cpp" line="891"/>
+        <location filename="../util.cpp" line="872"/>
         <source>Restart Required</source>
         <translation>Herstart noodzakelijk</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="891"/>
+        <location filename="../util.cpp" line="872"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>Start de applicatie opnieuw om de taalwijziging door te voeren.</translation>
     </message>
@@ -3187,22 +3135,22 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Ik &amp;stem in met bovenstaande licentievoorwaarden</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="791"/>
+        <location filename="../util.cpp" line="772"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>Deze server vereist dat u voorwaarden accepteert voor het verbinen. Lees deze in het chatvenster.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="792"/>
+        <location filename="../util.cpp" line="773"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Ik heb de voorwaarden gelezen en &amp;stem in.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="793"/>
+        <location filename="../util.cpp" line="774"/>
         <source>Accept</source>
         <translation>Accepteer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="794"/>
+        <location filename="../util.cpp" line="775"/>
         <source>Decline</source>
         <translation>Niet akkoord</translation>
     </message>
@@ -3568,7 +3516,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Rappen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="294"/>
+        <location filename="../settings.cpp" line="296"/>
         <source>No Name</source>
         <translation>Geen naam</translation>
     </message>
@@ -4796,45 +4744,15 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Internet Jamsessie Software</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1703"/>
+        <location filename="../util.cpp" line="1679"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, versie %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1720"/>
+        <location filename="../util.cpp" line="1696"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Gereleased onder de GNU General Public License versie 2 of recenter (GPLv2)</translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1733"/>
-        <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Deze applicatie gebruikt de volgende libraries, bronnen of code snippets:</translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1735"/>
-        <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Qt cross-platform applicatieframework</translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1736"/>
-        <source>(build)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1736"/>
-        <source>(runtime)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1754"/>
-        <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1760"/>
-        <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>
@@ -4865,18 +4783,16 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Opus Interactive Audio Codec</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1750"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation>Audio reverberatiecode door Perry R. Cook en Gary P. Scavone</translation>
+        <translation type="vanished">Audio reverberatiecode door Perry R. Cook en Gary P. Scavone</translation>
     </message>
     <message>
         <source>Some pixmaps are from the Open Clip Art Library (OCAL)</source>
         <translation type="vanished">Sommige pixmaps zijn van de Open Clip Art Library (OCAL)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1757"/>
         <source>Flag icons by Mark James</source>
-        <translation>Vlag-iconen van Mark James</translation>
+        <translation type="vanished">Vlag-iconen van Mark James</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>

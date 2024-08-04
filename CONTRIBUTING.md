@@ -60,16 +60,17 @@ We support the following platforms and versions:
 
 - **Windows 10** or later
 - **macOS 10.10** or later
-- **Ubuntu 20.04** or later, **Debian 11** or later, most Linux flavors with recent enough Qt versions. (Currently, it may still build on Ubuntu 18.04 and Debian 10, but the binaries built by Github will not run on those versions)
+- **Ubuntu 20.04** or later, **Debian 11** or later, most Linux flavors with recent enough Qt versions. (Currently, it may still build on Ubuntu 18.04 and Debian 10, but the binaries built by Github will not run on those versions.)
 
 _While Android and iOS aren't officially supported, please don't break their builds._
 
-Please try to avoid breaking any build by introducing platform-specific code. Check to see if any newly introduced Qt calls, parameters, properties or constants are available in the minimum supported Qt version, which is currently **5.9**. Note that code _style_ in a file may be Qt 4.x. While you should normally stick to existing style, if you make large-scale modifications, updating to Qt 5.9 style is recommended.
+Please try to avoid breaking any build by introducing platform-specific code. Check the Github builds all worked before raising a pull request.
+Check to see if any newly introduced Qt calls, parameters, properties or constants are available in the minimum supported Qt version, which is currently **5.12.2**. Note that code _style_ in a file may be Qt 4.x. While you should normally stick to existing style, if you make large-scale modifications, updating to Qt 5.12.2 style is recommended.
 Maintain C++11 compatibility throughout the code.
 
 ### Dependencies
 
-If your code requires new dependencies, ensure that they are available on all supported platforms and that their inclusion has been discussed and approved.
+If your code requires new dependencies, ensure that they are available on all supported platforms and that their inclusion has been discussed and approved. Include the `AUTOBUILD: Please build all targets` tag in your pull request to confirm Github builds for all supported platforms are successful.
 
 ### User experience
 

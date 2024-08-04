@@ -62,7 +62,7 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation>Certaines pixmaps sont issues du %1</translation>
+        <translation>Certaines images sont issues du %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
@@ -1394,7 +1394,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation>Si vous devez ajouter des répertoires supplémentaires à la liste déroulante des répertoires de la boîte de dialogue Connecter, vous pouvez saisir les adresses ici.&lt;br&gt;</translation>
+        <translation>Si vous devez ajouter des annuaires supplémentaires à la liste déroulante des annuaires de la boîte de dialogue Connecter, vous pouvez saisir les adresses ici.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="430"/>
@@ -1716,17 +1716,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation>Bouton de suppression du répertoire personnalisé</translation>
+        <translation>Bouton de suppression de l&apos;annuaire personnalisé</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation>Supprimer un répertoire personnalisé</translation>
+        <translation>Supprimer un annuaire personnalisé</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation>Cliquez sur le bouton pour supprimer le répertoire personnalisé actuellement sélectionné.</translation>
+        <translation>Cliquez sur le bouton pour supprimer l&apos;annuaire personnalisé actuellement sélectionné.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>

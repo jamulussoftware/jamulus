@@ -62,7 +62,7 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation>Certaines images sont issues du %1</translation>
+        <translation>Certaines images proviennent de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
@@ -4261,7 +4261,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../util.cpp" line="1754"/>
         <source>Some pixmaps are from the %1</source>
-        <translation>Certaines images sont issues de %1</translation>
+        <translation>Certaines images proviennent de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1760"/>

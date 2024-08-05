@@ -99,7 +99,7 @@
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Some sound samples are from %1</source>
-        <translation>Algunas muestras de audio son de la</translation>
+        <translation>Algunas muestras de audio son de la %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="709"/>

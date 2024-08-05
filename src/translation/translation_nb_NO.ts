@@ -26,7 +26,7 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(bygg)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="598"/>

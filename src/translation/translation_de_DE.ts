@@ -1633,7 +1633,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation>Benutzerdefinierte Verzeichnisse löschen Button</translation>
+        <translation>Benutzerdefiniertes Verzeichnis löschen Button</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
@@ -4044,7 +4044,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="202"/>
         <source>Custom Directory line edit</source>
-        <translation>Benutzerdefinierte Verzeichnisse Zeile bearbeiten</translation>
+        <translation>Benutzerdefiniertes Verzeichnis Zeile bearbeiten</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="246"/>

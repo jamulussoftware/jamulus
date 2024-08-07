@@ -13,7 +13,7 @@ LangString OLD_WRONG_VER_FOUND ${LANG_PORTUGUESEBR} \
     "Detectamos uma versão antiga de ${APP_NAME} em sua pasta Arquivos de Programa de 32 bits. É altamente recomendado removê-la antes de instalar uma nova versão de ${APP_NAME}. Deseja removê-la agora?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_PORTUGUESEBR} \
-    "Se continuar sem sua remoção, sua instalação poderá ser danificada! Tem certeza que você não deseja remover a versão antiga?"
+    "Se continuar sem sua remoção, a instalação poderá ser danificada! Tem certeza que você não deseja remover a versão antiga?"
 
 LangString OLD_VER_REMOVE_FAILED ${LANG_PORTUGUESEBR} \
      "Não foi possível desinstalar a versão antiga. Tentaremos instalar a nova, mas você pode também apertar cancelar e tentar remover a versão antiga por conta própria."

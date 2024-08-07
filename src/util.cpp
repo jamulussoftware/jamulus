@@ -771,6 +771,11 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 
     // set window title
     setWindowTitle ( tr ( "About %1" ).arg ( APP_NAME ) );
+
+#    if defined( Q_OS_IOS )
+    // for iOS version maximize the window
+    setWindowState ( Qt::WindowMaximized );
+#    endif
 }
 
 // Licence dialog --------------------------------------------------------------

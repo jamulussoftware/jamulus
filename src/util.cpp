@@ -771,6 +771,15 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 
     // set window title
     setWindowTitle ( tr ( "About %1" ).arg ( APP_NAME ) );
+
+    //### TODO: BEGIN ###//
+    // Test if the window also needs to be maximized on Android.
+    // Android has not been tested
+#    if defined( ANDROID ) || defined( Q_OS_IOS )
+    // for mobile version maximize the window
+    setWindowState ( Qt::WindowMaximized );
+#    endif
+    //### TODO: END ###//
 }
 
 // Licence dialog --------------------------------------------------------------

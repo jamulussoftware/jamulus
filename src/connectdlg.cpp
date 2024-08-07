@@ -157,8 +157,8 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     // setup timers
     TimerInitialSort.setSingleShot ( true ); // only once after list request
 
-#ifdef ANDROID
-    // for the android version maximize the window
+#if defined( ANDROID ) || defined( Q_OS_IOS )
+    // for the Android and iOS version maximize the window
     setWindowState ( Qt::WindowMaximized );
 #endif
 

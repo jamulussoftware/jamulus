@@ -1505,7 +1505,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation>Als u extra/eigen adresboeken wilt toevoegen aan de adresboek keuzelijst in het dialoogvenster Verbinden, dan kunt u hier de adressen invoeren.&lt;br&gt;</translation>
+        <translation>Als u extra/eigen adresboeken wilt toevoegen aan de adresboek keuzelijst in het Verbinden dialoogvenster, dan kunt u hier de adressen invoeren.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>
@@ -2097,7 +2097,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation>Klik op de knop om de momenteel geselecteerde eigen adresboek te verwijderen.</translation>
+        <translation>Klik op de knop om het momenteel geselecteerde eigen adresboek te verwijderen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>

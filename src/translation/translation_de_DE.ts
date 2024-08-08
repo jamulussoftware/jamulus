@@ -30,17 +30,17 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>Qt cross-platform application framework</source>
-        <translation>Qt plattformübergreifender Anwendungsrahmen</translation>
+        <translation>Qt plattformübergreifendes Framework</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(build)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="598"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Laufzeit)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="616"/>
@@ -90,12 +90,12 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Einige Pixmaps sind aus der %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Manche Töne sind von %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="709"/>
@@ -1628,22 +1628,22 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls weitere Verzeichnisse zum Verbinden-Dialog hinzugefügt werden sollen, können sie hier eingetragen werden. &lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefiniertes Verzeichnis löschen Button</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefiniertes Verzeichnis löschen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicke den Button um das momentan ausgewählte benutzerdefinierte Verzeichnis zu löschen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>
@@ -2975,17 +2975,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../connectdlg.cpp" line="99"/>
         <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveradresse löschen Button</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="100"/>
         <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveradresse löschen</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="101"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicke den Button um die momentan ausgewählte Serveradresse aus der Liste von gespeicherten Servern zu löschen.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>
@@ -3619,7 +3619,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation>Wenn diese Option aktiviert ist, wird der Recorder aktuelle Jams aufzeichnen (falls er korrekt konfiguriert ist).</translation>
+        <translation>Wenn dieses Kontrollkästchen aktiviert ist, läuft der Rekorder während einer laufenden Sitzung (wenn er richtig eingestellt ist).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="135"/>
@@ -4044,7 +4044,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="202"/>
         <source>Custom Directory line edit</source>
-        <translation>Benutzerdefinierte Verzeichnisse Zeile bearbeiten</translation>
+        <translation>Benutzerdefiniertes Verzeichnis Zeile bearbeiten</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="246"/>
@@ -4281,7 +4281,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlgbase.ui" line="132"/>
         <source>Location: Region</source>
-        <translation>Location: Region</translation>
+        <translation>Standort: Region</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
@@ -4422,7 +4422,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverlist.cpp" line="787"/>
         <source>Loading persistent server list file: %1</source>
-        <translation>Lade Persistenzdatei für Serverliste: %1</translation>
+        <translation>Datei mit persistenter Serverliste wird geladen: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="850"/>
@@ -4805,32 +4805,32 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../util.cpp" line="1733"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Diese Applikation verwendet die folgenden Bibliotheken, Ressourcen oder Codeschnipsel:</translation>
+        <translation>Diese App verwendet die folgenden Bibliotheken, Ressourcen oder Codeschnipsel:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1735"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Qt plattformübergreifender Anwendungsrahmen</translation>
+        <translation>Qt plattformübergreifendes Framework</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(build)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Laufzeit)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1754"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Einige Pixmaps sind aus der %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1760"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Manche Töne sind von %1</translation>
     </message>
     <message>
         <source>Using the following libraries, resources or code snippets:</source>

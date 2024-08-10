@@ -702,7 +702,6 @@ DISTFILES += ChangeLog \
     docs/TRANSLATING.md \
     linux/jamulus.desktop.in \
     linux/jamulus-server.desktop.in \
-    mac/Info-make-legacy.plist \
     mac/Info-make.plist \
     mac/Info-xcode.plist \
     mac/Jamulus.entitlements \

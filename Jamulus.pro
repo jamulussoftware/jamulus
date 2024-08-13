@@ -709,21 +709,21 @@ DISTFILES += ChangeLog \
     src/res/io.jamulus.jamulus.png \
     src/res/io.jamulus.jamulus.svg \
     src/res/io.jamulus.jamulusserver.svg \
-    src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
-    src/res/CLEDDisabledSmall.png \
-    src/res/CLEDGreen.png \
     src/res/CLEDGreenSmall.png \
     src/res/CLEDGrey.png \
-    src/res/CLEDGreySmall.png \
-    src/res/CLEDRed.png \
     src/res/CLEDRedSmall.png \
-    src/res/CLEDYellow.png \
     src/res/CLEDYellowSmall.png \
-    src/res/LEDBlackSmall.png \
-    src/res/LEDGreenSmall.png \
-    src/res/LEDRedSmall.png \
-    src/res/LEDYellowSmall.png \
+    src/res/CLEDBlackBig.png \
+    src/res/CLEDBlackSrc.png \
+    src/res/CLEDDisabled.png \
+    src/res/CLEDGreenBig.png \
+    src/res/CLEDGreenSrc.png \
+    src/res/CLEDGreySrc.png \
+    src/res/CLEDRedBig.png \
+    src/res/CLEDRedSrc.png \
+    src/res/CLEDYellowBig.png \
+    src/res/CLEDYellowSrc.png \
     src/res/IndicatorGreen.png \
     src/res/IndicatorYellow.png \
     src/res/IndicatorRed.png \
@@ -733,13 +733,15 @@ DISTFILES += ChangeLog \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
     src/res/HLEDGreen.png \
-    src/res/HLEDGreenSmall.png \
     src/res/HLEDBlack.png \
-    src/res/HLEDBlackSmall.png \
     src/res/HLEDRed.png \
-    src/res/HLEDRedSmall.png \
     src/res/HLEDYellow.png \
-    src/res/HLEDYellowSmall.png \
+    src/res/HLEDBlackSrc.png \
+    src/res/HLEDGreenSrc.png \
+    src/res/HLEDGrey.png \
+    src/res/HLEDGreySrc.png \
+    src/res/HLEDRedSrc.png \
+    src/res/HLEDYellowSrc.png \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
@@ -749,6 +751,7 @@ DISTFILES += ChangeLog \
     src/res/mutediconorange.png \
     src/res/servertrayiconactive.png \
     src/res/servertrayiconinactive.png \
+    src/res/installerbackground.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
     src/res/instruments/bassguitar.png \
@@ -1050,6 +1053,12 @@ DISTFILES += ChangeLog \
     src/res/flags/za.png \
     src/res/flags/zm.png \
     src/res/flags/zw.png \
+    src/res/flags/catalonia.png \
+    src/res/flags/england.png \
+    src/res/flags/europeanunion.png \
+    src/res/flags/scotland.png \
+    src/res/flags/wales.png \
+    src/res/flags/readme.txt \
     tools/changelog-helper.sh \
     tools/check-wininstaller-translations.sh \
     tools/checkkeys.pl \
@@ -1064,7 +1073,6 @@ DISTFILES += ChangeLog \
 DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/ChangeLog \
     libs/opus/COPYING \
-    libs/opus/INSTALL \
     libs/opus/NEWS \
     libs/opus/README \
     libs/opus/celt/arm/armopts.s.in \

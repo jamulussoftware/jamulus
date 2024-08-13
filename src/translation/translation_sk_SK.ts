@@ -11,12 +11,12 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(zostavenie)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="598"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(runtime)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="616"/>
@@ -62,12 +62,12 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektoré ikony sú z %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektoré zvukové ukážky sú z %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="709"/>
@@ -122,7 +122,7 @@
     <message>
         <location filename="../util.cpp" line="754"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>kórejčina</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="759"/>
@@ -137,7 +137,7 @@
     <message>
         <location filename="../util.cpp" line="765"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>nórsky bokmål</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="773"/>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2024 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Autorské práva © 2005-2024 Tím vývojárov Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -205,7 +205,7 @@
     <message>
         <location filename="../analyzerconsole.cpp" line="47"/>
         <source>Analyzer Console</source>
-        <translation>Konzola analyzátora</translation>
+        <translation>Konzola analyzéra</translation>
     </message>
     <message>
         <location filename="../analyzerconsole.cpp" line="65"/>
@@ -1668,7 +1668,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <location filename="../clientsettingsdlg.cpp" line="292"/>
         <location filename="../clientsettingsdlg.cpp" line="429"/>
         <source>Mono</source>
-        <translation></translation>
+        <translation>Mono</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="430"/>
@@ -2226,7 +2226,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="900"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Povoliť malú vyr. pamäť siete</translation>
+        <translation>Malé sieťové buffery</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="670"/>
@@ -2310,7 +2310,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="321"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Zvukové upozornenia</translation>
+        <translation>Zvukové upozornenia</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="366"/>
@@ -2325,7 +2325,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="738"/>
         <source>Jitter Buffer</source>
-        <translation>Vyr. pamäť chvenia</translation>
+        <translation>Vyrovnávacia pamäť chvenia</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="750"/>
@@ -2366,7 +2366,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1140"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Ochrana pred spätnou väzbou</translation>
+        <translation>Ochrana pred spätnou väzbou</translation>
     </message>
     <message>
         <source>Enable</source>
@@ -3416,7 +3416,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../serverdlg.cpp" line="603"/>
         <source>Select Main Recording Directory</source>
-        <translation>Vybrať hlavný adresár na nahrávanie</translation>
+        <translation>Výber hlavného adresára pre nahrávky</translation>
     </message>
     <message>
         <source> Server</source>
@@ -4021,32 +4021,32 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../util.cpp" line="1733"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Tento program používa nasledujúce knižnice, zdrojové dáta alebo úryvky kódu:</translation>
+        <translation>Tento program používa nasledujúce knižnice, zdroje alebo úryvky kódu:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1735"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Qt multiplatformový aplikačný framework</translation>
+        <translation>Multiplatformový aplikačný framework Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(zostavenie)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(runtime)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1754"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektoré ikony sú z %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1760"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektoré zvukové ukážky sú z %1</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>

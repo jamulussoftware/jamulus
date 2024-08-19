@@ -411,7 +411,7 @@ jobs:
         uses:                       lando/notarize-action@4f5869b09386e8336802159031e4189e0919ae20
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
-          primary-bundle-id:        io.jamulus.Jamulus
+          primary-bundle-id:         ${{ vars.MAC_BUNDLE_ID }} # Bundle ID for notarization. Set MAC_BUNDLE_ID as repository variable, not secret
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
           appstore-connect-team-id:  ${{ secrets.NOTARIZATION_TEAM_ID }}

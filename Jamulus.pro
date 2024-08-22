@@ -182,7 +182,7 @@ win32 {
     HEADERS += src/mac/activity.h src/mac/badgelabel.h
     OBJECTIVE_SOURCES += src/mac/activity.mm src/mac/badgelabel.mm
     CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = app.jamulussoftware
 
     OSX_ENTITLEMENTS.files = mac/Jamulus.entitlements
     OSX_ENTITLEMENTS.path = Contents/Resources
@@ -234,7 +234,7 @@ win32 {
     HEADERS += src/ios/ios_app_delegate.h
     HEADERS += src/sound/coreaudio-ios/sound.h
     OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = app.jamulussoftware
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {

@@ -190,11 +190,15 @@ pass_artifact_to_job() {
     fi
 }
 
-appstore_submit() {
-    echo "Submitting package to AppStore Connect..."
-    # test the signature of package
-    pkgutil --check-signature "${ARTIFACT_PATH}"
+notarize() {
+    echo "Submitting artifact to AppStore Connect..."
 
+    if [[ ${ARTIFACT_PATH} == *.pkg ]]; then
+        # test the signature pkg
+        pkgutil --check-signature "${ARTIFACT_PATH}"
+    fi
+
+    echo "Requesting notarization..."
     xcrun notarytool submit "${ARTIFACT_PATH}" \
         --apple-id "${NOTARIZATION_USERNAME}" \
         --team-id "${APPLE_TEAM_ID}" \
@@ -212,8 +216,8 @@ case "${1:-}" in
     get-artifacts)
         pass_artifact_to_job
         ;;
-    appstore-submit)
-        appstore_submit
+    notarize)
+        notarize
         ;;
     *)
         echo "Unknown stage '${1:-}'"

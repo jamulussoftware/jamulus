@@ -365,13 +365,13 @@ jobs:
         run:                        ${{ matrix.config.base_command }} build
         env:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
-          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
-          MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
-          MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
-          MAC_STORE_APP_CERT:       ${{ secrets.MACAPP_CERT}}
+          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT }} # Base64 encoded Developer ID Application certificate. See https://help.apple.com/xcode/mac/current/#/dev154b28f09
+          MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }} # Password protecting secrets.MACOS_CERTIFICATE
+          MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }} # Certificate ID of secrets.MACOS_CERTIFICATE. If unknown, import secrets.MACOS_CERT into keychain and get the hash via "security find-identity -v"
+          MAC_STORE_APP_CERT:       ${{ secrets.MACAPP_CERT }} # Base64 encoded Mac App Distribution certificate
           MAC_STORE_APP_CERT_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
           MAC_STORE_APP_CERT_ID:    ${{ secrets.MACAPP_CERT_ID }}
-          MAC_STORE_INST_CERT:      ${{ secrets.MACAPP_INST_CERT}}
+          MAC_STORE_INST_CERT:      ${{ secrets.MACAPP_INST_CERT }} # Base64 encoded Mac Installer Distribution certificate
           MAC_STORE_INST_CERT_PWD:  ${{ secrets.MACAPP_INST_CERT_PWD }}
           MAC_STORE_INST_CERT_ID:   ${{ secrets.MACAPP_INST_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
@@ -408,13 +408,13 @@ jobs:
                                     needs.create_release.outputs.publish_to_release == 'true' &&
                                     steps.build.outputs.macos_notarize == 'true'
         id:                         notarize-macOS-app
-        uses:                       lando/notarize-action@4f5869b09386e8336802159031e4189e0919ae20
-        with:
-          product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
-          primary-bundle-id:        io.jamulus.Jamulus
-          appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
-          appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
-          appstore-connect-team-id:  ${{ secrets.NOTARIZATION_TEAM_ID }}
+        run:                        ${{ matrix.config.base_command }} notarize
+        env:
+          ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+          NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }} # Apple ID for notarization
+          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }} # App specific password for Apple ID
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          APPLE_TEAM_ID:            ${{ secrets.NOTARIZATION_TEAM_ID }} # Team ID from App Store Connect
 
       - name:                       Staple macOS Release Build
         if:                         >-
@@ -437,18 +437,18 @@ jobs:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
 
       ## RELEASE PROCEDURE FOR: macOS App Store - storesigned pkg
-      - name:                       Validate and Upload macOS Storesign Pkg
+      - name:                       Notarize macOS Storesign Pkg
         if:                         >-
                                     steps.build.outputs.macos_store == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
         id:                         macos_validate_upload
-        run:                        ${{ matrix.config.base_command }} appstore-submit
+        run:                        ${{ matrix.config.base_command }} notarize
         env:
           ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
           NOTARIZATION_USERNAME:    ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
-          APPLE_TEAM_ID:            XXXXXXXXXXX
+          APPLE_TEAM_ID:            ${{ secrets.NOTARIZATION_TEAM_ID }}
 
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql

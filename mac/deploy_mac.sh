@@ -4,8 +4,11 @@ set -eu -o pipefail
 root_path=$(pwd)
 project_path="${root_path}/Jamulus.pro"
 resources_path="${root_path}/src/res"
+raw_path="${root_path}/rawbuild" # Path for raw, not yet runnable or signed binaries.
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
+macapp_deploy_path="${root_path}/storedeploy"
+
 cert_name=""
 macapp_cert_name=""
 macinst_cert_name=""
@@ -51,8 +54,12 @@ cleanup() {
     # Clean up previous deployments
     rm -rf "${build_path}"
     rm -rf "${deploy_path}"
+    rm -rf "${macapp_deploy_path}"
+    rm -rf "${raw_path}"
     mkdir -p "${build_path}"
     mkdir -p "${deploy_path}"
+    mkdir -p "${macapp_deploy_path}"
+    mkdir -p "${raw_path}"
 }
 
 build_app() {
@@ -98,32 +105,16 @@ build_app() {
         done
     fi
 
+    # Copy built (raw) artifacts to raw directory and deploy path
+    mv "${build_path}/${target_name}.app" "${raw_path}/${target_name}.app"
+    cp -a "${raw_path}/${target_name}.app" "${deploy_path}/${target_name}.app"
+
     # Add Qt deployment dependencies
     if [[ -z "$cert_name" ]]; then
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -codesign="-"
+        macdeployqt "${deploy_path}/${target_name}.app" -verbose=2 -always-overwrite -codesign="-"
     else
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
+        macdeployqt "${deploy_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
     fi
-
-    ## Build installer pkg file - for submission to App Store
-    if [[ -z "$macapp_cert_name" ]]; then
-        echo "No cert to sign for App Store, bypassing..."
-    else
-        # Clone the build directory to leave the adhoc signed app untouched
-        cp -a "${build_path}" "${build_path}_storesign"
-
-        # Add Qt deployment deps and codesign the app for App Store submission
-        macdeployqt "${build_path}_storesign/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
-
-        # Create pkg installer and sign for App Store submission
-        productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${build_path}_storesign/${target_name}.app" /Applications "${build_path}/Jamulus_${JAMULUS_BUILD_VERSION}.pkg"
-
-        # move created pkg file to prep for download
-        mv "${build_path}/Jamulus_${JAMULUS_BUILD_VERSION}.pkg" "${deploy_path}"
-    fi
-
-    # move app bundle to prep for dmg creation
-    mv "${build_path}/${target_name}.app" "${deploy_path}"
 
     # Cleanup
     make -f "${build_path}/Makefile" -C "${build_path}" distclean
@@ -181,6 +172,27 @@ build_installer_image() {
         "${deploy_path}/"
 }
 
+build_storesign_pkg() {
+    # Build installer pkg file - for submission to App Store
+    # Note: We do not upload the server to the app store for now. This could be changed easily by uncommenting the respective lines below
+    local client_target_name="${1}"
+    # local server_target_name="${2}"
+    echo "Cert signing for App Store started..."
+
+    # Copy binaries to separate temporary deploy directory leave the (adhoc) signed app untouched
+    cp -a "${raw_path}/${client_target_name}.app" "${macapp_deploy_path}/${client_target_name}.app"
+    # cp -a "${raw_path}/${server_target_name}.app" "${macapp_deploy_path}/${server_target_name}.app"
+
+    # Add Qt deployment deps and codesign the app for App Store submission
+    macdeployqt "${macapp_deploy_path}/${client_target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
+    # macdeployqt "${macapp_deploy_path}/${server_target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${macapp_cert_name}"
+
+    echo "Creating .pkg files for App Store submission"
+    # Create pkg installers and sign for App Store submission
+    productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${macapp_deploy_path}/${client_target_name}.app" /Applications "${deploy_path}/${client_target_name}_${JAMULUS_BUILD_VERSION}.pkg"
+    # productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${macapp_deploy_path}/${server_target_name}.app" /Applications "${deploy_path}/${server_target_name}_${JAMULUS_BUILD_VERSION}.pkg"
+}
+
 brew_install_pinned() {
     local pkg="$1"
     local version="$2"
@@ -220,3 +232,8 @@ build_app server_app "CONFIG+=server_bundle"
 
 # Create versioned installer image
 build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
+
+if [[ -n "$macapp_cert_name" ]]; then
+    # Create pkg file for App Store submission if certificate is given
+    build_storesign_pkg "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"
+fi

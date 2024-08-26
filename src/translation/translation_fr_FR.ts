@@ -11,12 +11,12 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(construction)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="598"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(exécution)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="616"/>
@@ -62,12 +62,12 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Certaines images proviennent de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Certains échantillons sonores proviennent de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="709"/>
@@ -1394,7 +1394,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vous devez ajouter des annuaires supplémentaires à la liste déroulante des annuaires de la boîte de dialogue Connecter, vous pouvez saisir les adresses ici.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="430"/>
@@ -1716,17 +1716,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton de suppression de l&apos;annuaire personnalisé</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer un annuaire personnalisé</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquez sur le bouton pour supprimer l&apos;annuaire personnalisé actuellement sélectionné.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>
@@ -2599,17 +2599,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../connectdlg.cpp" line="99"/>
         <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton de suppression de l&apos;adresse du serveur</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="100"/>
         <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer l&apos;adresse du serveur</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="101"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquez sur le bouton pour effacer l&apos;adresse du serveur actuellement sélectionné et la supprimer de la liste des serveurs enregistrés.</translation>
     </message>
     <message>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
@@ -4241,32 +4241,32 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../util.cpp" line="1733"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Cette application utilise les bibliothèques, ressources ou extraits de code suivants :</translation>
+        <translation>Cette application utilise les bibliothèques, ressources ou extraits de code suivants&#x202f;:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1735"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Cadriciel d&apos;application multiplateforme Qt</translation>
+        <translation>Cadriciel d&apos;application multiplateforme Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(construction)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(exécution)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1754"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Certaines images proviennent de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1760"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Certains échantillons sonores proviennent de %1</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>

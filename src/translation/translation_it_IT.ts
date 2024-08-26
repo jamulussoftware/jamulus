@@ -90,12 +90,12 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alcune pixmap provengono da %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alcuni campioni sonori provengono da %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="709"/>
@@ -1673,7 +1673,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Se serve aggiungere ulteriori cartelle al menu a discesa della finestra di dialogo Connetti, è possibile inserire qui gli indirizzi.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="430"/>
@@ -2037,17 +2037,17 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsante Elimina cartella personalizzata</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina cartella personalizzata</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fare clic sul pulsante per eliminare la cartella personalizzata attualmente selezionata.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>

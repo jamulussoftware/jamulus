@@ -35,12 +35,12 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(build)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="598"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(runtime)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="616"/>
@@ -90,12 +90,12 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sommige pixmaps zijn van de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sommige geluiden komen van %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="709"/>
@@ -1505,7 +1505,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Als u extra/eigen adresboeken wilt toevoegen aan de adresboek keuzelijst in het Verbinden dialoogvenster, dan kunt u hier de adressen invoeren.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>
@@ -2087,17 +2087,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijder eigen adresboeken knop</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijder eigen adresboek</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik op de knop om het momenteel geselecteerde eigen adresboek te verwijderen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>
@@ -2959,17 +2959,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../connectdlg.cpp" line="99"/>
         <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijder serveradres knop</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="100"/>
         <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijder serveradres</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="101"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik op de knop om het momenteel geselecteerde serveradres te wissen en het uit de lijst met opgeslagen servers te verwijderen.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>
@@ -4809,32 +4809,32 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.cpp" line="1733"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Deze applicatie gebruikt de volgende libraries, bronnen of code snippets:</translation>
+        <translation>Deze applicatie gebruikt de volgende libraries, bronnen of code snippets:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1735"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Qt cross-platform applicatieframework</translation>
+        <translation>Qt cross-platform applicatieframework</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(build)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(runtime)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1754"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sommige pixmaps zijn van de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1760"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sommige geluiden komen van %1</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>

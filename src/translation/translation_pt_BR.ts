@@ -39,12 +39,12 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(versão)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="598"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(tempo de execução)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="616"/>
@@ -94,12 +94,12 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alguns pixmaps são de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Algumas amostras de áudio são de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="709"/>
@@ -1532,7 +1532,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Se você precisa adicionar mais diretórios ao menu suspenso de Diretórios na janela Conectar, insira os endereços aqui.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>
@@ -2120,17 +2120,17 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botão para apagar diretórios personalizados</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar Diretório Personalizado</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique no botão para excluir o diretório personalizado selecionado.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>
@@ -2993,17 +2993,17 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../connectdlg.cpp" line="99"/>
         <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botão para apagar endereço de servidor</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="100"/>
         <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar Endereço de Servidor</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="101"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique no botão para limpar o endereço de servidor selecionado e excluí-lo da lista de servidores armazenados.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>
@@ -4836,32 +4836,32 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1733"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Esta aplicação utiliza as seguintes bibliotecas, recursos ou partes de código:</translation>
+        <translation>Esta aplicação utiliza as seguintes bibliotecas, recursos ou partes de código:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1735"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Estrutura de aplicações multiplataforma Qt</translation>
+        <translation>Estrutura de aplicações multiplataforma Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(versão)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(tempo de execução)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1754"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alguns pixmaps são de %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1760"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Algumas amostras de áudio são de %1</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>

@@ -39,12 +39,12 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(versión)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="598"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(tiempo de ejecución)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="616"/>
@@ -94,12 +94,12 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunos pixmaps son de la %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunas muestras de audio son de la %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="709"/>
@@ -1652,22 +1652,22 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Si necesitas añadir directorios adicionales al menú desplegable de Directorios en la ventana de Conectar, puedes introducir las direcciones aquí.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botón para borrar directorios personalizados</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar Directorio Personalizado</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Haz clic en el botón para borrar el directorio personalizado seleccionado.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>
@@ -3007,17 +3007,17 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../connectdlg.cpp" line="99"/>
         <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botón para borrar dirección de servidor</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="100"/>
         <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar Dirección de Servidor</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="101"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Haz clic para borrar la dirección de servidor seleccionada y eliminarla de la lista de servidores guardados.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>
@@ -4861,32 +4861,32 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.cpp" line="1733"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Esta aplicación utiliza las siguientes librerías, recursos o fragmentos de código:</translation>
+        <translation>Esta aplicación utiliza las siguientes librerías, recursos o fragmentos de código:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1735"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Marco de la aplicación multiplataforma Qt</translation>
+        <translation>Marco de la aplicación multiplataforma Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(versión)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(tiempo de ejecución)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1754"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunos pixmaps son de la %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1760"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunas muestras de audio son de la %1</translation>
     </message>
     <message>
         <source>the terms of the GNU General Public License as published by the Free Software</source>

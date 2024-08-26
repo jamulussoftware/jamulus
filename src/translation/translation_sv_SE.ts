@@ -26,12 +26,12 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(build)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="598"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(runtime)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="616"/>
@@ -62,12 +62,12 @@
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Några pixmaps är från %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Några ljudklipp är från %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="709"/>
@@ -1541,7 +1541,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Om du behöver lägga till ytterligare kataloger i kopplingsdialogens rullgardinsmeny för kataloger kan du ange adresserna här. &lt;br&gt;</translation>
     </message>
     <message>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
@@ -1555,17 +1555,17 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Knapp för att ta bort anpassad katalog</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort anpassad katalog</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicka på knappen för att ta bort den för närvarande valda anpassade katalogen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>
@@ -2654,17 +2654,17 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../connectdlg.cpp" line="99"/>
         <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
+        <translation>Knapp för att ta bort serveradress</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="100"/>
         <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort serveradressen</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="101"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicka på knappen för att rensa den för närvarande valda serveradressen och ta bort den från listan över sparade servrar.</translation>
     </message>
     <message>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. example.org:</source>
@@ -4412,32 +4412,32 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../util.cpp" line="1733"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Denna applikationen använder följande bibliotek, resurser eller kodavsnitt:</translation>
+        <translation>Denna applikationen använder följande bibliotek, resurser eller kodavsnitt:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1735"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Qt cross-platform applikationsramverk</translation>
+        <translation>Qt cross-platform applikationsramverk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(build)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(runtime)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1754"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vissa pixmaps kommer från %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1760"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vissa ljudfiler kommer från %1</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>
@@ -4470,7 +4470,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../util.cpp" line="1750"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="unfinished">Ljudklangkod av Perry R. Cook och Gary P. Scavone</translation>
+        <translation>Ljudklangkod av Perry R. Cook och Gary P. Scavone</translation>
     </message>
     <message>
         <source>Some pixmaps are from the Open Clip Art Library (OCAL)</source>
@@ -4479,7 +4479,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../util.cpp" line="1757"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished">Flaggsymboler gjorda av Mark James</translation>
+        <translation>Flaggsymboler gjorda av Mark James</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>

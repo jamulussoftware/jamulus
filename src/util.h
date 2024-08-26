@@ -1098,9 +1098,11 @@ public:
     {
 #ifdef _WIN32
         return OT_WINDOWS;
-#elif defined( __APPLE__ ) || defined( __MACOSX )
+#elif defined( Q_OS_MACOS )
         return OT_MAC_OS;
-#elif defined( ANDROID )
+#elif defined( Q_OS_IOS )
+        return OT_I_OS;
+#elif defined( Q_OS_ANDROID ) || defined( ANDROID )
         return OT_ANDROID;
 #else
         return OT_LINUX;

@@ -1,4 +1,4 @@
-### 3.11.0beta2 <- NOTE: the release version number will be 3.11.0 ###
+### 3.10.0dev <- NOTE: the release version number will be 3.11.0 ###
 
 - Refactor src/main.cpp (#3191).
   (contributed by @pljones)

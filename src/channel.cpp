@@ -508,23 +508,28 @@ void CChannel::Disconnect()
     // we only have to disconnect the channel if it is actually connected
     if ( IsConnected() )
     {
-        // for a Client, block further audio data and disable the channel as soon as Disconnect() is called
-        // TODO: Add reasoning from #2550
-
-        bDisconnectAndDisable = !bIsServer;
-
         // set time out counter to a small value > 0 so that the next time a
         // received audio block is queried, the disconnection is performed
         // (assuming that no audio packet is received in the meantime)
         iConTimeOut = 1; // a small number > 0
     }
-    else if ( !bIsServer )
+    
+    if ( !bIsServer )
     {
-        // For clients (?) set defaults
+        if ( IsConnected() )
+        {
+            // for a Client, block further audio data and disable the channel as soon as Disconnect() is called
+            // TODO: Add reasoning from #2550
+            bDisconnectAndDisable = true;
+        }
+        else
+        {
+            // For disconnected clients set defaults
 
-        bDisconnectAndDisable = false;
-        bIsEnabled            = false;
-        iConTimeOut           = 0;
+            bDisconnectAndDisable = false;
+            bIsEnabled            = false;
+            iConTimeOut           = 0;
+        }
     }
 }
 
@@ -547,9 +552,9 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData, const i
     EPutDataStat eRet = PS_GEN_ERROR;
 
     // Only process audio data if:
-    // - for client only: the packet comes from the server we want to talk to
+    // - for client only: the packet comes from the server we want to talk to and we aren't disconnecting
     // - the channel is enabled
-    if ( ( bIsServer || ( GetAddress() == RecHostAddr ) ) && IsEnabled() && !bDisconnectAndDisable )
+    if ( ( bIsServer || ( !bIsServer && GetAddress() == RecHostAddr && !bDisconnectAndDisable ) ) && IsEnabled() )
     {
         MutexSocketBuf.lock();
         {
@@ -637,7 +642,7 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData, const int iNumByte
                 eGetStatus  = GS_CHAN_NOW_DISCONNECTED;
                 iConTimeOut = 0; // make sure we do not have negative values
 
-                if ( bDisconnectAndDisable )
+                if ( bDisconnectAndDisable && !bIsServer )
                 {
                     bDisconnectAndDisable = false;
                     bIsEnabled            = false;
@@ -664,7 +669,7 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData, const int iNumByte
             // channel is disconnected
             eGetStatus = GS_CHAN_NOT_CONNECTED;
 
-            if ( bDisconnectAndDisable )
+            if ( bDisconnectAndDisable && !bIsServer )
             {
                 bDisconnectAndDisable = false;
                 bIsEnabled            = false;

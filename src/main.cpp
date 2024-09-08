@@ -919,14 +919,7 @@ int main ( int argc, char** argv )
         {
             // Client:
             // actual client object
-            CClient Client ( iPortNumber,
-                             iQosNumber,
-                             strConnOnStartupAddress,
-                             strMIDISetup,
-                             bNoAutoJackConnect,
-                             strClientName,
-                             bEnableIPv6,
-                             bMuteMeInPersonalMix );
+            CClient Client ( iPortNumber, iQosNumber, strMIDISetup, bNoAutoJackConnect, strClientName, bEnableIPv6, bMuteMeInPersonalMix );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
@@ -950,18 +943,17 @@ int main ( int argc, char** argv )
                 }
 
                 // GUI object
-                CClientDlg ClientDlg ( &Client,
-                                       &Settings,
-                                       strConnOnStartupAddress,
-                                       strMIDISetup,
-                                       bShowComplRegConnList,
-                                       bShowAnalyzerConsole,
-                                       bMuteStream,
-                                       bEnableIPv6,
-                                       nullptr );
+                CClientDlg
+                    ClientDlg ( &Client, &Settings, strMIDISetup, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, bEnableIPv6, nullptr );
 
                 // show dialog
                 ClientDlg.show();
+
+                // Connect on startup
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
 
                 pApp->exec();
             }
@@ -970,6 +962,12 @@ int main ( int argc, char** argv )
             {
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+
+                // Connect on startup
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
 
                 pApp->exec();
             }

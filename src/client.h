@@ -110,7 +110,6 @@ class CClient : public QObject
 public:
     CClient ( const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strConnOnStartupAddress,
               const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
@@ -119,18 +118,16 @@ public:
 
     virtual ~CClient();
 
-    void Start();
-    void Stop();
-    bool IsRunning() { return Sound.IsRunning(); }
-    bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
-    bool SetServerAddr ( QString strNAddr );
+    bool Connect ( QString strServerAddress, QString strServerName );
+    bool Disconnect();
+
+    bool SoundIsRunning() const { return Sound.IsCallbackEntered(); } // For OnTimerCheckAudioDeviceOk only
+    bool IsConnected() { return Channel.IsConnected(); }
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
 
     bool GetAndResetbJitterBufferOKFlag();
-
-    bool IsConnected() { return Channel.IsConnected(); }
 
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
     void       SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
@@ -427,8 +424,9 @@ signals:
 
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
+    void Connecting ( QString strServerName );
     void Disconnected();
-    void SoundDeviceChanged ( QString strError );
+    void SoundDeviceChanged();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
     void ControllerInPanValue ( int iChannelIdx, int iValue );
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );

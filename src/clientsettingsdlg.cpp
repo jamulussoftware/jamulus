@@ -1066,22 +1066,24 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
 void CClientSettingsDlg::UpdateUploadRate()
 {
     // update upstream rate information label
-    lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) );
-    lblUpstreamUnit->setText ( "kbps" );
+    if ( pClient->IsConnected() )
+    {
+        lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) );
+        lblUpstreamUnit->setText ( "kbps" );
+    }
+    else
+    {
+        lblUpstreamValue->setText ( "---" );
+        lblUpstreamUnit->setText ( "" );
+    }
 }
 
 void CClientSettingsDlg::UpdateDisplay()
 {
-    // update slider controls (settings might have been changed)
+    // update slider controls (settings might have been changed) and upstream rate information label
     UpdateJitterBufferFrame();
     UpdateSoundCardFrame();
-
-    if ( !pClient->IsRunning() )
-    {
-        // clear text labels with client parameters
-        lblUpstreamValue->setText ( "---" );
-        lblUpstreamUnit->setText ( "" );
-    }
+    UpdateUploadRate();
 }
 
 void CClientSettingsDlg::UpdateDirectoryComboBox()

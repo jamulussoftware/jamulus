@@ -118,17 +118,20 @@ public:
 
     virtual ~CClient();
 
+    void Start();
+    void Stop();
     bool Connect ( QString strServerAddress, QString strServerName );
     bool Disconnect();
 
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); } // For OnTimerCheckAudioDeviceOk only
+    bool SetServerAddr ( QString strNAddr );
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
 
     bool GetAndResetbJitterBufferOKFlag();
-    
+
     bool IsConnected() { return Channel.IsConnected(); }
 
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }

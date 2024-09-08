@@ -827,7 +827,7 @@ void CClientDlg::OnChatTextReceived ( QString strChatText )
     // always when a new message arrives since this is annoying.
     ShowChatWindow ( ( strChatText.indexOf ( WELCOME_MESSAGE_PREFIX ) == 0 ) );
 
-    UpdateSettingsAndChatButtons();
+    UpdateDisplay();
 }
 
 void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
@@ -982,7 +982,7 @@ void CClientDlg::ShowChatWindow ( const bool bForceRaise )
         ChatDlg.activateWindow();
     }
 
-    UpdateSettingsAndChatButtons();
+    UpdateDisplay();
 }
 
 void CClientDlg::ShowAnalyzerConsole()
@@ -1132,7 +1132,7 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
     // timeout to check if a valid device is selected and if we do not have
     // fundamental settings errors (in which case the GUI would only show that
     // it is trying to connect the server which does not help to solve the problem (#129))
-    if ( !pClient->SoundIsRunning() )
+    if ( !pClient->IsCallbackEntered() )
     {
         QMessageBox::warning ( this,
                                APP_NAME,
@@ -1220,7 +1220,7 @@ void CClientDlg::OnDisconnect()
     TimerDetectFeedback.stop();
     bDetectFeedback = false;
 
-    UpdateSettingsAndChatButtons();
+    UpdateDisplay();
 
     // reset LEDs
     ledBuffers->Reset();
@@ -1238,7 +1238,7 @@ void CClientDlg::OnDisconnect()
     SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
 }
 
-void CClientDlg::UpdateSettingsAndChatButtons()
+void CClientDlg::UpdateDisplay()
 {
     // update settings/chat buttons (do not fire signals since it is an update)
     if ( chbSettings->isChecked() && !ClientSettingsDlg.isVisible() )

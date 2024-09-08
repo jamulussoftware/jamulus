@@ -121,13 +121,15 @@ public:
     bool Connect ( QString strServerAddress, QString strServerName );
     bool Disconnect();
 
-    bool SoundIsRunning() const { return Sound.IsCallbackEntered(); } // For OnTimerCheckAudioDeviceOk only
-    bool IsConnected() { return Channel.IsConnected(); }
+    bool IsRunning() { return Sound.IsRunning(); }
+    bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); } // For OnTimerCheckAudioDeviceOk only
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
 
     bool GetAndResetbJitterBufferOKFlag();
+    
+    bool IsConnected() { return Channel.IsConnected(); }
 
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
     void       SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }

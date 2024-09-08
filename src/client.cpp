@@ -942,7 +942,7 @@ void CClient::Init()
     bFraSiFactSafeSupported = true;
 #else
     bFraSiFactPrefSupported = ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
-    bFraSiFactDefSupported = ( Sound.Init ( iFraSizeDefault ) == iFraSizeDefault );
+    bFraSiFactDefSupported  = ( Sound.Init ( iFraSizeDefault ) == iFraSizeDefault );
     bFraSiFactSafeSupported = ( Sound.Init ( iFraSizeSafe ) == iFraSizeSafe );
 #endif
 

@@ -92,8 +92,8 @@ protected:
     void ShowChatWindow ( const bool bForceRaise = true );
     void ShowAnalyzerConsole();
     void UpdateAudioFaderSlider();
-    void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
     void UpdateRevSelection();
+    void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
     void SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
     CClient*         pClient;
@@ -116,7 +116,7 @@ protected:
     virtual void closeEvent ( QCloseEvent* Event );
     virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
     virtual void dropEvent ( QDropEvent* Event ) { ManageDragNDrop ( Event, false ); }
-    void         UpdateSettingsAndChatButtons();
+    void         UpdateDisplay();
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -132,7 +132,7 @@ public slots:
     void OnTimerCheckAudioDeviceOk();
     void OnTimerDetectFeedback();
 
-    void OnTimerStatus() { UpdateSettingsAndChatButtons(); }
+    void OnTimerStatus() { UpdateDisplay(); }
 
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );

@@ -32,7 +32,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Check .cpp/.h/.mm with clang-format
-      uses: DoozyX/clang-format-lint-action@11b773b1598aa4ae3b32f023701bca5201c3817d
+      uses: DoozyX/clang-format-lint-action@c71d0bf4e21876ebec3e5647491186f8797fde31
       with:
         clangFormatVersion: 14
         # When updating the extension list, remember to update

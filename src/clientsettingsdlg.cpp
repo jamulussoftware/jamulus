@@ -1063,25 +1063,31 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
     UpdateDisplay();
 }
 
+/// @method
+/// @brief Sets upstream rate label to current upload rate if the client is connected, else resets label
 void CClientSettingsDlg::UpdateUploadRate()
 {
-    // update upstream rate information label
-    lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) );
-    lblUpstreamUnit->setText ( "kbps" );
-}
-
-void CClientSettingsDlg::UpdateDisplay()
-{
-    // update slider controls (settings might have been changed)
-    UpdateJitterBufferFrame();
-    UpdateSoundCardFrame();
-
-    if ( !pClient->IsRunning() )
+    // update upstream rate information label if needed
+    if ( pClient->IsConnected() )
+    {
+        lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) );
+        lblUpstreamUnit->setText ( "kbps" );
+    }
+    else
     {
         // clear text labels with client parameters
         lblUpstreamValue->setText ( "---" );
         lblUpstreamUnit->setText ( "" );
     }
+}
+
+/// @method
+/// @brief Updates slider controls (settings might have been changed) and upstream rate information label
+void CClientSettingsDlg::UpdateDisplay()
+{
+    UpdateJitterBufferFrame();
+    UpdateSoundCardFrame();
+    UpdateUploadRate();
 }
 
 void CClientSettingsDlg::UpdateDirectoryComboBox()

@@ -111,7 +111,6 @@ class CClient : public QObject
 public:
     CClient ( const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strConnOnStartupAddress,
               const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
@@ -122,6 +121,13 @@ public:
 
     void Start();
     void Stop();
+    void Disconnect();
+    void Connect ( QString strServerAddress, QString strServerName );
+
+    // The ConnectedServerName is emitted by Connected() to update the UI with a human readable server name
+    void    SetConnectedServerName ( const QString strServerName ) { strConnectedServerName = strServerName; };
+    QString GetConnectedServerName() const { return strConnectedServerName; };
+
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
     bool SetServerAddr ( QString strNAddr );
@@ -288,6 +294,10 @@ protected:
     int  EvaluatePingMessage ( const int iMs );
     void CreateServerJitterBufferMessage();
 
+    // information for the connected server
+
+    QString strConnectedServerName;
+
     // only one channel is needed for client application
     CChannel  Channel;
     CProtocol ConnLessProtocol;
@@ -388,7 +398,8 @@ protected slots:
     {
         if ( InetAddr == Channel.GetAddress() )
         {
-            emit Disconnected();
+            // Stop client in case it received a Disconnection request
+            Stop();
         }
     }
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
@@ -428,7 +439,11 @@ signals:
 
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
+    void Connected ( QString strServerName );
+    void ConnectingFailed ( QString errorMessage );
+    void DisconnectClient();
     void Disconnected();
+
     void SoundDeviceChanged ( QString strError );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
     void ControllerInPanValue ( int iChannelIdx, int iValue );

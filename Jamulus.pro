@@ -244,21 +244,28 @@ win32 {
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {
-    ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     ANDROID_VERSION_NAME = $$VERSION
     ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
+    ANDROID_PERMISSIONS += android.permission.INTERNET \
+        android.permission.RECORD_AUDIO \
+        android.permission.WRITE_EXTERNAL_STORAGE \
+        android.permission.MODIFY_AUDIO_SETTINGS
+
+    ANDROID_MIN_SDK_VERSION = 23
+    ANDROID_TARGET_SDK_VERSION = 34
+
     # liboboe requires C++17 for std::timed_mutex
     CONFIG += c++17
 
-    QT += androidextras
+    # debug_and_release breaks qmlimportscanner for Android because it can't find the nested qrc file
+    CONFIG -= debug_and_release
+
+    QT += core-private
 
     # enabled only for debugging on android devices
     DEFINES += ANDROIDDEBUG
-
-    target.path = /tmp/your_executable # path on device
-    INSTALLS += target
 
     HEADERS += src/sound/oboe/sound.h
 
@@ -267,7 +274,6 @@ win32 {
 
     LIBS += -lOpenSLES
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-    DISTFILES += android/AndroidManifest.xml
 
     # if compiling for android you need to use Oboe library which is included as a git submodule
     # make sure you git pull with submodules to pull the latest Oboe library

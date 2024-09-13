@@ -28,12 +28,12 @@ set -eu
 
 # Some of the following version pinnings are semi-automatically checked for
 # updates. Update .github/workflows/bump-dependencies.yaml when renaming those:
-COMMANDLINETOOLS_VERSION=6858069
-ANDROID_NDK_VERSION=r21d
-ANDROID_PLATFORM=android-30
-ANDROID_BUILD_TOOLS=30.0.2
+COMMANDLINETOOLS_VERSION=11076708
+ANDROID_NDK_VERSION=r26b
+ANDROID_PLATFORM=android-34
+ANDROID_BUILD_TOOLS=34.0.0
 AQTINSTALL_VERSION=3.1.18
-QT_VERSION=5.15.2
+QT_VERSION=6.7.2
 
 # Only variables which are really needed by sub-commands are exported.
 # Definitions have to stay in a specific order due to dependencies.
@@ -45,7 +45,7 @@ COMMANDLINETOOLS_DIR="${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
 export ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
 ANDROID_NDK_HOST="linux-x86_64"
 ANDROID_SDKMANAGER="${COMMANDLINETOOLS_DIR}/bin/sdkmanager"
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/"
+export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/platform-tools"
 
@@ -58,7 +58,7 @@ setup_ubuntu_dependencies() {
     export DEBIAN_FRONTEND="noninteractive"
 
     sudo apt-get -qq update
-    sudo apt-get -qq --no-install-recommends -y install build-essential zip unzip bzip2 p7zip-full curl chrpath openjdk-8-jdk-headless
+    sudo apt-get -qq --no-install-recommends -y install build-essential zip unzip bzip2 p7zip-full curl chrpath openjdk-17-jdk-headless
 }
 
 setup_android_sdk() {
@@ -117,7 +117,7 @@ build_app_as_apk() {
     local QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
     local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
 
-    "${QT_DIR}/bin/qmake" -spec android-clang
+    "${QT_DIR}/bin/qmake" -spec android-clang ANDROID_ABIS="armeabi-v7a arm64-v8a x86 x86_64"
     "${MAKE}" -j "$(nproc)"
     "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
     "${QT_DIR}"/bin/androiddeployqt --input android-Jamulus-deployment-settings.json --output "${BUILD_DIR}" \

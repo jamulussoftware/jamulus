@@ -40,7 +40,7 @@
 #endif
 #include "util.h"
 #ifdef ANDROID
-#    include <QtAndroidExtras/QtAndroid>
+#    include <QtCore/private/qandroidextras_p.h>
 #endif
 #if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
@@ -829,13 +829,13 @@ int main ( int argc, char** argv )
 
 #ifdef ANDROID
     // special Android coded needed for record audio permission handling
-    auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
+    auto result = QtAndroidPrivate::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) ).result();
 
-    if ( result == QtAndroid::PermissionResult::Denied )
+    if ( result == QtAndroidPrivate::PermissionResult::Denied )
     {
-        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync ( QStringList ( { "android.permission.RECORD_AUDIO" } ) );
+        QtAndroidPrivate::PermissionResult requestResult = QtAndroidPrivate::requestPermission ( QString ( "android.permission.RECORD_AUDIO" ) ).result();
 
-        if ( resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied )
+        if ( requestResult == QtAndroidPrivate::PermissionResult::Denied )
         {
             return 0;
         }

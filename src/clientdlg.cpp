@@ -1167,7 +1167,7 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
 }
 
-void CClientDlg::OnConnect ( QString strServerName )
+void CClientDlg::OnConnect ( QString strMixerBoardLabel )
 {
 
     // hide label connect to server
@@ -1179,7 +1179,7 @@ void CClientDlg::OnConnect ( QString strServerName )
     butConnect->setText ( tr ( "&Disconnect" ) );
 
     // set server name in audio mixer group box title
-    MainMixerBoard->SetServerName ( strServerName );
+    MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
     // start timer for level meter bar and ping time measurement
     TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );

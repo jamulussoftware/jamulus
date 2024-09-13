@@ -431,7 +431,7 @@ signals:
 
     void Connecting ( QString strServerName );
     void Disconnected();
-    void SoundDeviceChanged();
+    void SoundDeviceChanged ( QString strError );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
     void ControllerInPanValue ( int iChannelIdx, int iValue );
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );

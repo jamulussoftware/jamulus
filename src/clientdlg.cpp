@@ -1143,8 +1143,20 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
 
 void CClientDlg::OnTimerDetectFeedback() { bDetectFeedback = false; }
 
-void CClientDlg::OnSoundDeviceChanged()
+void CClientDlg::OnSoundDeviceChanged ( QString strError )
 {
+    if ( !strError.isEmpty() )
+    {
+        // the sound device setup has a problem, disconnect any active connection
+        if ( pClient->IsRunning() )
+        {
+            pClient->Disconnect();
+        }
+
+        // show the error message of the device setup
+        QMessageBox::critical ( this, APP_NAME, strError, tr ( "Ok" ), nullptr );
+    }
+
     // if the check audio device timer is running, it must be restarted on a device change
     if ( TimerCheckAudioDeviceOk.isActive() )
     {

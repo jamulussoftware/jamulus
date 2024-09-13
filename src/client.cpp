@@ -618,15 +618,11 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
         Sound.Start();
     }
 
+    // in case of an error inform the GUI about it
     if ( !strError.isEmpty() )
     {
-        // due to error, disconnect
-        Disconnect();
+        emit SoundDeviceChanged ( strError );
     }
-
-    // in case of an error, this will inform the GUI about it
-
-    emit SoundDeviceChanged();
 
     return strError;
 }
@@ -754,18 +750,8 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
     }
     MutexDriverReinit.unlock();
 
-    if ( !strError.isEmpty() )
-    {
-#ifndef HEADLESS
-        QMessageBox::critical ( 0, APP_NAME, strError, tr ( "Ok" ) );
-#else
-        qCritical() << qUtf8Printable ( strError );
-        exit ( 1 );
-#endif
-    }
-
     // inform GUI about the sound card device change
-    emit SoundDeviceChanged();
+    emit SoundDeviceChanged ( strError );
 }
 
 void CClient::OnHandledSignal ( int sigNum )
@@ -924,7 +910,8 @@ bool CClient::Connect ( QString strServerAddress, QString strServerName )
     if ( !Channel.IsEnabled() )
     {
         // Set server address and connect if valid address was supplied
-        if ( SetServerAddr ( strServerAddress ) ) {
+        if ( SetServerAddr ( strServerAddress ) )
+        {
 
             Start();
 

@@ -513,7 +513,7 @@ void CChannel::Disconnect()
         // (assuming that no audio packet is received in the meantime)
         iConTimeOut = 1; // a small number > 0
     }
-    
+
     if ( !bIsServer )
     {
         if ( IsConnected() )

@@ -76,7 +76,7 @@ public:
 
     void PrepAndSendPacket ( CHighPrioSocket* pSocket, const CVector<uint8_t>& vecbyNPacket, const int iNPacketLen );
 
-    void ResetTimeOutCounter() { iConTimeOut = (bDisconnectAndDisable && !bIsServer) ? 1 : iConTimeOutStartVal; }
+    void ResetTimeOutCounter() { iConTimeOut = ( bDisconnectAndDisable && !bIsServer ) ? 1 : iConTimeOutStartVal; }
     bool IsConnected() const { return iConTimeOut > 0; }
     void Disconnect();
 

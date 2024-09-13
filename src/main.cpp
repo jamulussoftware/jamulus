@@ -1005,25 +1005,30 @@ int main ( int argc, char** argv )
                 }
 
                 // GUI object
-                CClientDlg
-                    ClientDlg ( &Client, &Settings, strConnOnStartupAddress, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, nullptr );
+                CClientDlg ClientDlg ( &Client, &Settings, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, nullptr );
 
                 // show dialog
                 ClientDlg.show();
+
+                // Connect on startup if requested
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
 
                 pApp->exec();
             }
             else
 #    endif
             {
-                if ( !strConnOnStartupAddress.isEmpty() )
-                {
-                    Client.SetServerAddr ( strConnOnStartupAddress );
-                    Client.Start();
-                }
-
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+
+                // Connect on startup if requested
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
 
                 pApp->exec();
             }

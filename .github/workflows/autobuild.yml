@@ -427,16 +427,21 @@ jobs:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
           ARTIFACT_PATH:            deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 
-      - name:                       Deploy Artifacts to Release
+      - name:                       Deploy Artifact 1 to Release
         if:                         needs.create_release.outputs.publish_to_release == 'true'
-        id:                         upload-release-assets
+        id:                         upload-release-asset1
         run:                        >
-          gh release upload "${{ needs.create_release.outputs.tag_name }}" "deploy/${{ steps.get-artifacts.outputs.artifact_1 }}" "deploy/${{ steps.get-artifacts.outputs.artifact_2 }}" --clobber
-          ||
           gh release upload "${{ needs.create_release.outputs.tag_name }}" "deploy/${{ steps.get-artifacts.outputs.artifact_1 }}" --clobber
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-
+      - name:                       Deploy Artifact 2 to Release
+        if:                         needs.create_release.outputs.publish_to_release == 'true' &&
+                                    steps.get-artifacts.outputs.artifact_2
+        id:                         upload-release-asset2
+        run:                        >
+          gh release upload "${{ needs.create_release.outputs.tag_name }}" "deploy/${{ steps.get-artifacts.outputs.artifact_2 }}" --clobber
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql
         uses:                       github/codeql-action/analyze@v3

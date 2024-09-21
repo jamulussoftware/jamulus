@@ -1,4 +1,4 @@
-### 3.11.0 (2024-09-21) ###
+### 3.11.0dev <- NOTE: the release version number will be 3.12.0 ###
 
 - Client: Added "Delete Entry" button to Advanced Settings, Custom Directories (#3260).
   (contributed by @AdamGLIN)

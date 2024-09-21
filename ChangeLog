@@ -27,6 +27,9 @@
 - Android: save settings on app state change (#3144).
   (contributed by @pljones)
 
+- Refactor Release upload to two step process (#3374).
+  (contributed by @ann0see)
+
 - Refactoring: Decouple App Store upload from dmg build (#3350).
   (contributed by @ann0see)
 

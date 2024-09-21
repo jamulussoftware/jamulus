@@ -48,31 +48,77 @@
 .Op Fl \-showallservers
 .Op Fl \-showanalyzerconsole
 .Sh DESCRIPTION
-.Nm Jamulus ,
-a low-latency audio client and server, enables musicians to perform real-time
+.Nm Jamulus
+is a low-latency audio Client and Server system that allows musicians to perform real-time
 .Dq jam
 sessions over the internet.
-It is available across multiple platforms, so participants of any field
-can communicate without specialist setup requirements.
-This is not restricted to music, of course; other use
-.Pq perhaps conferencing?
-is also possible.
+Jamulus can be run on Linux, macOS, Windows, Android and iOS.
+
+.Sh OPERATION SUMMARY
+.Nm Jamulus
+operates in two main modes,
+.Dq Client
+and
+.Dq Server .
+A participant in a jam session sends their audio to the server using the Client.
+The Client can also be used to control Server-side mixing of the audio from all Clients
+connected to the Server.
+The Server then returns the mixed audio to the Client for output.
+
+.Sh BASIC CONSIDERATION
+Jamulus is a real-time network audio application.
+The Client must have a good, low-latency real-time audio system.
+Both Client and Server must have low-jitter networking with adequate bandwidth.
+(Bandwidth is most important at the Server, as more Client connections increases the bandwidth.
+The Client only ever uses a maximum of under 1Mbps outbound and inbound.)
+
+.Sh CLIENT OPERATION
+Each participant can choose whether to run a single Client
+(pre-mixing multiple local audio channels) or to run multiple Clients
+(one per local audio channel).
+Audio channels can be mono or stereo and a Client can send mono and receive a stereo mix back.
 .Pp
-One participant starts
-.Nm
-in Server mode, ideally on a dedicated server (virtual) machine;
-all participants start the (graphical) Client which transmits audio
-to the Server, receiving back a mixed stream.
-Use of a metronome is recommended.
-Clients should be connected using ethernet, not wireless, and use
-proper headphone and microphone connections, not Bluetooth.
-The Server should run on a low-latency system, ideally not a VM.
+The Client offers a very basic command line interface.
+However, most participants will likely choose to use the graphical user interface.
+Additionally, the Client can be controlled using JSON-RPC.
+For more information about these features, please refer to the online guides.
+
+.Sh SERVER OPERATION
+The primary function of a Jamulus Server is to receive audio over the network from a Client,
+mix each network audio channel together according to the settings supplied by a Client
+and transmit the audio back to a Client.
+The Server owner can choose to run the software on a computer on their LAN or to have Jamulus Server
+hosted by a service provider.
+Due to the way most Internet Service Providers supply their service, running on a LAN can cause some issues
+but, if the Server owner chooses to, registering the server with a
+.Dq Public Directory
+(see below) can help participants to find their server consistently.
 .Pp
-Running
-.Nm
-without any extra options launches the full graphical Client.
+A Server owner needs to provide prospective participants the Server Internet Address
+(and port number if not the default).  This needs to be the externally visible address and needs to be
+routed to the computer running the Server.  For further information about running a server, see the online guides.
+
+.Sh PUBLIC DIRECTORES
+A
+.Nm Directory
+is a special kind of Server.  It allows Clients to retrieve a list of
+.Dq registered
+Servers, showing what other Clients are connected.  It also alerts the Server to potential incoming connections,
+which initiates a
+.Dq hole punch
+through any firewall (as the Jamulus protocol is connectionless).
 .Pp
-The options are as follows:
+Anyone can set up a Directory and supply its Internet Address to Server owners to register their server and to Clients
+wanting to retrieve addition Servers.
+.Pp
+However,
+.Nm Public Directories
+are
+.Dq built in
+to Jamulus and are intended for use by an Server owner wanting to make their Server available to any Client
+- that is, to be open to public usage.
+
+.Sh COMMAND LINE OPTIONS
 .Bl -tag -width Ds
 .It Fl 6 | Fl \-enableipv6
 enable IPv6 support
@@ -273,18 +319,6 @@ show analyser console to debug network buffer properties
 .El
 .Pp
 Note that the debugging commands are not intended for general use.
-.Pp
-.Nm Jamulus
-knows four modes of operation: Client mode and three kinds of Server
-.Pq Unregistered, Registered, Directory.
-A Unregistered Server is unlisted, Clients can only connect if given
-the address (IP address and port).
-A Registered Server will contact a Directory (whose address must be
-given at Server startup) and show up in that Server's list; Clients
-can retrieve a list of Registered Servers from the Directory Server.
-Several Registered Directories are operated by the Jamulus project;
-there is a Directory for each genre, which is how Registered Jamulus
-Servers are categorised into genres.
 .Sh SEE ALSO
 .Xr qjackctl 1
 .Bl -tag -width Ds
@@ -312,6 +346,8 @@ above)
 .An mirabilos Aq tg@debian.org
 wrote this manual page for the Debian project,
 but it may be used elsewhere as well.
+.An pljones Aq peter@drealm.info
+updated following several years of development.
 .Sh BUGS
 This manual page was derived from the source code and summarises
 some of the information from the website, but it could be more helpful.

@@ -303,6 +303,7 @@ opus_int32 opus_repacketizer_out_range_impl(OpusRepacketizer *rp, int begin, int
    }
    if (ext_len > 0) {
       int ret = opus_packet_extensions_generate(&data[ext_begin], ext_len, all_extensions, ext_count, 0);
+      (void)ret;    /* suppress unused warning when celt_assert() is not enabled */
       celt_assert(ret == ext_len);
    }
    for (i=ones_begin;i<ones_end;i++)

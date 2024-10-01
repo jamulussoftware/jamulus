@@ -644,6 +644,7 @@ SOURCES_OPUS = libs/opus/celt/bands.c \
     libs/opus/silk/VAD.c \
     libs/opus/silk/VQ_WMat_EC.c \
     libs/opus/src/analysis.c \
+    libs/opus/src/extensions.c \
     libs/opus/src/mlp.c \
     libs/opus/src/mlp_data.c \
     libs/opus/src/opus.c \

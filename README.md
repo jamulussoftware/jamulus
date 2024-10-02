@@ -2,6 +2,10 @@
 
 ![CodeQL](https://github.com/jamulussoftware/jamulus/workflows/CodeQL/badge.svg)
 
+## Contents of this feature branch
+
+This branch contains replacement of Qt console message routines (`qInfo` etc) with `iostream` `cout` and `cerr`.
+
 Jamulus - Internet Jam Session Software
 =======================================
 <a href="https://jamulus.io/"><img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/></a>

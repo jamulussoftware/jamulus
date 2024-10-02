@@ -50,6 +50,7 @@ enum EMidiCtlType
     Solo,
     Mute,
     MuteMyself,
+    OurFader, // Proposed addition: a MidiCtrlType for our own fader level
     None
 };
 

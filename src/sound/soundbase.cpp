@@ -33,6 +33,7 @@ char const sMidiCtlChar[] = {
     /* [EMidiCtlType::Solo]        = */ 's',
     /* [EMidiCtlType::Mute]        = */ 'm',
     /* [EMidiCtlType::MuteMyself]  = */ 'o',
+    /* [EMidiCtlType::OurFader]    = */ 'z', // Proposed addition: a new enum value for "our fader"
     /* [EMidiCtlType::None]        = */ '\0' };
 
 /* Implementation *************************************************************/
@@ -370,6 +371,13 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
                             // consider offset for the faders
 
                             emit ControllerInFaderLevel ( cCtrl.iChannel, iFaderLevel );
+                        }
+                        break;
+                        case OurFader:
+                        {
+                            // special message about our own fader - emit a fader level whatever-it-is-called with channel id -1
+                            const int iFaderLevel = static_cast<int> ( static_cast<double> ( iValue ) / 127*AUD_MIX_FADER_MAX );
+                            emit ControllerInFaderLevel ( -1, iFaderLevel);
                         }
                         break;
                         case Pan:

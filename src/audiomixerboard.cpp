@@ -1335,22 +1335,16 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
 
 void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx, const int iValue )
 {
-    // only apply new fader level if channel index is valid and the fader is visible
-    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
-    {
-        if ( vecpChanFader[static_cast<size_t> ( iChannelIdx )]->IsVisible() )
-        {
-            vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetFaderLevel ( iValue );
-        }
-    }
     // Proposed change: if iChannelIdx is I_MY_CHANNEL and our own channel ID is a valid index
     // then we adjust our own fader level:
-    if((iChannelIdx == -1) && iMyChannelID != I_MY_CHANNEL)
+    const int iTheChannelIdx = ( iChannelIdx == I_MY_CHANNEL ) ? iMyChannelID : iChannelIdx;
+
+    // only apply new fader level if channel index is valid and the fader is visible
+    if ( ( iTheChannelIdx >= 0 ) && ( iTheChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[static_cast<size_t> ( iMyChannelID )]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iTheChannelIdx )]->IsVisible() )
         {
-            //printf("debug: set our own fader(%d) level to %d\n", iMyChannelID, iValue);
-            vecpChanFader[static_cast<size_t> ( iMyChannelID )]->SetFaderLevel ( iValue );
+            vecpChanFader[static_cast<size_t> ( iTheChannelIdx )]->SetFaderLevel ( iValue );
         }
     }
 }

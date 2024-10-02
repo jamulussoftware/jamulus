@@ -363,21 +363,16 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
                         switch ( cCtrl.eType )
                         {
                         case Fader:
+                        case OurFader:
                         {
                             // we are assuming that the controller number is the same
                             // as the audio fader index and the range is 0-127
                             const int iFaderLevel = static_cast<int> ( static_cast<double> ( iValue ) / 127 * AUD_MIX_FADER_MAX );
+                            const int iTheChannel = cCtrl.eType == OurFader ? I_MY_CHANNEL : cCtrl.iChannel;
 
                             // consider offset for the faders
 
-                            emit ControllerInFaderLevel ( cCtrl.iChannel, iFaderLevel );
-                        }
-                        break;
-                        case OurFader:
-                        {
-                            // special message about our own fader - emit a fader level whatever-it-is-called with channel id -1
-                            const int iFaderLevel = static_cast<int> ( static_cast<double> ( iValue ) / 127*AUD_MIX_FADER_MAX );
-                            emit ControllerInFaderLevel ( I_MY_CHANNEL, iFaderLevel);
+                            emit ControllerInFaderLevel ( iTheChannel, iFaderLevel );
                         }
                         break;
                         case Pan:

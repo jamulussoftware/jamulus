@@ -1351,6 +1351,16 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx, const int iValue )
             vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetFaderLevel ( iValue );
         }
     }
+    // Proposed change: if iChannelIdx is -1 and our own channel ID is a valid index
+    // then we adjust our own fader level:
+    if((iChannelIdx == -1) && iMyChannelID != INVALID_INDEX)
+    {
+        if ( vecpChanFader[static_cast<size_t> ( iMyChannelID )]->IsVisible() )
+        {
+            //printf("debug: set our own fader(%d) level to %d\n", iMyChannelID, iValue);
+            vecpChanFader[static_cast<size_t> ( iMyChannelID )]->SetFaderLevel ( iValue );
+        }
+    }
 }
 
 void CAudioMixerBoard::SetPanValue ( const int iChannelIdx, const int iValue )

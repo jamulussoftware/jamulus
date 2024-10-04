@@ -50,7 +50,7 @@ enum EMidiCtlType
     Solo,
     Mute,
     MuteMyself,
-    OurFader, // Proposed addition: a MidiCtrlType for our own fader level
+    MyChannel,
     None
 };
 
@@ -160,7 +160,19 @@ protected:
     QMutex MutexAudioProcessCallback;
     QMutex MutexDevProperties;
 
-    QString                strSystemDriverTechniqueName;
+    QString strSystemDriverTechniqueName;
+
+    // This is used as a lookup table for parsing option letters, mapping
+    // a single character to an EMidiCtlType. Has to follow order of EMidiCtlType.
+    const QString sMidiCtl = QString()
+                                 .append ( /* [EMidiCtlType::Fader]      = */ "f" )
+                                 .append ( /* [EMidiCtlType::Pan]        = */ "p" )
+                                 .append ( /* [EMidiCtlType::Solo]       = */ "s" )
+                                 .append ( /* [EMidiCtlType::Mute]       = */ "m" )
+                                 .append ( /* [EMidiCtlType::MuteMyself] = */ "o" )
+                                 .append ( /* [EMidiCtlType::MyChannel]  = */ "z" )
+                                 .append ( /* [EMidiCtlType::None]       = */ "\0" );
+
     int                    iCtrlMIDIChannel;
     QVector<CMidiCtlEntry> aMidiCtls;
 

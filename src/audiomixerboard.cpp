@@ -1343,53 +1343,56 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
 
 void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx, const int iValue )
 {
-    // If iChannelIdx is I_MY_CHANNEL and our own channel ID is a valid index
-    // then we adjust our own fader level
-    const int iTheChannelIdx = ( iChannelIdx == I_MY_CHANNEL ) ? iMyChannelID : iChannelIdx;
+    const int iRealChannelIdx = getRealChannelIdx ( iChannelIdx );
 
     // only apply new fader level if channel index is valid and the fader is visible
-    if ( ( iTheChannelIdx >= 0 ) && ( iTheChannelIdx < MAX_NUM_CHANNELS ) )
+    if ( ( iRealChannelIdx >= 0 ) && ( iRealChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[static_cast<size_t> ( iTheChannelIdx )]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iRealChannelIdx )]->IsVisible() )
         {
-            vecpChanFader[static_cast<size_t> ( iTheChannelIdx )]->SetFaderLevel ( iValue );
+            vecpChanFader[static_cast<size_t> ( iRealChannelIdx )]->SetFaderLevel ( iValue );
         }
     }
 }
 
 void CAudioMixerBoard::SetPanValue ( const int iChannelIdx, const int iValue )
 {
+    const int iRealChannelIdx = getRealChannelIdx ( iChannelIdx );
+
     // only apply new pan value if channel index is valid and the panner is visible
-    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) && bDisplayPans )
+    if ( ( iRealChannelIdx >= 0 ) && ( iRealChannelIdx < MAX_NUM_CHANNELS ) && bDisplayPans )
     {
-        if ( vecpChanFader[static_cast<size_t> ( iChannelIdx )]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iRealChannelIdx )]->IsVisible() )
         {
-            vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetPanValue ( iValue );
+            vecpChanFader[static_cast<size_t> ( iRealChannelIdx )]->SetPanValue ( iValue );
         }
     }
 }
 
 void CAudioMixerBoard::SetFaderIsSolo ( const int iChannelIdx, const bool bIsSolo )
 {
-    // only apply solo if channel index is valid and the fader is visible
-    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+    const int iRealChannelIdx = getRealChannelIdx ( iChannelIdx );
 
+    // only apply solo if channel index is valid and the fader is visible
+    if ( ( iRealChannelIdx >= 0 ) && ( iRealChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[static_cast<size_t> ( iChannelIdx )]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iRealChannelIdx )]->IsVisible() )
         {
-            vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetFaderIsSolo ( bIsSolo );
+            vecpChanFader[static_cast<size_t> ( iRealChannelIdx )]->SetFaderIsSolo ( bIsSolo );
         }
     }
 }
 
 void CAudioMixerBoard::SetFaderIsMute ( const int iChannelIdx, const bool bIsMute )
 {
+    const int iRealChannelIdx = getRealChannelIdx ( iChannelIdx );
+
     // only apply mute if channel index is valid and the fader is visible
-    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+    if ( ( iRealChannelIdx >= 0 ) && ( iRealChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[static_cast<size_t> ( iChannelIdx )]->IsVisible() )
+        if ( vecpChanFader[static_cast<size_t> ( iRealChannelIdx )]->IsVisible() )
         {
-            vecpChanFader[static_cast<size_t> ( iChannelIdx )]->SetFaderIsMute ( bIsMute );
+            vecpChanFader[static_cast<size_t> ( iRealChannelIdx )]->SetFaderIsMute ( bIsMute );
         }
     }
 }

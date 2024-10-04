@@ -288,6 +288,15 @@ protected:
     template<unsigned int slotId>
     inline void connectFaderSignalsToMixerBoardSlots();
 
+    // When handling MIDI controllers for adjusting Jamulus channel controls,
+    // each channel is assigned by the server.  As a user's Jamulus channel
+    // will vary on each server connection, to enable the assignment of MIDI
+    // controllers to the user's own Jamulus channel, the constant I_MY_CHANNEL
+    // is passed into the methods used to handle the requests.  This method then
+    // maps I_MY_CHANNEL to the current value of the user's Jamulus channel,
+    // held in iMyChannel.
+    inline int getRealChannelIdx ( const int iChannelIdx ) const { return iChannelIdx == I_MY_CHANNEL ? iMyChannelID : iChannelIdx; }
+
 signals:
     void ChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader );
     void ChangeChanPan ( int iId, float fPan );

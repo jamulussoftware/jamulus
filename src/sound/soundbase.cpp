@@ -24,18 +24,6 @@
 
 #include "soundbase.h"
 
-// This is used as a lookup table for parsing option letters, mapping
-// a single character to an EMidiCtlType
-char const sMidiCtlChar[] = {
-    // Has to follow order of EMidiCtlType
-    /* [EMidiCtlType::Fader]       = */ 'f',
-    /* [EMidiCtlType::Pan]         = */ 'p',
-    /* [EMidiCtlType::Solo]        = */ 's',
-    /* [EMidiCtlType::Mute]        = */ 'm',
-    /* [EMidiCtlType::MuteMyself]  = */ 'o',
-    /* [EMidiCtlType::OurFader]    = */ 'z', // Proposed addition: a new enum value for "our fader"
-    /* [EMidiCtlType::None]        = */ '\0' };
-
 /* Implementation *************************************************************/
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          void ( *fpNewProcessCallback ) ( CVector<int16_t>& psData, void* pParg ),
@@ -233,98 +221,156 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 }
 
 /******************************************************************************\
-* MIDI handling                                                                *
+* Command Line Handling                                                        *
 \******************************************************************************/
 void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
 {
-    int iMIDIOffsetFader = 70; // Behringer X-TOUCH: offset of 0x46
-
-    // parse the server info string according to definition: there is
-    // the legacy definition with just one or two numbers that only
-    // provides a definition for the controller offset of the level
-    // controllers (default 70 for the sake of Behringer X-Touch)
-    // [MIDI channel];[offset for level]
-    //
-    // The more verbose new form is a sequence of offsets for various
-    // controllers: at the current point, 'f', 'p', 's', and 'm' are
-    // parsed for fader, pan, solo, mute controllers respectively.
-    // However, at the current point of time only 'f' and 'p'
-    // controllers are actually implemented.  The syntax for a Korg
-    // nanoKONTROL2 with 8 fader controllers starting at offset 0 and
-    // 8 pan controllers starting at offset 16 would be
-    //
-    // [MIDI channel];f0*8;p16*8
-    //
-    // Namely a sequence of letters indicating the kind of controller,
-    // followed by the offset of the first such controller, followed
-    // by * and a count for number of controllers (if more than 1)
-    if ( !strMIDISetup.isEmpty() )
+    if ( strMIDISetup.isEmpty() )
     {
-        // split the different parameter strings
-        const QStringList slMIDIParams = strMIDISetup.split ( ";" );
+        // should be caught in main.cpp
+        return;
+    }
 
-        // [MIDI channel]
-        if ( slMIDIParams.count() >= 1 )
+    // Parse the --ctrlmidich string.  There are two formats.
+    // Default to the legacy kind of specifying the fader controller offset
+    // without an indication of the count of controllers.
+    bool bSimple = true;
+
+    // split the different parameter strings
+    const QStringList slMIDIParams = strMIDISetup.split ( ";" );
+    int               iNumParams   = slMIDIParams.count();
+
+    if ( iNumParams >= 1 )
+    {
+        bool bChOK = false;
+        int  i     = slMIDIParams[0].toUInt ( &bChOK );
+        if ( bChOK )
         {
-            iCtrlMIDIChannel = slMIDIParams[0].toUInt();
+            // [MIDI channel] supplied (else use default)
+            iCtrlMIDIChannel = i;
         }
-
-        bool bSimple = true; // Indicates the legacy kind of specifying
-                             // the fader controller offset without an
-                             // indication of the count of controllers
-
-        // [offset for level]
-        if ( slMIDIParams.count() >= 2 )
+        else
         {
-            int i = slMIDIParams[1].toUInt ( &bSimple );
-            // if the second parameter can be parsed as a number, we
-            // have the legacy specification of controllers.
-            if ( bSimple )
-                iMIDIOffsetFader = i;
-        }
-
-        if ( bSimple )
-        {
-            // For the legacy specification, we consider every controller
-            // up to the maximum number of channels (or the maximum
-            // controller number) a fader.
-            for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-            {
-                if ( i + iMIDIOffsetFader > 127 )
-                    break;
-                aMidiCtls[i + iMIDIOffsetFader] = { EMidiCtlType::Fader, i };
-            }
+            // iCtrlMIDIChannel == INVALID_MIDI_CH, so no point continuing
             return;
         }
+    }
 
-        // We have named controllers
-
-        for ( int i = 1; i < slMIDIParams.count(); i++ )
+    // Use Behringer X-TOUCH as default offset of 0x46
+    int iMIDIOffsetFader = 70;
+    if ( iNumParams >= 2 )
+    {
+        // if there is a second parameter that can be parsed as a number,
+        // we have the legacy specification of controllers.
+        int i = slMIDIParams[1].toUInt ( &bSimple );
+        if ( bSimple )
         {
-            QString sParm = slMIDIParams[i].trimmed();
-            if ( sParm.isEmpty() )
-                continue;
+            // [offset for fader] supplied (else use default)
+            iMIDIOffsetFader = i;
+        }
+    }
 
-            int iCtrl = QString ( sMidiCtlChar ).indexOf ( sParm[0] );
-            if ( iCtrl < 0 )
-                continue;
-            EMidiCtlType eTyp = static_cast<EMidiCtlType> ( iCtrl );
+    if ( bSimple )
+    {
+        // For the legacy specification, we consider every controller
+        // up to the maximum number of channels (or the maximum
+        // controller number) a fader.
+        for ( int i = 0; i + iMIDIOffsetFader <= 127 && i < MAX_NUM_CHANNELS; i++ )
+        {
+            // add a list entry for the CMidiCtlEntry
+            aMidiCtls[i + iMIDIOffsetFader] = { EMidiCtlType::Fader, i };
+        }
+        return;
+    }
 
-            const QStringList slP    = sParm.mid ( 1 ).split ( '*' );
-            int               iFirst = slP[0].toUInt();
-            int               iNum   = ( slP.count() > 1 ) ? slP[1].toUInt() : 1;
-            for ( int iOff = 0; iOff < iNum; iOff++ )
+    // We have named controllers
+    // Validate and see whether "MyChannel" option is present
+
+    bool        bMyChannel = false;
+    QStringList slValid; // keep track of valid entries to make later processing simple
+
+    for ( int i = 0; i < iNumParams; i++ )
+    {
+        QString sParm = slMIDIParams[i].trimmed();
+
+        if ( sParm.isEmpty() )
+        {
+            // skip empty entries silently
+            continue;
+        }
+
+        int iCtrl = sMidiCtl.indexOf ( sParm[0] );
+        if ( iCtrl < 0 )
+        {
+            // skip unknown entries silently
+            continue;
+        }
+
+        if ( static_cast<EMidiCtlType> ( iCtrl ) == EMidiCtlType::MyChannel )
+        {
+            // once seen, just remember this
+            bMyChannel = true;
+            continue;
+        }
+
+        const QStringList slP = sParm.mid ( 1 ).split ( '*' );
+
+        if ( slP.count() > 2 )
+        {
+            // skip invalid entries silently
+            continue;
+        }
+
+        bool bIsUInt = false;
+
+        unsigned int u = slP[0].toUInt ( &bIsUInt );
+        if ( !bIsUInt )
+        {
+            // skip invalid entries silently
+            continue;
+        }
+        int iFirst = u;
+
+        // silently default incoherent count to 1
+        int iNum = 1;
+        if ( static_cast<EMidiCtlType> ( iCtrl ) != EMidiCtlType::MuteMyself && slP.count() == 2 )
+        {
+            bIsUInt        = false;
+            unsigned int u = slP[1].toUInt ( &bIsUInt );
+            if ( bIsUInt )
             {
-                if ( iOff >= MAX_NUM_CHANNELS )
-                    break;
-                if ( iFirst + iOff >= 128 )
-                    break;
+                iNum = u;
+            }
+        }
+
+        // store the valid entry in a more splittable format
+        slValid.append ( QString ( "%1*%2*%3" ).arg ( iCtrl ).arg ( iFirst ).arg ( iNum ) );
+    }
+
+    foreach ( QString sParm, slValid )
+    {
+        const QStringList  slP    = sParm.split ( '*' );
+        const EMidiCtlType eTyp   = static_cast<EMidiCtlType> ( slP[0].toInt() );
+        const int          iFirst = slP[1].toUInt();
+        const int          iNum   = slP[2].toUInt();
+        for ( int iOff = 0; iOff < iNum && iOff + iFirst <= 127 && iOff < MAX_NUM_CHANNELS; iOff++ )
+        {
+            // For MyChannel option, first offset is "MyChannel", then the rest are 0 to iNum-1 channels
+            if ( bMyChannel )
+            {
+                aMidiCtls[iFirst + iOff] = { eTyp, iOff == 0 ? I_MY_CHANNEL : iOff - 1 };
+            }
+            else
+            {
                 aMidiCtls[iFirst + iOff] = { eTyp, iOff };
             }
         }
     }
 }
 
+/******************************************************************************\
+* MIDI handling                                                                *
+\******************************************************************************/
 void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
 {
     if ( vMIDIPaketBytes.Size() > 0 )
@@ -357,22 +403,22 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
                     // make sure packet is long enough
                     if ( vMIDIPaketBytes.Size() > 2 && vMIDIPaketBytes[1] <= uint8_t ( 127 ) && vMIDIPaketBytes[2] <= uint8_t ( 127 ) )
                     {
+                        // Where "MyChannel" is in effect, cCtrl.iChannel will be I_MY_CHANNEL
+                        // for the first CC number in the range for a cCtrl.eType and then zero upwards.
                         const CMidiCtlEntry& cCtrl  = aMidiCtls[vMIDIPaketBytes[1]];
                         const int            iValue = vMIDIPaketBytes[2];
-                        ;
+
                         switch ( cCtrl.eType )
                         {
                         case Fader:
-                        case OurFader:
                         {
                             // we are assuming that the controller number is the same
                             // as the audio fader index and the range is 0-127
                             const int iFaderLevel = static_cast<int> ( static_cast<double> ( iValue ) / 127 * AUD_MIX_FADER_MAX );
-                            const int iTheChannel = cCtrl.eType == OurFader ? I_MY_CHANNEL : cCtrl.iChannel;
 
                             // consider offset for the faders
 
-                            emit ControllerInFaderLevel ( iTheChannel, iFaderLevel );
+                            emit ControllerInFaderLevel ( cCtrl.iChannel, iFaderLevel );
                         }
                         break;
                         case Pan:

@@ -4802,7 +4802,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1733"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Questa applicazione usa le seguenti librerie, risorse e parti di codice:</translation>
+        <translation>Questa app usa le seguenti librerie, risorse o frammenti di codice:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1735"/>

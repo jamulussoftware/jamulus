@@ -32,6 +32,7 @@
 #endif
 #include "../global.h"
 #include "../util.h"
+#define I_MY_CHANNEL -1
 
 // TODO better solution with enum definition
 // problem: in signals it seems not to work to use CSoundBase::ESndCrdResetType

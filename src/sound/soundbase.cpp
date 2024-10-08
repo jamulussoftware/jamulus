@@ -377,7 +377,7 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
                         {
                             // special message about our own fader - emit a fader level whatever-it-is-called with channel id -1
                             const int iFaderLevel = static_cast<int> ( static_cast<double> ( iValue ) / 127*AUD_MIX_FADER_MAX );
-                            emit ControllerInFaderLevel ( -1, iFaderLevel);
+                            emit ControllerInFaderLevel ( I_MY_CHANNEL, iFaderLevel);
                         }
                         break;
                         case Pan:

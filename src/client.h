@@ -38,6 +38,7 @@
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
+#include "plugins/audioreverb.h"
 #include "buffer.h"
 #include "signalhandler.h"
 

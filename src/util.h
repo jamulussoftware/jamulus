@@ -1110,46 +1110,6 @@ public:
     }
 };
 
-// Audio reverbration ----------------------------------------------------------
-class CAudioReverb
-{
-public:
-    CAudioReverb() {}
-
-    void Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam, const int iSampleRate, const float fT60 = 1.1f );
-
-    void Clear();
-    void Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fAttenuation );
-
-protected:
-    void setT60 ( const float fT60, const int iSampleRate );
-    bool isPrime ( const int number );
-
-    class COnePole
-    {
-    public:
-        COnePole() : fA ( 0 ), fB ( 0 ) { Reset(); }
-        void  setPole ( const float fPole );
-        float Calc ( const float fIn );
-        void  Reset() { fLastSample = 0; }
-
-    protected:
-        float fA;
-        float fB;
-        float fLastSample;
-    };
-
-    EAudChanConf eAudioChannelConf;
-    int          iStereoBlockSizeSam;
-    CFIFO<float> allpassDelays[3];
-    CFIFO<float> combDelays[4];
-    COnePole     combFilters[4];
-    CFIFO<float> outLeftDelay;
-    CFIFO<float> outRightDelay;
-    float        allpassCoefficient;
-    float        combCoefficient[4];
-};
-
 // CRC -------------------------------------------------------------------------
 class CCRC
 {

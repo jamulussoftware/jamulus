@@ -32,6 +32,7 @@
 #endif
 #include "../global.h"
 #include "../util.h"
+#define I_MY_CHANNEL -1
 
 // TODO better solution with enum definition
 // problem: in signals it seems not to work to use CSoundBase::ESndCrdResetType
@@ -49,6 +50,7 @@ enum EMidiCtlType
     Solo,
     Mute,
     MuteMyself,
+    MyChannel,
     None
 };
 
@@ -158,7 +160,19 @@ protected:
     QMutex MutexAudioProcessCallback;
     QMutex MutexDevProperties;
 
-    QString                strSystemDriverTechniqueName;
+    QString strSystemDriverTechniqueName;
+
+    // This is used as a lookup table for parsing option letters, mapping
+    // a single character to an EMidiCtlType. Has to follow order of EMidiCtlType.
+    const QString sMidiCtl = QString()
+                                 .append ( /* [EMidiCtlType::Fader]      = */ "f" )
+                                 .append ( /* [EMidiCtlType::Pan]        = */ "p" )
+                                 .append ( /* [EMidiCtlType::Solo]       = */ "s" )
+                                 .append ( /* [EMidiCtlType::Mute]       = */ "m" )
+                                 .append ( /* [EMidiCtlType::MuteMyself] = */ "o" )
+                                 .append ( /* [EMidiCtlType::MyChannel]  = */ "z" )
+                                 .append ( /* [EMidiCtlType::None]       = */ "\0" );
+
     int                    iCtrlMIDIChannel;
     QVector<CMidiCtlEntry> aMidiCtls;
 

@@ -27,7 +27,6 @@
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
-                         const QString&   strConnOnStartupAddress,
                          const QString&   strMIDISetup,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
@@ -272,14 +271,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     TimerCheckAudioDeviceOk.setSingleShot ( true ); // only check once after connection
     TimerDetectFeedback.setSingleShot ( true );
 
-    // Connect on startup ------------------------------------------------------
-    if ( !strConnOnStartupAddress.isEmpty() )
-    {
-        // initiate connection (always show the address in the mixer board
-        // (no alias))
-        Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
-    }
-
     // File menu  --------------------------------------------------------------
     QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
 
@@ -473,7 +464,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
 
-    QObject::connect ( pClient, &CClient::Disconnected, this, &CClientDlg::OnDisconnected );
+    QObject::connect ( pClient, &CClient::Connected, this, &CClientDlg::OnConnect );
+
+    QObject::connect ( pClient, &CClient::ConnectingFailed, this, &CClientDlg::OnConnectingFailed );
+
+    QObject::connect ( pClient, &CClient::Disconnected, this, &CClientDlg::OnDisconnect );
 
     QObject::connect ( pClient, &CClient::ChatTextReceived, this, &CClientDlg::OnChatTextReceived );
 
@@ -608,11 +603,8 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     ConnectDlg.close();
     AnalyzerConsole.close();
 
-    // if connected, terminate connection
-    if ( pClient->IsRunning() )
-    {
-        pClient->Stop();
-    }
+    // Disconnect if needed
+    pClient->Stop();
 
     // make sure all current fader settings are applied to the settings struct
     MainMixerBoard->StoreAllFaderSettings();
@@ -730,15 +722,9 @@ void CClientDlg::OnConnectDlgAccepted()
             }
         }
 
-        // first check if we are already connected, if this is the case we have to
-        // disconnect the old server first
-        if ( pClient->IsRunning() )
-        {
-            Disconnect();
-        }
-
         // initiate connection
-        Connect ( strSelectedAddress, strMixerBoardLabel );
+
+        pClient->Connect ( strSelectedAddress, strMixerBoardLabel );
 
         // reset flag
         bConnectDlgWasShown = false;
@@ -750,11 +736,12 @@ void CClientDlg::OnConnectDisconBut()
     // the connect/disconnect button implements a toggle functionality
     if ( pClient->IsRunning() )
     {
-        Disconnect();
-        SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
+        pClient->Stop();
     }
     else
     {
+        // If the client isn't running, we assume that we weren't connected. Thus show the connect dialog
+        // TODO: Refactor to have robust error handling
         ShowConnectionSetupDialog();
     }
 }
@@ -859,7 +846,7 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
         // disconnect from that server.
         if ( !LicenceDlg.exec() )
         {
-            Disconnect();
+            pClient->Stop();
         }
 
         // unmute the client output stream if local mute button is not pressed
@@ -1164,7 +1151,7 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
         // the sound device setup has a problem, disconnect any active connection
         if ( pClient->IsRunning() )
         {
-            Disconnect();
+            pClient->Stop();
         }
 
         // show the error message of the device setup
@@ -1193,65 +1180,38 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
 }
 
-void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel )
+void CClientDlg::OnConnect ( const QString& strMixerBoardLabel )
 {
-    // set address and check if address is valid
-    if ( pClient->SetServerAddr ( strSelectedAddress ) )
+
+    // hide label connect to server
+    lblConnectToServer->hide();
+    lbrInputLevelL->setEnabled ( true );
+    lbrInputLevelR->setEnabled ( true );
+
+    // change connect button text to "disconnect"
+    butConnect->setText ( tr ( "&Disconnect" ) );
+
+    // set server name in audio mixer group box title
+    MainMixerBoard->SetServerName ( strMixerBoardLabel );
+
+    // start timer for level meter bar and ping time measurement
+    TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+    TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
+    TimerPing.start ( PING_UPDATE_TIME_MS );
+    TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
+
+    // audio feedback detection
+    if ( pSettings->bEnableFeedbackDetection )
     {
-        // try to start client, if error occurred, do not go in
-        // running state but show error message
-        try
-        {
-            if ( !pClient->IsRunning() )
-            {
-                pClient->Start();
-            }
-        }
-
-        catch ( const CGenErr& generr )
-        {
-            // show error message and return the function
-            QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );
-            return;
-        }
-
-        // hide label connect to server
-        lblConnectToServer->hide();
-        lbrInputLevelL->setEnabled ( true );
-        lbrInputLevelR->setEnabled ( true );
-
-        // change connect button text to "disconnect"
-        butConnect->setText ( tr ( "&Disconnect" ) );
-
-        // set server name in audio mixer group box title
-        MainMixerBoard->SetServerName ( strMixerBoardLabel );
-
-        // start timer for level meter bar and ping time measurement
-        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
-        TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
-        TimerPing.start ( PING_UPDATE_TIME_MS );
-        TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
-
-        // audio feedback detection
-        if ( pSettings->bEnableFeedbackDetection )
-        {
-            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
-            bDetectFeedback = true;
-        }
+        TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+        bDetectFeedback = true;
     }
 }
 
-void CClientDlg::Disconnect()
-{
-    // only stop client if currently running, in case we received
-    // the stopped message, the client is already stopped but the
-    // connect/disconnect button and other GUI controls must be
-    // updated
-    if ( pClient->IsRunning() )
-    {
-        pClient->Stop();
-    }
+void CClientDlg::OnConnectingFailed ( const QString& strError ) { QMessageBox::critical ( this, APP_NAME, strError, "Close", nullptr ); }
 
+void CClientDlg::OnDisconnect()
+{
     // change connect button text to "connect"
     butConnect->setText ( tr ( "C&onnect" ) );
 
@@ -1293,6 +1253,9 @@ void CClientDlg::Disconnect()
 
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
+
+    // Reset the deco
+    SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
 }
 
 void CClientDlg::UpdateDisplay()

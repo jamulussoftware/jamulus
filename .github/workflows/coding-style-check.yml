@@ -58,6 +58,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install pylint
-      run: pip install --user "pylint < 3.0" --break-system-packages
+      run: pip install --user "pylint < 3.0"
     - name: Check Python files with pylint
       run: find ./tools -name '*.py' -print -exec pylint {} +

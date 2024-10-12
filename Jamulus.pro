@@ -229,6 +229,7 @@ win32 {
     }
 
 } else:ios {
+    QMAKE_ASSET_CATALOGS += src/res/iOSIcons.xcassets
     QMAKE_INFO_PLIST = ios/Info.plist
     OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
     HEADERS += src/ios/ios_app_delegate.h

@@ -642,7 +642,12 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
 // Language combo box ----------------------------------------------------------
 CLanguageComboBox::CLanguageComboBox ( QWidget* parent ) : QComboBox ( parent ), iIdxSelectedLanguage ( INVALID_INDEX )
 {
-    QObject::connect ( this, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CLanguageComboBox::OnLanguageActivated );
+    // This requires a Qt::QueuedConnection on iOS due to https://bugreports.qt.io/browse/QTBUG-64577
+    QObject::connect ( this,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                       this,
+                       &CLanguageComboBox::OnLanguageActivated,
+                       Qt::QueuedConnection );
 }
 
 void CLanguageComboBox::Init ( QString& strSelLanguage )

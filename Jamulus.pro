@@ -470,8 +470,7 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/silk/typedef.h \
     libs/opus/src/analysis.h \
     libs/opus/src/mlp.h \
-    libs/opus/src/opus_private.h \
-    libs/opus/src/tansig_table.h
+    libs/opus/src/opus_private.h
 
 HEADERS_OPUS_ARM = libs/opus/celt/arm/armcpu.h \
     libs/opus/silk/arm/biquad_alt_arm.h \

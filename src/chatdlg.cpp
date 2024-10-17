@@ -62,7 +62,7 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
     pMenu->addMenu ( pEditMenu );
 #if defined( Q_OS_IOS )
     QAction* action = pMenu->addAction ( tr ( "&Close" ) );
-    connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
+    connect ( action, SIGNAL ( triggered() ), this, SLOT ( hide() ) );
 #endif
 
 #if defined( ANDROID ) || defined( Q_OS_ANDROID )

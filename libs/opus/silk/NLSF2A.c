@@ -80,7 +80,7 @@ void silk_NLSF2A(
     };
     const unsigned char *ordering;
     opus_int   k, i, dd;
-    opus_int32 cos_LSF_QA[ SILK_MAX_ORDER_LPC ];
+    opus_int32 cos_LSF_QA[ SILK_MAX_ORDER_LPC ] = {0};
     opus_int32 P[ SILK_MAX_ORDER_LPC / 2 + 1 ], Q[ SILK_MAX_ORDER_LPC / 2 + 1 ];
     opus_int32 Ptmp, Qtmp, f_int, f_frac, cos_val, delta;
     opus_int32 a32_QA1[ SILK_MAX_ORDER_LPC ];

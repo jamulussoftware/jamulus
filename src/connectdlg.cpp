@@ -113,12 +113,12 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 #ifdef ANDROID
     // for Android we need larger numbers because of the default font size
     lvwServers->setColumnWidth ( 0, 200 );
-    lvwServers->setColumnWidth ( 1, 130 );
+    lvwServers->setColumnWidth ( 1, 110 );
     lvwServers->setColumnWidth ( 2, 130 );
     lvwServers->setColumnWidth ( 3, 100 );
 #else
     lvwServers->setColumnWidth ( 0, 180 );
-    lvwServers->setColumnWidth ( 1, 75 );
+    lvwServers->setColumnWidth ( 1, 65 );
     lvwServers->setColumnWidth ( 2, 75 );
     lvwServers->setColumnWidth ( 3, 70 );
     lvwServers->setColumnWidth ( 4, 220 );
@@ -775,26 +775,29 @@ void CConnectDlg::OnTimerPing()
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
+        QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
+
+        // we need to ask for the server version only if we have not received it
+        const bool bNeedVersion = pCurListViewItem->text ( 1 ).isEmpty();
+
         CHostAddress haServerAddress;
 
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
-        if ( NetworkUtil().ParseNetworkAddress ( lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString(),
-                                                 haServerAddress,
-                                                 bEnableIPv6 ) )
+        if ( NetworkUtil().ParseNetworkAddress ( pCurListViewItem->data ( 0, Qt::UserRole ).toString(), haServerAddress, bEnableIPv6 ) )
         {
             // if address is valid, send ping message using a new thread
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
-            QFuture<void> f = QtConcurrent::run ( &CConnectDlg::EmitCLServerListPingMes, this, haServerAddress );
+            QFuture<void> f = QtConcurrent::run ( &CConnectDlg::EmitCLServerListPingMes, this, haServerAddress, bNeedVersion );
             Q_UNUSED ( f );
 #else
-            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, haServerAddress );
+            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, haServerAddress, bNeedVersion );
 #endif
         }
     }
 }
 
-void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress )
+void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion )
 {
     // The ping time messages for all servers should not be sent all in a very
     // short time since it showed that this leads to errors in the ping time
@@ -804,6 +807,12 @@ void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress 
     QThread::msleep ( 11 );
 
     emit CreateCLServerListPingMes ( haServerAddress );
+
+    // also request the server version if we have not already received it
+    if ( bNeedVersion )
+    {
+        emit CreateCLServerListReqVerAndOSMes ( haServerAddress );
+    }
 }
 
 void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients )
@@ -935,6 +944,17 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
     // we may have changed the Hidden state for some items, if a filter was active, we now
     // have to update it to void lines appear which do not satisfy the filter criteria
     UpdateListFilter();
+}
+
+void CConnectDlg::SetServerVersionResult ( const CHostAddress& InetAddr, const QString& strVersion )
+{
+    // apply the received server version to the correct server list entry
+    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
+
+    if ( pCurListViewItem )
+    {
+        pCurListViewItem->setText ( 1, strVersion );
+    }
 }
 
 QTreeWidgetItem* CConnectDlg::FindListViewItem ( const CHostAddress& InetAddr )

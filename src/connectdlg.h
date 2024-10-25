@@ -66,6 +66,20 @@ public:
     QString GetSelectedServerName() const { return strSelectedServerName; }
 
 protected:
+    // NOTE: This enum must list the columns in the same order
+    //       as their column headings in connectdlgbase.ui
+    enum EConnectListViewColumns
+    {
+        LVC_NAME,               // server name
+        LVC_VERSION,            // server version
+        LVC_PING,               // ping time
+        LVC_CLIENTS,            // number of connected clients (including additional strings like " (full)")
+        LVC_LOCATION,           // location
+        LVC_PING_MIN_HIDDEN,    // minimum ping time (invisible)
+        LVC_CLIENTS_MAX_HIDDEN, // maximum number of clients (invisible)
+        LVC_COLUMNS             // total number of columns
+    };
+
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 

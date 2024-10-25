@@ -55,6 +55,7 @@ public:
     QString GetReceivedName() { return cReceivedChanInfo.strName; }
     int     GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
     QString GetReceivedCity() { return cReceivedChanInfo.strCity; }
+    int     GetReceivedChID() { return cReceivedChanInfo.iChanID; }
     void    SetChannelInfos ( const CChannelInfo& cChanInfo );
     void    Show() { pFrame->show(); }
     void    Hide() { pFrame->hide(); }

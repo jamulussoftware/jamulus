@@ -333,6 +333,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QAction* ByCityAction =
         pViewMenu->addAction ( tr ( "Sort Users by &City" ), this, SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
 
+    QAction* ByServerChannelAction = pViewMenu->addAction ( tr ( "Sort Users by Se&rver Channel" ),
+                                                            this,
+                                                            SLOT ( OnSortChannelsByChannel() ),
+                                                            QKeySequence ( Qt::CTRL + Qt::Key_R ) );
+
     OwnFaderFirstAction->setCheckable ( true );
     OwnFaderFirstAction->setChecked ( pSettings->bOwnFaderFirst );
 
@@ -349,13 +354,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     SortActionGroup->addAction ( ByGroupAction );
     ByCityAction->setCheckable ( true );
     SortActionGroup->addAction ( ByCityAction );
+    ByServerChannelAction->setCheckable ( true );
+    SortActionGroup->addAction ( ByServerChannelAction );
 
     // initialize sort type setting (i.e., recover stored setting)
     switch ( pSettings->eChannelSortType )
     {
-    case ST_NO_SORT:
-        NoSortAction->setChecked ( true );
-        break;
     case ST_BY_NAME:
         ByNameAction->setChecked ( true );
         break;
@@ -367,6 +371,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         break;
     case ST_BY_CITY:
         ByCityAction->setChecked ( true );
+        break;
+    case ST_BY_SERVER_CHANNEL:
+        ByServerChannelAction->setChecked ( true );
+        break;
+    default: // ST_NO_SORT
+        NoSortAction->setChecked ( true );
         break;
     }
     MainMixerBoard->SetFaderSorting ( pSettings->eChannelSortType );

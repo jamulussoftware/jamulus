@@ -558,11 +558,12 @@ enum ERecorderState
 enum EChSortType
 {
     // used for settings -> enum values should be fixed
-    ST_NO_SORT       = 0,
-    ST_BY_NAME       = 1,
-    ST_BY_INSTRUMENT = 2,
-    ST_BY_GROUPID    = 3,
-    ST_BY_CITY       = 4
+    ST_NO_SORT           = 0,
+    ST_BY_NAME           = 1,
+    ST_BY_INSTRUMENT     = 2,
+    ST_BY_GROUPID        = 3,
+    ST_BY_CITY           = 4,
+    ST_BY_SERVER_CHANNEL = 5
 };
 
 // Directory type --------------------------------------------------------------

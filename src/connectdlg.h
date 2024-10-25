@@ -59,6 +59,7 @@ public:
     void SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo );
 
     void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
+    void SetServerVersionResult ( const CHostAddress& InetAddr, const QString& strVersion );
 
     bool    GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
@@ -74,7 +75,7 @@ protected:
     void             UpdateListFilter();
     void             ShowAllMusicians ( const bool bState );
     void             RequestServerList();
-    void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress );
+    void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void             UpdateDirectoryComboBox();
 
     CClientSettings* pSettings;

@@ -115,6 +115,8 @@ public:
     // in a callback function it has to be public -> better solution
     void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType ) { emit ReinitRequest ( eSndCrdResetType ); }
 
+    bool IsMIDIEnabled() { return iCtrlMIDIChannel != INVALID_MIDI_CH; }
+
 protected:
     virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
     virtual void     UnloadCurrentDriver() {}

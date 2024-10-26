@@ -272,6 +272,8 @@ public:
         Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit );
     }
 
+    bool IsMIDIEnabled() { return Sound.IsMIDIEnabled(); }
+
     // settings
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;

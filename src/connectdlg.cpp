@@ -113,15 +113,15 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 #ifdef ANDROID
     // for Android we need larger numbers because of the default font size
     lvwServers->setColumnWidth ( LVC_NAME, 200 );
-    lvwServers->setColumnWidth ( LVC_VERSION, 110 );
     lvwServers->setColumnWidth ( LVC_PING, 130 );
     lvwServers->setColumnWidth ( LVC_CLIENTS, 100 );
+    lvwServers->setColumnWidth ( LVC_VERSION, 110 );
 #else
     lvwServers->setColumnWidth ( LVC_NAME, 180 );
-    lvwServers->setColumnWidth ( LVC_VERSION, 65 );
     lvwServers->setColumnWidth ( LVC_PING, 75 );
     lvwServers->setColumnWidth ( LVC_CLIENTS, 70 );
     lvwServers->setColumnWidth ( LVC_LOCATION, 220 );
+    lvwServers->setColumnWidth ( LVC_VERSION, 65 );
 #endif
     lvwServers->clear();
 
@@ -131,12 +131,14 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     // add invisible columns which are used for sorting the list and storing
     // the current/maximum number of clients
     // 0: server name
-    // 1: server version
-    // 2: ping time
-    // 3: number of musicians (including additional strings like " (full)")
-    // 4: location
+    // 1: ping time
+    // 2: number of musicians (including additional strings like " (full)")
+    // 3: location
+    // 4: server version
     // 5: minimum ping time (invisible)
     // 6: maximum number of clients (invisible)
+    // (see EConnectListViewColumns in connectdlg.h, which must match the above)
+
     lvwServers->setColumnCount ( LVC_COLUMNS );
     lvwServers->hideColumn ( LVC_PING_MIN_HIDDEN );
     lvwServers->hideColumn ( LVC_CLIENTS_MAX_HIDDEN );

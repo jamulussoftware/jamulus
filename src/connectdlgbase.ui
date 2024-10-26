@@ -73,11 +73,6 @@
      </column>
      <column>
       <property name="text">
-       <string>Version</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>Ping Time</string>
       </property>
      </column>
@@ -89,6 +84,11 @@
      <column>
       <property name="text">
        <string>Location</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Version</string>
       </property>
      </column>
     </widget>

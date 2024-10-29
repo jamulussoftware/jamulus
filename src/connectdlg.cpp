@@ -808,13 +808,13 @@ void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress,
     // block the GUI).
     QThread::msleep ( 11 );
 
-    emit CreateCLServerListPingMes ( haServerAddress );
-
-    // also request the server version if we have not already received it
+    // first request the server version if we have not already received it
     if ( bNeedVersion )
     {
         emit CreateCLServerListReqVerAndOSMes ( haServerAddress );
     }
+
+    emit CreateCLServerListPingMes ( haServerAddress );
 }
 
 void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients )

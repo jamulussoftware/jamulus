@@ -1092,39 +1092,47 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
             iMyFader = static_cast<int> ( i );
         }
 
-        if ( eChSortType == ST_BY_NAME )
+        switch ( eChSortType )
         {
+        case ST_BY_NAME:
             PairList << QPair<QString, size_t> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
-        }
-        else if ( eChSortType == ST_BY_CITY )
-        {
-            PairList << QPair<QString, size_t> ( vecpChanFader[i]->GetReceivedCity().toLower(), i );
-        }
-        else if ( eChSortType == ST_BY_INSTRUMENT )
-        {
+            break;
+        case ST_BY_CITY:
+            // sort first "by city" and second "by name" by adding the name after the city
+            PairList << QPair<QString, size_t> ( vecpChanFader[i]->GetReceivedCity().toLower() + vecpChanFader[i]->GetReceivedName().toLower(), i );
+            break;
+        case ST_BY_INSTRUMENT:
             // sort first "by instrument" and second "by name" by adding the name after the instrument
             PairList << QPair<QString, size_t> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ) +
                                                      vecpChanFader[i]->GetReceivedName().toLower(),
                                                  i );
-        }
-        else if ( eChSortType == ST_BY_GROUPID )
-        {
+            break;
+        case ST_BY_GROUPID:
+            // sort first "by group" and second "by name" by adding the name after the group
             if ( vecpChanFader[i]->GetGroupID() == INVALID_INDEX )
             {
                 // put channels without a group at the end
-                PairList << QPair<QString, size_t> ( "z", i ); // group IDs are numbers, use letter to put it at the end
+                PairList << QPair<QString, size_t> ( "999" + vecpChanFader[i]->GetReceivedName().toLower(),
+                                                     i ); // worst case is one group per channel (current max is 8)
             }
             else
             {
-                PairList << QPair<QString, size_t> ( QString::number ( vecpChanFader[i]->GetGroupID() ), i );
+                PairList << QPair<QString, size_t> ( QString ( "%1" ).arg ( vecpChanFader[i]->GetGroupID(), 3, 10, QLatin1Char ( '0' ) ) +
+                                                         vecpChanFader[i]->GetReceivedName().toLower(),
+                                                     i );
             }
-        }
-        else // ST_NO_SORT
-        {
+            break;
+        case ST_BY_SERVER_CHANNEL:
+            PairList << QPair<QString, size_t> ( QString ( "%1" ).arg ( vecpChanFader[i]->GetReceivedChID(), 3, 10, QLatin1Char ( '0' ) ) +
+                                                     vecpChanFader[i]->GetReceivedName().toLower(),
+                                                 i );
+            break;
+        default: // ST_NO_SORT
             // per definition for no sort: faders are sorted in the order they appeared (note that we
             // pad to a total of 11 characters with zeros to make sure the sorting is done correctly)
             PairList << QPair<QString, size_t> ( QString ( "%1" ).arg ( vecpChanFader[i]->GetRunningNewClientCnt(), 11, 10, QLatin1Char ( '0' ) ),
                                                  i );
+            break;
         }
 
         // count the number of visible faders

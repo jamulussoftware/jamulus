@@ -266,7 +266,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         GetIniSetting ( IniXMLDocument, "client", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
     // fader channel sorting
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "channelsort", 0, 4 /* ST_BY_CITY */, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "channelsort", 0, 5 /* ST_BY_SERVER_CHANNEL */, iValue ) )
     {
         eChannelSortType = static_cast<EChSortType> ( iValue );
     }

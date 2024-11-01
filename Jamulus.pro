@@ -471,8 +471,7 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/silk/typedef.h \
     libs/opus/src/analysis.h \
     libs/opus/src/mlp.h \
-    libs/opus/src/opus_private.h \
-    libs/opus/src/tansig_table.h
+    libs/opus/src/opus_private.h
 
 HEADERS_OPUS_ARM = libs/opus/celt/arm/armcpu.h \
     libs/opus/silk/arm/biquad_alt_arm.h \
@@ -645,6 +644,7 @@ SOURCES_OPUS = libs/opus/celt/bands.c \
     libs/opus/silk/VAD.c \
     libs/opus/silk/VQ_WMat_EC.c \
     libs/opus/src/analysis.c \
+    libs/opus/src/extensions.c \
     libs/opus/src/mlp.c \
     libs/opus/src/mlp_data.c \
     libs/opus/src/opus.c \

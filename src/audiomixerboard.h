@@ -56,7 +56,8 @@ public:
     int     GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
     QString GetReceivedCity() { return cReceivedChanInfo.strCity; }
     int     GetReceivedChID() { return cReceivedChanInfo.iChanID; }
-    void    SetChannelInfos ( const CChannelInfo& cChanInfo );
+    int     GetReceivedMIDIID() { return cReceivedMIDIID; }
+    void    SetChannelInfos ( const CChannelInfo& cChanInfo, int iMIDIID );
     void    Show() { pFrame->show(); }
     void    Hide() { pFrame->hide(); }
     bool    IsVisible() { return !pFrame->isHidden(); }
@@ -120,6 +121,7 @@ protected:
     QLabel*    plblCountryFlag;
 
     CChannelInfo cReceivedChanInfo;
+    int          cReceivedMIDIID;
 
     bool        bOtherChannelIsSolo;
     bool        bIsMyOwnFader;
@@ -190,6 +192,7 @@ public:
 
     virtual ~CAudioMixerBoard();
 
+    void    SetClientPointer ( CClient* pNClient ) { pClient = pNClient; }
     void    SetSettingsPointer ( CClientSettings* pNSet ) { pSettings = pNSet; }
     void    HideAll();
     void    ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
@@ -200,8 +203,6 @@ public:
     void    SetDisplayPans ( const bool eNDP );
     void    SetPanIsSupported();
     void    SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
-    void    SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
-    int     GetMyChannelID() const { return iMyChannelID; }
 
     void SetFaderLevel ( const int iChannelIdx, const int iValue );
 
@@ -260,6 +261,7 @@ protected:
     void UpdateSoloStates();
     void UpdateTitle();
 
+    CClient*                pClient;
     CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;
     CMixerBoardScrollArea*  pScrollArea;
@@ -267,7 +269,6 @@ protected:
     bool                    bDisplayPans;
     bool                    bIsPanSupported;
     bool                    bNoFaderVisible;
-    int                     iMyChannelID;         // must use int (not size_t) so INVALID_INDEX can be stored
     int                     iRunningNewClientCnt; // integer type is sufficient, will never overrun for its purpose
     int                     iNumMixerPanelRows;
     QString                 strServerName;

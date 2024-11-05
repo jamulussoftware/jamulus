@@ -214,7 +214,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // MeterStyle init
     SetMeterStyle ( pClient->GetMeterStyle() );
 
-    // set the settings pointer to the mixer board (must be done early)
+    // pass the client and settings pointers to the mixer board (must be done early)
+    MainMixerBoard->SetClientPointer ( pClient );
     MainMixerBoard->SetSettingsPointer ( pSettings );
     MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
 
@@ -486,8 +487,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::Disconnected, this, &CClientDlg::OnDisconnected );
 
     QObject::connect ( pClient, &CClient::ChatTextReceived, this, &CClientDlg::OnChatTextReceived );
-
-    QObject::connect ( pClient, &CClient::ClientIDReceived, this, &CClientDlg::OnClientIDReceived );
 
     QObject::connect ( pClient, &CClient::MuteStateHasChangedReceived, this, &CClientDlg::OnMuteStateHasChangedReceived );
 

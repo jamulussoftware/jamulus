@@ -260,7 +260,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     UpdateGroupIDDependencies();
 
     // the instrument picture might need scaling after a style change
-    SetChannelInfos ( cReceivedChanInfo );
+    SetChannelInfos ( cReceivedChanInfo, cReceivedMIDIID );
 }
 
 void CChannelFader::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
@@ -436,6 +436,7 @@ void CChannelFader::Reset()
     plblCountryFlag->setVisible ( false );
     plblCountryFlag->setToolTip ( "" );
     cReceivedChanInfo = CChannelInfo();
+    cReceivedMIDIID   = INVALID_INDEX;
     SetupFaderTag ( SL_NOT_SET );
 
     // set a defined tool tip time out
@@ -666,10 +667,11 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
 
 void CChannelFader::SetChannelLevel ( const uint16_t iLevel ) { plbrChannelLevel->SetValue ( iLevel ); }
 
-void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
+void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo, int iMIDIID )
 {
     // store received channel info
     cReceivedChanInfo = cChanInfo;
+    cReceivedMIDIID   = iMIDIID;
 
     // init properties for the tool tip
     int              iTTInstrument = CInstPictures::GetNotUsedInstrument();
@@ -682,7 +684,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     // show channel numbers if --ctrlmidich is used (#241, #95)
     if ( bMIDICtrlUsed )
     {
-        strModText.prepend ( QString().setNum ( cChanInfo.iChanID ) + ":" );
+        strModText.prepend ( QString().setNum ( iMIDIID ) + ":" );
     }
 
     QTextBoundaryFinder tbfName ( QTextBoundaryFinder::Grapheme, cChanInfo.strName );
@@ -886,7 +888,6 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     bDisplayPans ( false ),
     bIsPanSupported ( false ),
     bNoFaderVisible ( true ),
-    iMyChannelID ( INVALID_INDEX ),
     iRunningNewClientCnt ( 0 ),
     iNumMixerPanelRows ( 1 ), // pSettings->iNumMixerPanelRows is not yet available
     strServerName ( "" ),
@@ -1049,7 +1050,6 @@ void CAudioMixerBoard::HideAll()
     bIsPanSupported      = false;
     bNoFaderVisible      = true;
     eRecorderState       = RS_UNDEFINED;
-    iMyChannelID         = INVALID_INDEX;
     iRunningNewClientCnt = 0; // reset running counter on new server connection
 
     // use original order of channel (by server ID)
@@ -1123,7 +1123,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
             }
             break;
         case ST_BY_SERVER_CHANNEL:
-            PairList << QPair<QString, size_t> ( QString ( "%1" ).arg ( vecpChanFader[i]->GetReceivedChID(), 3, 10, QLatin1Char ( '0' ) ) +
+            PairList << QPair<QString, size_t> ( QString ( "%1" ).arg ( vecpChanFader[i]->GetReceivedMIDIID(), 3, 10, QLatin1Char ( '0' ) ) +
                                                      vecpChanFader[i]->GetReceivedName().toLower(),
                                                  i );
             break;
@@ -1267,7 +1267,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                 vecpChanFader[iChanID]->Reset();
                 vecAvgLevels[iChanID] = 0.0f;
 
-                if ( static_cast<int> ( iChanID ) == iMyChannelID )
+                if ( static_cast<int> ( iChanID ) == pClient->GetMyChannelID() )
                 {
                     // this is my own fader --> set fader property
                     vecpChanFader[iChanID]->SetIsMyOwnFader();
@@ -1288,7 +1288,8 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                 // we can adjust the level even if no fader was visible.
                 // The fader level of 100 % is the default in the
                 // server, in that case we do not have to do anything here.
-                if ( ( !bNoFaderVisible || ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != static_cast<int> ( iChanID ) ) ) ) &&
+                if ( ( !bNoFaderVisible ||
+                       ( ( pClient->GetMyChannelID() != INVALID_INDEX ) && ( pClient->GetMyChannelID() != static_cast<int> ( iChanID ) ) ) ) &&
                      ( pSettings->iNewClientFaderLevel != 100 ) )
                 {
                     // the value is in percent -> convert range
@@ -1322,7 +1323,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
             }
 
             // set the channel infos
-            vecpChanFader[iChanID]->SetChannelInfos ( vecChanInfo[idxVecpChan] );
+            vecpChanFader[iChanID]->SetChannelInfos ( vecChanInfo[idxVecpChan], pClient->ChanToMIDI ( iChanID ) );
         }
 
         // update the solo states since if any channel was on solo and a new client
@@ -1397,7 +1398,7 @@ void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
     for ( size_t i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         // only apply to visible faders and not to my own channel fader
-        if ( vecpChanFader[i]->IsVisible() && ( static_cast<int> ( i ) != iMyChannelID ) )
+        if ( vecpChanFader[i]->IsVisible() && ( static_cast<int> ( i ) != pClient->GetMyChannelID() ) )
         {
             // the value is in percent -> convert range, also use the group
             // update flag to make sure the group values are all set to the
@@ -1426,7 +1427,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     for ( size_t i = 0; i < MAX_NUM_CHANNELS; ++i )
     {
         // only apply to visible faders (and not to my own channel fader)
-        if ( vecpChanFader[i]->IsVisible() && ( static_cast<int> ( i ) != iMyChannelID ) )
+        if ( vecpChanFader[i]->IsVisible() && ( static_cast<int> ( i ) != pClient->GetMyChannelID() ) )
         {
             // map averaged meter output level to decibels
             // (invert CStereoSignalLevelMeter::CalcLogResultForMeter)
@@ -1516,7 +1517,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     for ( size_t i = 0; i < MAX_NUM_CHANNELS; ++i )
     {
         // only apply to visible faders (and not to my own channel fader)
-        if ( vecpChanFader[i]->IsVisible() && ( static_cast<int> ( i ) != iMyChannelID ) )
+        if ( vecpChanFader[i]->IsVisible() && ( static_cast<int> ( i ) != pClient->GetMyChannelID() ) )
         {
             // map averaged meter output level to decibels
             // (invert CStereoSignalLevelMeter::CalcLogResultForMeter)
@@ -1778,4 +1779,4 @@ void CAudioMixerBoard::SetChannelLevels ( const CVector<uint16_t>& vecChannelLev
     }
 }
 
-void CAudioMixerBoard::MuteMyChannel() { SetFaderIsMute ( iMyChannelID, true ); }
+void CAudioMixerBoard::MuteMyChannel() { SetFaderIsMute ( pClient->GetMyChannelID(), true ); }

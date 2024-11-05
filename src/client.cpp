@@ -36,6 +36,7 @@ CClient::CClient ( const quint16  iPortNumber,
     ChannelInfo(),
     strClientName ( strNClientName ),
     Channel ( false ), /* we need a client channel -> "false" */
+    iMyChannelID ( INVALID_INDEX ),
     CurOpusEncoder ( nullptr ),
     CurOpusDecoder ( nullptr ),
     eAudioCompressionType ( CT_OPUS ),
@@ -789,8 +790,44 @@ void CClient::OnHandledSignal ( int sigNum )
 #endif
 }
 
-void CClient::OnControllerInFaderLevel ( int iChannelIdx, int iValue )
+// Ensure user's own channel is always given MIDI offset 0, so it is the first physical fader
+// All channels with a client ID less than user's own will use ID+1 as their MIDI offset
+
+int CClient::ChanToMIDI ( const int iChannelIdx )
 {
+    if ( iMyChannelID == INVALID_INDEX )
+        return iChannelIdx;
+
+    if ( iChannelIdx == iMyChannelID )
+        return 0;
+
+    if ( iChannelIdx < iMyChannelID )
+        return iChannelIdx + 1;
+
+    return iChannelIdx;
+}
+
+int CClient::MIDIToChan ( const int iMIDIIdx )
+{
+    if ( iMyChannelID == INVALID_INDEX )
+        return iMIDIIdx;
+
+    if ( iMIDIIdx == 0 )
+        return iMyChannelID;
+
+    if ( iMIDIIdx <= iMyChannelID )
+        return iMIDIIdx - 1;
+
+    return iMIDIIdx;
+}
+
+// Handle received MIDI controls
+
+void CClient::OnControllerInFaderLevel ( int iMIDIIdx, int iValue )
+{
+    // map the MIDI index to the real channel number
+    const int iChannelIdx = MIDIToChan ( iMIDIIdx );
+
     // in case of a headless client the faders cannot be moved so we need
     // to send the controller information directly to the server
 #ifdef HEADLESS
@@ -804,8 +841,11 @@ void CClient::OnControllerInFaderLevel ( int iChannelIdx, int iValue )
     emit ControllerInFaderLevel ( iChannelIdx, iValue );
 }
 
-void CClient::OnControllerInPanValue ( int iChannelIdx, int iValue )
+void CClient::OnControllerInPanValue ( int iMIDIIdx, int iValue )
 {
+    // map the MIDI index to the real channel number
+    const int iChannelIdx = MIDIToChan ( iMIDIIdx );
+
     // in case of a headless client the panners cannot be moved so we need
     // to send the controller information directly to the server
 #ifdef HEADLESS
@@ -816,8 +856,11 @@ void CClient::OnControllerInPanValue ( int iChannelIdx, int iValue )
     emit ControllerInPanValue ( iChannelIdx, iValue );
 }
 
-void CClient::OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo )
+void CClient::OnControllerInFaderIsSolo ( int iMIDIIdx, bool bIsSolo )
 {
+    // map the MIDI index to the real channel number
+    const int iChannelIdx = MIDIToChan ( iMIDIIdx );
+
     // in case of a headless client the buttons are not displayed so we need
     // to send the controller information directly to the server
 #ifdef HEADLESS
@@ -827,8 +870,11 @@ void CClient::OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo )
     emit ControllerInFaderIsSolo ( iChannelIdx, bIsSolo );
 }
 
-void CClient::OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute )
+void CClient::OnControllerInFaderIsMute ( int iMIDIIdx, bool bIsMute )
 {
+    // map the MIDI index to the real channel number
+    const int iChannelIdx = MIDIToChan ( iMIDIIdx );
+
     // in case of a headless client the buttons are not displayed so we need
     // to send the controller information directly to the server
 #ifdef HEADLESS
@@ -851,6 +897,9 @@ void CClient::OnControllerInMuteMyself ( bool bMute )
 
 void CClient::OnClientIDReceived ( int iChanID )
 {
+    // remember our client ID received from the server
+    iMyChannelID = iChanID;
+
     // for headless mode we support to mute our own signal in the personal mix
     // (note that the check for headless is done in the main.cpp and must not
     // be checked here)
@@ -902,6 +951,9 @@ void CClient::Stop()
     // gets its way to the server, if not, the old behaviour time-out
     // disconnects the connection anyway).
     ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
+
+    // forget our own channel ID
+    iMyChannelID = INVALID_INDEX;
 
     // reset current signal level and LEDs
     bJitterBufferOK = true;

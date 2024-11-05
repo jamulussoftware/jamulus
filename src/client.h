@@ -133,6 +133,8 @@ public:
 
     bool IsConnected() { return Channel.IsConnected(); }
 
+    int GetMyChannelID() { return iMyChannelID; }
+
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
     void       SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
 
@@ -272,6 +274,10 @@ public:
         Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit );
     }
 
+    // convert between MIDI index and real channel index
+    int ChanToMIDI ( const int iChanIdx );
+    int MIDIToChan ( const int iMIDIIdx );
+
     // settings
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;
@@ -291,6 +297,9 @@ protected:
     // only one channel is needed for client application
     CChannel  Channel;
     CProtocol ConnLessProtocol;
+
+    // this client's channel ID sent by the server
+    int iMyChannelID; // must use int (not size_t) so INVALID_INDEX can be stored
 
     // audio encoder/decoder
     OpusCustomMode*        Opus64Mode;
@@ -398,10 +407,11 @@ protected slots:
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
-    void OnControllerInFaderLevel ( int iChannelIdx, int iValue );
-    void OnControllerInPanValue ( int iChannelIdx, int iValue );
-    void OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
-    void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
+
+    void OnControllerInFaderLevel ( int iMIDIIdx, int iValue );
+    void OnControllerInPanValue ( int iMIDIIdx, int iValue );
+    void OnControllerInFaderIsSolo ( int iMIDIIdx, bool bIsSolo );
+    void OnControllerInFaderIsMute ( int iMIDIIdx, bool bIsMute );
     void OnControllerInMuteMyself ( bool bMute );
     void OnClientIDReceived ( int iChanID );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

@@ -103,7 +103,7 @@ MESSAGES (with connection)
     +-------------------+--------------+
 
 
-- PROTMESSID_CHANNEL_PAN: Gain of channel
+- PROTMESSID_CHANNEL_PAN: Panning of channel
 
     +-------------------+-----------------+
     | 1 byte channel ID | 2 bytes panning |

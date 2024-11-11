@@ -120,7 +120,6 @@ CClient::CClient ( const quint16  iPortNumber,
 
     // The first ConClientListMesReceived handler performs the necessary cleanup and has to run first:
     QObject::connect ( &Channel, &CChannel::ConClientListMesReceived, this, &CClient::OnConClientListMesReceived );
-    QObject::connect ( &Channel, &CChannel::ConClientListMesReceived, this, &CClient::ConClientListMesReceived );
 
     QObject::connect ( &Channel, &CChannel::Disconnected, this, &CClient::Disconnected );
 
@@ -130,7 +129,7 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &Channel, &CChannel::ClientIDReceived, this, &CClient::OnClientIDReceived );
 
-    QObject::connect ( &Channel, &CChannel::MuteStateHasChangedReceived, this, &CClient::MuteStateHasChangedReceived );
+    QObject::connect ( &Channel, &CChannel::MuteStateHasChangedReceived, this, &CClient::OnMuteStateHasChangedReceived );
 
     QObject::connect ( &Channel, &CChannel::LicenceRequired, this, &CClient::LicenceRequired );
 
@@ -154,7 +153,7 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived, this, &CClient::CLVersionAndOSReceived );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived, this, &CClient::CLChannelLevelListReceived );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived, this, &CClient::OnCLChannelLevelListReceived );
 
     // other
     QObject::connect ( &Sound, &CSound::ReinitRequest, this, &CClient::OnSndCrdReinitRequest );
@@ -291,8 +290,24 @@ void CClient::OnNewConnection()
     //### TODO: END ###//
 }
 
+void CClient::OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
+{
+    // TODO map iChanID from server channel ID to client channel ID
+
+    emit MuteStateHasChangedReceived ( iChanID, bIsMuted );
+}
+
+void CClient::OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList )
+{
+    // TODO reorder levels from server channel order to client channel order
+
+    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
+}
+
 void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
+    // TODO translate from server channel IDs to client channel IDs
+
     // Upon receiving a new client list, we have to reset oldGain and newGain
     // entries for unused channels. This ensures that a disconnected channel
     // does not leave behind wrong cached gain values which would leak into
@@ -316,6 +331,8 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
             oldGain[iId] = newGain[iId] = 1;
         }
     }
+
+    emit ConClientListMesReceived ( vecChanInfo );
 }
 
 void CClient::CreateServerJitterBufferMessage()

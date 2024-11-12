@@ -307,6 +307,7 @@ void CClient::OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint
 void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
     // TODO translate from server channel IDs to client channel IDs
+    // ALSO here is where we allocate and free client channels as required
 
     // Upon receiving a new client list, we have to reset oldGain and newGain
     // entries for unused channels. This ensures that a disconnected channel
@@ -331,6 +332,8 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
             oldGain[iId] = newGain[iId] = 1;
         }
     }
+
+    // TODO vecChanInfo needs to be ordered by client channel ID instead of server channel ID
 
     emit ConClientListMesReceived ( vecChanInfo );
 }
@@ -444,7 +447,7 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
     // here the timer was not active:
     // send the actual gain and reset the range of channel IDs to empty
     oldGain[iId] = newGain[iId] = fGain;
-    Channel.SetRemoteChanGain ( iId, fGain );
+    Channel.SetRemoteChanGain ( iId, fGain );   // TODO translate client channel to server channel ID
 
     StartDelayTimer();
 }
@@ -460,7 +463,7 @@ void CClient::OnTimerRemoteChanGain()
         {
             // send new gain and record as old gain
             float fGain = oldGain[iId] = newGain[iId];
-            Channel.SetRemoteChanGain ( iId, fGain );
+            Channel.SetRemoteChanGain ( iId, fGain );   // TODO translate client channel to server channel ID
             bSent = true;
         }
     }
@@ -489,6 +492,11 @@ void CClient::StartDelayTimer()
     {
         TimerGain.start ( iCurPingTime * 2 );
     }
+}
+
+void CClient::SetRemoteChanPan ( const int iId, const float fPan )
+{
+    Channel.SetRemoteChanPan ( iId, fPan ); // TODO translate client channel to server channel ID
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )
@@ -868,12 +876,14 @@ void CClient::OnControllerInMuteMyself ( bool bMute )
 
 void CClient::OnClientIDReceived ( int iChanID )
 {
+    // TODO allocate and map client-side channel 0
+
     // for headless mode we support to mute our own signal in the personal mix
     // (note that the check for headless is done in the main.cpp and must not
     // be checked here)
     if ( bMuteMeInPersonalMix )
     {
-        SetRemoteChanGain ( iChanID, 0, false );
+        SetRemoteChanGain ( iChanID, 0, false );    // TODO this will need client channel ID
     }
 
     emit ClientIDReceived ( iChanID );

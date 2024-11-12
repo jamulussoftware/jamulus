@@ -244,7 +244,7 @@ public:
     void OnTimerRemoteChanGain();
     void StartDelayTimer();
 
-    void SetRemoteChanPan ( const int iId, const float fPan ) { Channel.SetRemoteChanPan ( iId, fPan ); }
+    void SetRemoteChanPan ( const int iId, const float fPan );
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
 

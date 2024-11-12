@@ -104,6 +104,15 @@
 #define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE   165
 
 /* Classes ********************************************************************/
+
+class CClientChannel
+{
+public:
+    int iServerChannelID; // unused channels will contain INVALID_INDEX
+
+    // can store here other information about an active channel
+};
+
 class CClient : public QObject
 {
     Q_OBJECT
@@ -288,9 +297,25 @@ protected:
     int  EvaluatePingMessage ( const int iMs );
     void CreateServerJitterBufferMessage();
 
+    void ClearClientChannels();
+    void FreeClientChannel ( const int iServerChannelID );
+    int  FindClientChannel ( const int iServerChannelID, const bool bCreateIfNew ); // returns a client channel ID or INVALID_INDEX
+
     // only one channel is needed for client application
     CChannel  Channel;
     CProtocol ConnLessProtocol;
+
+    // client channels, indexed by client channel ID,
+    // containing server channel ID (INVALID_INDEX if free)
+    CClientChannel clientChannels[MAX_NUM_CHANNELS];
+
+    // client channel IDs, indexed by server channel ID
+    // unused channels will contain INVALID_INDEX
+    int clientChannelIDs[MAX_NUM_CHANNELS];
+
+    // number of active channels
+    int    iActiveChannels;
+    QMutex MutexChannels;
 
     // audio encoder/decoder
     OpusCustomMode*        Opus64Mode;

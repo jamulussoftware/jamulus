@@ -447,7 +447,7 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
     // here the timer was not active:
     // send the actual gain and reset the range of channel IDs to empty
     oldGain[iId] = newGain[iId] = fGain;
-    Channel.SetRemoteChanGain ( iId, fGain );   // TODO translate client channel to server channel ID
+    Channel.SetRemoteChanGain ( iId, fGain ); // TODO translate client channel to server channel ID
 
     StartDelayTimer();
 }
@@ -463,7 +463,7 @@ void CClient::OnTimerRemoteChanGain()
         {
             // send new gain and record as old gain
             float fGain = oldGain[iId] = newGain[iId];
-            Channel.SetRemoteChanGain ( iId, fGain );   // TODO translate client channel to server channel ID
+            Channel.SetRemoteChanGain ( iId, fGain ); // TODO translate client channel to server channel ID
             bSent = true;
         }
     }
@@ -883,7 +883,7 @@ void CClient::OnClientIDReceived ( int iChanID )
     // be checked here)
     if ( bMuteMeInPersonalMix )
     {
-        SetRemoteChanGain ( iChanID, 0, false );    // TODO this will need client channel ID
+        SetRemoteChanGain ( iChanID, 0, false ); // TODO this will need client channel ID
     }
 
     emit ClientIDReceived ( iChanID );
@@ -1412,4 +1412,80 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
         fDelayToFillNetworkPacketsMs + fTotalJitterBufferDelayMs + fTotalSoundCardDelayMs + fAdditionalAudioCodecDelayMs;
 
     return MathUtils::round ( fTotalBufferDelayMs + iPingTimeMs );
+}
+
+// Management of Client Channels and mapping to/from Server Channels
+
+void CClient::ClearClientChannels()
+{
+    QMutexLocker locker ( &MutexChannels );
+
+    iActiveChannels = 0;
+
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        clientChannels[i].iServerChannelID = INVALID_INDEX;
+        // TODO reset any other fields in CClientChannel
+
+        clientChannelIDs[i] = INVALID_INDEX;
+    }
+}
+
+void CClient::FreeClientChannel ( const int iServerChannelID )
+{
+    QMutexLocker locker ( &MutexChannels );
+
+    if ( iServerChannelID == INVALID_INDEX || iServerChannelID >= MAX_NUM_CHANNELS )
+    {
+        return;
+    }
+
+    const int iClientChannelID = clientChannelIDs[iServerChannelID];
+
+    Q_ASSERT ( clientChannels[iClientChannelID].iServerChannelID == iServerChannelID );
+
+    clientChannelIDs[iServerChannelID]                = INVALID_INDEX;
+    clientChannels[iClientChannelID].iServerChannelID = INVALID_INDEX;
+
+    iActiveChannels -= 1;
+}
+
+// find, and optionally create, a client channel for the supplied server channel ID
+// returns a client channel ID or INVALID_INDEX
+int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateIfNew )
+{
+    QMutexLocker locker ( &MutexChannels );
+
+    if ( iServerChannelID == INVALID_INDEX || iServerChannelID >= MAX_NUM_CHANNELS )
+    {
+        return INVALID_INDEX;
+    }
+
+    const int iClientChannelID = clientChannelIDs[iServerChannelID];
+
+    if ( iClientChannelID != INVALID_INDEX )
+    {
+        Q_ASSERT ( clientChannels[iClientChannelID].iServerChannelID == iServerChannelID );
+
+        return iClientChannelID;
+    }
+
+    // no matching client channel - create new one if requested
+    if ( bCreateIfNew )
+    {
+        // search clientChannels[] for a free client channel
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        {
+            if ( clientChannels[i].iServerChannelID == INVALID_INDEX )
+            {
+                clientChannels[i].iServerChannelID = iServerChannelID;
+                clientChannelIDs[iServerChannelID] = i;
+
+                iActiveChannels += 1;
+                return i; // new client channel ID
+            }
+        }
+    }
+
+    return INVALID_INDEX;
 }

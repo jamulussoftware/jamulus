@@ -921,7 +921,6 @@ int main ( int argc, char** argv )
             // actual client object
             CClient Client ( iPortNumber,
                              iQosNumber,
-                             strConnOnStartupAddress,
                              strMIDISetup,
                              bNoAutoJackConnect,
                              strClientName,
@@ -952,7 +951,6 @@ int main ( int argc, char** argv )
                 // GUI object
                 CClientDlg ClientDlg ( &Client,
                                        &Settings,
-                                       strConnOnStartupAddress,
                                        strMIDISetup,
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
@@ -963,6 +961,12 @@ int main ( int argc, char** argv )
                 // show dialog
                 ClientDlg.show();
 
+                // Connect on startup
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
+
                 pApp->exec();
             }
             else
@@ -970,6 +974,12 @@ int main ( int argc, char** argv )
             {
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+
+                // Connect on startup
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
 
                 pApp->exec();
             }

@@ -109,6 +109,7 @@ class CClientChannel
 {
 public:
     int iServerChannelID; // unused channels will contain INVALID_INDEX
+    int iJoinSequence;    // order of joining of session participants
 
     // can store here other information about an active channel
 };
@@ -313,8 +314,8 @@ protected:
     // unused channels will contain INVALID_INDEX
     int clientChannelIDs[MAX_NUM_CHANNELS];
 
-    // number of active channels
-    int    iActiveChannels;
+    int    iActiveChannels; // number of active channels
+    int    iJoinSequence;   // order of joining of session participants
     QMutex MutexChannels;
 
     // audio encoder/decoder

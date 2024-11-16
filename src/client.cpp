@@ -894,6 +894,9 @@ void CClient::Start()
     // init object
     Init();
 
+    // initialise client channels
+    ClearClientChannels();
+
     // enable channel
     Channel.SetEnable ( true );
 
@@ -1421,10 +1424,12 @@ void CClient::ClearClientChannels()
     QMutexLocker locker ( &MutexChannels );
 
     iActiveChannels = 0;
+    iJoinSequence   = 0;
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         clientChannels[i].iServerChannelID = INVALID_INDEX;
+        clientChannels[i].iJoinSequence    = 0;
         // TODO reset any other fields in CClientChannel
 
         clientChannelIDs[i] = INVALID_INDEX;
@@ -1448,6 +1453,11 @@ void CClient::FreeClientChannel ( const int iServerChannelID )
     clientChannels[iClientChannelID].iServerChannelID = INVALID_INDEX;
 
     iActiveChannels -= 1;
+
+    qInfo() << qUtf8Printable ( QString ( "> Freed client ch %1 for server ch %2; chan count = %3" )
+                                    .arg ( iClientChannelID )
+                                    .arg ( iServerChannelID )
+                                    .arg ( iActiveChannels ) );
 }
 
 // find, and optionally create, a client channel for the supplied server channel ID
@@ -1479,9 +1489,16 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
             if ( clientChannels[i].iServerChannelID == INVALID_INDEX )
             {
                 clientChannels[i].iServerChannelID = iServerChannelID;
+                clientChannels[i].iJoinSequence    = ++iJoinSequence;
                 clientChannelIDs[iServerChannelID] = i;
 
                 iActiveChannels += 1;
+
+                qInfo() << qUtf8Printable ( QString ( "> Alloc client ch %1 for server ch %2; chan count = %3" )
+                                                .arg ( iClientChannelID )
+                                                .arg ( iServerChannelID )
+                                                .arg ( iActiveChannels ) );
+
                 return i; // new client channel ID
             }
         }

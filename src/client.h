@@ -429,8 +429,8 @@ protected slots:
     void OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void OnControllerInMuteMyself ( bool bMute );
-    void OnClientIDReceived ( int iChanID );
-    void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
+    void OnClientIDReceived ( int iServerChanID );
+    void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
     void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
 

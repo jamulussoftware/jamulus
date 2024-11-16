@@ -290,9 +290,10 @@ void CClient::OnNewConnection()
     //### TODO: END ###//
 }
 
-void CClient::OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
+void CClient::OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted )
 {
-    // TODO map iChanID from server channel ID to client channel ID
+    // map iChanID from server channel ID to client channel ID
+    int iChanID = FindClientChannel ( iServerChanID, false );
 
     emit MuteStateHasChangedReceived ( iChanID, bIsMuted );
 }
@@ -306,34 +307,73 @@ void CClient::OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint
 
 void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
-    // TODO translate from server channel IDs to client channel IDs
+    // translate from server channel IDs to client channel IDs
     // ALSO here is where we allocate and free client channels as required
 
     // Upon receiving a new client list, we have to reset oldGain and newGain
     // entries for unused channels. This ensures that a disconnected channel
     // does not leave behind wrong cached gain values which would leak into
     // any new channel which reused this channel id.
-    int iNumConnectedClients = vecChanInfo.Size();
 
-    // Save what channel IDs are in use:
-    bool bChanIdInUse[MAX_NUM_CHANNELS] = {};
-    for ( int i = 0; i < iNumConnectedClients; i++ )
+    const int iNumConnectedClients = vecChanInfo.Size();
+    int       i, iSrvIdx;
+
+    // this relies on the received client list being in order of server channel ID
+
+    for ( i = 0, iSrvIdx = 0; i < iNumConnectedClients && iSrvIdx < MAX_NUM_CHANNELS; )
     {
-        bChanIdInUse[vecChanInfo[i].iChanID] = true;
+        // server channel ID of this entry
+        const int iServerChannelID = vecChanInfo[i].iChanID;
+
+        // find matching client channel ID, creating new if necessary
+        const int iClientChannelID = FindClientChannel ( iServerChannelID, true );
+
+        // discard any lower server channels that are no longer in our local list
+        while ( iSrvIdx < iServerChannelID )
+        {
+            const int iId = FindClientChannel ( iSrvIdx, false );
+
+            if ( iId != INVALID_INDEX )
+            {
+                // reset oldGain and newGain as this channel id is currently unused and will
+                // start with a server-side gain at 1 (100%) again.
+                oldGain[iId] = newGain[iId] = 1;
+
+                // iSrvIdx contains a server channel number that has now gone
+                FreeClientChannel ( iSrvIdx );
+            }
+            iSrvIdx++;
+        }
+
+        // now should have matching server channel IDs
+        vecChanInfo[i].iChanID = iClientChannelID; // update channel number to be client-side
+        i++;                                       // next list entry
+        iSrvIdx++;                                 // next local server channel
     }
 
-    // Reset all gains for unused channel IDs:
-    for ( int iId = 0; iId < MAX_NUM_CHANNELS; iId++ )
+    // have now run out of active channels, discard any remaining from our local list
+    // note that iActiveChannels will reduce as remaining channels are freed
+
+    while ( iActiveChannels > iNumConnectedClients && iSrvIdx < MAX_NUM_CHANNELS )
     {
-        if ( !bChanIdInUse[iId] )
+        const int iId = FindClientChannel ( iSrvIdx, false );
+
+        if ( iId != INVALID_INDEX )
         {
             // reset oldGain and newGain as this channel id is currently unused and will
             // start with a server-side gain at 1 (100%) again.
             oldGain[iId] = newGain[iId] = 1;
+
+            // iSrvIdx contains a server channel number that has now gone
+            FreeClientChannel ( iSrvIdx );
         }
+        iSrvIdx++;
     }
 
+    Q_ASSERT ( iActiveChannels == iNumConnectedClients );
+
     // TODO vecChanInfo needs to be ordered by client channel ID instead of server channel ID
+    // check if this is actually necessary, and whether it affects the level meters
 
     emit ConClientListMesReceived ( vecChanInfo );
 }
@@ -447,7 +487,7 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
     // here the timer was not active:
     // send the actual gain and reset the range of channel IDs to empty
     oldGain[iId] = newGain[iId] = fGain;
-    Channel.SetRemoteChanGain ( iId, fGain ); // TODO translate client channel to server channel ID
+    Channel.SetRemoteChanGain ( clientChannels[iId].iServerChannelID, fGain ); // translate client channel to server channel ID
 
     StartDelayTimer();
 }
@@ -463,7 +503,7 @@ void CClient::OnTimerRemoteChanGain()
         {
             // send new gain and record as old gain
             float fGain = oldGain[iId] = newGain[iId];
-            Channel.SetRemoteChanGain ( iId, fGain ); // TODO translate client channel to server channel ID
+            Channel.SetRemoteChanGain ( clientChannels[iId].iServerChannelID, fGain ); // translate client channel to server channel ID
             bSent = true;
         }
     }
@@ -496,7 +536,7 @@ void CClient::StartDelayTimer()
 
 void CClient::SetRemoteChanPan ( const int iId, const float fPan )
 {
-    Channel.SetRemoteChanPan ( iId, fPan ); // TODO translate client channel to server channel ID
+    Channel.SetRemoteChanPan ( clientChannels[iId].iServerChannelID, fPan ); // translate client channel to server channel ID
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )
@@ -874,16 +914,17 @@ void CClient::OnControllerInMuteMyself ( bool bMute )
     emit ControllerInMuteMyself ( bMute );
 }
 
-void CClient::OnClientIDReceived ( int iChanID )
+void CClient::OnClientIDReceived ( int iServerChanID )
 {
-    // TODO allocate and map client-side channel 0
+    // allocate and map client-side channel 0
+    int iChanID = FindClientChannel ( iServerChanID, true ); // should always return channel 0
 
     // for headless mode we support to mute our own signal in the personal mix
     // (note that the check for headless is done in the main.cpp and must not
     // be checked here)
     if ( bMuteMeInPersonalMix )
     {
-        SetRemoteChanGain ( iChanID, 0, false ); // TODO this will need client channel ID
+        SetRemoteChanGain ( iChanID, 0, false );
     }
 
     emit ClientIDReceived ( iChanID );
@@ -1434,6 +1475,8 @@ void CClient::ClearClientChannels()
 
         clientChannelIDs[i] = INVALID_INDEX;
     }
+
+    qInfo() << "> Client channel list cleared";
 }
 
 void CClient::FreeClientChannel ( const int iServerChannelID )
@@ -1471,7 +1514,7 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
         return INVALID_INDEX;
     }
 
-    const int iClientChannelID = clientChannelIDs[iServerChannelID];
+    int iClientChannelID = clientChannelIDs[iServerChannelID];
 
     if ( iClientChannelID != INVALID_INDEX )
     {
@@ -1484,13 +1527,13 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
     if ( bCreateIfNew )
     {
         // search clientChannels[] for a free client channel
-        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        for ( iClientChannelID = 0; iClientChannelID < MAX_NUM_CHANNELS; iClientChannelID++ )
         {
-            if ( clientChannels[i].iServerChannelID == INVALID_INDEX )
+            if ( clientChannels[iClientChannelID].iServerChannelID == INVALID_INDEX )
             {
-                clientChannels[i].iServerChannelID = iServerChannelID;
-                clientChannels[i].iJoinSequence    = ++iJoinSequence;
-                clientChannelIDs[iServerChannelID] = i;
+                clientChannels[iClientChannelID].iServerChannelID = iServerChannelID;
+                clientChannels[iClientChannelID].iJoinSequence    = ++iJoinSequence;
+                clientChannelIDs[iServerChannelID]                = iClientChannelID;
 
                 iActiveChannels += 1;
 
@@ -1499,7 +1542,7 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
                                                 .arg ( iServerChannelID )
                                                 .arg ( iActiveChannels ) );
 
-                return i; // new client channel ID
+                return iClientChannelID; // new client channel ID
             }
         }
     }

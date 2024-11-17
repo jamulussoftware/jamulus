@@ -300,9 +300,12 @@ void CClient::OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted )
 
 void CClient::OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList )
 {
-    // TODO reorder levels from server channel order to client channel order
+    // reorder levels from server channel order to client channel order
 
-    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
+    if ( ReorderLevelList ( vecLevelList ) )
+    {
+        emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
+    }
 }
 
 void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
@@ -1562,4 +1565,61 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
     }
 
     return INVALID_INDEX;
+}
+
+bool CClient::ReorderLevelList ( CVector<uint16_t>& vecLevelList )
+{
+    QMutexLocker locker ( &MutexChannels );
+
+    // vecLevelList is sent from server ordered by server channel ID
+    // re-order it by client channel ID before passing up to the GUI
+    // the list is passed in by reference and modified in situ
+
+    // check it is the right length
+    if ( vecLevelList.Size() != iActiveChannels )
+    {
+        return false; // tell caller to ignore it
+    }
+
+    int iClientCh;
+    int iServerCh = 0;
+
+    // fetch levels by server channel ID
+
+    for ( int i = 0; i < iActiveChannels; i++ )
+    {
+        // find next active server channel
+        while ( iServerCh < MAX_NUM_CHANNELS )
+        {
+            iClientCh = clientChannelIDs[iServerCh++];
+
+            if ( iClientCh != INVALID_INDEX )
+            {
+                clientChannels[iClientCh].level = vecLevelList[i];
+                break;
+            }
+        }
+    }
+
+    // store levels by client channel ID
+
+    iClientCh = 0;
+
+    for ( int i = 0; i < iActiveChannels; i++ )
+    {
+        while ( iClientCh < MAX_NUM_CHANNELS )
+        {
+            uint16_t level = clientChannels[iClientCh].level;
+
+            iServerCh = clientChannels[iClientCh++].iServerChannelID;
+
+            if ( iServerCh != INVALID_INDEX )
+            {
+                vecLevelList[i] = level;
+                break;
+            }
+        }
+    }
+
+    return true; // tell caller to emit signal with new list
 }

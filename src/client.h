@@ -305,6 +305,7 @@ protected:
     void ClearClientChannels();
     void FreeClientChannel ( const int iServerChannelID );
     int  FindClientChannel ( const int iServerChannelID, const bool bCreateIfNew ); // returns a client channel ID or INVALID_INDEX
+    bool ReorderLevelList ( CVector<uint16_t>& vecLevelList );                      // modifies vecLevelList, passed by reference
 
     // only one channel is needed for client application
     CChannel  Channel;

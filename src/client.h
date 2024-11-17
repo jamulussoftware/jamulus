@@ -111,6 +111,10 @@ public:
     int iServerChannelID; // unused channels will contain INVALID_INDEX
     int iJoinSequence;    // order of joining of session participants
 
+    float oldGain, newGain; // for rate-limiting sending of gain messages
+
+    uint16_t level; // last value of level meter received for channel
+
     // can store here other information about an active channel
 };
 

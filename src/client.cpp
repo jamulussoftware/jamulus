@@ -1478,8 +1478,7 @@ void CClient::ClearClientChannels()
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         clientChannels[i].iServerChannelID = INVALID_INDEX;
-        clientChannels[i].iJoinSequence    = 0;
-        // TODO reset any other fields in CClientChannel
+        // all other fields will be initialised on channel allocation
 
         clientChannelIDs[i] = INVALID_INDEX;
     }
@@ -1537,11 +1536,18 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
         // search clientChannels[] for a free client channel
         for ( iClientChannelID = 0; iClientChannelID < MAX_NUM_CHANNELS; iClientChannelID++ )
         {
-            if ( clientChannels[iClientChannelID].iServerChannelID == INVALID_INDEX )
+            CClientChannel* clientChan = &clientChannels[iClientChannelID];
+
+            if ( clientChan->iServerChannelID == INVALID_INDEX )
             {
-                clientChannels[iClientChannelID].iServerChannelID = iServerChannelID;
-                clientChannels[iClientChannelID].iJoinSequence    = ++iJoinSequence;
-                clientChannelIDs[iServerChannelID]                = iClientChannelID;
+                clientChan->iServerChannelID = iServerChannelID;
+                clientChan->iJoinSequence    = ++iJoinSequence;
+
+                clientChan->oldGain = clientChan->newGain = 1.0f;
+
+                clientChan->level = 0;
+
+                clientChannelIDs[iServerChannelID] = iClientChannelID;
 
                 iActiveChannels += 1;
 

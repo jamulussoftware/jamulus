@@ -318,18 +318,50 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
     const int iNumConnectedClients = vecChanInfo.Size();
     int       i, iSrvIdx;
 
-    // this relies on the received client list being in order of server channel ID
+    // on a new connection, a server sends an empty channel list before sending
+    // the real channel list (see #1010). To avoid this discarding "our" channel
+    // that we have just created, we skip this processing and just pass the empty
+    // list to the emitted signal.
 
-    for ( i = 0, iSrvIdx = 0; i < iNumConnectedClients && iSrvIdx < MAX_NUM_CHANNELS; )
+    if ( iNumConnectedClients != 0 )
     {
-        // server channel ID of this entry
-        const int iServerChannelID = vecChanInfo[i].iChanID;
+        // this relies on the received client list being in order of server channel ID
 
-        // find matching client channel ID, creating new if necessary
-        const int iClientChannelID = FindClientChannel ( iServerChannelID, true );
+        for ( i = 0, iSrvIdx = 0; i < iNumConnectedClients && iSrvIdx < MAX_NUM_CHANNELS; )
+        {
+            // server channel ID of this entry
+            const int iServerChannelID = vecChanInfo[i].iChanID;
 
-        // discard any lower server channels that are no longer in our local list
-        while ( iSrvIdx < iServerChannelID )
+            // find matching client channel ID, creating new if necessary
+            const int iClientChannelID = FindClientChannel ( iServerChannelID, true );
+
+            // discard any lower server channels that are no longer in our local list
+            while ( iSrvIdx < iServerChannelID )
+            {
+                const int iId = FindClientChannel ( iSrvIdx, false );
+
+                if ( iId != INVALID_INDEX )
+                {
+                    // reset oldGain and newGain as this channel id is currently unused and will
+                    // start with a server-side gain at 1 (100%) again.
+                    oldGain[iId] = newGain[iId] = 1;
+
+                    // iSrvIdx contains a server channel number that has now gone
+                    FreeClientChannel ( iSrvIdx );
+                }
+                iSrvIdx++;
+            }
+
+            // now should have matching server channel IDs
+            vecChanInfo[i].iChanID = iClientChannelID; // update channel number to be client-side
+            i++;                                       // next list entry
+            iSrvIdx++;                                 // next local server channel
+        }
+
+        // have now run out of active channels, discard any remaining from our local list
+        // note that iActiveChannels will reduce as remaining channels are freed
+
+        while ( iActiveChannels > iNumConnectedClients && iSrvIdx < MAX_NUM_CHANNELS )
         {
             const int iId = FindClientChannel ( iSrvIdx, false );
 
@@ -345,34 +377,10 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
             iSrvIdx++;
         }
 
-        // now should have matching server channel IDs
-        vecChanInfo[i].iChanID = iClientChannelID; // update channel number to be client-side
-        i++;                                       // next list entry
-        iSrvIdx++;                                 // next local server channel
+        Q_ASSERT ( iActiveChannels == iNumConnectedClients );
     }
 
-    // have now run out of active channels, discard any remaining from our local list
-    // note that iActiveChannels will reduce as remaining channels are freed
-
-    while ( iActiveChannels > iNumConnectedClients && iSrvIdx < MAX_NUM_CHANNELS )
-    {
-        const int iId = FindClientChannel ( iSrvIdx, false );
-
-        if ( iId != INVALID_INDEX )
-        {
-            // reset oldGain and newGain as this channel id is currently unused and will
-            // start with a server-side gain at 1 (100%) again.
-            oldGain[iId] = newGain[iId] = 1;
-
-            // iSrvIdx contains a server channel number that has now gone
-            FreeClientChannel ( iSrvIdx );
-        }
-        iSrvIdx++;
-    }
-
-    Q_ASSERT ( iActiveChannels == iNumConnectedClients );
-
-    // TODO vecChanInfo needs to be ordered by client channel ID instead of server channel ID
+    // TODO Does vecChanInfo need to be ordered by client channel ID instead of server channel ID?
     // check if this is actually necessary, and whether it affects the level meters
 
     emit ConClientListMesReceived ( vecChanInfo );

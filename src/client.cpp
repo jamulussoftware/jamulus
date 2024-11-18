@@ -262,15 +262,6 @@ void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
 
 void CClient::OnNewConnection()
 {
-    // The oldGain and newGain arrays are used to avoid sending duplicate gain change messages.
-    // As these values depend on the channel IDs of a specific server, we have
-    // to reset those upon connect.
-    // We reset to 1 because this is what the server part sets by default.
-    for ( int iId = 0; iId < MAX_NUM_CHANNELS; iId++ )
-    {
-        oldGain[iId] = newGain[iId] = 1;
-    }
-
     // a new connection was successfully initiated, send infos and request
     // connected clients list
     Channel.SetRemoteInfo ( ChannelInfo );
@@ -313,11 +304,6 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
     // translate from server channel IDs to client channel IDs
     // ALSO here is where we allocate and free client channels as required
 
-    // Upon receiving a new client list, we have to reset oldGain and newGain
-    // entries for unused channels. This ensures that a disconnected channel
-    // does not leave behind wrong cached gain values which would leak into
-    // any new channel which reused this channel id.
-
     const int iNumConnectedClients = vecChanInfo.Size();
     int       i, iSrvIdx;
 
@@ -345,10 +331,6 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 
                 if ( iId != INVALID_INDEX )
                 {
-                    // reset oldGain and newGain as this channel id is currently unused and will
-                    // start with a server-side gain at 1 (100%) again.
-                    oldGain[iId] = newGain[iId] = 1;
-
                     // iSrvIdx contains a server channel number that has now gone
                     FreeClientChannel ( iSrvIdx );
                 }
@@ -370,10 +352,6 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 
             if ( iId != INVALID_INDEX )
             {
-                // reset oldGain and newGain as this channel id is currently unused and will
-                // start with a server-side gain at 1 (100%) again.
-                oldGain[iId] = newGain[iId] = 1;
-
                 // iSrvIdx contains a server channel number that has now gone
                 FreeClientChannel ( iSrvIdx );
             }
@@ -461,18 +439,20 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 // running), it will be sent immediately, and a 300ms timer started.
 //
 // If a gain change message is requested while the timer is still running, the new gain is not sent,
-// but just stored in newGain[iId], and the minGainId and maxGainId updated to note the range of
-// IDs that must be checked when the time expires (this will usually be a single channel
+// but just stored in clientChannels[iId].newGain, and the minGainId and maxGainId updated to note
+// the range of IDs that must be checked when the time expires (this will usually be a single channel
 // unless channel grouping is being used). This avoids having to check all possible channels.
 //
-// When the timer fires, the channels minGainId <= iId < maxGainId are checked by comparing
-// the last sent value in oldGain[iId] with any pending value in newGain[iId], and if they differ,
-// the new value is sent, updating oldGain[iId] with the sent value. If any new values are
+// When the timer fires, the channels minGainId <= iId < maxGainId are checked by comparing the last sent value
+// in clientChannels[iId].oldGain with any pending value in clientChannels[iId].newGain, and if they differ,
+// the new value is sent, updating clientChannels[iId].oldGain with the sent value. If any new values are
 // sent, the timer is restarted so that further immediate updates will be pended.
 
 void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader )
 {
     QMutexLocker locker ( &MutexGain );
+
+    CClientChannel* clientChan = &clientChannels[iId];
 
     // if this gain is for my own channel, apply the value for the Mute Myself function
     if ( bIsMyOwnFader )
@@ -483,8 +463,8 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
     if ( TimerGain.isActive() )
     {
         // just update the new value for sending later;
-        // will compare with oldGain[iId] when the timer fires
-        newGain[iId] = fGain;
+        // will compare with oldGain when the timer fires
+        clientChan->newGain = fGain;
 
         // update range of channel IDs to check in the timer
         if ( iId < minGainId )
@@ -497,8 +477,8 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
 
     // here the timer was not active:
     // send the actual gain and reset the range of channel IDs to empty
-    oldGain[iId] = newGain[iId] = fGain;
-    Channel.SetRemoteChanGain ( clientChannels[iId].iServerChannelID, fGain ); // translate client channel to server channel ID
+    clientChan->oldGain = clientChan->newGain = fGain;
+    Channel.SetRemoteChanGain ( clientChan->iServerChannelID, fGain ); // translate client channel to server channel ID
 
     StartDelayTimer();
 }
@@ -510,11 +490,13 @@ void CClient::OnTimerRemoteChanGain()
 
     for ( int iId = minGainId; iId < maxGainId; iId++ )
     {
-        if ( newGain[iId] != oldGain[iId] )
+        CClientChannel* clientChan = &clientChannels[iId];
+
+        if ( clientChan->newGain != clientChan->oldGain )
         {
             // send new gain and record as old gain
-            float fGain = oldGain[iId] = newGain[iId];
-            Channel.SetRemoteChanGain ( clientChannels[iId].iServerChannelID, fGain ); // translate client channel to server channel ID
+            float fGain = clientChan->oldGain = clientChan->newGain;
+            Channel.SetRemoteChanGain ( clientChan->iServerChannelID, fGain ); // translate client channel to server channel ID
             bSent = true;
         }
     }

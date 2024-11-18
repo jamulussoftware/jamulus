@@ -927,6 +927,15 @@ void CClient::OnControllerInMuteMyself ( bool bMute )
 
 void CClient::OnClientIDReceived ( int iServerChanID )
 {
+    // if we have just connected to a running server, iActiveChannels will be 0
+    // if iActiveChannels is not 0, the server must have been restarted on the fly
+    // in that case, channels might have changed, so clear our list to get it afresh.
+    if ( iActiveChannels != 0 )
+    {
+        qInfo() << "> Server restarted?";
+        ClearClientChannels();
+    }
+
     // allocate and map client-side channel 0
     int iChanID = FindClientChannel ( iServerChanID, true ); // should always return channel 0
 

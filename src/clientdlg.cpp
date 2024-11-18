@@ -333,10 +333,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QAction* ByCityAction =
         pViewMenu->addAction ( tr ( "Sort Users by &City" ), this, SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
 
-    QAction* ByServerChannelAction = pViewMenu->addAction ( tr ( "Sort Users by Se&rver Channel" ),
+    QAction* ByServerChannelAction = pViewMenu->addAction ( tr ( "Sort Users by Chann&el" ),
                                                             this,
                                                             SLOT ( OnSortChannelsByChannel() ),
-                                                            QKeySequence ( Qt::CTRL + Qt::Key_R ) );
+                                                            QKeySequence ( Qt::CTRL + Qt::Key_E ) );
 
     OwnFaderFirstAction->setCheckable ( true );
     OwnFaderFirstAction->setChecked ( pSettings->bOwnFaderFirst );

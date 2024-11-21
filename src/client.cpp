@@ -1574,6 +1574,9 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
 //
 // The list size is checked against the current number of active channels to guard against
 // any unexpected temporary mismatch in size due to potential out-of-order message delivery.
+//
+// This function returns true if the list has been processed and should be passed on,
+// or false if it was the wrong size and should be discarded.
 
 bool CClient::ReorderLevelList ( CVector<uint16_t>& vecLevelList )
 {

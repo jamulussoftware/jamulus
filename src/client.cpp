@@ -1558,6 +1558,24 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
     return INVALID_INDEX;
 }
 
+// When the client receives a channel level list from the server, the list contains one value
+// for each currently-active channel, ordered by the channel ID assigned by the server.
+// The values will correspond to the active channels in the last client list that was sent.
+// This list is passed up to the mixer board, which will interpret the values in the order
+// of channels that it knows about.
+//
+// Since CClient is now translating server channel IDs to local client channel IDs before
+// passing the client list up to the mixer board, it is also necessary to re-order the values
+// in the level list so that they are in order of mapped client channel ID.
+// This function performs that re-ordering by scanning the server channels in order, once,
+// for active channels, and storing the level value in the corresponding client channel.
+// Then the function scans the client channels in order, fetching the level values and putting
+// them back into vecLevelList in order of client channel. The mixer board will then display
+// the levels against the correct channels.
+//
+// The list size is checked against the current number of active channels to guard against
+// any unexpected temporary mismatch in size due to potential out-of-order message delivery.
+
 bool CClient::ReorderLevelList ( CVector<uint16_t>& vecLevelList )
 {
     QMutexLocker locker ( &MutexChannels );

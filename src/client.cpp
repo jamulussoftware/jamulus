@@ -361,8 +361,7 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
         Q_ASSERT ( iActiveChannels == iNumConnectedClients );
     }
 
-    // TODO Does vecChanInfo need to be ordered by client channel ID instead of server channel ID?
-    // check if this is actually necessary, and whether it affects the level meters
+    // pass the received list onwards, now containing client channel IDs
 
     emit ConClientListMesReceived ( vecChanInfo );
 }

@@ -286,7 +286,10 @@ void CClient::OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted )
     // map iChanID from server channel ID to client channel ID
     int iChanID = FindClientChannel ( iServerChanID, false );
 
-    emit MuteStateHasChangedReceived ( iChanID, bIsMuted );
+    if ( iChanID != INVALID_INDEX )
+    {
+        emit MuteStateHasChangedReceived ( iChanID, bIsMuted );
+    }
 }
 
 void CClient::OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList )
@@ -321,8 +324,9 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
             // server channel ID of this entry
             const int iServerChannelID = vecChanInfo[i].iChanID;
 
-            // find matching client channel ID, creating new if necessary
-            const int iClientChannelID = FindClientChannel ( iServerChannelID, true );
+            // find matching client channel ID, creating new if necessary,
+            // update channel number to be client-side
+            vecChanInfo[i].iChanID = FindClientChannel ( iServerChannelID, true );
 
             // discard any lower server channels that are no longer in our local list
             while ( iSrvIdx < iServerChannelID )
@@ -337,10 +341,8 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
                 iSrvIdx++;
             }
 
-            // now should have matching server channel IDs
-            vecChanInfo[i].iChanID = iClientChannelID; // update channel number to be client-side
-            i++;                                       // next list entry
-            iSrvIdx++;                                 // next local server channel
+            i++;       // next list entry
+            iSrvIdx++; // next local server channel
         }
 
         // have now run out of active channels, discard any remaining from our local list
@@ -1476,7 +1478,7 @@ void CClient::ClearClientChannels()
         clientChannelIDs[i] = INVALID_INDEX;
     }
 
-    qInfo() << "> Client channel list cleared";
+    // qInfo() << "> Client channel list cleared";
 }
 
 void CClient::FreeClientChannel ( const int iServerChannelID )
@@ -1497,10 +1499,12 @@ void CClient::FreeClientChannel ( const int iServerChannelID )
 
     iActiveChannels -= 1;
 
+    /*
     qInfo() << qUtf8Printable ( QString ( "> Freed client ch %1 for server ch %2; chan count = %3" )
                                     .arg ( iClientChannelID )
                                     .arg ( iServerChannelID )
                                     .arg ( iActiveChannels ) );
+     */
 }
 
 // find, and optionally create, a client channel for the supplied server channel ID
@@ -1544,10 +1548,12 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
 
                 iActiveChannels += 1;
 
+                /*
                 qInfo() << qUtf8Printable ( QString ( "> Alloc client ch %1 for server ch %2; chan count = %3" )
                                                 .arg ( iClientChannelID )
                                                 .arg ( iServerChannelID )
                                                 .arg ( iActiveChannels ) );
+                 */
 
                 return iClientChannelID; // new client channel ID
             }

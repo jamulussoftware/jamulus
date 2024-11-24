@@ -1569,7 +1569,7 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
 // This list is passed up to the mixer board, which will interpret the values in the order
 // of channels that it knows about.
 //
-// Since CClient is now translating server channel IDs to local client channel IDs before
+// Since CClient is translating server channel IDs to local client channel IDs before
 // passing the client list up to the mixer board, it is also necessary to re-order the values
 // in the level list so that they are in order of mapped client channel ID.
 // This function performs that re-ordering by scanning the server channels in order, once,

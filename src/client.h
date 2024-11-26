@@ -112,6 +112,7 @@ public:
     int iJoinSequence;    // order of joining of session participants
 
     float oldGain, newGain; // for rate-limiting sending of gain messages
+    float oldPan, newPan;   // for rate-limiting sending of pan messages
 
     uint16_t level; // last value of level meter received for channel
 
@@ -255,8 +256,8 @@ public:
     void SetMuteOutStream ( const bool bDoMute ) { bMuteOutStream = bDoMute; }
 
     void SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader );
-    void OnTimerRemoteChanGain();
-    void StartDelayTimer();
+    void OnTimerRemoteChanGainOrPan();
+    void StartTimerGainOrPan();
 
     void SetRemoteChanPan ( const int iId, const float fPan );
 
@@ -393,13 +394,11 @@ protected:
     // for ping measurement
     QElapsedTimer PreciseTime;
 
-    // for gain rate limiting
-    QMutex MutexGain;
-    QTimer TimerGain;
-    int    minGainId;
-    int    maxGainId;
-    float  oldGain[MAX_NUM_CHANNELS];
-    float  newGain[MAX_NUM_CHANNELS];
+    // for gain or pan rate limiting
+    QMutex MutexGainOrPan;
+    QTimer TimerGainOrPan;
+    int    minGainOrPanId;
+    int    maxGainOrPanId;
     int    iCurPingTime;
 
     CSignalHandler* pSignalHandler;

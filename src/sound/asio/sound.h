@@ -56,7 +56,7 @@ class CSound : public CSoundBase
 public:
     CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg, const QString& strMIDISetup, const bool, const QString& );
 
-    virtual ~CSound() { UnloadCurrentDriver(); }
+    virtual ~CSound();
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
@@ -134,4 +134,12 @@ protected:
     static long      asioMessages ( long selector, long value, void* message, double* opt );
 
     char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
+
+    // Windows native MIDI
+    HMIDIIN hMidiIn; // windows handle
+    UINT    midiPort;
+
+    void                 MidiStart();
+    void                 MidiStop();
+    static void CALLBACK MidiCallback ( HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2 );
 };

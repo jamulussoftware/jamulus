@@ -577,6 +577,23 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     asioCallbacks.sampleRateDidChange  = &sampleRateChanged;
     asioCallbacks.asioMessage          = &asioMessages;
     asioCallbacks.bufferSwitchTimeInfo = &bufferSwitchTimeInfo;
+
+    // Optional MIDI initialization --------------------------------------------
+    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
+    {
+        MidiStart();
+    }
+}
+
+CSound::~CSound()
+{
+    // stop MIDI if running
+    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
+    {
+        MidiStop();
+    }
+
+    UnloadCurrentDriver();
 }
 
 void CSound::ResetChannelMapping()
@@ -1217,4 +1234,61 @@ int64_t CSound::Flip64Bits ( const int64_t iIn )
     }
 
     return iOut;
+}
+
+// Windows Native MIDI support
+void CSound::MidiStart()
+{
+    midiPort = 0; // might want to make this settable, Windows allocates device numbers in order
+
+    MMRESULT result = midiInOpen ( &hMidiIn, midiPort, (DWORD_PTR) MidiCallback, 0, CALLBACK_FUNCTION );
+
+    if ( result != MMSYSERR_NOERROR )
+    {
+        qWarning() << "! Failed to open MIDI input device. Error code: " << result;
+        hMidiIn = 0;
+        return;
+    }
+
+    result = midiInStart ( hMidiIn );
+    if ( result != MMSYSERR_NOERROR )
+    {
+        qWarning() << "! Failed to start MIDI input. Error code: " << result;
+        midiInClose ( hMidiIn );
+        hMidiIn = 0;
+        return;
+    }
+}
+
+void CSound::MidiStop()
+{
+    // stop MIDI if running
+    if ( hMidiIn != 0 )
+    {
+        midiInStop ( hMidiIn );
+        midiInClose ( hMidiIn );
+    }
+}
+
+void CALLBACK CSound::MidiCallback ( HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2 )
+{
+    Q_UNUSED ( hMidiIn );
+    Q_UNUSED ( dwInstance );
+    Q_UNUSED ( dwParam2 );
+
+    if ( wMsg == MIM_DATA )
+    {
+        BYTE status = dwParam1 & 0xFF;
+        BYTE data1  = ( dwParam1 >> 8 ) & 0xFF;
+        BYTE data2  = ( dwParam1 >> 16 ) & 0xFF;
+
+        // copy packet and send it to the MIDI parser
+        CVector<uint8_t> vMIDIPaketBytes ( 3 );
+
+        vMIDIPaketBytes[0] = static_cast<uint8_t> ( status );
+        vMIDIPaketBytes[1] = static_cast<uint8_t> ( data1 );
+        vMIDIPaketBytes[2] = static_cast<uint8_t> ( data2 );
+
+        pSound->ParseMIDIMessage ( vMIDIPaketBytes );
+    }
 }

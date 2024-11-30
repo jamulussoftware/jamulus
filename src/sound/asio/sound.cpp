@@ -1239,34 +1239,49 @@ int64_t CSound::Flip64Bits ( const int64_t iIn )
 // Windows Native MIDI support
 void CSound::MidiStart()
 {
-    midiPort = 0; // might want to make this settable, Windows allocates device numbers in order
-
-    MMRESULT result = midiInOpen ( &hMidiIn, midiPort, (DWORD_PTR) MidiCallback, 0, CALLBACK_FUNCTION );
-
-    if ( result != MMSYSERR_NOERROR )
+    /* Get the number of MIDI In devices in this computer */
+    iMidiDevs = midiInGetNumDevs();
+    if ( iMidiDevs > MAX_MIDI_DEVS )
     {
-        qWarning() << "! Failed to open MIDI input device. Error code: " << result;
-        hMidiIn = 0;
-        return;
+        iMidiDevs = MAX_MIDI_DEVS;
     }
 
-    result = midiInStart ( hMidiIn );
-    if ( result != MMSYSERR_NOERROR )
+    // printf("Found %d MIDI device%s\n", iMidiDevs, iMidiDevs == 1 ? "" : "s");
+
+    // open all connected MIDI devices and set the callback function to handle incoming messages
+    for ( int i = 0; i < iMidiDevs; i++ )
     {
-        qWarning() << "! Failed to start MIDI input. Error code: " << result;
-        midiInClose ( hMidiIn );
-        hMidiIn = 0;
-        return;
+        MMRESULT result = midiInOpen ( &hMidiIn[i], i, (DWORD_PTR) MidiCallback, 0, CALLBACK_FUNCTION );
+
+        if ( result != MMSYSERR_NOERROR )
+        {
+            qWarning() << "! Failed to open MIDI input device. Error code: " << result;
+            hMidiIn[i] = 0;
+            return;
+        }
+
+        result = midiInStart ( hMidiIn[i] );
+
+        if ( result != MMSYSERR_NOERROR )
+        {
+            qWarning() << "! Failed to start MIDI input. Error code: " << result;
+            midiInClose ( hMidiIn[i] );
+            hMidiIn[i] = 0;
+            return;
+        }
     }
 }
 
 void CSound::MidiStop()
 {
     // stop MIDI if running
-    if ( hMidiIn != 0 )
+    for ( int i = 0; i < iMidiDevs; i++ )
     {
-        midiInStop ( hMidiIn );
-        midiInClose ( hMidiIn );
+        if ( hMidiIn[i] != 0 )
+        {
+            midiInStop ( hMidiIn[i] );
+            midiInClose ( hMidiIn[i] );
+        }
     }
 }
 

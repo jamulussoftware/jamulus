@@ -136,8 +136,10 @@ protected:
     char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
 
     // Windows native MIDI
-    HMIDIIN hMidiIn; // windows handle
-    UINT    midiPort;
+#define MAX_MIDI_DEVS 4
+
+    int     iMidiDevs;
+    HMIDIIN hMidiIn[MAX_MIDI_DEVS]; // windows handles
 
     void                 MidiStart();
     void                 MidiStop();

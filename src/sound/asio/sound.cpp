@@ -1236,7 +1236,11 @@ int64_t CSound::Flip64Bits ( const int64_t iIn )
     return iOut;
 }
 
+//---------------------------------------------------------------------------------------
 // Windows Native MIDI support
+//
+// For API, see https://learn.microsoft.com/en-gb/windows/win32/multimedia/midi-reference
+
 void CSound::MidiStart()
 {
     /* Get the number of MIDI In devices in this computer */
@@ -1285,6 +1289,8 @@ void CSound::MidiStop()
     }
 }
 
+// See https://learn.microsoft.com/en-us/previous-versions//dd798460(v=vs.85)
+// for the definition of the MIDI input callback function.
 void CALLBACK CSound::MidiCallback ( HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2 )
 {
     Q_UNUSED ( hMidiIn );
@@ -1293,6 +1299,8 @@ void CALLBACK CSound::MidiCallback ( HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwIns
 
     if ( wMsg == MIM_DATA )
     {
+        // See https://learn.microsoft.com/en-gb/windows/win32/multimedia/mim-data
+        // The three bytes of a MIDI message are encoded into the 32-bit dwParam1 parameter.
         BYTE status = dwParam1 & 0xFF;
         BYTE data1  = ( dwParam1 >> 8 ) & 0xFF;
         BYTE data2  = ( dwParam1 >> 16 ) & 0xFF;

@@ -49,6 +49,7 @@ enum EMidiCtlType
     Solo,
     Mute,
     MuteMyself,
+    Device,
     None
 };
 
@@ -166,6 +167,8 @@ protected:
     long    lNumDevs;
     QString strCurDevName;
     QString strDriverNames[MAX_NUMBER_SOUND_CARDS];
+
+    QString strMIDIDevice;
 
 signals:
     void ReinitRequest ( int iSndCrdResetType );

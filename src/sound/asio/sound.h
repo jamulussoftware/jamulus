@@ -29,6 +29,7 @@
 #include "../../util.h"
 #include "../../global.h"
 #include "../soundbase.h"
+#include "../midi-win/midi.h"
 
 // The following includes require the ASIO SDK to be placed in
 // libs/ASIOSDK2 during build.
@@ -135,13 +136,6 @@ protected:
 
     char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
 
-    // Windows native MIDI
-#define MAX_MIDI_DEVS 4
-
-    int     iMidiDevs;
-    HMIDIIN hMidiIn[MAX_MIDI_DEVS]; // windows handles
-
-    void                 MidiStart();
-    void                 MidiStop();
-    static void CALLBACK MidiCallback ( HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2 );
+    // Windows native MIDI support
+    CMidi Midi;
 };

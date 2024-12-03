@@ -113,6 +113,9 @@ public:
     // in a callback function it has to be public -> better solution
     void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType ) { emit ReinitRequest ( eSndCrdResetType ); }
 
+    // this needs to be public so that it can be called from CMidi
+    void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
+
 protected:
     virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
     virtual void     UnloadCurrentDriver() {}
@@ -150,8 +153,6 @@ protected:
         bCallbackEntered = true;
         ( *fpProcessCallback ) ( psData, pProcessCallbackArg );
     }
-
-    void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
 
     bool   bRun;
     bool   bCallbackEntered;

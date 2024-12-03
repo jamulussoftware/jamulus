@@ -581,7 +581,7 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     // Optional MIDI initialization --------------------------------------------
     if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
     {
-        MidiStart();
+        Midi.MidiStart();
     }
 }
 
@@ -590,7 +590,7 @@ CSound::~CSound()
     // stop MIDI if running
     if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
     {
-        MidiStop();
+        Midi.MidiStop();
     }
 
     UnloadCurrentDriver();
@@ -1234,84 +1234,4 @@ int64_t CSound::Flip64Bits ( const int64_t iIn )
     }
 
     return iOut;
-}
-
-//---------------------------------------------------------------------------------------
-// Windows Native MIDI support
-//
-// For API, see https://learn.microsoft.com/en-gb/windows/win32/multimedia/midi-reference
-
-void CSound::MidiStart()
-{
-    /* Get the number of MIDI In devices in this computer */
-    iMidiDevs = midiInGetNumDevs();
-    if ( iMidiDevs > MAX_MIDI_DEVS )
-    {
-        iMidiDevs = MAX_MIDI_DEVS;
-    }
-
-    // printf("Found %d MIDI device%s\n", iMidiDevs, iMidiDevs == 1 ? "" : "s");
-
-    // open all connected MIDI devices and set the callback function to handle incoming messages
-    for ( int i = 0; i < iMidiDevs; i++ )
-    {
-        MMRESULT result = midiInOpen ( &hMidiIn[i], i, (DWORD_PTR) MidiCallback, 0, CALLBACK_FUNCTION );
-
-        if ( result != MMSYSERR_NOERROR )
-        {
-            qWarning() << "! Failed to open MIDI input device. Error code: " << result;
-            hMidiIn[i] = 0;
-            return;
-        }
-
-        result = midiInStart ( hMidiIn[i] );
-
-        if ( result != MMSYSERR_NOERROR )
-        {
-            qWarning() << "! Failed to start MIDI input. Error code: " << result;
-            midiInClose ( hMidiIn[i] );
-            hMidiIn[i] = 0;
-            return;
-        }
-    }
-}
-
-void CSound::MidiStop()
-{
-    // stop MIDI if running
-    for ( int i = 0; i < iMidiDevs; i++ )
-    {
-        if ( hMidiIn[i] != 0 )
-        {
-            midiInStop ( hMidiIn[i] );
-            midiInClose ( hMidiIn[i] );
-        }
-    }
-}
-
-// See https://learn.microsoft.com/en-us/previous-versions//dd798460(v=vs.85)
-// for the definition of the MIDI input callback function.
-void CALLBACK CSound::MidiCallback ( HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2 )
-{
-    Q_UNUSED ( hMidiIn );
-    Q_UNUSED ( dwInstance );
-    Q_UNUSED ( dwParam2 );
-
-    if ( wMsg == MIM_DATA )
-    {
-        // See https://learn.microsoft.com/en-gb/windows/win32/multimedia/mim-data
-        // The three bytes of a MIDI message are encoded into the 32-bit dwParam1 parameter.
-        BYTE status = dwParam1 & 0xFF;
-        BYTE data1  = ( dwParam1 >> 8 ) & 0xFF;
-        BYTE data2  = ( dwParam1 >> 16 ) & 0xFF;
-
-        // copy packet and send it to the MIDI parser
-        CVector<uint8_t> vMIDIPaketBytes ( 3 );
-
-        vMIDIPaketBytes[0] = static_cast<uint8_t> ( status );
-        vMIDIPaketBytes[1] = static_cast<uint8_t> ( data1 );
-        vMIDIPaketBytes[2] = static_cast<uint8_t> ( data2 );
-
-        pSound->ParseMIDIMessage ( vMIDIPaketBytes );
-    }
 }

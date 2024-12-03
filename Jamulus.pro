@@ -155,8 +155,10 @@ win32 {
             }
             # Important: Keep those ASIO includes local to this build target in
             # order to avoid poisoning other builds license-wise.
-            HEADERS += src/sound/asio/sound.h
+            HEADERS += src/sound/asio/sound.h \
+                src/sound/midi-win/midi.h
             SOURCES += src/sound/asio/sound.cpp \
+                src/sound/midi-win/midi.cpp \
                 libs/ASIOSDK2/common/asio.cpp \
                 libs/ASIOSDK2/host/asiodrivers.cpp \
                 libs/ASIOSDK2/host/pc/asiolist.cpp

@@ -43,24 +43,20 @@ void CMidi::MidiStart()
 
     /* Get the number of MIDI In devices in this computer */
     iMidiDevs = midiInGetNumDevs();
-    if ( iMidiDevs > MAX_MIDI_DEVS )
-    {
-        iMidiDevs = MAX_MIDI_DEVS;
-    }
 
     qInfo() << qUtf8Printable ( QString ( "- MIDI devices found: %1" ).arg ( iMidiDevs ) );
 
     // open all connected MIDI devices and set the callback function to handle incoming messages
     for ( int i = 0; i < iMidiDevs; i++ )
     {
-        MIDIINCAPS mic;
+        HMIDIIN    hMidiIn; // windows handle
+        MIDIINCAPS mic;     // device name and capabilities
 
         MMRESULT result = midiInGetDevCaps ( i, &mic, sizeof ( MIDIINCAPS ) );
 
         if ( result != MMSYSERR_NOERROR )
         {
             qWarning() << qUtf8Printable ( QString ( "! Failed to identify MIDI input device %1. Error code: %2" ).arg ( i ).arg ( result ) );
-            hMidiIn[i] = 0;
             continue; // try next device, if any
         }
 
@@ -69,43 +65,40 @@ void CMidi::MidiStart()
         if ( !selMIDIDevice.isEmpty() && selMIDIDevice != midiDev )
         {
             qInfo() << qUtf8Printable ( QString ( "  %1: %2 (ignored)" ).arg ( i ).arg ( midiDev ) );
-            hMidiIn[i] = 0;
             continue; // try next device, if any
         }
 
         qInfo() << qUtf8Printable ( QString ( "  %1: %2" ).arg ( i ).arg ( midiDev ) );
 
-        result = midiInOpen ( &hMidiIn[i], i, (DWORD_PTR) MidiCallback, 0, CALLBACK_FUNCTION );
+        result = midiInOpen ( &hMidiIn, i, (DWORD_PTR) MidiCallback, 0, CALLBACK_FUNCTION );
 
         if ( result != MMSYSERR_NOERROR )
         {
             qWarning() << qUtf8Printable ( QString ( "! Failed to open MIDI input device %1. Error code: %2" ).arg ( i ).arg ( result ) );
-            hMidiIn[i] = 0;
             continue; // try next device, if any
         }
 
-        result = midiInStart ( hMidiIn[i] );
+        result = midiInStart ( hMidiIn );
 
         if ( result != MMSYSERR_NOERROR )
         {
             qWarning() << qUtf8Printable ( QString ( "! Failed to start MIDI input device %1. Error code: %2" ).arg ( i ).arg ( result ) );
-            midiInClose ( hMidiIn[i] );
-            hMidiIn[i] = 0;
+            midiInClose ( hMidiIn );
             continue; // try next device, if any
         }
+
+        // success, add it to list of open handles
+        vecMidiInHandles.append ( hMidiIn );
     }
 }
 
 void CMidi::MidiStop()
 {
     // stop MIDI if running
-    for ( int i = 0; i < iMidiDevs; i++ )
+    for ( int i = 0; i < vecMidiInHandles.size(); i++ )
     {
-        if ( hMidiIn[i] != 0 )
-        {
-            midiInStop ( hMidiIn[i] );
-            midiInClose ( hMidiIn[i] );
-        }
+        midiInStop ( vecMidiInHandles.at ( i ) );
+        midiInClose ( vecMidiInHandles.at ( i ) );
     }
 }
 

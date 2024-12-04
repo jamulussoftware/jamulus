@@ -27,9 +27,6 @@
 #include "../../util.h"
 #include "../../global.h"
 
-// Max number of Windows native MIDI interfaces to support
-#define MAX_MIDI_DEVS 8
-
 /* Classes ********************************************************************/
 class CMidi
 {
@@ -42,8 +39,8 @@ public:
     void MidiStop();
 
 protected:
-    int     iMidiDevs;
-    HMIDIIN hMidiIn[MAX_MIDI_DEVS]; // windows handles
+    int              iMidiDevs;
+    QVector<HMIDIIN> vecMidiInHandles; // windows handles
 
     static void CALLBACK MidiCallback ( HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2 );
 };

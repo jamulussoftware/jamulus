@@ -313,7 +313,7 @@ void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
             if ( eTyp == Device )
             {
                 // save MIDI device name to select
-		strMIDIDevice = sParm.mid ( 1 );
+                strMIDIDevice = sParm.mid ( 1 );
             }
             else
             {

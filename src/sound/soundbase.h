@@ -107,6 +107,8 @@ public:
 
     virtual void OpenDriverSetup() {}
 
+    virtual const QString& GetMIDIDevice() { return strMIDIDevice; }
+
     bool IsRunning() const { return bRun; }
     bool IsCallbackEntered() const { return bCallbackEntered; }
 

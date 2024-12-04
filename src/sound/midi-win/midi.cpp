@@ -39,6 +39,8 @@ extern CSound* pSound;
 
 void CMidi::MidiStart()
 {
+    QString selMIDIDevice = pSound->GetMIDIDevice();
+
     /* Get the number of MIDI In devices in this computer */
     iMidiDevs = midiInGetNumDevs();
     if ( iMidiDevs > MAX_MIDI_DEVS )
@@ -58,10 +60,20 @@ void CMidi::MidiStart()
         if ( result != MMSYSERR_NOERROR )
         {
             qWarning() << qUtf8Printable ( QString ( "! Failed to identify MIDI input device %1. Error code: %2" ).arg ( i ).arg ( result ) );
+            hMidiIn[i] = 0;
             continue; // try next device, if any
         }
 
-        qInfo() << qUtf8Printable ( QString ( "  %1: %2" ).arg ( i ).arg ( mic.szPname ) );
+        QString midiDev ( mic.szPname );
+
+        if ( !selMIDIDevice.isEmpty() && selMIDIDevice != midiDev )
+        {
+            qInfo() << qUtf8Printable ( QString ( "  %1: %2 (ignored)" ).arg ( i ).arg ( midiDev ) );
+            hMidiIn[i] = 0;
+            continue; // try next device, if any
+        }
+
+        qInfo() << qUtf8Printable ( QString ( "  %1: %2" ).arg ( i ).arg ( midiDev ) );
 
         result = midiInOpen ( &hMidiIn[i], i, (DWORD_PTR) MidiCallback, 0, CALLBACK_FUNCTION );
 

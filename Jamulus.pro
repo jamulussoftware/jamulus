@@ -147,6 +147,11 @@ win32 {
             INCLUDEPATH += "$${programfilesdir}/JACK2/include"
             LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
         } else {
+            message(Using native Windows MIDI.)
+
+            HEADERS += src/sound/midi-win/midi.h
+            SOURCES += src/sound/midi-win/midi.cpp
+
             message(Using ASIO.)
             message(Please review the ASIO SDK licence.)
 
@@ -155,10 +160,8 @@ win32 {
             }
             # Important: Keep those ASIO includes local to this build target in
             # order to avoid poisoning other builds license-wise.
-            HEADERS += src/sound/asio/sound.h \
-                src/sound/midi-win/midi.h
+            HEADERS += src/sound/asio/sound.h
             SOURCES += src/sound/asio/sound.cpp \
-                src/sound/midi-win/midi.cpp \
                 libs/ASIOSDK2/common/asio.cpp \
                 libs/ASIOSDK2/host/asiodrivers.cpp \
                 libs/ASIOSDK2/host/pc/asiolist.cpp

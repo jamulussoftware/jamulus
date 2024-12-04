@@ -4807,7 +4807,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1735"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Framework per applicazioni multipiattaforma Qt</translation>
+        <translation>Framework applicativo multipiattaforma Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1736"/>

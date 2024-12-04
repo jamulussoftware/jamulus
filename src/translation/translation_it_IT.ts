@@ -4822,12 +4822,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1754"/>
         <source>Some pixmaps are from the %1</source>
-        <translation>Alcune pixmap provengono dal %1</translation>
+        <translation>Alcune pixmap provengono da %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1760"/>
         <source>Some sound samples are from %1</source>
-        <translation>Alcuni campioni audio provengono da %1</translation>
+        <translation>Alcuni campioni sonori provengono da %1</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>

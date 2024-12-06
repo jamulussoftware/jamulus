@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
+    <width>648</width>
     <height>493</height>
    </rect>
   </property>
@@ -84,6 +84,11 @@
      <column>
       <property name="text">
        <string>Location</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Version</string>
       </property>
      </column>
     </widget>

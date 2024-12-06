@@ -54,6 +54,9 @@ public slots:
     void OnLocalInputTextTextChanged ( const QString& strNewText );
     void OnClearChatHistory();
     void OnAnchorClicked ( const QUrl& Url );
+#if defined( Q_OS_IOS ) || defined( ANDROID ) || defined( Q_OS_ANDROID )
+    void OnCloseClicked();
+#endif
 
 signals:
     void NewLocalInputText ( QString strNewText );

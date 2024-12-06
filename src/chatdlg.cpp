@@ -61,12 +61,11 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
 
     pMenu->addMenu ( pEditMenu );
 #if defined( Q_OS_IOS )
-    QAction* action = pMenu->addAction ( tr ( "&Close" ) );
-    connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
+    QAction* closeAction = pMenu->addAction ( tr ( "&Close" ) );
 #endif
 
 #if defined( ANDROID ) || defined( Q_OS_ANDROID )
-    pEditMenu->addAction ( tr ( "&Close" ), this, SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
+    pEditMenu->addAction ( tr ( "&Close" ), this, SLOT ( OnCloseClicked() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
 #endif
 
     // Now tell the layout about the menu
@@ -78,6 +77,10 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
     QObject::connect ( butSend, &QPushButton::clicked, this, &CChatDlg::OnSendText );
 
     QObject::connect ( txvChatWindow, &QTextBrowser::anchorClicked, this, &CChatDlg::OnAnchorClicked );
+
+#if defined( Q_OS_IOS )
+    QObject::connect ( closeAction, &QAction::triggered, this, &CChatDlg::OnCloseClicked );
+#endif
 }
 
 void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
@@ -149,3 +152,18 @@ void CChatDlg::OnAnchorClicked ( const QUrl& Url )
         }
     }
 }
+
+#if defined( Q_OS_IOS ) || defined( ANDROID ) || defined( Q_OS_ANDROID )
+void CChatDlg::OnCloseClicked()
+{
+    // on mobile add a close button or menu entry
+#    if defined( Q_OS_IOS )
+    // On Qt6, iOS crashes if we call close() due to unknown reasons, therefore we just hide() the dialog. A Qt bug is suspected.
+    // Checkout https://github.com/jamulussoftware/jamulus/pull/3413
+    hide();
+#    endif
+#    if defined( ANDROID ) || defined( Q_OS_ANDROID )
+    close();
+#    endif
+}
+#endif

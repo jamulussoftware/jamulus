@@ -256,10 +256,9 @@ public:
     void SetMuteOutStream ( const bool bDoMute ) { bMuteOutStream = bDoMute; }
 
     void SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader );
+    void SetRemoteChanPan ( const int iId, const float fPan );
     void OnTimerRemoteChanGainOrPan();
     void StartTimerGainOrPan();
-
-    void SetRemoteChanPan ( const int iId, const float fPan );
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
 

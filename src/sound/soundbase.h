@@ -49,6 +49,7 @@ enum EMidiCtlType
     Solo,
     Mute,
     MuteMyself,
+    Device,
     None
 };
 
@@ -106,12 +107,17 @@ public:
 
     virtual void OpenDriverSetup() {}
 
+    virtual const QString& GetMIDIDevice() { return strMIDIDevice; }
+
     bool IsRunning() const { return bRun; }
     bool IsCallbackEntered() const { return bCallbackEntered; }
 
     // TODO this should be protected but since it is used
     // in a callback function it has to be public -> better solution
     void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType ) { emit ReinitRequest ( eSndCrdResetType ); }
+
+    // this needs to be public so that it can be called from CMidi
+    void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
 
 protected:
     virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
@@ -151,8 +157,6 @@ protected:
         ( *fpProcessCallback ) ( psData, pProcessCallbackArg );
     }
 
-    void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
-
     bool   bRun;
     bool   bCallbackEntered;
     QMutex MutexAudioProcessCallback;
@@ -165,6 +169,8 @@ protected:
     long    lNumDevs;
     QString strCurDevName;
     QString strDriverNames[MAX_NUMBER_SOUND_CARDS];
+
+    QString strMIDIDevice;
 
 signals:
     void ReinitRequest ( int iSndCrdResetType );

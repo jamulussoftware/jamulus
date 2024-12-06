@@ -147,6 +147,11 @@ win32 {
             INCLUDEPATH += "$${programfilesdir}/JACK2/include"
             LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
         } else {
+            message(Using native Windows MIDI.)
+
+            HEADERS += src/sound/midi-win/midi.h
+            SOURCES += src/sound/midi-win/midi.cpp
+
             message(Using ASIO.)
             message(Please review the ASIO SDK licence.)
 

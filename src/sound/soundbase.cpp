@@ -33,6 +33,7 @@ char const sMidiCtlChar[] = {
     /* [EMidiCtlType::Solo]        = */ 's',
     /* [EMidiCtlType::Mute]        = */ 'm',
     /* [EMidiCtlType::MuteMyself]  = */ 'o',
+    /* [EMidiCtlType::Device]      = */ 'd',
     /* [EMidiCtlType::None]        = */ '\0' };
 
 /* Implementation *************************************************************/
@@ -309,16 +310,24 @@ void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
                 continue;
             EMidiCtlType eTyp = static_cast<EMidiCtlType> ( iCtrl );
 
-            const QStringList slP    = sParm.mid ( 1 ).split ( '*' );
-            int               iFirst = slP[0].toUInt();
-            int               iNum   = ( slP.count() > 1 ) ? slP[1].toUInt() : 1;
-            for ( int iOff = 0; iOff < iNum; iOff++ )
+            if ( eTyp == Device )
             {
-                if ( iOff >= MAX_NUM_CHANNELS )
-                    break;
-                if ( iFirst + iOff >= 128 )
-                    break;
-                aMidiCtls[iFirst + iOff] = { eTyp, iOff };
+                // save MIDI device name to select
+                strMIDIDevice = sParm.mid ( 1 );
+            }
+            else
+            {
+                const QStringList slP    = sParm.mid ( 1 ).split ( '*' );
+                int               iFirst = slP[0].toUInt();
+                int               iNum   = ( slP.count() > 1 ) ? slP[1].toUInt() : 1;
+                for ( int iOff = 0; iOff < iNum; iOff++ )
+                {
+                    if ( iOff >= MAX_NUM_CHANNELS )
+                        break;
+                    if ( iFirst + iOff >= 128 )
+                        break;
+                    aMidiCtls[iFirst + iOff] = { eTyp, iOff };
+                }
             }
         }
     }

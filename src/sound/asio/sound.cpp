@@ -577,6 +577,23 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     asioCallbacks.sampleRateDidChange  = &sampleRateChanged;
     asioCallbacks.asioMessage          = &asioMessages;
     asioCallbacks.bufferSwitchTimeInfo = &bufferSwitchTimeInfo;
+
+    // Optional MIDI initialization --------------------------------------------
+    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
+    {
+        Midi.MidiStart();
+    }
+}
+
+CSound::~CSound()
+{
+    // stop MIDI if running
+    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
+    {
+        Midi.MidiStop();
+    }
+
+    UnloadCurrentDriver();
 }
 
 void CSound::ResetChannelMapping()

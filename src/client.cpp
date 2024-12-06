@@ -176,9 +176,9 @@ CClient::CClient ( const quint16  iPortNumber,
     PreciseTime.start();
 
     // set gain delay timer to single-shot and connect handler function
-    TimerGain.setSingleShot ( true );
+    TimerGainOrPan.setSingleShot ( true );
 
-    QObject::connect ( &TimerGain, &QTimer::timeout, this, &CClient::OnTimerRemoteChanGain );
+    QObject::connect ( &TimerGainOrPan, &QTimer::timeout, this, &CClient::OnTimerRemoteChanGainOrPan );
 
     // start the socket (it is important to start the socket after all
     // initializations and connections)
@@ -431,27 +431,28 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
     CreateServerJitterBufferMessage();
 }
 
-// In order not to flood the server with gain change messages, particularly when using
+// In order not to flood the server with gain or pan change messages, particularly when using
 // a MIDI controller, a timer is used to limit the rate at which such messages are generated.
 // This avoids a potential long backlog of messages, since each must be ACKed before the next
 // can be sent, and this ACK is subject to the latency of the server connection.
 //
-// When the first gain change message is requested after an idle period (i.e. the timer is not
-// running), it will be sent immediately, and a 300ms timer started.
+// When the first gain or pan change message is requested after an idle period (i.e. the timer is not
+// running), it will be sent immediately, and a timer started. The timer period is dependent on
+// the current ping time to the remote server.
 //
-// If a gain change message is requested while the timer is still running, the new gain is not sent,
-// but just stored in clientChannels[iId].newGain, and the minGainId and maxGainId updated to note
-// the range of IDs that must be checked when the time expires (this will usually be a single channel
-// unless channel grouping is being used). This avoids having to check all possible channels.
+// If a gain or pan change message is requested while the timer is still running, the new value is not sent,
+// but just stored in newGain or newPan within clientChannels[iId], and the minGainOrPanId and maxGainOrPanId
+// updated to note the range of IDs that must be checked when the time expires (this will usually be a single
+// channel unless channel grouping is being used). This avoids having to check all possible channels.
 //
-// When the timer fires, the channels minGainId <= iId < maxGainId are checked by comparing the last sent value
-// in clientChannels[iId].oldGain with any pending value in clientChannels[iId].newGain, and if they differ,
-// the new value is sent, updating clientChannels[iId].oldGain with the sent value. If any new values are
-// sent, the timer is restarted so that further immediate updates will be pended.
+// When the timer fires, the channels minGainOrPanId <= iId < maxGainOrPanId are checked by comparing the
+// last sent values in oldGain or oldPan with any pending values in newGain or newPan, and if they differ,
+// the new value is sent, updating oldGain or oldPan with the sent value. If any new values are sent,
+// the timer is restarted so that further immediate updates will be pended.
 
 void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader )
 {
-    QMutexLocker locker ( &MutexGain );
+    QMutexLocker locker ( &MutexGainOrPan );
 
     CClientChannel* clientChan = &clientChannels[iId];
 
@@ -461,17 +462,17 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
         fMuteOutStreamGain = fGain;
     }
 
-    if ( TimerGain.isActive() )
+    if ( TimerGainOrPan.isActive() )
     {
         // just update the new value for sending later;
         // will compare with oldGain when the timer fires
         clientChan->newGain = fGain;
 
         // update range of channel IDs to check in the timer
-        if ( iId < minGainId )
-            minGainId = iId; // first value to check
-        if ( iId >= maxGainId )
-            maxGainId = iId + 1; // first value NOT to check
+        if ( iId < minGainOrPanId )
+            minGainOrPanId = iId; // first value to check
+        if ( iId >= maxGainOrPanId )
+            maxGainOrPanId = iId + 1; // first value NOT to check
 
         return;
     }
@@ -481,15 +482,15 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
     clientChan->oldGain = clientChan->newGain = fGain;
     Channel.SetRemoteChanGain ( clientChan->iServerChannelID, fGain ); // translate client channel to server channel ID
 
-    StartDelayTimer();
+    StartTimerGainOrPan();
 }
 
-void CClient::OnTimerRemoteChanGain()
+void CClient::OnTimerRemoteChanGainOrPan()
 {
-    QMutexLocker locker ( &MutexGain );
+    QMutexLocker locker ( &MutexGainOrPan );
     bool         bSent = false;
 
-    for ( int iId = minGainId; iId < maxGainId; iId++ )
+    for ( int iId = minGainOrPanId; iId < maxGainOrPanId; iId++ )
     {
         CClientChannel* clientChan = &clientChannels[iId];
 
@@ -500,37 +501,69 @@ void CClient::OnTimerRemoteChanGain()
             Channel.SetRemoteChanGain ( clientChan->iServerChannelID, fGain ); // translate client channel to server channel ID
             bSent = true;
         }
+
+        if ( clientChan->newPan != clientChan->oldPan )
+        {
+            // send new pan and record as old pan
+            float fPan = clientChan->oldPan = clientChan->newPan;
+            Channel.SetRemoteChanPan ( clientChan->iServerChannelID, fPan ); // translate client channel to server channel ID
+            bSent = true;
+        }
     }
 
-    // if a new gain has been sent, reset the range of channel IDs to empty and start timer
+    // if a new gain or pan has been sent, reset the range of channel IDs to empty and start timer
     if ( bSent )
     {
-        StartDelayTimer();
+        StartTimerGainOrPan();
     }
 }
 
 // reset the range of channel IDs to check and start the delay timer
-void CClient::StartDelayTimer()
+void CClient::StartTimerGainOrPan()
 {
-    maxGainId = 0;
-    minGainId = MAX_NUM_CHANNELS;
+    maxGainOrPanId = 0;
+    minGainOrPanId = MAX_NUM_CHANNELS;
 
     // start timer to delay sending further updates
     // use longer delay when connected to server with higher ping time,
     // double the ping time in order to allow a bit of overhead for other messages
     if ( iCurPingTime < DEFAULT_GAIN_DELAY_PERIOD_MS / 2 )
     {
-        TimerGain.start ( DEFAULT_GAIN_DELAY_PERIOD_MS );
+        TimerGainOrPan.start ( DEFAULT_GAIN_DELAY_PERIOD_MS );
     }
     else
     {
-        TimerGain.start ( iCurPingTime * 2 );
+        TimerGainOrPan.start ( iCurPingTime * 2 );
     }
 }
 
 void CClient::SetRemoteChanPan ( const int iId, const float fPan )
 {
-    Channel.SetRemoteChanPan ( clientChannels[iId].iServerChannelID, fPan ); // translate client channel to server channel ID
+    QMutexLocker locker ( &MutexGainOrPan );
+
+    CClientChannel* clientChan = &clientChannels[iId];
+
+    if ( TimerGainOrPan.isActive() )
+    {
+        // just update the new value for sending later;
+        // will compare with oldPan when the timer fires
+        clientChan->newPan = fPan;
+
+        // update range of channel IDs to check in the timer
+        if ( iId < minGainOrPanId )
+            minGainOrPanId = iId; // first value to check
+        if ( iId >= maxGainOrPanId )
+            maxGainOrPanId = iId + 1; // first value NOT to check
+
+        return;
+    }
+
+    // here the timer was not active:
+    // send the actual gain and reset the range of channel IDs to empty
+    clientChan->oldPan = clientChan->newPan = fPan;
+    Channel.SetRemoteChanPan ( clientChan->iServerChannelID, fPan ); // translate client channel to server channel ID
+
+    StartTimerGainOrPan();
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )
@@ -1541,6 +1574,7 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
                 clientChan->iJoinSequence    = ++iJoinSequence;
 
                 clientChan->oldGain = clientChan->newGain = 1.0f;
+                clientChan->oldPan = clientChan->newPan = 0.5f;
 
                 clientChan->level = 0;
 

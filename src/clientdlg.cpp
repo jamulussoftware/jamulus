@@ -813,8 +813,11 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVer
 #endif
 }
 
-void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion )
+void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType, QString strVersion )
 {
+    // display version in connect dialog
+    ConnectDlg.SetServerVersionResult ( InetAddr, strVersion );
+
     // update check
 #if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
     int            mySuffixIndex;

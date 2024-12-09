@@ -59,12 +59,27 @@ public:
     void SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo );
 
     void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
+    void SetServerVersionResult ( const CHostAddress& InetAddr, const QString& strVersion );
 
     bool    GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
     QString GetSelectedServerName() const { return strSelectedServerName; }
 
 protected:
+    // NOTE: This enum must list the columns in the same order
+    //       as their column headings in connectdlgbase.ui
+    enum EConnectListViewColumns
+    {
+        LVC_NAME,               // server name
+        LVC_PING,               // ping time
+        LVC_CLIENTS,            // number of connected clients (including additional strings like " (full)")
+        LVC_LOCATION,           // location
+        LVC_VERSION,            // server version
+        LVC_PING_MIN_HIDDEN,    // minimum ping time (invisible)
+        LVC_CLIENTS_MAX_HIDDEN, // maximum number of clients (invisible)
+        LVC_COLUMNS             // total number of columns
+    };
+
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 
@@ -74,7 +89,7 @@ protected:
     void             UpdateListFilter();
     void             ShowAllMusicians ( const bool bState );
     void             RequestServerList();
-    void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress );
+    void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void             UpdateDirectoryComboBox();
 
     CClientSettings* pSettings;

@@ -11,12 +11,12 @@
     <message>
         <location filename="../util.cpp" line="392"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(buduj)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="393"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(czas wykonania)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="411"/>
@@ -62,12 +62,12 @@
     <message>
         <location filename="../util.cpp" line="417"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektóre pixmapy są z %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="425"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektóre sample dźwięku są z %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="504"/>
@@ -1552,22 +1552,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeżeli musisz dodać dodatkowe katalogi docelowe do dropdownu Połączenia katalogu docelowego dialogu, możesz wprowadzić adresy tutaj.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Przycisk usunięcia niestandardowego katalogu docelowego</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń niestandardowy katalog docelowy</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknij przycisk aby usunąć wybrany katalog niestandardowy.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
@@ -2640,17 +2640,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../connectdlg.cpp" line="99"/>
         <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
+        <translation>Przycisk usunięcia adresu serwera</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="100"/>
         <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń adres serwera</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="101"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknij przycisk aby wyczyścić wybrany adres serwera i usunąć go z listy przechowywanych serwerów.</translation>
     </message>
     <message>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
@@ -4306,32 +4306,32 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../util.cpp" line="1542"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Aplikacja korzysta z następująuch bibliotek, źródeł lub fragmentów kodu:</translation>
+        <translation>Aplikacja korzysta z następująuch bibliotek, zasobów lub fragmentów kodu:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1544"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Qt - między-platformowe szablony aplikacji</translation>
+        <translation>Między-platformowe szablony aplikacji Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1545"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(buduj)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1545"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(czas wykonania)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1563"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektóre pixmapy są z %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1569"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektóre sample dźwiękowe są z %1</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>

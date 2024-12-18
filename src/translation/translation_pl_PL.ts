@@ -4,22 +4,22 @@
 <context>
     <name>CAboutDlg</name>
     <message>
-        <location filename="../util.cpp" line="597"/>
+        <location filename="../util.cpp" line="392"/>
         <source>Qt cross-platform application framework</source>
         <translation>Qt - między-platformowe szablony aplikacji</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="597"/>
+        <location filename="../util.cpp" line="392"/>
         <source>(build)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="598"/>
+        <location filename="../util.cpp" line="393"/>
         <source>(runtime)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="616"/>
+        <location filename="../util.cpp" line="411"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
         <translation>Kod algorytmu pogłosu: Perry R. Cook i Gary P Scavone</translation>
     </message>
@@ -28,17 +28,17 @@
         <translation type="vanished">Niektóre obrazki pochodzą z</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="574"/>
+        <location filename="../util.cpp" line="369"/>
         <source>This app enables musicians to perform real-time jam sessions over the internet.</source>
         <translation>Aplikacja pozwala muzykom na sesje dźwiękowe w czasie rzeczywistym przez internet.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="577"/>
+        <location filename="../util.cpp" line="372"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
         <translation>To jest serwer, który zbiera dane audio każdego uczestnika i już zmiksowane odsyła do każdego.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="596"/>
+        <location filename="../util.cpp" line="391"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
         <translation>Aplikacja korzysta z następująuch bibliotek, źródeł lub fragmentów kodu:</translation>
     </message>
@@ -51,7 +51,7 @@
         <translation type="vanished">Aby znaleźć szczegółowe informacje o współtwórcach sprawdź </translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="626"/>
+        <location filename="../util.cpp" line="421"/>
         <source>Flag icons by Mark James</source>
         <translation>Ikony flag: Mark James</translation>
     </message>
@@ -60,87 +60,87 @@
         <translation type="vanished">Niektóre próbki dźwiękowe pochodzą z</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="622"/>
+        <location filename="../util.cpp" line="417"/>
         <source>Some pixmaps are from the %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="630"/>
+        <location filename="../util.cpp" line="425"/>
         <source>Some sound samples are from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="709"/>
+        <location filename="../util.cpp" line="504"/>
         <source>For details on the contributions check out the %1</source>
         <translation>Aby znaleźć szczegółowe informacje o współtwórcach sprawdź %1</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="710"/>
+        <location filename="../util.cpp" line="505"/>
         <source>Github Contributors list</source>
         <translation>Lista współautorów na Github-ie</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="713"/>
+        <location filename="../util.cpp" line="508"/>
         <source>Spanish</source>
         <translation>hiszpański</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="717"/>
+        <location filename="../util.cpp" line="512"/>
         <source>French</source>
         <translation>francuski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="722"/>
+        <location filename="../util.cpp" line="517"/>
         <source>Portuguese</source>
         <translation>portugalski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="729"/>
+        <location filename="../util.cpp" line="524"/>
         <source>Dutch</source>
         <translation>holenderski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="734"/>
+        <location filename="../util.cpp" line="529"/>
         <source>Italian</source>
         <translation>włoski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="738"/>
+        <location filename="../util.cpp" line="533"/>
         <source>German</source>
         <translation>niemiecki</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="743"/>
+        <location filename="../util.cpp" line="538"/>
         <source>Polish</source>
         <translation>polski</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="748"/>
+        <location filename="../util.cpp" line="543"/>
         <source>Swedish</source>
         <translation>szwedzki</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="754"/>
+        <location filename="../util.cpp" line="549"/>
         <source>Korean</source>
         <translation>koreański</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="759"/>
+        <location filename="../util.cpp" line="554"/>
         <source>Slovak</source>
         <translation>słowacki</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="762"/>
+        <location filename="../util.cpp" line="557"/>
         <source>Simplified Chinese</source>
         <translation>Chiński uproszczony</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="765"/>
+        <location filename="../util.cpp" line="560"/>
         <source>Norwegian Bokmål</source>
         <translation>Norweski Bokmål</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="773"/>
+        <location filename="../util.cpp" line="568"/>
         <source>About %1</source>
         <translation>O programie %1</translation>
     </message>
@@ -236,12 +236,12 @@
         <translation>P R Ó B U J Ę   S I Ę   P O Ł Ą C Z Y Ć</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="1185"/>
+        <location filename="../audiomixerboard.cpp" line="1193"/>
         <source>RECORDING ACTIVE</source>
         <translation>NAGRYWANIE AKTYWNE</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="1195"/>
+        <location filename="../audiomixerboard.cpp" line="1203"/>
         <source>Personal Mix at: %1</source>
         <translation>Własny miks na: %1</translation>
     </message>
@@ -549,12 +549,12 @@
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="64"/>
-        <location filename="../chatdlg.cpp" line="69"/>
+        <location filename="../chatdlg.cpp" line="68"/>
         <source>&amp;Close</source>
         <translation>&amp;Zamknij</translation>
     </message>
     <message>
-        <location filename="../chatdlg.cpp" line="145"/>
+        <location filename="../chatdlg.cpp" line="148"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
         <translation>Czy chcesz otworzyć link &apos;%1&apos; w przeglądarce?</translation>
     </message>
@@ -750,7 +750,7 @@
         <translation type="vanished">Jeśli ta dioda zmieni kolor na czerwony, korzystanie z aplikacji może być utrudnione.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="729"/>
+        <location filename="../clientdlg.cpp" line="737"/>
         <source>%1 Directory</source>
         <translation>%1 Serwer zbiorczy</translation>
     </message>
@@ -801,7 +801,7 @@
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="231"/>
-        <location filename="../clientdlg.cpp" line="1256"/>
+        <location filename="../clientdlg.cpp" line="1267"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Połącz</translation>
     </message>
@@ -835,12 +835,12 @@
         <translation>&amp;Konfiguracja połączenia...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="389"/>
+        <location filename="../clientdlg.cpp" line="397"/>
         <source>My &amp;Profile...</source>
         <translation>Mój &amp;profil...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="376"/>
+        <location filename="../clientdlg.cpp" line="384"/>
         <source>C&amp;hat...</source>
         <translation>&amp;Czat...</translation>
     </message>
@@ -849,7 +849,7 @@
         <translation type="vanished">&amp;Ustawienia...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="381"/>
+        <location filename="../clientdlg.cpp" line="389"/>
         <source>&amp;Analyzer Console...</source>
         <translation>Konsola &amp;analizatora...</translation>
     </message>
@@ -922,27 +922,27 @@
         <translation type="vanished">&amp;Ustawienia</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="967"/>
+        <location filename="../clientdlg.cpp" line="978"/>
         <source>Connect</source>
         <translation>Połącz</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="979"/>
+        <location filename="../clientdlg.cpp" line="990"/>
         <source>Settings</source>
         <translation>Ustawienia</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="989"/>
+        <location filename="../clientdlg.cpp" line="1000"/>
         <source>Chat</source>
         <translation>Czat</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1065"/>
+        <location filename="../clientdlg.cpp" line="1076"/>
         <source>Enable feedback detection</source>
         <translation>Wykrywaj sprzężenia</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1068"/>
+        <location filename="../clientdlg.cpp" line="1079"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
@@ -951,7 +951,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę sprzęgania i wtedy wyłącz swoje wyciszenie.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1171"/>
+        <location filename="../clientdlg.cpp" line="1182"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -975,17 +975,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Wskaźnik aktualnego połączenia</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="387"/>
+        <location filename="../clientdlg.cpp" line="337"/>
+        <source>Sort Users by Chann&amp;el</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clientdlg.cpp" line="395"/>
         <source>Sett&amp;ings</source>
         <translation>Ustaw&amp;ienia</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="391"/>
+        <location filename="../clientdlg.cpp" line="399"/>
         <source>Audio/Network &amp;Settings...</source>
         <translation>&amp;Ustawienia dźwięku i sieci...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="393"/>
+        <location filename="../clientdlg.cpp" line="401"/>
         <source>A&amp;dvanced Settings...</source>
         <translation>Ustawienia &amp;zaawansowane...</translation>
     </message>
@@ -1016,28 +1021,28 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Serwer adresowy</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="774"/>
-        <location filename="../clientdlg.cpp" line="786"/>
+        <location filename="../clientdlg.cpp" line="782"/>
+        <location filename="../clientdlg.cpp" line="794"/>
         <source>Select Channel Setup File</source>
         <translation>Wybierz plik ustawień kanału</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="931"/>
+        <location filename="../clientdlg.cpp" line="942"/>
         <source>user</source>
         <translation>użytkownik</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="935"/>
+        <location filename="../clientdlg.cpp" line="946"/>
         <source>users</source>
         <translation>użytkownicy</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1153"/>
+        <location filename="../clientdlg.cpp" line="1164"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
         <translation>Twoja karta dźwiękowa nie działa prawidłowo. Proszę otworzyć okno ustawień dźwięku i sprawdzić wybrane urządzenie i ustawienia sterownika.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1224"/>
+        <location filename="../clientdlg.cpp" line="1235"/>
         <source>&amp;Disconnect</source>
         <translation>&amp;Rozłącz</translation>
     </message>
@@ -1393,7 +1398,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <location filename="../clientsettingsdlg.cpp" line="469"/>
         <location filename="../clientsettingsdlg.cpp" line="608"/>
         <location filename="../clientsettingsdlg.cpp" line="616"/>
-        <location filename="../util.cpp" line="1290"/>
+        <location filename="../util.cpp" line="1099"/>
         <source>None</source>
         <translation>Brak</translation>
     </message>
@@ -1413,12 +1418,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Przycisk wyboru flagi kraju/regionu</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="1191"/>
+        <location filename="../clientsettingsdlg.cpp" line="1197"/>
         <source>Center</source>
         <translation>Środek</translation>
     </message>
     <message>
-        <location filename="../clientsettingsdlg.cpp" line="1203"/>
+        <location filename="../clientsettingsdlg.cpp" line="1209"/>
         <source>R</source>
         <translation>P</translation>
     </message>
@@ -1631,7 +1636,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="66"/>
-        <location filename="../clientsettingsdlg.cpp" line="1198"/>
+        <location filename="../clientsettingsdlg.cpp" line="1204"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -1909,7 +1914,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Wysoka</translation>
     </message>
     <message>
-        <location filename="../util.h" line="609"/>
+        <location filename="../util.h" line="610"/>
         <source>Custom</source>
         <translation>Własny</translation>
     </message>
@@ -1918,37 +1923,37 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Wszystkie style</translation>
     </message>
     <message>
-        <location filename="../util.h" line="591"/>
+        <location filename="../util.h" line="592"/>
         <source>Any Genre 2</source>
         <translation>Każdy styl 2</translation>
     </message>
     <message>
-        <location filename="../util.h" line="594"/>
+        <location filename="../util.h" line="595"/>
         <source>Any Genre 3</source>
         <translation>Każdy styl 3</translation>
     </message>
     <message>
-        <location filename="../util.h" line="597"/>
+        <location filename="../util.h" line="598"/>
         <source>Genre Rock</source>
         <translation>Rock</translation>
     </message>
     <message>
-        <location filename="../util.h" line="600"/>
+        <location filename="../util.h" line="601"/>
         <source>Genre Jazz</source>
         <translation>Jazz</translation>
     </message>
     <message>
-        <location filename="../util.h" line="603"/>
+        <location filename="../util.h" line="604"/>
         <source>Genre Classical/Folk</source>
         <translation>Klasyka/folk</translation>
     </message>
     <message>
-        <location filename="../util.h" line="606"/>
+        <location filename="../util.h" line="607"/>
         <source>Genre Choral/Barbershop</source>
         <translation>Chór/zespół wokalny</translation>
     </message>
     <message>
-        <location filename="../util.h" line="612"/>
+        <location filename="../util.h" line="613"/>
         <source>Any Genre 1</source>
         <translation>Każdy styl 1</translation>
     </message>
@@ -2045,247 +2050,247 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Ok</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1293"/>
+        <location filename="../util.cpp" line="1102"/>
         <source>Drum Set</source>
         <translation>Zestaw perkusyjny</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1296"/>
+        <location filename="../util.cpp" line="1105"/>
         <source>Djembe</source>
         <translation>Djembe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1299"/>
+        <location filename="../util.cpp" line="1108"/>
         <source>Electric Guitar</source>
         <translation>Gitara elektryczna</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1302"/>
+        <location filename="../util.cpp" line="1111"/>
         <source>Acoustic Guitar</source>
         <translation>Gitara akustyczna</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1305"/>
+        <location filename="../util.cpp" line="1114"/>
         <source>Bass Guitar</source>
         <translation>Gitara basowa</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1308"/>
+        <location filename="../util.cpp" line="1117"/>
         <source>Keyboard</source>
         <translation>Klawisze</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1311"/>
+        <location filename="../util.cpp" line="1120"/>
         <source>Synthesizer</source>
         <translation>Syntezator</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1314"/>
+        <location filename="../util.cpp" line="1123"/>
         <source>Grand Piano</source>
         <translation>Fortepian</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1317"/>
+        <location filename="../util.cpp" line="1126"/>
         <source>Accordion</source>
         <translation>Akordeon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1320"/>
+        <location filename="../util.cpp" line="1129"/>
         <source>Vocal</source>
         <translation>Śpiew</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1323"/>
+        <location filename="../util.cpp" line="1132"/>
         <source>Microphone</source>
         <translation>Mikrofon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1326"/>
+        <location filename="../util.cpp" line="1135"/>
         <source>Harmonica</source>
         <translation>Harmonijka ustna</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1329"/>
+        <location filename="../util.cpp" line="1138"/>
         <source>Trumpet</source>
         <translation>Trąbka</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1332"/>
+        <location filename="../util.cpp" line="1141"/>
         <source>Trombone</source>
         <translation>Puzon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1335"/>
+        <location filename="../util.cpp" line="1144"/>
         <source>French Horn</source>
         <translation>Waltornia</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1338"/>
+        <location filename="../util.cpp" line="1147"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1341"/>
+        <location filename="../util.cpp" line="1150"/>
         <source>Saxophone</source>
         <translation>Saksofon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1344"/>
+        <location filename="../util.cpp" line="1153"/>
         <source>Clarinet</source>
         <translation>Klarnet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1347"/>
+        <location filename="../util.cpp" line="1156"/>
         <source>Flute</source>
         <translation>Flet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1350"/>
+        <location filename="../util.cpp" line="1159"/>
         <source>Violin</source>
         <translation>Skrzypce</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1353"/>
+        <location filename="../util.cpp" line="1162"/>
         <source>Cello</source>
         <translation>Wiolonczela</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1356"/>
+        <location filename="../util.cpp" line="1165"/>
         <source>Double Bass</source>
         <translation>Kontrabas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1359"/>
+        <location filename="../util.cpp" line="1168"/>
         <source>Recorder</source>
         <translation>Rejestrator</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1362"/>
+        <location filename="../util.cpp" line="1171"/>
         <source>Streamer</source>
         <translation>Streamer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1365"/>
+        <location filename="../util.cpp" line="1174"/>
         <source>Listener</source>
         <translation>Słuchacz</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1368"/>
+        <location filename="../util.cpp" line="1177"/>
         <source>Guitar+Vocal</source>
         <translation>Gitara+Śpiew</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1371"/>
+        <location filename="../util.cpp" line="1180"/>
         <source>Keyboard+Vocal</source>
         <translation>Keyboard+Śpiew</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1374"/>
+        <location filename="../util.cpp" line="1183"/>
         <source>Bodhran</source>
         <translation>Bodhran</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1377"/>
+        <location filename="../util.cpp" line="1186"/>
         <source>Bassoon</source>
         <translation>Fagot</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1380"/>
+        <location filename="../util.cpp" line="1189"/>
         <source>Oboe</source>
         <translation>Obój</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1383"/>
+        <location filename="../util.cpp" line="1192"/>
         <source>Harp</source>
         <translation>Harfa</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1386"/>
+        <location filename="../util.cpp" line="1195"/>
         <source>Viola</source>
         <translation>Altówka</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1389"/>
+        <location filename="../util.cpp" line="1198"/>
         <source>Congas</source>
         <translation>Kongi</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1392"/>
+        <location filename="../util.cpp" line="1201"/>
         <source>Bongo</source>
         <translation>Bongo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1395"/>
+        <location filename="../util.cpp" line="1204"/>
         <source>Vocal Bass</source>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1398"/>
+        <location filename="../util.cpp" line="1207"/>
         <source>Vocal Tenor</source>
         <translation>Tenor</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1401"/>
+        <location filename="../util.cpp" line="1210"/>
         <source>Vocal Alto</source>
         <translation>Alt</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1404"/>
+        <location filename="../util.cpp" line="1213"/>
         <source>Vocal Soprano</source>
         <translation>Sopran</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1407"/>
+        <location filename="../util.cpp" line="1216"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1410"/>
+        <location filename="../util.cpp" line="1219"/>
         <source>Mandolin</source>
         <translation>Mandolina</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1413"/>
+        <location filename="../util.cpp" line="1222"/>
         <source>Ukulele</source>
         <translation>Ukulele</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1416"/>
+        <location filename="../util.cpp" line="1225"/>
         <source>Bass Ukulele</source>
         <translation>Ukulele basowe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1419"/>
+        <location filename="../util.cpp" line="1228"/>
         <source>Vocal Baritone</source>
         <translation>Baryton</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1422"/>
+        <location filename="../util.cpp" line="1231"/>
         <source>Vocal Lead</source>
         <translation>Wokal prowadzący</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1425"/>
+        <location filename="../util.cpp" line="1234"/>
         <source>Mountain Dulcimer</source>
         <translation>Cymbały górskie</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1428"/>
+        <location filename="../util.cpp" line="1237"/>
         <source>Scratching</source>
         <translation>Scratch</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1431"/>
+        <location filename="../util.cpp" line="1240"/>
         <source>Rapping</source>
         <translation>Rapowanie</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1434"/>
+        <location filename="../util.cpp" line="1243"/>
         <source>Vibraphone</source>
         <translation>Wibrafon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1437"/>
+        <location filename="../util.cpp" line="1246"/>
         <source>Conductor</source>
         <translation>Dyrygent</translation>
     </message>
@@ -2720,7 +2725,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Jeżeli znasz adres IP lub URL serwera możesz podłączyć się do niego podając te dane w polu nazwa/adres serwera. Dodatkowo może być podany numer portu - po dwukropku za adresem/numerem IP, np. %1. To pole tekstowe będzie także wyświetlać listę ostatnio używanych adresów.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="155"/>
+        <location filename="../connectdlg.cpp" line="160"/>
         <source>Filter text, or # for occupied servers</source>
         <translation>Tekst filtra lub # żeby widzieć używane serwery</translation>
     </message>
@@ -2776,17 +2781,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Lokalizacja</translation>
     </message>
     <message>
-        <location filename="../connectdlgbase.ui" line="96"/>
+        <location filename="../connectdlgbase.ui" line="91"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../connectdlgbase.ui" line="101"/>
         <source>Server Address</source>
         <translation>Adres serwera</translation>
     </message>
     <message>
-        <location filename="../connectdlgbase.ui" line="133"/>
+        <location filename="../connectdlgbase.ui" line="138"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Anuluj</translation>
     </message>
     <message>
-        <location filename="../connectdlgbase.ui" line="140"/>
+        <location filename="../connectdlgbase.ui" line="145"/>
         <source>&amp;Connect</source>
         <translation>&amp;Połącz</translation>
     </message>
@@ -2794,33 +2804,33 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../util.cpp" line="815"/>
+        <location filename="../util.cpp" line="619"/>
         <source>&amp;Help</source>
         <translation>P&amp;omoc</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="822"/>
-        <location filename="../util.cpp" line="827"/>
+        <location filename="../util.cpp" line="626"/>
+        <location filename="../util.cpp" line="631"/>
         <source>Getting &amp;Started...</source>
         <translation>&amp;Zaczynajmy...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="823"/>
+        <location filename="../util.cpp" line="627"/>
         <source>Software &amp;Manual...</source>
         <translation>&amp;Instrukcja programu...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="830"/>
+        <location filename="../util.cpp" line="634"/>
         <source>What&apos;s &amp;This</source>
         <translation>&amp;Co to jest</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="832"/>
+        <location filename="../util.cpp" line="636"/>
         <source>&amp;About Jamulus...</source>
         <translation>&amp;O programie Jamulus...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="834"/>
+        <location filename="../util.cpp" line="638"/>
         <source>About &amp;Qt...</source>
         <translation>O &amp;Qt...</translation>
     </message>
@@ -2837,12 +2847,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../util.cpp" line="891"/>
+        <location filename="../util.cpp" line="700"/>
         <source>Restart Required</source>
         <translation>Wymagany restart</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="891"/>
+        <location filename="../util.cpp" line="700"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>Aby wprowadzić zmianę języka, proszę uruchomić program ponownie.</translation>
     </message>
@@ -2850,22 +2860,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <location filename="../util.cpp" line="791"/>
+        <location filename="../util.cpp" line="595"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>Zanim dołączysz, ten serwer wymaga akceptacji warunków korzystania. Proszę je przeczytać w oknie czatu.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="792"/>
+        <location filename="../util.cpp" line="596"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Zapoznałem się z zasadami i &amp;akceptuję.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="793"/>
+        <location filename="../util.cpp" line="597"/>
         <source>Accept</source>
         <translation>Zgadzam się</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="794"/>
+        <location filename="../util.cpp" line="598"/>
         <source>Decline</source>
         <translation>Odrzucam</translation>
     </message>
@@ -3702,42 +3712,42 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Niezarejstrowany</translation>
     </message>
     <message>
-        <location filename="../util.h" line="588"/>
+        <location filename="../util.h" line="589"/>
         <source>None</source>
         <translation>Brak</translation>
     </message>
     <message>
-        <location filename="../util.h" line="635"/>
+        <location filename="../util.h" line="636"/>
         <source>Not registered</source>
         <translation>Nie zarejstrowany</translation>
     </message>
     <message>
-        <location filename="../util.h" line="638"/>
+        <location filename="../util.h" line="639"/>
         <source>Bad address</source>
         <translation>Błędny adres</translation>
     </message>
     <message>
-        <location filename="../util.h" line="641"/>
+        <location filename="../util.h" line="642"/>
         <source>Registration requested</source>
         <translation>Wymagana rejestracja</translation>
     </message>
     <message>
-        <location filename="../util.h" line="644"/>
+        <location filename="../util.h" line="645"/>
         <source>Registration failed</source>
         <translation>Rejestraca nie powiodła się</translation>
     </message>
     <message>
-        <location filename="../util.h" line="647"/>
+        <location filename="../util.h" line="648"/>
         <source>Check server version</source>
         <translation>Sprawdź wersję serwera</translation>
     </message>
     <message>
-        <location filename="../util.h" line="650"/>
+        <location filename="../util.h" line="651"/>
         <source>Registered</source>
         <translation>Zarejestrowany</translation>
     </message>
     <message>
-        <location filename="../util.h" line="653"/>
+        <location filename="../util.h" line="654"/>
         <source>Server list full at directory</source>
         <translation>Lista serwerów pełna w katalogu</translation>
     </message>
@@ -3750,17 +3760,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Serwer zbiorczy zapełniony</translation>
     </message>
     <message>
-        <location filename="../util.h" line="656"/>
+        <location filename="../util.h" line="657"/>
         <source>Your server version is too old</source>
         <translation>Wersja twojego serwera jest przestarzała</translation>
     </message>
     <message>
-        <location filename="../util.h" line="659"/>
+        <location filename="../util.h" line="660"/>
         <source>Requirements not fulfilled</source>
         <translation>Niespełniono wymagań</translation>
     </message>
     <message>
-        <location filename="../util.h" line="662"/>
+        <location filename="../util.h" line="663"/>
         <source>Unknown value %1</source>
         <translation>Nieznana wartość %1</translation>
     </message>
@@ -4235,22 +4245,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished"> nie mógł być uruchomiony z powodu problemów z interfejsem audio.</translation>
     </message>
     <message>
-        <location filename="../sound/soundbase.cpp" line="117"/>
+        <location filename="../sound/soundbase.cpp" line="118"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
         <translation>Nie można używać wybranego urządzenia dźwiękowego z powodu błędu %1. Poprzedni sterownik zostanie wybrany.</translation>
     </message>
     <message>
-        <location filename="../sound/soundbase.cpp" line="158"/>
+        <location filename="../sound/soundbase.cpp" line="159"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
         <translation>Poprzednio wybrane urządzenie dźwiękowe nie jest już dostępne lub jego ustawienia nie są już kompatybilne. Spróbuję znaleźć odpowiednie urządzenie dźwiękowe ale może ono powodować sprzężenia. Przed podłączeniem do serwera proszę sprawdzić swoje ustawienia audio.</translation>
     </message>
     <message>
-        <location filename="../sound/soundbase.cpp" line="171"/>
+        <location filename="../sound/soundbase.cpp" line="172"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
         <translation>&lt;b&gt;%1 nie znalazł działającego %2 urządzenia dźwiękowego.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../sound/soundbase.cpp" line="182"/>
+        <location filename="../sound/soundbase.cpp" line="183"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
         <translation>Można spróbować naprawić błędy w ustawieniach sterownika. Otworzyć je teraz?</translation>
     </message>
@@ -4267,7 +4277,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Czy chcesz otworzyć ustawienia sterownika ASIO żeby spróbować ustawić konfigurację dźwięku?</translation>
     </message>
     <message>
-        <location filename="../sound/soundbase.cpp" line="189"/>
+        <location filename="../sound/soundbase.cpp" line="190"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
         <translation>Nie udało się uruchomić %1-a. Proszę sprawdzić/zmienić ustawienia dźwięku i uruchomić %1-a ponownie.</translation>
     </message>
@@ -4283,43 +4293,43 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Program do sesji dźwiękowych przez internet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1703"/>
+        <location filename="../util.cpp" line="1512"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, Wersja %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1720"/>
+        <location filename="../util.cpp" line="1529"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Wydane na zasadach licencji GNU General Public License wersja 2 lub następne (GPLv2)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1733"/>
+        <location filename="../util.cpp" line="1542"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
         <translation type="unfinished">Aplikacja korzysta z następująuch bibliotek, źródeł lub fragmentów kodu:</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1735"/>
+        <location filename="../util.cpp" line="1544"/>
         <source>Qt cross-platform application framework</source>
         <translation type="unfinished">Qt - między-platformowe szablony aplikacji</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1736"/>
+        <location filename="../util.cpp" line="1545"/>
         <source>(build)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1736"/>
+        <location filename="../util.cpp" line="1545"/>
         <source>(runtime)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1754"/>
+        <location filename="../util.cpp" line="1563"/>
         <source>Some pixmaps are from the %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1760"/>
+        <location filename="../util.cpp" line="1569"/>
         <source>Some sound samples are from %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4352,7 +4362,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Kodek Opus Audio</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1750"/>
+        <location filename="../util.cpp" line="1559"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
         <translation>Kod algorytmu pogłosu: Perry R. Cook i Gary P Scavone</translation>
     </message>
@@ -4361,7 +4371,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Niektóre obrazki są z Open Clip Art Library (OCAL)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1757"/>
+        <location filename="../util.cpp" line="1566"/>
         <source>Flag icons by Mark James</source>
         <translation>Ikony flag: Mark James</translation>
     </message>

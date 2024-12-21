@@ -2740,7 +2740,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>

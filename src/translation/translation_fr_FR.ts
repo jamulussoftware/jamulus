@@ -893,7 +893,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>Tri&amp;er les utilisateurs par canal</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>

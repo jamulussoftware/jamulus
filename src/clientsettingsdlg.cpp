@@ -106,16 +106,21 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     lblNetBuf->setWhatsThis ( strJitterBufferSize );
     lblNetBuf->setToolTip ( strJitterBufferSizeTT );
+    lblNetBuf->installEventFilter ( this ); // install event filter for tooltips
     grbJitterBuffer->setWhatsThis ( strJitterBufferSize );
     grbJitterBuffer->setToolTip ( strJitterBufferSizeTT );
+    grbJitterBuffer->installEventFilter ( this ); // install event filter for tooltips
     sldNetBuf->setWhatsThis ( strJitterBufferSize );
     sldNetBuf->setAccessibleName ( tr ( "Local jitter buffer slider control" ) );
     sldNetBuf->setToolTip ( strJitterBufferSizeTT );
+    sldNetBuf->installEventFilter ( this ); // install event filter for tooltips
     sldNetBufServer->setWhatsThis ( strJitterBufferSize );
     sldNetBufServer->setAccessibleName ( tr ( "Server jitter buffer slider control" ) );
     sldNetBufServer->setToolTip ( strJitterBufferSizeTT );
+    sldNetBufServer->installEventFilter ( this ); // install event filter for tooltips
     chbAutoJitBuf->setAccessibleName ( tr ( "Auto jitter buffer check box" ) );
     chbAutoJitBuf->setToolTip ( strJitterBufferSizeTT );
+    chbAutoJitBuf->installEventFilter ( this ); // install event filter for tooltips
 
 #if !defined( WITH_JACK )
     // sound card device
@@ -143,6 +148,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                     "driver, make sure to connect the ASIO inputs in the kX DSP settings "
                                     "panel." ) +
                                TOOLTIP_COM_END_TEXT );
+    cbxSoundcard->installEventFilter ( this ); // install event filter for tooltips
 #    endif
 
     // sound card input/output channel mapping
@@ -249,17 +255,21 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayPreferred->setAccessibleName ( tr ( "64 samples setting radio button" ) );
     rbtBufferDelayPreferred->setToolTip ( strSndCrdBufDelayTT );
+    rbtBufferDelayPreferred->installEventFilter ( this ); // install event filter for tooltips
     rbtBufferDelayDefault->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayDefault->setAccessibleName ( tr ( "128 samples setting radio button" ) );
     rbtBufferDelayDefault->setToolTip ( strSndCrdBufDelayTT );
+    rbtBufferDelayDefault->installEventFilter ( this ); // install event filter for tooltips
     rbtBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelaySafe->setAccessibleName ( tr ( "256 samples setting radio button" ) );
     rbtBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
+    rbtBufferDelaySafe->installEventFilter ( this ); // install event filter for tooltips
 
 #if defined( _WIN32 ) && !defined( WITH_JACK )
     butDriverSetup->setWhatsThis ( strSndCardDriverSetup );
     butDriverSetup->setAccessibleName ( tr ( "ASIO Device Settings push button" ) );
     butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
+    butDriverSetup->installEventFilter ( this ); // install event filter for tooltips
 #endif
 
     // fancy skin
@@ -398,9 +408,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbAudioAlerts->setAccessibleName ( tr ( "Audio Alerts check box" ) );
 
     // show tooltips
-    chbShowToolTips->setWhatsThis ( "<b>" + tr ( "Show ToolTips" ) + ":</b> " +
-                                    tr ( "Enable or disable the showing of ToolTips when the mouse points to certain items." ) );
-    chbShowToolTips->setAccessibleName ( tr ( "Show ToolTips check box" ) );
+    chbShowToolTips->setWhatsThis ( "<b>" + tr ( "Show tool tips" ) + ":</b> " +
+                                    tr ( "Enable or disable the showing of tool tips when the mouse points to certain items." ) );
+    chbShowToolTips->setAccessibleName ( tr ( "Show tool tips check box" ) );
 
     // init driver button
 #if defined( _WIN32 ) && !defined( WITH_JACK )
@@ -1227,4 +1237,16 @@ void CClientSettingsDlg::OnAudioPanValueChanged ( int value )
 {
     pClient->SetAudioInFader ( value );
     UpdateAudioFaderSlider();
+}
+
+bool CClientSettingsDlg::eventFilter ( QObject* obj, QEvent* event )
+{
+    if ( event->type() == QEvent::ToolTip )
+    {
+        // return true to suppress tooltip, false to allow it
+        return !pSettings->bShowToolTips;
+    }
+
+    // continue with normal processing for other events
+    return QObject::eventFilter ( obj, event );
 }

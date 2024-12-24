@@ -71,6 +71,8 @@ protected:
 
     virtual void showEvent ( QShowEvent* );
 
+    bool eventFilter ( QObject* obj, QEvent* event );
+
     CClient*         pClient;
     CClientSettings* pSettings;
     QTimer           TimerStatus;

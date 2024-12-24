@@ -332,7 +332,7 @@
                   <item>
                    <widget class="QCheckBox" name="chbShowToolTips">
                     <property name="text">
-                     <string>Show Tooltips</string>
+                     <string>Show tool tips</string>
                     </property>
                    </widget>
                   </item>

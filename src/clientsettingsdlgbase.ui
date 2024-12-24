@@ -276,6 +276,13 @@
                     </property>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QLabel" name="lblShowToolTips">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </item>
                 <item>
@@ -319,6 +326,13 @@
                    <widget class="QCheckBox" name="chbAudioAlerts">
                     <property name="text">
                      <string>Audio Alerts</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="chbShowToolTips">
+                    <property name="text">
+                     <string>Show Tooltips</string>
                     </property>
                    </widget>
                   </item>
@@ -1358,6 +1372,7 @@
   <tabstop>cbxLanguage</tabstop>
   <tabstop>spnMixerRows</tabstop>
   <tabstop>chbAudioAlerts</tabstop>
+  <tabstop>chbShowToolTips</tabstop>
   <tabstop>cbxSoundcard</tabstop>
   <tabstop>butDriverSetup</tabstop>
   <tabstop>cbxLInChan</tabstop>

@@ -49,6 +49,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 {
     setupUi ( this );
 
+    // install event filter for tooltips
+    qApp->installEventFilter ( this );
+
     // Add help text to controls -----------------------------------------------
     // input level meter
     QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " +
@@ -1515,4 +1518,15 @@ void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, c
 
     // set current LED status
     ledDelay->SetLight ( eOverallDelayLEDColor );
+}
+
+bool CClientDlg::eventFilter ( QObject* obj, QEvent* event )
+{
+    if ( event->type() == QEvent::ToolTip && !pSettings->bShowToolTips )
+    {
+        return true; // don't show tooltip
+    }
+
+    // continue with normal processing of event
+    return CBaseDlg::eventFilter ( obj, event );
 }

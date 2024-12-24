@@ -94,6 +94,8 @@ protected:
     virtual void showEvent ( QShowEvent* ) override;
     virtual bool eventFilter ( QObject* obj, QEvent* event ) override;
 
+    bool eventFilter ( QObject* obj, QEvent* event );
+
     CClient*         pClient;
     CClientSettings* pSettings;
     QTimer           TimerStatus;

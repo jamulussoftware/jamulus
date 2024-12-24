@@ -397,6 +397,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                         "A second sound device may be required to hear the alerts." ) );
     chbAudioAlerts->setAccessibleName ( tr ( "Audio Alerts check box" ) );
 
+    // show tooltips
+    chbShowToolTips->setWhatsThis ( "<b>" + tr ( "Show ToolTips" ) + ":</b> " +
+                                    tr ( "Enable or disable the showing of ToolTips when the mouse points to certain items." ) );
+    chbShowToolTips->setAccessibleName ( tr ( "Show ToolTips check box" ) );
+
     // init driver button
 #if defined( _WIN32 ) && !defined( WITH_JACK )
     butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
@@ -479,6 +484,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // init audio alerts
     chbAudioAlerts->setCheckState ( pSettings->bEnableAudioAlerts ? Qt::Checked : Qt::Unchecked );
+
+    // init show tooltips
+    chbShowToolTips->setCheckState ( pSettings->bShowToolTips ? Qt::Checked : Qt::Unchecked );
 
     // update feedback detection
     chbDetectFeedback->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
@@ -644,6 +652,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QObject::connect ( chbDetectFeedback, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnFeedbackDetectionChanged );
 
     QObject::connect ( chbAudioAlerts, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnAudioAlertsChanged );
+
+    QObject::connect ( chbShowToolTips, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnShowToolTipsChanged );
 
     // line edits
     QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
@@ -997,6 +1007,8 @@ void CClientSettingsDlg::OnMeterStyleActivated ( int iMeterStyleIdx )
 }
 
 void CClientSettingsDlg::OnAudioAlertsChanged ( int value ) { pSettings->bEnableAudioAlerts = value == Qt::Checked; }
+
+void CClientSettingsDlg::OnShowToolTipsChanged ( int value ) { pSettings->bShowToolTips = value == Qt::Checked; }
 
 void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {

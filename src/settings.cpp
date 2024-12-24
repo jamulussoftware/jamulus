@@ -289,6 +289,12 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         bEnableAudioAlerts = bValue;
     }
 
+    // show tooltips
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "showtooltips", bValue ) )
+    {
+        bShowToolTips = bValue;
+    }
+
     // name
     pClient->ChannelInfo.strName = FromBase64ToString (
         GetIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( QCoreApplication::translate ( "CMusProfDlg", "No Name" ) ) ) );
@@ -651,6 +657,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
 
     // audio alerts
     SetFlagIniSet ( IniXMLDocument, "client", "enableaudioalerts", bEnableAudioAlerts );
+
+    // show tooltips
+    SetFlagIniSet ( IniXMLDocument, "client", "showtooltips", bShowToolTips );
 
     // name
     PutIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( pClient->ChannelInfo.strName ) );

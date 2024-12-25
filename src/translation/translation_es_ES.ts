@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordenar Usuarios por &amp;Canal</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
@@ -3168,7 +3168,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versión</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>

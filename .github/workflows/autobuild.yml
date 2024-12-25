@@ -195,7 +195,7 @@ jobs:
         config:
           - config_name:            Android .apk (artifact+codeQL)
             target_os:              android
-            building_on_os:         ubuntu-20.04
+            building_on_os:         ubuntu-22.04
             base_command:           ./.github/autobuild/android.sh
             run_codeql:             true
             is_main_build_target:   true

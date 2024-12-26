@@ -53,7 +53,7 @@ $Qt64Version = "6.8.1"
 $AqtinstallVersion = "3.1.21"
 $JackVersion = "1.9.22"
 $Msvc32Version = "win32_msvc2019"
-$Msvc64Version = "win64_msvc2019_64"
+$Msvc64Version = "win64_msvc2022_64"
 $JomVersion = "1.1.2"
 
 # Compose JACK download urls

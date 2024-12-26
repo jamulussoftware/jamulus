@@ -78,7 +78,7 @@ Download and install Qt e.g via the [official open source installer](https://www
 
 **Note:**
 - Use the free GPLv2 license for Open Source development, not the commercial "universal installer"
-- Select Components during installation: Expand the Qt section, find the matching version, preferrably **Qt 5.15.2**, and add the compiler components for your compiler, e.g., `MSVC 2019 32-bit/64-bit` for Visual Studio 2019
+- Select Components during installation: Expand the Qt section, find the matching version.  To match the Github builds, you will need to check the versions in `windows/deploy_windows.ps2`.  This gives both the Qt and MSVC versions (e.g. 6.8.1 and msvc2022_64 for a 64bit release).
 
 If you build with *JACK* support, install JACK via choco: `choco install --no-progress -y jack`
 

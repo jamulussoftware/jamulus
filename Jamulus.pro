@@ -234,15 +234,22 @@ win32 {
     }
 
 } else:ios {
+
+    QMAKE_TARGET_BUNDLE_PREFIX = app.jamulussoftware
     QMAKE_ASSET_CATALOGS += src/res/iOSIcons.xcassets
     QMAKE_INFO_PLIST = ios/Info.plist
+
     OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
     HEADERS += src/ios/ios_app_delegate.h
-    HEADERS += src/sound/coreaudio-ios/sound.h
+
     OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = app.jamulussoftware
+    HEADERS += src/sound/coreaudio-ios/sound.h
+
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
+
+    QMAKE_CXXFLAGS += -DQT_DEFAULT_MEDIA_BACKEND=darwin
+
 } else:android {
     ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     ANDROID_VERSION_NAME = $$VERSION

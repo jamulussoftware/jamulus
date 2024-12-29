@@ -38,31 +38,25 @@
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
-#include "plugins/audioreverb.h"
 #include "buffer.h"
 #include "signalhandler.h"
+#include "audiomixerboard.h"
+#include "levelmeter.h"
+#include "chatbox.h"
 
-#if defined( _WIN32 ) && !defined( JACK_ON_WINDOWS )
+#if defined( _WIN32 )
 #    include "sound/asio/sound.h"
-#else
-#    if ( defined( Q_OS_MACOS ) ) && !defined( JACK_REPLACES_COREAUDIO )
-#        include "sound/coreaudio-mac/sound.h"
-#    else
-#        if defined( Q_OS_IOS )
-#            include "sound/coreaudio-ios/sound.h"
-#        else
-#            ifdef ANDROID
-#                include "sound/oboe/sound.h"
-#            else
-#                include "sound/jack/sound.h"
-#                ifndef JACK_ON_WINDOWS // these headers are not available in Windows OS
-#                    include <sched.h>
-#                    include <netdb.h>
-#                endif
-#                include <socket.h>
-#            endif
-#        endif
-#    endif
+#elif defined( Q_OS_MACOS )
+#    include "sound/coreaudio-mac/sound.h"
+#elif defined( Q_OS_IOS )
+#    include "sound/coreaudio-ios/sound.h"
+#elif defined (Q_OS_ANDROID)
+#    include "sound/oboe/sound.h"
+#elif defined (Q_OS_LINUX)
+#    include "sound/jack/sound.h"
+#    include <sched.h>
+#    include <netdb.h>
+#    include <socket.h>
 #endif
 
 /* Definitions ****************************************************************/
@@ -70,9 +64,6 @@
 #define AUD_FADER_IN_MIN    0
 #define AUD_FADER_IN_MAX    100
 #define AUD_FADER_IN_MIDDLE ( AUD_FADER_IN_MAX / 2 )
-
-// audio reverberation range
-#define AUD_REVERB_MAX 100
 
 // default delay period between successive gain updates (ms)
 // this will be increased to double the ping time if connected to a distant server
@@ -103,25 +94,44 @@
 #define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY_DBLE_FRAMESIZE 71
 #define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE   165
 
+// from clientdlg
+/* Definitions ****************************************************************/
+// update time for GUI controls
+#define LEVELMETER_UPDATE_TIME_MS  100  // ms
+#define BUFFER_LED_UPDATE_TIME_MS  300  // ms
+#define LED_BAR_UPDATE_TIME_MS     1000 // ms
+#define CHECK_AUDIO_DEV_OK_TIME_MS 5000 // ms
+#define DETECT_FEEDBACK_TIME_MS    3000 // ms
+
+// number of ping times > upper bound until error message is shown
+#define NUM_HIGH_PINGS_UNTIL_ERROR 5
+
+#define DISPLAY_UPDATE_TIME 1000 // ms
+
+#define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
+
+// ------------
+
 /* Classes ********************************************************************/
-
-class CClientChannel
-{
-public:
-    int iServerChannelID; // unused channels will contain INVALID_INDEX
-    int iJoinSequence;    // order of joining of session participants
-
-    float oldGain, newGain; // for rate-limiting sending of gain messages
-    float oldPan, newPan;   // for rate-limiting sending of pan messages
-
-    uint16_t level; // last value of level meter received for channel
-
-    // can store here other information about an active channel
-};
-
 class CClient : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(QString sessionlinkText READ sessionlinkText WRITE setSessionlinkText NOTIFY sessionlinkTextChanged)
+    Q_PROPERTY(bool muteOut READ muteOut WRITE setMuteOut NOTIFY muteOutChanged)
+    Q_PROPERTY(int audioInPan READ audioInPan WRITE setAudioInPan NOTIFY audioInPanChanged FINAL)
+    Q_PROPERTY(int pingVal READ pingVal NOTIFY pingValChanged FINAL)
+    Q_PROPERTY(int delayVal READ delayVal NOTIFY delayValChanged FINAL)
+    Q_PROPERTY(bool jitterWarn READ jitterWarn WRITE setJitterWarn NOTIFY jitterWarnChanged FINAL)
+    Q_PROPERTY(QString sessionStatus READ sessionStatus NOTIFY sessionStatusChanged FINAL)
+    Q_PROPERTY(QString sessionName READ sessionName NOTIFY sessionNameChanged FINAL)
+    Q_PROPERTY(QString recordingStatus READ recordingStatus NOTIFY recordingStatusChanged FINAL)
+    Q_PROPERTY(bool bConnected READ bConnected NOTIFY bConnectedChanged FINAL)
+    // for Input LevelMeter L-R
+    Q_PROPERTY(CLevelMeter* inputMeterL READ inputMeterL CONSTANT)
+    Q_PROPERTY(CLevelMeter* inputMeterR READ inputMeterR CONSTANT)
+    // show user messages
+    Q_PROPERTY(QString userMsg READ userMsg WRITE setUserMsg NOTIFY userMsgChanged FINAL)
 
 public:
     CClient ( const quint16  iPortNumber,
@@ -131,15 +141,76 @@ public:
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
               const bool     bNEnableIPv6,
-              const bool     bNMuteMeInPersonalMix );
+              const bool     bNMuteMeInPersonalMix,
+              // additional from clientdlg:
+              const QString& strIniFileName,
+              const bool       bMuteStream,      // maybe
+              // for settings
+              const QList<QString> bCommandLineOptions
+            );
 
     virtual ~CClient();
+
+    // QML accessors -----------
+    int  audioInPan() const { return iAudioInFader; }
+    void setAudioInPan ( const int iNV ) { iAudioInFader = iNV; emit audioInPanChanged(); }
+
+    int pingVal() { return m_pingVal; }
+
+    int delayVal() { return m_delayVal; }
+
+    bool jitterWarn();
+    void setJitterWarn( bool warn );
+
+    QString sessionStatus() { return m_sessionStatus; }
+    void setSessionStatus( QString strName );
+    // { if (IsRunning())
+    //         return "CONNECTED";
+    //     return "NO SESSION";
+    // }
+
+    QString sessionName() { return strSelectedAddress; }
+
+    QString recordingStatus()
+    {
+        if (eRecorderState == 3)
+            return "ON";
+        return "OFF";
+    }
+
+    QString sessionlinkText();
+    void setSessionlinkText( const QString& strSelectedAddress );
+
+    bool muteOut() { return bMuteOutStream; }
+    void setMuteOut ( bool value )
+    {
+        bMuteOutStream = value;
+    }
+
+    CLevelMeter* inputMeterL() const { return m_inputMeterL; }
+    CLevelMeter* inputMeterR() const { return m_inputMeterR; }
+
+    QString userMsg() const;
+    void setUserMsg( const QString &userMessage );
+
+    // -- QML ----
+
+    // things
+    CChannelCoreInfo    ChannelInfo;
+    QString             strClientName;
+    QString             strIniFileName;
+    CClientSettings     pSettings;
+    CAudioMixerBoard    audioMixerBoard;
+    CChatBox            chatBox;
+    QList<QString>      CommandLineOptions; // for settings
+    // ----
 
     void Start();
     void Stop();
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
     bool SetServerAddr ( QString strNAddr );
+    void SetServerStatus ( const QString& strNewServerName );
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
@@ -148,30 +219,13 @@ public:
 
     bool IsConnected() { return Channel.IsConnected(); }
 
-    EGUIDesign GetGUIDesign() const { return eGUIDesign; }
-    void       SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
-
-    EMeterStyle GetMeterStyle() const { return eMeterStyle; }
-    void        SetMeterStyle ( const EMeterStyle eNMT ) { eMeterStyle = eNMT; }
-
     EAudioQuality GetAudioQuality() const { return eAudioQuality; }
     void          SetAudioQuality ( const EAudioQuality eNAudioQuality );
 
     EAudChanConf GetAudioChannels() const { return eAudioChannelConf; }
     void         SetAudioChannels ( const EAudChanConf eNAudChanConf );
 
-    int  GetAudioInFader() const { return iAudioInFader; }
-    void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
-
-    int  GetReverbLevel() const { return iReverbLevel; }
-    void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
-
-    bool IsReverbOnLeftChan() const { return bReverbOnLeftChan; }
-    void SetReverbOnLeftChan ( const bool bIL )
-    {
-        bReverbOnLeftChan = bIL;
-        AudioReverb.Clear();
-    }
+    bool bConnected() { return IsRunning(); }
 
     void SetDoAutoSockBufSize ( const bool bValue );
     bool GetDoAutoSockBufSize() const { return Channel.GetDoAutoSockBufSize(); }
@@ -256,9 +310,10 @@ public:
     void SetMuteOutStream ( const bool bDoMute ) { bMuteOutStream = bDoMute; }
 
     void SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader );
-    void SetRemoteChanPan ( const int iId, const float fPan );
-    void OnTimerRemoteChanGainOrPan();
-    void StartTimerGainOrPan();
+    void OnTimerRemoteChanGain();
+    void StartDelayTimer();
+
+    void SetRemoteChanPan ( const int iId, const float fPan ) { Channel.SetRemoteChanPan ( iId, fPan ); }
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
 
@@ -286,9 +341,6 @@ public:
         Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit );
     }
 
-    // settings
-    CChannelCoreInfo ChannelInfo;
-    QString          strClientName;
 
 protected:
     // callback function must be static, otherwise it does not work
@@ -302,26 +354,9 @@ protected:
     int  EvaluatePingMessage ( const int iMs );
     void CreateServerJitterBufferMessage();
 
-    void ClearClientChannels();
-    void FreeClientChannel ( const int iServerChannelID );
-    int  FindClientChannel ( const int iServerChannelID, const bool bCreateIfNew ); // returns a client channel ID or INVALID_INDEX
-    bool ReorderLevelList ( CVector<uint16_t>& vecLevelList );                      // modifies vecLevelList, passed by reference
-
     // only one channel is needed for client application
     CChannel  Channel;
     CProtocol ConnLessProtocol;
-
-    // client channels, indexed by client channel ID,
-    // containing server channel ID (INVALID_INDEX if free)
-    CClientChannel clientChannels[MAX_NUM_CHANNELS];
-
-    // client channel IDs, indexed by server channel ID
-    // unused channels will contain INVALID_INDEX
-    int clientChannelIDs[MAX_NUM_CHANNELS];
-
-    int    iActiveChannels; // number of active channels
-    int    iJoinSequence;   // order of joining of session participants
-    QMutex MutexChannels;
 
     // audio encoder/decoder
     OpusCustomMode*        Opus64Mode;
@@ -354,9 +389,6 @@ protected:
     CVector<uint8_t> vecbyNetwData;
 
     int          iAudioInFader;
-    bool         bReverbOnLeftChan;
-    int          iReverbLevel;
-    CAudioReverb AudioReverb;
     int          iInputBoost;
 
     int iSndCrdPrefFrameSizeFactor;
@@ -377,8 +409,6 @@ protected:
     int iMonoBlockSizeSam;
     int iStereoBlockSizeSam;
 
-    EGUIDesign  eGUIDesign;
-    EMeterStyle eMeterStyle;
     bool        bEnableAudioAlerts;
     bool        bEnableOPUS64;
 
@@ -393,14 +423,57 @@ protected:
     // for ping measurement
     QElapsedTimer PreciseTime;
 
-    // for gain or pan rate limiting
-    QMutex MutexGainOrPan;
-    QTimer TimerGainOrPan;
-    int    minGainOrPanId;
-    int    maxGainOrPanId;
+    // for gain rate limiting
+    QMutex MutexGain;
+    QTimer TimerGain;
+    int    minGainId;
+    int    maxGainId;
+    float  oldGain[MAX_NUM_CHANNELS];
+    float  newGain[MAX_NUM_CHANNELS];
     int    iCurPingTime;
 
     CSignalHandler* pSignalHandler;
+
+    // for join / connect
+    QString        strSelectedAddress;
+    void Connect( const QString& strAddress );
+    void Disconnect();
+    QString                 strServerName;
+
+    // timers
+    QTimer         TimerSigMet;
+    QTimer         TimerBuffersLED;
+    QTimer         TimerStatus;
+    QTimer         TimerPing;
+    QTimer         TimerCheckAudioDeviceOk;
+    QTimer         TimerDetectFeedback;
+
+    void SetPingTime ( const int iPingTime, const int iOverallDelayMs );
+
+    int            iClients;
+    // bool           bConnected;
+    bool           bConnectDlgWasShown;
+    bool           bMIDICtrlUsed;
+    bool           bDetectFeedback;
+    ERecorderState eLastRecorderState;
+    ERecorderState          eRecorderState;
+
+    virtual void closeEvent ( QCloseEvent* Event );
+
+    // QML props .................
+    // object refs for input meter levels
+    CLevelMeter* m_inputMeterL;
+    CLevelMeter* m_inputMeterR;
+    // for ping/delay stat display
+    int m_pingVal;
+    int m_delayVal;
+    // for user messages
+    QString m_userMsg;
+    // handle jitterWarn state
+    bool m_jitterWarn = false;
+    // session status
+    QString m_sessionStatus = "NO SESSION";
+
 
 protected slots:
     void OnHandledSignal ( int sigNum );
@@ -432,10 +505,62 @@ protected slots:
     void OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void OnControllerInMuteMyself ( bool bMute );
-    void OnClientIDReceived ( int iServerChanID );
-    void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
-    void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
+    void OnClientIDReceived ( int iChanID );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
+
+
+public slots:
+    // new client stuff
+    void onConnectButtonClicked();
+    void onDisconnectButtonClicked();
+    void OnTimerSigMet();
+    void OnTimerBuffersLED();
+    void OnTimerCheckAudioDeviceOk();
+    void OnTimerDetectFeedback();
+    void OnTimerStatus() { ; }    // redundant ?
+    void OnTimerPing();
+    void OnPingTimeResult ( int iPingTime );
+    void OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVersion );
+    void OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion );
+    void OnChatTextReceived ( QString strChatText );
+    void OnLoadChannelSetup();
+    void OnSaveChannelSetup();
+
+    void OnOwnFaderFirst()
+    {
+        pSettings.bOwnFaderFirst = !pSettings.bOwnFaderFirst;
+        audioMixerBoard.SetFaderSorting ( pSettings.eChannelSortType );
+    }
+    void OnNoSortChannels() { audioMixerBoard.SetFaderSorting ( ST_NO_SORT ); }
+    void OnSortChannelsByName() { audioMixerBoard.SetFaderSorting ( ST_BY_NAME ); }
+    void OnSortChannelsByGroupID() { audioMixerBoard.SetFaderSorting ( ST_BY_GROUPID ); }
+    void OnClearAllStoredSoloMuteSettings();
+    void OnSetAllFadersToNewClientLevel() { audioMixerBoard.SetAllFaderLevelsToNewClientLevel(); }
+    void OnAutoAdjustAllFaderLevels() { audioMixerBoard.AutoAdjustAllFaderLevels(); }
+    void OnNumMixerPanelRowsChanged ( int value ) { audioMixerBoard.SetNumMixerPanelRows ( value ); }
+    void OnNewLocalInputText ( QString strChatText ) { CreateChatTextMes ( strChatText ); }
+
+    void OnSoundDeviceChanged ( QString strError );
+
+    void OnChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader ) { SetRemoteChanGain ( iId, fGain, bIsMyOwnFader ); }
+
+    void OnChangeChanPan ( int iId, float fPan ) { SetRemoteChanPan ( iId, fPan ); }
+
+    void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
+    {
+        audioMixerBoard.SetRemoteFaderIsMute ( iChanID, bIsMuted );
+    }
+
+    void OnCLChannelLevelListReceived ( CHostAddress /* unused */, CVector<uint16_t> vecLevelList )
+    {
+        audioMixerBoard.SetChannelLevels ( vecLevelList );
+    }
+
+    void OnDisconnected() { Disconnect(); }
+    void OnRecorderStateReceived ( ERecorderState eRecorderState );
+    void OnNumClientsChanged ( int iNewNumClients );
+    // void accept() { close(); } // introduced by pljones
+
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
@@ -448,15 +573,10 @@ signals:
     void RecorderStateReceived ( ERecorderState eRecorderState );
 
     void CLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
-
     void CLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
-
     void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
-
     void CLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int iPingTime, int iNumClients );
-
     void CLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
-
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
     void Disconnected();
@@ -466,4 +586,19 @@ signals:
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void ControllerInMuteMyself ( bool bMute );
+
+    // QML signals
+    void sessionlinkTextChanged();
+    void muteOutChanged();
+    void audioInPanChanged();
+    void pingValChanged();
+    void delayValChanged();
+    void jitterWarnChanged();
+    void inputLevelLChanged();
+    void inputLevelRChanged();
+    void sessionStatusChanged();
+    void sessionNameChanged();
+    void recordingStatusChanged();
+    void bConnectedChanged();
+    void userMsgChanged();
 };

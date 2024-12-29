@@ -1,10 +1,4 @@
-VERSION = 3.11.0dev
-
-# Using lrelease and embed_translations only works for Qt 5.12 or later.
-# See https://github.com/jamulussoftware/jamulus/pull/3288 for these changes.
-lessThan(QT_MAJOR_VERSION, 5) | equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 12) {
-    error(Jamulus requires at least Qt5.12. See https://github.com/jamulussoftware/jamulus/pull/3288)
-}
+VERSION = 3.12.0qml
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -12,59 +6,22 @@ contains(CONFIG, "noupcasename") {
     TARGET = jamulus
 }
 
-# allow detailed version info for intermediate builds (#475)
-contains(VERSION, .*dev.*) {
-    exists(".git/config") {
-        GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
-        VERSION = "$$VERSION"-$$GIT_DESCRIPTION
-        message("building version \"$$VERSION\" (intermediate in git repository)")
-    } else {
-        VERSION = "$$VERSION"-nogit
-        message("building version \"$$VERSION\" (intermediate without git repository)")
-    }
-} else {
-    message("building version \"$$VERSION\" (release)")
-}
-
 CONFIG += qt \
     thread \
-    lrelease \
-    embed_translations \
-    debug_and_release
+    lrelease
 
 QT += network \
     xml \
-    concurrent
-
-contains(CONFIG, "nosound") {
-    CONFIG -= "nosound"
-    CONFIG += "serveronly"
-    warning("\"nosound\" is deprecated: please use \"serveronly\" for a server-only build.")
-}
+    concurrent \
+    svg
 
 contains(CONFIG, "headless") {
     message(Headless mode activated.)
     QT -= gui
 } else {
-    QT += widgets
-    QT += multimedia
+    QT += qml \
+          quickcontrols2
 }
-
-# Do not set LRELEASE_DIR explicitly when using embed_translations.
-# It doesn't work with multiple targets or architectures.
-TRANSLATIONS = src/translation/translation_de_DE.ts \
-    src/translation/translation_fr_FR.ts \
-    src/translation/translation_ko_KR.ts \
-    src/translation/translation_pt_PT.ts \
-    src/translation/translation_pt_BR.ts \
-    src/translation/translation_es_ES.ts \
-    src/translation/translation_nb_NO.ts \
-    src/translation/translation_nl_NL.ts \
-    src/translation/translation_pl_PL.ts \
-    src/translation/translation_sk_SK.ts \
-    src/translation/translation_it_IT.ts \
-    src/translation/translation_sv_SE.ts \
-    src/translation/translation_zh_CN.ts
 
 INCLUDEPATH += src
 
@@ -75,135 +32,54 @@ INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/silk/fixed \
     libs/opus
 
-# As JACK is used in multiple OS, we declare it globally
-HEADERS_JACK = src/sound/jack/sound.h
-SOURCES_JACK = src/sound/jack/sound.cpp
-
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
 
-# some depreciated functions need to be kept for older versions to build
-# TODO as soon as we drop support for the old Qt version, remove the following line
-DEFINES += QT_NO_DEPRECATED_WARNINGS
-
 win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
-    DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
-    RC_FILE = src/res/win-mainicon.rc
-    mingw* {
-        DEFINES += _WIN32_WINNT=0x0600 # solves missing inet_pton in CSocket::SendPacket
-        LIBS += -lole32 \
-            -luser32 \
-            -ladvapi32 \
-            -lwinmm \
-            -lws2_32
-    } else {
-        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/jamulussoftware/jamulus/issues/93
-        LIBS += ole32.lib \
-            user32.lib \
-            advapi32.lib \
-            winmm.lib \
-            ws2_32.lib
-        greaterThan(QT_MAJOR_VERSION, 5) {
-            # Qt5 had a special qtmain library which took care of forwarding the MSVC default WinMain() entrypoint to
-            # the platform-agnostic main().
-            # Qt6 is still supposed to have that lib under the new name QtEntryPoint. As it does not seem
-            # to be effective when building with qmake, we are rather instructing MSVC to use the platform-agnostic
-            # main() entrypoint directly:
-            QMAKE_LFLAGS += /subsystem:windows /ENTRY:mainCRTStartup
-        }
+    DEFINES += NOMINMAX # solves a compiler error with std::min/max
+    # RC_FILE = src/res/win-mainicon.rc
+
+    LIBS += ole32.lib \
+        user32.lib \
+        advapi32.lib \
+        winmm.lib \
+        ws2_32.lib
+
+    !exists(windows/ASIOSDK2) {
+        error("Error: ASIOSDK2 must be placed in reporoot windows/ folder.")
     }
 
-    contains(CONFIG, "serveronly") {
-        message(Restricting build to server-only due to CONFIG+=serveronly.)
-        DEFINES += SERVER_ONLY
-    } else {
-        contains(CONFIG, "jackonwindows") {
-            message(Using JACK.)
-            contains(QT_ARCH, "i386") {
-                exists("C:/Program Files (x86)") {
-                    message("Cross compilation build")
-                    programfilesdir = "C:/Program Files (x86)"
-                } else {
-                    message("Native i386 build")
-                    programfilesdir = "C:/Program Files"
-                }
-                libjackname = "libjack.lib"
-            } else {
-                message("Native x86_64 build")
-                programfilesdir = "C:/Program Files"
-                libjackname = "libjack64.lib"
-            }
-            !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32 Bit vs. 64 Bit).")
-            }
-
-            HEADERS += $$HEADERS_JACK
-            SOURCES += $$SOURCES_JACK
-            DEFINES += WITH_JACK
-            DEFINES += JACK_ON_WINDOWS
-            DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-            INCLUDEPATH += "$${programfilesdir}/JACK2/include"
-            LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
-        } else {
-            message(Using native Windows MIDI.)
-
-            HEADERS += src/sound/midi-win/midi.h
-            SOURCES += src/sound/midi-win/midi.cpp
-
-            message(Using ASIO.)
-            message(Please review the ASIO SDK licence.)
-
-            !exists(libs/ASIOSDK2/common) {
-                error("Error: ASIOSDK2 must be placed in Jamulus \\libs folder such that e.g. \\libs\ASIOSDK2\common exists.")
-            }
-            # Important: Keep those ASIO includes local to this build target in
-            # order to avoid poisoning other builds license-wise.
-            HEADERS += src/sound/asio/sound.h
-            SOURCES += src/sound/asio/sound.cpp \
-                libs/ASIOSDK2/common/asio.cpp \
-                libs/ASIOSDK2/host/asiodrivers.cpp \
-                libs/ASIOSDK2/host/pc/asiolist.cpp
-            INCLUDEPATH += libs/ASIOSDK2/common \
-                libs/ASIOSDK2/host \
-                libs/ASIOSDK2/host/pc
-        }
-    }
+    # Important: Keep those ASIO includes local to this build target in
+    # order to avoid poisoning other builds license-wise.
+    HEADERS += src/sound/asio/sound.h 
+    SOURCES += src/sound/asio/sound.cpp \
+        windows/ASIOSDK2/common/asio.cpp \
+        windows/ASIOSDK2/host/asiodrivers.cpp \
+        windows/ASIOSDK2/host/pc/asiolist.cpp
+    INCLUDEPATH += windows/ASIOSDK2/common \
+        windows/ASIOSDK2/host \
+        windows/ASIOSDK2/host/pc
 
 } else:macx {
-    contains(CONFIG, "server_bundle") {
-        message(The generated application bundle will run a server instance.)
-
-        DEFINES += SERVER_BUNDLE
-        TARGET = $${TARGET}Server
-        MACOSX_BUNDLE_ICON.files = src/res/mac-jamulus-server.icns
-        RC_FILE = src/res/mac-jamulus-server.icns
-    } else {
-        MACOSX_BUNDLE_ICON.files = src/res/mac-mainicon.icns
-        RC_FILE = src/res/mac-mainicon.icns
-    }
+    # MACOSX_BUNDLE_ICON.files = mac/mac-mainicon.icns
 
     HEADERS += src/mac/activity.h src/mac/badgelabel.h
     OBJECTIVE_SOURCES += src/mac/activity.mm src/mac/badgelabel.mm
     CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = app.jamulussoftware
+    QMAKE_TARGET_BUNDLE_PREFIX = live.jamulus
+    QMAKE_INFO_PLIST = mac/Info-xcode.plist
 
     OSX_ENTITLEMENTS.files = mac/Jamulus.entitlements
     OSX_ENTITLEMENTS.path = Contents/Resources
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
-
-    macx-xcode {
-        # As of 2023-04-15 the macOS build with Xcode only fails. This is tracked in #1841
-        QMAKE_INFO_PLIST = mac/Info-xcode.plist
-        XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
-        XCODE_ENTITLEMENTS.value = mac/Jamulus.entitlements
-        QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
-        MACOSX_BUNDLE_ICON.path = Contents/Resources
-        QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
-    } else {
-        QMAKE_INFO_PLIST = mac/Info-make.plist
-    }
+    XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
+    XCODE_ENTITLEMENTS.value = mac/Jamulus.entitlements
+    QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
+   
+    MACOSX_BUNDLE_ICON.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
 
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
@@ -214,48 +90,75 @@ win32 {
         -framework Foundation \
         -framework AppKit
 
-    contains(CONFIG, "jackonmac") {
-        message(Using JACK.)
-        !exists(/usr/include/jack/jack.h) {
-            !exists(/usr/local/include/jack/jack.h) {
-                 error("Error: jack.h was not found at the usual place, maybe JACK is not installed")
-            }
-        }
-        HEADERS += $$HEADERS_JACK
-        SOURCES += $$SOURCES_JACK
-        DEFINES += WITH_JACK
-        DEFINES += JACK_REPLACES_COREAUDIO
-        INCLUDEPATH += /usr/local/include
-        LIBS += /usr/local/lib/libjack.dylib
-    } else {
-        message(Using CoreAudio.)
-        HEADERS += src/sound/coreaudio-mac/sound.h
-        SOURCES += src/sound/coreaudio-mac/sound.cpp
-    }
+    HEADERS += src/sound/coreaudio-mac/sound.h
+    SOURCES += src/sound/coreaudio-mac/sound.cpp
 
 } else:ios {
-    QMAKE_ASSET_CATALOGS += src/res/iOSIcons.xcassets
-    QMAKE_INFO_PLIST = ios/Info.plist
-    OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
-    HEADERS += src/ios/ios_app_delegate.h
+    # reset TARGET for iOS only since rename
+    TARGET = Jamulus
+    QMAKE_INFO_PLIST = ios/Info-xcode.plist
+    QMAKE_ASSET_CATALOGS += ios/Images.xcassets
+    QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
+    ios_icon.files = $$files($$PWD/ios/AppIcon*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+
     HEADERS += src/sound/coreaudio-ios/sound.h
     OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = app.jamulussoftware
+
+    # PRODUCT_BUNDLE_IDENTIFIER is set like
+    #  ${PRODUCT_BUNDLE_IDENTIFIER} = QMAKE_TARGET_BUNDLE_PREFIX.QMAKE_BUNDLE
+    QMAKE_TARGET_BUNDLE_PREFIX = live.jamulus
+    QMAKE_BUNDLE = Jamulus
+    
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
+
 } else:android {
-    ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    # ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    # Build all targets, as per: https://developer.android.com/topic/arc/device-support
+
+    # get ANDROID_ABIS from environment - passed directly to qmake
+    ANDROID_ABIS = $$getenv(ANDROID_ABIS)
+
+    # if ANDROID_ABIS is passed as env var to qmake, will override this
+    # !defined(ANDROID_ABIS, var):ANDROID_ABIS = arm64-v8a
+
+    # by default is 23 = Android 6 !
+    # Update: try with min Android 8.1 - sdk27
+    ANDROID_MIN_SDK_VERSION = 27
+    ANDROID_TARGET_SDK_VERSION = 32
     ANDROID_VERSION_NAME = $$VERSION
-    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+
+    ## FOR LOCAL DEV USE:
+    equals(QMAKE_HOST.os, Windows) {
+        ANDROID_ABIS = x86_64
+        ANDROID_VERSION_CODE = 1234 # dummy int value
+    } else {
+        # date-based unique integer value for Play Store submission
+        !defined(ANDROID_VERSION_CODE, var):ANDROID_VERSION_CODE = $$system(date +%s | cut -c 2-)
+    }
+
+    # make separate version codes for each abi build otherwise Play Store rejects
+    contains (ANDROID_ABIS, armeabi-v7a) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 1)
+        message("Setting for armeabi-v7a: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+    contains (ANDROID_ABIS, x86) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 2)
+        message("Setting for x86: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+    contains (ANDROID_ABIS, x86_64) {
+        ANDROID_VERSION_CODE = $$num_add($$ANDROID_VERSION_CODE, 3)
+        message("Setting for x86_64: ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+    }
+
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
     # liboboe requires C++17 for std::timed_mutex
     CONFIG += c++17
 
-    QT += androidextras
-
     # enabled only for debugging on android devices
-    DEFINES += ANDROIDDEBUG
+    #DEFINES += ANDROIDDEBUG
 
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
@@ -286,15 +189,9 @@ win32 {
     HEADERS += $$OBOE_HEADERS
     SOURCES += $$OBOE_SOURCES
     DISTFILES += $$DISTFILES_OBOE
-} else:unix {
-    # we want to compile with C++11
-    CONFIG += c++11
 
-    # --as-needed avoids linking the final binary against unnecessary runtime
-    # libs. Most g++ versions already do that by default.
-    # However, Debian buster does not and would link against libQt5Concurrent
-    # unnecessarily without this workaround (#741):
-    QMAKE_LFLAGS += -Wl,--as-needed
+} else:unix {
+    CONFIG += c++17
 
     # we assume to have lrintf() one moderately modern linux distributions
     # would be better to have that tested, though
@@ -310,17 +207,12 @@ win32 {
     } else {
         message(JACK Audio Interface Enabled.)
 
-        HEADERS += $$HEADERS_JACK
-        SOURCES += $$SOURCES_JACK
+        HEADERS += src/sound/jack/sound.h
+        SOURCES += src/sound/jack/sound.cpp
 
-        contains(CONFIG, "raspijamulus") {
-            message(Using JACK Audio in raspijamulus.sh mode.)
-            LIBS += -ljack
-        } else {
-            CONFIG += link_pkgconfig
-            PKGCONFIG += jack
-        }
-
+        CONFIG += link_pkgconfig
+        PKGCONFIG += jack
+  
         DEFINES += WITH_JACK
     }
 
@@ -334,59 +226,17 @@ win32 {
     BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
     target.path = $$BINDIR
 
-    contains(CONFIG, "headless") {
-        INSTALLS += target
-    } else {
-        isEmpty(APPSDIR) {
-            APPSDIR = share/applications
-        }
-        APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
-        desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += linux/jamulus.desktop.in linux/jamulus-server.desktop.in
-        desktop.files = linux/jamulus.desktop linux/jamulus-server.desktop
-
-        isEmpty(ICONSDIR) {
-            ICONSDIR = share/icons/hicolor/512x512/apps
-        }
-        ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
-        icons.path = $$ICONSDIR
-        icons.files = src/res/io.jamulus.jamulus.png
-
-        isEmpty(ICONSDIR_SVG) {
-            ICONSDIR_SVG = share/icons/hicolor/scalable/apps/
-        }
-        ICONSDIR_SVG = $$absolute_path($$ICONSDIR_SVG, $$PREFIX)
-        icons_svg.path = $$ICONSDIR_SVG
-        icons_svg.files = src/res/io.jamulus.jamulus.svg src/res/io.jamulus.jamulusserver.svg
-
-        isEmpty(MANDIR) {
-            MANDIR = share/man/man1
-        }
-        MANDIR = $$absolute_path($$MANDIR, $$PREFIX)
-        man.path = $$MANDIR
-        man.files = linux/Jamulus.1
-
-        INSTALLS += target desktop icons icons_svg man
-    }
+    INSTALLS += target
 }
 
-# Do not set RCC_DIR explicitly when using embed_translations.
-# It doesn't work with multiple targets or architectures.
+RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
-FORMS_GUI = src/aboutdlgbase.ui \
-    src/serverdlgbase.ui
+#FORMS_GUI = src/serverdlgbase.ui
 
-!contains(CONFIG, "serveronly") {
-    FORMS_GUI += src/clientdlgbase.ui \
-        src/clientsettingsdlgbase.ui \
-        src/chatdlgbase.ui \
-        src/connectdlgbase.ui
-}
-
-HEADERS += src/plugins/audioreverb.h \
-    src/buffer.h \
+HEADERS += src/buffer.h \
     src/channel.h \
+    src/chatbox.h \
     src/global.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
@@ -401,6 +251,7 @@ HEADERS += src/plugins/audioreverb.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
     src/signalhandler.h
+    # src/messagereceiver.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
@@ -408,17 +259,12 @@ HEADERS += src/plugins/audioreverb.h \
         src/testbench.h
 }
 
-HEADERS_GUI = src/serverdlg.h
+#HEADERS_GUI = src/serverdlg.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS_GUI += src/audiomixerboard.h \
-        src/chatdlg.h \
-        src/clientsettingsdlg.h \
-        src/connectdlg.h \
-        src/clientdlg.h \
         src/levelmeter.h \
-        src/analyzerconsole.h \
-        src/multicolorled.h
+        # src/analyzerconsole.h \
 }
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
@@ -492,9 +338,9 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/x86cpu.h \
     $$files(libs/opus/silk/x86/*.h)
 
-SOURCES += src/plugins/audioreverb.cpp \
-    src/buffer.cpp \
+SOURCES += src/buffer.cpp \
     src/channel.cpp \
+    src/chatbox.cpp \
     src/main.cpp \
     src/protocol.cpp \
     src/recorder/jamcontroller.cpp \
@@ -508,23 +354,22 @@ SOURCES += src/plugins/audioreverb.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
     src/recorder/cwavestream.cpp
+    # src/messagereceiver.cpp
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
         src/sound/soundbase.cpp \
 }
 
-SOURCES_GUI = src/serverdlg.cpp
+#SOURCES_GUI = src/serverdlg.cpp
 
 !contains(CONFIG, "serveronly") {
     SOURCES_GUI += src/audiomixerboard.cpp \
-        src/chatdlg.cpp \
-        src/clientsettingsdlg.cpp \
-        src/connectdlg.cpp \
-        src/clientdlg.cpp \
-        src/multicolorled.cpp \
+        # src/clientdlg.cpp \
+        # src/clientsettingsdlg.cpp \
+        # src/multicolorled.cpp \
         src/levelmeter.cpp \
-        src/analyzerconsole.cpp
+        # src/analyzerconsole.cpp
 }
 
 SOURCES_OPUS = libs/opus/celt/bands.c \
@@ -1173,11 +1018,6 @@ contains(CONFIG, "opus_shared_lib") {
     }
 }
 
-# disable version check if requested (#370)
-contains(CONFIG, "disable_version_check") {
-    message(The version check is disabled.)
-    DEFINES += DISABLE_VERSION_CHECK
-}
 
 # Enable formatting all code via `make clang_format`.
 # Note: When extending the list of file extensions or when adding new code directories,

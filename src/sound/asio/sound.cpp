@@ -101,10 +101,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
         if ( bOpenDriverSetup )
         {
             OpenDriverSetup();
-            QMessageBox::question ( nullptr,
-                                    APP_NAME,
-                                    "Are you done with your ASIO driver settings of " + GetDeviceName ( iDriverIdx ) + "?",
-                                    QMessageBox::Yes );
         }
 
         // driver cannot be used, clean up
@@ -313,9 +309,8 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
 
     //### TEST: BEGIN ###//
     /*
-    #include <QMessageBox>
-    QMessageBox::information ( 0, "APP_NAME", QString("lMinSize: %1, lMaxSize: %2, lPreferredSize: %3, lGranularity: %4").
-                               arg(HWBufferInfo.lMinSize).arg(HWBufferInfo.lMaxSize).arg(HWBufferInfo.lPreferredSize).arg(HWBufferInfo.lGranularity)
+    QString("lMinSize: %1, lMaxSize: %2, lPreferredSize: %3, lGranularity: %4").
+        arg(HWBufferInfo.lMinSize).arg(HWBufferInfo.lMaxSize).arg(HWBufferInfo.lPreferredSize).arg(HWBufferInfo.lGranularity)
     );
     _exit(1);
     */
@@ -554,7 +549,7 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
         throw CGenErr ( "<b>" + tr ( "No ASIO audio device driver found." ) + "</b><br><br>" +
                         QString ( tr ( "Please install an ASIO driver before running %1. "
                                        "If you own a device with ASIO support, install its official ASIO driver. "
-                                       "If not, you'll need to install a universal driver like ASIO4ALL." ) )
+                                       "If not, you'll need to install a universal driver like KorASIO." ) )
                             .arg ( APP_NAME ) );
     }
     asioDrivers->removeCurrentDriver();
@@ -577,23 +572,6 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     asioCallbacks.sampleRateDidChange  = &sampleRateChanged;
     asioCallbacks.asioMessage          = &asioMessages;
     asioCallbacks.bufferSwitchTimeInfo = &bufferSwitchTimeInfo;
-
-    // Optional MIDI initialization --------------------------------------------
-    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
-    {
-        Midi.MidiStart();
-    }
-}
-
-CSound::~CSound()
-{
-    // stop MIDI if running
-    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
-    {
-        Midi.MidiStop();
-    }
-
-    UnloadCurrentDriver();
 }
 
 void CSound::ResetChannelMapping()

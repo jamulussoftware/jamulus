@@ -24,11 +24,7 @@
 
 #pragma once
 
-#include <QFrame>
-#include <QPixmap>
 #include <QTimer>
-#include <QLayout>
-#include <QProgressBar>
 #include "util.h"
 #include "global.h"
 
@@ -37,82 +33,35 @@
 #define CLIP_IND_TIME_OUT_MS   20000
 
 /* Classes ********************************************************************/
-class CLevelMeter : public QWidget
+class CLevelMeter : public QObject
 {
     Q_OBJECT
 
-public:
-    enum ELevelMeterType
-    {
-        MT_BAR_NARROW,
-        MT_BAR_WIDE,
-        MT_LED_STRIPE,
-        MT_LED_ROUND_SMALL,
-        MT_LED_ROUND_BIG
-    };
+    Q_PROPERTY(double doubleVal READ doubleVal WRITE setDoubleVal NOTIFY doubleValChanged)
+    Q_PROPERTY(bool clipStatus READ clipStatus WRITE setClipStatus NOTIFY clipStatusChanged)
 
-    CLevelMeter ( QWidget* parent = nullptr );
+public:
+    CLevelMeter ( QObject* parent = nullptr );
     virtual ~CLevelMeter();
 
-    void SetValue ( const double dValue );
-    void SetLevelMeterType ( const ELevelMeterType eNType );
+    double doubleVal() const { return m_doubleVal; }
+    bool clipStatus(); // const { return m_clipStatus; }
 
 protected:
-    class cLED
-    {
-    public:
-        enum ELightColor
-        {
-            RL_DISABLED,
-            RL_BLACK,
-            RL_GREEN,
-            RL_YELLOW,
-            RL_RED,
-            RL_ROUND_SMALL_BLACK,
-            RL_ROUND_SMALL_GREEN,
-            RL_ROUND_SMALL_YELLOW,
-            RL_ROUND_SMALL_RED,
-            RL_ROUND_BIG_BLACK,
-            RL_ROUND_BIG_GREEN,
-            RL_ROUND_BIG_YELLOW,
-            RL_ROUND_BIG_RED
-        };
-
-        cLED ( QWidget* parent );
-
-        void        SetColor ( const ELightColor eNewColor );
-        ELightColor GetColor() { return eCurLightColor; };
-        QLabel*     GetLabelPointer() { return pLEDLabel; }
-
-    protected:
-        QPixmap BitmCubeLedBlack;
-        QPixmap BitmCubeLedGreen;
-        QPixmap BitmCubeLedYellow;
-        QPixmap BitmCubeLedRed;
-        QPixmap BitmCubeRoundSmallLedBlack;
-        QPixmap BitmCubeRoundSmallLedGreen;
-        QPixmap BitmCubeRoundSmallLedYellow;
-        QPixmap BitmCubeRoundSmallLedRed;
-        QPixmap BitmCubeRoundBigLedBlack;
-        QPixmap BitmCubeRoundBigLedGreen;
-        QPixmap BitmCubeRoundBigLedYellow;
-        QPixmap BitmCubeRoundBigLedRed;
-
-        ELightColor eCurLightColor;
-        QLabel*     pLEDLabel;
-    };
-
-    virtual void mousePressEvent ( QMouseEvent* ) override { ClipReset(); }
-
-    void SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType, const bool bIsClip );
-
-    CMinimumStackedLayout* pMinStackedLayout;
-    ELevelMeterType        eLevelMeterType;
-    CVector<cLED*>         vecpLEDs;
-    QProgressBar*          pBarMeter;
-
+    // virtual void mousePressEvent ( QMouseEvent* ) override { ClipReset(); }
     QTimer TimerClip;
+
+    double m_doubleVal; // level of this meter
+    bool m_clipStatus;
 
 public slots:
     void ClipReset();
+
+    void setDoubleVal(double value);
+    void setClipStatus( bool clipStatus );
+
+
+signals:
+    void doubleValChanged();
+    void clipStatusChanged();
 };

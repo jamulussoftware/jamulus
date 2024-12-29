@@ -1025,7 +1025,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordina utenti per canal&amp;e</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
@@ -3117,7 +3117,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versione</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>

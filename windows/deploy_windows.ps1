@@ -1,9 +1,9 @@
 param (
     # Replace default path with system Qt installation folder if necessary
     [string] $QtInstallPath32 = "C:\Qt\5.15.2",
-    [string] $QtInstallPath64 = "C:\Qt\5.15.2",
+    [string] $QtInstallPath64 = "C:\Qt\6.8.1",
     [string] $QtCompile32 = "msvc2019",
-    [string] $QtCompile64 = "msvc2019_64",
+    [string] $QtCompile64 = "msvc2022_64",
     # Important:
     # - Do not update ASIO SDK without checking for license-related changes.
     # - Do not copy (parts of) the ASIO SDK into the Jamulus source tree without

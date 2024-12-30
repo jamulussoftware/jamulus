@@ -141,7 +141,8 @@ group_entries() {
     local index=0
     for category in "${category_order[@]}"; do
         # use | as delimiter, as category may contain /
-        changelog=$(sed -re 's|^(- '"${category}"')|'"${index}"' \1|' <<< "${changelog}")
+        # also re-add stripped newline from last line, for correct sorting
+        changelog=$(sed -re 's|^(- '"${category}"')|'"${index}"' \1|' <<< "${changelog}")$'\n'
         index=$((index + 1))
     done
 

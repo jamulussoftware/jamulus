@@ -40,6 +40,7 @@ export GH_REPO=jamulussoftware/jamulus
 PR_LIST_LIMIT=300
 TRANSLATION_ENTRY_TEXT="GUI: Translations have been updated:"
 TRANSLATION_ENTRY_TEXT2="Translations updated from Hosted Weblate"
+BUNDLED_QT_UPDATE_TEXT="Build: Updated bundled Qt6"
 declare -A LANGS
 LANGS[de_DE]="German"
 LANGS[fr_FR]="French"
@@ -133,6 +134,7 @@ group_entries() {
         "Doc:"
         "Website:"
         "Github:"
+        "$BUNDLED_QT_UPDATE_TEXT"
         "Build:"
         "Autobuild:"
         "Code:"

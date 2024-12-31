@@ -29,7 +29,7 @@
 #include <QSettings>
 #include <QDir>
 #ifndef HEADLESS
-#    include <QGUIApplication>
+#   include <QGuiApplication>
 #endif
 #include "global.h"
 // #ifndef SERVER_ONLY

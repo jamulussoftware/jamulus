@@ -130,6 +130,7 @@ group_entries() {
         "Mac:"
         "Android:"
         "iOS:"
+        "Dependencies:"
         "Translation:"
         "Doc:"
         "Website:"

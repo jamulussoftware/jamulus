@@ -29,7 +29,6 @@
 #include <QTextBoundaryFinder>
 #include <QQmlListProperty>
 #include "global.h"
-#include "qguiapplication.h"
 #include "util.h"
 #include "levelmeter.h"
 #include "settings.h"

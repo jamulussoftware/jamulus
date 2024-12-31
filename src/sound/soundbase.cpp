@@ -33,7 +33,6 @@ char const sMidiCtlChar[] = {
     /* [EMidiCtlType::Solo]        = */ 's',
     /* [EMidiCtlType::Mute]        = */ 'm',
     /* [EMidiCtlType::MuteMyself]  = */ 'o',
-    /* [EMidiCtlType::Device]      = */ 'd',
     /* [EMidiCtlType::None]        = */ '\0' };
 
 /* Implementation *************************************************************/
@@ -182,7 +181,8 @@ QString CSoundBase::SetDev ( const QString strDevName )
             // ASIO drivers
             sErrorMessage += "<br>" + tr ( "You may be able to fix errors in the driver settings. Do you want to open these settings now?" );
 
-            if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes | QMessageBox::No ) )
+            //FIXME - show messagebox in QML world with sErrorMessage
+            if ( true )
             {
                 LoadAndInitializeFirstValidDriver ( true );
             }
@@ -310,24 +310,16 @@ void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
                 continue;
             EMidiCtlType eTyp = static_cast<EMidiCtlType> ( iCtrl );
 
-            if ( eTyp == Device )
+            const QStringList slP    = sParm.mid ( 1 ).split ( '*' );
+            int               iFirst = slP[0].toUInt();
+            int               iNum   = ( slP.count() > 1 ) ? slP[1].toUInt() : 1;
+            for ( int iOff = 0; iOff < iNum; iOff++ )
             {
-                // save MIDI device name to select
-                strMIDIDevice = sParm.mid ( 1 );
-            }
-            else
-            {
-                const QStringList slP    = sParm.mid ( 1 ).split ( '*' );
-                int               iFirst = slP[0].toUInt();
-                int               iNum   = ( slP.count() > 1 ) ? slP[1].toUInt() : 1;
-                for ( int iOff = 0; iOff < iNum; iOff++ )
-                {
-                    if ( iOff >= MAX_NUM_CHANNELS )
-                        break;
-                    if ( iFirst + iOff >= 128 )
-                        break;
-                    aMidiCtls[iFirst + iOff] = { eTyp, iOff };
-                }
+                if ( iOff >= MAX_NUM_CHANNELS )
+                    break;
+                if ( iFirst + iOff >= 128 )
+                    break;
+                aMidiCtls[iFirst + iOff] = { eTyp, iOff };
             }
         }
     }

@@ -23,6 +23,35 @@
 \******************************************************************************/
 
 #include "settings.h"
+#include "client.h"
+
+
+CClientSettings::CClientSettings ( CClient* pNCliP, const QString& sNFiName, QObject* parent ) :
+    CSettings(),
+    vecStoredFaderTags ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
+    vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
+    vecStoredPanValues ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
+    vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    vecStoredFaderGroupID ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
+    vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
+    iNewClientFaderLevel ( 100 ),
+    iInputBoost ( 1 ),
+    iSettingsTab ( SETTING_TAB_AUDIONET ),
+    bConnectDlgShowAllMusicians ( true ),
+    eChannelSortType ( ST_NO_SORT ),
+    iNumMixerPanelRows ( 1 ),
+    vstrDirectoryAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
+    eDirectoryType ( AT_DEFAULT ),
+    bEnableFeedbackDetection ( true ),
+    bEnableAudioAlerts ( false ),
+    bOwnFaderFirst ( false ),
+    pClient ( pNCliP )
+{
+    SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
+
+}
+
 
 /* Implementation *************************************************************/
 void CSettings::Load ( const QList<QString>& CommandLineOptions )
@@ -201,7 +230,49 @@ void CSettings::PutIniSetting ( QDomDocument& xmlFile, const QString& sSection, 
 }
 
 #ifndef SERVER_ONLY
+
 // Client settings -------------------------------------------------------------
+int CClientSettings::uploadRate() const
+{
+    // update upstream rate information
+    return pClient->GetUploadRateKbps();
+
+}
+
+void CClientSettings::updateSettings()
+{
+    emit slSndCrdDevChanged();
+
+    // as the soundcard has changed, we need to update all the dependent stuff too
+    emit sndCrdInputChannelNamesChanged();
+    emit sndCardLInChannelChanged();
+    emit sndCardRInChannelChanged();
+
+    emit sndCrdOutputChannelNamesChanged();
+    emit sndCardLOutChannelChanged();
+    emit sndCardROutChannelChanged();
+
+    //
+    emit cbxAudioQualityChanged();
+    emit cbxAudioChannelsChanged();
+
+}
+
+void CClientSettings::UpdateUploadRate()
+{
+    // update upstream rate information label
+
+    // Here we just need to notify QML to update by reading uploadRate()
+    emit uploadRateChanged();
+}
+
+void CClientSettings::UpdateDisplay()
+{
+    UpdateJitterBufferFrame();
+    UpdateSoundCardFrame();
+    UpdateUploadRate();
+}
+
 void CClientSettings::LoadFaderSettings ( const QString& strCurFileName )
 {
     // prepare file name for loading initialization data from XML file and read
@@ -266,7 +337,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         GetIniSetting ( IniXMLDocument, "client", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
     // fader channel sorting
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "channelsort", 0, 5 /* ST_BY_SERVER_CHANNEL */, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "channelsort", 0, 4 /* ST_BY_CITY */, iValue ) )
     {
         eChannelSortType = static_cast<EChSortType> ( iValue );
     }
@@ -293,48 +364,10 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     pClient->ChannelInfo.strName = FromBase64ToString (
         GetIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( QCoreApplication::translate ( "CMusProfDlg", "No Name" ) ) ) );
 
-    // instrument
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument", 0, CInstPictures::GetNumAvailableInst() - 1, iValue ) )
-    {
-        pClient->ChannelInfo.iInstrument = iValue;
-    }
-
-    // country
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
-    {
-        pClient->ChannelInfo.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iValue );
-    }
-    else
-    {
-        // if no country is given, use the one from the operating system
-        pClient->ChannelInfo.eCountry = QLocale::system().country();
-    }
-
-    // city
-    pClient->ChannelInfo.strCity = FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "city_base64" ) );
-
-    // skill level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "skill", 0, 3 /* SL_PROFESSIONAL */, iValue ) )
-    {
-        pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> ( iValue );
-    }
-
     // audio fader
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
     {
-        pClient->SetAudioInFader ( iValue );
-    }
-
-    // reverberation level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
-    {
-        pClient->SetReverbLevel ( iValue );
-    }
-
-    // reverberation channel assignment
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
-    {
-        pClient->SetReverbOnLeftChan ( bValue );
+        pClient->setAudioInPan( iValue );
     }
 
     // sound card selection
@@ -345,7 +378,17 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
 #    ifndef HEADLESS
         // special case: when settings are loaded no GUI is yet created, therefore
         // we have to create a warning message box here directly
-        QMessageBox::warning ( nullptr, APP_NAME, strError );
+        pClient->setUserMsg( strError );
+
+        // make sure we update GUI - FIXME - what are we updating here?
+        emit slSndCrdDevChanged();
+        // as the soundcard has changed, we need to update all the dependent stuff too
+        emit sndCrdInputChannelNamesChanged();
+        emit sndCardLInChannelChanged();
+        emit sndCardRInChannelChanged();
+        emit sndCrdOutputChannelNamesChanged();
+        emit sndCardLOutChannelChanged();
+        emit sndCardROutChannelChanged();
 #    endif
     }
 
@@ -410,43 +453,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     if ( GetFlagIniSet ( IniXMLDocument, "client", "enableopussmall", bValue ) )
     {
         pClient->SetEnableOPUS64 ( bValue );
-    }
-
-    // GUI design
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
-    {
-        pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
-    }
-
-    // MeterStyle
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle", 0, 4 /* MT_LED_ROUND_BIG */, iValue ) )
-    {
-        pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iValue ) );
-    }
-    else
-    {
-        // if MeterStyle is not found in the ini, set it based on the GUI design
-        if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
-        {
-            switch ( iValue )
-            {
-            case GD_STANDARD:
-                pClient->SetMeterStyle ( MT_BAR_WIDE );
-                break;
-
-            case GD_ORIGINAL:
-                pClient->SetMeterStyle ( MT_LED_STRIPE );
-                break;
-
-            case GD_SLIMFADER:
-                pClient->SetMeterStyle ( MT_BAR_NARROW );
-                break;
-
-            default:
-                pClient->SetMeterStyle ( MT_LED_STRIPE );
-                break;
-            }
-        }
     }
 
     // audio channels
@@ -520,32 +526,8 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     // window position of the main window
     vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposmain_base64" ) );
 
-    // window position of the settings window
-    vecWindowPosSettings = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposset_base64" ) );
-
-    // window position of the chat window
-    vecWindowPosChat = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposchat_base64" ) );
-
-    // window position of the connect window
-    vecWindowPosConnect = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposcon_base64" ) );
-
-    // visibility state of the settings window
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisset", bValue ) )
-    {
-        bWindowWasShownSettings = bValue;
-    }
-
-    // visibility state of the chat window
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "winvischat", bValue ) )
-    {
-        bWindowWasShownChat = bValue;
-    }
-
-    // visibility state of the connect window
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "winviscon", bValue ) )
-    {
-        bWindowWasShownConnect = bValue;
-    }
+    // set Test setting
+    strTestMode = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "test_setting" ) );
 
     // selected Settings Tab
     if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, 2, iValue ) )
@@ -668,13 +650,7 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     SetNumericIniSet ( IniXMLDocument, "client", "skill", static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) );
 
     // audio fader
-    SetNumericIniSet ( IniXMLDocument, "client", "audfad", pClient->GetAudioInFader() );
-
-    // reverberation level
-    SetNumericIniSet ( IniXMLDocument, "client", "revlev", pClient->GetReverbLevel() );
-
-    // reverberation channel assignment
-    SetFlagIniSet ( IniXMLDocument, "client", "reverblchan", pClient->IsReverbOnLeftChan() );
+    SetNumericIniSet ( IniXMLDocument, "client", "audfad", pClient->audioInPan() );
 
     // sound card selection
     PutIniSetting ( IniXMLDocument, "client", "auddev_base64", ToBase64 ( pClient->GetSndCrdDev() ) );
@@ -706,12 +682,6 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // enable OPUS64 setting
     SetFlagIniSet ( IniXMLDocument, "client", "enableopussmall", pClient->GetEnableOPUS64() );
 
-    // GUI design
-    SetNumericIniSet ( IniXMLDocument, "client", "guidesign", static_cast<int> ( pClient->GetGUIDesign() ) );
-
-    // MeterStyle
-    SetNumericIniSet ( IniXMLDocument, "client", "meterstyle", static_cast<int> ( pClient->GetMeterStyle() ) );
-
     // audio channels
     SetNumericIniSet ( IniXMLDocument, "client", "audiochannels", static_cast<int> ( pClient->GetAudioChannels() ) );
 
@@ -733,23 +703,8 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "client", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );
 
-    // window position of the settings window
-    PutIniSetting ( IniXMLDocument, "client", "winposset_base64", ToBase64 ( vecWindowPosSettings ) );
-
-    // window position of the chat window
-    PutIniSetting ( IniXMLDocument, "client", "winposchat_base64", ToBase64 ( vecWindowPosChat ) );
-
-    // window position of the connect window
-    PutIniSetting ( IniXMLDocument, "client", "winposcon_base64", ToBase64 ( vecWindowPosConnect ) );
-
-    // visibility state of the settings window
-    SetFlagIniSet ( IniXMLDocument, "client", "winvisset", bWindowWasShownSettings );
-
-    // visibility state of the chat window
-    SetFlagIniSet ( IniXMLDocument, "client", "winvischat", bWindowWasShownChat );
-
-    // visibility state of the connect window
-    SetFlagIniSet ( IniXMLDocument, "client", "winviscon", bWindowWasShownConnect );
+    // save if in Test mode
+    PutIniSetting ( IniXMLDocument, "client", "test_setting", ToBase64 ( strTestMode ) );
 
     // Settings Tab
     SetNumericIniSet ( IniXMLDocument, "client", "settingstab", iSettingsTab );
@@ -783,212 +738,451 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
         SetNumericIniSet ( IniXMLDocument, "client", QString ( "storedgroupid%1" ).arg ( iIdx ), vecStoredFaderGroupID[iIdx] );
     }
 }
+
+void CClientSettings::UpdateJitterBufferFrame()
+{
+
+    emit sldNetBufChanged();
+
+    emit sldNetBufServerChanged();
+
+    emit chbAutoJitBufChanged();
+}
+
+void CClientSettings::UpdateSoundCardFrame()
+{
+    // get current actual buffer size value
+    const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
+
+    // check which predefined size is used (it is possible that none is used)
+    const bool bPreferredChecked = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED );
+    const bool bDefaultChecked   = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT );
+    const bool bSafeChecked      = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE );
+
+    setRbtBufferDelayPreferred( bPreferredChecked );
+    setRbtBufferDelayDefault( bDefaultChecked );
+    setRbtBufferDelaySafe( bSafeChecked );
+
+    emit fraSiFactSafeSupportedChanged();
+    emit fraSiFactDefSupportedChanged();
+    emit fraSiFactPrefSupportedChanged();
+
+    emit bufSizeChanged();
+}
+
+int CClientSettings::edtNewClientLevel() const
+{
+    return iNewClientFaderLevel;
+}
+
+void CClientSettings::setEdtNewClientLevel(const int newClientLevel )
+{
+    iNewClientFaderLevel = newClientLevel;
+    emit edtNewClientLevelChanged();
+}
+
+int CClientSettings::sldNetBuf() const
+{
+    return pClient->GetSockBufNumFrames();
+}
+
+void CClientSettings::setSldNetBuf( const int setBufVal )
+{
+    pClient->SetSockBufNumFrames ( setBufVal, true );
+    emit sldNetBufChanged();
+    UpdateJitterBufferFrame(); // FIXME - this repeats previous signal
+}
+
+int CClientSettings::sldNetBufServer() const
+{
+
+    return pClient->GetServerSockBufNumFrames();
+}
+
+void CClientSettings::setSldNetBufServer( const int setServerBufVal )
+{
+    pClient->SetServerSockBufNumFrames( setServerBufVal);
+    emit sldNetBufServerChanged();
+    UpdateJitterBufferFrame(); // FIXME - this repeats previous signal
+}
+
+
+int CClientSettings::cbxAudioChannels() const
+{
+    return pClient->GetAudioChannels();
+}
+
+void CClientSettings::setCbxAudioChannels( const int iChanIdx )
+{
+    if ( pClient->GetAudioChannels() == static_cast<EAudChanConf> ( iChanIdx ) )
+        return;
+
+    pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iChanIdx ) );
+    emit cbxAudioChannelsChanged();
+
+    qDebug() << "setCbxAudioChannels to: " << iChanIdx;
+    UpdateDisplay(); // upload rate will be changed
+}
+
+int CClientSettings::cbxAudioQuality() const
+{
+    return pClient->GetAudioQuality();
+}
+
+void CClientSettings::setCbxAudioQuality( const int qualityIdx )
+{
+    pClient->SetAudioQuality ( static_cast<EAudioQuality> ( qualityIdx ) );
+    emit cbxAudioQualityChanged();
+
+    qDebug() << "setCbxAudioQuality to: " << qualityIdx;
+    UpdateDisplay(); // upload rate will be changed
+
+}
+
+int CClientSettings::dialInputBoost() const
+{
+    return iInputBoost;
+}
+
+void CClientSettings::setDialInputBoost( const int inputBoost )
+{
+    iInputBoost = inputBoost;
+    pClient->SetInputBoost ( iInputBoost );
+    emit dialInputBoostChanged();
+}
+
+int CClientSettings::spnMixerRows() const
+{
+    return iNumMixerPanelRows;
+}
+
+void CClientSettings::setSpnMixerRows( const int mixerRows )
+{
+    if ( iNumMixerPanelRows == mixerRows )
+        return;
+
+    iNumMixerPanelRows = mixerRows;
+    emit spnMixerRowsChanged();
+}
+
+QString CClientSettings::pedtAlias() const
+{
+    return pClient->ChannelInfo.strName;
+}
+
+void CClientSettings::setPedtAlias( QString strAlias )
+{
+    // truncate string if necessary
+    const QString thisStr = TruncateString ( strAlias, MAX_LEN_FADER_TAG );
+
+    if (pClient->ChannelInfo.strName == thisStr)
+        return;
+
+    pClient->ChannelInfo.strName = thisStr;
+    pClient->SetRemoteInfo();
+
+    emit pedtAliasChanged();
+    qDebug() << "pedt alias changed: " << thisStr;
+
+}
+
+bool CClientSettings::chbDetectFeedback()
+{
+    return bEnableFeedbackDetection;
+}
+
+void CClientSettings::setChbDetectFeedback( bool detectFeedback )
+{
+    if ( bEnableFeedbackDetection == detectFeedback )
+        return;
+
+    bEnableFeedbackDetection = detectFeedback;
+    emit chbDetectFeedbackChanged();
+}
+
+bool CClientSettings::chbEnableOPUS64()
+{
+    return pClient->GetEnableOPUS64();
+}
+
+void CClientSettings::setChbEnableOPUS64( bool enableOPUS64 )
+{
+    if ( pClient->GetEnableOPUS64() == enableOPUS64 )
+        return;
+
+    pClient->SetEnableOPUS64 ( enableOPUS64 );
+    emit chbEnableOPUS64Changed();
+    UpdateDisplay();
+}
+
+bool CClientSettings::rbtBufferDelayPreferred()
+{
+    // get current actual buffer size value
+    const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
+
+    // check which predefined size is used (it is possible that none is used)
+    const bool bPreferredChecked = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED );
+    return bPreferredChecked;
+}
+
+void CClientSettings::setRbtBufferDelayPreferred( bool enableBufDelPref )
+{
+    pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED );
+    qDebug() << "SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED )";
+    emit rbtBufferDelayPreferredChanged();
+    emit bufSizeChanged();
+}
+
+bool CClientSettings::rbtBufferDelayDefault()
+{
+    // get current actual buffer size value
+    const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
+
+    // check which predefined size is used (it is possible that none is used)
+    const bool bDefaultChecked = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT );
+    return bDefaultChecked;
+}
+
+void CClientSettings::setRbtBufferDelayDefault( bool enableBufDelDef )
+{
+    pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT );
+    qDebug() << "SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT )";
+    emit rbtBufferDelayDefaultChanged();
+    emit bufSizeChanged();
+}
+
+bool CClientSettings::rbtBufferDelaySafe()
+{
+    // get current actual buffer size value
+    const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
+
+    // check which predefined size is used (it is possible that none is used)
+    const bool bSafeChecked = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE );
+    return bSafeChecked;
+}
+
+void CClientSettings::setRbtBufferDelaySafe( bool enableBufDelSafe )
+{
+    pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_SAFE );
+    qDebug() << "SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_SAFE )";
+    emit rbtBufferDelaySafeChanged();
+    emit bufSizeChanged();
+}
+
+bool CClientSettings::fraSiFactPrefSupported()
+{
+    return pClient->GetFraSiFactPrefSupported();
+}
+
+bool CClientSettings::fraSiFactDefSupported()
+{
+    return pClient->GetFraSiFactDefSupported();
+}
+
+bool CClientSettings::fraSiFactSafeSupported()
+{
+    return pClient->GetFraSiFactSafeSupported();
+}
+
+QString CClientSettings::sndCrdBufferDelayPreferred()
+{
+    return GenSndCrdBufferDelayString( FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES );
+}
+
+QString CClientSettings::sndCrdBufferDelaySafe()
+{
+    return GenSndCrdBufferDelayString( FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES );
+}
+
+QString CClientSettings::sndCrdBufferDelayDefault()
+{
+    return GenSndCrdBufferDelayString( FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES );
+}
+
+QString CClientSettings::GenSndCrdBufferDelayString( const int iFrameSize, const QString strAddText )
+{
+    // use two times the buffer delay for the entire delay since
+    // we have input and output
+    return QString().setNum ( static_cast<double> ( iFrameSize ) * 2 * 1000 / SYSTEM_SAMPLE_RATE_HZ, 'f', 2 ) + " ms (" +
+           QString().setNum ( iFrameSize ) + strAddText + ")";
+
+}
+
+QString CClientSettings::bufSize()
+{
+    return GenSndCrdBufferDelayString ( pClient->GetSndCrdActualMonoBlSize() );
+}
+
+bool CClientSettings::chbAutoJitBuf()
+{
+    return pClient->GetDoAutoSockBufSize();
+}
+
+void CClientSettings::setChbAutoJitBuf( bool autoJit )
+{
+    if ( pClient->GetDoAutoSockBufSize() == autoJit )
+        return;
+
+    pClient->SetDoAutoSockBufSize ( autoJit );
+    qDebug() << "setChbAutoJitBuf changed to: " << pClient->GetDoAutoSockBufSize();
+    emit chbAutoJitBufChanged();
+
+    UpdateJitterBufferFrame(); // FIXME - this repeats previous signal
+}
+
+// soundcard box
+QStringList CClientSettings::slSndCrdDevNames()
+{
+    return pClient->GetSndCrdDevNames();
+}
+
+QStringList CClientSettings::sndCrdInputChannelNames()
+{
+    QStringList inputChannelNames;
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ ) {
+        QString inputChannelName = pClient->GetSndCrdInputChannelName ( iSndChanIdx );
+        inputChannelNames.append(inputChannelName);
+    }
+    return inputChannelNames;
+}
+
+QStringList CClientSettings::sndCrdOutputChannelNames()
+{
+    QStringList outputChannelNames;
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ ) {
+        QString inputChannelName = pClient->GetSndCrdOutputChannelName ( iSndChanIdx );
+        outputChannelNames.append(inputChannelName);
+    }
+    return outputChannelNames;
+}
+
+QString CClientSettings::slSndCrdDev()
+{
+    return pClient->GetSndCrdDev();
+}
+
+void CClientSettings::setSlSndCrdDev( const QString& sndCardDev )
+{
+    qDebug() << "setSlSndCrdDev: Passed sndCardDev value: " << sndCardDev;
+    qDebug() << "setSlSndCrdDev: Current sndCardDev value: " << pClient->GetSndCrdDev();
+    if ( pClient->GetSndCrdDev() == sndCardDev )
+    {
+        qDebug() << "setSlSndCrdDev: NOT SETTING ANYTHING";
+        return;
+    }
+
+    qDebug() << "setSlSndCrdDev: CHANGING sndcarddev to " << sndCardDev ; // on console
+    pClient->SetSndCrdDev ( sndCardDev );
+    QString success = pClient->SetSndCrdDev(sndCardDev);
+    if (success != "")
+    {
+        qWarning() << "Failed to set soundcard device. Defaulting to " << pClient->GetSndCrdDev();
+    }
+    emit slSndCrdDevChanged();
+    emit slSndCrdDevNamesChanged();
+
+    // as the soundcard has changed, we need to update all the dependent stuff too
+    emit sndCrdInputChannelNamesChanged();
+    emit sndCardLInChannelChanged();
+    emit sndCardRInChannelChanged();
+
+    emit sndCrdOutputChannelNamesChanged();
+    emit sndCardLOutChannelChanged();
+    emit sndCardROutChannelChanged();
+
+    // update buffer stuff
+    UpdateDisplay();
+}
+
+// channel selectors
+int CClientSettings::sndCardNumInputChannels()
+{
+    return pClient->GetSndCrdNumInputChannels();
+}
+
+int CClientSettings::sndCardNumOutputChannels()
+{
+    return pClient->GetSndCrdNumOutputChannels();
+}
+
+QString CClientSettings::sndCardLInChannel()
+{
+    return pClient->GetSndCrdInputChannelName( pClient->GetSndCrdLeftInputChannel() );
+}
+
+void CClientSettings::setSndCardLInChannel( QString chanName )
+{
+    if ( sndCardLInChannel() == chanName )
+        return;
+
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ ) {
+        if ( chanName == pClient->GetSndCrdInputChannelName( iSndChanIdx ) ) {
+            pClient->SetSndCrdLeftInputChannel( iSndChanIdx );
+            break;
+        }
+    }
+
+    emit sndCardLInChannelChanged();
+}
+
+QString CClientSettings::sndCardRInChannel()
+{
+    return pClient->GetSndCrdInputChannelName( pClient->GetSndCrdRightInputChannel() );
+}
+
+void CClientSettings::setSndCardRInChannel( QString chanName )
+{
+    if ( sndCardRInChannel() == chanName )
+        return;
+
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ ) {
+        if ( chanName == pClient->GetSndCrdInputChannelName( iSndChanIdx ) ) {
+            pClient->SetSndCrdRightInputChannel( iSndChanIdx );
+            break;
+        }
+    }
+
+    emit sndCardRInChannelChanged();
+}
+
+QString CClientSettings::sndCardLOutChannel()
+{
+    return  pClient->GetSndCrdOutputChannelName( pClient->GetSndCrdLeftOutputChannel() );
+}
+
+void CClientSettings::setSndCardLOutChannel( QString chanName )
+{
+    if ( sndCardLOutChannel() == chanName )
+        return;
+
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ ) {
+        if ( chanName == pClient->GetSndCrdOutputChannelName( iSndChanIdx ) ) {
+            pClient->SetSndCrdLeftOutputChannel( iSndChanIdx );
+            break;
+        }
+    }
+
+    emit sndCardLOutChannelChanged();
+}
+
+QString CClientSettings::sndCardROutChannel()
+{
+    return pClient->GetSndCrdOutputChannelName( pClient->GetSndCrdRightOutputChannel() );
+}
+
+void CClientSettings::setSndCardROutChannel( QString chanName )
+{
+    if ( sndCardROutChannel() == chanName )
+        return;
+
+    for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ ) {
+        if ( chanName == pClient->GetSndCrdOutputChannelName( iSndChanIdx ) ) {
+            pClient->SetSndCrdRightOutputChannel( iSndChanIdx );
+            break;
+        }
+    }
+
+    emit sndCardROutChannelChanged();
+}
+
 #endif
-
-// Server settings -------------------------------------------------------------
-// that this gets called means we are not headless
-void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions )
-{
-    int  iValue;
-    bool bValue;
-
-    // window position of the main window
-    vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
-
-    // name/city/country
-    if ( !CommandLineOptions.contains ( "--serverinfo" ) )
-    {
-        // name
-        pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
-
-        // city
-        pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "city" ) );
-
-        // country
-        if ( GetNumericIniSet ( IniXMLDocument, "server", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
-        {
-            pServer->SetServerCountry ( CLocale::WireFormatCountryCodeToQtCountry ( iValue ) );
-        }
-    }
-
-    // norecord flag
-    if ( !CommandLineOptions.contains ( "--norecord" ) )
-    {
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
-        {
-            pServer->SetEnableRecording ( !bValue );
-        }
-    }
-
-    // welcome message
-    if ( !CommandLineOptions.contains ( "--welcomemessage" ) )
-    {
-        pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
-    }
-
-    // language
-    strLanguage =
-        GetIniSetting ( IniXMLDocument, "server", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
-
-    // base recording directory
-    if ( !CommandLineOptions.contains ( "--recording" ) )
-    {
-        pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
-    }
-
-    // to avoid multiple registrations, must do this after collecting serverinfo
-    if ( !CommandLineOptions.contains ( "--centralserver" ) &&   // for backwards compatibility
-         !CommandLineOptions.contains ( "--directoryserver" ) && // also for backwards compatibility
-         !CommandLineOptions.contains ( "--directoryaddress" ) )
-    {
-        // custom directory
-        // CServerListManager defaults to command line argument (or "" if not passed)
-        // Server GUI defaults to ""
-        QString directoryAddress = "";
-
-        //### TODO: BEGIN ###//
-        // compatibility to old version < 3.8.2
-        directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", directoryAddress );
-        //### TODO: END ###//
-
-        directoryAddress = GetIniSetting ( IniXMLDocument, "server", "directoryaddress", directoryAddress );
-
-        pServer->SetDirectoryAddress ( directoryAddress );
-    }
-
-    // directory type
-    // CServerListManager defaults to AT_NONE
-    // Because type could be AT_CUSTOM, it has to be set after the address to avoid multiple registrations
-    EDirectoryType directoryType = AT_NONE;
-
-    // if a command line Directory address is set, set the Directory Type (genre) to AT_CUSTOM so it's used
-    if ( CommandLineOptions.contains ( "--centralserver" ) || CommandLineOptions.contains ( "--directoryserver" ) ||
-         CommandLineOptions.contains ( "--directoryaddress" ) )
-    {
-        directoryType = AT_CUSTOM;
-    }
-    else
-    {
-        //### TODO: BEGIN ###//
-        // compatibility to old version < 3.4.7
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
-        {
-            directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
-        }
-        else
-        {
-            //### TODO: END ###//
-
-            // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
-
-            //### TODO: BEGIN ###//
-            // compatibility to old version < 3.8.2
-            if ( GetNumericIniSet ( IniXMLDocument,
-                                    "server",
-                                    "centservaddrtype",
-                                    static_cast<int> ( AT_DEFAULT ),
-                                    static_cast<int> ( AT_CUSTOM ),
-                                    iValue ) )
-            {
-                directoryType = static_cast<EDirectoryType> ( iValue );
-            }
-            //### TODO: END ###//
-
-            else
-            {
-                if ( GetNumericIniSet ( IniXMLDocument,
-                                        "server",
-                                        "directorytype",
-                                        static_cast<int> ( AT_NONE ),
-                                        static_cast<int> ( AT_CUSTOM ),
-                                        iValue ) )
-                {
-                    directoryType = static_cast<EDirectoryType> ( iValue );
-                }
-            }
-        }
-
-        //### TODO: BEGIN ###//
-        // compatibility to old version < 3.9.0
-        // override type to AT_NONE if servlistenabled exists and is false
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
-        {
-            directoryType = AT_NONE;
-        }
-        //### TODO: END ###//
-    }
-
-    pServer->SetDirectoryType ( directoryType );
-
-    // server list persistence file name
-    if ( !CommandLineOptions.contains ( "--directoryfile" ) )
-    {
-        pServer->SetServerListFileName ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "directoryfile_base64" ) ) );
-    }
-
-    // start minimized on OS start
-    if ( !CommandLineOptions.contains ( "--startminimized" ) )
-    {
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
-        {
-            pServer->SetAutoRunMinimized ( bValue );
-        }
-    }
-
-    // delay panning
-    if ( !CommandLineOptions.contains ( "--delaypan" ) )
-    {
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "delaypan", bValue ) )
-        {
-            pServer->SetEnableDelayPanning ( bValue );
-        }
-    }
-}
-
-void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit )
-{
-    // window position of the main window
-    PutIniSetting ( IniXMLDocument, "server", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );
-
-    // directory type
-    SetNumericIniSet ( IniXMLDocument, "server", "directorytype", static_cast<int> ( pServer->GetDirectoryType() ) );
-
-    // name
-    PutIniSetting ( IniXMLDocument, "server", "name", pServer->GetServerName() );
-
-    // city
-    PutIniSetting ( IniXMLDocument, "server", "city", pServer->GetServerCity() );
-
-    // country
-    SetNumericIniSet ( IniXMLDocument, "server", "country", CLocale::QtCountryToWireFormatCountryCode ( pServer->GetServerCountry() ) );
-
-    // norecord flag
-    SetFlagIniSet ( IniXMLDocument, "server", "norecord", pServer->GetDisableRecording() );
-
-    // welcome message
-    PutIniSetting ( IniXMLDocument, "server", "welcome", ToBase64 ( pServer->GetWelcomeMessage() ) );
-
-    // language
-    PutIniSetting ( IniXMLDocument, "server", "language", strLanguage );
-
-    // base recording directory
-    PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64", ToBase64 ( pServer->GetRecordingDir() ) );
-
-    // custom directory
-    PutIniSetting ( IniXMLDocument, "server", "directoryaddress", pServer->GetDirectoryAddress() );
-
-    // server list persistence file name
-    PutIniSetting ( IniXMLDocument, "server", "directoryfile_base64", ToBase64 ( pServer->GetServerListFileName() ) );
-
-    // start minimized on OS start
-    SetFlagIniSet ( IniXMLDocument, "server", "autostartmin", pServer->GetAutoRunMinimized() );
-
-    // delay panning
-    SetFlagIniSet ( IniXMLDocument, "server", "delaypan", pServer->IsDelayPanningEnabled() );
-
-    // we MUST do this after saving the value and Save() is called OnAboutToQuit()
-    if ( isAboutToQuit )
-    {
-        pServer->SetDirectoryType ( AT_NONE );
-    }
-}

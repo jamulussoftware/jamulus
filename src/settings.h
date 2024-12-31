@@ -29,13 +29,12 @@
 #include <QSettings>
 #include <QDir>
 #ifndef HEADLESS
-#    include <QApplication>
-#    include <QMessageBox>
+#   include <QGuiApplication>
 #endif
 #include "global.h"
-#ifndef SERVER_ONLY
-#    include "client.h"
-#endif
+// #ifndef SERVER_ONLY
+// #    include "client.h"
+// #endif
 #include "server.h"
 #include "util.h"
 
@@ -90,9 +89,7 @@ protected:
     virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) = 0;
 
     void ReadFromFile ( const QString& strCurFileName, QDomDocument& XMLDocument );
-
     void WriteToFile ( const QString& strCurFileName, const QDomDocument& XMLDocument );
-
     void SetFileName ( const QString& sNFiName, const QString& sDefaultFileName );
 
     // The following functions implement the conversion from the general string
@@ -134,40 +131,146 @@ public slots:
     void OnAboutToQuit() { Save ( true ); }
 };
 
+
 #ifndef SERVER_ONLY
+class CClient; // Forward declaration
+
 class CClientSettings : public CSettings
 {
+    Q_OBJECT
+
+    Q_PROPERTY(int edtNewClientLevel READ edtNewClientLevel WRITE setEdtNewClientLevel NOTIFY edtNewClientLevelChanged)
+    Q_PROPERTY(int uploadRate READ uploadRate NOTIFY uploadRateChanged)
+    Q_PROPERTY(int sldNetBuf READ sldNetBuf WRITE setSldNetBuf NOTIFY sldNetBufChanged)
+    Q_PROPERTY(int sldNetBufMin READ sldNetBufMin CONSTANT)
+    Q_PROPERTY(int sldNetBufMax READ sldNetBufMax CONSTANT)
+    Q_PROPERTY(int sldNetBufServer READ sldNetBufServer WRITE setSldNetBufServer NOTIFY sldNetBufServerChanged)
+    Q_PROPERTY(QString bufSize READ bufSize NOTIFY bufSizeChanged)
+    Q_PROPERTY(int cbxAudioChannels READ cbxAudioChannels WRITE setCbxAudioChannels NOTIFY cbxAudioChannelsChanged)
+    Q_PROPERTY(int cbxAudioQuality READ cbxAudioQuality WRITE setCbxAudioQuality NOTIFY cbxAudioQualityChanged)
+    Q_PROPERTY(int dialInputBoost READ dialInputBoost WRITE setDialInputBoost NOTIFY dialInputBoostChanged)
+    Q_PROPERTY(QString pedtAlias READ pedtAlias WRITE setPedtAlias NOTIFY pedtAliasChanged)
+    Q_PROPERTY(int spnMixerRows READ spnMixerRows WRITE setSpnMixerRows NOTIFY spnMixerRowsChanged)
+    Q_PROPERTY(bool chbDetectFeedback READ chbDetectFeedback WRITE setChbDetectFeedback NOTIFY chbDetectFeedbackChanged)
+    Q_PROPERTY(bool chbEnableOPUS64 READ chbEnableOPUS64 WRITE setChbEnableOPUS64 NOTIFY chbEnableOPUS64Changed)
+    Q_PROPERTY(QString sndCrdBufferDelayPreferred READ sndCrdBufferDelayPreferred NOTIFY sndCrdBufferDelayPreferredChanged)
+    Q_PROPERTY(QString sndCrdBufferDelaySafe READ sndCrdBufferDelaySafe NOTIFY sndCrdBufferDelaySafeChanged)
+    Q_PROPERTY(QString sndCrdBufferDelayDefault READ sndCrdBufferDelayDefault NOTIFY sndCrdBufferDelayDefaultChanged)
+    Q_PROPERTY(bool rbtBufferDelayPreferred READ rbtBufferDelayPreferred WRITE setRbtBufferDelayPreferred NOTIFY rbtBufferDelayPreferredChanged)
+    Q_PROPERTY(bool rbtBufferDelayDefault READ rbtBufferDelayDefault WRITE setRbtBufferDelayDefault NOTIFY rbtBufferDelayDefaultChanged)
+    Q_PROPERTY(bool rbtBufferDelaySafe READ rbtBufferDelaySafe WRITE setRbtBufferDelaySafe NOTIFY rbtBufferDelaySafeChanged)
+    Q_PROPERTY(bool fraSiFactPrefSupported READ fraSiFactPrefSupported NOTIFY fraSiFactPrefSupportedChanged)
+    Q_PROPERTY(bool fraSiFactDefSupported READ fraSiFactDefSupported NOTIFY fraSiFactDefSupportedChanged)
+    Q_PROPERTY(bool fraSiFactSafeSupported READ fraSiFactSafeSupported NOTIFY fraSiFactSafeSupportedChanged)
+    Q_PROPERTY(bool chbAutoJitBuf READ chbAutoJitBuf WRITE setChbAutoJitBuf NOTIFY chbAutoJitBufChanged)
+    Q_PROPERTY(QStringList slSndCrdDevNames READ slSndCrdDevNames NOTIFY slSndCrdDevNamesChanged)
+    Q_PROPERTY(QStringList sndCrdInputChannelNames READ sndCrdInputChannelNames NOTIFY sndCrdInputChannelNamesChanged)
+    Q_PROPERTY(QStringList sndCrdOutputChannelNames READ sndCrdOutputChannelNames NOTIFY sndCrdOutputChannelNamesChanged)
+    Q_PROPERTY(QString slSndCrdDev READ slSndCrdDev WRITE setSlSndCrdDev NOTIFY slSndCrdDevChanged)
+    Q_PROPERTY(int sndCardNumInputChannels READ sndCardNumInputChannels NOTIFY sndCardNumInputChannelsChanged)
+    Q_PROPERTY(int sndCardNumOutputChannels READ sndCardNumOutputChannels NOTIFY sndCardNumOutputChannelsChanged)
+    Q_PROPERTY(QString sndCardLInChannel READ sndCardLInChannel WRITE setSndCardLInChannel NOTIFY sndCardLInChannelChanged)
+    Q_PROPERTY(QString sndCardRInChannel READ sndCardRInChannel WRITE setSndCardRInChannel NOTIFY sndCardRInChannelChanged)
+    Q_PROPERTY(QString sndCardLOutChannel READ sndCardLOutChannel WRITE setSndCardLOutChannel NOTIFY sndCardLOutChannelChanged)
+    Q_PROPERTY(QString sndCardROutChannel READ sndCardROutChannel WRITE setSndCardROutChannel NOTIFY sndCardROutChannelChanged)
+
+
 public:
-    CClientSettings ( CClient* pNCliP, const QString& sNFiName ) :
-        CSettings(),
-        vecStoredFaderTags ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
-        vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-        vecStoredPanValues ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
-        vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-        vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-        vecStoredFaderGroupID ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
-        vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-        iNewClientFaderLevel ( 100 ),
-        iInputBoost ( 1 ),
-        iSettingsTab ( SETTING_TAB_AUDIONET ),
-        bConnectDlgShowAllMusicians ( true ),
-        eChannelSortType ( ST_NO_SORT ),
-        iNumMixerPanelRows ( 1 ),
-        vstrDirectoryAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-        eDirectoryType ( AT_DEFAULT ),
-        bEnableFeedbackDetection ( true ),
-        bEnableAudioAlerts ( false ),
-        vecWindowPosSettings(), // empty array
-        vecWindowPosChat(),     // empty array
-        vecWindowPosConnect(),  // empty array
-        bWindowWasShownSettings ( false ),
-        bWindowWasShownChat ( false ),
-        bWindowWasShownConnect ( false ),
-        bOwnFaderFirst ( false ),
-        pClient ( pNCliP )
-    {
-        SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
-    }
+    CClientSettings(CClient* pNCliP, const QString& sNFiName, QObject* parent = nullptr);
+
+    int edtNewClientLevel() const;
+    void setEdtNewClientLevel(const int newClientLevel );
+
+    QString bufSize(); 
+
+    int sldNetBuf() const;
+    void setSldNetBuf( const int setBufVal );
+
+    int sldNetBufServer() const;
+    void setSldNetBufServer( const int setServerBufVal );
+
+    int sldNetBufMin() const { return MIN_NET_BUF_SIZE_NUM_BL; }
+    int sldNetBufMax() const { return MAX_NET_BUF_SIZE_NUM_BL; }
+
+    int cbxAudioChannels() const;
+    void setCbxAudioChannels( const int chanIdx );
+
+    int cbxAudioQuality() const;
+    void setCbxAudioQuality( const int qualityIdx );
+
+    int dialInputBoost() const;
+    void setDialInputBoost( const int inputBoost );
+
+    QString pedtAlias() const;
+    void setPedtAlias( QString strAlias );
+
+    int spnMixerRows() const;
+    void setSpnMixerRows( const int mixerRows );
+
+    bool chbDetectFeedback();
+    void setChbDetectFeedback( bool detectFeedback );
+
+    bool chbEnableOPUS64();
+    void setChbEnableOPUS64( bool enableOPUS64 );
+
+    QString sndCrdBufferDelayPreferred();
+    QString sndCrdBufferDelaySafe();
+    QString sndCrdBufferDelayDefault();
+
+    bool rbtBufferDelayPreferred();
+    void setRbtBufferDelayPreferred( bool enableBufDelPref );
+
+    bool rbtBufferDelayDefault();
+    void setRbtBufferDelayDefault( bool enableBufDelDef );
+
+    bool rbtBufferDelaySafe();
+    void setRbtBufferDelaySafe( bool enableBufDelSafe );
+
+    bool fraSiFactPrefSupported();
+    bool fraSiFactDefSupported(); // { return bFraSiFactDefSupported; }
+    bool fraSiFactSafeSupported(); // { return bFraSiFactSafeSupported; }
+
+    bool chbAutoJitBuf();
+    void setChbAutoJitBuf( bool autoJit );
+
+    QStringList slSndCrdDevNames();
+    QStringList sndCrdInputChannelNames ();
+    QStringList sndCrdOutputChannelNames ();
+
+    QString slSndCrdDev();
+    void setSlSndCrdDev( const QString& sndCardDev );
+
+    int sndCardNumInputChannels();
+    int sndCardNumOutputChannels();
+
+    QString sndCardLInChannel();
+    void setSndCardLInChannel( QString chanName );
+
+    QString sndCardRInChannel();
+    void setSndCardRInChannel( QString chanName );
+
+    QString sndCardLOutChannel();
+    void setSndCardLOutChannel( QString chanName );
+
+    QString sndCardROutChannel();
+    void setSndCardROutChannel( QString chanName );
+
+    void UpdateUploadRate(); // maintained for now
+    void UpdateDisplay();
+    void UpdateSoundCardFrame();
+
+    int uploadRate() const;
+    // void setUploadRate();
+
+    void updateSettings();
+
+    // DO THIS LATER, A BIT MORE INVOLVED
+    // void UpdateSoundDeviceChannelSelectionFrame();
+
+    // void SetEnableFeedbackDetection ( bool enable );
+    // endof TODO
+
+    QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
     void LoadFaderSettings ( const QString& strCurFileName );
     void SaveFaderSettings ( const QString& strCurFileName );
@@ -193,13 +296,15 @@ public:
     bool             bEnableAudioAlerts;
 
     // window position/state settings
-    QByteArray vecWindowPosSettings;
-    QByteArray vecWindowPosChat;
     QByteArray vecWindowPosConnect;
-    bool       bWindowWasShownSettings;
-    bool       bWindowWasShownChat;
-    bool       bWindowWasShownConnect;
     bool       bOwnFaderFirst;
+
+    // for Test mode setting
+    QByteArray strTestMode;
+
+    // for QML display
+    void    UpdateJitterBufferFrame();
+
 
 protected:
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit ) override;
@@ -209,8 +314,49 @@ protected:
     void WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument );
 
     CClient* pClient;
+
+    // void    UpdateAudioFaderSlider();
+
+public slots:
+
+signals:
+    void edtNewClientLevelChanged();
+    void bufSizeChanged();
+    void sldNetBufChanged();
+    void sldNetBufServerChanged();
+    void uploadRateChanged();
+    void cbxAudioChannelsChanged();
+    void cbxAudioQualityChanged();
+    void dialInputBoostChanged();
+    void spnMixerRowsChanged();
+    void pedtAliasChanged();
+    void chbDetectFeedbackChanged();
+    void chbEnableOPUS64Changed();
+    void rbtBufferDelayPreferredChanged();
+    void rbtBufferDelayDefaultChanged();
+    void rbtBufferDelaySafeChanged();
+    void fraSiFactPrefSupportedChanged();
+    void fraSiFactDefSupportedChanged();
+    void fraSiFactSafeSupportedChanged();
+    void sndCrdBufferDelayPreferredChanged();
+    void sndCrdBufferDelaySafeChanged();
+    void sndCrdBufferDelayDefaultChanged();
+    void chbAutoJitBufChanged();
+    void slSndCrdDevChanged();
+    void slSndCrdDevNamesChanged();
+    void sndCardNumInputChannelsChanged();
+    void sndCardNumOutputChannelsChanged();
+    void sndCardLInChannelChanged();
+    void sndCardRInChannelChanged();
+    void sndCardLOutChannelChanged();
+    void sndCardROutChannelChanged();
+    void sndCrdInputChannelNamesChanged();
+    void sndCrdOutputChannelNamesChanged();
+
 };
 #endif
+
+
 
 class CServerSettings : public CSettings
 {

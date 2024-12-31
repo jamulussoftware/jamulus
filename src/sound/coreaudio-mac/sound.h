@@ -28,7 +28,6 @@
 #include <AudioToolbox/AudioToolbox.h>
 #include <CoreMIDI/CoreMIDI.h>
 #include <QMutex>
-#include <QMessageBox>
 #include "../soundbase.h"
 #include "../../global.h"
 

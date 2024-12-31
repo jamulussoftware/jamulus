@@ -23,28 +23,27 @@
 \******************************************************************************/
 
 #include <QCoreApplication>
+#include <QtDebug>
 #include <QDir>
 #include <iostream>
 #include "global.h"
 #ifndef HEADLESS
-#    include <QApplication>
-#    include <QMessageBox>
-#    include "serverdlg.h"
-#    ifndef SERVER_ONLY
-#        include "clientdlg.h"
-#    endif
+#   include <QGuiApplication>
+#   include "QQmlContext"
+#   include <QQmlApplicationEngine>
+#   include <QQuickStyle>
 #endif
 #include "settings.h"
+#include "client.h"
 #ifndef SERVER_ONLY
 #    include "testbench.h"
 #endif
 #include "util.h"
-#ifdef ANDROID
-#    include <QtAndroidExtras/QtAndroid>
-#endif
 #if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
+#   include "mac/activity.h"
+#   include <QFileOpenEvent>
 #endif
 #include <memory>
 #ifndef NO_JSON_RPC
@@ -117,6 +116,8 @@ int main ( int argc, char** argv )
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
     QString      strJsonRpcSecretFileName    = "";
+    // handle primary / secondary instances
+    // MessageReceiver msgReceiver;
 
 #if defined( HEADLESS ) || defined( SERVER_ONLY )
     Q_UNUSED ( bStartMinimized )
@@ -137,6 +138,8 @@ int main ( int argc, char** argv )
         freopen ( "CONOUT$", "w", stdout );
         freopen ( "CONOUT$", "w", stderr );
     }
+
+
 #endif
 
     // When adding new options, follow the same order as --help output
@@ -342,9 +345,6 @@ int main ( int argc, char** argv )
         // HTML status file ----------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
         {
-            qWarning() << qUtf8Printable (
-                QString ( "- The HTML status file option (\"--htmlstatus\" or \"-m\") is deprecated and will be removed soon. Please use JSON-RPC "
-                          "instead.  See https://github.com/jamulussoftware/jamulus/blob/main/docs/JSON-RPC.md" ) );
             strHTMLStatusFileName = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- HTML status file name: %1" ).arg ( strHTMLStatusFileName ) );
             CommandLineOptions << "--htmlstatus";
@@ -639,7 +639,6 @@ int main ( int argc, char** argv )
     else
 #endif
     {
-
         if ( ClientOnlyOptions.size() != 0 )
         {
             qCritical() << qUtf8Printable (
@@ -816,31 +815,14 @@ int main ( int argc, char** argv )
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
-#    if defined( Q_OS_IOS )
-    bUseGUI   = true;
-    bIsClient = true; // Client only - TODO: maybe a switch in interface to change to server?
-
-    // bUseMultithreading = true;
-    QApplication* pApp       = new QApplication ( argc, argv );
-#    else
-    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
-#    endif
+    QGuiApplication* pApp = new QGuiApplication ( argc, argv );
 #endif
 
-#ifdef ANDROID
-    // special Android coded needed for record audio permission handling
-    auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
-
-    if ( result == QtAndroid::PermissionResult::Denied )
+    if (bUseGUI == true)
     {
-        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync ( QStringList ( { "android.permission.RECORD_AUDIO" } ) );
-
-        if ( resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied )
-        {
-            return 0;
-        }
+        // pApp->setStyle("fusion");
+        // QQuickStyle::setStyle("Fusion");
     }
-#endif
 
 #ifdef _WIN32
     // set application priority class -> high priority
@@ -849,7 +831,7 @@ int main ( int argc, char** argv )
     // For accessible support we need to add a plugin to qt. The plugin has to
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.
-    QDir ApplDir ( QApplication::applicationDirPath() );
+    QDir ApplDir ( QGuiApplication::applicationDirPath() );
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
@@ -929,11 +911,15 @@ int main ( int argc, char** argv )
                              bNoAutoJackConnect,
                              strClientName,
                              bEnableIPv6,
-                             bMuteMeInPersonalMix );
+                             bMuteMeInPersonalMix,
+                             strIniFileName,
+                             false,
+                             CommandLineOptions
+                             );
 
             // load settings from init-file (command line options override)
-            CClientSettings Settings ( &Client, strIniFileName );
-            Settings.Load ( CommandLineOptions );
+            // CClientSettings Settings ( &Client, strIniFileName );
+            // Settings.Load ( CommandLineOptions );
 
 #    ifndef NO_JSON_RPC
             if ( pRpcServer )
@@ -946,26 +932,34 @@ int main ( int argc, char** argv )
             if ( bUseGUI )
             {
                 // load translation
-                if ( bUseTranslation )
-                {
-                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                    CInstPictures::UpdateTableOnLanguageChange();
-                }
+                // if ( bUseTranslation )
+                // {
+                //     CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                //     CInstPictures::UpdateTableOnLanguageChange();
+                // }
 
-                // GUI object
-                CClientDlg ClientDlg ( &Client,
-                                       &Settings,
-                                       strConnOnStartupAddress,
-                                       strMIDISetup,
-                                       bShowComplRegConnList,
-                                       bShowAnalyzerConsole,
-                                       bMuteStream,
-                                       bEnableIPv6,
-                                       nullptr );
+                qmlRegisterType<CChannelFader>("Jamulus", 1, 0, "ChannelFader");
 
-                // show dialog
-                ClientDlg.show();
+                // audioMixerBoard.testAddChannel();
 
+                // Create the QML application engine
+                QQmlApplicationEngine engine;
+
+                // Expose C++ objects to QML
+                QQmlContext* context = engine.rootContext();
+                context->setContextProperty("_main", &Client);
+                context->setContextProperty("_settings", &Client.pSettings);
+                context->setContextProperty("_audioMixerBoard", &Client.audioMixerBoard);
+                context->setContextProperty("_chatBox", &Client.chatBox);
+
+                // Load the main QML file
+                engine.load(QUrl(QStringLiteral("qrc:/AppWindow.qml")));
+                // engine.load(QUrl(QStringLiteral("qrc:/testQml.qml")));
+
+                if (engine.rootObjects().isEmpty())
+                    return -1;
+
+                // In main client mode - so call run() rather than exec() to setup url handler stuff
                 pApp->exec();
             }
             else
@@ -973,7 +967,6 @@ int main ( int argc, char** argv )
             {
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
-
                 pApp->exec();
             }
         }
@@ -1008,29 +1001,30 @@ int main ( int argc, char** argv )
             {
                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
             }
-
 #endif
+
+
 #ifndef HEADLESS
             if ( bUseGUI )
             {
                 // load settings from init-file (command line options override)
-                CServerSettings Settings ( &Server, strIniFileName );
-                Settings.Load ( CommandLineOptions );
+                // CServerSettings Settings ( &Server, strIniFileName );
+                // Settings.Load ( CommandLineOptions );
 
                 // load translation
-                if ( bUseTranslation )
-                {
-                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                }
+                // if ( bUseTranslation )
+                // {
+                //     CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                // }
 
                 // GUI object for the server
-                CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
+//                CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
 
-                // show dialog (if not the minimized flag is set)
-                if ( !bStartMinimized )
-                {
-                    ServerDlg.show();
-                }
+//                // show dialog (if not the minimized flag is set)
+//                if ( !bStartMinimized )
+//                {
+//                    ServerDlg.show();
+//                }
 
                 pApp->exec();
             }
@@ -1058,7 +1052,7 @@ int main ( int argc, char** argv )
 #ifndef HEADLESS
         if ( bUseGUI )
         {
-            QMessageBox::critical ( nullptr, APP_NAME, generr.GetErrorText(), "Quit", nullptr );
+            // FIXME - show error here in QML  //  generr.GetErrorText(),
         }
         else
 #endif
@@ -1105,32 +1099,32 @@ QString UsageArguments ( char** argv )
            "  -6, --enableipv6        enable IPv6 addressing (IPv4 is always enabled)\n"
            "\n"
            "Server only:\n"
-           "  -d, --discononquit      disconnect all Clients on quit\n"
-           "  -e, --directoryaddress  address of the Directory with which to register\n"
-           "                          (or 'localhost' to run as a Directory)\n"
-           "      --directoryfile     File to hold server list across Directory restarts. Directories only.\n"
-           "  -f, --listfilter        Server list whitelist filter. Directories only. Format:\n"
-           "                          [IP address 1];[IP address 2];[IP address 3]; ...\n"
-           "  -F, --fastupdate        use 64 samples frame size mode\n"
-           "  -l, --log               enable logging, set file name\n"
-           "  -L, --licence           show an agreement window before users can connect\n"
-           "  -m, --htmlstatus        deprecated, please use JSON-RPC instead\n"
-           "  -o, --serverinfo        registration info for this Server.  Format:\n"
-           "                          [name];[city];[country as two-letter ISO country code or Qt5 QLocale ID]\n"
-           "      --serverpublicip    public IP address for this Server.  Needed when\n"
-           "                          registering with a server list hosted\n"
-           "                          behind the same NAT\n"
-           "  -P, --delaypan          start with delay panning enabled\n"
-           "  -R, --recording         set server recording directory; server will record when a session is active by default\n"
-           "      --norecord          set server not to record by default when recording is configured\n"
-           "  -s, --server            start Server\n"
-           "      --serverbindip      IP address the Server will bind to (rather than all)\n"
-           "  -T, --multithreading    use multithreading to make better use of\n"
-           "                          multi-core CPUs and support more Clients\n"
-           "  -u, --numchannels       maximum number of channels\n"
-           "  -w, --welcomemessage    welcome message to display on connect\n"
-           "                          (string or filename, HTML supported)\n"
-           "  -z, --startminimized    start minimizied\n"
+           "  -d, --discononquit    disconnect all Clients on quit\n"
+           "  -e, --directoryserver address of the directory Server with which to register\n"
+           "                        (or 'localhost' to host a server list on this Server)\n"
+           "      --directoryfile   Remember registered Servers even if the Directory is restarted. Directory Servers only.\n"
+           "  -f, --listfilter      Server list whitelist filter.  Format:\n"
+           "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
+           "  -F, --fastupdate      use 64 samples frame size mode\n"
+           "  -l, --log             enable logging, set file name\n"
+           "  -L, --licence         show an agreement window before users can connect\n"
+           "  -m, --htmlstatus      enable HTML status file, set file name\n"
+           "  -o, --serverinfo      registration info for this Server.  Format:\n"
+           "                        [name];[city];[country as two-letter ISO country code or Qt5 QLocale ID]\n"
+           "      --serverpublicip  public IP address for this Server.  Needed when\n"
+           "                        registering with a server list hosted\n"
+           "                        behind the same NAT\n"
+           "  -P, --delaypan        start with delay panning enabled\n"
+           "  -R, --recording       set server recording directory; server will record when a session is active by default\n"
+           "      --norecord        set server not to record by default when recording is configured\n"
+           "  -s, --server          start Server\n"
+           "      --serverbindip    IP address the Server will bind to (rather than all)\n"        
+           "  -T, --multithreading  use multithreading to make better use of\n"
+           "                        multi-core CPUs and support more Clients\n"
+           "  -u, --numchannels     maximum number of channels\n"
+           "  -w, --welcomemessage  welcome message to display on connect\n"
+           "                        (string or filename, HTML supported)\n"
+           "  -z, --startminimized  start minimizied\n"
            "\n"
            "Client only:\n"
            "  -c, --connect           connect to given Server address on startup\n"

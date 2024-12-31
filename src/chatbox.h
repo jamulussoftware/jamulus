@@ -24,40 +24,39 @@
 
 #pragma once
 
-#include <QLabel>
-#include <QString>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QMenuBar>
-#include <QWhatsThis>
-#include <QLayout>
-#include <QAccessible>
-#include <QDesktopServices>
-#include <QMessageBox>
-#include <QRegularExpression>
+// #include <QAccessible>
+// #include <QDesktopServices>
+// #include <QRegularExpression>
 #include "global.h"
 #include "util.h"
-#include "ui_chatdlgbase.h"
 
 /* Classes ********************************************************************/
-class CChatDlg : public CBaseDlg, private Ui_CChatDlgBase
+class CChatBox: public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString chatHistory READ chatHistory WRITE setChatHistory NOTIFY chatHistoryChanged)
+
 public:
-    CChatDlg ( QWidget* parent = nullptr );
+    explicit CChatBox(QObject* parent = nullptr);
+
+    // Accessors for the Q_PROPERTY
+    QString chatHistory() const;
+    void setChatHistory(const QString& newChat);
+
+    // QML calls this to send a message
+    Q_INVOKABLE void sendMessage(const QString& msg);
+    Q_INVOKABLE void clearChatHistory();
 
     void AddChatText ( QString strChatText );
 
 public slots:
-    void OnSendText();
-    void OnLocalInputTextTextChanged ( const QString& strNewText );
-    void OnClearChatHistory();
-    void OnAnchorClicked ( const QUrl& Url );
-#if defined( Q_OS_IOS ) || defined( ANDROID ) || defined( Q_OS_ANDROID )
-    void OnCloseClicked();
-#endif
 
 signals:
     void NewLocalInputText ( QString strNewText );
+    void chatHistoryChanged();
+
+private:
+    QString m_chatHistory;
+
 };

@@ -358,361 +358,6 @@ void CHighPrecisionTimer::run()
 /******************************************************************************\
 * GUI Utilities                                                                *
 \******************************************************************************/
-// About dialog ----------------------------------------------------------------
-#ifndef HEADLESS
-CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
-{
-    setupUi ( this );
-
-    // general description of software
-    txvAbout->setText ( "<p>" +
-                        tr ( "This app enables musicians to perform real-time jam sessions "
-                             "over the internet." ) +
-                        "<br>" +
-                        tr ( "There is a server which collects "
-                             " the audio data from each client, mixes the audio data and sends the mix "
-                             " back to each client." ) +
-                        "</p>"
-                        "<p><font face=\"courier\">" // GPL header text
-                        "This program is free software; you can redistribute it and/or modify "
-                        "it under the terms of the GNU General Public License as published by "
-                        "the Free Software Foundation; either version 2 of the License, or "
-                        "(at your option) any later version.<br>This program is distributed in "
-                        "the hope that it will be useful, but WITHOUT ANY WARRANTY; without "
-                        "even the implied warranty of MERCHANTABILITY or FITNESS FOR A "
-                        "PARTICULAR PURPOSE. See the GNU General Public License for more "
-                        "details.<br>You should have received a copy of the GNU General Public "
-                        "License along with his program; if not, write to the Free Software "
-                        "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
-                        "USA"
-                        "</font></p>" );
-
-    // libraries used by this compilation
-    txvLibraries->setText ( tr ( "This app uses the following libraries, resources or code snippets:" ) + "<p>" +
-                            tr ( "Qt cross-platform application framework" ) + QString ( " %1 " ).arg ( QT_VERSION_STR ) + tr ( "(build)" ) +
-                            QString ( ", %1 " ).arg ( qVersion() ) + tr ( "(runtime)" ) +
-                            ", <i><a href=\"https://www.qt.io\">https://www.qt.io</a></i>"
-                            "</p>"
-                            "<p>"
-                            "Opus Interactive Audio Codec"
-                            ", <i><a href=\"https://www.opus-codec.org\">https://www.opus-codec.org</a></i>"
-                            "</p>"
-#    ifndef SERVER_ONLY
-#        if defined( _WIN32 ) && !defined( WITH_JACK )
-                            "<p>"
-                            "ASIO (Audio Stream I/O) SDK"
-                            ", <i><a href=\"https://www.steinberg.net/developers/\">https://www.steinberg.net/developers</a></i>"
-                            "<br>"
-                            "ASIO is a trademark and software of Steinberg Media Technologies GmbH"
-                            "</p>"
-#        endif
-#        ifndef HEADLESS
-                            "<p>" +
-                            tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
-                            ", 1995 - 2021"
-                            ", The Synthesis ToolKit in C++ (STK)"
-                            ", <i><a href=\"https://ccrma.stanford.edu/software/stk\">https://ccrma.stanford.edu/software/stk</a></i>"
-                            "</p>"
-                            "<p>" +
-                            QString ( tr ( "Some pixmaps are from the %1" ) ).arg ( "Open Clip Art Library (OCAL)" ) +
-                            ", <i><a href=\"https://openclipart.org\">https://openclipart.org</a></i>"
-                            "</p>"
-                            "<p>" +
-                            tr ( "Flag icons by Mark James" ) +
-                            ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i>"
-                            "</p>"
-                            "<p>" +
-                            QString ( tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" ) +
-                            ", <i><a href=\"https://freesound.org\">https://freesound.org</a></i>"
-                            "</p>"
-#        endif
-#    endif
-    );
-
-    // contributors list
-    txvContributors->setText (
-        "<p>Volker Fischer (<a href=\"https://github.com/corrados\">corrados</a>)</p>"
-        "<p>Peter L. Jones (<a href=\"https://github.com/pljones\">pljones</a>)</p>"
-        "<p>Jonathan Baker-Bates (<a href=\"https://github.com/gilgongo\">gilgongo</a>)</p>"
-        "<p>ann0see (<a href=\"https://github.com/ann0see\">ann0see</a>)</p>"
-        "<p>Daniele Masato (<a href=\"https://github.com/doloopuntil\">doloopuntil</a>)</p>"
-        "<p>Martin Schilde (<a href=\"https://github.com/geheimerEichkater\">geheimerEichkater</a>)</p>"
-        "<p>Simon Tomlinson (<a href=\"https://github.com/sthenos\">sthenos</a>)</p>"
-        "<p>Marc jr. Landolt (<a href=\"https://github.com/braindef\">braindef</a>)</p>"
-        "<p>Olivier Humbert (<a href=\"https://github.com/trebmuh\">trebmuh</a>)</p>"
-        "<p>Tarmo Johannes (<a href=\"https://github.com/tarmoj\">tarmoj</a>)</p>"
-        "<p>mirabilos (<a href=\"https://github.com/mirabilos\">mirabilos</a>)</p>"
-        "<p>Hector Martin (<a href=\"https://github.com/marcan\">marcan</a>)</p>"
-        "<p>newlaurent62 (<a href=\"https://github.com/newlaurent62\">newlaurent62</a>)</p>"
-        "<p>AronVietti (<a href=\"https://github.com/AronVietti\">AronVietti</a>)</p>"
-        "<p>Emlyn Bolton (<a href=\"https://github.com/emlynmac\">emlynmac</a>)</p>"
-        "<p>Jos van den Oever (<a href=\"https://github.com/vandenoever\">vandenoever</a>)</p>"
-        "<p>Tormod Volden (<a href=\"https://github.com/tormodvolden\">tormodvolden</a>)</p>"
-        "<p>Alberstein8 (<a href=\"https://github.com/Alberstein8\">Alberstein8</a>)</p>"
-        "<p>Gauthier Fleutot Östervall (<a href=\"https://github.com/fleutot\">fleutot</a>)</p>"
-        "<p>Tony Mountifield (<a href=\"https://github.com/softins\">softins</a>)</p>"
-        "<p>HPS (<a href=\"https://github.com/hselasky\">hselasky</a>)</p>"
-        "<p>Stanislas Michalak (<a href=\"https://github.com/stanislas-m\">stanislas-m</a>)</p>"
-        "<p>JP Cimalando (<a href=\"https://github.com/jpcima\">jpcima</a>)</p>"
-        "<p>Adam Sampson (<a href=\"https://github.com/atsampson\">atsampson</a>)</p>"
-        "<p>Jakob Jarmar (<a href=\"https://github.com/jarmar\">jarmar</a>)</p>"
-        "<p>Stefan Weil (<a href=\"https://github.com/stweil\">stweil</a>)</p>"
-        "<p>Nils Brederlow (<a href=\"https://github.com/dingodoppelt\">dingodoppelt</a>)</p>"
-        "<p>Sebastian Krzyszkowiak (<a href=\"https://github.com/dos1\">dos1</a>)</p>"
-        "<p>Bryan Flamig (<a href=\"https://github.com/bflamig\">bflamig</a>)</p>"
-        "<p>Kris Raney (<a href=\"https://github.com/kraney\">kraney</a>)</p>"
-        "<p>dszgit (<a href=\"https://github.com/dszgit\">dszgit</a>)</p>"
-        "<p>nefarius2001 (<a href=\"https://github.com/nefarius2001\">nefarius2001</a>)</p>"
-        "<p>jc-Rosichini (<a href=\"https://github.com/jc-Rosichini\">jc-Rosichini</a>)</p>"
-        "<p>Julian Santander (<a href=\"https://github.com/j-santander\">j-santander</a>)</p>"
-        "<p>chigkim (<a href=\"https://github.com/chigkim\">chigkim</a>)</p>"
-        "<p>Bodo (<a href=\"https://github.com/bomm\">bomm</a>)</p>"
-        "<p>Christian Hoffmann (<a href=\"https://github.com/hoffie\">hoffie</a>)</p>"
-        "<p>jp8 (<a href=\"https://github.com/jp8\">jp8</a>)</p>"
-        "<p>James (<a href=\"https://github.com/jdrage\">jdrage</a>)</p>"
-        "<p>ranfdev (<a href=\"https://github.com/ranfdev\">ranfdev</a>)</p>"
-        "<p>bspeer (<a href=\"https://github.com/bspeer\">bspeer</a>)</p>"
-        "<p>Martin Passing (<a href=\"https://github.com/passing\">passing</a>)</p>"
-        "<p>DonC (<a href=\"https://github.com/dcorson-ticino-com\">dcorson-ticino-com</a>)</p>"
-        "<p>David Kastrup (<a href=\"https://github.com/dakhubgit\">dakhubgit</a>)</p>"
-        "<p>Jordan Lum (<a href=\"https://github.com/mulyaj\">mulyaj</a>)</p>"
-        "<p>Noam Postavsky (<a href=\"https://github.com/npostavs\">npostavs</a>)</p>"
-        "<p>David Savinkoff (<a href=\"https://github.com/DavidSavinkoff\">DavidSavinkoff</a>)</p>"
-        "<p>Johannes Brauers (<a href=\"https://github.com/JohannesBrx\">JohannesBrx</a>)</p>"
-        "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
-        "<p>Ferenc Wágner (<a href=\"https://github.com/wferi\">wferi</a>)</p>"
-        "<p>Martin Kaistra (<a href=\"https://github.com/djfun\">djfun</a>)</p>"
-        "<p>Burkhard Volkemer (<a href=\"https://github.com/buv\">buv</a>)</p>"
-        "<p>Magnus Groß (<a href=\"https://github.com/vimpostor\">vimpostor</a>)</p>"
-        "<p>Julien Taverna (<a href=\"https://github.com/jujudusud\">jujudusud</a>)</p>"
-        "<p>Detlef Hennings (<a href=\"https://github.com/DetlefHennings\">DetlefHennings</a>)</p>"
-        "<p>drummer1154 (<a href=\"https://github.com/drummer1154\">drummer1154</a>)</p>"
-        "<p>helgeerbe (<a href=\"https://github.com/helgeerbe\">helgeerbe</a>)</p>"
-        "<p>Hk1020 (<a href=\"https://github.com/Hk1020\">Hk1020</a>)</p>"
-        "<p>Jeroen van Veldhuizen (<a href=\"https://github.com/jeroenvv\">jeroenvv</a>)</p>"
-        "<p>Reinhard (<a href=\"https://github.com/reinhardwh\">reinhardwh</a>)</p>"
-        "<p>Stefan Menzel (<a href=\"https://github.com/menzels\">menzels</a>)</p>"
-        "<p>Dau Huy Ngoc (<a href=\"https://github.com/ngocdh\">ngocdh</a>)</p>"
-        "<p>Jiri Popek (<a href=\"https://github.com/jardous\">jardous</a>)</p>"
-        "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>"
-        "<p>RobyDati (<a href=\"https://github.com/RobyDati\">RobyDati</a>)</p>"
-        "<p>Rob-NY (<a href=\"https://github.com/Rob-NY\">Rob-NY</a>)</p>"
-        "<p>Thai Pangsakulyanont (<a href=\"https://github.com/dtinth\">dtinth</a>)</p>"
-        "<p>Peter Goderie (<a href=\"https://github.com/pgScorpio\">pgScorpio</a>)</p>"
-        "<p>Dan Garton (<a href=\"https://github.com/danryu\">danryu</a>)</p>"
-        "<br>" +
-        tr ( "For details on the contributions check out the %1" )
-            .arg ( "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." ) );
-
-    // translators
-    txvTranslation->setText ( "<p><b>" + tr ( "Spanish" ) +
-                              "</b></p>"
-                              "<p>Daryl Hanlon (<a href=\"https://github.com/ignotus666\">ignotus666</a>)</p>"
-                              "<p><b>" +
-                              tr ( "French" ) +
-                              "</b></p>"
-                              "<p>Olivier Humbert (<a href=\"https://github.com/trebmuh\">trebmuh</a>)</p>"
-                              "<p>Julien Taverna (<a href=\"https://github.com/jujudusud\">jujudusud</a>)</p>"
-                              "<p><b>" +
-                              tr ( "Portuguese" ) +
-                              "</b></p>"
-                              "<p>Miguel de Matos (<a href=\"https://github.com/Snayler\">Snayler</a>)</p>"
-                              "<p>Melcon Moraes (<a href=\"https://github.com/melcon\">melcon</a>)</p>"
-                              "<p>Manuela Silva (<a href=\"https://hosted.weblate.org/user/mansil/\">mansil</a>)</p>"
-                              "<p>gbonaspetti (<a href=\"https://hosted.weblate.org/user/gbonaspetti/\">gbonaspetti</a>)</p>"
-                              "<p><b>" +
-                              tr ( "Dutch" ) +
-                              "</b></p>"
-                              "<p>Jeroen Geertzen (<a href=\"https://github.com/jerogee\">jerogee</a>)</p>"
-                              "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
-                              "<p><b>" +
-                              tr ( "Italian" ) +
-                              "</b></p>"
-                              "<p>Giuseppe Sapienza (<a href=\"https://github.com/dzpex\">dzpex</a>)</p>"
-                              "<p><b>" +
-                              tr ( "German" ) +
-                              "</b></p>"
-                              "<p>Volker Fischer (<a href=\"https://github.com/corrados\">corrados</a>)</p>"
-                              "<p>Roland Moschel (<a href=\"https://github.com/rolamos\">rolamos</a>)</p>"
-                              "<p><b>" +
-                              tr ( "Polish" ) +
-                              "</b></p>"
-                              "<p>Martyna Danysz (<a href=\"https://github.com/Martyna27\">Martyna27</a>)</p>"
-                              "<p>Tomasz Bojczuk (<a href=\"https://github.com/SeeLook\">SeeLook</a>)</p>"
-                              "<p><b>" +
-                              tr ( "Swedish" ) +
-                              "</b></p>"
-                              "<p>Daniel (<a href=\"https://github.com/genesisproject2020\">genesisproject2020</a>)</p>"
-                              "<p>tygyh (<a href=\"https://github.com/tygyh\">tygyh</a>)</p>"
-                              "<p>Allan Nordhøy (<a href=\"https://hosted.weblate.org/user/kingu/\">kingu</a>)</p>"
-                              "<p><b>" +
-                              tr ( "Korean" ) +
-                              "</b></p>"
-                              "<p>Jung-Kyu Park (<a href=\"https://github.com/bagjunggyu\">bagjunggyu</a>)</p>"
-                              "<p>이정희 (<a href=\"https://hosted.weblate.org/user/MarongHappy/\">MarongHappy</a>)</p>"
-                              "<p><b>" +
-                              tr ( "Slovak" ) +
-                              "</b></p>"
-                              "<p>Jose Riha (<a href=\"https://github.com/jose1711\">jose1711</a>)</p>" +
-                              "<p><b>" + tr ( "Simplified Chinese" ) +
-                              "</b></p>"
-                              "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>" +
-                              "<p><b>" + tr ( "Norwegian Bokmål" ) +
-                              "</b></p>"
-                              "<p>Allan Nordhøy (<a href=\"https://hosted.weblate.org/user/kingu/\">kingu</a>)</p>" );
-
-    // set version number in about dialog
-    lblVersion->setText ( GetVersionAndNameStr() );
-
-    // set window title
-    setWindowTitle ( tr ( "About %1" ).arg ( APP_NAME ) );
-
-    //### TODO: BEGIN ###//
-    // Test if the window also needs to be maximized on Android.
-    // Android has not been tested
-#    if defined( ANDROID ) || defined( Q_OS_IOS )
-    // for mobile version maximize the window
-    setWindowState ( Qt::WindowMaximized );
-#    endif
-    //### TODO: END ###//
-}
-
-// Licence dialog --------------------------------------------------------------
-CLicenceDlg::CLicenceDlg ( QWidget* parent ) : CBaseDlg ( parent )
-{
-    /*
-        The licence dialog is structured as follows:
-        - text box with the licence text on the top
-        - check box: I &agree to the above licence terms
-        - Accept button (disabled if check box not checked)
-        - Decline button
-    */
-    setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
-
-    QVBoxLayout* pLayout    = new QVBoxLayout ( this );
-    QHBoxLayout* pSubLayout = new QHBoxLayout;
-    QLabel*      lblLicence =
-        new QLabel ( tr ( "This server requires you accept conditions before you can join. Please read these in the chat window." ), this );
-    QCheckBox* chbAgree     = new QCheckBox ( tr ( "I have read the conditions and &agree." ), this );
-    butAccept               = new QPushButton ( tr ( "Accept" ), this );
-    QPushButton* butDecline = new QPushButton ( tr ( "Decline" ), this );
-
-    pSubLayout->addStretch();
-    pSubLayout->addWidget ( chbAgree );
-    pSubLayout->addWidget ( butAccept );
-    pSubLayout->addWidget ( butDecline );
-    pLayout->addWidget ( lblLicence );
-    pLayout->addLayout ( pSubLayout );
-
-    // set some properties
-    butAccept->setEnabled ( false );
-    butAccept->setDefault ( true );
-
-    QObject::connect ( chbAgree, &QCheckBox::stateChanged, this, &CLicenceDlg::OnAgreeStateChanged );
-
-    QObject::connect ( butAccept, &QPushButton::clicked, this, &CLicenceDlg::accept );
-
-    QObject::connect ( butDecline, &QPushButton::clicked, this, &CLicenceDlg::reject );
-}
-
-// Help menu -------------------------------------------------------------------
-CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&Help" ), parent )
-{
-    QAction* pAction;
-
-    // standard help menu consists of about and what's this help
-    if ( bIsClient )
-    {
-        addAction ( tr ( "Getting &Started..." ), this, SLOT ( OnHelpClientGetStarted() ) );
-        addAction ( tr ( "Software &Manual..." ), this, SLOT ( OnHelpSoftwareMan() ) );
-    }
-    else
-    {
-        addAction ( tr ( "Getting &Started..." ), this, SLOT ( OnHelpServerGetStarted() ) );
-    }
-    addSeparator();
-    addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
-    addSeparator();
-    pAction = addAction ( tr ( "&About Jamulus..." ), this, SLOT ( OnHelpAbout() ) );
-    pAction->setMenuRole ( QAction::AboutRole ); // required for Mac
-    pAction = addAction ( tr ( "About &Qt..." ), this, SLOT ( OnHelpAboutQt() ) );
-    pAction->setMenuRole ( QAction::AboutQtRole ); // required for Mac
-}
-
-// Language combo box ----------------------------------------------------------
-CLanguageComboBox::CLanguageComboBox ( QWidget* parent ) : QComboBox ( parent ), iIdxSelectedLanguage ( INVALID_INDEX )
-{
-    // This requires a Qt::QueuedConnection on iOS due to https://bugreports.qt.io/browse/QTBUG-64577
-    QObject::connect ( this,
-                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-                       this,
-                       &CLanguageComboBox::OnLanguageActivated,
-                       Qt::QueuedConnection );
-}
-
-void CLanguageComboBox::Init ( QString& strSelLanguage )
-{
-    // load available translations
-    const QMap<QString, QString>   TranslMap = CLocale::GetAvailableTranslations();
-    QMapIterator<QString, QString> MapIter ( TranslMap );
-
-    // add translations to the combobox list
-    clear();
-    int iCnt                  = 0;
-    int iIdxOfEnglishLanguage = 0;
-    iIdxSelectedLanguage      = INVALID_INDEX;
-
-    while ( MapIter.hasNext() )
-    {
-        MapIter.next();
-        addItem ( QLocale ( MapIter.key() ).nativeLanguageName() + " (" + MapIter.key() + ")", MapIter.key() );
-
-        // store the combo box index of the default english language
-        if ( MapIter.key().compare ( "en" ) == 0 )
-        {
-            iIdxOfEnglishLanguage = iCnt;
-        }
-
-        // if the selected language is found, store the combo box index
-        if ( MapIter.key().compare ( strSelLanguage ) == 0 )
-        {
-            iIdxSelectedLanguage = iCnt;
-        }
-
-        iCnt++;
-    }
-
-    // if the selected language was not found, use the english language
-    if ( iIdxSelectedLanguage == INVALID_INDEX )
-    {
-        strSelLanguage       = "en";
-        iIdxSelectedLanguage = iIdxOfEnglishLanguage;
-    }
-
-    setCurrentIndex ( iIdxSelectedLanguage );
-}
-
-void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
-{
-    // only update if the language selection is different from the current selected language
-    if ( iIdxSelectedLanguage != iLanguageIdx )
-    {
-        QMessageBox::information ( this, tr ( "Restart Required" ), tr ( "Please restart the application for the language change to take effect." ) );
-
-        emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
-    }
-}
-
-QSize CMinimumStackedLayout::sizeHint() const
-{
-    // always use the size of the currently visible widget:
-    if ( currentWidget() )
-    {
-        return currentWidget()->sizeHint();
-    }
-    return QStackedLayout::sizeHint();
-}
-#endif
 
 /******************************************************************************\
 * Other Classes                                                                *
@@ -817,19 +462,19 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
     QHostAddress InetAddr;
     unsigned int iNetPort = DEFAULT_PORT_NUMBER;
 
-    // qInfo() << qUtf8Printable ( QString ( "Parsing network address %1" ).arg ( strAddress ) );
+           // qInfo() << qUtf8Printable ( QString ( "Parsing network address %1" ).arg ( strAddress ) );
 
-    // init requested host address with invalid address first
+           // init requested host address with invalid address first
     HostAddress = CHostAddress();
 
-    // Allow the following address formats:
-    // [addr4or6]
-    // [addr4or6]:port
-    // addr4
-    // addr4:port
-    // hostname
-    // hostname:port
-    // (where addr4or6 is a literal IPv4 or IPv6 address, and addr4 is a literal IPv4 address
+           // Allow the following address formats:
+           // [addr4or6]
+           // [addr4or6]:port
+           // addr4
+           // addr4:port
+           // hostname
+           // hostname:port
+           // (where addr4or6 is a literal IPv4 or IPv6 address, and addr4 is a literal IPv4 address
 
     bool               bLiteralAddr = false;
     QRegularExpression rx1 ( "^\\[([^]]*)\\](?::(\\d+))?$" ); // [addr4or6] or [addr4or6]:port
@@ -840,7 +485,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
     QRegularExpressionMatch rx1match = rx1.match ( strAddress );
     QRegularExpressionMatch rx2match = rx2.match ( strAddress );
 
-    // parse input address with rx1 and rx2 in turn, capturing address/host and port
+           // parse input address with rx1 and rx2 in turn, capturing address/host and port
     if ( rx1match.capturedStart() == 0 )
     {
         // literal address within []
@@ -874,7 +519,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
         }
     }
 
-    // first try if this is an IP number an can directly applied to QHostAddress
+           // first try if this is an IP number an can directly applied to QHostAddress
     if ( InetAddr.setAddress ( strAddress ) )
     {
         if ( !bEnableIPv6 && InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
@@ -901,7 +546,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
         }
     }
 
-    // qInfo() << qUtf8Printable ( QString ( "Parsed network address %1" ).arg ( InetAddr.toString() ) );
+           // qInfo() << qUtf8Printable ( QString ( "Parsed network address %1" ).arg ( InetAddr.toString() ) );
 
     HostAddress = CHostAddress ( InetAddr, iNetPort );
 
@@ -1096,156 +741,12 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bRe
         // NOTE: Do not change the order of any instrument in the future!
         // NOTE: The very first entry is the "not used" element per definition.
         vecDataBase.Init ( 0 ); // first clear all existing data since we create the list be adding entries
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "None" ),
-                                           ":/png/instr/res/instruments/none.png",
-                                           IC_OTHER_INSTRUMENT ) ); // special first element
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Drum Set" ),
-                                           ":/png/instr/res/instruments/drumset.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Djembe" ),
-                                           ":/png/instr/res/instruments/djembe.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Electric Guitar" ),
-                                           ":/png/instr/res/instruments/eguitar.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Acoustic Guitar" ),
-                                           ":/png/instr/res/instruments/aguitar.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Guitar" ),
-                                           ":/png/instr/res/instruments/bassguitar.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard" ),
-                                           ":/png/instr/res/instruments/keyboard.png",
-                                           IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Synthesizer" ),
-                                           ":/png/instr/res/instruments/synthesizer.png",
-                                           IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Grand Piano" ),
-                                           ":/png/instr/res/instruments/grandpiano.png",
-                                           IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Accordion" ),
-                                           ":/png/instr/res/instruments/accordeon.png",
-                                           IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal" ),
-                                           ":/png/instr/res/instruments/vocal.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Microphone" ),
-                                           ":/png/instr/res/instruments/microphone.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harmonica" ),
-                                           ":/png/instr/res/instruments/harmonica.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trumpet" ),
-                                           ":/png/instr/res/instruments/trumpet.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trombone" ),
-                                           ":/png/instr/res/instruments/trombone.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "French Horn" ),
-                                           ":/png/instr/res/instruments/frenchhorn.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Tuba" ),
-                                           ":/png/instr/res/instruments/tuba.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Saxophone" ),
-                                           ":/png/instr/res/instruments/saxophone.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Clarinet" ),
-                                           ":/png/instr/res/instruments/clarinet.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Flute" ),
-                                           ":/png/instr/res/instruments/flute.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Violin" ),
-                                           ":/png/instr/res/instruments/violin.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Cello" ),
-                                           ":/png/instr/res/instruments/cello.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Double Bass" ),
-                                           ":/png/instr/res/instruments/doublebass.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Recorder" ),
-                                           ":/png/instr/res/instruments/recorder.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Streamer" ),
-                                           ":/png/instr/res/instruments/streamer.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Listener" ),
-                                           ":/png/instr/res/instruments/listener.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Guitar+Vocal" ),
-                                           ":/png/instr/res/instruments/guitarvocal.png",
-                                           IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard+Vocal" ),
-                                           ":/png/instr/res/instruments/keyboardvocal.png",
-                                           IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bodhran" ),
-                                           ":/png/instr/res/instruments/bodhran.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bassoon" ),
-                                           ":/png/instr/res/instruments/bassoon.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Oboe" ),
-                                           ":/png/instr/res/instruments/oboe.png",
-                                           IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harp" ),
-                                           ":/png/instr/res/instruments/harp.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Viola" ),
-                                           ":/png/instr/res/instruments/viola.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Congas" ),
-                                           ":/png/instr/res/instruments/congas.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bongo" ),
-                                           ":/png/instr/res/instruments/bongo.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Bass" ),
-                                           ":/png/instr/res/instruments/vocalbass.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Tenor" ),
-                                           ":/png/instr/res/instruments/vocaltenor.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Alto" ),
-                                           ":/png/instr/res/instruments/vocalalto.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Soprano" ),
-                                           ":/png/instr/res/instruments/vocalsoprano.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Banjo" ),
-                                           ":/png/instr/res/instruments/banjo.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mandolin" ),
-                                           ":/png/instr/res/instruments/mandolin.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Ukulele" ),
-                                           ":/png/instr/res/instruments/ukulele.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Ukulele" ),
-                                           ":/png/instr/res/instruments/bassukulele.png",
-                                           IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Baritone" ),
-                                           ":/png/instr/res/instruments/vocalbaritone.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Lead" ),
-                                           ":/png/instr/res/instruments/vocallead.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mountain Dulcimer" ),
-                                           ":/png/instr/res/instruments/mountaindulcimer.png",
-                                           IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Scratching" ),
-                                           ":/png/instr/res/instruments/scratching.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Rapping" ),
-                                           ":/png/instr/res/instruments/rapping.png",
-                                           IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vibraphone" ),
-                                           ":/png/instr/res/instruments/vibraphone.png",
-                                           IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Conductor" ),
-                                           ":/png/instr/res/instruments/conductor.png",
-                                           IC_OTHER_INSTRUMENT ) );
+
+        // DON'T actually do anything here, we don't use the instruments images now!
+
+//        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Conductor" ),
+//                                           ":/png/instr/res/instruments/conductor.png",
+//                                           IC_OTHER_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;
@@ -1556,16 +1057,6 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** ";
 #    endif
 #    ifndef HEADLESS
-        strVersionText += "\n *** " + QCoreApplication::tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
-                          ", 1995 - 2021, The Synthesis ToolKit in C++ (STK)";
-        strVersionText += "\n *** <https://ccrma.stanford.edu/software/stk>";
-        strVersionText += "\n *** ";
-        strVersionText += "\n *** " + QString ( QCoreApplication::tr ( "Some pixmaps are from the %1" ) ).arg ( " Open Clip Art Library (OCAL)" );
-        strVersionText += "\n *** <https://openclipart.org>";
-        strVersionText += "\n *** ";
-        strVersionText += "\n *** " + QCoreApplication::tr ( "Flag icons by Mark James" );
-        strVersionText += "\n *** <http://www.famfamfam.com>";
-        strVersionText += "\n *** ";
         strVersionText += "\n *** " + QString ( QCoreApplication::tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" );
         strVersionText += "\n *** <https://freesound.org>";
         strVersionText += "\n *** ";

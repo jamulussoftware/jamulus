@@ -60,19 +60,9 @@
 #    include <QThread>
 #endif
 #ifndef HEADLESS
-#    include <QMessageBox>
-#    include <QMenu>
-#    include <QWhatsThis>
-#    include <QTextBrowser>
-#    include <QLabel>
-#    include <QCheckBox>
-#    include <QComboBox>
-#    include <QLineEdit>
 #    include <QDateTime>
 #    include <QDesktopServices>
 #    include <QKeyEvent>
-#    include <QStackedLayout>
-#    include "ui_aboutdlgbase.h"
 #endif
 
 #include "global.h"
@@ -149,6 +139,29 @@ public:
 
     // this function simply converts the type of size to integer
     inline int Size() const { return static_cast<int> ( std::vector<TData>::size() ); }
+
+    // new world additions
+    // this function simply converts the type of size to integer
+    // size(): Returns the number of elements.
+    inline int size() const { return static_cast<int> ( std::vector<TData>::size() ); }
+
+    // pushback(element): Adds an element to the end.
+    void pushback ( const TData& tI )
+    {
+        Enlarge ( 1 );
+        std::vector<TData>::back() = tI;
+    }
+
+    // at(index): Returns the element at the specified index.
+    TData& at(int index) {
+        return std::vector<TData>::at(index);
+    }
+
+    // clear(): Removes all elements.
+    void clear() {
+        std::vector<TData>::clear();
+    }
+
 };
 
 /* Implementation *************************************************************/
@@ -369,103 +382,60 @@ void CMovingAv<TData>::Add ( const TData tNewD )
 \******************************************************************************/
 #ifndef HEADLESS
 // Dialog base class -----------------------------------------------------------
-class CBaseDlg : public QDialog
-{
-    Q_OBJECT
+// class CBaseDlg : public QDialog
+// {
+//     Q_OBJECT
 
-public:
-    CBaseDlg ( QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags() ) : QDialog ( parent, flags ) {}
+// public:
+//     CBaseDlg ( QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags() ) : QDialog ( parent, flags ) {}
 
-public slots:
-    void keyPressEvent ( QKeyEvent* pEvent )
-    {
-        // block escape key
-        if ( pEvent->key() != Qt::Key_Escape )
-        {
-#    ifdef ANDROID
-            if ( pEvent->key() == Qt::Key_Back )
-            {
-                close(); // otherwise, dialog does not show properly again in android (nefarius2001, #832)
-                return;
-            }
-#    endif
-            QDialog::keyPressEvent ( pEvent );
-        }
-    }
-};
+// public slots:
+//     void keyPressEvent ( QKeyEvent* pEvent )
+//     {
+//         // block escape key
+//         if ( pEvent->key() != Qt::Key_Escape )
+//         {
+// #    if defined ( Q_OS_ANDROID )
+//             if ( pEvent->key() == Qt::Key_Back )
+//             {
+//                 close(); // otherwise, dialog does not show properly again in android (nefarius2001, #832)
+//                 return;
+//             }
+// #    endif
+//             QDialog::keyPressEvent ( pEvent );
+//         }
+//     }
+// };
 
-// About dialog ----------------------------------------------------------------
-class CAboutDlg : public CBaseDlg, private Ui_CAboutDlgBase
-{
-    Q_OBJECT
-
-public:
-    CAboutDlg ( QWidget* parent = nullptr );
-};
-
-// Licence dialog --------------------------------------------------------------
-class CLicenceDlg : public CBaseDlg
-{
-    Q_OBJECT
-
-public:
-    CLicenceDlg ( QWidget* parent = nullptr );
-
-protected:
-    QPushButton* butAccept;
-
-public slots:
-    void OnAgreeStateChanged ( int value ) { butAccept->setEnabled ( value == Qt::Checked ); }
-};
-
-// Help menu -------------------------------------------------------------------
-class CHelpMenu : public QMenu
-{
-    Q_OBJECT
-
-public:
-    CHelpMenu ( const bool bIsClient, QWidget* parent = nullptr );
-
-protected:
-    CAboutDlg AboutDlg;
-
-public slots:
-    void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
-    void OnHelpAbout() { AboutDlg.exec(); }
-    void OnHelpAboutQt() { QMessageBox::aboutQt ( nullptr, QString ( tr ( "About Qt" ) ) ); }
-    void OnHelpClientGetStarted() { QDesktopServices::openUrl ( QUrl ( CLIENT_GETTING_STARTED_URL ) ); }
-    void OnHelpServerGetStarted() { QDesktopServices::openUrl ( QUrl ( SERVER_GETTING_STARTED_URL ) ); }
-    void OnHelpSoftwareMan() { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
-};
 
 // Language combo box ----------------------------------------------------------
-class CLanguageComboBox : public QComboBox
-{
-    Q_OBJECT
+// class CLanguageComboBox : public QComboBox
+// {
+//     Q_OBJECT
 
-public:
-    CLanguageComboBox ( QWidget* parent = nullptr );
+// public:
+//     CLanguageComboBox ( QWidget* parent = nullptr );
 
-    void Init ( QString& strSelLanguage );
+//     void Init ( QString& strSelLanguage );
 
-protected:
-    int iIdxSelectedLanguage;
+// protected:
+//     int iIdxSelectedLanguage;
 
-public slots:
-    void OnLanguageActivated ( int iLanguageIdx );
+// public slots:
+//     void OnLanguageActivated ( int iLanguageIdx );
 
-signals:
-    void LanguageChanged ( QString strLanguage );
-};
+// signals:
+//     void LanguageChanged ( QString strLanguage );
+// };
 
 // StackedLayout which auto-reduces to the size of the currently visible widget
-class CMinimumStackedLayout : public QStackedLayout
-{
-    Q_OBJECT
-public:
-    CMinimumStackedLayout ( QWidget* parent = nullptr ) : QStackedLayout ( parent ) {}
-    virtual QSize sizeHint() const override;
-};
+// class CMinimumStackedLayout : public QStackedLayout
+// {
+//     Q_OBJECT
+// public:
+//     CMinimumStackedLayout ( QWidget* parent = nullptr ) : QStackedLayout ( parent ) {}
+//     virtual QSize sizeHint() const override;
+// };
 #endif
 
 /******************************************************************************\
@@ -558,12 +528,11 @@ enum ERecorderState
 enum EChSortType
 {
     // used for settings -> enum values should be fixed
-    ST_NO_SORT           = 0,
-    ST_BY_NAME           = 1,
-    ST_BY_INSTRUMENT     = 2,
-    ST_BY_GROUPID        = 3,
-    ST_BY_CITY           = 4,
-    ST_BY_SERVER_CHANNEL = 5
+    ST_NO_SORT       = 0,
+    ST_BY_NAME       = 1,
+    ST_BY_INSTRUMENT = 2,
+    ST_BY_GROUPID    = 3,
+    ST_BY_CITY       = 4
 };
 
 // Directory type --------------------------------------------------------------
@@ -588,29 +557,11 @@ inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
     case AT_NONE:
         return QCoreApplication::translate ( "CServerDlg", "None" );
 
-    case AT_ANY_GENRE2:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 2" );
-
-    case AT_ANY_GENRE3:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 3" );
-
-    case AT_GENRE_ROCK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Rock" );
-
-    case AT_GENRE_JAZZ:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
-
-    case AT_GENRE_CLASSICAL_FOLK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk" );
-
-    case AT_GENRE_CHORAL:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Choral/Barbershop" );
-
     case AT_CUSTOM:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Custom" );
+        return QCoreApplication::translate ( "CClientDlg", "Custom" );
 
     default: // AT_DEFAULT
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 1" );
+        return QCoreApplication::translate ( "CClientDlg", "Any Genre 1" );
     }
 }
 
@@ -1099,11 +1050,9 @@ public:
     {
 #ifdef _WIN32
         return OT_WINDOWS;
-#elif defined( Q_OS_MACOS )
+#elif defined( __APPLE__ ) || defined( __MACOSX )
         return OT_MAC_OS;
-#elif defined( Q_OS_IOS )
-        return OT_I_OS;
-#elif defined( Q_OS_ANDROID ) || defined( ANDROID )
+#elif defined( ANDROID )
         return OT_ANDROID;
 #else
         return OT_LINUX;

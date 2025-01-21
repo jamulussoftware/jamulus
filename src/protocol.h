@@ -84,6 +84,7 @@
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
 #define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
+#define PROTMESSID_CLM_TCP_SUPPORTED          1019 // TCP is supported
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE 2001 // a container for split messages
@@ -154,6 +155,7 @@ public:
     void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
+    void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr );
 
     static int GetBodyLength ( const CVector<uint8_t>& vecbyData );
 
@@ -288,6 +290,7 @@ protected:
     bool EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection );
     bool EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
+    bool EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr );
 
     int iOldRecID;
     int iOldRecCnt;
@@ -354,4 +357,5 @@ signals:
     void CLReqConnClientsList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection );
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
+    void CLTcpSupported ( CHostAddress InetAddr );
 };

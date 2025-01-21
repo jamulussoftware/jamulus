@@ -432,6 +432,12 @@ CONNECTION LESS MESSAGES
           five times for one registration request at 500ms intervals.
           Beyond this, it should "ping" every 15 minutes
           (standard re-registration timeout).
+
+
+- PROTMESSID_CLM_TCP_SUPPORTED: TCP supported message
+
+    note: does not have any data -> n = 0
+
 */
 
 #include "protocol.h"
@@ -921,6 +927,10 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
 
     case PROTMESSID_CLM_REGISTER_SERVER_RESP:
         EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
+        break;
+
+    case PROTMESSID_CLM_TCP_SUPPORTED:
+        EvaluateCLTcpSupportedMes ( InetAddr );
         break;
     }
 }
@@ -2581,6 +2591,19 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, con
 
     // invoke message action
     emit CLRegisterServerResp ( InetAddr, static_cast<ESvrRegResult> ( iSvrRegResult ) );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLTcpSupportedMes ( const CHostAddress& InetAddr )
+{
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_TCP_SUPPORTED, CVector<uint8_t> ( 0 ), InetAddr );
+}
+
+bool CProtocol::EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLTcpSupported ( InetAddr );
 
     return false; // no error
 }

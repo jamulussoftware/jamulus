@@ -27,7 +27,6 @@
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
                    const quint16  iQosNumber,
-                   const QString& strConnOnStartupAddress,
                    const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
@@ -121,7 +120,7 @@ CClient::CClient ( const quint16  iPortNumber,
     // The first ConClientListMesReceived handler performs the necessary cleanup and has to run first:
     QObject::connect ( &Channel, &CChannel::ConClientListMesReceived, this, &CClient::OnConClientListMesReceived );
 
-    QObject::connect ( &Channel, &CChannel::Disconnected, this, &CClient::Disconnected );
+    QObject::connect ( &Channel, &CChannel::Disconnected, this, &CClient::Stop );
 
     QObject::connect ( &Channel, &CChannel::NewConnection, this, &CClient::OnNewConnection );
 
@@ -183,13 +182,6 @@ CClient::CClient ( const quint16  iPortNumber,
     // start the socket (it is important to start the socket after all
     // initializations and connections)
     Socket.Start();
-
-    // do an immediate start if a server address is given
-    if ( !strConnOnStartupAddress.isEmpty() )
-    {
-        SetServerAddr ( strConnOnStartupAddress );
-        Start();
-    }
 }
 
 CClient::~CClient()
@@ -578,6 +570,9 @@ bool CClient::SetServerAddr ( QString strNAddr )
         // apply address to the channel
         Channel.SetAddress ( HostAddress );
 
+        // By default, set server name to HostAddress. If using the Connect() method, this may be overwritten
+        SetConnectedServerName ( HostAddress.toString() );
+
         return true;
     }
     else
@@ -865,11 +860,8 @@ void CClient::OnHandledSignal ( int sigNum )
     {
     case SIGINT:
     case SIGTERM:
-        // if connected, terminate connection (needed for headless mode)
-        if ( IsRunning() )
-        {
-            Stop();
-        }
+        // if connected, Stop client (needed for headless mode)
+        Stop();
 
         // this should trigger OnAboutToQuit
         QCoreApplication::instance()->exit();
@@ -979,8 +971,14 @@ void CClient::Start()
 
     // start audio interface
     Sound.Start();
+
+    emit Connected ( GetConnectedServerName() );
 }
 
+/// @method
+/// @brief Stops client and disconnects from server
+/// @emit Disconnected
+///       Use to set CClientDlg to show not being connected
 void CClient::Stop()
 {
     // stop audio interface
@@ -1013,6 +1011,53 @@ void CClient::Stop()
     // reset current signal level and LEDs
     bJitterBufferOK = true;
     SignalLevelMeter.Reset();
+
+    // emit Disconnected() to inform UI of disconnection
+    emit Disconnected();
+}
+
+/// @method
+/// @brief Stops the client if the client is running
+/// @emit Disconnected
+void CClient::Disconnect()
+{
+    if ( IsRunning() )
+    {
+        Stop();
+    }
+}
+
+/// @method
+/// @brief Connects to strServerAddress
+/// @emit Connected (strServerName) if the client wasn't running and SetServerAddr was valid. emit happens through Start().
+///       Use to set CClientDlg to show being connected
+/// @emit ConnectingFailed (error) if an error occurred
+///       Use to display error message in CClientDlg
+/// @param strServerAddress - the server address to connect to
+/// @param strServerName - the String argument to be passed to Connecting()
+void CClient::Connect ( QString strServerAddress, QString strServerName )
+{
+    try
+    {
+        if ( !IsRunning() )
+        {
+            // Set server address and connect if valid address was supplied
+            if ( SetServerAddr ( strServerAddress ) )
+            {
+                SetConnectedServerName ( strServerName );
+                Start();
+            }
+            else
+            {
+                throw CGenErr ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
+            }
+        }
+    }
+    catch ( const CGenErr& generr )
+    {
+        Stop();
+        emit ConnectingFailed ( generr.GetErrorText() );
+    }
 }
 
 void CClient::Init()

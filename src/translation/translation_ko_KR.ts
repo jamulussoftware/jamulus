@@ -11,12 +11,12 @@
     <message>
         <location filename="../util.cpp" line="392"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(빌드)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="393"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(런타임)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="411"/>
@@ -62,12 +62,12 @@
     <message>
         <location filename="../util.cpp" line="417"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>일부 픽스맵은 %1에서 가져왔습니다</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="425"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>일부 사운드 샘플은 %1에서 가져왔습니다</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="504"/>
@@ -159,7 +159,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation>텍스트 레이블 버전</translation>
+        <translation>TextLabelVersion</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
@@ -322,7 +322,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="254"/>
         <source>Grp</source>
-        <translation>Grp</translation>
+        <translation>그룹</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="140"/>
@@ -893,7 +893,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>채널별로 사용자 정렬(&amp;E)</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
@@ -1399,7 +1399,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>연결 대화상자의 디렉터리 드롭다운에 추가 디렉터리를 추가해야 하는 경우, 여기에 주소를 입력할 수 있습니다.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="430"/>
@@ -1702,7 +1702,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="292"/>
         <source>and</source>
-        <translation>그리고</translation>
+        <translation>및</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="361"/>
@@ -1716,22 +1716,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="367"/>
         <source>Custom Directories combo box</source>
-        <translation>사용자 정의 디렉터리 콤보 박스</translation>
+        <translation>사용자 지정 디렉터리 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 지정 디렉터리 버튼 삭제</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 지정 디렉터리 삭제</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>버튼을 클릭하면 현재 선택한 사용자 지정 디렉터리를 삭제할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>
@@ -1812,22 +1812,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="444"/>
         <source>Fancy</source>
-        <translation>훌륭함</translation>
+        <translation>화려한</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="445"/>
         <source>Compact</source>
-        <translation>콤팩트</translation>
+        <translation>간결한</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="450"/>
         <source>Bar (narrow)</source>
-        <translation>바 (좁음)</translation>
+        <translation>막대 (좁음)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>Bar (wide)</source>
-        <translation>바 (넓음)</translation>
+        <translation>막대 (넓음)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="452"/>
@@ -1900,7 +1900,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="610"/>
         <source>Custom</source>
-        <translation>사용자 정의</translation>
+        <translation>사용자 지정</translation>
     </message>
     <message>
         <location filename="../util.h" line="592"/>
@@ -2544,7 +2544,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="46"/>
         <source>Shows the servers listed by the selected directory. You can add custom directories in Advanced Settings.</source>
-        <translation>선택한 디렉터리 별로 나열된 서버를 표시합니다. 고급 설정에서 사용자 정의 디렉터리를 추가할 수 있습니다.</translation>
+        <translation>선택한 디렉터리 별로 나열된 서버를 표시합니다. 고급 설정에서 사용자 지정 디렉터리를 추가할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="48"/>
@@ -2579,7 +2579,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="81"/>
         <source>You can add custom directories in Advanced Settings.</source>
-        <translation>고급 설정에서 사용자 정의 디렉터리를 추가할 수 있습니다.</translation>
+        <translation>고급 설정에서 사용자 지정 디렉터리를 추가할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="83"/>
@@ -2604,17 +2604,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="99"/>
         <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
+        <translation>서버 주소 버튼 삭제</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="100"/>
         <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>서버 주소 삭제</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="101"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>버튼을 클릭하면 현재 선택한 서버 주소가 지워지고 저장된 서버 목록에서 삭제됩니다.</translation>
     </message>
     <message>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
@@ -2740,7 +2740,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>버전</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>
@@ -3174,12 +3174,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="196"/>
         <source>Custom Directory address</source>
-        <translation>사용자 정의 디렉터리 주소</translation>
+        <translation>사용자 지정 디렉터리 주소</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="197"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation>사용자 정의 디렉터리 주소는 이 서버를 추가해야 하는 서버 목록이 있는 디렉터리의 주소입니다.</translation>
+        <translation>사용자 지정 디렉터리 주소는 이 서버를 추가해야 하는 서버 목록이 있는 디렉터리의 주소입니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
@@ -3487,7 +3487,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="202"/>
         <source>Custom Directory line edit</source>
-        <translation>사용자 정의 디렉터리 라인 편집</translation>
+        <translation>사용자 지정 디렉터리 라인 편집</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="246"/>
@@ -3787,7 +3787,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation>사용자 정의 디렉터리 주소</translation>
+        <translation>사용자 지정 디렉터리 주소</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
@@ -4247,32 +4247,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1542"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">이 앱은 다음의 라이브러리, 리소스 또는 코드 스니펫을 사용합니다:</translation>
+        <translation>이 앱은 다음의 라이브러리, 리소스 또는 코드 스니펫을 사용합니다:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1544"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Qt 크로스 플랫폼 애플리케이션 프레임워크</translation>
+        <translation>Qt 크로스 플랫폼 애플리케이션 프레임워크</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1545"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(빌드)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1545"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(런타임)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1563"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>일부 픽스맵은 %1에서 가져왔습니다</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1569"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>일부 사운드 샘플은 %1에서 가져왔습니다</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>
@@ -4305,7 +4305,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1559"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation>Audio reverberation code by Perry R. Cook and Gary P. Scavone</translation>
+        <translation>Perry R. Cook과 Gary P. Scavone이 작성한 오디오 잔향 코드</translation>
     </message>
     <message>
         <source>Some pixmaps are from the Open Clip Art Library (OCAL)</source>

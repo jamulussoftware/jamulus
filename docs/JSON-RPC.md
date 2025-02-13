@@ -129,57 +129,6 @@ Results:
 | result.version | string | The Jamulus version. |
 
 
-### jamulus/pollServerList
-
-Request list of servers in a directory
-
-Parameters:
-
-| Name | Type | Description |
-| --- | --- | --- |
-| params.directory | string | socket address of directory to query, e.g. anygenre1.jamulus.io:22124. |
-
-Results:
-
-| Name | Type | Description |
-| --- | --- | --- |
-| result | string | "ok" or "error" if bad arguments. |
-
-
-### jamulusclient/connect
-
-Disconnect client from server
-
-Parameters:
-
-| Name | Type | Description |
-| --- | --- | --- |
-| params.address | string | Server socket address (ip_addr:port). |
-
-Results:
-
-| Name | Type | Description |
-| --- | --- | --- |
-| result | string | Always "ok". |
-
-
-### jamulusclient/disconnect
-
-Disconnect client from server
-
-Parameters:
-
-| Name | Type | Description |
-| --- | --- | --- |
-| params | object | No parameters (empty object). |
-
-Results:
-
-| Name | Type | Description |
-| --- | --- | --- |
-| result | string | Always "ok". |
-
-
 ### jamulusclient/getChannelInfo
 
 Returns the client's profile information.
@@ -197,9 +146,11 @@ Results:
 | result.id | number | The channel ID. |
 | result.name | string | The musician’s name. |
 | result.skillLevel | string | The musician’s skill level (beginner, intermediate, expert, or null). |
+| result.countryId | number | The musician’s country ID (see QLocale::Country). |
 | result.country | string | The musician’s country. |
 | result.city | string | The musician’s city. |
-| result.instrument | number | The musician’s instrument. |
+| result.instrumentId | number | The musician’s instrument ID (see CInstPictures::GetTable). |
+| result.instrument | string | The musician’s instrument. |
 | result.skillLevel | string | Your skill level (beginner, intermediate, expert, or null). |
 
 
@@ -235,6 +186,23 @@ Results:
 | Name | Type | Description |
 | --- | --- | --- |
 | result.clients | array | The client list. See jamulusclient/clientListReceived for the format. |
+
+
+### jamulusclient/pollServerList
+
+Request list of servers in a directory.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.directory | string | Socket address of directory to query. Example: anygenre1.jamulus.io:22124 |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | "ok" or "error" if bad arguments. |
 
 
 ### jamulusclient/sendChatText
@@ -495,8 +463,10 @@ Parameters:
 | params.clients[*].id | number | The channel ID. |
 | params.clients[*].name | string | The musician’s name. |
 | params.clients[*].skillLevel | string | The musician’s skill level (beginner, intermediate, expert, or null). |
+| params.clients[*].countryId | number | The musician’s country ID (see QLocale::Country). |
 | params.clients[*].country | string | The musician’s country. |
 | params.clients[*].city | string | The musician’s city. |
+| params.clients[*].instrumentId | number | The musician’s instrument ID (see CInstPictures::GetTable). |
 | params.clients[*].instrument | string | The musician’s instrument. |
 
 
@@ -524,13 +494,13 @@ Parameters:
 
 ### jamulusclient/recorderState
 
-Emitted when the client is connected to a server who's recorder state changes.
+Emitted when the client is connected to a server whose recorder state changes.
 
 Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params.state | number | The recorder state |
+| params.state | number | The recorder state. |
 
 
 ### jamulusclient/serverInfoReceived
@@ -541,9 +511,9 @@ Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params.address | string | The server socket address |
-| params.pingtime | number | The round-trip ping time in ms |
-| params.numClients | number | The quantity of clients connected to the server |
+| params.address | string | The server socket address. |
+| params.pingtime | number | The round-trip ping time, in milliseconds. |
+| params.numClients | number | The number of clients connected to the server. |
 
 
 ### jamulusclient/serverListReceived
@@ -555,9 +525,10 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params.servers | array | The server list. |
-| params.servers[*].address | string | Socket address (ip_address:port) |
-| params.servers[*].name | string | Server name |
-| params.servers[*].country | string | Server country |
-| params.servers[*].city | string | Server city |
+| params.servers[*].address | string | Socket address (ip_address:port). |
+| params.servers[*].name | string | Server name. |
+| params.servers[*].countryId | number | Server country ID (see QLocale::Country). |
+| params.servers[*].country | string | Server country. |
+| params.servers[*].city | string | Server city. |
 
 

@@ -202,17 +202,17 @@
         <translation>Versione</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2024 Volker Fischer e altri</translation>
+        <source>Copyright (C) 2005-2025 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2025 Volker Fischer e altri</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2024 Team di sviluppo Jamulus</translation>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2025 Team di sviluppo Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2024 The Jamulus Development Team</source>
-        <translation>Copyright © 2005-2024 Il team di sviluppo di Jamulus</translation>
+        <source>Copyright © 2005-2025 The Jamulus Development Team</source>
+        <translation>Copyright © 2005-2025 Il team di sviluppo di Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -4882,8 +4882,8 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <translation>Iconde delle Bandiere di Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2024 Team di sviluppo Jamulus</translation>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2025 Team di sviluppo Jamulus</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

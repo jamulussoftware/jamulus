@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 ##############################################################################
-# Copyright (c) 2022-2024
+# Copyright (c) 2022-2025
 #
 # Author(s):
 #  Christian Hoffmann

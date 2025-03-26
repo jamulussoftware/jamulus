@@ -162,13 +162,13 @@
         <translation>Version d&apos;étiquette de texte</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2024 L&apos;équipe de développement de Jamulus</translation>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2025 L&apos;équipe de développement de Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2024 The Jamulus Development Team</source>
-        <translation>Copyright © 2005-2024 L&apos;équipe de développement de Jamulus</translation>
+        <source>Copyright © 2005-2025 The Jamulus Development Team</source>
+        <translation>Copyright © 2005-2025 L&apos;équipe de développement de Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -4321,8 +4321,8 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <translation>Icônes de drapeaux par Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2024 L&apos;équipe de développement de Jamulus</translation>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2025 L&apos;équipe de développement de Jamulus</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

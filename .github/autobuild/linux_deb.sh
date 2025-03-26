@@ -51,6 +51,9 @@ esac
 setup() {
     export DEBIAN_FRONTEND="noninteractive"
 
+    APT_ARCH="$(dpkg --print-architecture)"
+    export APT_ARCH
+
     setup_cross_compilation_apt_sources
 
     echo "Installing dependencies..."
@@ -61,18 +64,22 @@ setup() {
 }
 
 setup_cross_compilation_apt_sources() {
-    if [[ "${TARGET_ARCH}" == amd64 ]]; then
+    if [[ "${TARGET_ARCH}" == "${APT_ARCH}" ]]; then
         return
     fi
+    echo "Building on ${APT_ARCH} for ${TARGET_ARCH}. Thus modifying apt..."
     sudo dpkg --add-architecture "${TARGET_ARCH}"
-    # Duplicate the original Ubuntu sources and modify them to refer to the TARGET_ARCH:
-    sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
-    # Now take the original Ubuntu sources and limit those to the build host (i.e. non-TARGET_ARCH) architectures:
-    sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
+
+    if [[ "${APT_ARCH}" == "amd64"  ]]; then
+        # Duplicate the original Ubuntu sources and modify them to refer to the TARGET_ARCH:
+        sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
+        # Now take the original Ubuntu sources and limit those to the build host (i.e. non-TARGET_ARCH) architectures:
+        sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
+    fi
 }
 
 setup_cross_compiler() {
-    if [[ "${TARGET_ARCH}" == amd64 ]]; then
+    if [[ "${TARGET_ARCH}" == "${APT_ARCH}" ]]; then
         return
     fi
     local GCC_VERSION=9  # 9 is the default on 20.04, there is no reason not to update once 20.04 is out of support

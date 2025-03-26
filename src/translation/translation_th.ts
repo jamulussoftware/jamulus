@@ -198,16 +198,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2024 Volker Fischer und andere</translation>
+        <source>Copyright (C) 2005-2025 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2025 Volker Fischer und andere</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2024 beim Jamulus Entwicklungs Team</translation>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2025 beim Jamulus Entwicklungs Team</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2024 The Jamulus Development Team</source>
+        <source>Copyright © 2005-2025 The Jamulus Development Team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4857,8 +4857,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2024 beim Jamulus Entwicklungs Team</translation>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2025 beim Jamulus Entwicklungs Team</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

@@ -210,17 +210,17 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2024 Volker Fischer y otros</translation>
+        <source>Copyright (C) 2005-2025 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2025 Volker Fischer y otros</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2024 El Equipo de Desarrollo de Jamulus</translation>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2025 El Equipo de Desarrollo de Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2024 The Jamulus Development Team</source>
-        <translation>Copyright © 2005-2024 El Equipo de Desarrollo de Jamulus</translation>
+        <source>Copyright © 2005-2025 The Jamulus Development Team</source>
+        <translation>Copyright © 2005-2025 El Equipo de Desarrollo de Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -4937,8 +4937,8 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation>Iconos de banderas de Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2024 The Jamulus Development Team</translation>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2025 The Jamulus Development Team</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

@@ -163,17 +163,17 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 Volker Fischer and others</source>
+        <source>Copyright (C) 2005-2025 Volker Fischer and others</source>
         <translation type="vanished">Upphovsrätt (C) 2005-2020 Volker Fischer och andra</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
         <translation type="vanished">Upphovsrätt (C) 2005-2021 The Jamulus Development Team</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2024 The Jamulus Development Team</source>
-        <translation>Copyright © 2005-2024 The Jamulus Development Team</translation>
+        <source>Copyright © 2005-2025 The Jamulus Development Team</source>
+        <translation>Copyright © 2005-2025 The Jamulus Development Team</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -4492,7 +4492,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Flaggsymboler gjorda av Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2024 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
         <translation type="obsolete">Upphovsrätt (C) 2005-2021 The Jamulus Development Team</translation>
     </message>
     <message>

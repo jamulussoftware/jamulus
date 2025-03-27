@@ -39,6 +39,8 @@ export GH_REPO=jamulussoftware/jamulus
 
 PR_LIST_LIMIT=300
 TRANSLATION_ENTRY_TEXT="GUI: Translations have been updated:"
+TRANSLATION_ENTRY_TEXT2="Translations updated from Hosted Weblate"
+BUNDLED_QT_UPDATE_TEXT="Build: Updated bundled Qt6"
 declare -A LANGS
 LANGS[de_DE]="German"
 LANGS[fr_FR]="French"
@@ -112,32 +114,38 @@ group_entries() {
     # Prepend a number to known categories in order to make their sorting position consistent:
     category_order=(
         "$TRANSLATION_ENTRY_TEXT"
-        "GUI"
-        "Accessibility"
-        "Client"
-        "Server"
-        "Recorder"
-        "Performance"
-        "CLI"
-        "Bug Fix"
-        "Windows"
-        "Installer"
-        "Linux"
-        "Mac"
-        "Android"
-        "iOS"
-        "Translation"
-        "Doc"
-        "Website"
-        "Github"
-        "Build"
-        "Autobuild"
-        "Code"
-        "Internal"
+        "$TRANSLATION_ENTRY_TEXT2"
+        "GUI:"
+        "Accessibility:"
+        "Client:"
+        "Client/Server:"
+        "Server:"
+        "Recorder:"
+        "Performance:"
+        "CLI:"
+        "Bug Fix:"
+        "Windows:"
+        "Installer:"
+        "Linux:"
+        "Mac:"
+        "Android:"
+        "iOS:"
+        "Dependencies:"
+        "Translation:"
+        "Doc:"
+        "Website:"
+        "Github:"
+        "$BUNDLED_QT_UPDATE_TEXT"
+        "Build:"
+        "Autobuild:"
+        "Code:"
+        "Internal:"
     )
     local index=0
     for category in "${category_order[@]}"; do
-        changelog=$(sed -re 's/^(- '"${category}"')/'"${index}"' \1/' <<< "${changelog}")
+        # use | as delimiter, as category may contain /
+        # also re-add stripped newline from last line, for correct sorting
+        changelog=$(sed -re 's|^(- '"${category}"')|'"${index}"' \1|' <<< "${changelog}")$'\n'
         index=$((index + 1))
     done
 

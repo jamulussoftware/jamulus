@@ -3,6 +3,7 @@ Jamulus
 Jamulus.ini
 Makefile
 Makefile.*
+!libs/opus/**/Makefile.*
 *.pro.user*
 **.cppe
 **.he

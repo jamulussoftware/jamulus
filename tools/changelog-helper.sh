@@ -41,6 +41,10 @@ PR_LIST_LIMIT=300
 TRANSLATION_ENTRY_TEXT="GUI: Translations have been updated:"
 TRANSLATION_ENTRY_TEXT2="Translations updated from Hosted Weblate"
 BUNDLED_QT_UPDATE_TEXT="Build: Updated bundled Qt6"
+# must escape ( and ) so that sed doesn't treat them as magic
+BUNDLED_JACK_UPDATE_TEXT="Build: Updated bundled JACK \\(Windows-only\\)"
+NSIS_UPDATE_TEXT="Build: Updated Windows Installer base \\(NSIS\\)"
+ASIO_UPDATE_TEXT="Build: Updated ASIO SDK \\(Windows-only\\)"
 declare -A LANGS
 LANGS[de_DE]="German"
 LANGS[fr_FR]="French"
@@ -136,6 +140,9 @@ group_entries() {
         "Website:"
         "Github:"
         "$BUNDLED_QT_UPDATE_TEXT"
+        "$BUNDLED_JACK_UPDATE_TEXT"
+        "$NSIS_UPDATE_TEXT"
+        "$ASIO_UPDATE_TEXT"
         "Build:"
         "Autobuild:"
         "Code:"

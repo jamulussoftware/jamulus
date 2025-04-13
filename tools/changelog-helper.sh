@@ -117,8 +117,9 @@ group_entries() {
 
     # Prepend a number to known categories in order to make their sorting position consistent:
     category_order=(
-        "$TRANSLATION_ENTRY_TEXT"
+        "Translation:"
         "$TRANSLATION_ENTRY_TEXT2"
+        "$TRANSLATION_ENTRY_TEXT"
         "GUI:"
         "Accessibility:"
         "Client:"
@@ -135,7 +136,6 @@ group_entries() {
         "Android:"
         "iOS:"
         "Dependencies:"
-        "Translation:"
         "Doc:"
         "Website:"
         "Github:"

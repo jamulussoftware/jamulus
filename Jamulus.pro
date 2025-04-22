@@ -50,6 +50,16 @@ contains(CONFIG, "headless") {
     QT += multimedia
 }
 
+# DRED is a superset of Deep PLC and requires it
+contains(CONFIG, "opus_dred") {
+    message("Building OPUS with Deep Redundancy.")
+    CONFIG += "opus_deep_plc"
+}
+
+contains(CONFIG, "opus_deep_plc") {
+    message("Building OPUS with Deep PLC.")
+}
+
 # Do not set LRELEASE_DIR explicitly when using embed_translations.
 # It doesn't work with multiple targets or architectures.
 TRANSLATIONS = src/translation/translation_de_DE.ts \
@@ -74,6 +84,10 @@ INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/silk/float \
     libs/opus/silk/fixed \
     libs/opus
+
+contains(CONFIG, "opus_deep_plc") {
+    INCLUDEPATH_OPUS += libs/opus/dnn
+}
 
 # As JACK is used in multiple OS, we declare it globally
 HEADERS_JACK = src/sound/jack/sound.h
@@ -490,7 +504,40 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/pitch_sse.h \
     libs/opus/celt/x86/vq_sse.h \
     libs/opus/celt/x86/x86cpu.h \
-    $$files(libs/opus/silk/x86/*.h)
+    libs/opus/silk/x86/SigProc_FIX_sse.h \
+    libs/opus/silk/x86/main_sse.h
+
+HEADERS_OPUS_DEEP_PLC = \
+    libs/opus/dnn/lpcnet.h \
+    libs/opus/dnn/burg.h \
+    libs/opus/dnn/common.h \
+    libs/opus/dnn/freq.h \
+    libs/opus/dnn/fargan.h \
+    libs/opus/dnn/fargan_data.h \
+    libs/opus/dnn/lpcnet_private.h \
+    libs/opus/dnn/nnet.h \
+    libs/opus/dnn/plc_data.h \
+    libs/opus/dnn/vec.h \
+    libs/opus/dnn/vec_avx.h \
+    libs/opus/dnn/vec_neon.h \
+    libs/opus/dnn/pitchdnn.h \
+    libs/opus/dnn/pitchdnn_data.h \
+    libs/opus/dnn/x86/dnn_x86.h \
+    libs/opus/dnn/nnet_arch.h \
+    libs/opus/dnn/arm/dnn_arm.h
+
+HEADERS_OPUS_DRED = \
+    libs/opus/dnn/dred_coding.h \
+    libs/opus/dnn/dred_config.h \
+    libs/opus/dnn/dred_decoder.h \
+    libs/opus/dnn/dred_encoder.h \
+    libs/opus/dnn/dred_rdovae.h \
+    libs/opus/dnn/dred_rdovae_constants.h \
+    libs/opus/dnn/dred_rdovae_enc.h \
+    libs/opus/dnn/dred_rdovae_enc_data.h \
+    libs/opus/dnn/dred_rdovae_dec.h \
+    libs/opus/dnn/dred_rdovae_dec_data.h \
+    libs/opus/dnn/dred_rdovae_stats_data.h
 
 SOURCES += src/plugins/audioreverb.cpp \
     src/buffer.cpp \
@@ -674,22 +721,79 @@ SOURCES_OPUS_X86_SSE = libs/opus/celt/x86/x86cpu.c \
     libs/opus/celt/x86/x86_celt_map.c \
     libs/opus/celt/x86/pitch_sse.c
 SOURCES_OPUS_X86_SSE2 = libs/opus/celt/x86/pitch_sse2.c \
-     libs/opus/celt/x86/vq_sse2.c
+    libs/opus/celt/x86/vq_sse2.c
 SOURCES_OPUS_X86_SSE4 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
-     libs/opus/celt/x86/pitch_sse4_1.c \
-     libs/opus/silk/x86/NSQ_sse4_1.c \
-     libs/opus/silk/x86/NSQ_del_dec_sse4_1.c \
-     libs/opus/silk/x86/x86_silk_map.c \
-     libs/opus/silk/x86/VAD_sse4_1.c \
-     libs/opus/silk/x86/VQ_WMat_EC_sse4_1.c
+    libs/opus/celt/x86/pitch_sse4_1.c \
+    libs/opus/silk/x86/NSQ_sse4_1.c \
+    libs/opus/silk/x86/NSQ_del_dec_sse4_1.c \
+    libs/opus/silk/x86/x86_silk_map.c \
+    libs/opus/silk/x86/VAD_sse4_1.c \
+    libs/opus/silk/x86/VQ_WMat_EC_sse4_1.c
+
+SOURCES_OPUS_DEEP_PLC = \
+    libs/opus/dnn/burg.c \
+    libs/opus/dnn/freq.c \
+    libs/opus/dnn/fargan.c \
+    libs/opus/dnn/fargan_data.c \
+    libs/opus/dnn/lpcnet_enc.c \
+    libs/opus/dnn/lpcnet_plc.c \
+    libs/opus/dnn/lpcnet_tables.c \
+    libs/opus/dnn/nnet.c \
+    libs/opus/dnn/nnet_default.c \
+    libs/opus/dnn/plc_data.c \
+    libs/opus/dnn/parse_lpcnet_weights.c \
+    libs/opus/dnn/pitchdnn.c \
+    libs/opus/dnn/pitchdnn_data.c
+
+SOURCES_OPUS_DRED = \
+    libs/opus/dnn/dred_rdovae_enc.c \
+    libs/opus/dnn/dred_rdovae_enc_data.c \
+    libs/opus/dnn/dred_rdovae_dec.c \
+    libs/opus/dnn/dred_rdovae_dec_data.c \
+    libs/opus/dnn/dred_rdovae_stats_data.c \
+    libs/opus/dnn/dred_encoder.c \
+    libs/opus/dnn/dred_coding.c \
+    libs/opus/dnn/dred_decoder.c
+
+SOURCES_OPUS_DNN_X86_RTCD = \
+    libs/opus/dnn/x86/x86_dnn_map.c
+SOURCES_OPUS_DNN_AVX2 = \
+    libs/opus/dnn/x86/nnet_avx2.c
+SOURCES_OPUS_DNN_SSE4_1 = \
+    libs/opus/dnn/x86/nnet_sse4_1.c
+SOURCES_OPUS_DNN_SSE2 = \
+    libs/opus/dnn/x86/nnet_sse2.c
+
+SOURCES_OPUS_DNN_ARM_RTCD = \
+    libs/opus/dnn/arm/arm_dnn_map.c
+SOURCES_OPUS_DNN_DOTPROD = \
+    libs/opus/dnn/arm/nnet_dotprod.c
+SOURCES_OPUS_DNN_NEON = \
+    libs/opus/dnn/arm/nnet_neon.c
+
+contains(CONFIG, "opus_deep_plc") {
+    HEADERS_OPUS += $$HEADERS_OPUS_DEEP_PLC
+    SOURCES_OPUS += $$SOURCES_OPUS_DEEP_PLC
+    SOURCES_OPUS_ARM += $$SOURCES_OPUS_DNN_ARM_RTCD $$SOURCES_OPUS_DNN_DOTPROD $$SOURCES_OPUS_DNN_NEON
+    SOURCES_OPUS_X86 += $$SOURCES_OPUS_DNN_X86_RTCD
+    SOURCES_OPUS_X86_SSE2 += $$SOURCES_OPUS_DNN_SSE2
+    SOURCES_OPUS_X86_SSE4 += $$SOURCES_OPUS_DNN_SSE4_1
+    #SOURCES_OPUS_X86_AVX2 += $$SOURCES_OPUS_DNN_AVX2
+}
+
+contains(CONFIG, "opus_dred") {
+    HEADERS_OPUS += $$HEADERS_OPUS_DRED
+    SOURCES_OPUS += $$SOURCES_OPUS_DRED
+}
 
 contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
     HEADERS_OPUS += $$HEADERS_OPUS_ARM
     SOURCES_OPUS_ARCH += $$SOURCES_OPUS_ARM
     DEFINES_OPUS += OPUS_ARM_PRESUME_NEON=1 OPUS_ARM_PRESUME_NEON_INTR=1
-    contains(QT_ARCH, arm64-v8a):DEFINES_OPUS += OPUS_ARM_PRESUME_AARCH64_NEON_INTR
+    contains(QT_ARCH, arm64-v8a):DEFINES_OPUS += OPUS_ARM_PRESUME_AARCH64_NEON_INTR=1
 } else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
     HEADERS_OPUS += $$HEADERS_OPUS_X86
+    SOURCES_OPUS += $$SOURCES_OPUS_X86
     SOURCES_OPUS_ARCH += $$SOURCES_OPUS_X86_SSE $$SOURCES_OPUS_X86_SSE2 $$SOURCES_OPUS_X86_SSE4
     DEFINES_OPUS += OPUS_X86_MAY_HAVE_SSE OPUS_X86_MAY_HAVE_SSE2 OPUS_X86_MAY_HAVE_SSE4_1
     # x86_64 implies SSE2
@@ -697,6 +801,13 @@ contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
     DEFINES_OPUS += CPU_INFO_BY_C
 }
 DEFINES_OPUS += OPUS_BUILD=1 USE_ALLOCA=1 OPUS_HAVE_RTCD=1 HAVE_LRINTF=1 HAVE_LRINT=1
+contains(CONFIG, "opus_deep_plc") {
+    DEFINES_OPUS += ENABLE_DEEP_PLC=1
+}
+
+contains(CONFIG, "opus_dred") {
+    DEFINES_OPUS += ENABLE_DRED=1
+}
 
 DISTFILES += ChangeLog \
     COMPILING.md \

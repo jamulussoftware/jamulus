@@ -62,7 +62,7 @@ jobs:
     # Check if we are doing a release or just a normal build.
     # This must be done before actually building the app to find out where to upload the binaries and if we need to create a Github release.
     name:                           Build vars & Github release (if required)
-    runs-on:                        ubuntu-20.04
+    runs-on:                        ubuntu-24.04-arm
     outputs:
       publish_to_release:           ${{ steps.get-build-vars.outputs.PUBLISH_TO_RELEASE }}
       tag_name:                     ${{ steps.get-build-vars.outputs.RELEASE_TAG }}

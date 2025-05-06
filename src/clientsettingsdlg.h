@@ -71,6 +71,8 @@ protected:
 
     virtual void showEvent ( QShowEvent* );
 
+    bool eventFilter ( QObject* obj, QEvent* event );
+
     CClient*         pClient;
     CClientSettings* pSettings;
     QTimer           TimerStatus;
@@ -97,6 +99,7 @@ public slots:
     void OnGUIDesignActivated ( int iDesignIdx );
     void OnMeterStyleActivated ( int iMeterStyleIdx );
     void OnAudioAlertsChanged ( int value );
+    void OnShowToolTipsChanged ( int value );
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnAliasTextChanged ( const QString& strNewName );
     void OnInstrumentActivated ( int iCntryListItem );
@@ -116,6 +119,7 @@ signals:
     void GUIDesignChanged();
     void MeterStyleChanged();
     void AudioAlertsChanged();
+    void ShowToolTipsChanged();
     void AudioChannelsChanged();
     void CustomDirectoriesChanged();
     void NumMixerPanelRowsChanged ( int value );

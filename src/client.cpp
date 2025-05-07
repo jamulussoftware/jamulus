@@ -979,6 +979,11 @@ void CClient::Start()
 
     // start audio interface
     Sound.Start();
+
+#if defined( Q_OS_WINDOWS )
+    // Disable hibernation or display dimming if the app is running on Windows
+    SetThreadExecutionState ( ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED );
+#endif
 }
 
 void CClient::Stop()
@@ -1013,6 +1018,11 @@ void CClient::Stop()
     // reset current signal level and LEDs
     bJitterBufferOK = true;
     SignalLevelMeter.Reset();
+
+#if defined( Q_OS_WINDOWS )
+    // Allow hibernation or display dimming if the app is running again (Windows)
+    SetThreadExecutionState ( ES_CONTINUOUS );
+#endif
 }
 
 void CClient::Init()

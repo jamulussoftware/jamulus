@@ -977,7 +977,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortuj użytkowników po kanale</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
@@ -1006,7 +1006,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientdlg.cpp" line="301"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation>Wy&amp;czyść wszystkie ustawienia solo/wycissz</translation>
+        <translation>Wyczyść wszystkie ustawienia solo/wycissz</translation>
     </message>
     <message>
         <source>Center</source>

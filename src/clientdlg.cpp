@@ -401,6 +401,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pSettingsMenu->addAction ( tr ( "A&dvanced Settings..." ), this, SLOT ( OnOpenAdvancedSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_D ) );
 
+    pSettingsMenu->addAction (
+        tr ( "&MIDI Control Settings..." ),
+        this,
+        [this] { ShowGeneralSettings ( SETTING_TAB_MIDI ); },
+        QKeySequence ( Qt::CTRL + Qt::Key_M ) );
+
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
 
@@ -535,6 +541,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::CustomDirectoriesChanged, &ConnectDlg, &CConnectDlg::OnCustomDirectoriesChanged );
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::NumMixerPanelRowsChanged, this, &CClientDlg::OnNumMixerPanelRowsChanged );
+
+    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::MIDIControllerUsageChanged, this, &CClientDlg::OnMIDIControllerUsageChanged );
 
     QObject::connect ( this, &CClientDlg::SendTabChange, &ClientSettingsDlg, &CClientSettingsDlg::OnMakeTabChange );
 
@@ -1525,4 +1533,14 @@ void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, c
 
     // set current LED status
     ledDelay->SetLight ( eOverallDelayLEDColor );
+}
+
+// OnOpenMidiSettings slot removed; lambda is used in menu action
+void CClientDlg::OnMIDIControllerUsageChanged ( bool bEnabled )
+{
+    // Update the mixer board's MIDI flag to trigger proper user numbering display
+    MainMixerBoard->SetMIDICtrlUsed ( bEnabled );
+
+    // Enable/disable runtime MIDI via the sound interface through the public CClient interface
+    pClient->EnableMIDI ( bEnabled );
 }

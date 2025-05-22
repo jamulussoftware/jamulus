@@ -920,25 +920,31 @@ int main ( int argc, char** argv )
 #ifndef SERVER_ONLY
         if ( bIsClient )
         {
-            // Client:
-            // actual client object
+            // Create client with empty MIDI string initially (safer initialization)
             CClient Client ( iPortNumber,
                              iQosNumber,
                              strConnOnStartupAddress,
-                             strMIDISetup,
+                             "", // Always start with empty MIDI
                              bNoAutoJackConnect,
                              strClientName,
                              bEnableIPv6,
                              bMuteMeInPersonalMix );
 
-            // load settings from init-file (command line options override)
+            // Create Settings with the client pointer
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
+
+            // Parse command line MIDI parameters if provided
+            CSoundBase::ParseMIDICommandLineParams ( strMIDISetup, Settings );
+            if ( Settings.bUseMIDIController )
+            {
+                Client.ApplyMIDIMapping ( Settings.GetMIDIMapString() );
+            }
 
 #    ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
-                new CClientRpc ( &Client, pRpcServer, pRpcServer );
+                new CClientRpc ( &Client, &Settings, pRpcServer, pRpcServer );
             }
 #    endif
 

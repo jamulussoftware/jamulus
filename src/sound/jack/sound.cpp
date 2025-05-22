@@ -85,21 +85,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     }
 
     // optional MIDI initialization
-    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
-    {
-        input_port_midi = jack_port_register ( pJackClient, "input midi", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
-
-        if ( input_port_midi == nullptr )
-        {
-            throw CGenErr ( QString ( tr ( "The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. "
-                                           "Afterwards, check if another MIDI program can connect to JACK." ) )
-                                .arg ( APP_NAME ) );
-        }
-    }
-    else
-    {
-        input_port_midi = nullptr;
-    }
+    input_port_midi = nullptr;
 
     // tell the JACK server that we are ready to roll
     if ( jack_activate ( pJackClient ) )
@@ -190,6 +176,56 @@ void CSound::Stop()
 {
     // call base class
     CSoundBase::Stop();
+}
+
+void CSound::EnableMIDI ( bool bEnable )
+{
+    if ( bEnable && ( iCtrlMIDIChannel != INVALID_MIDI_CH ) )
+    {
+        // Create MIDI port if we have valid MIDI channel and no port exists
+        if ( input_port_midi == nullptr )
+        {
+            CreateMIDIPort();
+        }
+    }
+    else
+    {
+        // Destroy MIDI port if it exists
+        if ( input_port_midi != nullptr )
+        {
+            DestroyMIDIPort();
+        }
+    }
+}
+
+bool CSound::IsMIDIEnabled() const { return ( input_port_midi != nullptr ); }
+
+void CSound::CreateMIDIPort()
+{
+    if ( pJackClient != nullptr && input_port_midi == nullptr )
+    {
+        input_port_midi = jack_port_register ( pJackClient, "input midi", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
+
+        if ( input_port_midi == nullptr )
+        {
+            qWarning() << "Failed to create JACK MIDI port at runtime";
+        }
+    }
+}
+
+void CSound::DestroyMIDIPort()
+{
+    if ( pJackClient != nullptr && input_port_midi != nullptr )
+    {
+        if ( jack_port_unregister ( pJackClient, input_port_midi ) == 0 )
+        {
+            input_port_midi = nullptr;
+        }
+        else
+        {
+            qWarning() << "Failed to destroy JACK MIDI port";
+        }
+    }
 }
 
 int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )

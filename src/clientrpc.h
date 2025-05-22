@@ -28,6 +28,7 @@
 #include "client.h"
 #include "util.h"
 #include "rpcserver.h"
+#include "settings.h"
 
 /* Classes ********************************************************************/
 class CClientRpc : public QObject
@@ -35,9 +36,10 @@ class CClientRpc : public QObject
     Q_OBJECT
 
 public:
-    CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* parent = nullptr );
+    CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServer* pRpcServer, QObject* parent = nullptr );
 
 private:
+    CClientSettings*  m_pSettings;
     QJsonArray        arrStoredChanInfo;
     static QJsonValue SerializeSkillLevel ( ESkillLevel skillLevel );
 };

@@ -629,6 +629,30 @@ bool CSound::CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType 
     return ( ( SamType == ASIOSTInt16LSB ) || ( SamType == ASIOSTInt24LSB ) || ( SamType == ASIOSTInt32LSB ) );
 }
 
+void CSound::EnableMIDI ( bool bEnable )
+{
+    if ( bEnable )
+    {
+        // Enable MIDI only if it's not already enabled
+        if ( !bMidiEnabled && iCtrlMIDIChannel != INVALID_MIDI_CH )
+        {
+            Midi.MidiStart();
+            bMidiEnabled = true;
+        }
+    }
+    else
+    {
+        // Disable MIDI only if it's currently enabled
+        if ( bMidiEnabled )
+        {
+            Midi.MidiStop();
+            bMidiEnabled = false;
+        }
+    }
+}
+
+bool CSound::IsMIDIEnabled() const { return bMidiEnabled; }
+
 void CSound::bufferSwitch ( long index, ASIOBool )
 {
     int iCurSample;

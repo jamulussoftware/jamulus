@@ -461,6 +461,62 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }
 
+    // MIDI settings
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midichannel", 0, 16, iValue ) )
+    {
+        midiChannel = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midifaderoffset", 0, 127, iValue ) )
+    {
+        midiFaderOffset = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midifadercount", 0, 127, iValue ) )
+    {
+        midiFaderCount = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midipanoffset", 0, 127, iValue ) )
+    {
+        midiPanOffset = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midipancount", 0, 127, iValue ) )
+    {
+        midiPanCount = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midisolooffset", 0, 127, iValue ) )
+    {
+        midiSoloOffset = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midisolocount", 0, 127, iValue ) )
+    {
+        midiSoloCount = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midimuteoffset", 0, 127, iValue ) )
+    {
+        midiMuteOffset = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midimutecount", 0, 127, iValue ) )
+    {
+        midiMuteCount = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midimutemyself", 0, 127, iValue ) )
+    {
+        midiMuteMyself = iValue;
+    }
+
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "usemidicontroller", bValue ) )
+    {
+        bUseMIDIController = bValue;
+    }
+
     // custom directories
 
     //### TODO: BEGIN ###//
@@ -548,7 +604,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // selected Settings Tab
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, 2, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, 3, iValue ) )
     {
         iSettingsTab = iValue;
     }
@@ -556,7 +612,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     // fader settings
     ReadFaderSettingsFromXML ( IniXMLDocument );
 }
-
 void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument )
 {
     int  iIdx;
@@ -754,8 +809,36 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // Settings Tab
     SetNumericIniSet ( IniXMLDocument, "client", "settingstab", iSettingsTab );
 
+    // MIDI settings
+    SetNumericIniSet ( IniXMLDocument, "client", "midichannel", midiChannel );
+    SetNumericIniSet ( IniXMLDocument, "client", "midifaderoffset", midiFaderOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midifadercount", midiFaderCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midipanoffset", midiPanOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midipancount", midiPanCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midisolooffset", midiSoloOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midisolocount", midiSoloCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midimuteoffset", midiMuteOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midimutecount", midiMuteCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midimutemyself", midiMuteMyself );
+    SetFlagIniSet ( IniXMLDocument, "client", "usemidicontroller", bUseMIDIController );
+
     // fader settings
     WriteFaderSettingsToXML ( IniXMLDocument );
+}
+
+QString CClientSettings::GetMIDIMapString() const
+{
+    return QString ( "%1;f%2*%3;p%4*%5;s%6*%7;m%8*%9;o%10" )
+        .arg ( midiChannel )
+        .arg ( midiFaderOffset )
+        .arg ( midiFaderCount )
+        .arg ( midiPanOffset )
+        .arg ( midiPanCount )
+        .arg ( midiSoloOffset )
+        .arg ( midiSoloCount )
+        .arg ( midiMuteOffset )
+        .arg ( midiMuteCount )
+        .arg ( midiMuteMyself );
 }
 
 void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )

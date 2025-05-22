@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "soundbase.h"
+#include "../settings.h"
 
 // This is used as a lookup table for parsing option letters, mapping
 // a single character to an EMidiCtlType
@@ -235,8 +236,72 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 /******************************************************************************\
 * MIDI handling                                                                *
 \******************************************************************************/
+
+void CSoundBase::ParseMIDICommandLineParams ( const QString& strMIDISetup, CClientSettings& Settings )
+{
+    if ( !strMIDISetup.isEmpty() )
+    {
+        QStringList slMIDIParams = strMIDISetup.split ( ";" );
+        if ( slMIDIParams.count() >= 1 )
+        {
+            Settings.midiChannel = slMIDIParams[0].toInt();
+            for ( int i = 1; i < slMIDIParams.count(); ++i )
+            {
+                QString sParm = slMIDIParams[i].trimmed();
+                if ( sParm.startsWith ( "f" ) )
+                {
+                    QStringList slP          = sParm.mid ( 1 ).split ( "*" );
+                    Settings.midiFaderOffset = slP[0].toInt();
+                    if ( slP.size() > 1 )
+                    {
+                        Settings.midiFaderCount = slP[1].toInt();
+                    }
+                }
+                else if ( sParm.startsWith ( "p" ) )
+                {
+                    QStringList slP        = sParm.mid ( 1 ).split ( "*" );
+                    Settings.midiPanOffset = slP[0].toInt();
+                    if ( slP.size() > 1 )
+                    {
+                        Settings.midiPanCount = slP[1].toInt();
+                    }
+                }
+                else if ( sParm.startsWith ( "s" ) )
+                {
+                    QStringList slP         = sParm.mid ( 1 ).split ( "*" );
+                    Settings.midiSoloOffset = slP[0].toInt();
+                    if ( slP.size() > 1 )
+                    {
+                        Settings.midiSoloCount = slP[1].toInt();
+                    }
+                }
+                else if ( sParm.startsWith ( "m" ) )
+                {
+                    QStringList slP         = sParm.mid ( 1 ).split ( "*" );
+                    Settings.midiMuteOffset = slP[0].toInt();
+                    if ( slP.size() > 1 )
+                    {
+                        Settings.midiMuteCount = slP[1].toInt();
+                    }
+                }
+                else if ( sParm.startsWith ( "o" ) )
+                {
+                    QStringList slP         = sParm.mid ( 1 ).split ( "*" );
+                    Settings.midiMuteMyself = slP[0].toInt();
+                }
+            }
+        }
+        Settings.bUseMIDIController = true;
+    }
+}
 void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
 {
+    // Clear all previous MIDI mappings
+    for ( int i = 0; i < aMidiCtls.size(); ++i )
+    {
+        aMidiCtls[i] = { None, 0 };
+    }
+
     int iMIDIOffsetFader = 70; // Behringer X-TOUCH: offset of 0x46
 
     // parse the server info string according to definition: there is
@@ -367,7 +432,9 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
                     {
                         const CMidiCtlEntry& cCtrl  = aMidiCtls[vMIDIPaketBytes[1]];
                         const int            iValue = vMIDIPaketBytes[2];
-                        ;
+
+                        emit MidiCCReceived ( vMIDIPaketBytes[1] );
+
                         switch ( cCtrl.eType )
                         {
                         case Fader:
@@ -415,4 +482,14 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
             }
         }
     }
+}
+
+void CSoundBase::SetMIDIMapping ( const QString& strMIDISetup )
+{
+    // Parse the MIDI mapping
+    ParseCommandLineArgument ( strMIDISetup );
+
+    // Enable/disable MIDI port based on whether mapping is empty
+    bool bShouldEnable = !strMIDISetup.isEmpty();
+    EnableMIDI ( bShouldEnable );
 }

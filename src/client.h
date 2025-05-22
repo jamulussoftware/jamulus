@@ -293,9 +293,15 @@ public:
     CProtocol* getConnLessProtocol() { return &ConnLessProtocol; }
     //### TODO: END ###//
 
+    // MIDI control
+    void EnableMIDI ( bool bEnable ) { Sound.EnableMIDI ( bEnable ); }
+    bool IsMIDIEnabled() const { return Sound.IsMIDIEnabled(); }
+
     // settings
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;
+
+    void ApplyMIDIMapping ( const QString& midiMap );
 
 protected:
     // callback function must be static, otherwise it does not work
@@ -473,4 +479,8 @@ signals:
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void ControllerInMuteMyself ( bool bMute );
+    void MidiCCReceived ( int ccNumber );
+
+private slots:
+    void OnMidiCCReceived ( int ccNumber );
 };

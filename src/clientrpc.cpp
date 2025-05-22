@@ -25,7 +25,9 @@
 
 #include "clientrpc.h"
 
-CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* parent ) : QObject ( parent )
+CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServer* pRpcServer, QObject* parent ) :
+    QObject ( parent ),
+    m_pSettings ( pSettings )
 {
     /// @rpc_notification jamulusclient/chatTextReceived
     /// @brief Emitted when a chat text is received.
@@ -353,6 +355,78 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
         }
 
         pClient->SetControllerInFaderLevel ( jsonChannelIndex.toInt(), jsonLevel.toInt() );
+        response["result"] = "ok";
+    } );
+
+    /// @rpc_method jamulusclient/getMidiSettings
+    /// @brief Returns all MIDI controller settings.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {object} result - MIDI settings object.
+    pRpcServer->HandleMethod ( "jamulusclient/getMidiSettings", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        QJsonObject jsonMidiParams{ { "bUseMIDIController", m_pSettings->bUseMIDIController },
+                                    { "midiChannel", m_pSettings->midiChannel },
+                                    { "midiMuteMyself", m_pSettings->midiMuteMyself },
+                                    { "midiFaderOffset", m_pSettings->midiFaderOffset },
+                                    { "midiFaderCount", m_pSettings->midiFaderCount },
+                                    { "midiPanOffset", m_pSettings->midiPanOffset },
+                                    { "midiPanCount", m_pSettings->midiPanCount },
+                                    { "midiSoloOffset", m_pSettings->midiSoloOffset },
+                                    { "midiSoloCount", m_pSettings->midiSoloCount },
+                                    { "midiMuteOffset", m_pSettings->midiMuteOffset },
+                                    { "midiMuteCount", m_pSettings->midiMuteCount } };
+        response["result"] = jsonMidiParams;
+        Q_UNUSED ( params );
+    } );
+
+    /// @rpc_method jamulusclient/setMidiSettings
+    /// @brief Sets one or more MIDI controller settings.
+    /// @param {object} params - Any subset of MIDI settings fields to set.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusclient/setMidiSettings", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        if ( params.contains ( "bUseMIDIController" ) )
+        {
+            m_pSettings->bUseMIDIController = params["bUseMIDIController"].toBool();
+        }
+        if ( params.contains ( "midiChannel" ) )
+        {
+            m_pSettings->midiChannel = params["midiChannel"].toInt();
+        }
+        if ( params.contains ( "midiMuteMyself" ) )
+        {
+            m_pSettings->midiMuteMyself = params["midiMuteMyself"].toInt();
+        }
+        if ( params.contains ( "midiFaderOffset" ) )
+        {
+            m_pSettings->midiFaderOffset = params["midiFaderOffset"].toInt();
+        }
+        if ( params.contains ( "midiFaderCount" ) )
+        {
+            m_pSettings->midiFaderCount = params["midiFaderCount"].toInt();
+        }
+        if ( params.contains ( "midiPanOffset" ) )
+        {
+            m_pSettings->midiPanOffset = params["midiPanOffset"].toInt();
+        }
+        if ( params.contains ( "midiPanCount" ) )
+        {
+            m_pSettings->midiPanCount = params["midiPanCount"].toInt();
+        }
+        if ( params.contains ( "midiSoloOffset" ) )
+        {
+            m_pSettings->midiSoloOffset = params["midiSoloOffset"].toInt();
+        }
+        if ( params.contains ( "midiSoloCount" ) )
+        {
+            m_pSettings->midiSoloCount = params["midiSoloCount"].toInt();
+        }
+        if ( params.contains ( "midiMuteOffset" ) )
+        {
+            m_pSettings->midiMuteOffset = params["midiMuteOffset"].toInt();
+        }
+        if ( params.contains ( "midiMuteCount" ) )
+        {
+            m_pSettings->midiMuteCount = params["midiMuteCount"].toInt();
+        }
         response["result"] = "ok";
     } );
 }

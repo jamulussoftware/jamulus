@@ -28,12 +28,8 @@
 #define kInputBus  1
 
 /* Implementation *************************************************************/
-CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
-                 void*          arg,
-                 const QString& strMIDISetup,
-                 const bool,
-                 const QString& ) :
-    CSoundBase ( "CoreAudio iOS", fpNewProcessCallback, arg, strMIDISetup ),
+CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ), void* arg, const bool, const QString& ) :
+    CSoundBase ( "CoreAudio iOS", fpNewProcessCallback, arg ),
     isInitialized ( false )
 {
     try

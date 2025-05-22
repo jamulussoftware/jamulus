@@ -38,11 +38,9 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
-             void*          arg,
-             const QString& strMIDISetup,
-             const bool,
-             const QString& );
+    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ), void* arg, const bool, const QString& );
+
+    virtual ~CSound();
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
@@ -62,6 +60,11 @@ public:
     virtual void    SetRightOutputChannel ( const int iNewChan );
     virtual int     GetLeftOutputChannel() { return iSelOutputLeftChannel; }
     virtual int     GetRightOutputChannel() { return iSelOutputRightChannel; }
+
+    // MIDI functions
+    virtual void        EnableMIDI ( const bool bEnable );
+    virtual bool        IsMIDIEnabled() const;
+    virtual QStringList GetMIDIDevNames() override;
 
     // these variables/functions should be protected but cannot since we want
     // to access them from the callback function
@@ -108,6 +111,9 @@ protected:
 
     bool ConvertCFStringToQString ( const CFStringRef stringRef, QString& sOut );
 
+    void CreateMIDIPort();
+    void DestroyMIDIPort();
+
     // callbacks
     static OSStatus deviceNotification ( AudioDeviceID, UInt32, const AudioObjectPropertyAddress* inAddresses, void* inRefCon );
 
@@ -126,7 +132,8 @@ protected:
     AudioDeviceIOProcID audioInputProcID;
     AudioDeviceIOProcID audioOutputProcID;
 
-    MIDIPortRef midiInPortRef;
+    MIDIClientRef midiClient;
+    MIDIPortRef   midiInPortRef;
 
     QString sChannelNamesInput[MAX_NUM_IN_OUT_CHANNELS];
     QString sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];

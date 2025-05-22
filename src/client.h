@@ -119,6 +119,8 @@ public:
     // can store here other information about an active channel
 };
 
+class CClientSettings;
+
 class CClient : public QObject
 {
     Q_OBJECT
@@ -127,7 +129,6 @@ public:
     CClient ( const quint16  iPortNumber,
               const quint16  iQosNumber,
               const QString& strConnOnStartupAddress,
-              const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
               const bool     bNEnableIPv6,
@@ -293,11 +294,25 @@ public:
     CProtocol* getConnLessProtocol() { return &ConnLessProtocol; }
     //### TODO: END ###//
 
+    // MIDI control
+    void        EnableMIDI ( bool bEnable ) { Sound.EnableMIDI ( bEnable ); }
+    bool        IsMIDIEnabled() const { return Sound.IsMIDIEnabled(); }
+    QStringList GetMIDIDevNames() { return Sound.GetMIDIDevNames(); }
+    QString     GetMIDIDevice() { return Sound.GetMIDIDevice(); }
+    void        SetMIDIDevice ( const QString& strDevice ) { Sound.SetMIDIDevice ( strDevice ); }
+
     // settings
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;
 
+public:
+    void SetSettings ( CClientSettings* settings );
+
 protected:
+    // Signal handler must be declared before pSettings for correct init order
+    CSignalHandler* pSignalHandler;
+    // Pointer to settings for MIDI and other config
+    CClientSettings* pSettings;
     // callback function must be static, otherwise it does not work
     static void AudioCallback ( CVector<short>& psData, void* arg );
 
@@ -407,8 +422,6 @@ protected:
     int    maxGainOrPanId;
     int    iCurPingTime;
 
-    CSignalHandler* pSignalHandler;
-
 protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
@@ -473,4 +486,8 @@ signals:
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void ControllerInMuteMyself ( bool bMute );
+    void MidiCCReceived ( int ccNumber );
+
+private slots:
+    void OnMidiCCReceived ( int ccNumber );
 };

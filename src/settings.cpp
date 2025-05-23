@@ -289,176 +289,230 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         bEnableAudioAlerts = bValue;
     }
 
-    // name
-    pClient->ChannelInfo.strName = FromBase64ToString (
-        GetIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( QCoreApplication::translate ( "CMusProfDlg", "No Name" ) ) ) );
-
-    // instrument
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument", 0, CInstPictures::GetNumAvailableInst() - 1, iValue ) )
+    // --- MIDI settings (do NOT require pClient) ---
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midichannel", 0, 16, iValue ) )
     {
-        pClient->ChannelInfo.iInstrument = iValue;
+        midiChannel = iValue;
     }
 
-    // country
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midifaderoffset", 0, 127, iValue ) )
     {
-        pClient->ChannelInfo.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iValue );
-    }
-    else
-    {
-        // if no country is given, use the one from the operating system
-        pClient->ChannelInfo.eCountry = QLocale::system().country();
+        midiFaderOffset = iValue;
     }
 
-    // city
-    pClient->ChannelInfo.strCity = FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "city_base64" ) );
-
-    // skill level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "skill", 0, 3 /* SL_PROFESSIONAL */, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midifadercount", 0, 127, iValue ) )
     {
-        pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> ( iValue );
+        midiFaderCount = iValue;
     }
 
-    // audio fader
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midipanoffset", 0, 127, iValue ) )
     {
-        pClient->SetAudioInFader ( iValue );
+        midiPanOffset = iValue;
     }
 
-    // reverberation level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midipancount", 0, 127, iValue ) )
     {
-        pClient->SetReverbLevel ( iValue );
+        midiPanCount = iValue;
+    }
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midisolooffset", 0, 127, iValue ) )
+    {
+        midiSoloOffset = iValue;
     }
 
-    // reverberation channel assignment
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midisolocount", 0, 127, iValue ) )
     {
-        pClient->SetReverbOnLeftChan ( bValue );
+        midiSoloCount = iValue;
     }
 
-    // sound card selection
-    const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
-
-    if ( !strError.isEmpty() )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midimuteoffset", 0, 127, iValue ) )
     {
-#    ifndef HEADLESS
-        // special case: when settings are loaded no GUI is yet created, therefore
-        // we have to create a warning message box here directly
-        QMessageBox::warning ( nullptr, APP_NAME, strError );
-#    endif
+        midiMuteOffset = iValue;
     }
 
-    // sound card channel mapping settings: make sure these settings are
-    // set AFTER the sound card device is set, otherwise the settings are
-    // overwritten by the defaults
-    //
-    // sound card left input channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midimutecount", 0, 127, iValue ) )
     {
-        pClient->SetSndCrdLeftInputChannel ( iValue );
+        midiMuteCount = iValue;
     }
 
-    // sound card right input channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midimutemyself", 0, 127, iValue ) )
     {
-        pClient->SetSndCrdRightInputChannel ( iValue );
+        midiMuteMyself = iValue;
     }
 
-    // sound card left output channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    // All code that uses pClient must be guarded
+    if ( pClient )
     {
-        pClient->SetSndCrdLeftOutputChannel ( iValue );
-    }
+        // name
+        pClient->ChannelInfo.strName = FromBase64ToString (
+            GetIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( QCoreApplication::translate ( "CMusProfDlg", "No Name" ) ) ) );
 
-    // sound card right output channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
-    {
-        pClient->SetSndCrdRightOutputChannel ( iValue );
-    }
-
-    // sound card preferred buffer size index
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx", FRAME_SIZE_FACTOR_PREFERRED, FRAME_SIZE_FACTOR_SAFE, iValue ) )
-    {
-        // additional check required since only a subset of factors are
-        // defined
-        if ( ( iValue == FRAME_SIZE_FACTOR_PREFERRED ) || ( iValue == FRAME_SIZE_FACTOR_DEFAULT ) || ( iValue == FRAME_SIZE_FACTOR_SAFE ) )
+        // instrument
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument", 0, CInstPictures::GetNumAvailableInst() - 1, iValue ) )
         {
-            pClient->SetSndCrdPrefFrameSizeFactor ( iValue );
+            pClient->ChannelInfo.iInstrument = iValue;
         }
-    }
 
-    // automatic network jitter buffer size setting
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", bValue ) )
-    {
-        pClient->SetDoAutoSockBufSize ( bValue );
-    }
-
-    // network jitter buffer size
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf", MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
-    {
-        pClient->SetSockBufNumFrames ( iValue );
-    }
-
-    // network jitter buffer size for server
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbufserver", MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
-    {
-        pClient->SetServerSockBufNumFrames ( iValue );
-    }
-
-    // enable OPUS64 setting
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "enableopussmall", bValue ) )
-    {
-        pClient->SetEnableOPUS64 ( bValue );
-    }
-
-    // GUI design
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
-    {
-        pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
-    }
-
-    // MeterStyle
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle", 0, 4 /* MT_LED_ROUND_BIG */, iValue ) )
-    {
-        pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iValue ) );
-    }
-    else
-    {
-        // if MeterStyle is not found in the ini, set it based on the GUI design
-        if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
+        // country
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
         {
-            switch ( iValue )
+            pClient->ChannelInfo.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iValue );
+        }
+        else
+        {
+            // if no country is given, use the one from the operating system
+            pClient->ChannelInfo.eCountry = QLocale::system().country();
+        }
+
+        // city
+        pClient->ChannelInfo.strCity = FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "city_base64" ) );
+
+        // skill level
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "skill", 0, 3 /* SL_PROFESSIONAL */, iValue ) )
+        {
+            pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> ( iValue );
+        }
+
+        // audio fader
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
+        {
+            pClient->SetAudioInFader ( iValue );
+        }
+
+        // reverberation level
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
+        {
+            pClient->SetReverbLevel ( iValue );
+        }
+
+        // reverberation channel assignment
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
+        {
+            pClient->SetReverbOnLeftChan ( bValue );
+        }
+
+        // sound card selection
+        const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
+
+        if ( !strError.isEmpty() )
+        {
+#    ifndef HEADLESS
+            // special case: when settings are loaded no GUI is yet created, therefore
+            // we have to create a warning message box here directly
+            QMessageBox::warning ( nullptr, APP_NAME, strError );
+#    endif
+        }
+
+        // sound card channel mapping settings: make sure these settings are
+        // set AFTER the sound card device is set, otherwise the settings are
+        // overwritten by the defaults
+        //
+        // sound card left input channel mapping
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+        {
+            pClient->SetSndCrdLeftInputChannel ( iValue );
+        }
+
+        // sound card right input channel mapping
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+        {
+            pClient->SetSndCrdRightInputChannel ( iValue );
+        }
+
+        // sound card left output channel mapping
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+        {
+            pClient->SetSndCrdLeftOutputChannel ( iValue );
+        }
+
+        // sound card right output channel mapping
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+        {
+            pClient->SetSndCrdRightOutputChannel ( iValue );
+        }
+
+        // sound card preferred buffer size index
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx", FRAME_SIZE_FACTOR_PREFERRED, FRAME_SIZE_FACTOR_SAFE, iValue ) )
+        {
+            // additional check required since only a subset of factors are
+            // defined
+            if ( ( iValue == FRAME_SIZE_FACTOR_PREFERRED ) || ( iValue == FRAME_SIZE_FACTOR_DEFAULT ) || ( iValue == FRAME_SIZE_FACTOR_SAFE ) )
             {
-            case GD_STANDARD:
-                pClient->SetMeterStyle ( MT_BAR_WIDE );
-                break;
-
-            case GD_ORIGINAL:
-                pClient->SetMeterStyle ( MT_LED_STRIPE );
-                break;
-
-            case GD_SLIMFADER:
-                pClient->SetMeterStyle ( MT_BAR_NARROW );
-                break;
-
-            default:
-                pClient->SetMeterStyle ( MT_LED_STRIPE );
-                break;
+                pClient->SetSndCrdPrefFrameSizeFactor ( iValue );
             }
         }
-    }
 
-    // audio channels
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 2 /* CC_STEREO */, iValue ) )
-    {
-        pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iValue ) );
-    }
+        // automatic network jitter buffer size setting
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", bValue ) )
+        {
+            pClient->SetDoAutoSockBufSize ( bValue );
+        }
 
-    // audio quality
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audioquality", 0, 2 /* AQ_HIGH */, iValue ) )
-    {
-        pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
+        // network jitter buffer size
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf", MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
+        {
+            pClient->SetSockBufNumFrames ( iValue );
+        }
+
+        // network jitter buffer size for server
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbufserver", MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
+        {
+            pClient->SetServerSockBufNumFrames ( iValue );
+        }
+
+        // enable OPUS64 setting
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "enableopussmall", bValue ) )
+        {
+            pClient->SetEnableOPUS64 ( bValue );
+        }
+
+        // GUI design
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
+        {
+            pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
+        }
+
+        // MeterStyle
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle", 0, 4 /* MT_LED_ROUND_BIG */, iValue ) )
+        {
+            pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iValue ) );
+        }
+        else
+        {
+            // if MeterStyle is not found in the ini, set it based on the GUI design
+            if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
+            {
+                switch ( iValue )
+                {
+                case GD_STANDARD:
+                    pClient->SetMeterStyle ( MT_BAR_WIDE );
+                    break;
+
+                case GD_ORIGINAL:
+                    pClient->SetMeterStyle ( MT_LED_STRIPE );
+                    break;
+
+                case GD_SLIMFADER:
+                    pClient->SetMeterStyle ( MT_BAR_NARROW );
+                    break;
+
+                default:
+                    pClient->SetMeterStyle ( MT_LED_STRIPE );
+                    break;
+                }
+            }
+        }
+
+        // audio channels
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 2 /* CC_STEREO */, iValue ) )
+        {
+            pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iValue ) );
+        }
+
+        // audio quality
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "audioquality", 0, 2 /* AQ_HIGH */, iValue ) )
+        {
+            pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
+        }
     }
 
     // custom directories
@@ -548,7 +602,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // selected Settings Tab
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, 2, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, 3, iValue ) )
     {
         iSettingsTab = iValue;
     }
@@ -753,6 +807,18 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
 
     // Settings Tab
     SetNumericIniSet ( IniXMLDocument, "client", "settingstab", iSettingsTab );
+
+    // MIDI settings
+    SetNumericIniSet ( IniXMLDocument, "client", "midichannel", midiChannel );
+    SetNumericIniSet ( IniXMLDocument, "client", "midifaderoffset", midiFaderOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midifadercount", midiFaderCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midipanoffset", midiPanOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midipancount", midiPanCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midisolooffset", midiSoloOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midisolocount", midiSoloCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midimuteoffset", midiMuteOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midimutecount", midiMuteCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midimutemyself", midiMuteMyself );
 
     // fader settings
     WriteFaderSettingsToXML ( IniXMLDocument );

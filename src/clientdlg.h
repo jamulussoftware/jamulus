@@ -243,6 +243,8 @@ public slots:
 
     void accept() { close(); } // introduced by pljones
 
+    void OnOpenMidiSettings();
+
 signals:
     void SendTabChange ( int iTabIdx );
 };

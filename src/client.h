@@ -295,6 +295,8 @@ public:
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;
 
+    void ApplyMIDIMapping ( const QString& midiMap );
+
 protected:
     // callback function must be static, otherwise it does not work
     static void AudioCallback ( CVector<short>& psData, void* arg );
@@ -471,4 +473,8 @@ signals:
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void ControllerInMuteMyself ( bool bMute );
+    void MidiCCReceived ( int ccNumber );
+
+private slots:
+    void OnMidiCCReceived ( int ccNumber );
 };

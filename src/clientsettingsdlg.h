@@ -67,6 +67,7 @@ protected:
     void    UpdateSoundCardFrame();
     void    UpdateDirectoryComboBox();
     void    UpdateAudioFaderSlider();
+    void    ApplyMIDIMappingFromSettings();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
     virtual void showEvent ( QShowEvent* );
@@ -119,4 +120,25 @@ signals:
     void AudioChannelsChanged();
     void CustomDirectoriesChanged();
     void NumMixerPanelRowsChanged ( int value );
+
+private:
+    enum MidiLearnTarget
+    {
+        None,
+        MuteMyself,
+        Fader,
+        Pan,
+        Solo,
+        Mute
+    };
+    MidiLearnTarget midiLearnTarget = None;
+    void            ResetMidiLearn();
+
+private slots:
+    void OnLearnMuteMyself();
+    void OnLearnFaderOffset();
+    void OnLearnPanOffset();
+    void OnLearnSoloOffset();
+    void OnLearnMuteOffset();
+    void OnMidiCCReceived ( int ccNumber );
 };

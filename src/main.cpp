@@ -920,8 +920,24 @@ int main ( int argc, char** argv )
 #ifndef SERVER_ONLY
         if ( bIsClient )
         {
-            // Client:
-            // actual client object
+            if ( strMIDISetup.isEmpty() )
+            {
+                CClientSettings tmpSettings ( nullptr, strIniFileName );
+                tmpSettings.Load ( CommandLineOptions );
+
+                strMIDISetup = QString ( "%1;f%2*%3;p%4*%5;s%6*%7;m%8*%9;o%10" )
+                                   .arg ( tmpSettings.midiChannel )
+                                   .arg ( tmpSettings.midiFaderOffset )
+                                   .arg ( tmpSettings.midiFaderCount )
+                                   .arg ( tmpSettings.midiPanOffset )
+                                   .arg ( tmpSettings.midiPanCount )
+                                   .arg ( tmpSettings.midiSoloOffset )
+                                   .arg ( tmpSettings.midiSoloCount )
+                                   .arg ( tmpSettings.midiMuteOffset )
+                                   .arg ( tmpSettings.midiMuteCount )
+                                   .arg ( tmpSettings.midiMuteMyself );
+            }
+
             CClient Client ( iPortNumber,
                              iQosNumber,
                              strConnOnStartupAddress,
@@ -931,9 +947,63 @@ int main ( int argc, char** argv )
                              bEnableIPv6,
                              bMuteMeInPersonalMix );
 
-            // load settings from init-file (command line options override)
+            // Create Settings with the client pointer
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
+
+            if ( !strMIDISetup.isEmpty() )
+            {
+                QStringList slMIDIParams = strMIDISetup.split ( ";" );
+                if ( slMIDIParams.count() >= 1 )
+                {
+                    Settings.midiChannel = slMIDIParams[0].toInt();
+                    for ( int i = 1; i < slMIDIParams.count(); ++i )
+                    {
+                        QString sParm = slMIDIParams[i].trimmed();
+                        if ( sParm.startsWith ( "f" ) )
+                        {
+                            QStringList slP          = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiFaderOffset = slP[0].toInt();
+                            if ( slP.size() > 1 )
+                            {
+                                Settings.midiFaderCount = slP[1].toInt();
+                            }
+                        }
+                        else if ( sParm.startsWith ( "p" ) )
+                        {
+                            QStringList slP        = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiPanOffset = slP[0].toInt();
+                            if ( slP.size() > 1 )
+                            {
+                                Settings.midiPanCount = slP[1].toInt();
+                            }
+                        }
+                        else if ( sParm.startsWith ( "s" ) )
+                        {
+                            QStringList slP         = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiSoloOffset = slP[0].toInt();
+                            if ( slP.size() > 1 )
+                            {
+                                Settings.midiSoloCount = slP[1].toInt();
+                            }
+                        }
+                        else if ( sParm.startsWith ( "m" ) )
+                        {
+                            QStringList slP         = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiMuteOffset = slP[0].toInt();
+                            if ( slP.size() > 1 )
+                            {
+                                Settings.midiMuteCount = slP[1].toInt();
+                            }
+                        }
+                        else if ( sParm.startsWith ( "o" ) )
+                        {
+                            QStringList slP         = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiMuteMyself = slP[0].toInt();
+                        }
+                    }
+                }
+            }
 
 #    ifndef NO_JSON_RPC
             if ( pRpcServer )

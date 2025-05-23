@@ -118,6 +118,7 @@ public:
 
     // this needs to be public so that it can be called from CMidi
     void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
+    void SetMIDIMapping ( const QString& strMIDISetup );
 
 protected:
     virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
@@ -179,4 +180,5 @@ signals:
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void ControllerInMuteMyself ( bool bMute );
+    void MidiCCReceived ( int ccNumber );
 };

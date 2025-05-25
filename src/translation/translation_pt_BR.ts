@@ -34,7 +34,7 @@
     <message>
         <location filename="../util.cpp" line="392"/>
         <source>Qt cross-platform application framework</source>
-        <translation>Estrutura de aplicações multiplataforma Qt</translation>
+        <translation>Framework de aplicações multiplataforma Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="392"/>
@@ -1090,7 +1090,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>O&amp;rdenar Usuários por Canal</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
@@ -3146,7 +3146,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>

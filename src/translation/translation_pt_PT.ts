@@ -207,7 +207,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation>TextLabelVersion</translation>
+        <translation>VersãoEtiquetaTexto</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2025 Volker Fischer and others</source>

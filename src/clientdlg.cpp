@@ -1479,9 +1479,16 @@ void CClientDlg::SetMixerBoardDeco ( const ERecorderState newRecorderState, cons
         }
         else
         {
-            if ( palette().color ( QPalette::Window ) == QColor::fromRgbF ( 0.196078, 0.196078, 0.196078, 1 ) )
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+            // for Qt 6.5.0 or later, we use the inbuilt cross platform color scheme picker.
+            if ( QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark )
+#else
+            // for earlier versions, check darkmode as proposed in https://www.qt.io/blog/dark-mode-on-windows-11-with-qt-6.5
+            const QPalette defaultPalette;
+            if ( defaultPalette.color ( QPalette::WindowText ).lightness() > defaultPalette.color ( QPalette::Window ).lightness() )
+#endif
             {
-                // Dark mode on macOS/Linux needs a light color
+                // Dark mode needs a light color
 
                 sTitleStyle += "color: rgb(220,220,220); }";
             }

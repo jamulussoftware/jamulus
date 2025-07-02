@@ -4106,7 +4106,7 @@ Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, res
     <message>
         <location filename="../serverdlg.cpp" line="128"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
-        <translation>Durante uma sessão de gravação, este botão pode ser usado para começar uma nova gravação.</translation>
+        <translation>Durante uma sessão de gravação, este botão pode ser utilizado para começar uma nova gravação.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="242"/>
@@ -4133,7 +4133,7 @@ Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, res
     <message>
         <location filename="../serverdlg.cpp" line="603"/>
         <source>Select Main Recording Directory</source>
-        <translation>Selecionar o Diretório Principal das Gravações</translation>
+        <translation>Selecionar a Diretoria Principal das Gravações</translation>
     </message>
     <message>
         <source>Predefined Address</source>

@@ -42,6 +42,9 @@
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+#    include <QStyleHints>
+#endif
 #include "global.h"
 #include "util.h"
 #include "client.h"

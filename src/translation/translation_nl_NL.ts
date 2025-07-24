@@ -3112,7 +3112,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versie</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>

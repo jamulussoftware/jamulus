@@ -1,6 +1,9 @@
 #!/bin/bash
 set -eu -o pipefail
 
+# Dependency versions
+CREATEDMG_VERSION_TAG="v1.2.2"
+
 root_path=$(pwd)
 project_path="${root_path}/Jamulus.pro"
 resources_path="${root_path}/src/res"
@@ -138,12 +141,8 @@ build_installer_image() {
     local client_target_name="${1}"
     local server_target_name="${2}"
 
-    # Install create-dmg via brew. brew needs to be installed first.
-    # Download and later install. This is done to make caching possible
-    # brew_install_pinned "create-dmg" "1.1.0"
-
-    # FIXME: Currently caching is disabled due to an error in the extract step
-    brew install create-dmg
+    # Install create-dmg
+    github_install_dependency "create-dmg/create-dmg" "${CREATEDMG_VERSION_TAG}"
 
     # Build installer image
 
@@ -193,26 +192,24 @@ build_storesign_pkg() {
     # productbuild --sign "${macinst_cert_name}" --keychain build.keychain --component "${macapp_deploy_path}/${server_target_name}.app" /Applications "${deploy_path}/${server_target_name}_${JAMULUS_BUILD_VERSION}.pkg"
 }
 
-brew_install_pinned() {
-    local pkg="$1"
-    local version="$2"
-    local pkg_version="${pkg}@${version}"
-    local brew_bottle_dir="${HOME}/Library/Cache/jamulus-homebrew-bottles"
-    local formula="/usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask/Formula/${pkg_version}.rb"
-    echo "Installing ${pkg_version}"
-    mkdir -p "${brew_bottle_dir}"
-    pushd "${brew_bottle_dir}"
-    if ! find . | grep -qF "${pkg_version}--"; then
-        echo "Building fresh ${pkg_version} package"
-        brew developer on  # avoids a warning
-        brew extract --version="${version}" "${pkg}" homebrew/cask
-        brew install --build-bottle --formula "${formula}"
-        brew bottle "${formula}"
-        # In order to keep the result the same, we uninstall and re-install without --build-bottle later
-        # (--build-bottle is documented to change behavior, e.g. by not running postinst scripts).
-        brew uninstall "${pkg_version}"
+github_install_dependency() {
+    local repository="${1}"
+    local version="${2}"
+    dependency_root_folder="${HOME}/Library/Cache/jamulus-dependencies/${repository}/${version}"
+    if [[ ! -d "${dependency_root_folder}" ]]; then
+        TMPDOWNLOADDIR=$(mktemp -d '/tmp/ghdep.XXXXXX')
+        # Download release
+        mkdir -p "${dependency_root_folder}"
+        wget "https://github.com/${repository}/archive/refs/tags/${version}.tar.gz" -O "${TMPDOWNLOADDIR}/dep.tar.gz"
+
+        # Unpack release and clean up
+        tar -xvzf "${TMPDOWNLOADDIR}/dep.tar.gz" -C "${TMPDOWNLOADDIR}/"
+        rm "${TMPDOWNLOADDIR}/dep.tar.gz"
+        # Since github creates a folder with the version number in the tar, copy all contents from this folder into ${dependency_root_folder}
+        mv "${TMPDOWNLOADDIR}"/*/* "${dependency_root_folder}/"
     fi
-    brew install "${pkg_version}--"*
+    pushd "${dependency_root_folder}"
+    sudo make install
     popd
 }
 

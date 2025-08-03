@@ -322,7 +322,7 @@ jobs:
         with:
           path: |
             /opt/qt
-            ~/Library/Cache/jamulus-homebrew-bottles
+            ~/Library/Cache/jamulus-dependencies
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/mac.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Windows dependencies

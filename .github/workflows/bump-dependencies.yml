@@ -41,7 +41,10 @@ jobs:
             get_upstream_version: GH_REPO=miurahr/aqtinstall gh release view --json tagName --jq .tagName | sed -re 's/^v//'
             # The following regexps capture both the *nix and the Windows variable syntax (different case, underscore):
             local_version_regex: (.*AQTINSTALL_?VERSION\s*=\s*"?)([0-9.]*)("?.*)
-
+          - name: create-dmg
+            changelog_name: create-dmg (macOS)
+            get_upstream_version: GH_REPO=create-dmg/create-dmg gh release view --json tagName --jq .tagName | sed -re 's/^v//'
+            local_version_regex: (.*CREATEDMG_?VERSION_?TAG\s*=\s*"?)([0-9.]*)("?.*)
           - name: Qt6
             changelog_name: bundled Qt6
             get_upstream_version: |
@@ -88,7 +91,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -eu
-          files=( .github/{autobuild,workflows}/* windows/*.ps1 )
+          files=( .github/{autobuild,workflows}/* windows/*.ps1 mac/*.sh )
           upstream_version="$(${{ matrix.components.get_upstream_version }})"
           local_version="$(perl -nle 'print "$2" if /${{ matrix.components.local_version_regex }}/i' "${files[@]}" | sort --reverse --version-sort | head -n1)"
           if [[ -z "$upstream_version" ]]; then

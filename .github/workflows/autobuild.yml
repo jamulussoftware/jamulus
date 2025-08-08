@@ -321,7 +321,7 @@ jobs:
         uses:                       actions/cache@v4
         with:
           path: |
-            /opt/qt
+            ~/qt
             ~/Library/Cache/jamulus-homebrew-bottles
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/mac.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.base_command }}
 

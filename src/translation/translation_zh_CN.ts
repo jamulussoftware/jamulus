@@ -21,7 +21,7 @@
     <message>
         <location filename="../util.cpp" line="411"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation>音频混响代码作者为 Perry R. Cook 和 Gary P. Scavone</translation>
+        <translation>音频混响代码由 Perry R. Cook 和 Gary P. Scavone 提供</translation>
     </message>
     <message>
         <source>Some pixmaps are from the</source>
@@ -852,7 +852,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>按频道对用户排序(&amp;e)</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
@@ -2530,7 +2530,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>版本</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>

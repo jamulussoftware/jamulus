@@ -36,7 +36,7 @@
     <message>
         <location filename="../util.cpp" line="411"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation>Ljudklangkod av Perry R. Cook och Gary P. Scavone</translation>
+        <translation>Ljudklangskod av Perry R. Cook och Gary P. Scavone</translation>
     </message>
     <message>
         <source>Some pixmaps are from the</source>

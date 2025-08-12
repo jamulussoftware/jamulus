@@ -30,7 +30,7 @@ jobs:
     # The clangFormatVersion is based on Ubuntu current LTS (jammy at time of writing).
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Check .cpp/.h/.mm with clang-format
       uses: DoozyX/clang-format-lint-action@bcb4eb2cb0d707ee4f3e5cc3b456eb075f12cf73
       with:
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     # shellcheck is already pre-installed on ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Check .sh with shellcheck
       run: find -name '*.sh' -not -path './libs/*' -exec shellcheck --shell=bash {} +
     - name: Install shfmt
@@ -56,7 +56,7 @@ jobs:
     name: Verify Python coding style
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install pylint
       run: pip install --user "pylint < 3.0"
     - name: Check Python files with pylint

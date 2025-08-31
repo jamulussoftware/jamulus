@@ -72,7 +72,7 @@ START_DATE=$(date -Idate)
 # with LANG being the language code (different syntax for app and web!)
 declare -A TRANSLATORS_BY_LANG
 # App translators:
-TRANSLATORS_BY_LANG[app_de_DE]="rolamos"
+TRANSLATORS_BY_LANG[app_de_DE]="ann0see"
 TRANSLATORS_BY_LANG[app_es_ES]="ignotus666"
 TRANSLATORS_BY_LANG[app_fr_FR]="jujudusud,trebmuh"
 TRANSLATORS_BY_LANG[app_it_IT]="dzpex"

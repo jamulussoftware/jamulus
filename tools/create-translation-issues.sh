@@ -54,14 +54,13 @@ if ! gh auth status &> /dev/null; then
     exit 1
 fi
 
-LOGGED_IN_AS=$(gh auth status | grep Logged | sed -e 's/^.*Logged in .*as //' -e 's/ ([^)]*)$//')
+LOGGED_IN_AS=$(gh auth status | grep Logged | sed -e 's/^.*Logged in to github.com account //' -e 's/ ([^)]*)$//')
 
 RELEASE=$1
 DEADLINE=$2
 TYPE=$3
 EXTRA_TEXT=${4:-}
 MILESTONE="Release ${RELEASE}"
-PROJECT=Tracking
 
 # shellcheck disable=SC2034  # shellcheck can't know that this will be used with envsubst, so "unused" variable is correct here.
 START_DATE=$(date -Idate)
@@ -114,7 +113,10 @@ ${EXTRA_TEXT}${MULTIPLE_TRANSLATORS_TEXT}
 
 Further documentation can be found in [TRANSLATING.md](https://github.com/jamulussoftware/jamulus/blob/main/docs/TRANSLATING.md).
 
+
 Thanks for contributing to Jamulus!
+
+In case you are **NOT** planning to update **${LANG}**, please comment on this issue.
 
 <a href="https://hosted.weblate.org/engage/jamulus/"><img src="https://hosted.weblate.org/widgets/jamulus/-/jamulus-app/multi-auto.svg" alt="Translation status" /></a>
 
@@ -158,12 +160,6 @@ Thanks for contributing to Jamulus!
 Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your screenshots here, and use those URLs in your `.inc` files.
 
 <!-- add URLs here-->
-
-![settings-profile](https://user-images.githubusercontent.com/4561747/178144679-bef8518c-f095-4848-86bf-7639cb508505.png)
-
-![server-window-setup](https://user-images.githubusercontent.com/4561747/178142684-1b85e654-78be-4909-a76c-945d7a0f7ccc.png)
-
-![server-window-options](https://user-images.githubusercontent.com/4561747/178142687-da256fa5-d7b8-47ab-9265-63c3c9760841.png)
 
 '
 
@@ -242,7 +238,7 @@ create_translation_issue_for_lang() {
     # If there's no existing issue, create one
     if [[ -z $existing_issue ]]; then
         echo "Creating Issue to translate $lang for $RELEASE"
-        URL=$(gh issue create --title "$title" --label translation --project "$PROJECT" --body "$body" --assignee "$translators" --milestone "$MILESTONE")
+        URL=$(gh issue create --title "$title" --label translation --body "$body" --assignee "$translators" --milestone "$MILESTONE")
         existing_issue=${URL/*\//}
     else
         echo "Issue to translate $lang for $RELEASE already exists"

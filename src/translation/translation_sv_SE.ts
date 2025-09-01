@@ -6,7 +6,7 @@
     <message>
         <location filename="../util.cpp" line="369"/>
         <source>This app enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation>Applikationen gör det möjligt för musiker att spela tillsammans live över Internet.</translation>
+        <translation>Denna applikation gör det möjligt för musiker att spela tillsammans live över Internet.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="372"/>
@@ -498,7 +498,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="863"/>
         <source>Musician Profile</source>
-        <translation>Musikprofil</translation>
+        <translation>Musikerprofil</translation>
     </message>
 </context>
 <context>

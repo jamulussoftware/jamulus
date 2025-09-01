@@ -82,6 +82,10 @@ public:
 
     virtual float GetInOutLatencyMs() { return fInOutLatencyMs; }
 
+    // MIDI port toggle
+    virtual void EnableMIDI ( bool bEnable );
+    virtual bool IsMIDIEnabled() const;
+
 protected:
     virtual QString LoadAndInitializeDriver ( QString strDriverName, bool bOpenDriverSetup );
     virtual void    UnloadCurrentDriver();
@@ -138,4 +142,7 @@ protected:
 
     // Windows native MIDI support
     CMidi Midi;
+
+private:
+    bool bMidiEnabled = false; // Tracks the runtime state of MIDI
 };

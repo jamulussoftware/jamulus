@@ -1360,3 +1360,16 @@ protected:
     bool            bBlockOnDoubleErrors;
     bool            bPreviousState;
 };
+
+// Generic hash functor for enum classes
+// Can be removed once macOS Legacy uses C++11 or newer
+#if defined( Q_OS_MACOS ) && QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+template<typename T>
+struct EnumClassHash
+{
+    std::size_t operator() ( T t ) const
+    {
+        return std::hash<typename std::underlying_type<T>::type>() ( static_cast<typename std::underlying_type<T>::type> ( t ) );
+    }
+};
+#endif

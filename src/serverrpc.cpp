@@ -122,24 +122,70 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
     /// @result {string} result.city - The server city.
     /// @result {number} result.countryId - The server country ID (see QLocale::Country).
     /// @result {string} result.welcomeMessage - The server welcome message.
+    /// @result {string} result.directoryType - The directory type as a string (see EDirectoryType and SerializeDirectoryType).
+    /// @result {string} result.directoryAddress - The string used to look up the directory address (only assume valid if directoryType is "custom"
+    /// and registrationStatus is "registered").
     /// @result {string} result.directory - The directory with which this server requested registration, or blank if none.
     /// @result {string} result.registrationStatus - The server registration status as string (see ESvrRegStatus and SerializeRegistrationStatus).
     pRpcServer->HandleMethod ( "jamulusserver/getServerProfile", [=] ( const QJsonObject& params, QJsonObject& response ) {
-        QString dsName = "";
-
-        if ( AT_NONE != pServer->GetDirectoryType() )
-            dsName = NetworkUtil::GetDirectoryAddress ( pServer->GetDirectoryType(), pServer->GetDirectoryAddress() );
+        EDirectoryType directoryType    = pServer->GetDirectoryType();
+        QString        directoryAddress = pServer->GetDirectoryAddress();
+        QString        dsName           = ( AT_NONE == directoryType ) ? "" : NetworkUtil::GetDirectoryAddress ( directoryType, directoryAddress );
 
         QJsonObject result{
             { "name", pServer->GetServerName() },
             { "city", pServer->GetServerCity() },
             { "countryId", pServer->GetServerCountry() },
             { "welcomeMessage", pServer->GetWelcomeMessage() },
+            { "directoryType", SerializeDirectoryType ( directoryType ) },
+            { "directoryAddress", directoryAddress },
             { "directory", dsName },
             { "registrationStatus", SerializeRegistrationStatus ( pServer->GetSvrRegStatus() ) },
         };
         response["result"] = result;
         Q_UNUSED ( params );
+    } );
+
+    /// @rpc_method jamulusserver/setDirectory
+    /// @brief Set the directory type and, for custom, the directory address.
+    /// @param {string} params.directoryType - The directory type as a string (see EDirectoryType and DeserializeDirectoryType).
+    /// @param {string} [params.directoryAddress] - (optional) The directory address, required if `directoryType` is "custom".
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusserver/setDirectory", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto           jsonDirectoryType = params["directoryType"];
+        auto           directoryAddress  = params["directoryAddress"];
+        EDirectoryType directoryType     = AT_NONE;
+
+        if ( !jsonDirectoryType.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory type is not a string" );
+            return;
+        }
+        else
+        {
+            directoryType = DeserializeDirectoryType ( jsonDirectoryType.toString().toStdString() );
+        }
+
+        if ( !directoryAddress.isUndefined() )
+        {
+            if ( !directoryAddress.isString() )
+            {
+                response["error"] =
+                    CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory address is not a string" );
+                return;
+            }
+        }
+        else if ( AT_CUSTOM == directoryType )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams,
+                                                                 "Invalid params: directory address is required when directory type is \"custom\"" );
+            return;
+        }
+
+        pServer->SetDirectoryAddress ( directoryAddress.toString() ); // ignored unless AT_CUSTOM == directoryType
+        pServer->SetDirectoryType ( directoryType );
+
+        response["result"] = "ok";
     } );
 
     /// @rpc_method jamulusserver/setServerName
@@ -226,37 +272,73 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
     } );
 }
 
-QJsonValue CServerRpc::SerializeRegistrationStatus ( ESvrRegStatus eSvrRegStatus )
+#if defined( Q_OS_MACOS ) && QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+const std::unordered_map<EDirectoryType, std::string, EnumClassHash<EDirectoryType>>
+#else
+const std::unordered_map<EDirectoryType, std::string>
+#endif
+    CServerRpc::sumDirectoryTypeToString = {
+        { EDirectoryType::AT_NONE, "none" },
+        { EDirectoryType::AT_DEFAULT, "any_genre_1" },
+        { EDirectoryType::AT_ANY_GENRE2, "any_genre_2" },
+        { EDirectoryType::AT_ANY_GENRE3, "any_genre_3" },
+        { EDirectoryType::AT_GENRE_ROCK, "genre_rock" },
+        { EDirectoryType::AT_GENRE_JAZZ, "genre_jazz" },
+        { EDirectoryType::AT_GENRE_CLASSICAL_FOLK, "genre_classical_folk" },
+        { EDirectoryType::AT_GENRE_CHORAL, "genre_choral_barbershop" },
+        { EDirectoryType::AT_CUSTOM, "custom" },
+};
+
+inline QJsonValue CServerRpc::SerializeDirectoryType ( EDirectoryType eAddrType )
 {
-    switch ( eSvrRegStatus )
-    {
-    case SRS_NOT_REGISTERED:
-        return "not_registered";
+    auto found = sumDirectoryTypeToString.find ( eAddrType );
+    if ( found == sumDirectoryTypeToString.end() )
+        return QJsonValue ( QString ( "unknown(%1)" ).arg ( eAddrType ) );
 
-    case SRS_BAD_ADDRESS:
-        return "bad_address";
+    return QJsonValue ( QString::fromStdString ( found->second ) );
+}
 
-    case SRS_REQUESTED:
-        return "requested";
+const std::unordered_map<std::string, EDirectoryType> CServerRpc::sumStringToDirectoryType = {
+    { "none", EDirectoryType::AT_NONE },
+    { "any_genre_1", EDirectoryType::AT_DEFAULT },
+    { "any_genre_2", EDirectoryType::AT_ANY_GENRE2 },
+    { "any_genre_3", EDirectoryType::AT_ANY_GENRE3 },
+    { "genre_rock", EDirectoryType::AT_GENRE_ROCK },
+    { "genre_jazz", EDirectoryType::AT_GENRE_JAZZ },
+    { "genre_classical_folk", EDirectoryType::AT_GENRE_CLASSICAL_FOLK },
+    { "genre_choral_barbershop", EDirectoryType::AT_GENRE_CHORAL },
+    { "custom", EDirectoryType::AT_CUSTOM },
+};
 
-    case SRS_TIME_OUT:
-        return "time_out";
+inline EDirectoryType CServerRpc::DeserializeDirectoryType ( std::string sAddrType )
+{
+    auto found = sumStringToDirectoryType.find ( sAddrType );
+    if ( found == sumStringToDirectoryType.end() )
+        return AT_DEFAULT;
 
-    case SRS_UNKNOWN_RESP:
-        return "unknown_resp";
+    return found->second;
+}
 
-    case SRS_REGISTERED:
-        return "registered";
+#if defined( Q_OS_MACOS ) && QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+const std::unordered_map<ESvrRegStatus, std::string, EnumClassHash<ESvrRegStatus>>
+#else
+const std::unordered_map<ESvrRegStatus, std::string>
+#endif
+    CServerRpc::sumSvrRegStatusToString = { { SRS_NOT_REGISTERED, "not_registered" },
+                                            { SRS_BAD_ADDRESS, "bad_address" },
+                                            { SRS_REQUESTED, "requested" },
+                                            { SRS_TIME_OUT, "time_out" },
+                                            { SRS_UNKNOWN_RESP, "unknown_resp" },
+                                            { SRS_REGISTERED, "registered" },
+                                            { SRS_SERVER_LIST_FULL, "directory_server_full" }, // TODO: rename to "server_list_full"
+                                            { SRS_VERSION_TOO_OLD, "server_version_too_old" },
+                                            { SRS_NOT_FULFILL_REQUIREMENTS, "requirements_not_fulfilled" } };
 
-    case SRS_SERVER_LIST_FULL:
-        return "directory_server_full"; // TODO - rename to "server_list_full"
+inline QJsonValue CServerRpc::SerializeRegistrationStatus ( ESvrRegStatus eSvrRegStatus )
+{
+    auto found = sumSvrRegStatusToString.find ( eSvrRegStatus );
+    if ( found == sumSvrRegStatusToString.end() )
+        return QJsonValue ( QString ( "unknown(%1)" ).arg ( eSvrRegStatus ) );
 
-    case SRS_VERSION_TOO_OLD:
-        return "server_version_too_old";
-
-    case SRS_NOT_FULFILL_REQUIREMENTS:
-        return "requirements_not_fulfilled";
-    }
-
-    return QString ( "unknown(%1)" ).arg ( eSvrRegStatus );
+    return QJsonValue ( QString::fromStdString ( found->second ) );
 }

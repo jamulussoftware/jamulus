@@ -25,8 +25,14 @@
 
 #pragma once
 
+#include <unordered_map>
 #include "server.h"
 #include "rpcserver.h"
+
+// hash functor for enum classes (only needed on legacy macOS Qt5)
+#if defined( Q_OS_MACOS ) && QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+#    include "util.h"
+#endif
 
 /* Classes ********************************************************************/
 class CServerRpc : public QObject
@@ -35,5 +41,18 @@ class CServerRpc : public QObject
 
 public:
     CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* parent = nullptr );
-    static QJsonValue SerializeRegistrationStatus ( ESvrRegStatus eSvrRegStatus );
+
+private:
+    const static std::unordered_map<std::string, EDirectoryType> sumStringToDirectoryType;
+#if defined( Q_OS_MACOS ) && QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+    const static std::unordered_map<EDirectoryType, std::string, EnumClassHash<EDirectoryType>> sumDirectoryTypeToString;
+    const static std::unordered_map<ESvrRegStatus, std::string, EnumClassHash<ESvrRegStatus>>   sumSvrRegStatusToString;
+#else
+    const static std::unordered_map<EDirectoryType, std::string> sumDirectoryTypeToString;
+    const static std::unordered_map<ESvrRegStatus, std::string>  sumSvrRegStatusToString;
+#endif
+
+    QJsonValue     SerializeDirectoryType ( EDirectoryType eAddrType );
+    EDirectoryType DeserializeDirectoryType ( std::string sAddrType );
+    QJsonValue     SerializeRegistrationStatus ( ESvrRegStatus eSvrRegStatus );
 };

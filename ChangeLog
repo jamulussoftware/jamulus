@@ -1,5 +1,8 @@
 ### 3.11.0dev <- NOTE: the release version number will be 3.12.0 ###
 
+- Translations updated from Hosted Weblate (#3441, #3388).
+  (contributed by @weblate)
+
 - Client: Display version for each server in the Connect dialog (#3416).
   (contributed by @softins)
 
@@ -15,15 +18,27 @@
 - Client: Added native MIDI support to the ASIO (non-Jack) Windows build (#3431).
   (contributed by @softins)
 
+- Client RPC: Added jamulusclient/pollServerList methods and jamulusclient/receivedServerList notification to JSON-RPC interface (#3479).
+  (contributed by @ann0see)
+
 - Server: Disabled swap memory usage on Linux (#3381).
   (contributed by @dtinth)
 
 - Server: The `-m`/`--htmlstatus` option is considered deprecated and has been replaced by JSON RPC's `jamulusserver/getClients` method. The `-m` option will be removed in future (#3398).
   (contributed by @ann0see)
 
+- Server RPC: Added jamulusserver/setDirectory request (#3533).
+  (contributed by @pljones)
+
+- Windows: Avoid screensaver or sleeping if connected to a server (#3498).
+  (contributed by @ann0see)
+
 - Linux: Reorder service initialization to wait for network interface before starting the Server (#3440).
   (contributed by @rdica)
 - iOS: Fixed GUI issue preventing the connect dialog to show correctly (#3343).
+  (contributed by @ann0see)
+
+- iOS: Upgrade build to Qt 6 (#3445).
   (contributed by @ann0see)
 
 - iOS: Return correct operating system version if run as server (#3360).
@@ -38,19 +53,37 @@
 - iOS: Fix crash on Qt6 after closing the chat window (#3413).
   (contributed by @ann0see)
 
-- Translations updated from Hosted Weblate (#3388).
-  (contributed by @weblate)
-
 - Dependencies: Updated Opus library to v1.5.2 (#3409).
   (contributed by @softins)
 
+- Build: Updated bundled Qt6 to version 6.9.1 (#3407).
+  (contributed by @app/github-actions)
+
 - Build: Updated bundled Qt6 to version 6.7.3 (#3262).
   (contributed by @app/github-actions)
+
+- Build: Updated Windows Installer base (NSIS) to version 3.11 (#3483).
+  (contributed by @app/github-actions)
+
+- Build: Upgrade Android Runner to Ubuntu 22.04 (#3444).
+  (contributed by @ann0see)
+
+- Build: Switch Linux ARM builds to be built on arm runners (#3470).
+  (contributed by @ann0see)
+
+- Build: Bump DoozyX/clang-format-lint-action from 0.18.2 to 0.20 (#3490).
+  (contributed by @app/dependabot)
 
 - Build: Bump DoozyX/clang-format-lint-action from 11b773b1598aa4ae3b32f023701bca5201c3817d to c71d0bf4e21876ebec3e5647491186f8797fde31 (#3368).
   (contributed by @app/dependabot)
 
 - Build: Updated the Github build runner for MacOS Legacy to macos-13 (#3436).
+  (contributed by @softins)
+
+- Internal: added improvements to changelog-helper.sh (#3459).
+  (contributed by @softins)
+
+- Internal: Added missing Makefile.in files to Opus 1.5.2 distro (#3488).
   (contributed by @softins)
 
 

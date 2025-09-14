@@ -977,7 +977,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation>Sortuj użytkowników po kanale</translation>
+        <translation>Sortuj użytkowników po kanal&amp;e</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>

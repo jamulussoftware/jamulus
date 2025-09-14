@@ -34,7 +34,7 @@
     <message>
         <location filename="../util.cpp" line="392"/>
         <source>Qt cross-platform application framework</source>
-        <translation>Estrutura de aplicações multiplataforma Qt</translation>
+        <translation>Estrutura de aplicações multiplataforma do Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="392"/>
@@ -207,7 +207,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation>TextoEtiquetaVersão</translation>
+        <translation>TextLabelVersion</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2025 Volker Fischer and others</source>
@@ -220,7 +220,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2025 The Jamulus Development Team</source>
-        <translation>Copyright © 2005-2025 A equipe de desenvolvimento Jamulus</translation>
+        <translation>Direitos de Autor © 2005-2025 A Equipa de Desenvolvimento do Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -289,12 +289,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="986"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
-        <translation>T E N T A N D O   L I G A R</translation>
+        <translation>A  T E N T A R   L I G A R</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="1193"/>
         <source>RECORDING ACTIVE</source>
-        <translation>GRAVAÇÃO ACTIVA</translation>
+        <translation>GRAVAÇÃO ATIVA</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="1203"/>
@@ -316,7 +316,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="142"/>
         <source>Input level of the current audio channel at the server</source>
-        <translation>Nível de entrada deste canal de áudio do servidor</translation>
+        <translation>Nível de entrada do canal de áudio atual no servidor</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="145"/>
@@ -330,7 +330,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="148"/>
         <source>Local mix level setting of the current audio channel at the server</source>
-        <translation>Configuração do nível de mistura local deste canal de áudio do servidor</translation>
+        <translation>Definição do nível de mistura local do canal de áudio atual no servidor</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="151"/>
@@ -1057,12 +1057,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation>A latência da ligação é o tempo necessário para o fluxo de áudio viajar do cliente para o servidor e vice-versa. Esta latência é introduzida pela rede e deve ser cerca de 20-30 ms. Se esta latência for maior que 50 ms, a distância até ao servidor é muito grande ou sua ligação à Internet não é suficiente.</translation>
+        <translation>O tempo do &apos;&apos;ping&apos;&apos; é o tempo necessário para a transmissão de áudio circular do cliente para o servidor e vice-versa. Esta latência é introduzida pela rede e deveria ser cerca de 20-30 ms. Se esta latência for maior do que 50 ms, a distância até ao servidor é muito grande ou a sua ligação à Internet não é suficiente.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="199"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation>A latência geral é calculada a partir da latência da ligação atual e do atraso introduzido pelas configurações do buffer.</translation>
+        <translation>A latência geral é calculada a partir do «Tempo do Ping» atual e do atraso introduzido pelas definições do buffer.</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the %1 software.</source>
@@ -1071,12 +1071,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="290"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation>A&amp;brir configuração da mistura...</translation>
+        <translation>&amp;Carregar Configuração dos Canais do Misturador...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="292"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation>Salvar &amp;configuração da mistura...</translation>
+        <translation>&amp;Guardar Configuração dos Canais do Misturador...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="315"/>
@@ -1086,7 +1086,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>Ord&amp;enar Utilizadores por Canal</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
@@ -1096,7 +1096,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="399"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation>Definições de Audio/&amp;Rede...</translation>
+        <translation>Definiçõe&amp;s de Áudio/Rede...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="401"/>
@@ -1106,37 +1106,37 @@
     <message>
         <location filename="../clientdlg.cpp" line="320"/>
         <source>N&amp;o User Sorting</source>
-        <translation>Nã&amp;o Ordenar Canais</translation>
+        <translation>Nã&amp;o Ordenar Utilizador</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="184"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation>Se este indicador LED ficar vermelho, o fluxo de áudio é interrompido.</translation>
+        <translation>Se este indicador LED ficar vermelho, a transmissão de áudio é interrompida.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="191"/>
         <source>Current Connection Status</source>
-        <translation>Estado da Ligação</translation>
+        <translation>Estado da Ligação Atual</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="323"/>
         <source>Sort Users by &amp;Name</source>
-        <translation>Ordenar Canais por &amp;Nome</translation>
+        <translation>Ordenar Utilizadores por &amp;Nome</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="325"/>
         <source>Sort Users by &amp;Instrument</source>
-        <translation>Ordenar Canais por &amp;Instrumento</translation>
+        <translation>Ordenar Utilizadores por &amp;Instrumento</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="331"/>
         <source>Sort Users by &amp;Group</source>
-        <translation>Ordenar Canais por &amp;Grupo</translation>
+        <translation>Ordenar Utilizadores por &amp;Grupo</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="334"/>
         <source>Sort Users by &amp;City</source>
-        <translation>Ordenar Canais por &amp;Cidade</translation>
+        <translation>Ordenar Utilizadores por &amp;Cidade</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="303"/>
@@ -1146,22 +1146,22 @@
     <message>
         <location filename="../clientdlg.cpp" line="160"/>
         <source>Local Jitter Buffer Status LED</source>
-        <translation>LED de estado do jitter buffer local</translation>
+        <translation>LED do Estado do Buffer Jitter Local</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="161"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation>O indicador LED do estado do buffer local mostra o estado atual do áudio/transmissão. Se a luz estiver vermelha, o fluxo de áudio é interrompido. Isto é causado por um dos seguintes problemas:</translation>
+        <translation>O LED do estado do buffer jitter local mostra o estado atual do áudio/transmissão. Se a luz estiver vermelha, a transmissão de áudio é interrompida. Isto é causado por um dos seguintes problemas:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="188"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation>Indicador LED de estado do jitter buffer local</translation>
+        <translation>Indicador do LED do estado Jitter Buffer Local</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="308"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation>Ajustar Auto. todos os &amp;Faders</translation>
+        <translation>Ajustar automaticamente todos os &amp;Faders</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -1200,21 +1200,21 @@
     <message>
         <location filename="../clientdlg.cpp" line="1000"/>
         <source>Chat</source>
-        <translation>Mensagens</translation>
+        <translation>Conversação</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1076"/>
         <source>Enable feedback detection</source>
-        <translation>Activar detecção de feedback</translation>
+        <translation>Ativar deteção de feedback</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1079"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
-        <translation>Foi detectado feedback de audio ou sinal alto.
+        <translation>Detetado feedback de áudio ou sinal alto.
 
-O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. Por favor resolva o problema de feedback antes de continuar.</translation>
+Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, resolva primeiro o problema de feedback e depois remova o silêncio você mesmo.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1164"/>
@@ -1232,7 +1232,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
-        <translation>Latência</translation>
+        <translation>Atraso</translation>
     </message>
     <message>
         <source>Buffers</source>
@@ -1282,7 +1282,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientdlgbase.ui" line="512"/>
         <source>&amp;Chat</source>
-        <translation>Me&amp;nsagens</translation>
+        <translation>&amp;Conversação</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="531"/>
@@ -1315,7 +1315,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientdlgbase.ui" line="557"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation>MUDO (Outras pessoas não o vão ouvir)</translation>
+        <translation>SILENCIADO (Outras pessoas não o vão ouvir)</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="587"/>
@@ -1325,7 +1325,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientdlgbase.ui" line="609"/>
         <source>Update check</source>
-        <translation>Verificação de actualização</translation>
+        <translation>Verificação de atualização</translation>
     </message>
 </context>
 <context>
@@ -1346,7 +1346,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlg.cpp" line="87"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation>A configuração do jitter buffer é, portanto, uma troca entre a qualidade do áudio e o atraso geral.</translation>
+        <translation>A definição do buffer de jitter é, portanto, uma troca entre a qualidade do áudio e o atraso geral.</translation>
     </message>
     <message>
         <source>An auto setting of the jitter buffer size setting is available. If the check Auto is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If the Auto check is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
@@ -2966,7 +2966,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../connectdlg.cpp" line="101"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation>Clique no botão para limpar o endereço de servidor selecionado e excluí-lo da lista de servidores armazenados.</translation>
+        <translation>Clique no botão para limpar o endereço do servidor selecionado e eliminá-lo da lista dos servidores guardados.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>
@@ -3089,7 +3089,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../connectdlgbase.ui" line="76"/>
         <source>Ping Time</source>
-        <translation>Latência</translation>
+        <translation>Tempo de Latência</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="81"/>
@@ -3104,7 +3104,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>
@@ -3954,7 +3954,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <location filename="../serverdlg.cpp" line="63"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation>&lt;b&gt;Diretório:&lt;/b&gt; Seleccione &apos;%1&apos; para não registar o seu servidor com um diretório.&lt;br&gt;Ou selecione um dos géneros para se registar nesse diretório.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um endereço de Diretório Personalizado no separador Opções para se registar num diretório personalizado.&lt;br&gt;&lt;br&gt;Para qualquer valor exceto &quot;%1&quot;, este servidor regista-se num diretório para que um utilizador %3 possa selecionar este servidor na lista de servidores da caixa de diálogo de ligação do cliente quando escolher esse diretório.&lt;br&gt;&lt;br&gt;O registo do servidor é renovado periodicamente para garantir que todos os servidores da lista de servidores da caixa de diálogo de ligação estão realmente disponíveis.</translation>
+        <translation>&lt;b&gt;Pasta:&lt;/b&gt; Selecione &apos;%1&apos; para não registar o seu servidor com uma pasta.&lt;br&gt;Ou selecione um dos géneros para registar com essa pasta.&lt;br&gt;Ou selecione &apos;%2&apos; e especifique um endereço da &quot;Pasta Personalizada&quot; no separador das &apos;Opções&apos; para registar numa pasta personalizada.&lt;br&gt;&lt;br&gt;Para qualquer valor, exceto &quot;%1&quot;, este servidor regista numa pasta para que um utilizador %3 possa selecionar este servidor na lista de servidores na janela da ligação do cliente quando escolher essa pasta.&lt;br&gt;&lt;br&gt;O registo do servidor é renovado periodicamente para garantir que todos os servidores na lista de servidores da janela de ligação estão realmente disponíveis.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
@@ -4106,7 +4106,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="128"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
-        <translation>Durante uma sessão de gravação, este botão pode ser usado para começar uma nova gravação.</translation>
+        <translation>Durante uma sessão de gravação, este botão pode ser utilizado para começar uma nova gravação.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="242"/>
@@ -4133,7 +4133,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="603"/>
         <source>Select Main Recording Directory</source>
-        <translation>Selecionar o Diretório Principal das Gravações</translation>
+        <translation>Selecionar a Diretoria Principal das Gravações</translation>
     </message>
     <message>
         <source>Predefined Address</source>
@@ -4212,7 +4212,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../util.h" line="648"/>
         <source>Check server version</source>
-        <translation>Verifique versão do servidor</translation>
+        <translation>Verifique a versão do servidor</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>
@@ -4222,7 +4222,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../util.h" line="654"/>
         <source>Server list full at directory</source>
-        <translation>Lista de servidores cheia no diretório</translation>
+        <translation>Lista dos servidores cheia na pasta</translation>
     </message>
     <message>
         <source>Directory server list full</source>
@@ -4263,7 +4263,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <location filename="../serverdlgbase.ui" line="39"/>
         <location filename="../serverdlgbase.ui" line="118"/>
         <source>Name</source>
-        <translation>Nome do Servidor</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="44"/>
@@ -4297,7 +4297,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation>Mensagem de Boas Vindas (HTML/CSS Suportado)</translation>
+        <translation>Boas-vindas da Janela de Conversação (HTML/CSS Suportado)</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="224"/>
@@ -4307,7 +4307,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation>End. de Diretório Personalizado</translation>
+        <translation>Endereço da Pasta Personalizada</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
@@ -4331,7 +4331,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
         <source>Update check</source>
-        <translation>Verificação de actualização</translation>
+        <translation>Verificação de atualização</translation>
     </message>
     <message>
         <source>Make My Server Public (Register My Server in the Server List)</source>
@@ -4354,7 +4354,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="253"/>
         <source>Recording Directory</source>
-        <translation>Diretório das Gravações</translation>
+        <translation>Pasta de Gravação</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
@@ -4364,7 +4364,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
         <source>Directory</source>
-        <translation>Diretório</translation>
+        <translation>Pasta</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -4375,7 +4375,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <location filename="../serverdlgbase.ui" line="232"/>
         <source>Language</source>
         <extracomment>Consider add &quot;(Lang)&quot; as a suffix to ensure that users who selected the wrong language find the correct button</extracomment>
-        <translation>Linguagem</translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <source>Directory Server Address:</source>
@@ -4384,7 +4384,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlgbase.ui" line="110"/>
         <source>My Server Info</source>
-        <translation>Informação do Servidor</translation>
+        <translation>Informação do Meu Servidor</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="125"/>
@@ -4417,22 +4417,22 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverlist.cpp" line="415"/>
         <source>Now a directory</source>
-        <translation>Agora um diretório</translation>
+        <translation>Agora uma pasta</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="421"/>
         <source>No longer a directory</source>
-        <translation>Deixou de ser um diretório</translation>
+        <translation>Deixou de ser uma pasta</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="780"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation>Não foi possível abrir &apos;%1&apos; para leitura/escrita. Por favor, verifique se %2 tem permissão (e se há espaço livre).</translation>
+        <translation>Não foi possível abrir &apos;%1&apos; para ler/gravar. Por favor, verifique se %2 tem permissão (e se há espaço livre).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="787"/>
         <source>Loading persistent server list file: %1</source>
-        <translation>A carregar ficheiro de lista de servidores persistentes: %1</translation>
+        <translation>A carregar o ficheiro da lista de servidores persistentes: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="850"/>
@@ -4550,12 +4550,12 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../sound/asio/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation>O dispositivo de áudio actualmente seleccionado não se encontra presente no sistema. Verifique seu dispositivo de áudio.</translation>
+        <translation>O dispositivo de áudio atualmente selecionado já não se encontra presente no sistema. Por favor, verifique o seu dispositivo de áudio.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
-        <translation>Não foi possível inicializar o driver de áudio. Confirme se seu equipamento de áudio está conectado e verifique suas configurações do driver.</translation>
+        <translation>Não foi possível inicializar o controlador de áudio. Confirme se o seu equipamento de áudio está ligado e verifique as suas definições do controlador.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="146"/>

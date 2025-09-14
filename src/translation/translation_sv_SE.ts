@@ -6,7 +6,7 @@
     <message>
         <location filename="../util.cpp" line="369"/>
         <source>This app enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation>Applikationen gör det möjligt för musiker att spela tillsammans live över Internet.</translation>
+        <translation>Denna applikation gör det möjligt för musiker att spela tillsammans live över Internet.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="372"/>
@@ -36,7 +36,7 @@
     <message>
         <location filename="../util.cpp" line="411"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation>Ljudklangkod av Perry R. Cook och Gary P. Scavone</translation>
+        <translation>Ljudklangskod av Perry R. Cook och Gary P. Scavone</translation>
     </message>
     <message>
         <source>Some pixmaps are from the</source>
@@ -498,7 +498,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="863"/>
         <source>Musician Profile</source>
-        <translation>Musikprofil</translation>
+        <translation>Musikerprofil</translation>
     </message>
 </context>
 <context>
@@ -985,7 +985,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortera användare efter kanal</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
@@ -2791,7 +2791,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>

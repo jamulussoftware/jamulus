@@ -1103,7 +1103,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientdlgbase.ui" line="531"/>
         <source>C&amp;onnect</source>
-        <translation>Se &amp;connecter</translation>
+        <translation>Se c&amp;onnecter</translation>
     </message>
     <message>
         <source>Pan</source>

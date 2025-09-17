@@ -87,6 +87,8 @@ public:
     virtual void Stop();
 
     virtual float GetInOutLatencyMs() { return fInOutLatencyMs; }
+    virtual void  EnableMIDI ( bool bEnable ) override;
+    virtual bool  IsMIDIEnabled() const override;
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function
@@ -105,6 +107,8 @@ protected:
     void OpenJack ( const bool bNoAutoJackConnect, const char* jackClientName );
 
     void CloseJack();
+    void CreateMIDIPort();
+    void DestroyMIDIPort();
 
     // callbacks
     static int     process ( jack_nframes_t nframes, void* arg );

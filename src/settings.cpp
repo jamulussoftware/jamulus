@@ -461,19 +461,75 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }
 
+    // MIDI settings
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midichannel", 0, 16, iValue ) )
+    {
+        midiChannel = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midifaderoffset", 0, 127, iValue ) )
+    {
+        midiFaderOffset = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midifadercount", 0, 127, iValue ) )
+    {
+        midiFaderCount = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midipanoffset", 0, 127, iValue ) )
+    {
+        midiPanOffset = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midipancount", 0, 127, iValue ) )
+    {
+        midiPanCount = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midisolooffset", 0, 127, iValue ) )
+    {
+        midiSoloOffset = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midisolocount", 0, 127, iValue ) )
+    {
+        midiSoloCount = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midimuteoffset", 0, 127, iValue ) )
+    {
+        midiMuteOffset = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midimutecount", 0, 127, iValue ) )
+    {
+        midiMuteCount = iValue;
+    }
+
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "midimutemyself", 0, 127, iValue ) )
+    {
+        midiMuteMyself = iValue;
+    }
+
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "usemidicontroller", bValue ) )
+    {
+        bUseMIDIController = bValue;
+    }
+
     // custom directories
 
-    //### TODO: BEGIN ###//
-    // compatibility to old version (< 3.6.1)
+    // ### TODO: BEGIN ###//
+    //  compatibility to old version (< 3.6.1)
     QString strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", "centralservaddr", "" );
-    //### TODO: END ###//
+    // ### TODO: END ###//
 
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
-        //### TODO: BEGIN ###//
-        // compatibility to old version (< 3.8.2)
+        // ### TODO: BEGIN ###//
+        //  compatibility to old version (< 3.8.2)
         strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", QString ( "centralservaddr%1" ).arg ( iIdx ), strDirectoryAddress );
-        //### TODO: END ###//
+        // ### TODO: END ###//
 
         vstrDirectoryAddress[iIdx] = GetIniSetting ( IniXMLDocument, "client", QString ( "directoryaddress%1" ).arg ( iIdx ), strDirectoryAddress );
         strDirectoryAddress        = "";
@@ -481,9 +537,9 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
 
     // directory type
 
-    //### TODO: BEGIN ###//
-    // compatibility to old version (<3.4.7)
-    // only the case that "centralservaddr" was set in old ini must be considered
+    // ### TODO: BEGIN ###//
+    //  compatibility to old version (<3.4.7)
+    //  only the case that "centralservaddr" was set in old ini must be considered
     if ( !vstrDirectoryAddress[0].isEmpty() && GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) && !bValue )
     {
         eDirectoryType = AT_CUSTOM;
@@ -493,7 +549,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     {
         eDirectoryType = static_cast<EDirectoryType> ( iValue );
     }
-    //### TODO: END ###//
+    // ### TODO: END ###//
 
     else if ( GetNumericIniSet ( IniXMLDocument, "client", "directorytype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
     {
@@ -548,7 +604,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // selected Settings Tab
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, 2, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, 3, iValue ) )
     {
         iSettingsTab = iValue;
     }
@@ -556,7 +612,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     // fader settings
     ReadFaderSettingsFromXML ( IniXMLDocument );
 }
-
 void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument )
 {
     int  iIdx;
@@ -754,8 +809,36 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // Settings Tab
     SetNumericIniSet ( IniXMLDocument, "client", "settingstab", iSettingsTab );
 
+    // MIDI settings
+    SetNumericIniSet ( IniXMLDocument, "client", "midichannel", midiChannel );
+    SetNumericIniSet ( IniXMLDocument, "client", "midifaderoffset", midiFaderOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midifadercount", midiFaderCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midipanoffset", midiPanOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midipancount", midiPanCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midisolooffset", midiSoloOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midisolocount", midiSoloCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midimuteoffset", midiMuteOffset );
+    SetNumericIniSet ( IniXMLDocument, "client", "midimutecount", midiMuteCount );
+    SetNumericIniSet ( IniXMLDocument, "client", "midimutemyself", midiMuteMyself );
+    SetFlagIniSet ( IniXMLDocument, "client", "usemidicontroller", bUseMIDIController );
+
     // fader settings
     WriteFaderSettingsToXML ( IniXMLDocument );
+}
+
+QString CClientSettings::GetMIDIMapString() const
+{
+    return QString ( "%1;f%2*%3;p%4*%5;s%6*%7;m%8*%9;o%10" )
+        .arg ( midiChannel )
+        .arg ( midiFaderOffset )
+        .arg ( midiFaderCount )
+        .arg ( midiPanOffset )
+        .arg ( midiPanCount )
+        .arg ( midiSoloOffset )
+        .arg ( midiSoloCount )
+        .arg ( midiMuteOffset )
+        .arg ( midiMuteCount )
+        .arg ( midiMuteMyself );
 }
 
 void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
@@ -846,10 +929,10 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         // Server GUI defaults to ""
         QString directoryAddress = "";
 
-        //### TODO: BEGIN ###//
-        // compatibility to old version < 3.8.2
+        // ### TODO: BEGIN ###//
+        //  compatibility to old version < 3.8.2
         directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", directoryAddress );
-        //### TODO: END ###//
+        // ### TODO: END ###//
 
         directoryAddress = GetIniSetting ( IniXMLDocument, "server", "directoryaddress", directoryAddress );
 
@@ -869,20 +952,20 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
     else
     {
-        //### TODO: BEGIN ###//
-        // compatibility to old version < 3.4.7
+        // ### TODO: BEGIN ###//
+        //  compatibility to old version < 3.4.7
         if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         {
             directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
         }
         else
         {
-            //### TODO: END ###//
+            // ### TODO: END ###//
 
             // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
 
-            //### TODO: BEGIN ###//
-            // compatibility to old version < 3.8.2
+            // ### TODO: BEGIN ###//
+            //  compatibility to old version < 3.8.2
             if ( GetNumericIniSet ( IniXMLDocument,
                                     "server",
                                     "centservaddrtype",
@@ -892,7 +975,7 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
             {
                 directoryType = static_cast<EDirectoryType> ( iValue );
             }
-            //### TODO: END ###//
+            // ### TODO: END ###//
 
             else
             {
@@ -908,14 +991,14 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
             }
         }
 
-        //### TODO: BEGIN ###//
-        // compatibility to old version < 3.9.0
-        // override type to AT_NONE if servlistenabled exists and is false
+        // ### TODO: BEGIN ###//
+        //  compatibility to old version < 3.9.0
+        //  override type to AT_NONE if servlistenabled exists and is false
         if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
         {
             directoryType = AT_NONE;
         }
-        //### TODO: END ###//
+        // ### TODO: END ###//
     }
 
     pServer->SetDirectoryType ( directoryType );

@@ -363,7 +363,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="160"/>
         <source>Local panning position of the current audio channel at the server</source>
-        <translation>Posição de panorâmica local do canal de áudio atual no servidor</translation>
+        <translation>Posição de movimento panorâmico local do canal de áudio atual no servidor</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="162"/>
@@ -421,12 +421,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="154"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
-        <translation>Alti-falante com sinal de proibição: Indica que o cliente silenciou o teu canal.</translation>
+        <translation>Altifalante com sinal de proibição: Indica que outro cliente o silenciou.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="158"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation>Define a posição de panorâmica da esquerda para a direita do canal. Funciona apenas no modo estéreo ou, de preferência, no modo Entrada Mono/Saída Estéreo.</translation>
+        <translation>Define o movimento panorâmico da &apos;Esquerda&apos; para a &apos;Direita&apos; do canal. Funciona apenas no modo estéreo ou, de preferência, no modo entrada mono/saída estéreo.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="166"/>
@@ -460,7 +460,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="186"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation>Identificação do canal da mistura (identificador do fader)</translation>
+        <translation>Etiqueta do canal da mistura (identificador do fader)</translation>
     </message>
     <message>
         <source>Mixer channel country flag</source>
@@ -474,7 +474,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="225"/>
         <source>MUTE</source>
-        <translation>MUTE</translation>
+        <translation>SILENCIAR</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="226"/>
@@ -536,7 +536,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="179"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation>O Identificador do fader identifica o cliente ligado. O nome no identificador, a imagem do instrumento e a bandeira de sua localização podem ser definidos na janela principal.</translation>
+        <translation>A etiqueta do fader identifica o cliente ligado. O nome da etiqueta, uma imagem do instrumento e a bandeira da sua localização podem ser definidos na janela principal.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="188"/>
@@ -585,17 +585,17 @@
     <message>
         <location filename="../chatdlg.cpp" line="34"/>
         <source>Chat Window</source>
-        <translation>Janela de Mensagens</translation>
+        <translation>Janela de Conversação</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="34"/>
         <source>The chat window shows a history of all chat messages.</source>
-        <translation>A janela de mensagens mostra um histórico de todas as mensagens enviadas durante a sessão.</translation>
+        <translation>A janela de conversação mostra um histórico de todas as mensagens de conversação.</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="36"/>
         <source>Chat history</source>
-        <translation>Histórico de Mensagens</translation>
+        <translation>Histórico de conversação</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="39"/>
@@ -610,22 +610,22 @@
     <message>
         <location filename="../chatdlg.cpp" line="44"/>
         <source>New chat text edit box</source>
-        <translation>Campo de edição de texto da mensagem</translation>
+        <translation>Nova caixa de edição do texto de conversação</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="54"/>
         <source>Type a message here</source>
-        <translation>Insira uma mensagem aqui</translation>
+        <translation>Digite aqui uma mensagem</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="58"/>
         <source>&amp;Edit</source>
-        <translation>E&amp;ditar</translation>
+        <translation>&amp;Editar</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="60"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation>&amp;Limpar Histórico</translation>
+        <translation>&amp;Limpar Histórico de Conversação</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="64"/>
@@ -636,7 +636,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="148"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation>Deseja abrir o link &apos;%1&apos; em seu navegador?</translation>
+        <translation>Deseja abrir a hiperligação &apos;%1&apos; no seu navegador?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>
@@ -652,7 +652,7 @@
     <message>
         <location filename="../chatdlgbase.ui" line="20"/>
         <source>Chat</source>
-        <translation>Mensagens</translation>
+        <translation>Conversação</translation>
     </message>
     <message>
         <location filename="../chatdlgbase.ui" line="54"/>

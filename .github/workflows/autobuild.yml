@@ -75,7 +75,7 @@ jobs:
         contents:                   write
     steps:
       - name:                       Checkout code
-        uses:                       actions/checkout@v4
+        uses:                       actions/checkout@v5
 
       - name:                       Determine release version, type and prerelease variables
         run:                        ./.github/autobuild/get_build_vars.py
@@ -310,7 +310,7 @@ jobs:
           git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
       - name:                       Checkout code
-        uses:                       actions/checkout@v4
+        uses:                       actions/checkout@v5
         with:
           # only Android needs the oboe submodule, so don't fetch it for other builds
           submodules:               ${{ matrix.config.target_os == 'android' }}

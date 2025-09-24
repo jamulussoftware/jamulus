@@ -79,7 +79,6 @@ class CClientDlg : public CBaseDlg, private Ui_CClientDlgBase
 public:
     CClientDlg ( CClient*         pNCliP,
                  CClientSettings* pNSetP,
-                 const QString&   strConnOnStartupAddress,
                  const QString&   strMIDISetup,
                  const bool       bNewShowComplRegConnList,
                  const bool       bShowAnalyzerConsole,
@@ -97,8 +96,6 @@ protected:
     void ShowAnalyzerConsole();
     void UpdateAudioFaderSlider();
     void UpdateRevSelection();
-    void Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel );
-    void Disconnect();
     void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
     void SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
@@ -130,6 +127,8 @@ protected:
     CAnalyzerConsole   AnalyzerConsole;
 
 public slots:
+    void OnConnect ( QString strServerName );
+    void OnDisconnect();
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
@@ -236,7 +235,6 @@ public slots:
     }
 
     void OnConnectDlgAccepted();
-    void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
     void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );

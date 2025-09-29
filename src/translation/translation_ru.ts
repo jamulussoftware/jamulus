@@ -30,7 +30,7 @@
     <message>
         <location filename="../util.cpp" line="392"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt фреймворк для разработки кроссплатформенного программного обеспечения</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="392"/>
@@ -40,7 +40,7 @@
     <message>
         <location filename="../util.cpp" line="393"/>
         <source>(runtime)</source>
-        <translation type="unfinished"></translation>
+        <translation>(время выполнения)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="411"/>
@@ -58,17 +58,17 @@
     <message>
         <location filename="../util.cpp" line="369"/>
         <source>This app enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Это приложение позволяет музыкантам проводить мероприятия(jam sessions) в режиме реального времени через Интернет.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="372"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
-        <translation type="unfinished"></translation>
+        <translation>Это сервер, который собирает аудиоданные от каждого клиента, микширует аудиоданные и отправляет микширование обратно каждому клиенту.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="391"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished"></translation>
+        <translation>Это приложение использует следующие библиотеки, ресурсы или фрагменты кода:</translation>
     </message>
     <message>
         <source>Country flag icons by Mark James</source>
@@ -81,7 +81,7 @@
     <message>
         <location filename="../util.cpp" line="421"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished"></translation>
+        <translation>Значки флагов от Марка Джеймса</translation>
     </message>
     <message>
         <source>Some sound samples are from</source>
@@ -90,17 +90,17 @@
     <message>
         <location filename="../util.cpp" line="417"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Некоторые пиксельные изображения взяты из %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="425"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Некоторые звуковые сэмплы взяты из %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="504"/>
         <source>For details on the contributions check out the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Для получения подробной информации о взносах ознакомьтесь с %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="505"/>
@@ -110,12 +110,12 @@
     <message>
         <location filename="../util.cpp" line="508"/>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Испанский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="512"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Французский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="517"/>

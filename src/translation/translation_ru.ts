@@ -35,7 +35,7 @@
     <message>
         <location filename="../util.cpp" line="392"/>
         <source>(build)</source>
-        <translation type="unfinished"></translation>
+        <translation>(сборка)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="393"/>
@@ -45,7 +45,7 @@
     <message>
         <location filename="../util.cpp" line="411"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="unfinished"></translation>
+        <translation>Код реверберации от Перри Р. Кука и Гэри П. Скавоне</translation>
     </message>
     <message>
         <source>Some pixmaps are from the</source>
@@ -120,52 +120,52 @@
     <message>
         <location filename="../util.cpp" line="517"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Португальский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="524"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Датский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="529"/>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Итальянский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="533"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Немецкий</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="538"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Польский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="543"/>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Шведский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="549"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Корейский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="554"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Словацкий</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="557"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Упрощённый китайский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="560"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Букмол</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="568"/>
@@ -208,7 +208,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2025 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>© 2005–2025 Команда разработчиков Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -218,7 +218,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="120"/>
         <source>&amp;Libraries</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Библиотеки</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="134"/>
@@ -228,7 +228,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="148"/>
         <source>&amp;Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Перевод</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="198"/>
@@ -246,7 +246,7 @@
     <message>
         <location filename="../analyzerconsole.cpp" line="65"/>
         <source>Error Rate of Each Buffer Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота ошибок для каждого размера буфера</translation>
     </message>
 </context>
 <context>
@@ -254,27 +254,27 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="903"/>
         <source>Personal Mix at the Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Персональный микс на сервере</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="904"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation type="unfinished"></translation>
+        <translation>Когда вы подключены к серверу, эти элементы управления позволяют настроить ваш локальный микс, не влияя на то, что слышат от вас другие. В заголовке отображается имя сервера и, если известно, ведётся ли на нём запись.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="977"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Сервер</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="986"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">П О П Ы Т К А   П О Д К Л Ю Ч Е Н И Я</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="1193"/>
         <source>RECORDING ACTIVE</source>
-        <translation type="unfinished"></translation>
+        <translation>ИДЁТ ЗАПИСЬ</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="1203"/>
@@ -296,7 +296,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="142"/>
         <source>Input level of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Уровень входного сигнала текущего аудиоканала на сервере</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="145"/>
@@ -315,7 +315,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="151"/>
         <source>Status Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Индикатор состояния</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="152"/>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="155"/>
         <source>Status indicator label</source>
-        <translation type="unfinished"></translation>
+        <translation>Метка индикатора состояния</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="157"/>
@@ -343,7 +343,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="160"/>
         <source>Local panning position of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальная позиция панорамирования текущего аудиоканала на сервере</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="162"/>
@@ -381,7 +381,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="140"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
-        <translation type="unfinished"></translation>
+        <translation>Отображает уровень звука этого канала до фейдера. Всем клиентам, подключённым к серверу, будет присвоен один и тот же уровень звука.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="67"/>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="146"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
-        <translation type="unfinished"></translation>
+        <translation>Регулирует уровень звука этого канала. Всем клиентам, подключённым к серверу, назначается аудиофейдер, который отображается у каждого из них для настройки локального микса.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="154"/>
@@ -421,7 +421,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="173"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>С помощью флажка Grp можно объединить аудиоканалы в группу. Фейдеры всех каналов в группе перемещаются пропорционально и синхронно, если сдвинуть любой из них.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="176"/>
@@ -516,34 +516,34 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="179"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Метка фейдера идентифицирует подключённого клиента. Имя, изображение инструмента и флаг вашего местоположения можно задать в главном окне.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="188"/>
         <source>Mixer channel country/region flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Флаг страны/региона на микшерном канале</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="844"/>
         <source>Intermediate</source>
-        <translation type="unfinished"></translation>
+        <translation>Промежуточный</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="850"/>
         <source>Expert</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспертный</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="863"/>
         <source>Musician Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Карточка музыканта</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="48"/>
         <location filename="../audiomixerboard.cpp" line="162"/>
         <location filename="../audiomixerboard.cpp" line="252"/>
         <source>Mute</source>
-        <translation type="unfinished"></translation>
+        <translation>Заглушить</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="44"/>
@@ -565,7 +565,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="34"/>
         <source>Chat Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Окно чата</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="34"/>
@@ -575,43 +575,43 @@
     <message>
         <location filename="../chatdlg.cpp" line="36"/>
         <source>Chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>История чата</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="39"/>
         <source>Input Message Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите текст сообщения</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="40"/>
         <source>Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите текст сообщения в поле для ввода и нажмите Enter, чтобы отправить его на сервер, который разошлёт сообщение всем подключённым клиентам. После этого ваше сообщение появится в окне чата.</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="44"/>
         <source>New chat text edit box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Новое поле для ввода текста чата</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="54"/>
         <source>Type a message here</source>
-        <translation type="unfinished"></translation>
+        <translation>Введи сообщение здесь</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="58"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Правка</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="60"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Очистить историю чата</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="64"/>
         <location filename="../chatdlg.cpp" line="68"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Закрыть</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="148"/>
@@ -632,12 +632,12 @@
     <message>
         <location filename="../chatdlgbase.ui" line="20"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../chatdlgbase.ui" line="54"/>
         <source>&amp;Send</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Отправить</translation>
     </message>
     <message>
         <source>Cl&amp;ear</source>
@@ -662,7 +662,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="59"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
-        <translation type="unfinished"></translation>
+        <translation>Во избежание искажений звука не допускайте перегрузки входного сигнала.</translation>
     </message>
     <message>
         <source>If the </source>
@@ -687,7 +687,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="77"/>
         <source>Input level meter</source>
-        <translation type="unfinished"></translation>
+        <translation>Индикатор входного уровня</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="78"/>
@@ -748,7 +748,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="62"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Если приложение подключено к серверу и вы играете на своём инструменте/поёте в микрофон, индикатор уровня громкости должен реагировать. Если этого не происходит, вы, вероятно, выбрали не тот входной канал (например, «линейный вход» вместо микрофонного) или установили слишком низкий уровень входного усиления в аудиомикшере (Windows).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="70"/>
@@ -771,7 +771,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="103"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
-        <translation type="unfinished"></translation>
+        <translation>Реверберацию можно применить к одному локальному моноканалу или к обоим каналам в стереорежиме. Выбор моноканала и уровень реверберации можно изменять. Например, если на правый аудиоканал звуковой карты подаётся сигнал с микрофона и необходимо применить реверберацию, установите переключатель каналов в положение «правый» и двигайте фейдер вверх, пока не будет достигнут её желаемый уровень.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="114"/>
@@ -786,7 +786,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="118"/>
         <source>With these radio buttons the audio input channel on which the reverb effect is applied can be chosen. Either the left or right input channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>С помощью этих радиокнопок можно выбрать входной аудиоканал, к которому применяется реверберация. Можно выбрать левый или правый входной канал.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="123"/>
@@ -805,7 +805,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="132"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Зелёный</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="133"/>
@@ -815,12 +815,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="138"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Жёлтый</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="144"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Красный</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="152"/>
@@ -885,12 +885,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished"></translation>
+        <translation>Время пинга — это время, необходимое аудиопотоку для прохождения от клиента до сервера и обратно. Эта задержка обусловлена сетью и должна составлять около 20–30 мс. Если она превышает 50 мс, значит, расстояние до сервера слишком велико или ваше интернет-соединение недостаточно качественное.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="199"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Общая задержка рассчитывается из текущего времени пинга и задержки, вносимой текущими настройками буфера.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="231"/>
@@ -905,17 +905,17 @@
     <message>
         <location filename="../clientdlg.cpp" line="284"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Файл</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="311"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Вид</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="286"/>
         <source>&amp;Connection Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Настройка соединения...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="397"/>
@@ -962,7 +962,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="1000"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1076"/>
@@ -979,7 +979,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="1164"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваша звуковая карта работает некорректно. Пожалуйста, откройте диалоговое окно настроек и проверьте выбор устройства и настройки драйвера.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1182"/>
@@ -989,12 +989,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="296"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Выйти</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="299"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp; Редактировать</translation>
     </message>
     <message>
         <source>&amp;Sort Users by Name</source>
@@ -1060,7 +1060,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="166"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Размера сетевого джиттер-буфера недостаточно для текущего джиттера сети/аудиоинтерфейса.</translation>
     </message>
     <message>
         <source>The sound card buffer delay (buffer size) is set to too small a value.</source>
@@ -1073,7 +1073,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="178"/>
         <source>The CPU of the client or server is at 100%.</source>
-        <translation type="unfinished"></translation>
+        <translation>Процессор клиента или сервера загружен на 100%.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="184"/>
@@ -1103,7 +1103,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
         <source>Sett&amp;ings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Настройки</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="399"/>
@@ -1113,7 +1113,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="401"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Продвинутые настройки...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="320"/>
@@ -1128,12 +1128,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="161"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation type="unfinished"></translation>
+        <translation>Светодиодный индикатор состояния локального джиттер-буфера показывает текущий статус аудио/потока. Если индикатор горит красным, аудиопоток прерван. Это вызвано одной из следующих проблем:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="188"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Светодиодный индикатор состояния локального джиттер-буфера</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the %1 software.</source>
@@ -1147,22 +1147,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="323"/>
         <source>Sort Users by &amp;Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Сортировать пользователей по &amp;Имени</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="325"/>
         <source>Sort Users by &amp;Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Сортировать пользователей по &amp;Инструменту</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="331"/>
         <source>Sort Users by &amp;Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Сортировать пользователей по &amp;Группе</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="334"/>
         <source>Sort Users by &amp;City</source>
-        <translation type="unfinished"></translation>
+        <translation>Сортировать пользователей по &amp;Городу</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="737"/>
@@ -1196,12 +1196,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="942"/>
         <source>user</source>
-        <translation type="unfinished"></translation>
+        <translation>пользователь</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="946"/>
         <source>users</source>
-        <translation type="unfinished"></translation>
+        <translation>пользователи</translation>
     </message>
     <message>
         <source>The soundcard device does not work correctly. Please check the device selection and the driver settings.</source>
@@ -1253,7 +1253,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientdlgbase.ui" line="400"/>
         <location filename="../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>мс</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="498"/>
@@ -1263,12 +1263,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="505"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Настройки</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="512"/>
         <source>&amp;Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Чат</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="531"/>
@@ -1376,7 +1376,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="129"/>
         <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если драйвер выбирается во время активного соединения, соединение останавливается, драйвер изменяется, и соединение автоматически запускается снова.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="133"/>
@@ -1386,22 +1386,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="137"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
-        <translation type="unfinished"></translation>
+        <translation>При использовании драйвера ASIO4ALL, пожалуйста, учтите, что он обычно добавляет дополнительную задержку звука примерно в 10-30 мс. Поэтому рекомендуется использовать звуковую карту с нативным драйвером ASIO.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="142"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если вы используете драйвер kX ASIO, убедитесь, что входы ASIO подключены в панели настроек kX DSP.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="149"/>
         <source>Sound Card Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Назначение каналов звуковой карты</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="150"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если выбранное звуковое устройство имеет более одного входного или выходного канала, становятся видимыми настройки «Назначение входных каналов» и «Назначение выходных каналов».</translation>
     </message>
     <message>
         <source>For each </source>
@@ -1495,7 +1495,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="174"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation type="unfinished"></translation>
+        <translation>Включает поддержку очень маленьких сетевых аудиопакетов. Эти пакеты используются только в том случае, если задержка буфера звуковой карты меньше %1 сэмплов. Чем меньше сетевые буферы, тем ниже задержка звука. Но в то же время возрастает нагрузка на сеть и вероятность выпадений звука или появления звуковых артефактов.</translation>
     </message>
     <message>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
@@ -1512,7 +1512,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="235"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Это открывает настройки драйвера вашей звуковой карты. Некоторые драйверы позволяют изменять настройки буфера, а другие, например ASIO4ALL, дают возможность выбирать входы или выходы ваших устройств. Больше информации можно найти на jamulus.io.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="240"/>
@@ -1527,17 +1527,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="272"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выберите стиль для индикаторов уровня. Опции «Полоса (узкая)» и «Светодиоды (круглые, маленькие)» применяются только к микшерной панели. Когда выбрана «Полоса (узкая)», для входных индикаторов устанавливается стиль «Полоса (широкая)». Когда выбраны «Светодиоды (круглые, маленькие)», для входных индикаторов устанавливается стиль «Светодиоды (круглые, большие)». Остальные опции применяются как к микшерной панели, так и к входным индикаторам.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="281"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Язык</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="281"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите язык, который будет использоваться в пользовательском интерфейсе.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="283"/>
@@ -1552,7 +1552,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="59"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
-        <translation type="unfinished"></translation>
+        <translation>Регулирует относительные уровни левого и правого локальных аудиоканалов. Для моносигнала он работает как регулятор панорамы между двумя каналами. Например, если микрофон подключён к правому входному каналу, а к левому — инструмент, который звучит намного громче микрофона, перемещайте фейдер в ту сторону, чтобы надпись над ним показывала %1, где %2 — текущий индикатор ослабления.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="122"/>
@@ -1562,7 +1562,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="123"/>
         <source>Under the Windows operating system the ASIO driver (sound card) can be selected using %1. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected. Under macOS the input and output hardware can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>В операционной системе Windows драйвер ASIO (звуковой карты) можно выбрать с помощью %1. Если выбранный драйвер ASIO недействителен, отображается сообщение об ошибке и выбирается предыдущий действительный драйвер. В macOS можно выбрать устройства ввода и вывода.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="188"/>
@@ -1583,7 +1583,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="201"/>
         <location filename="../clientsettingsdlg.cpp" line="223"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
-        <translation type="unfinished"></translation>
+        <translation>Некоторые драйверы звуковых карт не позволяют изменять задержку буфера из %1. В этом случае настройка задержки буфера будет неактивна, и её придётся изменять с помощью драйвера звуковой карты. Используйте соответствующий инструмент для вашего интерфейса, чтобы настроить размер буфера. Например, если вы используете ASIO, нажмите кнопку «Настройки устройства ASIO», чтобы открыть панель настроек драйвера, или, если вы используете JACK, воспользуйтесь утилитой вроде QjackCtl для настройки размера буфера. Для других интерфейсов, таких как Pipewire, потребуется использовать их собственные инструменты. Пожалуйста, обратитесь к руководству по вашему интерфейсу.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="209"/>
@@ -1593,7 +1593,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="215"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>Фактическая задержка буфера влияет на соединение, текущую скорость отдачи и общую задержку. Чем меньше размер буфера, тем выше вероятность появления красного индикатора состояния (выпадения звука), выше скорость отдачи и ниже общая задержка.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="271"/>
@@ -1617,7 +1617,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="345"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта настройка позволяет увеличить уровень входного сигнала до 10 раз (+20 дБ). Если ваш звук слишком тихий, сначала попробуйте увеличить уровень, приблизившись к микрофону, отрегулировав звуковое оборудование или увеличив уровень в настройках входа вашей операционной системы. И только если это не поможет, установите значение здесь. Если ваш звук слишком громкий, искажается и перегружен, эта опция не поможет. Не используйте её. Искажение всё равно останется. Вместо этого уменьшите уровень входного сигнала, отодвинувшись от микрофона, отрегулировав звуковое оборудование или уменьшив уровень в настройках входа вашей операционной системы.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="358"/>
@@ -1656,7 +1656,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="376"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation type="unfinished"></translation>
+        <translation>Зависит от текущего размера аудиопакета и настроек сжатия. Убедитесь, что скорость исходящего потока не превышает доступную вам скорость отдачи (проверить это можно с помощью такого сервиса, как speedtest.net).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>
@@ -1696,7 +1696,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="396"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Включать звуковое оповещение при получении сообщения в чате и при подключении нового клиента к сессии. Для прослушивания оповещений может потребоваться второе звуковое устройство.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="398"/>
@@ -1774,12 +1774,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="506"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Напишите здесь своё имя или псевдоним, чтобы другие музыканты, с которыми вы хотите играть, знали, кто вы. Вы также можете добавить изображение инструмента, на котором играете, и флаг страны или региона, где вы находитесь. Кроме того, можно указать ваш город и уровень владения инструментом.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="511"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Указанные здесь данные появятся на вашем фейдере на микшерной панели при подключении к серверу %1. Этот тег также будет отображаться у каждого клиента, подключённого к тому же серверу, что и вы.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="522"/>
@@ -2083,17 +2083,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="81"/>
         <source>You can set the jitter buffer size manually for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы можете вручную задать размер джиттер-буфера для локального клиента и удалённого сервера. Для локального джиттер-буфера выпадения в аудиопотоке обозначаются световым индикатором под фейдерами размера буфера. Если индикатор становится красным, произошло переполнение/опустошение буфера, и аудиопоток прерывается.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="90"/>
         <source>If the Auto setting is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If Auto is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
-        <translation type="unfinished"></translation>
+        <translation>Если включена настройка «Авто», джиттер-буферы локального клиента и удалённого сервера настраиваются автоматически на основе измерений джиттера сети и звуковой карты. Когда включён режим «Авто», регуляторы размера джиттер-буфера неактивны (их нельзя перемещать мышью).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="96"/>
         <source>If the Auto setting is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the Auto setting and to lower the jitter buffer size manually by using the sliders until your personal acceptable amount of dropouts is reached. The LED indicator will display the audio dropouts of the local jitter buffer with a red light.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если включена настройка «Авто», сетевые буферы локального клиента и удалённого сервера устанавливаются на консервативное значение, чтобы минимизировать вероятность пропадания звука. Для точной настройки задержки рекомендуется отключить опцию «Авто» и вручную уменьшать размер джиттер-буфера с помощью ползунков до тех пор, пока вы не достигнете приемлемого для вас количества выпадений звука. Светодиодный индикатор будет отображать выпадения звука в локальном джиттер-буфере красным светом.</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
@@ -2142,7 +2142,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="287"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбирает количество аудиоканалов, используемых для связи между клиентом и сервером. Доступно три режима:</translation>
     </message>
     <message>
         <source>and </source>
@@ -2161,7 +2161,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="299"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудиосигнал, отправляемый на сервер, — монофонический, а обратный сигнал — стереофонический. Это полезно в том случае, если к одному входному каналу звуковой карты подключен инструмент, а к другому — микрофон. В такой ситуации два входных сигнала можно свести в один моноканал, но микс с сервера будет слышен в стерео.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="307"/>
@@ -2185,7 +2185,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="333"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта настройка определяет в процентах уровень фейдера для нового подключившегося клиента. Когда новый клиент подключается к текущему серверу, ему будет присвоен указанный начальный уровень, если для этого клиента не был сохранён другой уровень с предыдущего подключения.</translation>
     </message>
     <message>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>

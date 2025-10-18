@@ -137,11 +137,13 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     // 4: server version
     // 5: minimum ping time (invisible)
     // 6: maximum number of clients (invisible)
+    // 7: last ping timestamp (invisible)
     // (see EConnectListViewColumns in connectdlg.h, which must match the above)
 
     lvwServers->setColumnCount ( LVC_COLUMNS );
     lvwServers->hideColumn ( LVC_PING_MIN_HIDDEN );
     lvwServers->hideColumn ( LVC_CLIENTS_MAX_HIDDEN );
+    lvwServers->hideColumn ( LVC_LAST_PING_TIMESTAMP_HIDDEN );
 
     // per default the root shall not be decorated (to save space)
     lvwServers->setRootIsDecorated ( false );
@@ -161,6 +163,8 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     // setup timers
     TimerInitialSort.setSingleShot ( true ); // only once after list request
+
+    TimerPingShutdown.setSingleShot ( true ); // single shot shutdown timer
 
 #if defined( ANDROID ) || defined( Q_OS_IOS )
     // for the Android and iOS version maximize the window
@@ -197,10 +201,15 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QObject::connect ( &TimerPing, &QTimer::timeout, this, &CConnectDlg::OnTimerPing );
 
     QObject::connect ( &TimerReRequestServList, &QTimer::timeout, this, &CConnectDlg::OnTimerReRequestServList );
+
+    QObject::connect ( &TimerPingShutdown, &QTimer::timeout, this, &CConnectDlg::OnTimerPingShutdown );
 }
 
 void CConnectDlg::showEvent ( QShowEvent* )
 {
+    // Stop shutdown timer if dialog is shown again before it expires
+    TimerPingShutdown.stop();
+
     // load stored IP addresses in combo box
     cbxServerAddr->clear();
     cbxServerAddr->clearEditText();
@@ -220,6 +229,9 @@ void CConnectDlg::showEvent ( QShowEvent* )
 
 void CConnectDlg::RequestServerList()
 {
+    // Ensure shutdown timer is stopped when requesting new server list
+    TimerPingShutdown.stop();
+
     // reset flags
     bServerListReceived        = false;
     bReducedServerListReceived = false;
@@ -232,6 +244,10 @@ void CConnectDlg::RequestServerList()
 
     // clear server list view
     lvwServers->clear();
+
+#ifdef PING_STEALTH_MODE
+    mapPingHistory.clear();
+#endif
 
     // update list combo box (disable events to avoid a signal)
     cbxDirectory->blockSignals ( true );
@@ -271,9 +287,19 @@ void CConnectDlg::RequestServerList()
 
 void CConnectDlg::hideEvent ( QHideEvent* )
 {
-    // if window is closed, stop timers
-    TimerPing.stop();
+    // Stop the regular server list request timer immediately
     TimerReRequestServList.stop();
+
+#ifdef PING_STEALTH_MODE
+    // Start shutdown timer with randomized duration (30-50 seconds)
+    // This keeps ping timer running for stealth purposes to avoid correlation
+    const int iShutdownTimeMs = PING_SHUTDOWN_TIME_MS_MIN + QRandomGenerator::global()->bounded ( PING_SHUTDOWN_TIME_MS_VAR ); // 15s + 0-15s = 15-30s
+    TimerPingShutdown.start ( iShutdownTimeMs );
+#else
+    TimerPing.stop();
+#endif
+
+
 }
 
 void CConnectDlg::OnDirectoryChanged ( int iTypeIdx )
@@ -293,6 +319,12 @@ void CConnectDlg::OnDirectoryChanged ( int iTypeIdx )
     }
     pSettings->eDirectoryType = static_cast<EDirectoryType> ( iTypeIdx );
     RequestServerList();
+}
+
+void CConnectDlg::OnTimerPingShutdown()
+{
+    // Shutdown timer expired - now stop all ping activities
+    TimerPing.stop();
 }
 
 void CConnectDlg::OnTimerReRequestServList()
@@ -451,6 +483,8 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
 
         // store the maximum number of clients
         pNewListViewItem->setText ( LVC_CLIENTS_MAX_HIDDEN, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
+
+        pNewListViewItem->setText ( LVC_LAST_PING_TIMESTAMP_HIDDEN, "0" );
 
         // store host address
         pNewListViewItem->setData ( LVC_NAME, Qt::UserRole, CurHostAddress.toString() );
@@ -788,12 +822,78 @@ void CConnectDlg::OnTimerPing()
         // in the server list item GUI control element
         if ( NetworkUtil().ParseNetworkAddress ( pCurListViewItem->data ( LVC_NAME, Qt::UserRole ).toString(), haServerAddress, bEnableIPv6 ) )
         {
+            // Get minimum ping time and last ping timestamp
+            const qint64 iCurrentTime       = QDateTime::currentMSecsSinceEpoch();
+            const int    iMinPingTime       = pCurListViewItem->text ( LVC_PING_MIN_HIDDEN ).toInt();
+            const qint64 iLastPingTimestamp = pCurListViewItem->text ( LVC_LAST_PING_TIMESTAMP_HIDDEN ).toLongLong();
+            const qint64 iTimeSinceLastPing = iCurrentTime - iLastPingTimestamp;
+
+            // Calculate adaptive ping interval based on latency using linear formula:
+            // - Ping < 15ms: ping every timer cycle (skip 0)
+            // - Ping 20ms: ping every 2nd timer cycle (skip 1)
+            // - Ping 25ms: ping every 3rd timer cycle (skip 2)
+            // - Ping 30ms: ping every 4th timer cycle (skip 3)
+            // - Ping 150ms+: ping every 10th timer cycle (skip 9, maximum)
+            // Formula: skip_count = min(9, (ping - 15) / 5)
+            // Interval multiplier = 1 + skip_count
+            int iPingInterval;
+            if ( iMinPingTime == 0 || iMinPingTime > 99999999 )
+            {
+                // Never pinged or invalid - always ping to get initial measurement
+                iPingInterval = 0;
+            }
+            else
+            {
+                // Calculate number of timer cycles to skip based on ping time
+                // Linear mapping: 15ms->0 skips, 20ms->1 skip, 25ms->2 skips, etc.
+                // Capped at 150ms which gives 9 skips (ping every 10th cycle)
+                const int iSkipCount          = std::min ( 9, std::max ( 0, ( iMinPingTime - 15 ) / 5 ) );
+                const int iIntervalMultiplier = 1 + iSkipCount;
+                iPingInterval                 = PING_UPDATE_TIME_SERVER_LIST_MS * iIntervalMultiplier;
+            }
+
+            // Add randomization as absolute time offset (±500ms) to prevent synchronized pings
+            // This avoids regular intervals (e.g., exactly 2500ms every time)
+            const int iRandomOffsetMs = QRandomGenerator::global()->bounded ( 1000 ) - 500; // -500ms to +500ms
+            iPingInterval += iRandomOffsetMs;
+
+#if 1 // Set to 1 to enable detailed ping diagnostics tooltip
+            
+            const int iPingsLastMinute = GetPingCountLastMinute ( pCurListViewItem->text ( LVC_NAME ) );
+            const double dTheoreticalPingRatePerMin = iPingInterval > 0 ? 60000.0 / static_cast<double> ( iPingInterval ) : 0.0;
+
+            // Update diagnostic tooltip with ping statistics
+            QString strTooltip = QString ( "Server: %1\n"
+                                           "Min Ping: %2 ms\n"
+                                           "Time Since Last Ping: %3 ms\n"
+                                           "Calculated Interval: %4 ms\n"
+                                           "Theoretical Rate: %5 pings/min\n"
+                                           "Actual Pings (last 60s): %6" )
+                                     .arg ( pCurListViewItem->text ( LVC_NAME ) )
+                                     .arg ( iMinPingTime )
+                                     .arg ( iTimeSinceLastPing )
+                                     .arg ( iPingInterval )
+                                     .arg ( dTheoreticalPingRatePerMin, 0, 'f', 1 )
+                                     .arg ( iPingsLastMinute );
+
+            // Set tooltip only for ping column
+            pCurListViewItem->setToolTip ( LVC_PING, iMinPingTime < 99999999 ? strTooltip : "n/a" );
+#endif
+
+            // Skip this server if not enough time has passed since last ping
+            if ( iTimeSinceLastPing < iPingInterval )
+            {
+                continue;
+            }
+
+            pCurListViewItem->setText ( LVC_LAST_PING_TIMESTAMP_HIDDEN, QString::number ( iCurrentTime ) );
+            TrackPingSent ( pCurListViewItem->text ( LVC_NAME ) );
             // if address is valid, send ping message using a new thread
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
             QFuture<void> f = QtConcurrent::run ( &CConnectDlg::EmitCLServerListPingMes, this, haServerAddress, bNeedVersion );
             Q_UNUSED ( f );
 #else
-            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, haServerAddress, bNeedVersion );
+            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, haServerAddress, bNeedVersion, lastPingTime );
 #endif
         }
     }
@@ -813,6 +913,9 @@ void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress,
     {
         emit CreateCLServerListReqVerAndOSMes ( haServerAddress );
     }
+
+
+
 
     emit CreateCLServerListPingMes ( haServerAddress );
 }
@@ -1032,3 +1135,39 @@ void CConnectDlg::UpdateDirectoryComboBox()
         }
     }
 }
+
+#ifdef PING_STEALTH_MODE
+void CConnectDlg::TrackPingSent ( const QString& strServerAddr )
+{
+    const qint64 iCurrentTime = QDateTime::currentMSecsSinceEpoch();
+
+    // Add current ping timestamp to history
+    mapPingHistory[strServerAddr].enqueue ( iCurrentTime );
+
+    // Remove pings older than 60 seconds (60000 ms)
+    const qint64 iOneMinuteAgo = iCurrentTime - 60000;
+    while ( !mapPingHistory[strServerAddr].isEmpty() && mapPingHistory[strServerAddr].head() < iOneMinuteAgo )
+    {
+        mapPingHistory[strServerAddr].dequeue();
+    }
+}
+
+int CConnectDlg::GetPingCountLastMinute ( const QString& strServerAddr )
+{
+    if ( !mapPingHistory.contains ( strServerAddr ) )
+    {
+        return 0;
+    }
+
+    // Clean up old entries first
+    const qint64 iCurrentTime  = QDateTime::currentMSecsSinceEpoch();
+    const qint64 iOneMinuteAgo = iCurrentTime - 60000;
+
+    while ( !mapPingHistory[strServerAddr].isEmpty() && mapPingHistory[strServerAddr].head() < iOneMinuteAgo )
+    {
+        mapPingHistory[strServerAddr].dequeue();
+    }
+
+    return mapPingHistory[strServerAddr].size();
+}
+#endif

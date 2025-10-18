@@ -43,6 +43,13 @@
 // transmitted until it is received
 #define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
 
+#define PING_STEALTH_MODE
+#ifdef PING_STEALTH_MODE
+#define PING_SHUTDOWN_TIME_MS_MIN 15000
+#define PING_SHUTDOWN_TIME_MS_VAR 15000
+#endif
+
+
 /* Classes ********************************************************************/
 class CConnectDlg : public CBaseDlg, private Ui_CConnectDlgBase
 {
@@ -76,7 +83,8 @@ protected:
         LVC_LOCATION,           // location
         LVC_VERSION,            // server version
         LVC_PING_MIN_HIDDEN,    // minimum ping time (invisible)
-        LVC_CLIENTS_MAX_HIDDEN, // maximum number of clients (invisible)
+        LVC_CLIENTS_MAX_HIDDEN, // maximum number of clients (invisible),
+        LVC_LAST_PING_TIMESTAMP_HIDDEN, // timestamp of last ping measurement (invisible)
         LVC_COLUMNS             // total number of columns
     };
 
@@ -95,6 +103,7 @@ protected:
     CClientSettings* pSettings;
 
     QTimer       TimerPing;
+    QTimer       TimerPingShutdown;
     QTimer       TimerReRequestServList;
     QTimer       TimerInitialSort;
     CHostAddress haDirectoryAddress;
@@ -107,6 +116,18 @@ protected:
     bool         bListFilterWasActive;
     bool         bShowAllMusicians;
     bool         bEnableIPv6;
+#ifdef PING_STEALTH_MODE
+private:
+    // Ping statistics tracking: stores timestamps of actual pings sent
+    // Key: server address string, Value: queue of ping timestamps (ms since epoch)
+    QMap<QString, QQueue<qint64>> mapPingHistory;
+
+    // Helper function to track ping and update statistics
+    void TrackPingSent ( const QString& strServerAddr );
+
+    // Helper function to get actual ping count in last minute
+    int GetPingCountLastMinute ( const QString& strServerAddr );
+ #endif
 
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
@@ -118,6 +139,7 @@ public slots:
     void OnConnectClicked();
     void OnDeleteServerAddrClicked();
     void OnTimerPing();
+    void OnTimerPingShutdown();
     void OnTimerReRequestServList();
 
 signals:

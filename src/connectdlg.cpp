@@ -845,7 +845,7 @@ void CConnectDlg::OnTimerPing()
                 iPingInterval                 = PING_UPDATE_TIME_SERVER_LIST_MS * iIntervalMultiplier;
               }
 
-            // Add randomization as absolute time offset (±500ms) to prevent synchronized pings
+            // Add randomization as absolute time offset ( 500ms) to prevent synchronized pings
             // This avoids regular intervals (e.g., exactly 2500ms every time)
             const int iRandomOffsetMs = QRandomGenerator::global()->bounded ( 500 ) - 250; // -250ms to +250ms
             iPingInterval += iRandomOffsetMs;
@@ -886,7 +886,7 @@ void CConnectDlg::OnTimerPing()
             QFuture<void> f = QtConcurrent::run ( &CConnectDlg::EmitCLServerListPingMes, this, haServerAddress, bNeedVersion );
             Q_UNUSED ( f );
 #else
-            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, haServerAddress, bNeedVersion, lastPingTime );
+            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, haServerAddress, bNeedVersion );
 #endif
         }
     }

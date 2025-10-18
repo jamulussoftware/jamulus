@@ -693,7 +693,7 @@ void CConnectDlg::UpdateListFilter()
                     bFilterFound = true;
                 }
 
-                // search children
+				// search children
                 for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
                 {
                     if ( pCurListViewItem->child ( iCCnt )->text ( LVC_NAME ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
@@ -829,13 +829,6 @@ void CConnectDlg::OnTimerPing()
             const qint64 iTimeSinceLastPing = iCurrentTime - iLastPingTimestamp;
 
             // Calculate adaptive ping interval based on latency using linear formula:
-            // - Ping < 15ms: ping every timer cycle (skip 0)
-            // - Ping 20ms: ping every 2nd timer cycle (skip 1)
-            // - Ping 25ms: ping every 3rd timer cycle (skip 2)
-            // - Ping 30ms: ping every 4th timer cycle (skip 3)
-            // - Ping 150ms+: ping every 10th timer cycle (skip 9, maximum)
-            // Formula: skip_count = min(9, (ping - 15) / 5)
-            // Interval multiplier = 1 + skip_count
             int iPingInterval;
             if ( iMinPingTime == 0 || iMinPingTime > 99999999 )
             {
@@ -846,15 +839,15 @@ void CConnectDlg::OnTimerPing()
             {
                 // Calculate number of timer cycles to skip based on ping time
                 // Linear mapping: 15ms->0 skips, 20ms->1 skip, 25ms->2 skips, etc.
-                // Capped at 150ms which gives 9 skips (ping every 10th cycle)
-                const int iSkipCount          = std::min ( 9, std::max ( 0, ( iMinPingTime - 15 ) / 5 ) );
+                // Capped at 55ms which gives 8 skips (ping every 9th cycle)
+                const int iSkipCount          = std::min ( 8, std::max ( 0, ( iMinPingTime - 15 ) / 5 ) );
                 const int iIntervalMultiplier = 1 + iSkipCount;
                 iPingInterval                 = PING_UPDATE_TIME_SERVER_LIST_MS * iIntervalMultiplier;
-            }
+              }
 
             // Add randomization as absolute time offset (±500ms) to prevent synchronized pings
             // This avoids regular intervals (e.g., exactly 2500ms every time)
-            const int iRandomOffsetMs = QRandomGenerator::global()->bounded ( 1000 ) - 500; // -500ms to +500ms
+            const int iRandomOffsetMs = QRandomGenerator::global()->bounded ( 500 ) - 250; // -250ms to +250ms
             iPingInterval += iRandomOffsetMs;
 
 #if 1 // Set to 1 to enable detailed ping diagnostics tooltip

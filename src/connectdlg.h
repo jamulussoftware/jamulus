@@ -45,8 +45,8 @@
 
 #define PING_STEALTH_MODE
 #ifdef PING_STEALTH_MODE
-#define PING_SHUTDOWN_TIME_MS_MIN 15000
-#define PING_SHUTDOWN_TIME_MS_VAR 15000
+#define PING_SHUTDOWN_TIME_MS_MIN 40000 // needs to be reasonable higher than the 10 x ping timer to have every server at least once pinged
+#define PING_SHUTDOWN_TIME_MS_VAR 20000
 #endif
 
 

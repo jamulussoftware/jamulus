@@ -507,7 +507,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
 #ifdef PING_STEALTH_MODE
         pNewListViewItem->setText ( LVC_LAST_PING_TIMESTAMP_HIDDEN, "0" );
         pNewListViewItem->setData ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole, QVariant() ); // QQueue<qint64> for ping stats, will be initialized on first ping
-        pNewListViewItem->setData ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole +1, QRandomGenerator::global()->bounded ( 800 ) ); // random ping salt per server
+        pNewListViewItem->setData ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole +1, QRandomGenerator::global()->bounded ( 500 ) ); // random ping salt per server
 #endif
 
         // store host address
@@ -528,7 +528,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     
 #ifdef PING_STEALTH_MODE
     // in stealth mode a lot of pings are skipped, so the frequency here can be higher
-    int iPingUpdateInterval = QRandomGenerator::global()->bounded ( 250 ) + 500;
+    int iPingUpdateInterval = QRandomGenerator::global()->bounded ( 100 ) + 500;
 #else
     int iPingUpdateInterval = PING_UPDATE_TIME_SERVER_LIST_MS;
 #endif
@@ -891,23 +891,26 @@ void CConnectDlg::OnTimerPing()
         }
         else
         {
-            // Calculate adaptive ping interval: base multiplier from latency (15ms→1x, capped at 9x),
+            // Calculate adaptive ping interval: base multiplier from latency (15ms→1x, capped at fPingMaxMultiplier),
             // combined with geographic (high-latency servers get 3-50% extra variance) and random factors (±15%)
+            const float fPingMaxMultiplier  = 3.0f;
             const float fGeoFactor = 1.0f + (std::min(500,iMinPingTime) / 100.0f ) * 0.2f; // high ping get more variance
             const float fRandomFactor = ( 0.85f + QRandomGenerator::global()->generateDouble() * 0.3f ) * fGeoFactor; 
-            const float fIntervalMultiplier = std::min ( 9.0f, std::max ( 1.0f, 1.0f + ( iMinPingTime - 15 ) / 25.0f ) ) * fRandomFactor;
-            iPingInterval                   = static_cast<int> ( PING_UPDATE_TIME_SERVER_LIST_MS * fIntervalMultiplier );
+            const float fIntervalMultiplier = std::min (fPingMaxMultiplier, std::max ( 1.0f, 1.0f + ( iMinPingTime - 15 ) / 25.0f ) ) * fRandomFactor;
+
+            iPingInterval = static_cast<int> ( PING_UPDATE_TIME_SERVER_LIST_MS * fIntervalMultiplier );
 
             iPingInterval += iServerSalt;
              
-            // Add randomization as absolute time offset ( 500ms) to prevent any synchronized pings across servers
-            const int iRandomOffsetMs = QRandomGenerator::global()->bounded ( 1000 ) - 500; // -500ms to +500ms
+            // Add randomization as absolute time offset ( 300ms) to prevent any synchronized pings across servers
+            const int iRandomOffsetMs = QRandomGenerator::global()->bounded ( 600 ) - 300; // -300ms to +300ms
             iPingInterval += iRandomOffsetMs;
 
-            // During shutdown: randomly sent a ping for first 7 seconds only
-            if ( TimerKeepPingAfterHide.isActive() && TimerKeepPingAfterHide.remainingTime() > ( iKeepPingAfterHideStartTime - 5000 ) )
+            // During shutdown: randomly sent a ping for first 15 seconds only
+            const qint64 iTimeSinceHide = iCurrentTime - iKeepPingAfterHideStartTimestamp;
+            if ( TimerKeepPingAfterHide.isActive() && iTimeSinceHide < 15000 )
             {            
-                iPingInterval = QRandomGenerator::global()->bounded ( 4000 ); 
+                iPingInterval = 2000 + QRandomGenerator::global()->bounded ( 1000 );
             } 
 
             iPingInterval = std::max ( iPingInterval, 100 ); // enforce minimum interval

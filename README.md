@@ -1,3 +1,12 @@
+# This is a fork to test out anti-correlation strategies, use at your own risk. 
+
+For details see discussion in 
+https://github.com/orgs/jamulussoftware/discussions/3545
+
+This is a client-side only fix: instead of pinging each server at a constant rate and stop when connecting this patch will randomize the frequency and keeps pinging even when the dialog is closed, makeing correlation events harder. It may still be possible at times when there is really no activity on jamulus servers over a long time, so with all randomization you are still the only user...
+
+
+
 [![Homepage picture](https://github.com/jamulussoftware/jamuluswebsite/blob/release/assets/img/jamulusbannersmall.png)](https://jamulus.io)
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)

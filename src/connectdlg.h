@@ -45,8 +45,9 @@
 
 #define PING_STEALTH_MODE // prototype to avoid correlation of pings and user activity
 #ifdef PING_STEALTH_MODE
-#define PING_SHUTDOWN_TIME_MS_MIN 30000 // recommend to keep it like this and not lower
-#define PING_SHUTDOWN_TIME_MS_VAR 10000
+//#define PING_STEALTH_MODE_DETAILED_STATS // enable to log detailed ping stats for debugging
+#define PING_SHUTDOWN_TIME_MS_MIN 40000 // recommend to keep it like this and not lower
+#define PING_SHUTDOWN_TIME_MS_VAR 20000
 // Register QQueue<qint64> as Qt metatype for use in QVariant to keep ping stats in UserRole
 Q_DECLARE_METATYPE ( QQueue<qint64> ) 
 #endif
@@ -103,6 +104,9 @@ protected:
     void             RequestServerList();
     void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void             UpdateDirectoryComboBox();
+#ifdef PING_STEALTH_MODE_DETAILED_STATS
+    void pingStealthModeDebugStats();
+#endif
 
     CClientSettings* pSettings;
 
@@ -110,6 +114,7 @@ protected:
 #ifdef PING_STEALTH_MODE
     QTimer       TimerKeepPingAfterHide;
     qint64       iKeepPingAfterHideStartTime; // shutdown ping timer in ms epoch
+    qint64       iKeepPingAfterHideStartTimestamp; // timestamp when keeping pings after hide started
 #endif
     QTimer       TimerReRequestServList;
     QTimer       TimerInitialSort;

@@ -43,10 +43,12 @@
 // transmitted until it is received
 #define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
 
-#define PING_STEALTH_MODE
+#define PING_STEALTH_MODE // prototype to avoid correlation of pings and user activity
 #ifdef PING_STEALTH_MODE
-#define PING_SHUTDOWN_TIME_MS_MIN 40000 // needs to be reasonable higher than the 10 x ping timer to have every server at least once pinged
-#define PING_SHUTDOWN_TIME_MS_VAR 20000
+#define PING_SHUTDOWN_TIME_MS_MIN 30000 // recommend to keep it like this and not lower
+#define PING_SHUTDOWN_TIME_MS_VAR 10000
+// Register QQueue<qint64> as Qt metatype for use in QVariant to keep ping stats in UserRole
+Q_DECLARE_METATYPE ( QQueue<qint64> ) 
 #endif
 
 
@@ -84,7 +86,9 @@ protected:
         LVC_VERSION,            // server version
         LVC_PING_MIN_HIDDEN,    // minimum ping time (invisible)
         LVC_CLIENTS_MAX_HIDDEN, // maximum number of clients (invisible),
+#ifdef PING_STEALTH_MODE
         LVC_LAST_PING_TIMESTAMP_HIDDEN, // timestamp of last ping measurement (invisible)
+#endif
         LVC_COLUMNS             // total number of columns
     };
 
@@ -103,7 +107,10 @@ protected:
     CClientSettings* pSettings;
 
     QTimer       TimerPing;
-    QTimer       TimerPingShutdown;
+#ifdef PING_STEALTH_MODE
+    QTimer       TimerKeepPingAfterHide;
+    qint64       iKeepPingAfterHideStartTime; // shutdown ping timer in ms epoch
+#endif
     QTimer       TimerReRequestServList;
     QTimer       TimerInitialSort;
     CHostAddress haDirectoryAddress;
@@ -116,18 +123,6 @@ protected:
     bool         bListFilterWasActive;
     bool         bShowAllMusicians;
     bool         bEnableIPv6;
-#ifdef PING_STEALTH_MODE
-private:
-    // Ping statistics tracking: stores timestamps of actual pings sent
-    // Key: server address string, Value: queue of ping timestamps (ms since epoch)
-    QMap<QString, QQueue<qint64>> mapPingHistory;
-
-    // Helper function to track ping and update statistics
-    void TrackPingSent ( const QString& strServerAddr );
-
-    // Helper function to get actual ping count in last minute
-    int GetPingCountLastMinute ( const QString& strServerAddr );
- #endif
 
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
@@ -139,7 +134,7 @@ public slots:
     void OnConnectClicked();
     void OnDeleteServerAddrClicked();
     void OnTimerPing();
-    void OnTimerPingShutdown();
+    void OnTimerKeepPingAfterHide();
     void OnTimerReRequestServList();
 
 signals:

@@ -48,8 +48,10 @@
 //#define PING_STEALTH_MODE_DETAILED_STATS // enable to log detailed ping stats for debugging
 #define PING_SHUTDOWN_TIME_MS_MIN 45000 // recommend to keep it like this and not lower
 #define PING_SHUTDOWN_TIME_MS_VAR 15000
+// Register QHostAddress as a Qt meta type
+Q_DECLARE_METATYPE ( QHostAddress )
 // Register QQueue<qint64> as Qt metatype for use in QVariant to keep ping stats in UserRole
-Q_DECLARE_METATYPE ( QQueue<qint64> ) 
+Q_DECLARE_METATYPE ( QQueue<qint64> )
 #endif
 
 

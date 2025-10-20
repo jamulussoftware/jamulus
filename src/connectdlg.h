@@ -44,14 +44,16 @@
 #define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
 
 #define PING_STEALTH_MODE // prototype to avoid correlation of pings and user activity
+
+#define PING_STEALTH_MODE // prototype to avoid correlation of pings and user activity
 #ifdef PING_STEALTH_MODE
-//#define PING_STEALTH_MODE_DETAILED_STATS // enable to log detailed ping stats for debugging
-#define PING_SHUTDOWN_TIME_MS_MIN 45000 // recommend to keep it like this and not lower
-#define PING_SHUTDOWN_TIME_MS_VAR 15000
-// Register QHostAddress as a Qt meta type
-Q_DECLARE_METATYPE ( QHostAddress )
-// Register QQueue<qint64> as Qt metatype for use in QVariant to keep ping stats in UserRole
-Q_DECLARE_METATYPE ( QQueue<qint64> )
+#ifdef _DEBUG
+#define PING_STEALTH_MODE_DETAILED_STATS // enable to log detailed ping stats for debugging
+#endif
+#define PING_SHUTDOWN_TIME_MS_MIN 45000 
+#define PING_SHUTDOWN_TIME_MS_VAR 30000
+Q_DECLARE_METATYPE(QQueue<qint64>)
+Q_DECLARE_METATYPE(QHostAddress)
 #endif
 
 
@@ -89,11 +91,21 @@ protected:
         LVC_VERSION,            // server version
         LVC_PING_MIN_HIDDEN,    // minimum ping time (invisible)
         LVC_CLIENTS_MAX_HIDDEN, // maximum number of clients (invisible),
-#ifdef PING_STEALTH_MODE
-        LVC_LAST_PING_TIMESTAMP_HIDDEN, // timestamp of last ping measurement (invisible)
-#endif
         LVC_COLUMNS             // total number of columns
     };
+
+
+    // those are the custom user data fields, all stored in the UserRole of the list view item (LVC_NAME)
+    enum EColumnPingNameUserRoles
+    {
+        USER_ROLE_HOST_ADDRESS = Qt::UserRole, // QString: CHostAddress as string
+        USER_ROLE_QHOST_ADDRESS_CACHE,      // QHostAddress: cache QHostAddress, will be updated on first ping
+        USER_ROLE_QHOST_PORT_CACHE,         // quint16: cache port number, will be updated on first ping
+        USER_ROLE_LAST_PING_TIMESTAMP,      // qint64: timestamp of last ping measurement
+        USER_ROLE_PING_TIMES_QUEUE,         // QQueue<qint64>: for ping stats, will be initialized on first ping
+        USER_ROLE_PING_SALT                 // int: random ping salt per server
+    };
+
 
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
@@ -115,7 +127,6 @@ protected:
     QTimer       TimerPing;
 #ifdef PING_STEALTH_MODE
     QTimer       TimerKeepPingAfterHide;
-    qint64       iKeepPingAfterHideStartTime; // shutdown ping timer in ms epoch
     qint64       iKeepPingAfterHideStartTimestamp; // timestamp when keeping pings after hide started
 #endif
     QTimer       TimerReRequestServList;

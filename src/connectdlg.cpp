@@ -143,9 +143,6 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     lvwServers->setColumnCount ( LVC_COLUMNS );
     lvwServers->hideColumn ( LVC_PING_MIN_HIDDEN );
     lvwServers->hideColumn ( LVC_CLIENTS_MAX_HIDDEN );
-#ifdef PING_STEALTH_MODE
-    lvwServers->hideColumn ( LVC_LAST_PING_TIMESTAMP_HIDDEN );
-#endif
 
     // per default the root shall not be decorated (to save space)
     lvwServers->setRootIsDecorated ( false );
@@ -166,8 +163,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     // setup timers
     TimerInitialSort.setSingleShot ( true ); // only once after list request
 #ifdef PING_STEALTH_MODE
-    TimerKeepPingAfterHide.setSingleShot ( true ); // single shot shutdown timer
-    iKeepPingAfterHideStartTime = 0;
+    TimerKeepPingAfterHide.setSingleShot ( true );
     iKeepPingAfterHideStartTimestamp = 0;
 #endif
 
@@ -300,19 +296,18 @@ void CConnectDlg::hideEvent ( QHideEvent* )
 #ifdef PING_STEALTH_MODE
     // Start shutdown timer with randomized duration 
     // This keeps ping timer running for stealth purposes to avoid correlation
-    iKeepPingAfterHideStartTime = PING_SHUTDOWN_TIME_MS_MIN + QRandomGenerator::global()->bounded ( PING_SHUTDOWN_TIME_MS_VAR ); 
     iKeepPingAfterHideStartTimestamp = QDateTime::currentMSecsSinceEpoch();
 
-    // Set all servers' last ping timestamp to current time
-    // This ensures the shutdown logic in OnTimerPing() will trigger random delays (500-4000ms)
-    // for each server's first shutdown ping, creating a uniform distribution
+    // Set all servers' last ping timestamp somehow near to the current time
     const int iServerListLen = lvwServers->topLevelItemCount();
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
         QTreeWidgetItem* pItem = lvwServers->topLevelItem ( iIdx );
-        pItem->setText ( LVC_LAST_PING_TIMESTAMP_HIDDEN, QString::number ( iKeepPingAfterHideStartTimestamp ) );
+        qint64           iRandomOffset = QRandomGenerator::global()->bounded ( 1000 );
+        pItem->setData ( LVC_NAME, USER_ROLE_LAST_PING_TIMESTAMP,  iKeepPingAfterHideStartTimestamp - iRandomOffset );
     }
-    TimerKeepPingAfterHide.start ( iKeepPingAfterHideStartTime );
+    // this will initiate the "after hide" phase where ping will continue, at the end of which pinging will stop
+    TimerKeepPingAfterHide.start ( PING_SHUTDOWN_TIME_MS_MIN + QRandomGenerator::global()->bounded ( PING_SHUTDOWN_TIME_MS_VAR ) );
 #else
     TimerPing.stop();
 #endif
@@ -505,15 +500,15 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
         // store the maximum number of clients
         pNewListViewItem->setText ( LVC_CLIENTS_MAX_HIDDEN, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
 #ifdef PING_STEALTH_MODE
-        pNewListViewItem->setText ( LVC_LAST_PING_TIMESTAMP_HIDDEN, "0" );
-        pNewListViewItem->setData ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole, QVariant() ); // QQueue<qint64> for ping stats, will be initialized on first ping
-        pNewListViewItem->setData ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole +1, QRandomGenerator::global()->bounded ( 500 ) ); // random ping salt per server
+        pNewListViewItem->setData ( LVC_NAME, USER_ROLE_PING_TIMES_QUEUE, QVariant() ); // QQueue<qint64> for ping stats, will be initialized on first ping
+        pNewListViewItem->setData ( LVC_NAME, USER_ROLE_PING_SALT, QRandomGenerator::global()->bounded ( 500 ) ); // random ping salt per server
+        pNewListViewItem->setData ( LVC_NAME, USER_ROLE_LAST_PING_TIMESTAMP,  0  );
 #endif
 
         // store host address
-        pNewListViewItem->setData ( LVC_NAME, Qt::UserRole, CurHostAddress.toString() );
-        pNewListViewItem->setData ( LVC_NAME, Qt::UserRole + 1, QVariant() ); // cache QHostAddress, will be updated on first ping
-        pNewListViewItem->setData ( LVC_NAME, Qt::UserRole + 2, QVariant() ); // cache quint16 port number, will be updated on first ping
+        pNewListViewItem->setData ( LVC_NAME, USER_ROLE_HOST_ADDRESS, CurHostAddress.toString() );
+        pNewListViewItem->setData ( LVC_NAME, USER_ROLE_QHOST_ADDRESS_CACHE, QVariant() ); // cache QHostAddress, will be updated on first ping
+        pNewListViewItem->setData ( LVC_NAME, USER_ROLE_QHOST_PORT_CACHE, QVariant() );    // cache quint16 port number, will be updated on first ping
 
         // per default expand the list item (if not "show all servers")
         if ( bShowAllMusicians )
@@ -525,7 +520,6 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     // immediately issue the ping measurements and start the ping timer since
     // the server list is filled now
     OnTimerPing();
-    
 #ifdef PING_STEALTH_MODE
     // in stealth mode a lot of pings are skipped, so the frequency here can be higher
     int iPingUpdateInterval = QRandomGenerator::global()->bounded ( 100 ) + 500;
@@ -795,7 +789,7 @@ void CConnectDlg::OnConnectClicked()
         QTreeWidgetItem* pCurSelTopListItem = GetParentListViewItem ( CurSelListItemList[0] );
 
         // get host address from selected list view item as a string
-        strSelectedAddress = pCurSelTopListItem->data ( LVC_NAME, Qt::UserRole ).toString();
+        strSelectedAddress = pCurSelTopListItem->data ( LVC_NAME, USER_ROLE_HOST_ADDRESS ).toString();
 
         // store selected server name
         strSelectedServerName = pCurSelTopListItem->text ( LVC_NAME );
@@ -850,8 +844,8 @@ void CConnectDlg::OnTimerPing()
         const bool bNeedVersion = pCurListViewItem->text ( LVC_VERSION ).isEmpty();
 
         // retrieve cached QHostAddress and port from UserData
-        QVariant varCachedIP   = pCurListViewItem->data ( LVC_NAME, Qt::UserRole + 1 );
-        QVariant varCachedPort = pCurListViewItem->data ( LVC_NAME, Qt::UserRole + 2 );
+        QVariant varCachedIP   = pCurListViewItem->data ( LVC_NAME, USER_ROLE_QHOST_ADDRESS_CACHE );
+        QVariant varCachedPort = pCurListViewItem->data ( LVC_NAME, USER_ROLE_QHOST_PORT_CACHE );
 
         CHostAddress haServerAddress;
 
@@ -864,22 +858,24 @@ void CConnectDlg::OnTimerPing()
         else
         {
             // Fallback: parse and cache if not present (should not happen in normal flow)
-            if ( !NetworkUtil().ParseNetworkAddress ( pCurListViewItem->data ( LVC_NAME, Qt::UserRole ).toString(), haServerAddress, bEnableIPv6 ) )
+            if ( !NetworkUtil().ParseNetworkAddress ( pCurListViewItem->data ( LVC_NAME, USER_ROLE_HOST_ADDRESS ).toString(),
+                                                      haServerAddress,
+                                                      bEnableIPv6 ) )
             {
                 continue; // Skip this server if parsing fails
             }
 
             // Cache the parsed values for future use
-            pCurListViewItem->setData ( LVC_NAME, Qt::UserRole + 1, QVariant::fromValue ( haServerAddress.InetAddr ) );
-            pCurListViewItem->setData ( LVC_NAME, Qt::UserRole + 2, QVariant::fromValue ( haServerAddress.iPort ) );
+            pCurListViewItem->setData ( LVC_NAME, USER_ROLE_QHOST_ADDRESS_CACHE, QVariant::fromValue ( haServerAddress.InetAddr ) );
+            pCurListViewItem->setData ( LVC_NAME, USER_ROLE_QHOST_PORT_CACHE, QVariant::fromValue ( haServerAddress.iPort ) );
         }
 
 #ifdef PING_STEALTH_MODE
         // Get minimum ping time and last ping timestamp
         const qint64 iCurrentTime       = QDateTime::currentMSecsSinceEpoch();
         const int    iMinPingTime       = pCurListViewItem->text ( LVC_PING_MIN_HIDDEN ).toInt();
-        const qint64 iLastPingTimestamp = pCurListViewItem->text ( LVC_LAST_PING_TIMESTAMP_HIDDEN ).toLongLong();
-        const int    iServerSalt        = pCurListViewItem->data ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole + 1 ).toInt();
+        const qint64 iLastPingTimestamp = pCurListViewItem->data ( LVC_NAME, USER_ROLE_LAST_PING_TIMESTAMP ).toLongLong();
+        const int    iServerSalt        = pCurListViewItem->data ( LVC_NAME, USER_ROLE_PING_SALT ).toInt();
         const qint64 iTimeSinceLastPing = iCurrentTime - iLastPingTimestamp;
 
         // Calculate adaptive ping interval based on latency using linear formula:
@@ -893,6 +889,7 @@ void CConnectDlg::OnTimerPing()
         {
             // Calculate adaptive ping interval: base multiplier from latency (15ms→1x, capped at fPingMaxMultiplier),
             // combined with geographic (high-latency servers get 3-50% extra variance) and random factors (±15%)
+            // fPingMaxMultiplier is currently pretty low to keep it similar to the normal constant ping, should be increased in future versions (like 8-10)
             const float fPingMaxMultiplier  = 3.0f;
             const float fGeoFactor = 1.0f + (std::min(500,iMinPingTime) / 100.0f ) * 0.2f; // high ping get more variance
             const float fRandomFactor = ( 0.85f + QRandomGenerator::global()->generateDouble() * 0.3f ) * fGeoFactor; 
@@ -902,22 +899,28 @@ void CConnectDlg::OnTimerPing()
 
             iPingInterval += iServerSalt;
              
-            // Add randomization as absolute time offset ( 300ms) to prevent any synchronized pings across servers
+            // Add randomization to prevent any synchronized pings across servers with the same ping
             const int iRandomOffsetMs = QRandomGenerator::global()->bounded ( 600 ) - 300; // -300ms to +300ms
             iPingInterval += iRandomOffsetMs;
 
-            // During shutdown: randomly sent a ping for first 15 seconds only
-            const qint64 iTimeSinceHide = iCurrentTime - iKeepPingAfterHideStartTimestamp;
-            if ( TimerKeepPingAfterHide.isActive() && iTimeSinceHide < 15000 )
-            {            
-                iPingInterval = 2000 + QRandomGenerator::global()->bounded ( 1000 );
+            if ( TimerKeepPingAfterHide.isActive() )
+            {
+                // during shutdown: randomly sent a ping for first 15 seconds only, can be removed in the future when this mode is used
+                // by the majority of clients
+                const qint64 iTimeSinceHide = iCurrentTime - iKeepPingAfterHideStartTimestamp;
+
+                if ( iTimeSinceHide < 15000 )
+                {
+                    iPingInterval = 2000 + QRandomGenerator::global()->bounded ( 1000 );
+                }
+
             } 
 
             iPingInterval = std::max ( iPingInterval, 100 ); // enforce minimum interval
         }
 
-        
-        QQueue<qint64> pingQueue = pCurListViewItem->data ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole ).value<QQueue<qint64>>();
+#ifdef PING_STEALTH_MODE_DETAILED_STATS
+        QQueue<qint64> pingQueue = pCurListViewItem->data ( LVC_NAME, USER_ROLE_PING_TIMES_QUEUE ).value<QQueue<qint64>>();
 
         const double dTheoreticalPingRatePerMin = iPingInterval > 0 ? 60000.0 / static_cast<double> ( iPingInterval ) : 0.0;
         double       dActualPingRatePerMin      = 0.0;
@@ -930,7 +933,6 @@ void CConnectDlg::OnTimerPing()
             }
         }
 
-        // Update diagnostic tooltip with ping statistics
         QString strTooltip = QString ( "Server: %1\n"
                                        "Min Ping: %2 ms\n"
                                        "Time Since Last Ping: %3 ms\n"
@@ -944,8 +946,8 @@ void CConnectDlg::OnTimerPing()
                                  .arg ( dTheoreticalPingRatePerMin, 0, 'f', 1 )
                                  .arg ( dActualPingRatePerMin, 0, 'f', 1 );
 
-        // Set tooltip only for ping column
         pCurListViewItem->setToolTip ( LVC_PING, iMinPingTime < 99999999 ? strTooltip : "n/a" );
+#endif
 
         // Skip this server if not enough time has passed since last ping
         if ( iTimeSinceLastPing < iPingInterval )
@@ -953,19 +955,19 @@ void CConnectDlg::OnTimerPing()
             continue;
         }
 
-        pCurListViewItem->setText ( LVC_LAST_PING_TIMESTAMP_HIDDEN, QString::number ( iCurrentTime ) );
+        pCurListViewItem->setData ( LVC_NAME, USER_ROLE_LAST_PING_TIMESTAMP, qint64( iCurrentTime ) );
 
-        // Track ping timestamp in queue stored in Qt::UserRole of LVC_LAST_PING_TIMESTAMP_HIDDEN
+#ifdef PING_STEALTH_MODE_DETAILED_STATS
         pingQueue.enqueue ( iCurrentTime );
-
-        // Remove pings older than 60 seconds
+        // remove pings older than 60 seconds
         const qint64 iOneMinuteAgo = iCurrentTime - 60000;
         while ( !pingQueue.isEmpty() && pingQueue.head() < iOneMinuteAgo )
         {
             pingQueue.dequeue();
         }
-        pCurListViewItem->setData ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole, QVariant::fromValue ( pingQueue ) );
-#endif
+        pCurListViewItem->setData ( LVC_NAME, USER_ROLE_PING_TIMES_QUEUE, QVariant::fromValue ( pingQueue ) );
+#endif // PING_STEALTH_MODE_DETAILED_STATS
+#endif // PING_STEALTH_MODE
 
         // if address is valid, send ping message using a new thread
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
@@ -1148,7 +1150,7 @@ QTreeWidgetItem* CConnectDlg::FindListViewItem ( const CHostAddress& InetAddr )
     {
         // compare the received address with the user data string of the
         // host address by a string compare
-        if ( !lvwServers->topLevelItem ( iIdx )->data ( LVC_NAME, Qt::UserRole ).toString().compare ( InetAddr.toString() ) )
+        if ( !lvwServers->topLevelItem ( iIdx )->data ( LVC_NAME, USER_ROLE_HOST_ADDRESS ).toString().compare ( InetAddr.toString() ) )
         {
             return lvwServers->topLevelItem ( iIdx );
         }
@@ -1236,7 +1238,7 @@ void CConnectDlg::pingStealthModeDebugStats()
     {
         QTreeWidgetItem* pItem      = lvwServers->topLevelItem ( iIdx );
         QString          serverName = pItem->text ( LVC_NAME );
-        QQueue<qint64>   pingQueue  = pItem->data ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole ).value<QQueue<qint64>>();
+        QQueue<qint64>   pingQueue  = pItem->data ( LVC_NAME, USER_ROLE_PING_TIMES_QUEUE ).value<QQueue<qint64>>();
 
         if ( pingQueue.isEmpty() )
             continue;
@@ -1244,7 +1246,6 @@ void CConnectDlg::pingStealthModeDebugStats()
         iServersWithPings++;
         iTotalPings += pingQueue.size();
 
-        // ← NEU: Finde ersten Ping in der Shutdown-Phase
         qint64 iFirstShutdownPing = -1;
         for ( const qint64& timestamp : pingQueue )
         {
@@ -1265,7 +1266,7 @@ void CConnectDlg::pingStealthModeDebugStats()
         qDebug() << "Server:" << serverName.leftJustified ( 30 ) << "Pings:" << pingQueue.size()
                  << "First:" << QDateTime::fromMSecsSinceEpoch ( pingQueue.first() ).toString ( "hh:mm:ss" )
                  << "Last:" << QDateTime::fromMSecsSinceEpoch ( pingQueue.last() ).toString ( "hh:mm:ss" )
-                 << "FirstShutdown:" << ( iMsSinceShutdownStart >= 0 ? QString::number ( iMsSinceShutdownStart ) + "ms" : "n/a" ); // ← NEU
+                 << "FirstShutdown:" << ( iMsSinceShutdownStart >= 0 ? QString::number ( iMsSinceShutdownStart ) + "ms" : "n/a" ); 
 
         // Build histogram (1-second buckets)
         QVector<int> histogram ( 60, 0 );
@@ -1326,7 +1327,7 @@ void CConnectDlg::pingStealthModeDebugStats()
     }
     qDebug() << "Scale: 0-9 (9 = max" << maxPingsInBucket << "pings/sec)";
     qDebug() << aggregateChart;
-    qDebug() << "Time: [60s ago ←→ now]";
+    qDebug() << "Time: [60s ago <-> now]";
 
     // Detect potential patterns (spikes, regularity)
     int    iSpikesDetected   = 0;
@@ -1344,12 +1345,13 @@ void CConnectDlg::pingStealthModeDebugStats()
     qDebug() << "  Spikes detected (>2x avg):" << iSpikesDetected << "seconds";
     qDebug() << "  Distribution: " << ( iSpikesDetected > 10 ? "IRREGULAR (many spikes)" : "SMOOTH (good stealth)" );
 
-    // Gruppiere Server nach Rate (±0.5 pings/min Toleranz)
-    QMap<int, int> rateGroups; // Key: Rate*100 (z.B. 308 = 3.08), Value: Count
+    // group by rate (±0.5 pings/min tolerance)
+    QMap<int, int> rateGroups; // Key: Rate*100, Value: Count
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
         QTreeWidgetItem* pItem     = lvwServers->topLevelItem ( iIdx );
-        QQueue<qint64>   pingQueue = pItem->data ( LVC_LAST_PING_TIMESTAMP_HIDDEN, Qt::UserRole ).value<QQueue<qint64>>();
+        QQueue<qint64>   pingQueue = pItem->data
+        ( LVC_NAME, USER_ROLE_PING_TIMES_QUEUE ).value<QQueue<qint64>>();
 
         if ( pingQueue.size() > 1 )
         {
@@ -1357,7 +1359,7 @@ void CConnectDlg::pingStealthModeDebugStats()
             if ( timeSpan > 0 )
             {
                 double rate    = ( pingQueue.size() - 1 ) * 60000.0 / timeSpan;
-                int    rateKey = static_cast<int> ( rate * 100 ); // z.B. 3.08 → 308
+                int    rateKey = static_cast<int> ( rate * 100 ); 
                 rateGroups[rateKey]++;
             }
         }
@@ -1366,9 +1368,9 @@ void CConnectDlg::pingStealthModeDebugStats()
     qDebug() << "Rate clustering (servers with similar rates):";
     for ( auto it = rateGroups.begin(); it != rateGroups.end(); ++it )
     {
-        if ( it.value() > 1 ) // Nur Gruppen mit >1 Server
+        if ( it.value() > 1 ) 
         {
-            qDebug() << "  Rate:" << QString::number ( it.key() / 100.0, 'f', 2 ) << "pings/min → Servers:" << it.value();
+            qDebug() << "  Rate:" << QString::number ( it.key() / 100.0, 'f', 2 ) << "pings/min -> Servers:" << it.value();
         }
     }
 

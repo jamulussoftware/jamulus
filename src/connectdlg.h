@@ -43,7 +43,6 @@
 // transmitted until it is received
 #define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
 
-#define PING_STEALTH_MODE // prototype to avoid correlation of pings and user activity
 
 #define PING_STEALTH_MODE // prototype to avoid correlation of pings and user activity
 #ifdef PING_STEALTH_MODE

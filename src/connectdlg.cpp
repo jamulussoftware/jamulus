@@ -1,4 +1,4 @@
-﻿/******************************************************************************\
+/******************************************************************************\
  * Copyright (c) 2004-2025
  *
  * Author(s):
@@ -138,7 +138,6 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     // 4: server version
     // 5: minimum ping time (invisible)
     // 6: maximum number of clients (invisible)
-    // 7: last ping timestamp (invisible)
     // (see EConnectListViewColumns in connectdlg.h, which must match the above)
 
     lvwServers->setColumnCount ( LVC_COLUMNS );

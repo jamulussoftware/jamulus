@@ -86,7 +86,7 @@ protected:
         LVC_LOCATION,           // location
         LVC_VERSION,            // server version
         LVC_PING_MIN_HIDDEN,    // minimum ping time (invisible)
-        LVC_CLIENTS_MAX_HIDDEN, // maximum number of clients (invisible),
+        LVC_CLIENTS_MAX_HIDDEN, // maximum number of clients (invisible)
         LVC_COLUMNS             // total number of columns
     };
 

@@ -880,16 +880,17 @@ void CConnectDlg::OnTimerPing()
             iPingInterval += iRandomOffsetMs;
             iPingInterval = std::max ( iPingInterval, 500 );
 
-            // for now force one ping after the hide phase has elapsed 3500ms
-            // can be removed once the majority of clients is using this
+            // during shutdown: randomly sent a ping for first 15 seconds only, can be removed in the future when this mode is used
+            // by the majority of clients
             if ( TimerKeepPingAfterHide.isActive() )
             {
                 const qint64 iTimeSinceHide = iCurrentTime - iKeepPingAfterHideStartTimestamp;
-                if ( iTimeSinceHide >= 3500 && iLastPingTimestamp < iKeepPingAfterHideStartTimestamp )
-                {
-                    iPingInterval = 0;
+                if ( iTimeSinceHide < 15000 )
+                { 
+                    iPingInterval = 2000 + QRandomGenerator::global()->bounded ( 1000 );
                 }
             }
+
         }
 
 #ifdef PING_STEALTH_MODE_DETAILED_STATS

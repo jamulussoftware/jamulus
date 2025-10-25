@@ -880,12 +880,12 @@ void CConnectDlg::OnTimerPing()
             iPingInterval += iRandomOffsetMs;
             iPingInterval = std::max ( iPingInterval, 500 );
 
-            // during shutdown: randomly sent a ping for first 15 seconds only, can be removed in the future when this mode is used
+            // during shutdown: randomly sent a ping for first 20 to 30 seconds only, can be removed in the future when this mode is used
             // by the majority of clients
             if ( TimerKeepPingAfterHide.isActive() )
             {
                 const qint64 iTimeSinceHide = iCurrentTime - iKeepPingAfterHideStartTimestamp;
-                if ( iTimeSinceHide < 15000 )
+                if ( iTimeSinceHide < (20000 + QRandomGenerator::global()->bounded ( 10000 ) ) )
                 { 
                     iPingInterval = 2000 + QRandomGenerator::global()->bounded ( 1000 );
                 }

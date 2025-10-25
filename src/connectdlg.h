@@ -44,7 +44,7 @@
 #define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
 
 // defines the time interval it will keep pinging servers after the dialog was hidden (randomized +/- 20%)
-#define KEEP_PING_RUNNING_AFTER_HIDE_MS 60000
+#define KEEP_PING_RUNNING_AFTER_HIDE_MS (1000*120)
 
 #ifdef _DEBUG
 #    define PING_STEALTH_MODE_DETAILED_STATS // enable to log detailed ping stats for debugging

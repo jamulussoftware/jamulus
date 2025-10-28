@@ -82,7 +82,7 @@ Download and install Qt e.g via the [official open source installer](https://www
 
 If you build with *JACK* support, install JACK via choco: `choco install --no-progress -y jack`
 
-If you build with *ASIO* support, you'll need the [ASIO development files](https://www.steinberg.net/en/company/developer.html). Please ensure you read the ASIO-SDK licensing terms and register with Steinberg if necessary.
+If you build with *ASIO* support, you'll need the [ASIO development files](https://www.steinberg.net/developers/asiosdk-open/).
 
 ### Compiling and building installer
 

@@ -198,7 +198,7 @@ jobs:
             building_on_os:         ubuntu-22.04
             base_command:           ./.github/autobuild/android.sh
             run_codeql:             true
-            is_main_build_target:   true
+            #is_main_build_target:   true
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
@@ -208,7 +208,7 @@ jobs:
             building_container:     ubuntu:20.04
             base_command:           ./.github/autobuild/linux_deb.sh
             run_codeql:             true
-            is_main_build_target:   true
+            #is_main_build_target:   true
 
           - config_name:            Linux .deb armhf (artifacts)
             target_os:              linux
@@ -232,7 +232,7 @@ jobs:
             run_codeql:             false
             # Latest Xcode which runs on macos-14:
             xcode_version:          15.4.0
-            is_main_build_target:   true
+            #is_main_build_target:   true
 
           # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
           - config_name:            MacOS Legacy (artifacts+CodeQL)
@@ -246,7 +246,7 @@ jobs:
             # https://developer.apple.com/support/xcode/
             # https://xcodereleases.com/
             xcode_version:          14.2.0
-            is_main_build_target:   true
+            #is_main_build_target:   true
 
           - config_name:            iOS (artifacts)
             target_os:              ios

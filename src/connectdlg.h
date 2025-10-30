@@ -43,6 +43,16 @@
 // transmitted until it is received
 #define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
 
+// defines the time interval it will keep pinging servers after the dialog was hidden (randomized +/- 20%)
+#define KEEP_PING_RUNNING_AFTER_HIDE_MS (1000*120)
+
+#ifdef _DEBUG
+#    define PING_STEALTH_MODE_DETAILED_STATS // enable to log detailed ping stats for debugging
+#endif
+
+Q_DECLARE_METATYPE ( QQueue<qint64> )
+Q_DECLARE_METATYPE ( QHostAddress )
+
 /* Classes ********************************************************************/
 class CConnectDlg : public CBaseDlg, private Ui_CConnectDlgBase
 {
@@ -80,6 +90,17 @@ protected:
         LVC_COLUMNS             // total number of columns
     };
 
+    // those are the custom user data fields, all stored in the UserRole of the list view item (LVC_NAME)
+    enum EColumnPingNameUserRoles
+    {
+        USER_ROLE_HOST_ADDRESS = Qt::UserRole, // QString: CHostAddress as string
+        USER_ROLE_QHOST_ADDRESS_CACHE,         // QHostAddress: cache QHostAddress, will be updated on first ping
+        USER_ROLE_QHOST_PORT_CACHE,            // quint16: cache port number, will be updated on first ping
+        USER_ROLE_LAST_PING_TIMESTAMP,         // qint64: timestamp of last ping measurement
+        USER_ROLE_PING_TIMES_QUEUE,            // QQueue<qint64>: for ping stats, will be initialized on first ping
+        USER_ROLE_PING_SALT                    // int: random ping salt per server
+    };
+
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 
@@ -91,10 +112,15 @@ protected:
     void             RequestServerList();
     void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void             UpdateDirectoryComboBox();
+#ifdef PING_STEALTH_MODE_DETAILED_STATS
+    void pingStealthModeDebugStats();
+#endif
 
     CClientSettings* pSettings;
 
     QTimer       TimerPing;
+    QTimer       TimerKeepPingAfterHide;
+    qint64       iKeepPingAfterHideStartTimestamp; // timestamp when keeping pings after hide started
     QTimer       TimerReRequestServList;
     QTimer       TimerInitialSort;
     CHostAddress haDirectoryAddress;
@@ -118,6 +144,7 @@ public slots:
     void OnConnectClicked();
     void OnDeleteServerAddrClicked();
     void OnTimerPing();
+    void OnTimerKeepPingAfterHide();
     void OnTimerReRequestServList();
 
 signals:

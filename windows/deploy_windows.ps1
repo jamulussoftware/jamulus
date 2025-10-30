@@ -168,8 +168,10 @@ Function Install-Dependencies
     if ($BuildOption -Notmatch "jack") {
         # Don't download ASIO SDK on Jamulus JACK builds to save
         # resources and to be extra-sure license-wise.
+	Set-PSDebug -Trace 2
         Install-Dependency -Uri $AsioSDKUrl `
             -Name $AsioSDKName -Destination "..\libs\ASIOSDK2"
+	Set-PSDebug -Off
     }
 }
 

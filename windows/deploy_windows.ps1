@@ -11,8 +11,9 @@ param (
     #
     # The following version pinnings are semi-automatically checked for
     # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-    [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
-    [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
+    #[string] $AsioSDKName = "ASIO-SDK_2.3.4_2025-10-15",
+    [string] $AsioSDKName = "ASIOSDK",
+    [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/ASIO-SDK_2.3.4_2025-10-15.zip",
     [string] $NsisName = "nsis-3.11",
     [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.11/nsis-3.11.zip",
     [string] $BuildOption = ""
@@ -168,8 +169,10 @@ Function Install-Dependencies
     if ($BuildOption -Notmatch "jack") {
         # Don't download ASIO SDK on Jamulus JACK builds to save
         # resources and to be extra-sure license-wise.
+	Set-PSDebug -Trace 2
         Install-Dependency -Uri $AsioSDKUrl `
             -Name $AsioSDKName -Destination "..\libs\ASIOSDK2"
+	Set-PSDebug -Off
     }
 }
 

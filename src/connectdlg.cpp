@@ -25,6 +25,75 @@
 #include "connectdlg.h"
 
 /* Implementation *************************************************************/
+
+// mapVersionStr - converts a version number to a sortable string
+static QString mapVersionStr ( const QString& versionStr )
+{
+    QString key;
+    QString x = ">"; // default suffix is later (git, dev, nightly, etc)
+
+    // Regex for SemVer: major.minor.patch-suffix
+    QRegularExpression      semVerRegex ( R"(^(\d+)\.(\d+)\.(\d+)-?(.*)$)" );
+    QRegularExpressionMatch match = semVerRegex.match ( versionStr );
+
+    if ( !match.hasMatch() )
+    {
+        return versionStr; // fallback: plain text
+    }
+
+    int     major  = match.captured ( 1 ).toInt();
+    int     minor  = match.captured ( 2 ).toInt();
+    int     patch  = match.captured ( 3 ).toInt();
+    QString suffix = match.captured ( 4 ); // may be empty
+
+    if ( suffix.isEmpty() )
+    {
+        x = "="; // bare version number
+    }
+    else if ( suffix.startsWith ( "rc" ) || suffix.startsWith ( "beta" ) || suffix.startsWith ( "alpha" ) )
+    {
+        x = "<"; // pre-release version
+    }
+
+    // construct a sortable key mmmnnnpppksuffix, where:
+    //    mmm = major
+    //    nnn = minor
+    //    ppp = patch
+    //    k = sort key to sort alpha, beta, rc before bare version number, and other suffixes after (<, =, >)
+    //    suffix = supplied suffix
+    key = QString ( "%1%2%3%4%5" )
+              .arg ( major, 3, 10, QLatin1Char ( '0' ) )
+              .arg ( minor, 3, 10, QLatin1Char ( '0' ) )
+              .arg ( patch, 3, 10, QLatin1Char ( '0' ) )
+              .arg ( x )
+              .arg ( suffix );
+
+    return key;
+}
+
+// Subclass of QTreeWidgetItem that allows LVC_VERSION to sort by the UserRole data value
+CMappedTreeWidgetItem::CMappedTreeWidgetItem ( QTreeWidget* owner ) : QTreeWidgetItem ( owner ), owner ( owner ) {}
+
+bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
+{
+    if ( !owner )
+        return QTreeWidgetItem::operator<( other );
+
+    int column = owner->sortColumn();
+
+    // we only need this override for comparing server versions
+    if ( column != CConnectDlg::LVC_VERSION )
+        return QTreeWidgetItem::operator<( other );
+
+    QVariant lhs = data ( column, Qt::UserRole );
+    QVariant rhs = other.data ( column, Qt::UserRole );
+
+    if ( !lhs.isValid() || !rhs.isValid() )
+        return QTreeWidgetItem::operator<( other );
+
+    return lhs.toString() < rhs.toString();
+}
+
 CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, const bool bNEnableIPv6, QWidget* parent ) :
     CBaseDlg ( parent, Qt::Dialog ),
     pSettings ( pNSetP ),
@@ -121,7 +190,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     lvwServers->setColumnWidth ( LVC_PING, 75 );
     lvwServers->setColumnWidth ( LVC_CLIENTS, 70 );
     lvwServers->setColumnWidth ( LVC_LOCATION, 220 );
-    lvwServers->setColumnWidth ( LVC_VERSION, 65 );
+    lvwServers->setColumnWidth ( LVC_VERSION, 95 );
 #endif
     lvwServers->clear();
 
@@ -365,7 +434,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
         }
 
         // create new list view item
-        QTreeWidgetItem* pNewListViewItem = new QTreeWidgetItem ( lvwServers );
+        CMappedTreeWidgetItem* pNewListViewItem = new CMappedTreeWidgetItem ( lvwServers );
 
         // make the entry invisible (will be set to visible on successful ping
         // result) if the complete list of registered servers shall not be shown
@@ -471,7 +540,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
 void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo )
 {
     // find the server with the correct address
-    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
+    CMappedTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
 
     if ( pCurListViewItem )
     {
@@ -484,7 +553,7 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVect
         for ( int i = 0; i < iNumConnectedClients; i++ )
         {
             // create new list view item
-            QTreeWidgetItem* pNewChildListViewItem = new QTreeWidgetItem ( pCurListViewItem );
+            QTreeWidgetItem* pNewChildListViewItem = new QTreeWidgetItem ( static_cast<QTreeWidgetItem*> ( pCurListViewItem ) );
 
             // child items shall use only one column
             pNewChildListViewItem->setFirstColumnSpanned ( true );
@@ -632,8 +701,8 @@ void CConnectDlg::UpdateListFilter()
 
         for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
         {
-            QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
-            bool             bFilterFound     = false;
+            CMappedTreeWidgetItem* pCurListViewItem = static_cast<CMappedTreeWidgetItem*> ( lvwServers->topLevelItem ( iIdx ) );
+            bool                   bFilterFound     = false;
 
             // DEFINITION: if "#" is set at the beginning of the filter text, we show
             //             occupied servers (#397)
@@ -692,7 +761,7 @@ void CConnectDlg::UpdateListFilter()
 
             for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
             {
-                QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
+                CMappedTreeWidgetItem* pCurListViewItem = static_cast<CMappedTreeWidgetItem*> ( lvwServers->topLevelItem ( iIdx ) );
 
                 // if ping time is empty, hide item (if not already hidden)
                 if ( pCurListViewItem->text ( LVC_PING ).isEmpty() && !bShowCompleteRegList )
@@ -725,7 +794,7 @@ void CConnectDlg::OnConnectClicked()
     if ( CurSelListItemList.count() > 0 )
     {
         // get the parent list view item
-        QTreeWidgetItem* pCurSelTopListItem = GetParentListViewItem ( CurSelListItemList[0] );
+        CMappedTreeWidgetItem* pCurSelTopListItem = GetParentListViewItem ( CurSelListItemList[0] );
 
         // get host address from selected list view item as a string
         strSelectedAddress = pCurSelTopListItem->data ( LVC_NAME, Qt::UserRole ).toString();
@@ -820,7 +889,7 @@ void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress,
 void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients )
 {
     // apply the received ping time to the correct server list entry
-    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
+    CMappedTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
 
     if ( pCurListViewItem )
     {
@@ -951,15 +1020,18 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
 void CConnectDlg::SetServerVersionResult ( const CHostAddress& InetAddr, const QString& strVersion )
 {
     // apply the received server version to the correct server list entry
-    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
+    CMappedTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
 
     if ( pCurListViewItem )
     {
         pCurListViewItem->setText ( LVC_VERSION, strVersion );
+
+        // and store sortable mapped version number
+        pCurListViewItem->setData ( LVC_VERSION, Qt::UserRole, mapVersionStr ( strVersion ) );
     }
 }
 
-QTreeWidgetItem* CConnectDlg::FindListViewItem ( const CHostAddress& InetAddr )
+CMappedTreeWidgetItem* CConnectDlg::FindListViewItem ( const CHostAddress& InetAddr )
 {
     const int iServerListLen = lvwServers->topLevelItemCount();
 
@@ -969,14 +1041,14 @@ QTreeWidgetItem* CConnectDlg::FindListViewItem ( const CHostAddress& InetAddr )
         // host address by a string compare
         if ( !lvwServers->topLevelItem ( iIdx )->data ( LVC_NAME, Qt::UserRole ).toString().compare ( InetAddr.toString() ) )
         {
-            return lvwServers->topLevelItem ( iIdx );
+            return static_cast<CMappedTreeWidgetItem*> ( lvwServers->topLevelItem ( iIdx ) );
         }
     }
 
     return nullptr;
 }
 
-QTreeWidgetItem* CConnectDlg::GetParentListViewItem ( QTreeWidgetItem* pItem )
+CMappedTreeWidgetItem* CConnectDlg::GetParentListViewItem ( QTreeWidgetItem* pItem )
 {
     // check if the current item is already the top item, i.e. the parent
     // query fails and returns null
@@ -984,12 +1056,12 @@ QTreeWidgetItem* CConnectDlg::GetParentListViewItem ( QTreeWidgetItem* pItem )
     {
         // we only have maximum one level, i.e. if we call the parent function
         // we are at the top item
-        return pItem->parent();
+        return static_cast<CMappedTreeWidgetItem*> ( pItem->parent() );
     }
     else
     {
         // this item is already the top item
-        return pItem;
+        return static_cast<CMappedTreeWidgetItem*> ( pItem );
     }
 }
 

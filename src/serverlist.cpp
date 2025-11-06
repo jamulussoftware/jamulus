@@ -974,7 +974,7 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
     // Allow IPv4 only for communicating with Directories
-    // Use SRV DNS discovery for directory connections
+    // Use SRV DNS discovery for directory connections, fallback to A/AAAA if none.
     const QString strNetworkAddress = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
 #ifndef CLIENT_NO_SRV_CONNECT
     const bool bDirectoryAddressValid = NetworkUtil().ParseNetworkAddressWithSrvDiscovery ( strNetworkAddress, DirectoryAddress, false );

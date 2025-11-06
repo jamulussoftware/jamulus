@@ -25,44 +25,48 @@
 ##############################################################################
 
 use open qw(:std :utf8);
-use XML::Simple qw(:strict);
+use XML::LibXML;
 use Data::Dumper;
 
 my %keys;
 
 my $doneeng = 0;
+my $language;
 
 while ($ts = <*.ts>) {
-	my $xs = XMLin($ts, KeyAttr => {}, ForceArray => ['context', 'message']);
+	my $dom = XML::LibXML->load_xml(location => $ts);
 
-	# print Data::Dumper->Dump([$xs], [qw(xs)]);
+	foreach my $TS ($dom->findnodes('//TS/@language')) {
+		$language = $TS->to_literal();
+		printf "Language: %s\n", $language;
+	}
 
-	printf "Language: %s\n", $xs->{language};
-
-	foreach $context (@{$xs->{context}}) {
-		# printf "\n========================================\nContext: %s\n", $context->{name};
-		my $contextname = $context->{name};
-		$contextname =~ s/Base$//;	# merge base class with its child
+	foreach my $context ($dom->findnodes('//context')) {
+		my $contextname = $context->findvalue('./name');
+		# printf "\n========================================\nContext: %s\n", $contextname;
+		$contextname =~ s/Base$//;      # merge base class with its child
 		$contextname = 'CClientDlg+CHelpMenu' if ($contextname eq 'CClientDlg' || $contextname eq 'CHelpMenu');
 
-		foreach $message (@{$context->{message}}) {
-			# printf "  Msg: %s\n", $message->{source};
-			next if $message->{translation}{type} eq 'obsolete';
-			next if $message->{translation}{type} eq 'vanished';
-			#next if $message->{translation}{type} eq 'unfinished';	# don't skip unfinished strings, as they may still get used
+		MESSAGE: foreach my $message ($context->findnodes('./message')) {
+			my $source = $message->findvalue('./source');
+			# printf "  Msg: %s\n", $source;
 
-			next unless $message->{source} =~ /\&(.)/;
+			foreach my $translation ($message->findnodes('./translation')) {
+				my $type = $translation->{type};
+				next MESSAGE if $type eq 'obsolete';
+				next MESSAGE if $type eq 'vanished';
+				#next MESSAGE if $type eq 'unfinished';	# don't skip unfinished strings, as they may still get used
 
-			push @{$keys{en}{$contextname}{uc $1}}, $message->{source} unless $doneeng;
+				# skip messages without an accelerator key
+				next MESSAGE unless $source =~ /\&(.)/;
 
-			if (exists($message->{translation}{content})) {
-				if ($message->{translation}{content} =~ /\&(.)/) {
-					push @{$keys{$xs->{language}}{$contextname}{uc $1}}, $message->{translation}{content} . " (" . $message->{source} . ")";
+				push @{$keys{en}{$contextname}{uc $1}}, $source unless $doneeng;
+
+				my $content = $translation->to_literal();
+				if ($content =~ /\&(.)/) {
+					push @{$keys{$language}{$contextname}{uc $1}}, $content . " (" . $source . ")";
 				}
-			} elsif ($message->{translation} =~ /\&(.)/) {
-				push @{$keys{$xs->{language}}{$contextname}{uc $1}}, $message->{translation} . " (" . $message->{source} . ")";
 			}
-
 		}
 	}
 

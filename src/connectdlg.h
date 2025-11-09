@@ -49,7 +49,11 @@ class CConnectDlg : public CBaseDlg, private Ui_CConnectDlgBase
     Q_OBJECT
 
 public:
-    CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, const bool bNEnableIPv6, QWidget* parent = nullptr );
+    CConnectDlg ( CClientSettings* pNSetP,
+                  const bool       bNewShowCompleteRegList,
+                  const bool       bNEnableIPv6,
+                  const bool       bNEnableAccessiblePushButtonUi,
+                  QWidget*         parent = nullptr );
 
     void SetShowAllMusicians ( const bool bState ) { ShowAllMusicians ( bState ); }
     bool GetShowAllMusicians() { return bShowAllMusicians; }
@@ -107,6 +111,7 @@ protected:
     bool         bListFilterWasActive;
     bool         bShowAllMusicians;
     bool         bEnableIPv6;
+    bool         bEnableAccessiblePushButtonUi;
 
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );

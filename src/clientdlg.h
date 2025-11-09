@@ -85,6 +85,7 @@ public:
                  const bool       bShowAnalyzerConsole,
                  const bool       bMuteStream,
                  const bool       bNEnableIPv6,
+                 const bool       bNEnableAccessiblePushButtonUi,
                  QWidget*         parent = nullptr );
 
 protected:
@@ -110,6 +111,7 @@ protected:
     bool           bConnectDlgWasShown;
     bool           bDetectFeedback;
     bool           bEnableIPv6;
+    bool           bEnableAccessiblePushButtonUi;
     ERecorderState eLastRecorderState;
     EGUIDesign     eLastDesign;
     QTimer         TimerSigMet;

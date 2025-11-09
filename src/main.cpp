@@ -81,48 +81,50 @@ int main ( int argc, char** argv )
 #else
     bool bIsClient = true;
 #endif
-    bool         bUseGUI                     = true;
-    bool         bStartMinimized             = false;
-    bool         bShowComplRegConnList       = false;
-    bool         bDisconnectAllClientsOnQuit = false;
-    bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
-    bool         bUseMultithreading          = false;
-    bool         bShowAnalyzerConsole        = false;
-    bool         bMuteStream                 = false;
-    bool         bMuteMeInPersonalMix        = false;
-    bool         bDisableRecording           = false;
-    bool         bDelayPan                   = false;
-    bool         bNoAutoJackConnect          = false;
-    bool         bUseTranslation             = true;
-    bool         bCustomPortNumberGiven      = false;
-    bool         bEnableIPv6                 = false;
-    int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
-    quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
-    int          iJsonRpcPortNumber          = INVALID_PORT;
-    QString      strJsonRpcBindIP            = DEFAULT_JSON_RPC_LISTEN_ADDRESS;
-    quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
-    ELicenceType eLicenceType                = LT_NO_LICENCE;
-    QString      strMIDISetup                = "";
-    QString      strConnOnStartupAddress     = "";
-    QString      strIniFileName              = "";
-    QString      strHTMLStatusFileName       = "";
-    QString      strLoggingFileName          = "";
-    QString      strRecordingDirName         = "";
-    QString      strDirectoryAddress         = "";
-    QString      strServerListFileName       = "";
-    QString      strServerInfo               = "";
-    QString      strServerPublicIP           = "";
-    QString      strServerBindIP             = "";
-    QString      strServerListFilter         = "";
-    QString      strWelcomeMessage           = "";
-    QString      strClientName               = "";
-    QString      strJsonRpcSecretFileName    = "";
+    bool         bUseGUI                       = true;
+    bool         bStartMinimized               = false;
+    bool         bShowComplRegConnList         = false;
+    bool         bDisconnectAllClientsOnQuit   = false;
+    bool         bUseDoubleSystemFrameSize     = true; // default is 128 samples frame size
+    bool         bUseMultithreading            = false;
+    bool         bShowAnalyzerConsole          = false;
+    bool         bMuteStream                   = false;
+    bool         bMuteMeInPersonalMix          = false;
+    bool         bDisableRecording             = false;
+    bool         bDelayPan                     = false;
+    bool         bNoAutoJackConnect            = false;
+    bool         bUseTranslation               = true;
+    bool         bCustomPortNumberGiven        = false;
+    bool         bEnableIPv6                   = false;
+    bool         bEnableAccessiblePushButtonUi = false;
+    int          iNumServerChannels            = DEFAULT_USED_NUM_CHANNELS;
+    quint16      iPortNumber                   = DEFAULT_PORT_NUMBER;
+    int          iJsonRpcPortNumber            = INVALID_PORT;
+    QString      strJsonRpcBindIP              = DEFAULT_JSON_RPC_LISTEN_ADDRESS;
+    quint16      iQosNumber                    = DEFAULT_QOS_NUMBER;
+    ELicenceType eLicenceType                  = LT_NO_LICENCE;
+    QString      strMIDISetup                  = "";
+    QString      strConnOnStartupAddress       = "";
+    QString      strIniFileName                = "";
+    QString      strHTMLStatusFileName         = "";
+    QString      strLoggingFileName            = "";
+    QString      strRecordingDirName           = "";
+    QString      strDirectoryAddress           = "";
+    QString      strServerListFileName         = "";
+    QString      strServerInfo                 = "";
+    QString      strServerPublicIP             = "";
+    QString      strServerBindIP               = "";
+    QString      strServerListFilter           = "";
+    QString      strWelcomeMessage             = "";
+    QString      strClientName                 = "";
+    QString      strJsonRpcSecretFileName      = "";
 
 #if defined( HEADLESS ) || defined( SERVER_ONLY )
     Q_UNUSED ( bStartMinimized )
     Q_UNUSED ( bUseTranslation )
     Q_UNUSED ( bShowComplRegConnList )
     Q_UNUSED ( bShowAnalyzerConsole )
+    Q_UNUSED ( bEnableAccessiblePushButtonUi )
     Q_UNUSED ( bMuteStream )
 #endif
 #if defined( SERVER_ONLY )
@@ -243,6 +245,15 @@ int main ( int argc, char** argv )
             bEnableIPv6 = true;
             qInfo() << "- IPv6 enabled";
             CommandLineOptions << "--enableipv6";
+            continue;
+        }
+
+        // Enable Accessible server list --------------------------------------
+        if ( GetFlagArgument ( argv, i, "--accessible", "--accessible" ) )
+        {
+            bEnableAccessiblePushButtonUi = true;
+            qInfo() << "- Accessible server list enabled";
+            CommandLineOptions << "--accessible";
             continue;
         }
 
@@ -865,10 +876,10 @@ int main ( int argc, char** argv )
     Q_INIT_RESOURCE ( resources );
 
 #ifndef SERVER_ONLY
-    //### TEST: BEGIN ###//
-    // activate the following line to activate the test bench,
-    // CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
-    //### TEST: END ###//
+    // ### TEST: BEGIN ###//
+    //  activate the following line to activate the test bench,
+    //  CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
+    // ### TEST: END ###//
 #endif
 
 #ifdef NO_JSON_RPC
@@ -961,6 +972,7 @@ int main ( int argc, char** argv )
                                        bShowAnalyzerConsole,
                                        bMuteStream,
                                        bEnableIPv6,
+                                       bEnableAccessiblePushButtonUi,
                                        nullptr );
 
                 // show dialog
@@ -1139,6 +1151,7 @@ QString UsageArguments ( char** argv )
            "      --mutemyown         prevent me from hearing what I play in the server mix (headless only)\n"
            "      --clientname        client name (window title and JACK client name)\n"
            "      --ctrlmidich        configure MIDI controller\n"
+           "      --accessible        run Client UI in more accessible mode for screen reader users\n"
            "\n"
            "Example: %1 -s --inifile myinifile.ini\n"
            "\n"

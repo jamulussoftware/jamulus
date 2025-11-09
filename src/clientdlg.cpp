@@ -33,6 +33,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
                          const bool       bNEnableIPv6,
+                         const bool       bNEnableAccessiblePushButtonUi,
                          QWidget*         parent ) :
     CBaseDlg ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient ( pNCliP ),
@@ -40,11 +41,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     bConnectDlgWasShown ( false ),
     bDetectFeedback ( false ),
     bEnableIPv6 ( bNEnableIPv6 ),
+    bEnableAccessiblePushButtonUi ( bNEnableAccessiblePushButtonUi ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
     ChatDlg ( parent ),
-    ConnectDlg ( pNSetP, bNewShowComplRegConnList, parent ),
+    ConnectDlg ( pNSetP, bNewShowComplRegConnList, bNEnableIPv6, bNEnableAccessiblePushButtonUi, parent ),
     AnalyzerConsole ( pNCliP, parent )
 {
     setupUi ( this );
@@ -1286,11 +1288,11 @@ void CClientDlg::Disconnect()
     TimerDetectFeedback.stop();
     bDetectFeedback = false;
 
-    //### TODO: BEGIN ###//
-    // is this still required???
-    // immediately update status bar
+    // ### TODO: BEGIN ###//
+    //  is this still required???
+    //  immediately update status bar
     OnTimerStatus();
-    //### TODO: END ###//
+    // ### TODO: END ###//
 
     // reset LEDs
     ledBuffers->Reset();

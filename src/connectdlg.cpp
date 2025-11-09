@@ -25,7 +25,11 @@
 #include "connectdlg.h"
 
 /* Implementation *************************************************************/
-CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, const bool bNEnableIPv6, QWidget* parent ) :
+CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
+                           const bool       bNewShowCompleteRegList,
+                           const bool       bNEnableIPv6,
+                           const bool       bNEnableAccessiblePushButtonUi,
+                           QWidget*         parent ) :
     CBaseDlg ( parent, Qt::Dialog ),
     pSettings ( pNSetP ),
     strSelectedAddress ( "" ),
@@ -36,7 +40,8 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     bServerListItemWasChosen ( false ),
     bListFilterWasActive ( false ),
     bShowAllMusicians ( true ),
-    bEnableIPv6 ( bNEnableIPv6 )
+    bEnableIPv6 ( bNEnableIPv6 ),
+    bEnableAccessiblePushButtonUi ( bNEnableAccessiblePushButtonUi )
 {
     setupUi ( this );
 
@@ -461,10 +466,13 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
             lvwServers->expandItem ( pNewListViewItem );
         }
 
-        // accessibility
-        for ( int i = 0; i < lvwServers->columnCount(); i++ )
+        // accessibility: use Push Buttons to allow screen readers to see the fields
+        if ( bEnableAccessiblePushButtonUi )
         {
-            lvwServers->setItemWidget ( pNewListViewItem, i, new QPushButton ( pNewListViewItem->text ( i ) ) );
+            for ( int i = 0; i < lvwServers->columnCount(); i++ )
+            {
+                lvwServers->setItemWidget ( pNewListViewItem, i, new QPushButton ( pNewListViewItem->text ( i ) ) );
+            }
         }
     }
 
@@ -889,7 +897,6 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
             // 4 is sufficient since the maximum width is ">500") (#201)
             pCurListViewItem->setText ( LVC_PING, QString ( "%1 ms" ).arg ( iMinPingTime, 4, 10, QLatin1Char ( ' ' ) ) );
         }
-        dynamic_cast<QPushButton*> ( lvwServers->itemWidget ( pCurListViewItem, 1 ) )->setText ( pCurListViewItem->text ( 1 ) );
 
         // update number of clients text
         if ( pCurListViewItem->text ( LVC_CLIENTS_MAX_HIDDEN ).toInt() == 0 )
@@ -905,7 +912,16 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         {
             pCurListViewItem->setText ( LVC_CLIENTS, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( LVC_CLIENTS_MAX_HIDDEN ) );
         }
-        dynamic_cast<QPushButton*> ( lvwServers->itemWidget ( pCurListViewItem, 2 ) )->setText ( pCurListViewItem->text ( 2 ) );
+
+        if ( bEnableAccessiblePushButtonUi )
+        {
+            // apply text to accessible ui
+            dynamic_cast<QPushButton*> ( lvwServers->itemWidget ( pCurListViewItem, LVC_PING ) )->setText ( pCurListViewItem->text ( LVC_PING ) );
+            dynamic_cast<QPushButton*> ( lvwServers->itemWidget ( pCurListViewItem, LVC_CLIENTS ) )
+                ->setText ( pCurListViewItem->text ( LVC_CLIENTS ) );
+            dynamic_cast<QPushButton*> ( lvwServers->itemWidget ( pCurListViewItem, LVC_VERSION ) )
+                ->setText ( pCurListViewItem->text ( LVC_VERSION ) );
+        }
 
         // check if the number of child list items matches the number of
         // connected clients, if not then request the client names

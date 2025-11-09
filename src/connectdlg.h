@@ -44,13 +44,8 @@
 #define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
 
 // defines the time interval it will keep pinging servers after the dialog was hidden (randomized +/- 20%)
-#define KEEP_PING_RUNNING_AFTER_HIDE_MS (1000*120)
+#define KEEP_PING_RUNNING_AFTER_HIDE_MS ( 1000 * 180 )
 
-#ifdef _DEBUG
-#    define PING_STEALTH_MODE_DETAILED_STATS // enable to log detailed ping stats for debugging
-#endif
-
-Q_DECLARE_METATYPE ( QQueue<qint64> )
 Q_DECLARE_METATYPE ( QHostAddress )
 
 /* Classes ********************************************************************/
@@ -97,7 +92,6 @@ protected:
         USER_ROLE_QHOST_ADDRESS_CACHE,         // QHostAddress: cache QHostAddress, will be updated on first ping
         USER_ROLE_QHOST_PORT_CACHE,            // quint16: cache port number, will be updated on first ping
         USER_ROLE_LAST_PING_TIMESTAMP,         // qint64: timestamp of last ping measurement
-        USER_ROLE_PING_TIMES_QUEUE,            // QQueue<qint64>: for ping stats, will be initialized on first ping
         USER_ROLE_PING_SALT                    // int: random ping salt per server
     };
 
@@ -112,10 +106,7 @@ protected:
     void             RequestServerList();
     void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void             UpdateDirectoryComboBox();
-#ifdef PING_STEALTH_MODE_DETAILED_STATS
-    void pingStealthModeDebugStats();
-#endif
-
+#
     CClientSettings* pSettings;
 
     QTimer       TimerPing;

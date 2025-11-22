@@ -2,7 +2,7 @@
 set -eu -o pipefail
 
 # Dependency versions
-CREATEDMG_VERSION="1.2.2"
+CREATEDMG_VERSION="1.2.3"
 
 root_path=$(pwd)
 project_path="${root_path}/Jamulus.pro"

@@ -354,7 +354,7 @@ jobs:
 
       - name:                       Initialize CodeQL
         if:                         matrix.config.run_codeql
-        uses:                       github/codeql-action/init@v3
+        uses:                       github/codeql-action/init@v4
         with:
           languages: 'cpp'
 
@@ -442,7 +442,7 @@ jobs:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql
-        uses:                       github/codeql-action/analyze@v3
+        uses:                       github/codeql-action/analyze@v4
 
   create_deb_repo:
     name:                           Create files for .deb repository (if requested)

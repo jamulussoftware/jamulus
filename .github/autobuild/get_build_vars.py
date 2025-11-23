@@ -103,3 +103,7 @@ if publish_to_release:
     set_github_variable("IS_PRERELEASE", str(is_prerelease).lower())
     set_github_variable("RELEASE_TITLE", release_title)
     set_github_variable("RELEASE_TAG", release_tag)
+
+set_github_variable("CACHE_KEY_MACOS", hashFiles(REPO_PATH + '.github/workflows/autobuild.yml', REPO_PATH + '.github/autobuild/mac.sh', REPO_PATH + 'mac/deploy_mac.sh') )
+set_github_variable("CACHE_KEY_WINDOWS", hashFiles(REPO_PATH + '.github/workflows/autobuild.yml', REPO_PATH + '.github/autobuild/windows.ps1', REPO_PATH + 'windows/deploy_windows.ps1') )
+set_github_variable("CACHE_KEY_ANDROID", hashFiles(REPO_PATH + '.github/workflows/autobuild.yml', REPO_PATH + '.github/autobuild/android.sh') )

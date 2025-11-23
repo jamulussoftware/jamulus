@@ -67,6 +67,9 @@ jobs:
       publish_to_release:           ${{ steps.get-build-vars.outputs.PUBLISH_TO_RELEASE }}
       tag_name:                     ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
       build_version:                ${{ steps.get-build-vars.outputs.BUILD_VERSION }}
+      cache_key_macos:              ${{ steps.get-build-vars.outputs.CACHE_KEY_MACOS }}
+      cache_key_windows:            ${{ steps.get-build-vars.outputs.CACHE_KEY_WINDOWS }}
+      cache_key_android:            ${{ steps.get-build-vars.outputs.CACHE_KEY_ANDROID }}
       build_all_targets:            ${{ steps.decide-build-targets.outputs.build_all_targets }}
     env:
       release_changelog_path:       ./.github_release_changelog.md
@@ -323,7 +326,7 @@ jobs:
           path: |
             ~/qt
             ~/Library/Cache/jamulus-dependencies
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/mac.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.base_command }}
+          key:                      ${{ matrix.config.target_os }}-${{ steps.get-build-vars.outputs.CACHE_KEY_MACOS }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'
@@ -335,7 +338,7 @@ jobs:
             C:\AutobuildCache
             ${{ github.workspace }}\libs\NSIS\NSIS-source
             ${{ github.workspace }}\libs\ASIOSDK2
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.base_command }}
+          key:                      ${{ matrix.config.target_os }}-${{ steps.get-build-vars.outputs.CACHE_KEY_WINDOWS }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'
@@ -345,7 +348,7 @@ jobs:
             /opt/Qt
             /opt/android/android-sdk
             /opt/android/android-ndk
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/android.sh') }}-${{ matrix.config.base_command }}
+          key:                      ${{ matrix.config.target_os }}-${{ steps.get-build-vars.outputs.CACHE_KEY_ANDROID }}-${{ matrix.config.base_command }}
 
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
         run:                        ${{ matrix.config.base_command }} setup

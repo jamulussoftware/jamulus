@@ -35,6 +35,7 @@ It analyzes Jamulus.pro and git push details (tag vs. branch, etc.) to decide
 import os
 import re
 import subprocess
+import hashlib
 
 REPO_PATH = os.path.join(os.path.dirname(__file__), '..', '..')
 
@@ -74,6 +75,15 @@ def set_github_variable(varname, varval):
     with open(output_file, "a") as ghout:
         ghout.write(f"{varname}={varval}\n")
 
+def hash_files(file_list):
+    key = hashlib.sha256()
+    mem = memoryview(bytearray(128*1024))
+    for file_name in file_list:
+        with open(file_name, 'rb', buffering=0) as f:
+            while n := f.readinto(mem):
+                key.update(mem[:n])
+    return key.hexdigest()
+
 jamulus_pro_version = get_version_from_jamulus_pro()
 set_github_variable("JAMULUS_PRO_VERSION", jamulus_pro_version)
 build_type, build_version = get_build_version(jamulus_pro_version)
@@ -103,3 +113,7 @@ if publish_to_release:
     set_github_variable("IS_PRERELEASE", str(is_prerelease).lower())
     set_github_variable("RELEASE_TITLE", release_title)
     set_github_variable("RELEASE_TAG", release_tag)
+
+set_github_variable("CACHE_KEY_MACOS", hash_files([REPO_PATH + '/.github/workflows/autobuild.yml', REPO_PATH + '/.github/autobuild/mac.sh', REPO_PATH + '/mac/deploy_mac.sh']) )
+set_github_variable("CACHE_KEY_WINDOWS", hash_files([REPO_PATH + '/.github/workflows/autobuild.yml', REPO_PATH + '/.github/autobuild/windows.ps1', REPO_PATH + '/windows/deploy_windows.ps1']) )
+set_github_variable("CACHE_KEY_ANDROID", hash_files([REPO_PATH + '/.github/workflows/autobuild.yml', REPO_PATH + '/.github/autobuild/android.sh']) )

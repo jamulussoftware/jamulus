@@ -326,6 +326,31 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
 
         response["result"] = "ok";
     } );
+
+    /// @rpc_method jamulusclient/setFaderLevel
+    /// @brief Sets the fader level.
+    /// @param {number} params.channelIndex - The channel index of the fader to be set.
+    /// @param {number} params.level - The fader level in range 0..100.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusclient/setFaderLevel", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonChannelIndex = params["channelIndex"];
+        if ( !jsonChannelIndex.isDouble() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: channelIndex is not a number" );
+            return;
+        }
+
+        auto jsonLevel = params["level"];
+        if ( !jsonLevel.isDouble() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: level is not a number" );
+            return;
+        }
+
+        // TODO How to set fader level in client correctly? OnControllerInFaderLevel is definitely the function we need to call...
+        //pClient->OnControllerInFaderLevel ( jsonChannelIndex.toInt(), jsonLevel.toInt() );
+        response["result"] = "ok";
+    } );
 }
 
 QJsonValue CClientRpc::SerializeSkillLevel ( ESkillLevel eSkillLevel )

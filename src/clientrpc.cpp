@@ -347,7 +347,6 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
             return;
         }
 
-        // TODO How to set fader level in client correctly? OnControllerInFaderLevel is definitely the function we need to call...
         pClient->SetControllerInFaderLevel ( jsonChannelIndex.toInt(), jsonLevel.toInt() );
         response["result"] = "ok";
     } );

@@ -881,7 +881,7 @@ void CClient::OnHandledSignal ( int sigNum )
 #endif
 }
 
-void CClient::OnControllerInFaderLevel ( int iChannelIdx, int iValue )
+void CClient::SetControllerInFaderLevel ( int iChannelIdx, int iValue )
 {
     // in case of a headless client the faders cannot be moved so we need
     // to send the controller information directly to the server

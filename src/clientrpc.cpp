@@ -328,7 +328,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     } );
 
     /// @rpc_method jamulusclient/setFaderLevel
-    /// @brief Sets the fader level.
+    /// @brief Sets the fader level. Example: {"id":1,"jsonrpc":"2.0","method":"jamulusclient/setFaderLevel","params":{"channelIndex": 0,"level": 50}}.
     /// @param {number} params.channelIndex - The channel index of the fader to be set.
     /// @param {number} params.level - The fader level in range 0..100.
     /// @result {string} result - Always "ok".

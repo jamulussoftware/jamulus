@@ -222,6 +222,24 @@ Results:
 | result | string | Always "ok". |
 
 
+### jamulusclient/setFaderLevel
+
+Sets the fader level. Example: {"id":1,"jsonrpc":"2.0","method":"jamulusclient/setFaderLevel","params":{"channelIndex": 0,"level": 50}}.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.channelIndex | number | The channel index of the fader to be set. |
+| params.level | number | The fader level in range 0..100. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
 ### jamulusclient/setName
 
 Sets your name.

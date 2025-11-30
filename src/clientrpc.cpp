@@ -334,16 +334,16 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @result {string} result - Always "ok".
     pRpcServer->HandleMethod ( "jamulusclient/setFaderLevel", [=] ( const QJsonObject& params, QJsonObject& response ) {
         auto jsonChannelIndex = params["channelIndex"];
-        if ( !jsonChannelIndex.isDouble() )
+        if ( !jsonChannelIndex.isDouble() || ( jsonChannelIndex.toInt() < 0 ) || ( jsonChannelIndex.toInt() > MAX_NUM_CHANNELS ) )
         {
-            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: channelIndex is not a number" );
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: channelIndex is not a number or out-of-range" );
             return;
         }
 
         auto jsonLevel = params["level"];
-        if ( !jsonLevel.isDouble() )
+        if ( !jsonLevel.isDouble() || ( jsonLevel.toInt() < 0 ) || ( jsonLevel.toInt() > 100 ) )
         {
-            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: level is not a number" );
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: level is not a number or out-of-range" );
             return;
         }
 

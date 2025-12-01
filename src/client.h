@@ -260,7 +260,7 @@ public:
     void OnTimerRemoteChanGainOrPan();
     void StartTimerGainOrPan();
 
-    void SetControllerInFaderLevel ( int iChannelIdx, int iValue );
+    void SetControllerInFaderLevel ( int iChannelIdx, int iValue )  { OnControllerInFaderLevel ( iChannelIdx, iValue ); }
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
 
@@ -434,7 +434,7 @@ protected slots:
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
-    void OnControllerInFaderLevel ( int iChannelIdx, int iValue ) { SetControllerInFaderLevel ( iChannelIdx, iValue ); }
+    void OnControllerInFaderLevel ( int iChannelIdx, int iValue );
     void OnControllerInPanValue ( int iChannelIdx, int iValue );
     void OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );

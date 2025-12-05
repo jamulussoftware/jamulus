@@ -52,7 +52,8 @@ contains(CONFIG, "headless") {
 
 # Do not set LRELEASE_DIR explicitly when using embed_translations.
 # It doesn't work with multiple targets or architectures.
-TRANSLATIONS = src/translation/translation_de_DE.ts \
+TRANSLATIONS = src/translation/translation_ja_JP.ts \
+    src/translation/translation_de_DE.ts \
     src/translation/translation_fr_FR.ts \
     src/translation/translation_ko_KR.ts \
     src/translation/translation_pt_PT.ts \

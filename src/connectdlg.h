@@ -32,6 +32,7 @@
 #include <QLocale>
 #include <QtConcurrent>
 #include <QRegularExpression>
+#include <QAccessible>
 #include "global.h"
 #include "util.h"
 #include "settings.h"
@@ -51,7 +52,7 @@ class CMappedTreeWidgetItem : public QTreeWidgetItem
 public:
     explicit CMappedTreeWidgetItem ( QTreeWidget* owner = nullptr );
 
-    bool operator<( const QTreeWidgetItem& other ) const override;
+    bool operator< ( const QTreeWidgetItem& other ) const override;
 
 private:
     QTreeWidget* owner = nullptr;
@@ -104,6 +105,8 @@ protected:
     void                   RequestServerList();
     void                   EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void                   UpdateDirectoryComboBox();
+    QString                BuildAccessibleTextForItem ( const QTreeWidgetItem* pItem ) const;
+    void                   UpdateAccessibilityForItem ( QTreeWidgetItem* pItem );
 
     CClientSettings* pSettings;
 
@@ -132,6 +135,7 @@ public slots:
     void OnDeleteServerAddrClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
+    void OnServerListItemSelectionChanged();
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );

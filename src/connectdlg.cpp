@@ -74,22 +74,22 @@ static QString mapVersionStr ( const QString& versionStr )
 // Subclass of QTreeWidgetItem that allows LVC_VERSION to sort by the UserRole data value
 CMappedTreeWidgetItem::CMappedTreeWidgetItem ( QTreeWidget* owner ) : QTreeWidgetItem ( owner ), owner ( owner ) {}
 
-bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
+bool CMappedTreeWidgetItem::operator< ( const QTreeWidgetItem& other ) const
 {
     if ( !owner )
-        return QTreeWidgetItem::operator<( other );
+        return QTreeWidgetItem::operator< ( other );
 
     int column = owner->sortColumn();
 
     // we only need this override for comparing server versions
     if ( column != CConnectDlg::LVC_VERSION )
-        return QTreeWidgetItem::operator<( other );
+        return QTreeWidgetItem::operator< ( other );
 
     QVariant lhs = data ( column, Qt::UserRole );
     QVariant rhs = other.data ( column, Qt::UserRole );
 
     if ( !lhs.isValid() || !rhs.isValid() )
-        return QTreeWidgetItem::operator<( other );
+        return QTreeWidgetItem::operator< ( other );
 
     return lhs.toString() < rhs.toString();
 }
@@ -242,6 +242,9 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     // to get default return key behaviour working
     QObject::connect ( lvwServers, &QTreeWidget::activated, this, &CConnectDlg::OnConnectClicked );
+
+    // connect selection change for accessibility support
+    QObject::connect ( lvwServers, &QTreeWidget::itemSelectionChanged, this, &CConnectDlg::OnServerListItemSelectionChanged );
 
     // line edit
     QObject::connect ( edtFilter, &QLineEdit::textEdited, this, &CConnectDlg::OnFilterTextEdited );
@@ -629,6 +632,75 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     // in the server address combo box, a text was changed, remove selection
     // in the server list (if any)
     lvwServers->clearSelection();
+}
+
+QString CConnectDlg::BuildAccessibleTextForItem ( const QTreeWidgetItem* pItem ) const
+{
+    // Return early if item is null to avoid crashes
+    if ( !pItem )
+    {
+        return QString();
+    }
+
+    // Check if this is a child item (musician) or parent item (server).
+    // Child items have a parent and represent individual musicians connected to a server.
+    // Parent items represent servers and contain multiple columns with server information.
+    if ( pItem->parent() != nullptr )
+    {
+        // This is a musician/child item - announce the musician name
+        return tr ( "Musician: %1" ).arg ( pItem->text ( LVC_NAME ) );
+    }
+
+    // This is a server item - build accessible text with all available information.
+    // Start with the server name, then append other columns that have data.
+    QString accessibleText = tr ( "Server: %1" ).arg ( pItem->text ( LVC_NAME ) );
+
+    // Helper lambda to append column data if it exists
+    auto appendColumnIfNotEmpty = [&] ( int column, const QString& label ) {
+        QString value = pItem->text ( column );
+        if ( !value.isEmpty() )
+        {
+            accessibleText += tr ( ", %1: %2" ).arg ( label ).arg ( value );
+        }
+    };
+
+    // Append all server information columns in the order they appear in the UI
+    appendColumnIfNotEmpty ( LVC_PING, tr ( "Ping" ) );
+    appendColumnIfNotEmpty ( LVC_CLIENTS, tr ( "Musicians" ) );
+    appendColumnIfNotEmpty ( LVC_LOCATION, tr ( "Location" ) );
+    appendColumnIfNotEmpty ( LVC_VERSION, tr ( "Version" ) );
+
+    return accessibleText;
+}
+
+void CConnectDlg::UpdateAccessibilityForItem ( QTreeWidgetItem* pItem )
+{
+    // Update the accessible description and notify the accessibility system
+    // when items are selected. This improves screen reader support on all platforms,
+    // including VoiceOver on macOS, NVDA/JAWS on Windows, and Orca on Linux.
+    if ( !pItem )
+    {
+        return;
+    }
+
+    QString accessibleText = BuildAccessibleTextForItem ( pItem );
+    lvwServers->setAccessibleDescription ( accessibleText );
+    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( lvwServers, accessibleText ) );
+}
+
+void CConnectDlg::OnServerListItemSelectionChanged()
+{
+    QList<QTreeWidgetItem*> selectedItems = lvwServers->selectedItems();
+
+    if ( !selectedItems.isEmpty() )
+    {
+        UpdateAccessibilityForItem ( selectedItems.first() );
+    }
+    else
+    {
+        // Clear accessible description when nothing is selected
+        lvwServers->setAccessibleDescription ( tr ( "Server list" ) );
+    }
 }
 
 void CConnectDlg::OnCustomDirectoriesChanged()

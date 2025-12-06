@@ -740,7 +740,8 @@ void CConnectDlg::UpdateAccessibleServerInfo()
     if ( !selectedItems.isEmpty() && selectedItems.first()->parent() == nullptr )
     {
         // We have a server item selected (not a musician child item)
-        QTreeWidgetItem* pItem = selectedItems.first();       
+        QTreeWidgetItem* pItem = selectedItems.first();
+        
         // Extract server information
         QString serverName = pItem->text ( LVC_NAME );
         QString pingTime = pItem->text ( LVC_PING );
@@ -769,7 +770,7 @@ void CConnectDlg::UpdateAccessibleServerInfo()
         
         // Update label
         lblAccessibleServerInfo->setText ( labelText );
-        lblAccessibleServerInfo->setAccessibleName ( tr ( "Selected server information box" ) );
+        lblAccessibleServerInfo->setAccessibleName ( tr ( "Seelected server information box" ) );
         lblAccessibleServerInfo->setAccessibleDescription ( tr ( "Show stats for selected server" ) );
         
         // Update navigation buttons to show previous/next server names
@@ -812,8 +813,7 @@ void CConnectDlg::UpdateAccessibleServerInfo()
         }
         
         // Force VoiceOver to announce the change
-        // TODO: Find out in how far this call is needed. 
-        QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( lblAccessibleServerInfo, tr ( "Selected server information box" ) ) );
+        QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( lblAccessibleServerInfo, accessibleText ) );
     }
     else
     {

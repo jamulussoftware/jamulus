@@ -1573,10 +1573,10 @@ void CProtocol::CreateVersionAndOSMes()
     int iPos = 0; // init position pointer
 
     // get the version number string
-    const QString strVerion = VERSION;
+    const QString strVersion = APP_VERSION;
 
     // convert version string to utf-8
-    const QByteArray strUTF8Version = strVerion.toUtf8();
+    const QByteArray strUTF8Version = strVersion.toUtf8();
 
     // size of current message body
     const int iEntrLen = 1 +                        // operating system
@@ -1864,7 +1864,7 @@ void CProtocol::CreateCLRegisterServerExMes ( const CHostAddress& InetAddr, cons
     const QByteArray strUTF8LInetAddr = LInetAddr.InetAddr.toString().toUtf8();
     const QByteArray strUTF8Name      = ServerInfo.strName.toUtf8();
     const QByteArray strUTF8City      = ServerInfo.strCity.toUtf8();
-    const QByteArray strUTF8Version   = QString ( VERSION ).toUtf8();
+    const QByteArray strUTF8Version   = QString ( APP_VERSION ).toUtf8();
 
     // size of current message body
     const int iEntrLen = 2 +                           // server internal port number
@@ -2296,10 +2296,10 @@ void CProtocol::CreateCLVersionAndOSMes ( const CHostAddress& InetAddr )
     int iPos = 0; // init position pointer
 
     // get the version number string
-    const QString strVerion = VERSION;
+    const QString strVersion = APP_VERSION;
 
     // convert version string to utf-8
-    const QByteArray strUTF8Version = strVerion.toUtf8();
+    const QByteArray strUTF8Version = strVersion.toUtf8();
 
     // size of current message body
     const int iEntrLen = 1 +                        // operating system

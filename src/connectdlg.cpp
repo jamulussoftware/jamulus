@@ -768,29 +768,10 @@ void CConnectDlg::UpdateAccessibleServerInfo()
             labelText += tr ( " &nbsp; <b>Version:</b> %1" ).arg ( version );
         }
         
-        // Build text for screen readers (without HTML)
-        QString accessibleText = tr ( "Server: %1" ).arg ( serverName );
-        if ( !pingTime.isEmpty() )
-        {
-            accessibleText += tr ( ", Ping: %1" ).arg ( pingTime );
-        }
-        if ( !musicians.isEmpty() )
-        {
-            accessibleText += tr ( ", Musicians: %1" ).arg ( musicians );
-        }
-        if ( !location.isEmpty() )
-        {
-            accessibleText += tr ( ", Location: %1" ).arg ( location );
-        }
-        if ( !version.isEmpty() )
-        {
-            accessibleText += tr ( ", Version: %1" ).arg ( version );
-        }
-        
         // Update label
         lblAccessibleServerInfo->setText ( labelText );
-        lblAccessibleServerInfo->setAccessibleName ( tr ( "Selected server: %1" ).arg ( serverName ) );
-        lblAccessibleServerInfo->setAccessibleDescription ( accessibleText );
+        lblAccessibleServerInfo->setAccessibleName ( tr ( "Seelected server information box" ) );
+        lblAccessibleServerInfo->setAccessibleDescription ( tr ( "Show stats for selected server" ) );
         
         // Update navigation buttons to show previous/next server names
         int currentIndex = lvwServers->indexOfTopLevelItem ( pItem );

@@ -24,6 +24,11 @@
 
 #pragma once
 
+// Enable accessible server list by default (can be disabled with -DDISABLE_ACCESSIBLE_SERVER_LIST)
+#ifndef DISABLE_ACCESSIBLE_SERVER_LIST
+#    define USE_ACCESSIBLE_SERVER_LIST
+#endif
+
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
@@ -32,6 +37,9 @@
 #include <QLocale>
 #include <QtConcurrent>
 #include <QRegularExpression>
+#include <QAccessible>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "global.h"
 #include "util.h"
 #include "settings.h"
@@ -105,7 +113,20 @@ protected:
     void                   EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void                   UpdateDirectoryComboBox();
 
+#ifdef USE_ACCESSIBLE_SERVER_LIST
+    void                   UpdateAccessibleServerInfo();
+#endif
+
     CClientSettings* pSettings;
+
+#ifdef USE_ACCESSIBLE_SERVER_LIST
+    // Accessible navigation panel for screen readers
+    QWidget*     wAccessibleNavPanel;     // Container for accessible navigation
+    QLabel*      lblAccessibleServerInfo; // Label showing current server information (read-only)
+    QPushButton* butAccessiblePrevious;   // Button to navigate to previous server
+    QPushButton* butAccessibleNext;       // Button to navigate to next server
+    QPushButton* butToggleAccessible;     // Button to show/hide accessible panel
+#endif
 
     QTimer       TimerPing;
     QTimer       TimerReRequestServList;
@@ -132,6 +153,13 @@ public slots:
     void OnDeleteServerAddrClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
+    void OnServerListItemSelectionChanged();
+
+#ifdef USE_ACCESSIBLE_SERVER_LIST
+    void OnAccessiblePreviousClicked();
+    void OnAccessibleNextClicked();
+    void OnToggleAccessibleClicked();
+#endif
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );

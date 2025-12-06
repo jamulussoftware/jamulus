@@ -747,28 +747,9 @@ void CConnectDlg::UpdateAccessibleServerInfo()
         QString pingTime = pItem->text ( LVC_PING );
         QString musicians = pItem->text ( LVC_CLIENTS );
         QString location = pItem->text ( LVC_LOCATION );
-        QString version = pItem->text ( LVC_VERSION );
+        QString version = pItem->text ( LVC_VERSION ); 
         
-        // Build comprehensive text for the label
-        QString labelText = tr ( "<b>Server:</b> %1" ).arg ( serverName );
-        if ( !pingTime.isEmpty() )
-        {
-            labelText += tr ( "<br><b>Ping:</b> %1" ).arg ( pingTime );
-        }
-        if ( !musicians.isEmpty() )
-        {
-            labelText += tr ( " &nbsp; <b>Musicians:</b> %1" ).arg ( musicians );
-        }
-        if ( !location.isEmpty() )
-        {
-            labelText += tr ( "<br><b>Location:</b> %1" ).arg ( location );
-        }
-        if ( !version.isEmpty() )
-        {
-            labelText += tr ( " &nbsp; <b>Version:</b> %1" ).arg ( version );
-        }
-        
-        // Build text for screen readers (without HTML)
+        // Build text for screen readers
         QString accessibleText = tr ( "Server: %1" ).arg ( serverName );
         if ( !pingTime.isEmpty() )
         {
@@ -788,7 +769,7 @@ void CConnectDlg::UpdateAccessibleServerInfo()
         }
         
         // Update label
-        lblAccessibleServerInfo->setText ( labelText );
+        lblAccessibleServerInfo->setText ( accessibleText );
         lblAccessibleServerInfo->setAccessibleName ( tr ( "Selected server: %1" ).arg ( serverName ) );
         lblAccessibleServerInfo->setAccessibleDescription ( accessibleText );
         
@@ -838,7 +819,7 @@ void CConnectDlg::UpdateAccessibleServerInfo()
     {
         // No server selected or musician child selected
         lblAccessibleServerInfo->setText ( tr ( "<i>No server selected or in musician selection</i>" ) );
-        lblAccessibleServerInfo->setAccessibleName ( tr ( "No server selected" ) );
+        lblAccessibleServerInfo->setAccessibleName ( tr ( "No server selected or in musician selection" ) );
         lblAccessibleServerInfo->setAccessibleDescription ( tr ( "No server selected. Use Previous/Next buttons or Alt+Up/Down to navigate servers." ) );
         
         // Reset navigation buttons

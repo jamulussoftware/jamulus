@@ -225,19 +225,6 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QVBoxLayout* accessibleMainLayout = new QVBoxLayout ( wAccessibleNavPanel );
     accessibleMainLayout->setContentsMargins ( 0, 5, 0, 5 );
     
-    // Create read-only, focusable label showing current server information
-    // Using QLabel with focus policy so screenreaders can read it
-    lblAccessibleServerInfo = new QLabel ( tr ( "No server selected" ), wAccessibleNavPanel );
-    lblAccessibleServerInfo->setObjectName ( "lblAccessibleServerInfo" );
-    lblAccessibleServerInfo->setWordWrap ( true );
-    lblAccessibleServerInfo->setFrameStyle ( QFrame::Panel | QFrame::Sunken );
-    lblAccessibleServerInfo->setTextInteractionFlags ( Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard );
-    lblAccessibleServerInfo->setMinimumHeight ( 50 );
-    lblAccessibleServerInfo->setFocusPolicy ( Qt::StrongFocus ); // Make it focusable for screen readers
-    lblAccessibleServerInfo->setAccessibleName ( tr ( "Current server information" ) );
-    lblAccessibleServerInfo->setAccessibleDescription ( tr ( "Shows details of the currently selected server. Use Previous/Next buttons or Alt+Up/Down to navigate." ) );
-    accessibleMainLayout->addWidget ( lblAccessibleServerInfo );
-    
     // Create horizontal layout for navigation buttons (Previous, Next)
     QHBoxLayout* navLayout = new QHBoxLayout();
     
@@ -258,7 +245,20 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     navLayout->addWidget ( butAccessibleNext, 1 );
     
     accessibleMainLayout->addLayout ( navLayout );
-    
+
+    // Create read-only, focusable label showing current server information
+    // Using QLabel with focus policy so screenreaders can read it
+    lblAccessibleServerInfo = new QLabel ( tr ( "No server selected" ), wAccessibleNavPanel );
+    lblAccessibleServerInfo->setObjectName ( "lblAccessibleServerInfo" );
+    lblAccessibleServerInfo->setWordWrap ( true );
+    lblAccessibleServerInfo->setFrameStyle ( QFrame::Panel | QFrame::Sunken );
+    lblAccessibleServerInfo->setTextInteractionFlags ( Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard );
+    lblAccessibleServerInfo->setMinimumHeight ( 50 );
+    lblAccessibleServerInfo->setFocusPolicy ( Qt::StrongFocus ); // Make it focusable for screen readers
+    lblAccessibleServerInfo->setAccessibleName ( tr ( "Current server information" ) );
+    lblAccessibleServerInfo->setAccessibleDescription ( tr ( "Shows details of the currently selected server. Use Previous/Next buttons or Alt+Up/Down to navigate." ) );
+    accessibleMainLayout->addWidget ( lblAccessibleServerInfo );
+
     // Create toggle button
     butToggleAccessible = new QPushButton ( u8"\u25BC " + tr ( "Hide Accessible Controls" ), this );
     butToggleAccessible->setObjectName ( "butToggleAccessible" );
@@ -770,7 +770,7 @@ void CConnectDlg::UpdateAccessibleServerInfo()
         
         // Update label
         lblAccessibleServerInfo->setText ( accessibleText );
-        lblAccessibleServerInfo->setAccessibleName ( tr ( "Selected server: %1" ).arg ( serverName ) );
+        lblAccessibleServerInfo->setAccessibleName ( tr ( "Selected server information" ) );
         lblAccessibleServerInfo->setAccessibleDescription ( accessibleText );
         
         // Update navigation buttons to show previous/next server names
@@ -816,12 +816,7 @@ void CConnectDlg::UpdateAccessibleServerInfo()
         QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( lblAccessibleServerInfo, accessibleText ) );
     }
     else
-    {
-        // No server selected or musician child selected
-        lblAccessibleServerInfo->setText ( tr ( "<i>No server selected or in musician selection</i>" ) );
-        lblAccessibleServerInfo->setAccessibleName ( tr ( "No server selected or in musician selection" ) );
-        lblAccessibleServerInfo->setAccessibleDescription ( tr ( "No server selected. Use Previous/Next buttons or Alt+Up/Down to navigate servers." ) );
-        
+    {        
         // Reset navigation buttons
         butAccessiblePrevious->setText ( u8"\u2190 " + tr ( "Previous" ) );
         butAccessiblePrevious->setAccessibleName ( tr ( "Navigate to previous server" ) );
@@ -830,6 +825,11 @@ void CConnectDlg::UpdateAccessibleServerInfo()
         butAccessibleNext->setText ( tr ( "Next" ) + u8" \u2192" );
         butAccessibleNext->setAccessibleName ( tr ( "Navigate to next server" ) );
         butAccessibleNext->setEnabled ( lvwServers->topLevelItemCount() > 0 );
+
+        // No server selected or musician child selected
+        lblAccessibleServerInfo->setText ( tr ( "<i>No server selected or in musician selection</i>" ) );
+        lblAccessibleServerInfo->setAccessibleName ( tr ( "No server selected or in musician selection" ) );
+        lblAccessibleServerInfo->setAccessibleDescription ( tr ( "No server selected. Use Previous/Next buttons or Alt+Up/Down to navigate servers." ) );
         
     }
 }

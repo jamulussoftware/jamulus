@@ -74,22 +74,22 @@ static QString mapVersionStr ( const QString& versionStr )
 // Subclass of QTreeWidgetItem that allows LVC_VERSION to sort by the UserRole data value
 CMappedTreeWidgetItem::CMappedTreeWidgetItem ( QTreeWidget* owner ) : QTreeWidgetItem ( owner ), owner ( owner ) {}
 
-bool CMappedTreeWidgetItem::operator< ( const QTreeWidgetItem& other ) const
+bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
 {
     if ( !owner )
-        return QTreeWidgetItem::operator< ( other );
+        return QTreeWidgetItem::operator<( other );
 
     int column = owner->sortColumn();
 
     // we only need this override for comparing server versions
     if ( column != CConnectDlg::LVC_VERSION )
-        return QTreeWidgetItem::operator< ( other );
+        return QTreeWidgetItem::operator<( other );
 
     QVariant lhs = data ( column, Qt::UserRole );
     QVariant rhs = other.data ( column, Qt::UserRole );
 
     if ( !lhs.isValid() || !rhs.isValid() )
-        return QTreeWidgetItem::operator< ( other );
+        return QTreeWidgetItem::operator<( other );
 
     return lhs.toString() < rhs.toString();
 }
@@ -215,6 +215,90 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     // per default the root shall not be decorated (to save space)
     lvwServers->setRootIsDecorated ( false );
 
+#ifdef USE_ACCESSIBLE_SERVER_LIST
+    // Create simplified accessible navigation panel for screen readers
+    // Design: One info label + 2 navigation buttons (Previous/Next) + Toggle button
+
+    wAccessibleNavPanel = new QWidget ( this );
+    wAccessibleNavPanel->setObjectName ( "wAccessibleNavPanel" );
+    
+    QVBoxLayout* accessibleMainLayout = new QVBoxLayout ( wAccessibleNavPanel );
+    accessibleMainLayout->setContentsMargins ( 0, 5, 0, 5 );
+    
+    // Create read-only, focusable label showing current server information
+    // Using QLabel with focus policy so screenreaders can read it
+    lblAccessibleServerInfo = new QLabel ( tr ( "No server selected" ), wAccessibleNavPanel );
+    lblAccessibleServerInfo->setObjectName ( "lblAccessibleServerInfo" );
+    lblAccessibleServerInfo->setWordWrap ( true );
+    lblAccessibleServerInfo->setFrameStyle ( QFrame::Panel | QFrame::Sunken );
+    lblAccessibleServerInfo->setTextInteractionFlags ( Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard );
+    lblAccessibleServerInfo->setMinimumHeight ( 50 );
+    lblAccessibleServerInfo->setFocusPolicy ( Qt::StrongFocus ); // Make it focusable for screen readers
+    lblAccessibleServerInfo->setAccessibleName ( tr ( "Current server information" ) );
+    lblAccessibleServerInfo->setAccessibleDescription ( tr ( "Shows details of the currently selected server. Use Previous/Next buttons or Alt+Up/Down to navigate." ) );
+    accessibleMainLayout->addWidget ( lblAccessibleServerInfo );
+    
+    // Create horizontal layout for navigation buttons (Previous, Next)
+    QHBoxLayout* navLayout = new QHBoxLayout();
+    
+    butAccessiblePrevious = new QPushButton ( u8"\u2190 " + tr ( "Previous Server" ), wAccessibleNavPanel );
+    butAccessiblePrevious->setObjectName ( "butAccessiblePrevious" );
+    butAccessiblePrevious->setAccessibleName ( tr ( "Go to previous server" ) );
+    butAccessiblePrevious->setAccessibleDescription ( tr ( "Navigate to the previous server in the list" ) );
+    butAccessiblePrevious->setShortcut ( QKeySequence ( Qt::ALT | Qt::Key_Up ) );
+    butAccessiblePrevious->setToolTip ( tr ( "Previous server (Alt+Up)" ) );
+    navLayout->addWidget ( butAccessiblePrevious, 1 );
+    
+    butAccessibleNext = new QPushButton ( tr ( "Next Server" ) + u8" \u2192", wAccessibleNavPanel );
+    butAccessibleNext->setObjectName ( "butAccessibleNext" );
+    butAccessibleNext->setAccessibleName ( tr ( "Go to next server" ) );
+    butAccessibleNext->setAccessibleDescription ( tr ( "Navigate to the next server in the list" ) );
+    butAccessibleNext->setShortcut ( QKeySequence ( Qt::ALT | Qt::Key_Down ) );
+    butAccessibleNext->setToolTip ( tr ( "Next server (Alt+Down)" ) );
+    navLayout->addWidget ( butAccessibleNext, 1 );
+    
+    accessibleMainLayout->addLayout ( navLayout );
+    
+    // Create toggle button
+    butToggleAccessible = new QPushButton ( u8"\u25BC " + tr ( "Hide Accessible Controls" ), this );
+    butToggleAccessible->setObjectName ( "butToggleAccessible" );
+    butToggleAccessible->setAccessibleName ( tr ( "Toggle accessible controls" ) );
+    butToggleAccessible->setAccessibleDescription ( tr ( "Show or hide the accessible navigation panel for screen readers" ) );
+    butToggleAccessible->setCheckable ( true );
+    butToggleAccessible->setChecked ( true );
+    butToggleAccessible->setToolTip ( tr ( "Toggle accessible controls" ) );
+    
+    // Insert the accessible panel and toggle button into the layout right after the tree widget
+    QVBoxLayout* mainLayout = qobject_cast<QVBoxLayout*> ( layout() );
+    if ( mainLayout )
+    {
+        // Find the tree widget in the layout
+        bool inserted = false;
+        for ( int i = 0; i < mainLayout->count(); ++i )
+        {
+            QLayoutItem* item = mainLayout->itemAt ( i );
+            if ( item && item->widget() == lvwServers )
+            {
+                mainLayout->insertWidget ( i + 1, butToggleAccessible );
+                mainLayout->insertWidget ( i + 2, wAccessibleNavPanel );
+                inserted = true;
+                break;
+            }
+        }
+        if ( !inserted )
+        {
+            qWarning ( "Accessible navigation panel could not be inserted: tree widget not found in layout." );
+        }
+    }
+    else
+    {
+        qWarning ( "Accessible navigation panel could not be inserted: main layout cast failed." );
+    }
+    
+    // Initially show the accessible panel
+    wAccessibleNavPanel->setVisible ( true );
+#endif
+
     // make sure the connect button has the focus
     butConnect->setFocus();
 
@@ -269,6 +353,13 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QObject::connect ( &TimerPing, &QTimer::timeout, this, &CConnectDlg::OnTimerPing );
 
     QObject::connect ( &TimerReRequestServList, &QTimer::timeout, this, &CConnectDlg::OnTimerReRequestServList );
+
+#ifdef USE_ACCESSIBLE_SERVER_LIST
+    // accessible navigation panel
+    QObject::connect ( butAccessiblePrevious, &QPushButton::clicked, this, &CConnectDlg::OnAccessiblePreviousClicked );
+    QObject::connect ( butAccessibleNext, &QPushButton::clicked, this, &CConnectDlg::OnAccessibleNextClicked );
+    QObject::connect ( butToggleAccessible, &QPushButton::clicked, this, &CConnectDlg::OnToggleAccessibleClicked );
+#endif
 }
 
 void CConnectDlg::showEvent ( QShowEvent* )
@@ -634,74 +725,214 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     lvwServers->clearSelection();
 }
 
-QString CConnectDlg::BuildAccessibleTextForItem ( const QTreeWidgetItem* pItem ) const
-{
-    // Return early if item is null to avoid crashes
-    if ( !pItem )
-    {
-        return QString();
-    }
-
-    // Check if this is a child item (musician) or parent item (server).
-    // Child items have a parent and represent individual musicians connected to a server.
-    // Parent items represent servers and contain multiple columns with server information.
-    if ( pItem->parent() != nullptr )
-    {
-        // This is a musician/child item - announce the musician name
-        return tr ( "Musician: %1" ).arg ( pItem->text ( LVC_NAME ) );
-    }
-
-    // This is a server item - build accessible text with all available information.
-    // Start with the server name, then append other columns that have data.
-    QString accessibleText = tr ( "Server: %1" ).arg ( pItem->text ( LVC_NAME ) );
-
-    // Helper lambda to append column data if it exists
-    auto appendColumnIfNotEmpty = [&] ( int column, const QString& label ) {
-        QString value = pItem->text ( column );
-        if ( !value.isEmpty() )
-        {
-            accessibleText += tr ( ", %1: %2" ).arg ( label ).arg ( value );
-        }
-    };
-
-    // Append all server information columns in the order they appear in the UI
-    appendColumnIfNotEmpty ( LVC_PING, tr ( "Ping" ) );
-    appendColumnIfNotEmpty ( LVC_CLIENTS, tr ( "Musicians" ) );
-    appendColumnIfNotEmpty ( LVC_LOCATION, tr ( "Location" ) );
-    appendColumnIfNotEmpty ( LVC_VERSION, tr ( "Version" ) );
-
-    return accessibleText;
-}
-
-void CConnectDlg::UpdateAccessibilityForItem ( QTreeWidgetItem* pItem )
-{
-    // Update the accessible description and notify the accessibility system
-    // when items are selected. This improves screen reader support on all platforms,
-    // including VoiceOver on macOS, NVDA/JAWS on Windows, and Orca on Linux.
-    if ( !pItem )
-    {
-        return;
-    }
-
-    QString accessibleText = BuildAccessibleTextForItem ( pItem );
-    lvwServers->setAccessibleDescription ( accessibleText );
-    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( lvwServers, accessibleText ) );
-}
-
 void CConnectDlg::OnServerListItemSelectionChanged()
+{
+#ifdef USE_ACCESSIBLE_SERVER_LIST
+    UpdateAccessibleServerInfo();
+#endif
+}
+
+#ifdef USE_ACCESSIBLE_SERVER_LIST
+void CConnectDlg::UpdateAccessibleServerInfo()
 {
     QList<QTreeWidgetItem*> selectedItems = lvwServers->selectedItems();
 
-    if ( !selectedItems.isEmpty() )
+    if ( !selectedItems.isEmpty() && selectedItems.first()->parent() == nullptr )
     {
-        UpdateAccessibilityForItem ( selectedItems.first() );
+        // We have a server item selected (not a musician child item)
+        QTreeWidgetItem* pItem = selectedItems.first();
+        
+        // Extract server information
+        QString serverName = pItem->text ( LVC_NAME );
+        QString pingTime = pItem->text ( LVC_PING );
+        QString musicians = pItem->text ( LVC_CLIENTS );
+        QString location = pItem->text ( LVC_LOCATION );
+        QString version = pItem->text ( LVC_VERSION );
+        
+        // Build comprehensive text for the label
+        QString labelText = tr ( "<b>Server:</b> %1" ).arg ( serverName );
+        if ( !pingTime.isEmpty() )
+        {
+            labelText += tr ( "<br><b>Ping:</b> %1" ).arg ( pingTime );
+        }
+        if ( !musicians.isEmpty() )
+        {
+            labelText += tr ( " &nbsp; <b>Musicians:</b> %1" ).arg ( musicians );
+        }
+        if ( !location.isEmpty() )
+        {
+            labelText += tr ( "<br><b>Location:</b> %1" ).arg ( location );
+        }
+        if ( !version.isEmpty() )
+        {
+            labelText += tr ( " &nbsp; <b>Version:</b> %1" ).arg ( version );
+        }
+        
+        // Build text for screen readers (without HTML)
+        QString accessibleText = tr ( "Server: %1" ).arg ( serverName );
+        if ( !pingTime.isEmpty() )
+        {
+            accessibleText += tr ( ", Ping: %1" ).arg ( pingTime );
+        }
+        if ( !musicians.isEmpty() )
+        {
+            accessibleText += tr ( ", Musicians: %1" ).arg ( musicians );
+        }
+        if ( !location.isEmpty() )
+        {
+            accessibleText += tr ( ", Location: %1" ).arg ( location );
+        }
+        if ( !version.isEmpty() )
+        {
+            accessibleText += tr ( ", Version: %1" ).arg ( version );
+        }
+        
+        // Update label
+        lblAccessibleServerInfo->setText ( labelText );
+        lblAccessibleServerInfo->setAccessibleName ( tr ( "Selected server: %1" ).arg ( serverName ) );
+        lblAccessibleServerInfo->setAccessibleDescription ( accessibleText );
+        
+        // Update navigation buttons to show previous/next server names
+        int currentIndex = lvwServers->indexOfTopLevelItem ( pItem );
+        
+        // Update "Previous" button with previous server name
+        if ( currentIndex > 0 )
+        {
+            QTreeWidgetItem* prevItem = lvwServers->topLevelItem ( currentIndex - 1 );
+            QString prevName = prevItem->text ( LVC_NAME );
+            butAccessiblePrevious->setText ( u8"\u2190 " + prevName );
+            butAccessiblePrevious->setAccessibleName ( tr ( "Previous server: %1" ).arg ( prevName ) );
+            butAccessiblePrevious->setAccessibleDescription ( tr ( "Go to previous server: %1" ).arg ( prevName ) );
+            butAccessiblePrevious->setEnabled ( true );
+        }
+        else
+        {
+            butAccessiblePrevious->setText ( u8"\u2190 " + tr ( "(first)" ) );
+            butAccessiblePrevious->setAccessibleName ( tr ( "No previous server - at first server" ) );
+            butAccessiblePrevious->setAccessibleDescription ( tr ( "Cannot go back, already at first server" ) );
+            butAccessiblePrevious->setEnabled ( false );
+        }
+        
+        // Update "Next" button with next server name
+        if ( currentIndex < lvwServers->topLevelItemCount() - 1 )
+        {
+            QTreeWidgetItem* nextItem = lvwServers->topLevelItem ( currentIndex + 1 );
+            QString nextName = nextItem->text ( LVC_NAME );
+            butAccessibleNext->setText ( nextName + u8" \u2192" );
+            butAccessibleNext->setAccessibleName ( tr ( "Next server: %1" ).arg ( nextName ) );
+            butAccessibleNext->setAccessibleDescription ( tr ( "Go to next server: %1" ).arg ( nextName ) );
+            butAccessibleNext->setEnabled ( true );
+        }
+        else
+        {
+            butAccessibleNext->setText ( tr ( "(last)" ) + u8" \u2192" );
+            butAccessibleNext->setAccessibleName ( tr ( "No next server - at last server" ) );
+            butAccessibleNext->setAccessibleDescription ( tr ( "Cannot go forward, already at last server" ) );
+            butAccessibleNext->setEnabled ( false );
+        }
+        
+        // Force VoiceOver to announce the change
+        QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( lblAccessibleServerInfo, accessibleText ) );
     }
     else
     {
-        // Clear accessible description when nothing is selected
-        lvwServers->setAccessibleDescription ( tr ( "Server list" ) );
+        // No server selected or musician child selected
+        lblAccessibleServerInfo->setText ( tr ( "<i>No server selected or in musician selection</i>" ) );
+        lblAccessibleServerInfo->setAccessibleName ( tr ( "No server selected" ) );
+        lblAccessibleServerInfo->setAccessibleDescription ( tr ( "No server selected. Use Previous/Next buttons or Alt+Up/Down to navigate servers." ) );
+        
+        // Reset navigation buttons
+        butAccessiblePrevious->setText ( u8"\u2190 " + tr ( "Previous" ) );
+        butAccessiblePrevious->setAccessibleName ( tr ( "Navigate to previous server" ) );
+        butAccessiblePrevious->setEnabled ( lvwServers->topLevelItemCount() > 0 );
+        
+        butAccessibleNext->setText ( tr ( "Next" ) + u8" \u2192" );
+        butAccessibleNext->setAccessibleName ( tr ( "Navigate to next server" ) );
+        butAccessibleNext->setEnabled ( lvwServers->topLevelItemCount() > 0 );
+        
     }
 }
+
+void CConnectDlg::OnAccessiblePreviousClicked()
+{
+    // Navigate to previous server
+    QList<QTreeWidgetItem*> selectedItems = lvwServers->selectedItems();
+    QTreeWidgetItem* currentItem = selectedItems.isEmpty() ? nullptr : selectedItems.first();
+    
+    // Get current item or first item if none selected
+    if ( currentItem == nullptr )
+    {
+        // Select first item
+        if ( lvwServers->topLevelItemCount() > 0 )
+        {
+            lvwServers->setCurrentItem ( lvwServers->topLevelItem ( 0 ) );
+        }
+        return;
+    }
+    
+    // If current item is a musician (child), move to parent
+    if ( currentItem->parent() != nullptr )
+    {
+        lvwServers->setCurrentItem ( currentItem->parent() );
+        return;
+    }
+    
+    // Get previous server item
+    int currentIndex = lvwServers->indexOfTopLevelItem ( currentItem );
+    if ( currentIndex > 0 )
+    {
+        lvwServers->setCurrentItem ( lvwServers->topLevelItem ( currentIndex - 1 ) );
+    }
+}
+
+void CConnectDlg::OnAccessibleNextClicked()
+{
+    // Navigate to next server
+    QList<QTreeWidgetItem*> selectedItems = lvwServers->selectedItems();
+    QTreeWidgetItem* currentItem = selectedItems.isEmpty() ? nullptr : selectedItems.first();
+    
+    // Get current item or first item if none selected
+    if ( currentItem == nullptr )
+    {
+        // Select first item
+        if ( lvwServers->topLevelItemCount() > 0 )
+        {
+            lvwServers->setCurrentItem ( lvwServers->topLevelItem ( 0 ) );
+        }
+        return;
+    }
+    
+    // If current item is a musician (child), find next server
+    if ( currentItem->parent() != nullptr )
+    {
+        currentItem = currentItem->parent();
+    }
+    
+    // Find next server item (skip musician children)
+    int currentIndex = lvwServers->indexOfTopLevelItem ( currentItem );
+    if ( currentIndex >= 0 && currentIndex < lvwServers->topLevelItemCount() - 1 )
+    {
+        lvwServers->setCurrentItem ( lvwServers->topLevelItem ( currentIndex + 1 ) );
+    }
+}
+
+void CConnectDlg::OnToggleAccessibleClicked()
+{
+    bool isVisible = wAccessibleNavPanel->isVisible();
+    wAccessibleNavPanel->setVisible ( !isVisible );
+    
+    if ( isVisible )
+    {
+        butToggleAccessible->setText ( u8"\u25B6 " + tr ( "Show Accessible Controls" ) );
+        butToggleAccessible->setAccessibleDescription ( tr ( "Show the accessible navigation controls" ) );
+    }
+    else
+    {
+        butToggleAccessible->setText ( u8"\u25BC " + tr ( "Hide Accessible Controls" ) );
+        butToggleAccessible->setAccessibleDescription ( tr ( "Hide the accessible navigation controls" ) );
+    }
+}
+#endif
 
 void CConnectDlg::OnCustomDirectoriesChanged()
 {

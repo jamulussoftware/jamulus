@@ -559,7 +559,10 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                               "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>" +
                               "<p><b>" + tr ( "Norwegian Bokmål" ) +
                               "</b></p>"
-                              "<p>Allan Nordhøy (<a href=\"https://hosted.weblate.org/user/kingu/\">kingu</a>)</p>" );
+                              "<p>Allan Nordhøy (<a href=\"https://hosted.weblate.org/user/kingu/\">kingu</a>)</p>" +
+                              "<p><b>" + tr ( "Japanese" ) +
+                              "</b></p>"
+                              "<p>tsukurun (<a href=\"https://github.com/tsukurun\">tsukurun</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );

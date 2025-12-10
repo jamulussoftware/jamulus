@@ -72,12 +72,12 @@
     <message>
         <location filename="../util.cpp" line="504"/>
         <source>For details on the contributions check out the %1</source>
-        <translation>貢献の詳細については %1 を確認してください</translation>
+        <translation>コード貢献の詳細については %1 を確認してください</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="505"/>
         <source>Github Contributors list</source>
-        <translation>Github 貢献者リスト</translation>
+        <translation>Github コード貢献者リスト</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="508"/>
@@ -183,7 +183,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="134"/>
         <source>&amp;Contributors</source>
-        <translation>貢献者(&amp;C)</translation>
+        <translation>コード貢献者(&amp;C)</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="148"/>

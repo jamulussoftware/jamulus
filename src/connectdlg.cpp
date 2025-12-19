@@ -227,27 +227,27 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     // Create horizontal layout for navigation buttons (Previous, Next)
     QHBoxLayout* navLayout = new QHBoxLayout();
     
-    butAccessiblePrevious = new QPushButton ( u8"\u2190 " + tr ( "Previous Server" ), wAccessibleNavPanel );
+    butAccessiblePrevious = new QPushButton ( tr ( "Previous Entry" ), wAccessibleNavPanel );
     butAccessiblePrevious->setObjectName ( "butAccessiblePrevious" );
-    butAccessiblePrevious->setAccessibleName ( tr ( "Go to previous server" ) );
-    butAccessiblePrevious->setAccessibleDescription ( tr ( "Navigate to the previous server in the list" ) );
+    butAccessiblePrevious->setAccessibleName ( tr ( "Previous Button" ) );
+    butAccessiblePrevious->setAccessibleDescription ( tr ( "Navigate to the previous server list entry" ) );
     butAccessiblePrevious->setShortcut ( QKeySequence ( Qt::ALT | Qt::Key_Up ) );
-    butAccessiblePrevious->setToolTip ( tr ( "Previous server (Alt+Up)" ) );
+    butAccessiblePrevious->setToolTip ( tr ( "Previous entry (Alt+Up)" ) );
     navLayout->addWidget ( butAccessiblePrevious, 1 );
     
-    butAccessibleNext = new QPushButton ( tr ( "Next Server" ) + u8" \u2192", wAccessibleNavPanel );
+    butAccessibleNext = new QPushButton ( tr ( "Next entry" ), wAccessibleNavPanel );
     butAccessibleNext->setObjectName ( "butAccessibleNext" );
-    butAccessibleNext->setAccessibleName ( tr ( "Go to next server" ) );
-    butAccessibleNext->setAccessibleDescription ( tr ( "Navigate to the next server in the list" ) );
+    butAccessibleNext->setAccessibleName ( tr ( "Go to next entry" ) );
+    butAccessibleNext->setAccessibleDescription ( tr ( "Navigate to the next server list entry" ) );
     butAccessibleNext->setShortcut ( QKeySequence ( Qt::ALT | Qt::Key_Down ) );
-    butAccessibleNext->setToolTip ( tr ( "Next server (Alt+Down)" ) );
+    butAccessibleNext->setToolTip ( tr ( "Next entry (Alt+Down)" ) );
     navLayout->addWidget ( butAccessibleNext, 1 );
     
     accessibleMainLayout->addLayout ( navLayout );
 
     // Create read-only, focusable label showing current server information
     // Using QLabel with focus policy so screenreaders can read it
-    lblAccessibleServerInfo = new QLabel ( tr ( "No server selected" ), wAccessibleNavPanel );
+    lblAccessibleServerInfo = new QLabel ( tr ( "No entry selected" ), wAccessibleNavPanel );
     lblAccessibleServerInfo->setObjectName ( "lblAccessibleServerInfo" );
     lblAccessibleServerInfo->setWordWrap ( true );
     lblAccessibleServerInfo->setFrameStyle ( QFrame::Panel | QFrame::Sunken );
@@ -259,7 +259,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     accessibleMainLayout->addWidget ( lblAccessibleServerInfo );
 
     // Create toggle button
-    butToggleAccessible = new QPushButton ( u8"\u25BC " + tr ( "Hide Accessible Controls" ), this );
+    butToggleAccessible = new QPushButton ( tr ( "Hide Accessible Controls" ), this );
     butToggleAccessible->setObjectName ( "butToggleAccessible" );
     butToggleAccessible->setAccessibleName ( tr ( "Toggle accessible controls" ) );
     butToggleAccessible->setAccessibleDescription ( tr ( "Show or hide the accessible navigation panel for screen readers" ) );
@@ -774,14 +774,14 @@ void CConnectDlg::UpdateAccessibleServerInfo()
         {
             QTreeWidgetItem* prevItem = lvwServers->topLevelItem ( currentIndex - 1 );
             QString prevName = prevItem->text ( LVC_NAME );
-            butAccessiblePrevious->setText ( u8"\u2190 " + prevName );
+            butAccessiblePrevious->setText ( prevName );
             butAccessiblePrevious->setAccessibleName ( tr ( "Previous server: %1" ).arg ( prevName ) );
             butAccessiblePrevious->setAccessibleDescription ( tr ( "Go to previous server: %1" ).arg ( prevName ) );
             butAccessiblePrevious->setEnabled ( true );
         }
         else
         {
-            butAccessiblePrevious->setText ( u8"\u2190 " + tr ( "(first)" ) );
+            butAccessiblePrevious->setText ( tr ( "(first)" ) );
             butAccessiblePrevious->setAccessibleName ( tr ( "No previous server - at first server" ) );
             butAccessiblePrevious->setAccessibleDescription ( tr ( "Cannot go back, already at first server" ) );
             butAccessiblePrevious->setEnabled ( false );
@@ -792,14 +792,14 @@ void CConnectDlg::UpdateAccessibleServerInfo()
         {
             QTreeWidgetItem* nextItem = lvwServers->topLevelItem ( currentIndex + 1 );
             QString nextName = nextItem->text ( LVC_NAME );
-            butAccessibleNext->setText ( nextName + u8" \u2192" );
+            butAccessibleNext->setText ( nextName );
             butAccessibleNext->setAccessibleName ( tr ( "Next server: %1" ).arg ( nextName ) );
             butAccessibleNext->setAccessibleDescription ( tr ( "Go to next server: %1" ).arg ( nextName ) );
             butAccessibleNext->setEnabled ( true );
         }
         else
         {
-            butAccessibleNext->setText ( tr ( "(last)" ) + u8" \u2192" );
+            butAccessibleNext->setText ( tr ( "(last)" ) );
             butAccessibleNext->setAccessibleName ( tr ( "No next server - at last server" ) );
             butAccessibleNext->setAccessibleDescription ( tr ( "Cannot go forward, already at last server" ) );
             butAccessibleNext->setEnabled ( false );
@@ -811,11 +811,11 @@ void CConnectDlg::UpdateAccessibleServerInfo()
     else
     {        
         // Reset navigation buttons
-        butAccessiblePrevious->setText ( u8"\u2190 " + tr ( "Previous" ) );
+        butAccessiblePrevious->setText ( tr ( "Previous" ) );
         butAccessiblePrevious->setAccessibleName ( tr ( "Navigate to previous server" ) );
         butAccessiblePrevious->setEnabled ( lvwServers->topLevelItemCount() > 0 );
         
-        butAccessibleNext->setText ( tr ( "Next" ) + u8" \u2192" );
+        butAccessibleNext->setText ( tr ( "Next" ) );
         butAccessibleNext->setAccessibleName ( tr ( "Navigate to next server" ) );
         butAccessibleNext->setEnabled ( lvwServers->topLevelItemCount() > 0 );
 

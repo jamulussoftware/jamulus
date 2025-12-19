@@ -215,7 +215,6 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     // per default the root shall not be decorated (to save space)
     lvwServers->setRootIsDecorated ( false );
 
-#ifdef USE_ACCESSIBLE_SERVER_LIST
     // Create simplified accessible navigation panel for screen readers
     // Design: One info label + 2 navigation buttons (Previous/Next) + Toggle button
 
@@ -297,7 +296,6 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     
     // Initially show the accessible panel
     wAccessibleNavPanel->setVisible ( true );
-#endif
 
     // make sure the connect button has the focus
     butConnect->setFocus();
@@ -354,12 +352,10 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     QObject::connect ( &TimerReRequestServList, &QTimer::timeout, this, &CConnectDlg::OnTimerReRequestServList );
 
-#ifdef USE_ACCESSIBLE_SERVER_LIST
     // accessible navigation panel
     QObject::connect ( butAccessiblePrevious, &QPushButton::clicked, this, &CConnectDlg::OnAccessiblePreviousClicked );
     QObject::connect ( butAccessibleNext, &QPushButton::clicked, this, &CConnectDlg::OnAccessibleNextClicked );
     QObject::connect ( butToggleAccessible, &QPushButton::clicked, this, &CConnectDlg::OnToggleAccessibleClicked );
-#endif
 }
 
 void CConnectDlg::showEvent ( QShowEvent* )
@@ -727,12 +723,9 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
 
 void CConnectDlg::OnServerListItemSelectionChanged()
 {
-#ifdef USE_ACCESSIBLE_SERVER_LIST
     UpdateAccessibleServerInfo();
-#endif
 }
 
-#ifdef USE_ACCESSIBLE_SERVER_LIST
 void CConnectDlg::UpdateAccessibleServerInfo()
 {
     QList<QTreeWidgetItem*> selectedItems = lvwServers->selectedItems();
@@ -913,7 +906,6 @@ void CConnectDlg::OnToggleAccessibleClicked()
         butToggleAccessible->setAccessibleDescription ( tr ( "Hide the accessible navigation controls" ) );
     }
 }
-#endif
 
 void CConnectDlg::OnCustomDirectoriesChanged()
 {

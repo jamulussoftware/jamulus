@@ -22,6 +22,8 @@
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone to let others hear you.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>The accessibility feature module we use requests camera access, even though it is not used by this Application. You do not need to allow access to your camera and can safely decline.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

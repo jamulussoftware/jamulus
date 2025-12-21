@@ -33,7 +33,7 @@ static QString mapVersionStr ( const QString& versionStr )
     QString x = ">"; // default suffix is later (git, dev, nightly, etc)
 
     // Regex for SemVer: major.minor.patch-suffix
-    QRegularExpression      semVerRegex ( R"(^(\d+)\.(\d+)\.(\d+)-?(.*)$)" );
+    QRegularExpression      semVerRegex ( R"(^(\d+)\.(\d+)\.(\d+)-?(.*):?(.*)$)" );
     QRegularExpressionMatch match = semVerRegex.match ( versionStr );
 
     if ( !match.hasMatch() )
@@ -45,6 +45,7 @@ static QString mapVersionStr ( const QString& versionStr )
     int     minor  = match.captured ( 2 ).toInt();
     int     patch  = match.captured ( 3 ).toInt();
     QString suffix = match.captured ( 4 ); // may be empty
+    QString tstamp = match.captured ( 5 ); // may be empty
 
     if ( suffix.isEmpty() )
     {
@@ -66,7 +67,7 @@ static QString mapVersionStr ( const QString& versionStr )
               .arg ( minor, 3, 10, QLatin1Char ( '0' ) )
               .arg ( patch, 3, 10, QLatin1Char ( '0' ) )
               .arg ( x )
-              .arg ( suffix );
+              .arg ( tstamp.isEmpty() ? suffix : tstamp );
 
     return key;
 }
@@ -184,13 +185,13 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     lvwServers->setColumnWidth ( LVC_NAME, 200 );
     lvwServers->setColumnWidth ( LVC_PING, 130 );
     lvwServers->setColumnWidth ( LVC_CLIENTS, 100 );
-    lvwServers->setColumnWidth ( LVC_VERSION, 110 );
+    lvwServers->setColumnWidth ( LVC_VERSION, 150 );
 #else
     lvwServers->setColumnWidth ( LVC_NAME, 180 );
     lvwServers->setColumnWidth ( LVC_PING, 75 );
     lvwServers->setColumnWidth ( LVC_CLIENTS, 70 );
     lvwServers->setColumnWidth ( LVC_LOCATION, 220 );
-    lvwServers->setColumnWidth ( LVC_VERSION, 95 );
+    lvwServers->setColumnWidth ( LVC_VERSION, 135 );
 #endif
     lvwServers->clear();
 
@@ -1024,7 +1025,7 @@ void CConnectDlg::SetServerVersionResult ( const CHostAddress& InetAddr, const Q
 
     if ( pCurListViewItem )
     {
-        pCurListViewItem->setText ( LVC_VERSION, strVersion );
+        pCurListViewItem->setText ( LVC_VERSION, GetDisplayVersion ( strVersion ) );
 
         // and store sortable mapped version number
         pCurListViewItem->setData ( LVC_VERSION, Qt::UserRole, mapVersionStr ( strVersion ) );

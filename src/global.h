@@ -73,7 +73,7 @@ LED bar:      lbr
 
 // version and application name (use version from qt prject file)
 #undef VERSION
-#define VERSION  APP_VERSION
+#define VERSION  GetDisplayVersion ( APP_VERSION )
 #define APP_NAME "Jamulus"
 
 // Windows registry key name of auto run entry for the server
@@ -374,3 +374,5 @@ bool GetNumericArgument ( int     argc,
                           double  rRangeStart,
                           double  rRangeStop,
                           double& rValue );
+
+inline QString GetDisplayVersion ( QString str ) { return str.contains ( ':' ) ? str.mid ( 0, str.lastIndexOf ( ':' ) ) : str; }

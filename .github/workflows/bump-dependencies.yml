@@ -79,8 +79,8 @@ jobs:
             changelog_name: ASIO SDK (Windows-only)
             get_upstream_version: |
               curl -s -o /dev/null --location --range 0-5 --write-out '%{url_effective}' https://www.steinberg.net/asiosdk |
-                grep -oP '.*asiosdk_\K.*(?=\.zip)'
-            local_version_regex: (.*["\/]asiosdk_)([^"]+?)(".*|\.zip.*)
+              grep -oP '.*\K(?:ASIO-SDK|asiosdk)_.*(?=\.zip)'
+            local_version_regex: (.*["\/])((?:ASIO-SDK|asiosdk)_[^"]+?)(".*|\.zip.*)
 
     steps:
       - uses: actions/checkout@v6

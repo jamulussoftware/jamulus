@@ -56,6 +56,10 @@ setup() {
         pip install "aqtinstall==${AQTINSTALL_VERSION}"
         # Install actual ios Qt:
         local qtmultimedia=()
+        # qtmultimedia requests camera and microphone permissions: https://doc.qt.io/qt-6.5/qtmultimedia-apple.html
+        # We do not need camera permissions, but AppStore Connect needs a description even if we never request for it.
+        # See the Info.plist file in the iOS build.
+
         if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+ ]]; then
             # From Qt6 onwards, qtmultimedia is a module and cannot be installed
             # as an archive anymore.

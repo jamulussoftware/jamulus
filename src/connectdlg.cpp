@@ -74,22 +74,22 @@ static QString mapVersionStr ( const QString& versionStr )
 // Subclass of QTreeWidgetItem that allows LVC_VERSION to sort by the UserRole data value
 CMappedTreeWidgetItem::CMappedTreeWidgetItem ( QTreeWidget* owner ) : QTreeWidgetItem ( owner ), owner ( owner ) {}
 
-bool CMappedTreeWidgetItem::operator< ( const QTreeWidgetItem& other ) const
+bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
 {
     if ( !owner )
-        return QTreeWidgetItem::operator< ( other );
+        return QTreeWidgetItem::operator<( other );
 
     int column = owner->sortColumn();
 
     // we only need this override for comparing server versions
     if ( column != CConnectDlg::LVC_VERSION )
-        return QTreeWidgetItem::operator< ( other );
+        return QTreeWidgetItem::operator<( other );
 
     QVariant lhs = data ( column, Qt::UserRole );
     QVariant rhs = other.data ( column, Qt::UserRole );
 
     if ( !lhs.isValid() || !rhs.isValid() )
-        return QTreeWidgetItem::operator< ( other );
+        return QTreeWidgetItem::operator<( other );
 
     return lhs.toString() < rhs.toString();
 }

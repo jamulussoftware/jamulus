@@ -56,3 +56,7 @@ Jamulus.xcodeproj
 jamulus_plugin_import.cpp
 .github_release_changelog.md
 /debian/
+
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md

@@ -1,0 +1,6 @@
+runtimes:
+    - python@3.11.11
+    - dart@3.7.2
+tools:
+    - pylint@3.3.6
+    - dartanalyzer@3.7.2

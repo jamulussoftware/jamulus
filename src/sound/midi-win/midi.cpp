@@ -60,7 +60,7 @@ void CMidi::MidiStart()
             continue; // try next device, if any
         }
 
-        QString midiDev ( mic.szPname );
+        QString midiDev = QString::fromWCharArray(mic.szPname);
 
         if ( !selMIDIDevice.isEmpty() && selMIDIDevice != midiDev )
         {

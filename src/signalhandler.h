@@ -98,8 +98,10 @@ public:
 
     bool emitSignal ( int );
 
-#ifndef _WIN32
 public slots:
+#ifdef _WIN32
+    void OnSocketNotify ( int ) { }
+#else
     void OnSocketNotify ( int socket );
 #endif
 

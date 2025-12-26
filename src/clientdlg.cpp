@@ -988,10 +988,9 @@ void CClientDlg::ShowGeneralSettings ( int iTab )
     emit SendTabChange ( iTab );
     ClientSettingsDlg.show();
     ClientSettingsDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Settings" ), pClient->strClientName ) );
-
-    // make sure dialog is upfront and has focus
-    ClientSettingsDlg.raise();
-    ClientSettingsDlg.activateWindow();
+    
+    // Do NOT force activation or raising here — forcing focus causes crashes
+    // in plugin hosts. Leave the dialog visible but let the host manage focus.
 }
 
 void CClientDlg::ShowChatWindow ( const bool bForceRaise )

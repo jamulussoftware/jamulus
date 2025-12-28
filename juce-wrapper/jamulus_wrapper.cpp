@@ -1186,8 +1186,12 @@ extern "C"
         if ( channel_id == -1 || channel_id == myChannelId )
         {
             // This is my local fader. Update the input fader setting.
-            jamulus_client_set_input_fader ( c, (int) ( gain * 100 ) );
-            // If connected, also tell Jamulus to update the personal mix
+            // Safety: Clamp gain to 1.0 for the input fader to prevent overflow/muting.
+            // (Boost is now handled via jamulus_client_set_input_boost separately)
+            float clampedGain = ( gain > 1.0f ) ? 1.0f : gain;
+            jamulus_client_set_input_fader ( c, (int) ( clampedGain * 100 ) );
+
+            // If connected, also tell Jamulus to update the personal monitoring mix
             if ( myChannelId != -1 )
             {
                 // Convert server channel ID to client channel index

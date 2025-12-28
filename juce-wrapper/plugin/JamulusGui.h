@@ -151,8 +151,7 @@ public:
 
     void setLevel ( float newLevel )
     {
-        // Smooth the level for nice visual feedback
-        targetLevel = juce::jlimit ( 0.0f, 1.0f, newLevel );
+        targetLevel = juce::jlimit ( 0.0f, 1.5f, newLevel ); // Allow slightly over 1.0 for clip testing
     }
 
     void setHorizontal ( bool isHorizontal )
@@ -165,85 +164,181 @@ public:
     {
         auto bounds = getLocalBounds().toFloat();
 
-        // Background
-        g.setColour ( juce::Colour ( 0xff2a2a2a ) );
-        g.fillRoundedRectangle ( bounds, horizontal ? 1.0f : 2.0f );
-
-        // Level bar
-        juce::Rectangle<float> levelRect;
         if ( horizontal )
         {
-            float levelWidth = bounds.getWidth() * currentLevel;
-            levelRect        = juce::Rectangle<float> ( bounds.getX(), bounds.getY(), levelWidth, bounds.getHeight() );
+            // Simple horizontal bar for master or small strips (internal use)
+            g.setColour ( juce::Colour ( 0xff212121 ) );
+            g.fillRoundedRectangle ( bounds, 1.0f );
+
+            float levelWidth = bounds.getWidth() * juce::jlimit ( 0.0f, 1.0f, currentLevel );
+            g.setColour ( currentLevel > 0.95f ? juce::Colours::red : ( currentLevel > 0.7f ? juce::Colours::yellow : juce::Colour ( 0xff00cc66 ) ) );
+            g.fillRect ( bounds.getX(), bounds.getY(), levelWidth, bounds.getHeight() );
+            return;
         }
-        else
+
+        // Pro-style Vertical Stereo Meter with dB Scale (+6 to -60)
+        g.fillAll ( juce::Colour ( 0xff121212 ) );
+
+        auto meterArea = bounds.reduced ( 1 );
+
+        // 1. Draw labels and scale lines
+        g.setColour ( juce::Colours::grey.withAlpha ( 0.5f ) );
+        g.setFont ( 7.0f );
+
+        const float labels[] = { 6.0f, 0.0f, -6.0f, -12.0f, -18.0f, -24.0f, -30.0f, -40.0f, -50.0f, -60.0f };
+        for ( float db : labels )
         {
-            float levelHeight = bounds.getHeight() * currentLevel;
-            levelRect = juce::Rectangle<float> ( bounds.getX() + 1, bounds.getBottom() - levelHeight - 1, bounds.getWidth() - 2, levelHeight );
+            float y = dbToY ( db, meterArea );
+            g.drawLine ( meterArea.getX(), y, meterArea.getRight(), y, 0.4f );
+
+            // Draw text for key values
+            if ( (int) db % 6 == 0 || db == 6.0f )
+                g.drawText ( juce::String ( (int) std::abs ( db ) ), meterArea.getX(), y - 4, meterArea.getWidth(), 8, juce::Justification::centred );
         }
 
-        // Color gradient based on level
-        juce::Colour levelColor;
-        if ( currentLevel > 0.9f )
-            levelColor = juce::Colours::red;
-        else if ( currentLevel > 0.7f )
-            levelColor = juce::Colours::yellow;
-        else
-            levelColor = juce::Colour ( 0xff00cc66 ); // Green
+        // 2. Draw the two bars (stereo look)
+        float barWidth = ( meterArea.getWidth() * 0.35f );
+        auto  leftBar  = meterArea.removeFromLeft ( barWidth ).reduced ( 1, 0 );
+        auto  rightBar = meterArea.removeFromRight ( barWidth ).reduced ( 1, 0 );
 
-        g.setColour ( levelColor );
-        if ( horizontal )
-            g.fillRect ( levelRect );
-        else
-            g.fillRoundedRectangle ( levelRect, 1.0f );
+        drawBar ( g, leftBar, currentLevel );
+        drawBar ( g, rightBar, currentLevel );
     }
 
 private:
+    float dbToY ( float db, juce::Rectangle<float> area ) const
+    {
+        // Scale: +6dB is top, -60dB is bottom
+        float normalized = juce::jmap ( db, -60.0f, 6.0f, 0.0f, 1.0f );
+        normalized       = juce::jlimit ( 0.0f, 1.0f, normalized );
+        return area.getBottom() - ( normalized * area.getHeight() );
+    }
+
+    float linearToDb ( float linear ) const { return ( linear <= 0.00001f ) ? -100.0f : 20.0f * std::log10 ( linear ); }
+
+    void drawBar ( juce::Graphics& g, juce::Rectangle<float> area, float level )
+    {
+        g.setColour ( juce::Colours::black.withAlpha ( 0.6f ) );
+        g.fillRect ( area );
+
+        float db = linearToDb ( level );
+        float y  = dbToY ( db, area );
+
+        if ( y < area.getBottom() )
+        {
+            auto levelRect = juce::Rectangle<float> ( area.getX(), y, area.getWidth(), area.getBottom() - y );
+
+            // Gradient: Green up to -12, Yellow to 0, Red above 0
+            juce::ColourGradient grad;
+            grad.isRadial = false;
+            grad.point1   = { 0, area.getBottom() };
+            grad.point2   = { 0, area.getY() };
+
+            grad.addColour ( 0.0, juce::Colour ( 0xff00cc66 ) ); // Green at bottom
+            grad.addColour ( juce::jmap ( -12.0f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colour ( 0xff00cc66 ) );
+            grad.addColour ( juce::jmap ( 0.0f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colours::yellow );
+            grad.addColour ( juce::jmap ( 0.1f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colours::red );
+            grad.addColour ( 1.0, juce::Colours::red );
+
+            g.setGradientFill ( grad );
+            g.fillRect ( levelRect );
+        }
+
+        // Clip indicator
+        if ( db > 0.0f )
+        {
+            g.setColour ( juce::Colours::red );
+            g.fillRect ( area.getX(), area.getY(), area.getWidth(), 2.0f );
+        }
+    }
+
     void timerCallback() override
     {
-        // Smooth the meter movement
-        const float smoothing = 0.3f;
+        const float smoothing = 0.25f;
         float       newLevel  = currentLevel + ( targetLevel - currentLevel ) * smoothing;
 
-        // Decay when signal drops
         if ( targetLevel < currentLevel )
-            newLevel = currentLevel * 0.9f;
+            newLevel = currentLevel * 0.85f; // Faster drop for "peak" feel
 
-        if ( std::abs ( newLevel - currentLevel ) > 0.001f )
+        if ( std::abs ( newLevel - currentLevel ) > 0.0001f )
         {
             currentLevel = newLevel;
             repaint();
         }
     }
 
-    juce::Colour getGroupColor ( int gid )
-    {
-        switch ( gid % 8 )
-        {
-        case 0:
-            return juce::Colour ( 0xff00ff00 ); // Green
-        case 1:
-            return juce::Colour ( 0xff32cd32 ); // LimeGreen
-        case 2:
-            return juce::Colour ( 0xff00fa9a ); // MediumSpringGreen
-        case 3:
-            return juce::Colour ( 0xff9acd32 ); // YellowGreen
-        case 4:
-            return juce::Colour ( 0xff228b22 ); // ForestGreen
-        case 5:
-            return juce::Colour ( 0xff2e8b57 ); // SeaGreen
-        case 6:
-            return juce::Colour ( 0xff6b8e23 ); // OliveDrab
-        case 7:
-            return juce::Colour ( 0xff8fbc8f ); // DarkSeaGreen
-        default:
-            return juce::Colours::transparentBlack;
-        }
-    }
-
     bool  horizontal   = false;
     float currentLevel = 0.0f;
     float targetLevel  = 0.0f;
+};
+
+// 1. Custom LookAndFeel for the Fader "Lever" Knob
+class FaderLookAndFeel : public juce::LookAndFeel_V4
+{
+public:
+    void drawLinearSlider ( juce::Graphics&                 g,
+                            int                             x,
+                            int                             y,
+                            int                             width,
+                            int                             height,
+                            float                           sliderPos,
+                            float                           minSliderPos,
+                            float                           maxSliderPos,
+                            const juce::Slider::SliderStyle style,
+                            juce::Slider&                   slider ) override
+    {
+        // Draw track (thin line)
+        auto                   trackWidth = 4.0f;
+        juce::Rectangle<float> track ( x + width * 0.5f - trackWidth * 0.5f, (float) y, trackWidth, (float) height );
+        g.setColour ( juce::Colour ( 0xff333333 ) );
+        g.fillRoundedRectangle ( track, 2.0f );
+
+        // Draw thumb (The "Lever")
+        auto thumbWidth  = width * 0.8f; // Wide
+        auto thumbHeight = 16.0f;        // Tall lever
+        auto thumbY      = sliderPos - ( thumbHeight * 0.5f );
+
+        juce::Rectangle<float> thumbBounds ( x + ( width - thumbWidth ) * 0.5f, thumbY, thumbWidth, thumbHeight );
+
+        // Draw shadow
+        g.setColour ( juce::Colours::black.withAlpha ( 0.5f ) );
+        g.fillRect ( thumbBounds.translated ( 1, 2 ) );
+
+        // Draw main body gradient
+        juce::Colour baseColor = slider.findColour ( juce::Slider::thumbColourId );
+        g.setGradientFill (
+            juce::ColourGradient::vertical ( baseColor.brighter ( 0.1f ), thumbBounds.getY(), baseColor.darker ( 0.3f ), thumbBounds.getBottom() ) );
+        g.fillRect ( thumbBounds );
+
+        // Draw outline
+        g.setColour ( juce::Colours::black.withAlpha ( 0.6f ) );
+        g.drawRect ( thumbBounds, 1.0f );
+
+        // Draw grip line
+        g.setColour ( juce::Colours::black.withAlpha ( 0.3f ) );
+        float gripY = thumbBounds.getCentreY();
+        g.drawLine ( thumbBounds.getX() + 4, gripY, thumbBounds.getRight() - 4, gripY, 1.0f );
+        g.setColour ( juce::Colours::white.withAlpha ( 0.2f ) );
+        g.drawLine ( thumbBounds.getX() + 4, gripY + 1, thumbBounds.getRight() - 4, gripY + 1, 1.0f );
+    }
+};
+
+// 2. Custom Slider for Pan to handle Right-Click Context Menu
+class PanSlider : public juce::Slider
+{
+public:
+    std::function<void()> onRightClick;
+
+    void mouseDown ( const juce::MouseEvent& e ) override
+    {
+        if ( e.mods.isPopupMenu() )
+        {
+            if ( onRightClick )
+                onRightClick();
+            return;
+        }
+        juce::Slider::mouseDown ( e );
+    }
 };
 
 //==============================================================================
@@ -254,26 +349,51 @@ class ChannelStrip : public juce::Component
 public:
     ChannelStrip()
     {
+        // 1. Labels
         addAndMakeVisible ( nameLabel );
-        nameLabel.setFont ( juce::Font ( 13.0f, juce::Font::bold ) );
+        nameLabel.setFont ( juce::Font ( 12.0f, juce::Font::bold ) );
         nameLabel.setJustificationType ( juce::Justification::centred );
-        nameLabel.setColour ( juce::Label::textColourId, juce::Colours::black );
+        nameLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
         nameLabel.setMinimumHorizontalScale ( 0.8f );
 
+        // 2. dB Readouts
+        addAndMakeVisible ( faderDbLabel );
+        faderDbLabel.setFont ( juce::Font ( 11.0f ) );
+        faderDbLabel.setJustificationType ( juce::Justification::centred );
+        faderDbLabel.setColour ( juce::Label::backgroundColourId, juce::Colours::black.withAlpha ( 0.5f ) );
+        faderDbLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
+        faderDbLabel.setText ( "0.0", juce::dontSendNotification );
+
+        addAndMakeVisible ( peakDbLabel );
+        peakDbLabel.setFont ( juce::Font ( 11.0f, juce::Font::bold ) );
+        peakDbLabel.setJustificationType ( juce::Justification::centred );
+        peakDbLabel.setColour ( juce::Label::backgroundColourId, juce::Colours::black.withAlpha ( 0.5f ) );
+        peakDbLabel.setColour ( juce::Label::textColourId, juce::Colour ( 0xff00cc66 ) );
+        peakDbLabel.setText ( "-oo", juce::dontSendNotification );
+
+        // 3. Sliders
         addAndMakeVisible ( faderSlider );
+        faderSlider.setLookAndFeel ( &faderLook ); // Apply custom "Lever" look
         faderSlider.setSliderStyle ( juce::Slider::LinearVertical );
-        faderSlider.setRange ( 0.0, 1.0 );
-        faderSlider.setValue ( 0.75 );
+        faderSlider.setRange ( -60.0, 6.0 ); // dB scale
+        faderSlider.setValue ( 0.0 );        // 0dB
         faderSlider.setScrollWheelEnabled ( true );
-        faderSlider.setDoubleClickReturnValue ( true, 0.75 );
+        faderSlider.setDoubleClickReturnValue ( true, 0.0 );
         faderSlider.setTextBoxStyle ( juce::Slider::NoTextBox, true, 0, 0 );
-        // Style fader like original (blue handle)
-        faderSlider.setColour ( juce::Slider::thumbColourId, juce::Colour ( 0xff2b93d4 ) );
-        faderSlider.setColour ( juce::Slider::trackColourId, juce::Colours::transparentBlack );
+        faderSlider.setColour ( juce::Slider::thumbColourId, juce::Colour ( 0xffe0e0e0 ) ); // Lighter thumb
+        faderSlider.setColour ( juce::Slider::trackColourId, juce::Colour ( 0x313131 ) );
 
         faderSlider.onValueChange = [this]() {
+            float db = (float) faderSlider.getValue();
+            // Display "-oo" at minimum
+            faderDbLabel.setText ( ( db <= -59.5f ) ? "-oo" : juce::String ( db, 1 ), juce::dontSendNotification );
+
             if ( onGainChanged )
-                onGainChanged ( channelId, static_cast<float> ( faderSlider.getValue() ) );
+            {
+                // Convert back to linear for Jamulus
+                float lin = ( db <= -59.5f ) ? 0.0f : std::pow ( 10.0f, db / 20.0f );
+                onGainChanged ( channelId, lin );
+            }
         };
 
         addAndMakeVisible ( panSlider );
@@ -283,12 +403,33 @@ public:
         panSlider.setScrollWheelEnabled ( true );
         panSlider.setDoubleClickReturnValue ( true, 0.0 );
         panSlider.setTextBoxStyle ( juce::Slider::NoTextBox, true, 0, 0 );
+        // Style as a small silver knob
+        panSlider.setColour ( juce::Slider::rotarySliderFillColourId, juce::Colours::transparentBlack );
+        panSlider.setColour ( juce::Slider::rotarySliderOutlineColourId, juce::Colour ( 0xff444444 ) );
+
+        // Handle Pan Changes
         panSlider.onValueChange = [this]() {
+            if ( isMono )
+            {
+                // Force center if mono
+                if ( std::abs ( panSlider.getValue() ) > 0.001 )
+                    panSlider.setValue ( 0.0, juce::dontSendNotification );
+                return;
+            }
             if ( onPanChanged )
                 onPanChanged ( channelId, static_cast<float> ( panSlider.getValue() ) );
         };
 
-        // Mute Button
+        // Handle Right-Click context menu
+        panSlider.onRightClick = [this]() {
+            juce::PopupMenu m;
+            m.addSectionHeader ( "Channel Mode" );
+            m.addItem ( "Stereo", true, !isMono, [this]() { setMonoMode ( false ); } );
+            m.addItem ( "Mono", true, isMono, [this]() { setMonoMode ( true ); } );
+            m.showMenuAsync ( juce::PopupMenu::Options() );
+        };
+
+        // 4. Buttons
         addAndMakeVisible ( muteButton );
         muteButton.setButtonText ( "M" );
         muteButton.setClickingTogglesState ( true );
@@ -299,7 +440,6 @@ public:
                 onMuteChanged ( channelId, muteButton.getToggleState() );
         };
 
-        // Solo Button
         addAndMakeVisible ( soloButton );
         soloButton.setButtonText ( "S" );
         soloButton.setClickingTogglesState ( true );
@@ -310,7 +450,6 @@ public:
                 onSoloChanged ( channelId, soloButton.getToggleState() );
         };
 
-        // Boost Button (+6dB)
         addAndMakeVisible ( boostButton );
         boostButton.setButtonText ( "B" );
         boostButton.setClickingTogglesState ( true );
@@ -321,11 +460,8 @@ public:
                 onBoostChanged ( channelId, boostButton.getToggleState() );
         };
 
-        // Group Button
         addAndMakeVisible ( groupButton );
         groupButton.setButtonText ( "G" );
-        groupButton.setClickingTogglesState ( false ); // We'll handle state manually via popup/menu
-        groupButton.setTooltip ( "Group" );
         groupButton.onClick = [this]() {
             juce::PopupMenu m;
             m.addItem ( 1, "No Grouping", true, groupID == -1 );
@@ -342,22 +478,19 @@ public:
                 }
                 else if ( result > 1 )
                 {
-                    int newGid = result - 2;
-                    setGroup ( newGid );
+                    int gid = result - 2;
+                    setGroup ( gid );
                     if ( onGroupChanged )
-                        onGroupChanged ( channelId, newGid );
+                        onGroupChanged ( channelId, gid );
                 }
             } );
         };
         groupButton.addMouseListener ( this, false );
 
-        addAndMakeVisible ( skillLabel );
-        skillLabel.setFont ( juce::Font ( 9.0f ) );
-        skillLabel.setJustificationType ( juce::Justification::centred );
-        skillLabel.setColour ( juce::Label::textColourId, juce::Colours::grey.darker() );
-
         addAndMakeVisible ( levelMeter );
     }
+
+    ~ChannelStrip() override { faderSlider.setLookAndFeel ( nullptr ); }
 
     void updateMuteButtonColor()
     {
@@ -452,6 +585,10 @@ public:
         groupButton.repaint();
     }
 
+    bool isMuted() const { return muteButton.getToggleState(); }
+    bool isSoloed() const { return soloButton.getToggleState(); }
+    bool getBoost() const { return boostButton.getToggleState(); }
+
     void mouseWheelMove ( const juce::MouseEvent& event, const juce::MouseWheelDetails& wheel ) override
     {
         if ( event.eventComponent == &groupButton )
@@ -507,8 +644,6 @@ public:
         this->skillLevel = skill;
         this->isMe       = isMe;
 
-        // Skill text removed as requested
-        skillLabel.setVisible ( false );
         nameLabel.setVisible ( true );
         nameLabel.setColour ( juce::Label::backgroundColourId, juce::Colours::transparentBlack );
         nameLabel.setColour ( juce::Label::textColourId, juce::Colours::black );
@@ -516,7 +651,23 @@ public:
         repaint();
     }
 
-    void setLevel ( float level ) { levelMeter.setLevel ( level ); }
+    void setLevel ( float level )
+    {
+        levelMeter.setLevel ( level );
+
+        // Update peak dB readout
+        float db = ( level <= 0.0001f ) ? -100.0f : 20.0f * std::log10 ( level );
+        if ( db < -90.0f )
+            peakDbLabel.setText ( "-oo", juce::dontSendNotification );
+        else
+            peakDbLabel.setText ( juce::String ( (int) db ), juce::dontSendNotification );
+
+        // Color peak box based on level
+        if ( level > 1.0f )
+            peakDbLabel.setColour ( juce::Label::textColourId, juce::Colours::red );
+        else
+            peakDbLabel.setColour ( juce::Label::textColourId, juce::Colour ( 0xff006633 ) ); // Darker Green for light backgrounds
+    }
 
     void setMute ( bool m )
     {
@@ -538,116 +689,154 @@ public:
         groupID = gid;
         updateGroupButtonColor();
     }
-    void setGain ( float g ) { faderSlider.setValue ( g, juce::dontSendNotification ); }
+
+    // New: Mono Mode
+    void setMonoMode ( bool mono )
+    {
+        isMono = mono;
+        if ( isMono )
+        {
+            panSlider.setValue ( 0.0, juce::sendNotification ); // Force center
+            panSlider.setEnabled ( false );
+            panSlider.setAlpha ( 0.5f );
+        }
+        else
+        {
+            panSlider.setEnabled ( true );
+            panSlider.setAlpha ( 1.0f );
+        }
+    }
+    float getGain() const
+    {
+        float db = (float) faderSlider.getValue();
+        return ( db <= -59.5f ) ? 0.0f : std::pow ( 10.0f, db / 20.0f );
+    }
+
+    void setGain ( float g )
+    {
+        float db = ( g <= 0.00001f ) ? -60.0f : 20.0f * std::log10 ( g );
+        faderSlider.setValue ( db, juce::dontSendNotification );
+        faderDbLabel.setText ( ( db <= -59.5f ) ? "-oo" : juce::String ( db, 1 ), juce::dontSendNotification );
+    }
 
     int  getChannelId() const { return channelId; }
     bool getIsMe() const { return isMe; }
 
     void paint ( juce::Graphics& g ) override
     {
-        auto bounds = getLocalBounds().toFloat();
+        auto totalBounds = getLocalBounds().toFloat();
 
-        // Define shape
+        // Define shape: Rounded on top (radius 8), straight on bottom
         juce::Path shape;
-        shape.addRoundedRectangle ( bounds, 6.0f );
+        float      cornerRadius = 8.0f;
+        shape.addRoundedRectangle ( totalBounds.getX(),
+                                    totalBounds.getY(),
+                                    totalBounds.getWidth(),
+                                    totalBounds.getHeight(),
+                                    cornerRadius,
+                                    cornerRadius,
+                                    true,
+                                    true,
+                                    false,
+                                    false ); // Top-Left, Top-Right, Bottom-Left, Bottom-Right
 
-        // Clip everything to the rounded shape to prevent corners sticking out
         g.saveState();
         g.reduceClipRegion ( shape );
 
-        // 1. Fill Background (Skill Color)
-        juce::Colour bgColour;
-        switch ( skillLevel )
-        {
-        case 1:
-            bgColour = juce::Colour ( 255, 255, 200 );
-            break; // Beginner: Pale Yellow
-        case 2:
-            bgColour = juce::Colour ( 225, 255, 225 );
-            break; // Intermediate: Pale Green
-        case 3:
-            bgColour = juce::Colour ( 255, 225, 225 );
-            break; // Expert: Pale Pink
-        default:
-            bgColour = isMe ? juce::Colour ( 0xffd0d0d0 ) : juce::Colour ( 0xffe0e0e0 );
-            break;
-        }
-        g.setColour ( bgColour );
-        g.fillAll(); // Fills clipped region
+        // 1. Background (Exact Pale Skill colors from image)
+        juce::Colour bgCol = juce::Colours::white; // Default (None/White)
 
-        // 2. Draw Header Elements
-        auto headerBounds = bounds;
-        auto flagBounds   = headerBounds.removeFromTop ( 30 ); // Adjusted to 30
-        auto instBounds   = headerBounds.removeFromTop ( 25 ); // Adjusted to 25
+        if ( skillLevel == 1 )
+            bgCol = juce::Colour ( 0xffffffea ); // Beginner: Pale Yellow
+        else if ( skillLevel == 2 )
+            bgCol = juce::Colour ( 0xffeaffea ); // Intermediate: Pale Green
+        else if ( skillLevel == 3 )
+            bgCol = juce::Colour ( 0xffffeaea ); // Expert: Pale Red
 
-        // Flag
+        // Blend 'me' highlight into the base color once
+        if ( isMe )
+            bgCol = bgCol.interpolatedWith ( juce::Colours::orange, 0.12f );
+
+        g.setColour ( bgCol );
+        g.fillAll();
+
+        // 2. Draw Header Area
+        // Flag overlay: Top full width, 34px height (taller as requested)
         if ( flagIcon.isValid() )
         {
-            g.setOpacity ( 1.0f );
-            // Draw filling the area
-            g.drawImage ( flagIcon, flagBounds, juce::RectanglePlacement::stretchToFit );
+            auto fBounds = juce::Rectangle<float> ( 0, 0, totalBounds.getWidth(), 34.0f );
+            g.drawImage ( flagIcon, fBounds, juce::RectanglePlacement::stretchToFit );
         }
 
-        // Instrument Icon
+        // Instrument Icon: Below flag, centered, moved down a touch
         if ( instrumentIcon.isValid() )
         {
-            g.setOpacity ( 1.0f );
-            g.drawImage ( instrumentIcon, instBounds.reduced ( 2 ), juce::RectanglePlacement::centred );
+            auto iBounds = juce::Rectangle<float> ( 0, 38.0f, totalBounds.getWidth(), 36.0f );
+            g.drawImage ( instrumentIcon, iBounds, juce::RectanglePlacement::centred );
         }
 
-        g.restoreState(); // Pop clip
+        g.restoreState();
 
-        // 3. Draw Border (on top)
-        g.setColour ( isMe ? juce::Colours::orange : juce::Colours::grey );
-        g.drawRoundedRectangle ( bounds, 6.0f, isMe ? 2.0f : 1.0f );
+        // 3. Draw Fader Ticks (Darker and aligned with fader)
+        auto faderBounds = faderSlider.getBounds().toFloat();
+        g.setColour ( juce::Colours::black.withAlpha ( 0.6f ) );
+
+        // Scale: +6dB to -60dB (matched to LevelMeter)
+        float tickDbs[] = { 6.0f, 0.0f, -6.0f, -12.0f, -18.0f, -24.0f, -30.0f, -36.0f, -42.0f, -48.0f, -54.0f, -60.0f };
+        for ( float db : tickDbs )
+        {
+            float normalized = juce::jmap ( db, -60.0f, 6.0f, 0.0f, 1.0f );
+            float y          = faderBounds.getBottom() - ( normalized * faderBounds.getHeight() );
+
+            // Draw ticks to the left of the centered fader track
+            float tickWidth = ( db == 0.0f ) ? 5.0f : 3.0f;
+            g.drawLine ( faderBounds.getX() - tickWidth - 2, y, faderBounds.getX() - 2, y, 1.2f );
+        }
+
+        // 4. Draw Border around the ENTIRE strip (using the same shape)
+        g.setColour ( isMe ? juce::Colours::orange : juce::Colours::black.withAlpha ( 0.2f ) );
+        g.strokePath ( shape, juce::PathStrokeType ( isMe ? 2.0f : 1.0f ) );
     }
 
     void resized() override
     {
-        auto bounds = getLocalBounds().reduced ( 3 );
+        auto bounds = getLocalBounds().reduced ( 4 );
 
-        // Tag area (Icon box + Name) - fixed height 80
-        auto tagArea = bounds.removeFromTop ( 80 ).reduced ( 2 );
+        // 1. Header Area
+        bounds.removeFromTop ( 72 ); // Reduced to 72 to tighten space between icon and label
+        nameLabel.setBounds ( bounds.removeFromTop ( 20 ) );
+        panSlider.setBounds ( bounds.removeFromTop ( 40 ).reduced ( 15, 0 ) );
 
-        // Icons space (Flag 30 + Inst 25 + Gap 5)
-        tagArea.removeFromTop ( 30 );
-        tagArea.removeFromTop ( 25 );
-        tagArea.removeFromTop ( 5 );
+        // 2. dB Readouts
+        auto readoutArea  = bounds.removeFromTop ( 18 );
+        auto leftReadout  = readoutArea.removeFromLeft ( readoutArea.getWidth() / 2 );
+        auto rightReadout = readoutArea;
 
-        // Name label below icons
-        nameLabel.setBounds ( tagArea );
+        faderDbLabel.setBounds ( leftReadout.reduced ( 1 ) );
+        peakDbLabel.setBounds ( rightReadout.reduced ( 1 ) );
 
-        // Skill label hidden
-        skillLabel.setBounds ( 0, 0, 0, 0 );
+        // 3. Buttons at bottom (Ordered: M/S above B/G)
+        auto bottomRow = bounds.removeFromBottom ( 22 );
+        boostButton.setBounds ( bottomRow.removeFromLeft ( bottomRow.getWidth() / 2 ).reduced ( 1 ) );
+        groupButton.setBounds ( bottomRow.reduced ( 1 ) );
 
-        bounds.removeFromTop ( 6 );
+        auto subBottom = bounds.removeFromBottom ( 22 );
+        muteButton.setBounds ( subBottom.removeFromLeft ( subBottom.getWidth() / 2 ).reduced ( 1 ) );
+        soloButton.setBounds ( subBottom.reduced ( 1 ) );
 
-        // Mute, Solo, Boost, and Group buttons area (2x2 grid)
-        auto bottomArea = bounds.removeFromBottom ( 45 ); // Increased height for 2 rows
-        auto buttonGrid = bottomArea.reduced ( 2, 0 );
-
-        int halfWidth  = buttonGrid.getWidth() / 2;
-        int halfHeight = buttonGrid.getHeight() / 2;
-
-        auto topRow = buttonGrid.removeFromTop ( halfHeight );
-        muteButton.setBounds ( topRow.removeFromLeft ( halfWidth ).reduced ( 1, 1 ) );
-        soloButton.setBounds ( topRow.reduced ( 1, 1 ) );
-
-        auto bottomRow = buttonGrid;
-        boostButton.setBounds ( bottomRow.removeFromLeft ( halfWidth ).reduced ( 1, 1 ) );
-        groupButton.setBounds ( bottomRow.reduced ( 1, 1 ) );
-
+        // 4. Fader and Meter (Centered under labels)
+        bounds.removeFromTop ( 4 );
         bounds.removeFromBottom ( 4 );
 
-        // Pan knob
-        panSlider.setBounds ( bounds.removeFromBottom ( 34 ).reduced ( 15, 0 ) );
+        auto faderArea = bounds;
+        auto leftCol   = faderArea.removeFromLeft ( faderArea.getWidth() / 2 );
+        auto rightCol  = faderArea;
 
-        bounds.removeFromTop ( 4 );
+        // Peak Meter: Centered in right column
+        levelMeter.setBounds ( rightCol.withSizeKeepingCentre ( 14, rightCol.getHeight() ) );
 
-        // Fader and meter (main middle area)
-        auto faderArea = bounds.reduced ( 2, 0 );
-        levelMeter.setBounds ( faderArea.removeFromRight ( 14 ).reduced ( 2, 2 ) );
-        faderSlider.setBounds ( faderArea );
+        // Volume Fader: Centered in left column, matching meter height
+        faderSlider.setBounds ( leftCol.withSizeKeepingCentre ( 24, leftCol.getHeight() ) ); // Wider slot for lever knob
     }
 
     std::function<void ( int, float )> onGainChanged;
@@ -660,19 +849,22 @@ public:
 private:
     int              channelId  = -1;
     bool             isMe       = false;
+    bool             isMono     = false;
     int              skillLevel = 0;
     int              groupID    = -1;
     juce::Label      nameLabel;
-    juce::Label      skillLabel;
+    juce::Label      faderDbLabel;
+    juce::Label      peakDbLabel;
     juce::Image      instrumentIcon;
     juce::Image      flagIcon;
     juce::Slider     faderSlider;
-    juce::Slider     panSlider;
+    PanSlider        panSlider; // Use custom PanSlider
     juce::TextButton muteButton;
     juce::TextButton soloButton;
     juce::TextButton boostButton;
     juce::TextButton groupButton;
     LevelMeter       levelMeter;
+    FaderLookAndFeel faderLook; // Custom look
 };
 
 //==============================================================================
@@ -755,26 +947,9 @@ public:
         autoLevelButton.onClick = [this]() {
             autoLevelEnabled = autoLevelButton.getToggleState();
             updateAutoLevelButtonColor();
-            if ( autoLevelEnabled )
+            if ( !autoLevelEnabled )
             {
-                // Turn off all boost buttons when auto level is enabled
-                for ( auto& strip : channelStrips )
-                {
-                    int id = strip->getChannelId();
-                    if ( channelBoosts.count ( id ) && channelBoosts[id] )
-                    {
-                        channelBoosts[id] = false;
-                        // Reset gain to non-boosted value
-                        float gain = channelGains.count ( id ) ? channelGains[id] : 0.75f;
-                        jamulus_client_set_channel_gain ( jamulusClient, id, gain );
-                    }
-                }
-                // Clear target gains so they get recalculated
-                autoLevelTargetGains.clear();
-            }
-            else
-            {
-                // Restore gains to current fader settings when disabled
+                // Restore gains to manual settings when disabled
                 for ( auto& strip : channelStrips )
                 {
                     int id = strip->getChannelId();
@@ -787,7 +962,6 @@ public:
                 }
 
                 // Clear auto-level state
-                autoLevelTargetGains.clear();
                 autoLevelCurrentGains.clear();
                 autoLevelPeakLevels.clear();
                 autoLevelPeakHoldCounters.clear();
@@ -810,6 +984,7 @@ public:
         addAndMakeVisible ( statusLabel );
         statusLabel.setText ( "Disconnected", juce::dontSendNotification );
         statusLabel.setColour ( juce::Label::textColourId, juce::Colours::grey );
+        statusLabel.setJustificationType ( juce::Justification::centred );
 
         // Delay & Jitter
         addAndMakeVisible ( delayLight );
@@ -937,7 +1112,7 @@ public:
 
         // Vertical Separator Line
         g.setColour ( juce::Colour ( 0xff505050 ) );
-        g.drawVerticalLine ( 200, 50.0f, 190.0f ); // Draw line separating local controls
+        g.drawVerticalLine ( 142, 50.0f, 190.0f ); // Draw line separating local controls (moved closer)
     }
 
     void resized() override
@@ -990,6 +1165,10 @@ public:
         // Left side - FX button, MON button, and network stats
         auto leftControls = controlsArea.removeFromLeft ( 140 ).reduced ( 10 );
 
+        // Status Label (Connected...) - Moved here above Ping
+        auto statusRow = leftControls.removeFromTop ( 20 );
+        statusLabel.setBounds ( statusRow );
+
         // Network Stats
         int statHeight = 20;
         int lightWidth = 14;
@@ -1013,13 +1192,14 @@ public:
         jitterLabel.setBounds ( jitterRow );
 
         // Spacer
-        leftControls.removeFromTop ( 10 );
+        leftControls.removeFromTop ( 5 ); // Reduced spacer
 
-        // Buttons row (FX, MON) - Moved below stats
-        auto buttonsRow = leftControls.removeFromTop ( 30 );
-        fxButton.setBounds ( buttonsRow.removeFromLeft ( 50 ).reduced ( 2 ) );
-        buttonsRow.removeFromLeft ( 5 ); // Gap
-        monitorModeButton.setBounds ( buttonsRow.removeFromLeft ( 50 ).reduced ( 2 ) );
+        // Buttons row (FX, MON) - Moved below stats, Centered
+        auto buttonsRow  = leftControls.removeFromTop ( 30 );
+        auto centerGroup = buttonsRow.withSizeKeepingCentre ( 105, buttonsRow.getHeight() ); // 50 + 5 + 50 = 105
+        fxButton.setBounds ( centerGroup.removeFromLeft ( 50 ).reduced ( 2 ) );
+        centerGroup.removeFromLeft ( 5 ); // Gap
+        monitorModeButton.setBounds ( centerGroup.removeFromLeft ( 50 ).reduced ( 2 ) );
 
         // Hide the removed elements (they still exist but won't be shown)
         inputLevelLabel.setVisible ( false );
@@ -1035,9 +1215,9 @@ public:
             fxPanel->setBounds ( 10, 100, 320, 530 ); // Adjusted Y position
         }
 
-        // Right side - Info/Status
+        // Right side - Info/Status (Status label moved to left)
         auto rightControls = controlsArea.removeFromRight ( 200 );
-        statusLabel.setBounds ( rightControls.removeFromTop ( 30 ).reduced ( 10 ) );
+        // statusLabel removed from here
 
         // Mixer area
         bounds.removeFromTop ( 10 );
@@ -1208,164 +1388,72 @@ private:
             updateChannelStrips();
         }
 
-        // Update channel levels - MUST map by ID because strips are sorted
-        std::map<int, int> idToLevel;
+        // 2. Identify global Solo state
+        bool anySolo = false;
+        for ( auto& s : channelStrips )
+        {
+            if ( !s->getIsMe() && s->isSoloed() )
+            {
+                anySolo = true;
+                break;
+            }
+        }
+
+        // 3. Update raw input levels map
+        std::map<int, float> rawInputLevels;
         for ( int i = 0; i < numChannels; ++i )
         {
             jamulus_channel_info_t info;
             if ( jamulus_client_get_channel_info ( jamulusClient, i, &info ) )
-                idToLevel[info.id] = info.level;
-        }
-
-        for ( auto& strip : channelStrips )
-        {
-            int id = strip->getChannelId();
-
-            // PRIORITY: If this is the "Me" strip, always show local input levels
-            // even if connected, for better feeling and consistency.
-            if ( strip->getIsMe() )
             {
-                strip->setLevel ( ( linearL + linearR ) * 0.5f );
-            }
-            else if ( id != -1 && idToLevel.count ( id ) )
-            {
-                float level = idToLevel[id] / 65535.0f;
-                strip->setLevel ( level );
-                channelLevels[id] = level; // Track for auto-leveling
+                float lvl               = info.level / 65535.0f;
+                rawInputLevels[info.id] = lvl;
+                channelLevels[info.id]  = lvl; // Store for auto-level brain
             }
         }
 
-        // Auto-level boosted channels if enabled
-        if ( autoLevelBoostEnabled && !channelStrips.empty() )
-        {
-            // Calculate average level of non-boosted, non-local channels
-            float avgLevel    = 0.0f;
-            int   normalCount = 0;
-            for ( auto& strip : channelStrips )
-            {
-                int id = strip->getChannelId();
-                if ( id != -1 && !strip->getIsMe() && channelLevels.count ( id ) )
-                {
-                    // Skip grouped channels for auto-level
-                    if ( channelGroups.count ( id ) && channelGroups[id] != -1 )
-                        continue;
-
-                    bool isBoosted = channelBoosts.count ( id ) && channelBoosts[id];
-                    if ( !isBoosted )
-                    {
-                        avgLevel += channelLevels[id];
-                        normalCount++;
-                    }
-                }
-            }
-
-            if ( normalCount > 0 )
-            {
-                avgLevel /= normalCount;
-
-                // For each boosted channel, check if it's too loud
-                for ( auto& strip : channelStrips )
-                {
-                    int id = strip->getChannelId();
-                    if ( id != -1 && !strip->getIsMe() && channelLevels.count ( id ) )
-                    {
-                        // Skip grouped channels for auto-level
-                        if ( channelGroups.count ( id ) && channelGroups[id] != -1 )
-                            continue;
-
-                        bool isBoosted = channelBoosts.count ( id ) && channelBoosts[id];
-                        if ( isBoosted )
-                        {
-                            float boostedLevel = channelLevels[id];
-                            // If boosted channel is more than 6dB louder than average
-                            float threshold = avgLevel * 2.0f; // +6dB = 2x
-                            if ( boostedLevel > threshold && threshold > 0.0f )
-                            {
-                                // Calculate attenuation needed
-                                float ratio       = boostedLevel / threshold;
-                                float attenuation = 1.0f / ratio;
-                                // Apply attenuated gain (fader * boost * attenuation)
-                                float baseGain = channelGains.count ( id ) ? channelGains[id] : 0.75f;
-                                float newGain  = baseGain * 2.0f * attenuation; // 2.0 is boost
-                                jamulus_client_set_channel_gain ( jamulusClient, id, newGain );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Auto Level ALL channels to target average (if enabled)
+        // 4. Update Auto Level "Brain" Calculation
         if ( autoLevelEnabled && !channelStrips.empty() )
         {
-            const float timerIntervalMs = 50.0f; // Timer runs at ~20Hz
-            const float noiseFloor      = 0.02f; // -34dB threshold (ignore very low background noise)
-
-            // Count active auto-leveled channels
-            int actualActiveCount = 0;
-            for ( auto& strip : channelStrips )
-            {
-                int id = strip->getChannelId();
-                if ( id != -1 && !strip->getIsMe() && ( !channelGroups.count ( id ) || channelGroups[id] == -1 ) )
-                    actualActiveCount++;
-            }
-
-            // Slowly adjust the "seen" channel count to prevent sudden mix shifts
-            // Adjust over ~3 seconds (at 20Hz, 60 ticks)
-            autoLevelSmoothedChannelCount += ( (float) actualActiveCount - autoLevelSmoothedChannelCount ) * 0.05f;
-
-            // Calculate a dynamic target level based on number of participants
-            // This prevents the total mix from clipping as more people join.
-            // Formula: 0.5 / sqrt(N) gives 0.5 for 1 person, 0.25 for 4 people, 0.125 for 16.
-            // We use a slightly more generous log-based or sqrt approach.
-            const float baseTarget        = 0.6f;
-            float       targetLevelLinear = baseTarget / std::sqrt ( std::max ( 1.0f, autoLevelSmoothedChannelCount ) );
-            targetLevelLinear             = juce::jlimit ( 0.1f, 0.6f, targetLevelLinear );
-
-            const int   holdTicks    = 100; // 5 seconds hold at 20Hz
-            const float attackCoeff  = 1.0f - std::exp ( -timerIntervalMs / autoLevelAttackMs );
-            const float releaseCoeff = 1.0f - std::exp ( -timerIntervalMs / autoLevelReleaseMs );
-
-            // Even longer long-term peak tracking: decay over ~10 seconds
-            const float longTermPeakDecayMs = 10000.0f;
-            const float longTermDecayCoeff  = 1.0f - std::exp ( -timerIntervalMs / longTermPeakDecayMs );
+            const float timerIntervalMs    = 50.0f;
+            const float noiseFloor         = 0.02f;
+            const float targetLevelLinear  = 0.5f;
+            const int   holdTicks          = 100;
+            const float attackCoeff        = 1.0f - std::exp ( -timerIntervalMs / autoLevelAttackMs );
+            const float releaseCoeff       = 1.0f - std::exp ( -timerIntervalMs / autoLevelReleaseMs );
+            const float longTermDecayCoeff = 1.0f - std::exp ( -timerIntervalMs / 10000.0f );
 
             for ( auto& strip : channelStrips )
             {
                 int id = strip->getChannelId();
                 if ( id == -1 || strip->getIsMe() )
-                    continue; // Skip local channel
+                    continue;
 
-                // Skip grouped channels for auto-level
+                // Skip grouped channels from the auto-level brain
                 if ( channelGroups.count ( id ) && channelGroups[id] != -1 )
                     continue;
 
                 if ( !channelLevels.count ( id ) )
                     continue;
-
                 float currentLevel = channelLevels[id];
 
                 // Initialize tracking if not yet done
                 if ( !autoLevelCurrentGains.count ( id ) )
                 {
-                    // For new channels, start at their current gain rather than forcing 1.0
-                    float startGain           = channelGains.count ( id ) ? channelGains[id] : 0.75f;
-                    autoLevelCurrentGains[id] = startGain;
+                    float faderVolume         = channelGains.count ( id ) ? channelGains[id] : 0.75f;
+                    float boostMult           = ( channelBoosts.count ( id ) && channelBoosts[id] ) ? 2.0f : 1.0f;
+                    autoLevelCurrentGains[id] = faderVolume * boostMult;
                 }
                 if ( !autoLevelPeakLevels.count ( id ) )
                     autoLevelPeakLevels[id] = 0.0f;
                 if ( !autoLevelPeakHoldCounters.count ( id ) )
                     autoLevelPeakHoldCounters[id] = 0;
-
-                // Track how long they've been in the auto-level mix
                 if ( !autoLevelChannelActiveTicks.count ( id ) )
                     autoLevelChannelActiveTicks[id] = 0;
                 else
                     autoLevelChannelActiveTicks[id]++;
 
-                bool isNew = autoLevelChannelActiveTicks[id] < 60; // First 3 seconds are "new"
-
-                // Handle peak hold and decay logic
+                bool   isNew        = autoLevelChannelActiveTicks[id] < 40;
                 float& longTermPeak = autoLevelPeakLevels[id];
                 int&   holdCounter  = autoLevelPeakHoldCounters[id];
 
@@ -1373,71 +1461,88 @@ private:
                 {
                     if ( currentLevel > longTermPeak )
                     {
-                        // New peak - update immediately and reset hold timer
                         longTermPeak = currentLevel;
                         holdCounter  = holdTicks;
                     }
                     else if ( holdCounter > 0 )
-                    {
-                        // Level is below current peak, but we are still in hold period
                         --holdCounter;
-                    }
                     else
-                    {
-                        // Hold finished, decay slowly to re-evaluate
                         longTermPeak -= ( longTermPeak - currentLevel ) * longTermDecayCoeff;
-                    }
                 }
                 else
                 {
-                    // Level is below noise floor - just decay slowly if hold is over
-                    // This allows it to eventually reset if they stop playing,
-                    // but won't jump up immediately just because they paused.
                     if ( holdCounter > 0 )
                         --holdCounter;
                     else if ( longTermPeak > 0.0f )
-                        longTermPeak -= longTermPeak * ( longTermDecayCoeff * 0.5f ); // Slower decay for silence
+                        longTermPeak -= longTermPeak * ( longTermDecayCoeff * 0.5f );
                 }
 
-                // Skip gain calculation if signal or peak is too low
                 if ( longTermPeak < noiseFloor )
                 {
-                    // If everything is quiet, gradually return to default gain 1.0 if not already there
-                    float& currentGain = autoLevelCurrentGains[id];
-                    if ( std::abs ( currentGain - 1.0f ) > 0.01f )
-                    {
-                        currentGain += ( 1.0f - currentGain ) * releaseCoeff;
-                        jamulus_client_set_channel_gain ( jamulusClient, id, currentGain );
-                    }
+                    autoLevelCurrentGains[id] += ( 1.0f - autoLevelCurrentGains[id] ) * releaseCoeff;
                     continue;
                 }
 
-                // Calculate target gain based on long-term peak trend
-                float targetGain = targetLevelLinear / longTermPeak;
-                targetGain       = juce::jlimit ( 0.25f, 2.0f, targetGain ); // Conservative gain range
-
-                float& currentGain = autoLevelCurrentGains[id];
-
-                // Determine smoothing based on attack/release
-                bool isSuddenSpike = currentLevel > ( longTermPeak * 1.3f ) && ( targetGain < currentGain );
-
-                float smoothingCoeff = isSuddenSpike ? attackCoeff : releaseCoeff;
-
-                // If it's a new channel, adjust a bit slower to "gradually level them in"
+                float targetGain = juce::jlimit ( 0.1f, 4.0f, targetLevelLinear / longTermPeak );
+                float smoothingCoeff =
+                    ( currentLevel > ( longTermPeak * 1.3f ) && ( targetGain < autoLevelCurrentGains[id] ) ) ? attackCoeff : releaseCoeff;
                 if ( isNew )
                     smoothingCoeff *= 0.5f;
 
-                // Apply smoothed gain change
-                float oldGain = currentGain;
-                currentGain += ( targetGain - currentGain ) * smoothingCoeff;
-
-                // Only send to client if the change is noticeable (> 0.2%)
-                if ( std::abs ( currentGain - oldGain ) > ( oldGain * 0.002f ) )
-                {
-                    jamulus_client_set_channel_gain ( jamulusClient, id, currentGain );
-                }
+                autoLevelCurrentGains[id] += ( targetGain - autoLevelCurrentGains[id] ) * smoothingCoeff;
             }
         }
+
+        // 5. Final Gain Dispatch and Meter Update pass
+        for ( auto& strip : channelStrips )
+        {
+            int  id   = strip->getChannelId();
+            bool isMe = strip->getIsMe();
+
+            // Determine if the channel should be silent
+            bool isMutedLocally = strip->isMuted();
+            bool isSoloedOut    = anySolo && !strip->isSoloed() && !isMe;
+            bool silenced       = isMutedLocally || isSoloedOut;
+
+            float finalGain = 0.0f;
+            if ( !silenced )
+            {
+                // Is this channel controlled by auto-level?
+                bool autoLeveled = autoLevelEnabled && !isMe && ( !channelGroups.count ( id ) || channelGroups[id] == -1 );
+
+                if ( autoLeveled && autoLevelCurrentGains.count ( id ) )
+                {
+                    finalGain = autoLevelCurrentGains[id];
+                }
+                else
+                {
+                    float baseFader = channelGains.count ( id ) ? channelGains[id] : 0.75f;
+                    // Boost applies to remote tracks. Local track boost is native in Jamulus.
+                    float boost = ( !isMe && channelBoosts.count ( id ) && channelBoosts[id] ) ? 2.0f : 1.0f;
+                    finalGain   = baseFader * boost;
+                }
+            }
+
+            // Update meter with produced volume (input * gain)
+            if ( isMe )
+            {
+                strip->setLevel ( ( ( linearL + linearR ) * 0.5f ) * finalGain );
+            }
+            else if ( id != -1 && rawInputLevels.count ( id ) )
+            {
+                strip->setLevel ( rawInputLevels[id] * finalGain );
+            }
+
+            static std::map<int, float> dispatcherLastSentGains;
+            if ( std::abs ( finalGain - dispatcherLastSentGains[id] ) > 0.0001f )
+            {
+                jamulus_client_set_channel_gain ( jamulusClient, id, finalGain );
+                dispatcherLastSentGains[id] = finalGain;
+            }
+        }
+
+        // Process Qt events to keep the Jamulus client running
+        jamulus_process_events();
 
         // Process Qt events to keep the Jamulus client running
         jamulus_process_events();
@@ -1714,7 +1819,7 @@ private:
                                     ci.isMe );
 
             auto stripPtr        = strip.get();
-            strip->onGainChanged = [this, stripPtr] ( int id, float gain ) {
+            strip->onGainChanged = [this, stripPtr, isPersonalTrack = ci.isMe] ( int id, float gain ) {
                 float oldGain = channelGains.count ( id ) ? channelGains[id] : 0.75f;
 
                 // Use the previous non-zero gain as reference if the current gain is 0
@@ -1724,8 +1829,17 @@ private:
                 if ( gain > 0.001f )
                     previousGains[id] = gain;
 
-                float boost = channelBoosts.count ( id ) && channelBoosts[id] ? 2.0f : 1.0f;
-                jamulus_client_set_channel_gain ( jamulusClient, id, gain * boost );
+                // For the local track, we don't multiply gain. The boost button is
+                // mapped to the native Jamulus input boost elsewhere.
+                if ( isPersonalTrack )
+                {
+                    jamulus_client_set_channel_gain ( jamulusClient, id, gain );
+                }
+                else
+                {
+                    float boost = channelBoosts.count ( id ) && channelBoosts[id] ? 2.0f : 1.0f;
+                    jamulus_client_set_channel_gain ( jamulusClient, id, gain * boost );
+                }
 
                 // Proportional Group Sync
                 int gid = channelGroups.count ( id ) ? channelGroups[id] : -1;
@@ -1735,7 +1849,8 @@ private:
                     for ( auto& s : channelStrips )
                     {
                         int otherId = s->getChannelId();
-                        if ( otherId != id && channelGroups.count ( otherId ) && channelGroups[otherId] == gid )
+                        // Only sync external tracks
+                        if ( otherId != id && !s->getIsMe() && channelGroups.count ( otherId ) && channelGroups[otherId] == gid )
                         {
                             float otherG   = channelGains.count ( otherId ) ? channelGains[otherId] : 0.75f;
                             float otherRef = ( otherG > 0.001f ) ? otherG : ( previousGains.count ( otherId ) ? previousGains[otherId] : 0.75f );
@@ -1756,14 +1871,37 @@ private:
                     }
                 }
             };
-            strip->onPanChanged   = [this] ( int id, float pan ) { jamulus_client_set_channel_pan ( jamulusClient, id, pan ); };
-            strip->onMuteChanged  = [this] ( int id, bool muted ) { jamulus_client_set_channel_mute ( jamulusClient, id, muted ); };
-            strip->onSoloChanged  = [this] ( int id, bool solo ) { jamulus_client_set_channel_solo ( jamulusClient, id, solo ); };
-            strip->onBoostChanged = [this] ( int id, bool boosted ) {
+            strip->onPanChanged  = [this] ( int id, float pan ) { jamulus_client_set_channel_pan ( jamulusClient, id, pan ); };
+            strip->onMuteChanged = [this] ( int id, bool muted ) {
+                // We handle muting in timerCallback's gain update loop to avoid conflicts with auto-level
+            };
+            strip->onSoloChanged = [this] ( int id, bool solo ) {
+                // We handle solo in timerCallback's gain update loop
+            };
+            strip->onBoostChanged = [this, isPersonalTrack = ci.isMe] ( int id, bool boosted ) {
                 channelBoosts[id] = boosted;
-                float gain        = channelGains.count ( id ) ? channelGains[id] : 0.75f;
-                float boost       = boosted ? 2.0f : 1.0f; // +6dB
-                jamulus_client_set_channel_gain ( jamulusClient, id, gain * boost );
+
+                // User track ("Me") or manual tracks should update immediately.
+                // Tracks under Auto-Level wait for the timer pass (unless grouped).
+                bool autoLeveled = autoLevelEnabled && !isPersonalTrack && ( !channelGroups.count ( id ) || channelGroups[id] == -1 );
+
+                if ( isPersonalTrack )
+                {
+                    // For the local track, we use the native Jamulus input boost (1=0dB, 2=6dB)
+                    // This is much safer than multiplying the input fader.
+                    jamulus_client_set_input_boost ( jamulusClient, boosted ? 2 : 1 );
+
+                    // Also update monitoring gain (return level)
+                    float gain = channelGains.count ( id ) ? channelGains[id] : 0.75f;
+                    jamulus_client_set_channel_gain ( jamulusClient, id, gain );
+                }
+                else if ( !autoLeveled )
+                {
+                    // Regular remote track - apply UI boost multiplier
+                    float gain  = channelGains.count ( id ) ? channelGains[id] : 0.75f;
+                    float boost = boosted ? 2.0f : 1.0f;
+                    jamulus_client_set_channel_gain ( jamulusClient, id, gain * boost );
+                }
             };
             strip->onGroupChanged = [this] ( int id, int groupId ) { channelGroups[id] = groupId; };
 

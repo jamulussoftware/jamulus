@@ -526,6 +526,14 @@ enum EGUIDesign
     GD_SLIMFADER = 2
 };
 
+// Default, fallback skin if no skin was selected
+#if defined( Q_OS_IOS ) || defined( ANDROID ) || defined( Q_OS_ANDROID )
+// on mobile, slim UI is preferred for space reasons
+#    define GD_DEFAULT GD_SLIMFADER
+#else
+#    define GD_DEFAULT GD_ORIGINAL
+#endif
+
 // MeterStyle enum -------------------------------------------------------------
 enum EMeterStyle
 {

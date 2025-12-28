@@ -81,8 +81,11 @@ public:
             return frames;
         }
 
-        // For output direction, ratio is inverted
-        double outRatio = dstRate / srcRate;
+        // For output direction (48kHz -> host rate):
+        // If srcRate=48000 and dstRate=44100, we have MORE source samples than output.
+        // For each output sample, we advance srcRate/dstRate ≈ 1.088 samples in source.
+        // This is the same ratio calculation as resampleTo48k uses.
+        double outRatio = srcRate / dstRate;
         int dstFrames = 0;
         double srcPos = outPosition;
 

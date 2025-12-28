@@ -30,7 +30,8 @@ CSound::~CSound()
 int CSound::Init(const int iNewPrefMonoBufferSize)
 {
     // Return the requested buffer size (or a sensible default) to satisfy CClient::Init()
-    // which expects this to return the actual buffer size achieved
+    // which expects this to return the actual buffer size achieved.
+    // We return 128 (FRAME_SIZE_FACTOR_DEFAULT * 64) which is the standard Jamulus size.
     return iNewPrefMonoBufferSize > 0 ? iNewPrefMonoBufferSize : 128;
 }
 

@@ -83,6 +83,14 @@ if (TARGET jamulus_vst3_VST3)
                 VERBATIM
             )
         endif()
+        # Copy the built VST3 to the default VST3 folder after build
+        set(VST3_OUTPUT "${CMAKE_BINARY_DIR}/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3")
+        set(VST3_DEST "C:/Program Files/Common Files/VST3/JamulusVST3.vst3")
+        add_custom_command(TARGET jamulus_vst3_VST3 POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${VST3_OUTPUT}" "${VST3_DEST}"
+            COMMENT "Copying JamulusVST3.vst3 to the default VST3 folder"
+            VERBATIM
+        )
     endif()
 endif()
 if (TARGET jamulus_vst3_VST2)

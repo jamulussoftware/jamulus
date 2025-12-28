@@ -1,0 +1,35 @@
+MSBuild version 17.14.23+b0019275e for .NET Framework
+
+  Checking File Globs
+  Automatic MOC and UIC for target AudioPerformanceTest_rc_lib
+  AudioPerformanceTest_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\third_party\JUCE\extras\AudioPerformanceTest\AudioPerformanceTest_rc_lib.dir\Release\AudioPerformanceTest_rc_lib.lib
+  Automatic MOC and UIC for target AudioPluginHost_rc_lib
+  AudioPluginHost_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\third_party\JUCE\extras\AudioPluginHost\AudioPluginHost_rc_lib.dir\Release\AudioPluginHost_rc_lib.lib
+  Automatic MOC and UIC for target BinaryBuilder_rc_lib
+  BinaryBuilder_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\third_party\JUCE\extras\BinaryBuilder\BinaryBuilder_rc_lib.dir\Release\BinaryBuilder_rc_lib.lib
+  Automatic MOC and UIC for target NetworkGraphicsDemo_rc_lib
+  NetworkGraphicsDemo_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\third_party\JUCE\extras\NetworkGraphicsDemo\NetworkGraphicsDemo_rc_lib.dir\Release\NetworkGraphicsDemo_rc_lib.lib
+  Automatic MOC and UIC for target Projucer_rc_lib
+  Projucer_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\third_party\JUCE\extras\Projucer\Projucer_rc_lib.dir\Release\Projucer_rc_lib.lib
+  Automatic MOC and UIC for target UnitTestRunner_rc_lib
+  UnitTestRunner_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\third_party\JUCE\extras\UnitTestRunner\UnitTestRunner_rc_lib.dir\Release\UnitTestRunner_rc_lib.lib
+  Automatic MOC and UIC for target jamulus_vst3_rc_lib
+  jamulus_vst3_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_rc_lib.dir\Release\jamulus_vst3_rc_lib.lib
+  Automatic MOC and UIC for target opus
+  opus.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\libs_opus\Release\opus.lib
+  Automatic MOC and UIC for target jamulus_core
+  jamulus_core.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\libjamulus\Release\jamulus_core.lib
+  Automatic MOC and UIC for target jamulus_wrapper
+  jamulus_wrapper.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\Release\jamulus_wrapper.lib
+  Automatic MOC and UIC for target jamulus_vst3
+  PluginEditor.cpp
+E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\plugin\JamulusGui.h(151,75): error C2039: 'transparent': is not a member of 'juce::Colours' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3.vcxproj]
+  (compiling source file '../../plugin/PluginEditor.cpp')
+      E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\third_party\JUCE\modules\juce_graphics\colour\juce_Colours.h(42,11):
+      see declaration of 'juce::Colours'
+  
+E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\plugin\JamulusGui.h(151,75): error C2065: 'transparent': undeclared identifier [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3.vcxproj]
+  (compiling source file '../../plugin/PluginEditor.cpp')
+  
+  Automatic MOC and UIC for target jamulus_vst3_vst3_helper
+  jamulus_vst3_vst3_helper.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\Release\jamulus_vst3_vst3_helper.exe

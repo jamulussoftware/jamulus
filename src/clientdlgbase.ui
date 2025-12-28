@@ -66,6 +66,65 @@
             <property name="spacing">
              <number>3</number>
             </property>
+            <!-- Name/Instrument/Flag row: always visible, above fader -->
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_namebox">
+              <item>
+               <widget class="QLabel" name="lblInstrumentIcon">
+                <property name="minimumSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
+                <property name="pixmap">
+                 <pixmap/>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lblNameBox">
+                <property name="text">
+                 <string>Your Name</string>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>24</height>
+                 </size>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignVCenter|Qt::AlignLeft</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lblCountryFlag">
+                <property name="minimumSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
+                <property name="pixmap">
+                 <pixmap/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>

@@ -431,6 +431,7 @@ protected:
 
 public slots:
     void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
+    void OnHelpPrivacyPolicy() { QDesktopServices::openUrl ( QUrl ( PRIVACY_POLICY_URL ) ); }
     void OnHelpAbout() { AboutDlg.exec(); }
     void OnHelpAboutQt() { QMessageBox::aboutQt ( nullptr, QString ( tr ( "About Qt" ) ) ); }
     void OnHelpClientGetStarted() { QDesktopServices::openUrl ( QUrl ( CLIENT_GETTING_STARTED_URL ) ); }

@@ -117,6 +117,7 @@ LED bar:      lbr
 #define CLIENT_GETTING_STARTED_URL "https://jamulus.io/wiki/Getting-Started"
 #define SERVER_GETTING_STARTED_URL "https://jamulus.io/wiki/Running-a-Server"
 #define SOFTWARE_MANUAL_URL        "https://jamulus.io/wiki/Software-Manual"
+#define PRIVACY_POLICY_URL         "https://jamulus.io/wiki/Privacy-Statement"
 
 // app update message
 #define APP_UPGRADE_AVAILABLE_MSG_TEXT \

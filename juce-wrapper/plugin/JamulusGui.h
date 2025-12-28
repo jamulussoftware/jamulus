@@ -705,6 +705,8 @@ public:
             panSlider.setEnabled ( true );
             panSlider.setAlpha ( 1.0f );
         }
+        if ( onMonoChanged )
+            onMonoChanged ( channelId, isMono );
     }
     float getGain() const
     {
@@ -845,6 +847,7 @@ public:
     std::function<void ( int, bool )>  onSoloChanged;
     std::function<void ( int, bool )>  onBoostChanged;
     std::function<void ( int, int )>   onGroupChanged;
+    std::function<void ( int, bool )>  onMonoChanged;
 
 private:
     int              channelId  = -1;
@@ -1046,8 +1049,8 @@ public:
             updateSidechainButtonColor();
         };
 
-        // Initialize delay effect
-        audioDelay.init ( 48000, 1000 ); // 48kHz, max 1000ms delay
+        // Initialize delay effect - Handled in Processor
+        // audioDelay.init ( 48000, 1000 );
 
         // Monitor Mode button (Direct Thru vs Server Return)
         addAndMakeVisible ( monitorModeButton );
@@ -1062,9 +1065,38 @@ public:
         };
         updateMonitorButtonColor();
 
-        // Mixer viewport
+        // Local (Me) strip container - fixed, not scrollable
+        addAndMakeVisible ( localStripContainer );
+
+        // Mixer viewport - only for remote channels
         addAndMakeVisible ( mixerViewport );
         mixerViewport.setViewedComponent ( &mixerContainer, false );
+
+        // Scroll indicator arrows
+        addAndMakeVisible ( scrollLeftArrow );
+        scrollLeftArrow.setButtonText ( "<" );
+        scrollLeftArrow.setColour ( juce::TextButton::buttonColourId, juce::Colour ( 0xff505050 ) );
+        scrollLeftArrow.setColour ( juce::TextButton::textColourOnId, juce::Colours::white );
+        scrollLeftArrow.setColour ( juce::TextButton::textColourOffId, juce::Colours::white );
+        scrollLeftArrow.onClick = [this]() {
+            auto pos  = mixerViewport.getViewPosition();
+            int  newX = juce::jmax ( 0, pos.x - 90 ); // Scroll one channel width
+            mixerViewport.setViewPosition ( newX, pos.y );
+            updateScrollArrows();
+        };
+
+        addAndMakeVisible ( scrollRightArrow );
+        scrollRightArrow.setButtonText ( ">" );
+        scrollRightArrow.setColour ( juce::TextButton::buttonColourId, juce::Colour ( 0xff505050 ) );
+        scrollRightArrow.setColour ( juce::TextButton::textColourOnId, juce::Colours::white );
+        scrollRightArrow.setColour ( juce::TextButton::textColourOffId, juce::Colours::white );
+        scrollRightArrow.onClick = [this]() {
+            auto pos  = mixerViewport.getViewPosition();
+            int  maxX = mixerContainer.getWidth() - mixerViewport.getWidth();
+            int  newX = juce::jmin ( maxX, pos.x + 90 ); // Scroll one channel width
+            mixerViewport.setViewPosition ( newX, pos.y );
+            updateScrollArrows();
+        };
 
         // Disconnect button (visible when connected)
         addAndMakeVisible ( disconnectButton );
@@ -1133,11 +1165,11 @@ public:
         auto header = bounds.removeFromTop ( 50 );
         titleLabel.setBounds ( header.removeFromLeft ( 150 ).reduced ( 10 ) );
 
-        // Toolbar buttons
+        // Toolbar buttons - Chat next to Connect
         auto toolbar = header;
         connectButton.setBounds ( toolbar.removeFromLeft ( 90 ).reduced ( 5 ) );
-        settingsButton.setBounds ( toolbar.removeFromLeft ( 90 ).reduced ( 5 ) );
         chatButton.setBounds ( toolbar.removeFromLeft ( 70 ).reduced ( 5 ) );
+        settingsButton.setBounds ( toolbar.removeFromLeft ( 90 ).reduced ( 5 ) );
         testToneButton.setBounds ( toolbar.removeFromLeft ( 90 ).reduced ( 5 ) );
 
         // Main Volume (label + slider + meters)
@@ -1219,12 +1251,31 @@ public:
         auto rightControls = controlsArea.removeFromRight ( 200 );
         // statusLabel removed from here
 
-        // Mixer area
+        // Mixer area - local strip fixed on left, remote channels scroll
         bounds.removeFromTop ( 10 );
-        mixerViewport.setBounds ( bounds );
+
+        // Local (Me) strip on the left - fixed, no scrolling
+        const int localStripWidth = 105;
+        auto      localBounds     = bounds.removeFromLeft ( localStripWidth );
+        localStripContainer.setBounds ( localBounds );
+
+        // Remote channels viewport (scrollable) with scroll arrows
+        const int arrowWidth = 20;
+
+        // Left scroll arrow (between local strip and viewport)
+        auto leftArrowBounds = bounds.removeFromLeft ( arrowWidth );
+        scrollLeftArrow.setBounds ( leftArrowBounds.reduced ( 2, 30 ) );
+
+        // Main viewport for remote channels
+        auto viewportBounds = bounds.removeFromRight ( bounds.getWidth() - arrowWidth );
+        mixerViewport.setBounds ( viewportBounds );
+
+        // Right scroll arrow
+        scrollRightArrow.setBounds ( bounds.reduced ( 2, 30 ) );
 
         // Update mixer container width based on number of channels
         updateMixerLayout();
+        updateScrollArrows();
     }
 
 private:
@@ -1572,7 +1623,7 @@ private:
         {
             settingsDialog          = std::make_unique<SettingsComponent> ( jamulusClient );
             settingsDialog->onClose = [this]() { hideAllDialogs(); };
-            settingsDialog->setAutoLevelBoostCallback ( [this] ( bool enabled ) { autoLevelBoostEnabled = enabled; } );
+            // settingsDialog->setAutoLevelBoostCallback ( [this] ( bool enabled ) { autoLevelBoostEnabled = enabled; } ); // Removed
         }
         showDialog ( settingsDialog.get() );
     }
@@ -1589,22 +1640,48 @@ private:
                 toggleFXPanel();
             };
 
-            // Reverb callbacks
-            fxPanel->onReverbTimeChanged = [this] ( float time ) {
-                reverbTime = time;
-                // Note: Actual reverb T60 is set in the Qt audio processing
-            };
-            fxPanel->onReverbPreDelayChanged = [this] ( float ms ) { reverbPreDelay = ms; };
-            fxPanel->onReverbHPChanged       = [this] ( float hz ) { reverbHP = hz; };
-            fxPanel->onReverbLPChanged       = [this] ( float hz ) { reverbLP = hz; };
+            // Apply Mono Constraint if current local channel is mono
+            fxPanel->setMonoConstraint ( isMeMono );
 
-            // Delay callbacks
-            fxPanel->onDelayEnableChanged   = [this] ( bool enabled ) { delayEnabled = enabled; };
-            fxPanel->onDelayLevelChanged    = [this] ( float level ) { audioDelay.setMix ( level ); };
-            fxPanel->onDelayTimeChanged     = [this] ( float ms ) { audioDelay.setDelayTime ( ms ); };
-            fxPanel->onDelayFeedbackChanged = [this] ( float fb ) { audioDelay.setFeedback ( fb ); };
-            fxPanel->onDelayPingPongChanged = [this] ( bool enabled ) { audioDelay.setPingPong ( enabled ); };
-            fxPanel->onDelayHPChanged       = [this] ( float hz ) { audioDelay.setHighPassFreq ( hz ); };
+            // Reverb callbacks - Proxy to Editor
+            fxPanel->onReverbEnableChanged = [this] ( bool enabled ) {
+                if ( onReverbEnableChanged )
+                    onReverbEnableChanged ( enabled );
+            };
+            fxPanel->onReverbMixChanged = [this] ( float mix ) {
+                if ( onReverbMixChanged )
+                    onReverbMixChanged ( mix );
+            };
+            fxPanel->onReverbDecayChanged = [this] ( float decay ) {
+                if ( onReverbDecayChanged )
+                    onReverbDecayChanged ( decay );
+            };
+
+            // Delay callbacks - Proxy to Editor
+            fxPanel->onDelayEnableChanged = [this] ( bool enabled ) {
+                if ( onDelayEnableChanged )
+                    onDelayEnableChanged ( enabled );
+            };
+            fxPanel->onDelayLevelChanged = [this] ( float level ) {
+                if ( onDelayMixChanged )
+                    onDelayMixChanged ( level );
+            };
+            fxPanel->onDelayTimeChanged = [this] ( float ms ) {
+                if ( onDelayTimeChanged )
+                    onDelayTimeChanged ( ms );
+            };
+            fxPanel->onDelayFeedbackChanged = [this] ( float fb ) {
+                if ( onDelayFeedbackChanged )
+                    onDelayFeedbackChanged ( fb );
+            };
+            fxPanel->onDelayPingPongChanged = [this] ( bool enabled ) {
+                if ( onDelayPingPongChanged )
+                    onDelayPingPongChanged ( enabled );
+            };
+            fxPanel->onDelayHPChanged = [this] ( float hz ) {
+                if ( onDelayHPChanged )
+                    onDelayHPChanged ( hz );
+            };
 
             fxPanel->loadCurrentValues();
             addAndMakeVisible ( fxPanel.get() );
@@ -1904,6 +1981,14 @@ private:
                 }
             };
             strip->onGroupChanged = [this] ( int id, int groupId ) { channelGroups[id] = groupId; };
+            strip->onMonoChanged  = [this, isPersonalTrack = ci.isMe] ( int id, bool mono ) {
+                if ( isPersonalTrack )
+                {
+                    isMeMono = mono;
+                    if ( fxPanel )
+                        fxPanel->setMonoConstraint ( mono );
+                }
+            };
 
             // Restore states
             if ( ci.info.id != -1 )
@@ -1920,7 +2005,11 @@ private:
                     channelGains[ci.info.id] = ci.info.gain;
             }
 
-            mixerContainer.addAndMakeVisible ( strip.get() );
+            // Local "Me" strip goes in fixed container, remote strips go in scrollable mixer
+            if ( ci.isMe )
+                localStripContainer.addAndMakeVisible ( strip.get() );
+            else
+                mixerContainer.addAndMakeVisible ( strip.get() );
             channelStrips.push_back ( std::move ( strip ) );
         }
 
@@ -1933,27 +2022,68 @@ private:
         const int localStripWidth    = 105;
         const int stripHeight        = mixerViewport.getHeight() - 20;
 
-        int totalWidth = 0;
-        if ( !channelStrips.empty() )
+        // Position local (Me) strip in the fixed container
+        for ( auto& strip : channelStrips )
         {
-            // First strip is "Me" - wider
-            totalWidth += localStripWidth;
-            // Others
-            totalWidth += static_cast<int> ( channelStrips.size() - 1 ) * standardStripWidth;
+            if ( strip->getIsMe() )
+            {
+                strip->setBounds ( 5, 10, localStripWidth - 10, stripHeight - 20 );
+                break;
+            }
         }
 
+        // Calculate width for remote channels only
+        int numRemote = 0;
+        for ( auto& strip : channelStrips )
+        {
+            if ( !strip->getIsMe() )
+                numRemote++;
+        }
+
+        int totalWidth = numRemote * standardStripWidth;
         if ( totalWidth < mixerViewport.getWidth() )
             totalWidth = mixerViewport.getWidth();
 
         mixerContainer.setSize ( totalWidth, stripHeight );
 
-        int x = 10;
-        for ( size_t i = 0; i < channelStrips.size(); ++i )
+        // Position remote channel strips in the scrollable container
+        int x = 5;
+        for ( auto& strip : channelStrips )
         {
-            int width = ( i == 0 ) ? localStripWidth : standardStripWidth;
-            channelStrips[i]->setBounds ( x, 10, width - 10, stripHeight - 20 );
-            x += width;
+            if ( !strip->getIsMe() )
+            {
+                strip->setBounds ( x, 10, standardStripWidth - 10, stripHeight - 20 );
+                x += standardStripWidth;
+            }
         }
+
+        updateScrollArrows();
+    }
+
+    void updateScrollArrows()
+    {
+        // Count remote channels
+        int numRemote = 0;
+        for ( auto& strip : channelStrips )
+        {
+            if ( !strip->getIsMe() )
+                numRemote++;
+        }
+
+        // Show/hide arrows based on scroll position and content
+        int scrollX      = mixerViewport.getViewPosition().x;
+        int contentWidth = mixerContainer.getWidth();
+        int viewWidth    = mixerViewport.getWidth();
+
+        // Left arrow: show if scrolled to the right (content hidden on left)
+        bool showLeft = scrollX > 0;
+        scrollLeftArrow.setVisible ( showLeft );
+        scrollLeftArrow.setAlpha ( showLeft ? 1.0f : 0.3f );
+
+        // Right arrow: show if there's more content to the right
+        bool showRight = ( scrollX + viewWidth ) < contentWidth && numRemote > 0;
+        scrollRightArrow.setVisible ( showRight );
+        scrollRightArrow.setAlpha ( showRight ? 1.0f : 0.3f );
     }
 
     jamulus_client_t jamulusClient;
@@ -1962,15 +2092,15 @@ private:
     juce::uint64     lastChannelsHash = 0;
     bool             chatPanelVisible = false;
     bool             fxPanelVisible   = false;
+    bool             isMeMono         = false;
 
     // FX parameters
-    float      reverbTime     = 1.0f;
-    float      reverbPreDelay = 0.0f;
-    float      reverbHP       = 20.0f;
-    float      reverbLP       = 20000.0f;
-    bool       delayEnabled   = false;
-    int        pingCounter    = 0;
-    AudioDelay audioDelay;
+    float reverbTime     = 1.0f;
+    float reverbPreDelay = 0.0f;
+    float reverbHP       = 20.0f;
+    float reverbLP       = 20000.0f;
+    int   pingCounter    = 0;
+    // AudioDelay removed - moved to Processor
 
     // Header
     juce::Label      titleLabel;
@@ -2022,8 +2152,11 @@ private:
     LevelMeter masterMeterL;
     LevelMeter masterMeterR;
 
-    // Mixer
-    juce::Viewport mixerViewport;
+    // Mixer - Local strip in fixed container, remote channels in scrollable viewport
+    juce::Component  localStripContainer; // Fixed container for "Me" strip
+    juce::Viewport   mixerViewport;       // Scrollable for remote channels
+    juce::TextButton scrollLeftArrow;     // Shows when channels off-screen left
+    juce::TextButton scrollRightArrow;    // Shows when channels off-screen right
     struct MixerContainer : public juce::Component
     {
         void paint ( juce::Graphics& g ) override
@@ -2152,6 +2285,19 @@ public:
     std::function<void ( bool )>  onSidechainChanged;
     std::function<void ( bool )>  onMonitorModeChanged; // true = server return, false = direct thru
     std::function<void ( float )> onMainVolumeChanged;  // 0.0 - 1.0
+
+    // Delay Callbacks
+    std::function<void ( bool )>  onDelayEnableChanged;
+    std::function<void ( float )> onDelayMixChanged;
+    std::function<void ( float )> onDelayTimeChanged;
+    std::function<void ( float )> onDelayFeedbackChanged;
+    std::function<void ( bool )>  onDelayPingPongChanged;
+    std::function<void ( float )> onDelayHPChanged;
+
+    // Reverb Callbacks
+    std::function<void ( bool )>  onReverbEnableChanged;
+    std::function<void ( float )> onReverbMixChanged;
+    std::function<void ( float )> onReverbDecayChanged;
 
     // Set sidechain availability (called by editor)
     void setSidechainAvailable ( bool available )

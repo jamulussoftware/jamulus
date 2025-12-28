@@ -6,6 +6,8 @@
 #include "../audio_fifo.h"
 #include "../virtual_sound/virtual_sound.h"
 #include "Resampler.h"
+#include "AudioDelay.h"
+#include "AudioReverb.h"
 
 class JamulusPluginProcessor
 {
@@ -55,4 +57,30 @@ private:
     double testToneFreq    = 440.0;
     double testToneAmp     = 0.2;
     float  mainVolume      = 1.0f; // Main output volume (0.0 - 1.0)
+
+    // Reverb Control Methods
+public:
+    void setReverbEnabled ( bool enabled ) { reverbEnabled = enabled; }
+    void setReverbMix ( float mix ) { audioReverb.setMix ( mix ); }
+    void setReverbDecay ( float seconds ) { audioReverb.setDecay ( seconds ); }
+    void setReverbDamping ( float damping ) { audioReverb.setDamping ( damping ); }
+
+private:
+    // Internal Reverb
+    bool        reverbEnabled = false;
+    AudioReverb audioReverb;
+
+    // Delay Control Methods
+public:
+    void setDelayEnabled ( bool enabled ) { delayEnabled = enabled; }
+    void setDelayMix ( float mix ) { audioDelay.setMix ( mix ); }
+    void setDelayTime ( float ms ) { audioDelay.setDelayTime ( ms ); }
+    void setDelayFeedback ( float fb ) { audioDelay.setFeedback ( fb ); }
+    void setDelayPingPong ( bool pp ) { audioDelay.setPingPong ( pp ); }
+    void setDelayHighPass ( float freq ) { audioDelay.setHighPassFreq ( freq ); }
+
+private:
+    // Internal Delay
+    bool       delayEnabled = false;
+    AudioDelay audioDelay;
 };

@@ -344,7 +344,8 @@ public:
                 jamulus_client_set_small_buffers ( jamulusClient, smallBuffersToggle.getToggleState() );
         };
 
-        // Auto Level Boosted Channels
+        // Auto Level Boosted Channels - Removed per user request
+        /*
         addAndMakeVisible ( autoLevelBoostToggle );
         autoLevelBoostToggle.setButtonText ( "Auto Level Boosted Channels" );
         autoLevelBoostToggle.setColour ( juce::ToggleButton::textColourId, juce::Colours::white );
@@ -353,6 +354,7 @@ public:
             if ( onAutoLevelBoostChanged )
                 onAutoLevelBoostChanged ( autoLevelBoostToggle.getToggleState() );
         };
+        */
 
         // === Status Section ===
         addAndMakeVisible ( statusSectionLabel );
@@ -422,7 +424,7 @@ public:
         newClientLevelSlider.setBounds ( row );
 
         smallBuffersToggle.setBounds ( makeRow() );
-        autoLevelBoostToggle.setBounds ( makeRow() );
+        // autoLevelBoostToggle.setBounds ( makeRow() ); // Removed
 
         bounds.removeFromTop ( 10 );
         statusSectionLabel.setBounds ( makeRow() );
@@ -529,15 +531,15 @@ private:
     juce::Label        newClientLevelLabel;
     juce::Slider       newClientLevelSlider;
     juce::ToggleButton smallBuffersToggle;
-    juce::ToggleButton autoLevelBoostToggle;
+    // juce::ToggleButton autoLevelBoostToggle; // Removed
 
     juce::Label statusSectionLabel;
     juce::Label delayLabel;
     juce::Label uploadRateLabel;
 
 public:
-    // Callback for auto level boost setting
-    std::function<void ( bool )> onAutoLevelBoostChanged;
+    // Callback for auto level boost setting - Removed
+    // std::function<void ( bool )> onAutoLevelBoostChanged;
 };
 
 //==============================================================================
@@ -655,8 +657,8 @@ public:
 
     std::function<void()> onClose;
 
-    // Pass through callback for auto level boost setting
-    void setAutoLevelBoostCallback ( std::function<void ( bool )> cb ) { audioNetworkTab.onAutoLevelBoostChanged = cb; }
+    // Pass through callback for auto level boost setting - Removed
+    // void setAutoLevelBoostCallback ( std::function<void ( bool )> cb ) { audioNetworkTab.onAutoLevelBoostChanged = cb; }
 
 private:
     jamulus_client_t jamulusClient;

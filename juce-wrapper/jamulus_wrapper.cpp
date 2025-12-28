@@ -229,9 +229,12 @@ public:
         outFifo                      = std::make_unique<AudioFifo> ( defaultCapacity, channels );
 
         // Initialize internal ring buffers for block processing
-        // Size for ~100ms of audio at 48kHz stereo = 4800 * 2 = 9600 samples
-        internalInputBuffer.resize ( 9600, 0 );
-        internalOutputBuffer.resize ( 9600, 0 );
+        // Size for ~200ms of audio at 48kHz stereo = 9600 samples
+        // Must be multiple of JAMULUS_STEREO_BLOCK_SIZE (256) to maintain channel alignment across wraps
+        // 9600 / 256 = 37.5 (BAD!)
+        // 9728 / 256 = 38 (GOOD) -> Use 9984 (39 * 256) for margin
+        internalInputBuffer.resize ( 9984, 0 );
+        internalOutputBuffer.resize ( 9984, 0 );
         inputWritePos  = 0;
         inputReadPos   = 0;
         outputWritePos = 0;
@@ -1185,19 +1188,15 @@ extern "C"
         int myChannelId = s_myChannelId; // Server channel ID for "me"
         if ( channel_id == -1 || channel_id == myChannelId )
         {
-            // This is my local fader. Update the input fader setting.
-            // Safety: Clamp gain to 1.0 for the input fader to prevent overflow/muting.
-            // (Boost is now handled via jamulus_client_set_input_boost separately)
-            float clampedGain = ( gain > 1.0f ) ? 1.0f : gain;
-            jamulus_client_set_input_fader ( c, (int) ( clampedGain * 100 ) );
-
-            // If connected, also tell Jamulus to update the personal monitoring mix
+            // This is my local fader. Update the personal monitoring mix.
+            // Note: Do NOT call SetAudioInFader here - that controls L/R balance, not volume!
+            // The input fader should stay at AUD_FADER_IN_MIDDLE (50) for balanced stereo.
             if ( myChannelId != -1 )
             {
                 // Convert server channel ID to client channel index
                 int clientIdx = wc->PublicFindClientChannel ( myChannelId );
                 if ( clientIdx >= 0 )
-                    wc->SetRemoteChanGain ( clientIdx, gain, true );
+                    wc->SetRemoteChanGain ( clientIdx, gain, false );
             }
         }
         else

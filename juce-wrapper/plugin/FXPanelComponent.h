@@ -26,16 +26,24 @@ class FXPanelComponent : public juce::Component
 public:
     FXPanelComponent ( jamulus_client_t client ) : jamulusClient ( client )
     {
-        // Reverb Enable
+        // Reverb Enable - Removed per user request
+        /*
         addAndMakeVisible ( reverbEnableButton );
         reverbEnableButton.setButtonText ( "Enable" );
         reverbEnableButton.setClickingTogglesState ( true );
         reverbEnableButton.setToggleState ( false, juce::dontSendNotification ); // Default enabled
         reverbEnableButton.onClick = [this]() {
+            bool enabled = reverbEnableButton.getToggleState();
             if ( onReverbEnableChanged )
-                onReverbEnableChanged ( reverbEnableButton.getToggleState() );
+                onReverbEnableChanged ( enabled );
+
+            // Toggle Logic: 0 if disabled, current slider value if enabled
+            int levelToSend = enabled ? static_cast<int> ( reverbLevelSlider.getValue() ) : 0;
+            jamulus_client_set_reverb_level ( jamulusClient, levelToSend );
+
             updateReverbControlsEnabled();
         };
+        */
         // === Header ===
         addAndMakeVisible ( titleLabel );
         titleLabel.setText ( "Effects", juce::dontSendNotification );
@@ -49,102 +57,49 @@ public:
                 onClose();
         };
 
-        // === REVERB SECTION ===
+        // === REVERB SECTION (Custom low-latency reverb) ===
         addAndMakeVisible ( reverbSectionLabel );
         reverbSectionLabel.setText ( "REVERB", juce::dontSendNotification );
         reverbSectionLabel.setFont ( juce::Font ( 14.0f, juce::Font::bold ) );
         reverbSectionLabel.setColour ( juce::Label::textColourId, juce::Colour ( 0xff00cc66 ) );
 
-        // Reverb Level
+        // Reverb Enable
+        addAndMakeVisible ( reverbEnableButton );
+        reverbEnableButton.setButtonText ( "Enable" );
+        reverbEnableButton.setClickingTogglesState ( true );
+        reverbEnableButton.onClick = [this]() {
+            if ( onReverbEnableChanged )
+                onReverbEnableChanged ( reverbEnableButton.getToggleState() );
+            updateReverbControlsEnabled();
+        };
+
+        // Reverb Level (wet/dry mix)
         addAndMakeVisible ( reverbLevelLabel );
-        reverbLevelLabel.setText ( "Level", juce::dontSendNotification );
+        reverbLevelLabel.setText ( "Mix", juce::dontSendNotification );
         reverbLevelLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
 
         addAndMakeVisible ( reverbLevelSlider );
-        setupSlider ( reverbLevelSlider, 0, 100, 0, "%" );
+        setupSlider ( reverbLevelSlider, 0, 100, 30, "%" );
         reverbLevelSlider.onValueChange = [this]() {
-            jamulus_client_set_reverb_level ( jamulusClient, static_cast<int> ( reverbLevelSlider.getValue() ) );
+            if ( onReverbMixChanged )
+                onReverbMixChanged ( static_cast<float> ( reverbLevelSlider.getValue() ) / 100.0f );
         };
 
-        // Reverb Time (T60)
-        addAndMakeVisible ( reverbTimeLabel );
-        reverbTimeLabel.setText ( "Time", juce::dontSendNotification );
-        reverbTimeLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
+        // Reverb Decay Time
+        addAndMakeVisible ( reverbDecayLabel );
+        reverbDecayLabel.setText ( "Decay", juce::dontSendNotification );
+        reverbDecayLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
 
-        addAndMakeVisible ( reverbTimeSlider );
-        setupSlider ( reverbTimeSlider, 0.1, 5.0, 1.0, " s" );
-        reverbTimeSlider.setNumDecimalPlacesToDisplay ( 1 );
-        reverbTimeSlider.onValueChange = [this]() {
-            if ( onReverbTimeChanged )
-                onReverbTimeChanged ( static_cast<float> ( reverbTimeSlider.getValue() ) );
+        addAndMakeVisible ( reverbDecaySlider );
+        setupSlider ( reverbDecaySlider, 0.1, 5.0, 1.5, " s" );
+        reverbDecaySlider.setNumDecimalPlacesToDisplay ( 1 );
+        reverbDecaySlider.onValueChange = [this]() {
+            if ( onReverbDecayChanged )
+                onReverbDecayChanged ( static_cast<float> ( reverbDecaySlider.getValue() ) );
         };
 
-        // Pre-delay
-        addAndMakeVisible ( preDelayLabel );
-        preDelayLabel.setText ( "Pre-Delay", juce::dontSendNotification );
-        preDelayLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
-
-        addAndMakeVisible ( preDelaySlider );
-        setupSlider ( preDelaySlider, 0, 100, 0, " ms" );
-        preDelaySlider.onValueChange = [this]() {
-            if ( onReverbPreDelayChanged )
-                onReverbPreDelayChanged ( static_cast<float> ( preDelaySlider.getValue() ) );
-        };
-
-        // High-pass filter
-        addAndMakeVisible ( reverbHPLabel );
-        reverbHPLabel.setText ( "HP Filter", juce::dontSendNotification );
-        reverbHPLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
-
-        addAndMakeVisible ( reverbHPSlider );
-        setupSlider ( reverbHPSlider, 20, 500, 20, " Hz" );
-        reverbHPSlider.setSkewFactorFromMidPoint ( 100 );
-        reverbHPSlider.onValueChange = [this]() {
-            if ( onReverbHPChanged )
-                onReverbHPChanged ( static_cast<float> ( reverbHPSlider.getValue() ) );
-        };
-
-        // Low-pass filter
-        addAndMakeVisible ( reverbLPLabel );
-        reverbLPLabel.setText ( "LP Filter", juce::dontSendNotification );
-        reverbLPLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
-
-        addAndMakeVisible ( reverbLPSlider );
-        setupSlider ( reverbLPSlider, 1000, 20000, 20000, " Hz" );
-        reverbLPSlider.setSkewFactorFromMidPoint ( 5000 );
-        reverbLPSlider.onValueChange = [this]() {
-            if ( onReverbLPChanged )
-                onReverbLPChanged ( static_cast<float> ( reverbLPSlider.getValue() ) );
-        };
-
-        // Reverb Channel (Left/Right/Both)
-        addAndMakeVisible ( reverbChannelLabel );
-        reverbChannelLabel.setText ( "Channel", juce::dontSendNotification );
-        reverbChannelLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
-
-        addAndMakeVisible ( reverbChannelCombo );
-        reverbChannelCombo.addItem ( "Stereo", 1 );
-        reverbChannelCombo.addItem ( "Left", 2 );
-        reverbChannelCombo.addItem ( "Right", 3 );
-        reverbChannelCombo.setSelectedId ( 1 ); // Default to Stereo
-        reverbChannelCombo.onChange = [this]() {
-            int sel = reverbChannelCombo.getSelectedId();
-            if ( sel == 1 )
-            {
-                // Stereo: reverb on both channels
-                jamulus_client_set_reverb_on_left ( jamulusClient, false ); // disables left-only
-            }
-            else if ( sel == 2 )
-            {
-                // Left only
-                jamulus_client_set_reverb_on_left ( jamulusClient, true );
-            }
-            else
-            {
-                // Right only
-                jamulus_client_set_reverb_on_left ( jamulusClient, false );
-            }
-        };
+        // Initial state
+        updateReverbControlsEnabled();
 
         // === DELAY SECTION ===
         addAndMakeVisible ( delaySectionLabel );
@@ -259,39 +214,15 @@ public:
         reverbEnableButton.setBounds ( reverbHeader.removeFromRight ( 80 ) );
         bounds.removeFromTop ( 5 );
 
-        auto row1 = bounds.removeFromTop ( 30 );
-        reverbLevelLabel.setBounds ( row1.removeFromLeft ( 70 ) );
-        reverbLevelSlider.setBounds ( row1 );
+        auto reverbRow1 = bounds.removeFromTop ( 30 );
+        reverbLevelLabel.setBounds ( reverbRow1.removeFromLeft ( 70 ) );
+        reverbLevelSlider.setBounds ( reverbRow1 );
 
         bounds.removeFromTop ( 5 );
 
-        auto row2 = bounds.removeFromTop ( 30 );
-        reverbTimeLabel.setBounds ( row2.removeFromLeft ( 70 ) );
-        reverbTimeSlider.setBounds ( row2 );
-
-        bounds.removeFromTop ( 5 );
-
-        auto row3 = bounds.removeFromTop ( 30 );
-        preDelayLabel.setBounds ( row3.removeFromLeft ( 70 ) );
-        preDelaySlider.setBounds ( row3 );
-
-        bounds.removeFromTop ( 5 );
-
-        auto row4 = bounds.removeFromTop ( 30 );
-        reverbHPLabel.setBounds ( row4.removeFromLeft ( 70 ) );
-        reverbHPSlider.setBounds ( row4 );
-
-        bounds.removeFromTop ( 5 );
-
-        auto row5 = bounds.removeFromTop ( 30 );
-        reverbLPLabel.setBounds ( row5.removeFromLeft ( 70 ) );
-        reverbLPSlider.setBounds ( row5 );
-
-        bounds.removeFromTop ( 5 );
-
-        auto row6 = bounds.removeFromTop ( 30 );
-        reverbChannelLabel.setBounds ( row6.removeFromLeft ( 70 ) );
-        reverbChannelCombo.setBounds ( row6.removeFromLeft ( 100 ) );
+        auto reverbRow2 = bounds.removeFromTop ( 30 );
+        reverbDecayLabel.setBounds ( reverbRow2.removeFromLeft ( 70 ) );
+        reverbDecaySlider.setBounds ( reverbRow2 );
 
         bounds.removeFromTop ( 15 );
 
@@ -336,20 +267,44 @@ public:
         if ( !jamulusClient )
             return;
 
+        /*
         reverbLevelSlider.setValue ( jamulus_client_get_reverb_level ( jamulusClient ), juce::dontSendNotification );
+        */
         // Default to Stereo
+        /*
         reverbChannelCombo.setSelectedId ( 1, juce::dontSendNotification );
+        */
     }
 
     // Callbacks
     std::function<void()> onClose;
 
+    // Set constraint from Mono mode
+    void setMonoConstraint ( bool isMono )
+    {
+        /*
+        if ( isMono )
+        {
+            // Force Stereo (ID 1) and Disable
+            reverbChannelCombo.setSelectedId ( 1, juce::dontSendNotification );
+            reverbChannelCombo.setEnabled ( false );
+
+            // Should also ensure the client state is updated
+            if ( reverbChannelCombo.onChange )
+                reverbChannelCombo.onChange();
+        }
+        else
+        {
+            // Enable if Reverb is enabled
+            reverbChannelCombo.setEnabled ( reverbEnableButton.getToggleState() );
+        }
+        */
+    }
+
     // Reverb callbacks
     std::function<void ( bool )>  onReverbEnableChanged;
-    std::function<void ( float )> onReverbTimeChanged;
-    std::function<void ( float )> onReverbPreDelayChanged;
-    std::function<void ( float )> onReverbHPChanged;
-    std::function<void ( float )> onReverbLPChanged;
+    std::function<void ( float )> onReverbMixChanged;
+    std::function<void ( float )> onReverbDecayChanged;
 
     // Delay callbacks
     std::function<void ( bool )>  onDelayEnableChanged;
@@ -374,19 +329,12 @@ private:
     {
         bool enabled = reverbEnableButton.getToggleState();
         reverbLevelSlider.setEnabled ( enabled );
-        reverbTimeSlider.setEnabled ( enabled );
-        preDelaySlider.setEnabled ( enabled );
-        reverbHPSlider.setEnabled ( enabled );
-        reverbLPSlider.setEnabled ( enabled );
-        reverbChannelCombo.setEnabled ( enabled );
+        reverbDecaySlider.setEnabled ( enabled );
         float alpha = enabled ? 1.0f : 0.5f;
         reverbLevelLabel.setAlpha ( alpha );
-        reverbTimeLabel.setAlpha ( alpha );
-        preDelayLabel.setAlpha ( alpha );
-        reverbHPLabel.setAlpha ( alpha );
-        reverbLPLabel.setAlpha ( alpha );
-        reverbChannelLabel.setAlpha ( alpha );
+        reverbDecayLabel.setAlpha ( alpha );
     }
+
     void updateDelayControlsEnabled()
     {
         bool enabled = delayEnableButton.getToggleState();
@@ -408,21 +356,13 @@ private:
     juce::Label      titleLabel;
     juce::TextButton closeButton;
 
-    // Reverb controls
+    // Reverb controls (Custom reverb)
     juce::Label        reverbSectionLabel;
     juce::ToggleButton reverbEnableButton;
     juce::Label        reverbLevelLabel;
     juce::Slider       reverbLevelSlider;
-    juce::Label        reverbTimeLabel;
-    juce::Slider       reverbTimeSlider;
-    juce::Label        preDelayLabel;
-    juce::Slider       preDelaySlider;
-    juce::Label        reverbHPLabel;
-    juce::Slider       reverbHPSlider;
-    juce::Label        reverbLPLabel;
-    juce::Slider       reverbLPSlider;
-    juce::Label        reverbChannelLabel;
-    juce::ComboBox     reverbChannelCombo;
+    juce::Label        reverbDecayLabel;
+    juce::Slider       reverbDecaySlider;
 
     // Delay controls
     juce::Label        delaySectionLabel;

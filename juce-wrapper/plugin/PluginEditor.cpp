@@ -16,6 +16,20 @@ JamulusPluginEditor::JamulusPluginEditor ( JamulusAudioProcessor& p ) : AudioPro
         guiComponent->setTestToneButtonCallback ( [this] ( bool enabled ) { audioProcessor.getProcessor().setTestToneEnabled ( enabled ); } );
         guiComponent->onMonitorModeChanged = [this] ( bool enabled ) { audioProcessor.getProcessor().setMonitorMode ( enabled ); };
         guiComponent->onMainVolumeChanged  = [this] ( float vol ) { audioProcessor.getProcessor().setMainVolume ( vol ); };
+
+        // Delay Callbacks
+        guiComponent->onDelayEnableChanged   = [this] ( bool enabled ) { audioProcessor.getProcessor().setDelayEnabled ( enabled ); };
+        guiComponent->onDelayMixChanged      = [this] ( float mix ) { audioProcessor.getProcessor().setDelayMix ( mix ); };
+        guiComponent->onDelayTimeChanged     = [this] ( float ms ) { audioProcessor.getProcessor().setDelayTime ( ms ); };
+        guiComponent->onDelayFeedbackChanged = [this] ( float fb ) { audioProcessor.getProcessor().setDelayFeedback ( fb ); };
+        guiComponent->onDelayPingPongChanged = [this] ( bool pp ) { audioProcessor.getProcessor().setDelayPingPong ( pp ); };
+        guiComponent->onDelayHPChanged       = [this] ( float freq ) { audioProcessor.getProcessor().setDelayHighPass ( freq ); };
+
+        // Reverb Callbacks
+        guiComponent->onReverbEnableChanged = [this] ( bool enabled ) { audioProcessor.getProcessor().setReverbEnabled ( enabled ); };
+        guiComponent->onReverbMixChanged    = [this] ( float mix ) { audioProcessor.getProcessor().setReverbMix ( mix ); };
+        guiComponent->onReverbDecayChanged  = [this] ( float decay ) { audioProcessor.getProcessor().setReverbDecay ( decay ); };
+
         addAndMakeVisible ( guiComponent.get() );
     }
 

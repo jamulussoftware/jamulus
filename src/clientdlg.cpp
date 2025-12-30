@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "clientdlg.h"
+#include "util.h"
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
@@ -41,7 +42,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     bDetectFeedback ( false ),
     bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
-    eLastDesign ( GD_ORIGINAL ),         //          "
+    eLastDesign ( GD_DEFAULT ),          //          "
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
     ChatDlg ( parent ),
     ConnectDlg ( pNSetP, bNewShowComplRegConnList, bNEnableIPv6, parent ),

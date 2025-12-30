@@ -27,6 +27,12 @@
 use open qw(:std :utf8);
 use XML::LibXML;
 use Data::Dumper;
+use File::Basename;
+
+my $TRANSLATION = "src/translation";
+my $scriptdir = dirname $0;
+
+chdir "$scriptdir/../$TRANSLATION" or die "translation directory not found";
 
 my %keys;
 

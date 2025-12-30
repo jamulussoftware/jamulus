@@ -226,37 +226,35 @@ jobs:
 
           - config_name:            MacOS (artifacts)
             target_os:              macos
-            building_on_os:         macos-14
+            building_on_os:         macos-15
             base_command:           QT_VERSION=6.9.1 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
-            # Latest Xcode which runs on macos-14:
-            xcode_version:          15.4.0
+            xcode_version:          16.3.0
             is_main_build_target:   true
 
           # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
           - config_name:            MacOS Legacy (artifacts+CodeQL)
             target_os:              macos
-            building_on_os:         macos-13
+            building_on_os:         macos-15-intel
             base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
             # Enable CodeQL on mac legacy as this version does not get signed
             run_codeql:             true
-            # For Qt5 on Mac, we need to use an unsupported SDK version as macOS 13 doesn't
-            # support Xcode 12.1 which still ships SDK 10.15.
+            # macos-15-intel ships with Xcode 16.x; while Qt5 is older, Xcode 16 still supports building it
             # https://developer.apple.com/support/xcode/
             # https://xcodereleases.com/
-            xcode_version:          14.2.0
+            xcode_version:          16.3.0
             is_main_build_target:   true
 
           - config_name:            iOS (artifacts)
             target_os:              ios
-            building_on_os:         macos-14
+            building_on_os:         macos-15
             base_command:           QT_VERSION=6.7.3 ./.github/autobuild/ios.sh
             # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:
             run_codeql:             false
-            xcode_version:          15.4.0
+            xcode_version:          16.3.0
 
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows

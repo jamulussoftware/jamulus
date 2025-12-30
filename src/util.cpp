@@ -636,9 +636,13 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addSeparator();
     addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
     addSeparator();
+
+    addAction ( tr ( "P&rivacy policy..." ), this, SLOT ( OnHelpPrivacyPolicy() ) );
+
     pAction = addAction ( tr ( "&About Jamulus..." ), this, SLOT ( OnHelpAbout() ) );
     pAction->setMenuRole ( QAction::AboutRole ); // required for Mac
     pAction = addAction ( tr ( "About &Qt..." ), this, SLOT ( OnHelpAboutQt() ) );
+
     pAction->setMenuRole ( QAction::AboutQtRole ); // required for Mac
 }
 

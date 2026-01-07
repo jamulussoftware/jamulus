@@ -29,7 +29,7 @@ set -eu
 QT_DIR=/opt/qt
 # The following version pinnings are semi-automatically checked for
 # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-AQTINSTALL_VERSION=3.1.21
+AQTINSTALL_VERSION=3.3.0
 
 if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
@@ -56,6 +56,10 @@ setup() {
         pip install "aqtinstall==${AQTINSTALL_VERSION}"
         # Install actual ios Qt:
         local qtmultimedia=()
+        # qtmultimedia requests camera and microphone permissions: https://doc.qt.io/qt-6.5/qtmultimedia-apple.html
+        # We do not need camera permissions, but AppStore Connect needs a description even if we never request for it.
+        # See the Info.plist file in the iOS build.
+
         if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+ ]]; then
             # From Qt6 onwards, qtmultimedia is a module and cannot be installed
             # as an archive anymore.

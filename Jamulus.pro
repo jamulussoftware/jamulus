@@ -15,7 +15,7 @@ contains(CONFIG, "noupcasename") {
 # allow detailed version info for intermediate builds (#475)
 contains(VERSION, .*dev.*) {
     exists(".git/config") {
-        GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
+        GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty):$$system(git show -s "--pretty=format:%ct") # commit_id(-dirty):seconds_since_epoch
         VERSION = "$$VERSION"-$$GIT_DESCRIPTION
         message("building version \"$$VERSION\" (intermediate in git repository)")
     } else {
@@ -52,7 +52,8 @@ contains(CONFIG, "headless") {
 
 # Do not set LRELEASE_DIR explicitly when using embed_translations.
 # It doesn't work with multiple targets or architectures.
-TRANSLATIONS = src/translation/translation_de_DE.ts \
+TRANSLATIONS = src/translation/translation_ja_JP.ts \
+    src/translation/translation_de_DE.ts \
     src/translation/translation_fr_FR.ts \
     src/translation/translation_ko_KR.ts \
     src/translation/translation_pt_PT.ts \

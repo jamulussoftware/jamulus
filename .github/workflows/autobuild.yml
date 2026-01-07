@@ -75,7 +75,7 @@ jobs:
         contents:                   write
     steps:
       - name:                       Checkout code
-        uses:                       actions/checkout@v4
+        uses:                       actions/checkout@v6
 
       - name:                       Determine release version, type and prerelease variables
         run:                        ./.github/autobuild/get_build_vars.py
@@ -226,37 +226,35 @@ jobs:
 
           - config_name:            MacOS (artifacts)
             target_os:              macos
-            building_on_os:         macos-14
+            building_on_os:         macos-15
             base_command:           QT_VERSION=6.9.1 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
-            # Latest Xcode which runs on macos-14:
-            xcode_version:          15.4.0
+            xcode_version:          16.3.0
             is_main_build_target:   true
 
           # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
           - config_name:            MacOS Legacy (artifacts+CodeQL)
             target_os:              macos
-            building_on_os:         macos-13
+            building_on_os:         macos-15-intel
             base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
             # Enable CodeQL on mac legacy as this version does not get signed
             run_codeql:             true
-            # For Qt5 on Mac, we need to use an unsupported SDK version as macOS 13 doesn't
-            # support Xcode 12.1 which still ships SDK 10.15.
+            # macos-15-intel ships with Xcode 16.x; while Qt5 is older, Xcode 16 still supports building it
             # https://developer.apple.com/support/xcode/
             # https://xcodereleases.com/
-            xcode_version:          14.2.0
+            xcode_version:          16.3.0
             is_main_build_target:   true
 
           - config_name:            iOS (artifacts)
             target_os:              ios
-            building_on_os:         macos-14
+            building_on_os:         macos-15
             base_command:           QT_VERSION=6.7.3 ./.github/autobuild/ios.sh
             # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:
             run_codeql:             false
-            xcode_version:          15.4.0
+            xcode_version:          16.3.0
 
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows
@@ -310,7 +308,7 @@ jobs:
           git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
       - name:                       Checkout code
-        uses:                       actions/checkout@v4
+        uses:                       actions/checkout@v6
         with:
           # only Android needs the oboe submodule, so don't fetch it for other builds
           submodules:               ${{ matrix.config.target_os == 'android' }}
@@ -318,7 +316,7 @@ jobs:
 
       - name:                       Cache Mac dependencies
         if:                         matrix.config.target_os == 'macos'
-        uses:                       actions/cache@v4
+        uses:                       actions/cache@v5
         with:
           path: |
             ~/qt
@@ -327,7 +325,7 @@ jobs:
 
       - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'
-        uses:                       actions/cache@v4
+        uses:                       actions/cache@v5
         with:
           path: |
             C:\Qt
@@ -339,7 +337,7 @@ jobs:
 
       - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'
-        uses:                       actions/cache@v4
+        uses:                       actions/cache@v5
         with:
           path: |
             /opt/Qt
@@ -354,7 +352,7 @@ jobs:
 
       - name:                       Initialize CodeQL
         if:                         matrix.config.run_codeql
-        uses:                       github/codeql-action/init@v3
+        uses:                       github/codeql-action/init@v4
         with:
           languages: 'cpp'
 
@@ -384,7 +382,7 @@ jobs:
       - name:                       Upload Artifact 1 to Job
         # Every build job has at least one artifact. Therefore, no `if` here.
         # If the artifact is missing, this should fail.
-        uses:                       actions/upload-artifact@v4
+        uses:                       actions/upload-artifact@v6
         with:
           name:                     ${{ steps.get-artifacts.outputs.artifact_1 }}
           path:                     deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
@@ -393,7 +391,7 @@ jobs:
 
       - name:                       Upload Artifact 2 to Job
         if:                         steps.get-artifacts.outputs.artifact_2
-        uses:                       actions/upload-artifact@v4
+        uses:                       actions/upload-artifact@v6
         with:
           name:                     ${{ steps.get-artifacts.outputs.artifact_2 }}
           path:                     deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
@@ -442,7 +440,7 @@ jobs:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.run_codeql
-        uses:                       github/codeql-action/analyze@v3
+        uses:                       github/codeql-action/analyze@v4
 
   create_deb_repo:
     name:                           Create files for .deb repository (if requested)
@@ -473,7 +471,7 @@ jobs:
       # Unfortunately download-artifact action doesn't support wild card downloads. Thus downloading all artifacts
       - name:                       Download all artifacts
         if:                         env.GPG_REPO_KEY_MISSING == 'false'
-        uses:                       actions/download-artifact@v4
+        uses:                       actions/download-artifact@v7
         with:
           path:                     releasedl/
       - name:                       Create Debian repository

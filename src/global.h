@@ -73,7 +73,7 @@ LED bar:      lbr
 
 // version and application name (use version from qt prject file)
 #undef VERSION
-#define VERSION  APP_VERSION
+#define VERSION  GetDisplayVersion ( APP_VERSION )
 #define APP_NAME "Jamulus"
 
 // Windows registry key name of auto run entry for the server
@@ -117,6 +117,7 @@ LED bar:      lbr
 #define CLIENT_GETTING_STARTED_URL "https://jamulus.io/wiki/Getting-Started"
 #define SERVER_GETTING_STARTED_URL "https://jamulus.io/wiki/Running-a-Server"
 #define SOFTWARE_MANUAL_URL        "https://jamulus.io/wiki/Software-Manual"
+#define PRIVACY_POLICY_URL         "https://jamulus.io/wiki/Privacy-Statement"
 
 // app update message
 #define APP_UPGRADE_AVAILABLE_MSG_TEXT \
@@ -374,3 +375,5 @@ bool GetNumericArgument ( int     argc,
                           double  rRangeStart,
                           double  rRangeStop,
                           double& rValue );
+
+inline QString GetDisplayVersion ( QString str ) { return str.contains ( ':' ) ? str.mid ( 0, str.lastIndexOf ( ':' ) ) : str; }

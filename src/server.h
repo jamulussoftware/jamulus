@@ -51,6 +51,8 @@
 #define INVALID_CHANNEL_ID ( MAX_NUM_CHANNELS + 1 )
 
 /* Classes ********************************************************************/
+class CentralDefense;
+
 template<unsigned int slotId>
 class CServerSlots : public CServerSlots<slotId - 1>
 {
@@ -310,6 +312,8 @@ protected:
     CSignalHandler* pSignalHandler;
 
     std::unique_ptr<CThreadPool> pThreadPool;
+
+    CentralDefense* m_centralDefense = nullptr;
 
 signals:
     void Started();

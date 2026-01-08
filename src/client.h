@@ -126,7 +126,6 @@ class CClient : public QObject
 public:
     CClient ( const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strConnOnStartupAddress,
               const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
@@ -137,8 +136,11 @@ public:
 
     void Start();
     void Stop();
+    bool Connect ( QString strServerAddress, QString strServerName );
+    bool Disconnect();
+
     bool IsRunning() { return Sound.IsRunning(); }
-    bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
+    bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); } // For OnTimerCheckAudioDeviceOk only
     bool SetServerAddr ( QString strNAddr );
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
@@ -466,6 +468,7 @@ signals:
 
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
+    void Connecting ( QString strServerName );
     void Disconnected();
     void SoundDeviceChanged ( QString strError );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );

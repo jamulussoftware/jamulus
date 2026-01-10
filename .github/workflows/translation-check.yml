@@ -10,6 +10,7 @@ on:
   push:
     paths:
       - 'src/translation/wininstaller/**'
+      - 'src/translation/*.ts'
       - 'tools/check-wininstaller-translations.sh'
       - '.github/workflows/translation-check.yml'
 
@@ -24,5 +25,7 @@ jobs:
         uses:        actions/checkout@v6
       - name:        "Check Windows installer translations"
         run:         ./tools/check-wininstaller-translations.sh
+      - name:        "Check application translations"
+        run:         pip install PyGithub && ./tools/check-translations.py
       #- name:       "Check for duplicate hotkeys (will not fail)"
       #  run:        sudo apt install libxml-simple-perl && cd src/translation/ && perl ./tools/checkkeys.pl

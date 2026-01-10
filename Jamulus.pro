@@ -62,6 +62,7 @@ TRANSLATIONS = src/translation/translation_ja_JP.ts \
     src/translation/translation_nb_NO.ts \
     src/translation/translation_nl_NL.ts \
     src/translation/translation_pl_PL.ts \
+    src/translation/translation_ru_RU.ts \
     src/translation/translation_sk_SK.ts \
     src/translation/translation_it_IT.ts \
     src/translation/translation_sv_SE.ts \

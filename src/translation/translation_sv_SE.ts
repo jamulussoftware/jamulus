@@ -39,25 +39,9 @@
         <translation>Ljudklangskod av Perry R. Cook och Gary P. Scavone</translation>
     </message>
     <message>
-        <source>Some pixmaps are from the</source>
-        <translation type="vanished">Vissa pixmaps är från</translation>
-    </message>
-    <message>
-        <source>Country flag icons by Mark James</source>
-        <translation type="vanished">Landsflaggsymboler gjorda av Mark James</translation>
-    </message>
-    <message>
-        <source>For details on the contributions check out the </source>
-        <translation type="vanished">För detaljer om bidrag, kolla in </translation>
-    </message>
-    <message>
         <location filename="../util.cpp" line="421"/>
         <source>Flag icons by Mark James</source>
         <translation>Flaggikoner av Mark James</translation>
-    </message>
-    <message>
-        <source>Some sound samples are from</source>
-        <translation type="vanished">Vissa ljudprover är från</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="417"/>
@@ -140,13 +124,14 @@
         <translation>Norskt bokmål</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="568"/>
-        <source>About %1</source>
-        <translation>Cirka %1</translation>
+        <location filename="../util.cpp" line="563"/>
+        <source>Japanese</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About </source>
-        <translation type="vanished">Om </translation>
+        <location filename="../util.cpp" line="571"/>
+        <source>About %1</source>
+        <translation>Cirka %1</translation>
     </message>
 </context>
 <context>
@@ -161,14 +146,6 @@
         <source>TextLabelVersion</source>
         <translatorcomment>How to translate this?</translatorcomment>
         <translation>TextLabelVersion</translation>
-    </message>
-    <message>
-        <source>Copyright (C) 2005-2026 Volker Fischer and others</source>
-        <translation type="vanished">Upphovsrätt (C) 2005-2020 Volker Fischer och andra</translation>
-    </message>
-    <message>
-        <source>Copyright (C) 2005-2026 The Jamulus Development Team</source>
-        <translation type="vanished">Upphovsrätt (C) 2005-2021 The Jamulus Development Team</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
@@ -386,10 +363,6 @@
         <translation>Panoreringstagg</translation>
     </message>
     <message>
-        <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</source>
-        <translation type="vanished">Fadertaggen identifierar den anslutna klienten. Etikettnamnet, en bild av ditt instrument och ditt lands flagga kan ställas in i huvudfönstret.</translation>
-    </message>
-    <message>
         <location filename="../audiomixerboard.cpp" line="184"/>
         <source>Mixer channel instrument picture</source>
         <translation>Mixerkanalens instrumentbild</translation>
@@ -398,10 +371,6 @@
         <location filename="../audiomixerboard.cpp" line="186"/>
         <source>Mixer channel label (fader tag)</source>
         <translation>Mixerkanalens etikett (fader)</translation>
-    </message>
-    <message>
-        <source>Mixer channel country flag</source>
-        <translation type="vanished">Mixerkanalens landsflagga</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="224"/>
@@ -559,14 +528,6 @@
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
         <translation>Vill du öppna länken &apos;%1&apos; i din webbläsare?</translation>
     </message>
-    <message>
-        <source>Do you want to open the link</source>
-        <translation type="vanished">Vill du öppna länken</translation>
-    </message>
-    <message>
-        <source>in an external browser?</source>
-        <translation type="vanished">i en extern webbläsare?</translation>
-    </message>
 </context>
 <context>
     <name>CChatDlgBase</name>
@@ -580,333 +541,253 @@
         <source>&amp;Send</source>
         <translation>&amp;Skicka</translation>
     </message>
-    <message>
-        <source>Cl&amp;ear</source>
-        <translation type="obsolete">R&amp;ensa</translation>
-    </message>
-    <message>
-        <source>&amp;Close</source>
-        <translation type="obsolete">S&amp;täng</translation>
-    </message>
 </context>
 <context>
     <name>CClientDlg</name>
     <message>
-        <location filename="../clientdlg.cpp" line="54"/>
+        <location filename="../clientdlg.cpp" line="55"/>
         <source>Input Level Meter</source>
         <translation>Ingångsnivå</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="55"/>
+        <location filename="../clientdlg.cpp" line="56"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
         <translation>Detta visar nivån på de två stereokanalerna för din ljudingång.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="59"/>
+        <location filename="../clientdlg.cpp" line="60"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
         <translation>Se till att inte klippa insignalen för att undvika en snedvridning av ljudsignalen.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="62"/>
+        <location filename="../clientdlg.cpp" line="63"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
         <translation>Om applikationen är ansluten till en server och du spelar ditt instrument/sjunger in i mikrofonen, bör VU-mätaren röra sig. Om detta inte sker har du antagligen valt fel inmatningskanal (t.ex. &apos;line in&apos; i stället för mikrofoningången) eller ställt in ingångsförstärkningen för (Windows) för lågt.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="70"/>
+        <location filename="../clientdlg.cpp" line="71"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
         <translation>För korrekt användning av applikationen, bör du inte höra din sång/instrument via högtalaren eller hörlurarna när programvaran inte är ansluten. Det kan uppnås genom att stänga av din ingående ljudkanal i uppspelningsblandaren (inte inspelningsblandaren!).</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="77"/>
+        <location filename="../clientdlg.cpp" line="78"/>
         <source>Input level meter</source>
         <translation>Ingångsnivåmätare</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="78"/>
+        <location filename="../clientdlg.cpp" line="79"/>
         <source>Simulates an analog LED level meter.</source>
         <translation>Simulerar en analog LED-nivåmätare.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="95"/>
+        <location filename="../clientdlg.cpp" line="96"/>
         <source>Connect/Disconnect Button</source>
         <translation>Knapp för att anslut eller koppla ifrån</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="96"/>
+        <location filename="../clientdlg.cpp" line="97"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
         <translation>Öppnar en dialogruta där du kan välja en server att ansluta till. Om du är ansluten avslutar du sessionen genom att trycka på den här knappen.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="99"/>
+        <location filename="../clientdlg.cpp" line="100"/>
         <source>Connect and disconnect toggle button</source>
         <translation>Knapp för att anslut och koppla bort</translation>
     </message>
     <message>
-        <source>Clicking on this button changes the caption of the button from Connect to Disconnect, i.e., it implements a toggle functionality for connecting and disconnecting the application.</source>
-        <translation type="vanished">Om du klickar på den här knappen ändras bildtexten på knappen från Ansluten till Nedkopplad, dvs. den implementerar en växelfunktion för att ansluta och koppla bort applikationen.</translation>
-    </message>
-    <message>
-        <source>Local Audio Input Fader</source>
-        <translation type="vanished">Lokal ljudingångsfader</translation>
-    </message>
-    <message>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="vanished">Kontrollerar de relativa nivåerna för vänster och höger lokala ljudkanal. För en monosignal fungerar den som en panorering mellan de två kanalerna. Om exempelvis en mikrofon är ansluten till den högra ingångskanalen och ett instrument är anslutet till den vänstra ingångskanalen som är mycket högre än mikrofonen, flytta ljudfadern i en riktning som etiketten ovanför fadern visar </translation>
-    </message>
-    <message>
-        <source>L</source>
-        <translation type="vanished">V</translation>
-    </message>
-    <message>
-        <source>, where</source>
-        <translation type="vanished">, där</translation>
-    </message>
-    <message>
-        <source>is the current attenuation indicator.</source>
-        <translation type="vanished">är den aktuella dämpningsindikatorn.</translation>
-    </message>
-    <message>
-        <source>Local audio input fader (left/right)</source>
-        <translation type="vanished">Lokal ljudingångsfader (vänster/höger)</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="102"/>
+        <location filename="../clientdlg.cpp" line="103"/>
         <source>Reverb effect</source>
         <translation>Reverb effekt</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="103"/>
+        <location filename="../clientdlg.cpp" line="104"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
         <translation>Reverb kan tillämpas på en lokal monoljudkanal eller på båda kanalerna i stereoläge. Valet av monokanal och reverbnivån kan ändras. Om till exempel en mikrofonsignal matas in till höger ljudkanal på ljudkortet och en reverb-effekt måste appliceras, ställ in kanalväljaren till höger och flytta fadern uppåt tills önskad reverbnivå har uppnåtts.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="114"/>
+        <location filename="../clientdlg.cpp" line="115"/>
         <source>Reverb effect level setting</source>
         <translation>Reverbeffektnivåinställning</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="117"/>
+        <location filename="../clientdlg.cpp" line="118"/>
         <source>Reverb Channel Selection</source>
         <translation>Reverbkanalval</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="118"/>
+        <location filename="../clientdlg.cpp" line="119"/>
         <source>With these radio buttons the audio input channel on which the reverb effect is applied can be chosen. Either the left or right input channel can be selected.</source>
         <translation>Med dessa tryckknappar kan du välja ljudingångskanalen på vilken reverbeffekten används. Antingen kan vänster eller höger ingångskanal väljas.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="123"/>
+        <location filename="../clientdlg.cpp" line="124"/>
         <source>Left channel selection for reverb</source>
         <translation>Vänster kanal för reverb</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="125"/>
+        <location filename="../clientdlg.cpp" line="126"/>
         <source>Right channel selection for reverb</source>
         <translation>Höger kanal för reverb</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="128"/>
+        <location filename="../clientdlg.cpp" line="129"/>
         <source>Delay Status LED</source>
         <translation>Fördröjningsstatus-LED</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="128"/>
+        <location filename="../clientdlg.cpp" line="129"/>
         <source>Shows the current audio delay status:</source>
         <translation>Visar aktuell ljudfördröjningsstatus:</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="132"/>
+        <location filename="../clientdlg.cpp" line="133"/>
         <source>Green</source>
         <translation>Grön</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="133"/>
+        <location filename="../clientdlg.cpp" line="134"/>
         <source>The delay is perfect for a jam session.</source>
         <translation>Fördröjningen är perfekt för en jam-session.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="138"/>
+        <location filename="../clientdlg.cpp" line="139"/>
         <source>Yellow</source>
         <translation>Gul</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="139"/>
+        <location filename="../clientdlg.cpp" line="140"/>
         <source>A session is still possible but it may be harder to play.</source>
         <translation>En session är fortfarande möjlig men det kan vara svårare att spela.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="144"/>
+        <location filename="../clientdlg.cpp" line="145"/>
         <source>Red</source>
         <translation>Röd</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="145"/>
+        <location filename="../clientdlg.cpp" line="146"/>
         <source>The delay is too large for jamming.</source>
         <translation>Fördröjningen är troligtvis för stor för en jam-session.</translation>
     </message>
     <message>
-        <source>If this LED indicator turns red, you will not have much fun using the application.</source>
-        <translation type="vanished">Om den här LED-indikatorn blir röd kommer du inte ha så kul med applikationen.</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="157"/>
+        <location filename="../clientdlg.cpp" line="158"/>
         <source>Delay status LED indicator</source>
         <translation>LED-indikator för fördröjningsstatus</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="737"/>
+        <location filename="../clientdlg.cpp" line="738"/>
         <source>%1 Directory</source>
         <translation>%1 Katalog</translation>
     </message>
     <message>
-        <source>Buffers Status LED</source>
-        <translation type="vanished">Buffertstatus-LED</translation>
-    </message>
-    <message>
-        <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation type="vanished">Statuslampan för buffertar visar aktuell ljud-/strömningsstatus. Om lampan är röd avbryts ljudströmmen. Detta orsakas av ett av följande problem:</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="166"/>
+        <location filename="../clientdlg.cpp" line="167"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
         <translation>Nätverksjitterbufferten är inte tillräckligt stor för det nuvarande nätverks-/ljudgränssnittsjitteret.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="170"/>
+        <location filename="../clientdlg.cpp" line="171"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
         <translation>Ljudkortets buffertfördröjning (buffertstorlek) är för liten (se Inställningsfönstret).</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="174"/>
+        <location filename="../clientdlg.cpp" line="175"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
         <translation>Uppladdnings- eller nedladdningsströmmen är för hög för din internethastighet.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="178"/>
+        <location filename="../clientdlg.cpp" line="179"/>
         <source>The CPU of the client or server is at 100%.</source>
         <translation>Klientens eller serverns CPU är 100%.</translation>
     </message>
     <message>
-        <source>Buffers status LED indicator</source>
-        <translation type="vanished">LED-indikator för buffertstatus</translation>
-    </message>
-    <message>
-        <source>Current Connection Status Parameter</source>
-        <translation type="obsolete">Parameter för aktuell anslutningsstatus</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="192"/>
+        <location filename="../clientdlg.cpp" line="193"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
         <translation>Ping-tiden är den tid som krävs för ljudströmmen att resa från klienten till servern och tillbaka igen. Denna fördröjning införs av nätverket och bör vara cirka 20-30 ms. Om denna fördröjning är högre än cirka 50 ms är ditt avstånd till servern för stort eller din internetanslutning är inte tillräcklig.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="199"/>
+        <location filename="../clientdlg.cpp" line="200"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
         <translation>Övergripande fördröjning beräknas utifrån den aktuella Ping-tiden och den fördröjning som införts av de aktuella buffertinställningarna.</translation>
     </message>
     <message>
-        <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="obsolete">Om den här LED-indikatorn blir röd kommer du inte ha så kul med att använda </translation>
-    </message>
-    <message>
-        <source> software.</source>
-        <translation type="obsolete"> applikationen.</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="231"/>
-        <location filename="../clientdlg.cpp" line="1267"/>
+        <location filename="../clientdlg.cpp" line="232"/>
+        <location filename="../clientdlg.cpp" line="1268"/>
         <source>C&amp;onnect</source>
         <translation>A&amp;nslut</translation>
     </message>
     <message>
-        <source>software upgrade available</source>
-        <translation type="vanished">mjukvaruuppdatering tillgänglig</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="284"/>
+        <location filename="../clientdlg.cpp" line="285"/>
         <source>&amp;File</source>
         <translation>&amp;Arkiv</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="311"/>
+        <location filename="../clientdlg.cpp" line="312"/>
         <source>&amp;View</source>
         <translation>&amp;Visa</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="286"/>
+        <location filename="../clientdlg.cpp" line="287"/>
         <source>&amp;Connection Setup...</source>
         <translation>&amp;Anslutningsinställningar...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="397"/>
+        <location filename="../clientdlg.cpp" line="398"/>
         <source>My &amp;Profile...</source>
         <translation>Min &amp;profil...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="384"/>
+        <location filename="../clientdlg.cpp" line="385"/>
         <source>C&amp;hat...</source>
         <translation>&amp;Chatt...</translation>
     </message>
     <message>
-        <source>&amp;Settings...</source>
-        <translation type="vanished">&amp;Inställningar...</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="389"/>
+        <location filename="../clientdlg.cpp" line="390"/>
         <source>&amp;Analyzer Console...</source>
         <translation>Analys&amp;konsol...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="320"/>
+        <location filename="../clientdlg.cpp" line="321"/>
         <source>N&amp;o User Sorting</source>
         <translation>Ingen kanals&amp;ortering</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="334"/>
+        <location filename="../clientdlg.cpp" line="335"/>
         <source>Sort Users by &amp;City</source>
         <translation>Sortera användarna efter S&amp;tad</translation>
     </message>
     <message>
-        <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation type="vanished">Dela upp &amp;mixerpanelen i två rader</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="301"/>
+        <location filename="../clientdlg.cpp" line="302"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation>&amp;Rensa alla lagrade solo och tystade inställningar</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="308"/>
+        <location filename="../clientdlg.cpp" line="309"/>
         <source>Auto-Adjust all &amp;Faders</source>
         <translatorcomment>Möjligtvis annat ordval skulle vara bättre.</translatorcomment>
         <translation>Justera alla &amp;mixers automatiskt</translation>
     </message>
     <message>
-        <source>&amp;Settings</source>
-        <translation type="obsolete">&amp;Inställningar</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="978"/>
+        <location filename="../clientdlg.cpp" line="979"/>
         <source>Connect</source>
         <translation>Anslut</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="990"/>
+        <location filename="../clientdlg.cpp" line="991"/>
         <source>Settings</source>
         <translation>Inställningar</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1000"/>
+        <location filename="../clientdlg.cpp" line="1001"/>
         <source>Chat</source>
         <translation>Chatt</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1076"/>
+        <location filename="../clientdlg.cpp" line="1077"/>
         <source>Enable feedback detection</source>
         <translation>Aktivera återkopplingsdetektering</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1079"/>
+        <location filename="../clientdlg.cpp" line="1080"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
@@ -915,156 +796,128 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen lös problemet med ljudåterkopplingen först och slå sedan på dittt ljud igen.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1164"/>
+        <location filename="../clientdlg.cpp" line="1165"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
         <translation>Ditt ljudkort fungerar inte korrekt. Öppna inställningar och kontrollera enhetsvalet och drivrutinsinställningarna.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1182"/>
+        <location filename="../clientdlg.cpp" line="1183"/>
         <source>Ok</source>
         <translation>Okej</translation>
     </message>
     <message>
-        <source>Clear &amp;All Stored Solo Settings</source>
-        <translation type="vanished">&amp;Rensa alla lagrade soloinställningar</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="303"/>
+        <location filename="../clientdlg.cpp" line="304"/>
         <source>Set All Faders to New Client &amp;Level</source>
         <translation>&amp;Ställ in alla mixers till ny klientnivå</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="296"/>
+        <location filename="../clientdlg.cpp" line="297"/>
         <source>E&amp;xit</source>
         <translation>A&amp;vsluta</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="152"/>
+        <location filename="../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
         <translation>Om den här LED-indikatorn blir röd kommer du inte att ha mycket kul med %1.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="160"/>
+        <location filename="../clientdlg.cpp" line="161"/>
         <source>Local Jitter Buffer Status LED</source>
         <translation>LED för lokal jitterbufferstatus</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="161"/>
+        <location filename="../clientdlg.cpp" line="162"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
         <translation>Statuslampan (LED) för dns lokala jitterbuffert visar aktuell ljud-/strömningsstatus. Om lampan är röd avbryts ljudströmmen. Detta orsakas av ett av följande problem:</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="184"/>
+        <location filename="../clientdlg.cpp" line="185"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
         <translation>Om denna LED-indikator blir röd avbryts ljudströmmen.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="188"/>
+        <location filename="../clientdlg.cpp" line="189"/>
         <source>Local Jitter Buffer status LED indicator</source>
         <translation>LED-indikator för lokal jitterbufferstatus</translation>
     </message>
     <message>
-        <source>If this LED indicator turns red, you will not have much fun using the %1 software.</source>
-        <translation type="obsolete">Om den här LED-indikatorn blir röd kommer du inte ha så kul med att använda %1 applicationen.</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="290"/>
+        <location filename="../clientdlg.cpp" line="291"/>
         <source>&amp;Load Mixer Channels Setup...</source>
         <translation>&amp;Ladda in mixerkanalinställningarna...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="292"/>
+        <location filename="../clientdlg.cpp" line="293"/>
         <source>&amp;Save Mixer Channels Setup...</source>
         <translation>&amp;Spara mixerkanalinställningarna...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="315"/>
+        <location filename="../clientdlg.cpp" line="316"/>
         <source>O&amp;wn Fader First</source>
         <translation>&amp;Egen fader först</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="337"/>
+        <location filename="../clientdlg.cpp" line="338"/>
         <source>Sort Users by Chann&amp;el</source>
         <translation>Sortera användare efter kanal</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="395"/>
+        <location filename="../clientdlg.cpp" line="396"/>
         <source>Sett&amp;ings</source>
         <translation>&amp;Inställningar</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="399"/>
+        <location filename="../clientdlg.cpp" line="400"/>
         <source>Audio/Network &amp;Settings...</source>
         <translation>Ljud och nätverks&amp;inställningar...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="401"/>
+        <location filename="../clientdlg.cpp" line="402"/>
         <source>A&amp;dvanced Settings...</source>
         <translation>A&amp;vancerade inställningar...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="299"/>
+        <location filename="../clientdlg.cpp" line="300"/>
         <source>&amp;Edit</source>
         <translation>&amp;Redigera</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="191"/>
+        <location filename="../clientdlg.cpp" line="192"/>
         <source>Current Connection Status</source>
         <translation>Aktuell anslutningsstatus</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="323"/>
+        <location filename="../clientdlg.cpp" line="324"/>
         <source>Sort Users by &amp;Name</source>
         <translation>Sortera användarna efter &amp;Namn</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="325"/>
+        <location filename="../clientdlg.cpp" line="326"/>
         <source>Sort Users by &amp;Instrument</source>
         <translation>Sortera användarna efter &amp;Instrument</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="331"/>
+        <location filename="../clientdlg.cpp" line="332"/>
         <source>Sort Users by &amp;Group</source>
         <translation>Sortera användarna efter &amp;Grupp</translation>
     </message>
     <message>
-        <source>None</source>
-        <translation type="obsolete">Ingen</translation>
-    </message>
-    <message>
-        <source>Center</source>
-        <translation type="vanished">Mitten</translation>
-    </message>
-    <message>
-        <source>R</source>
-        <translation type="vanished">H</translation>
-    </message>
-    <message>
-        <source>Directory Server</source>
-        <translation type="vanished">Katalogserver</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="782"/>
-        <location filename="../clientdlg.cpp" line="794"/>
+        <location filename="../clientdlg.cpp" line="783"/>
+        <location filename="../clientdlg.cpp" line="795"/>
         <source>Select Channel Setup File</source>
         <translation>Välj kanalinställningsfil</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="942"/>
+        <location filename="../clientdlg.cpp" line="943"/>
         <source>user</source>
         <translation>användare</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="946"/>
+        <location filename="../clientdlg.cpp" line="947"/>
         <source>users</source>
         <translation>användare</translation>
     </message>
     <message>
-        <source>The soundcard device does not work correctly. Please check the device selection and the driver settings.</source>
-        <translation type="vanished">Ljudkortet fungerar inte som det ska. Kontrollera enhetsvalet och drivrutinsinställningarna.</translation>
-    </message>
-    <message>
-        <location filename="../clientdlg.cpp" line="1235"/>
+        <location filename="../clientdlg.cpp" line="1236"/>
         <source>&amp;Disconnect</source>
         <translation>Koppla &amp;ner</translation>
     </message>
@@ -1075,10 +928,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
         <translation>Fördröjning</translation>
-    </message>
-    <message>
-        <source>Buffers</source>
-        <translation type="vanished">Buffert</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="247"/>
@@ -1132,14 +981,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>&amp;Koppla upp</translation>
     </message>
     <message>
-        <source>Pan</source>
-        <translation type="vanished">Panorera</translation>
-    </message>
-    <message>
-        <source>Center</source>
-        <translation type="vanished">Mitten</translation>
-    </message>
-    <message>
         <location filename="../clientdlgbase.ui" line="118"/>
         <source>Reverb</source>
         <translation>Reverb</translation>
@@ -1169,10 +1010,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <source>Update check</source>
         <translation>Uppdateringskontroll</translation>
     </message>
-    <message>
-        <source>MUTED (You are not sending any audio to the server)</source>
-        <translation type="vanished">TYSTAD (Du skickar inget ljud till servern)</translation>
-    </message>
 </context>
 <context>
     <name>CClientSettingsDlg</name>
@@ -1189,22 +1026,10 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Lokal ljudingångsfader</translation>
     </message>
     <message>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="vanished">Kontrollerar de relativa nivåerna för vänster och höger lokala ljudkanal. För en monosignal fungerar den som en panorering mellan de två kanalerna. Om exempelvis en mikrofon är ansluten till den högra ingångskanalen och ett instrument är anslutet till den vänstra ingångskanalen som är mycket högre än mikrofonen, flytta ljudfadern i en riktning som etiketten ovanför fadern visar </translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="66"/>
         <location filename="../clientsettingsdlg.cpp" line="1204"/>
         <source>L</source>
         <translation>V</translation>
-    </message>
-    <message>
-        <source>, where</source>
-        <translation type="vanished">, där</translation>
-    </message>
-    <message>
-        <source>is the current attenuation indicator.</source>
-        <translation type="vanished">är den aktuella dämpningsindikatorn.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="72"/>
@@ -1272,14 +1097,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Inställningen för buffertfördröjning är en grundläggande inställning för %1. Denna inställning påverkar många anslutningsegenskaper.</translation>
     </message>
     <message>
-        <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="obsolete">Vissa ljudkortdrivrutiner tillåter inte att buffertfördröjningen ändras inifrån %1. I detta fall är inställningen för buffertfördröjning inaktiverad och måste ändras med hjälp av ljudkortdrivrutinen. På Windows trycker du på knappen ASIO enhetsinställningar för att öppna panelen för drivrutinsinställningar. På Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
-    </message>
-    <message>
-        <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="obsolete">Om buffertfördröjningsinställningarna är inaktiverade är det förbjudet för ljuddrivrutinen att ändra denna inställning inifrån %1. På Windows trycker du på knappen ASIO enhetsinställningar för att öppna panelen för drivrutinsinställningar. På Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="235"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
         <translation>Detta öppnar drivrutinsinställningarna för ditt ljudkort. Vissa drivrutiner låter dig ändra buffertinställningar, andra som ASIO4ALL låter dig välja in- eller utgångar från din enhet(er). Mer information finns på jamulus.io.</translation>
@@ -1288,22 +1105,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../clientsettingsdlg.cpp" line="240"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
         <translation>Öppnar drivrutinsinställningarna. Obs! %1 stöder för närvarande bara enheter med en samplingsfrekvens på %2 Hz. Du kommer inte att kunna välja en drivrutin/enhet som inte gör det. För mer hjälp se jamulus.io.</translation>
-    </message>
-    <message>
-        <source>Jitter buffer status LED indicator</source>
-        <translation type="vanished">LED-indikator för jitterbufferstatus</translation>
-    </message>
-    <message>
-        <source>Sound Card Device</source>
-        <translation type="vanished">Ljudkortsenhet</translation>
-    </message>
-    <message>
-        <source>The ASIO driver (sound card) can be selected using </source>
-        <translation type="vanished">ASIO-drivrutinen (ljudkort) kan väljas med </translation>
-    </message>
-    <message>
-        <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="vanished"> under Windows. Under MacOS/Linux är inget ljudkortsval möjligt. Om den valda ASIO-drivrutinen inte är giltig visas ett felmeddelande och den tidigare giltiga drivrutinen väljs.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="129"/>
@@ -1336,14 +1137,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Om den valda ljudkortsenheten erbjuder mer än en ingångs- eller utgångskanal är inställningarna för inmatningskanalens mappning och utmatningskanal synliga.</translation>
     </message>
     <message>
-        <source>For each </source>
-        <translation type="vanished">För varje </translation>
-    </message>
-    <message>
-        <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
-        <translation type="vanished"> ingångs-/utgångskanal (vänster- och högerkanal) kan en annan faktisk ljudkortkanal väljas.</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="162"/>
         <source>Left input channel selection combo box</source>
         <translation>Vänster ingångskanalvalskombinationsruta</translation>
@@ -1369,14 +1162,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Aktivera liten nätverksbuffert</translation>
     </message>
     <message>
-        <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
-        <translation type="vanished">Om det är aktiverat aktiveras stödet för mycket små nätverksljudpaket. Mycket små nätverkspaket används faktiskt bara om ljudkortsbuffertfördröjningen är mindre än </translation>
-    </message>
-    <message>
-        <source> samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
-        <translation type="vanished"> bitars buffert. Ju mindre nätbuffertarna är, desto lägre är ljudet. Men samtidigt ökar nätverksbelastningen och sannolikheten för ljudavbrott ökar också.</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="180"/>
         <source>Small network buffers check box</source>
         <translation>Aktivera kryssrutan för små nätverksbuffertar</translation>
@@ -1387,55 +1172,14 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Ljudkortets buffertfördröjning</translation>
     </message>
     <message>
-        <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
-        <translation type="vanished">Inställningen för buffertfördröjning är en grundläggande inställning för denna applikation. Denna inställning påverkar många anslutningsegenskaper.</translation>
-    </message>
-    <message>
-        <source>Three buffer sizes are supported</source>
-        <translation type="vanished">Tre buffertstorlekar stöds</translation>
-    </message>
-    <message>
-        <source>64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="vanished">64 bitars buffert: Den rekommenderade inställningen. Den ger den lägsta latensen men fungerar inte med alla ljudkort.</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="194"/>
         <source>128 samples: Should work for most available sound cards.</source>
         <translation>128 bitars buffert: Bör fungera för alla ljudkort.</translation>
     </message>
     <message>
-        <source>256 samples: Should only be used on very slow computers or with a slow internet connection.</source>
-        <translation type="vanished">265 bitars buffert: Ska endast användas med långsamma datorer eller med långsam internetkoppling.</translation>
-    </message>
-    <message>
-        <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="vanished">Vissa ljudkortdrivrutiner tillåter inte att buffertfördröjningen ändras inifrån programmet. I detta fall är inställningen för buffertfördröjning inaktiverad och måste ändras med hjälp av ljudkortdrivrutinen. På Windows trycker du på knappen ASIO enhetsinställningar för att öppna panelen för drivrutinsinställningar. På Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
-    </message>
-    <message>
-        <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translatorcomment>ASIO enhetsinställningar</translatorcomment>
-        <translation type="vanished">Om buffertfördröjningsinställningarna är inaktiverade är det förbjudet för ljuddrivrutinen att ändra denna inställning inifrån programvaran. På Windows trycker du på knappen ASIO enhetsinställningar för att öppna panelen för drivrutinsinställningar. På Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="234"/>
         <source>Sound card driver settings</source>
         <translation>Ljudkortsinställningar</translation>
-    </message>
-    <message>
-        <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="vanished">Detta öppnar drivrutinsinställningarna för ditt ljudkort. Vissa drivrutiner låter dig ändra buffertinställningar, andra som ASIO4ALL låter dig välja in- eller utgångar från din enhet (er). Mer information finns på jamulus.io.</translation>
-    </message>
-    <message>
-        <source>Opens the driver settings. Note: </source>
-        <translation type="vanished">Öppnardrivrutinsinställningarna. Notera: </translation>
-    </message>
-    <message>
-        <source> currently only supports devices supporting a sample rate of </source>
-        <translation type="vanished"> stöder för närvarande endast enheter som stöder en samplingsfrekvens på </translation>
-    </message>
-    <message>
-        <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="vanished">Hz. Du kommer inte att kunna välja en drivrutin/enhet som inte gör det. För mer hjälp se jamulus.io.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="59"/>
@@ -1549,10 +1293,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Om du behöver lägga till ytterligare kataloger i kopplingsdialogens rullgardinsmeny för kataloger kan du ange adresserna här. &lt;br&gt;</translation>
     </message>
     <message>
-        <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
-        <translation type="vanished">Om du behöver lägga till ytterligare kataloger i rullgardinsmenyn Anslut dialogrutan Katalog kan du ange adresserna här.&lt;br&gt;För att ta bort ett värde, välj det, radera texten i inmatningsrutan och flytta sedan fokus från kontrollen.</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="367"/>
         <source>Custom Directories combo box</source>
         <translation>Kombinationsruta för anpassad kataloger</translation>
@@ -1658,25 +1398,9 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>H</translation>
     </message>
     <message>
-        <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="vanished">Vissa ljudkortdrivrutiner tillåter inte buffertfördröjningen att ändras från applikationen. I detta fall avbryts inställningen för buffertfördröjning och måste ändras med ljudkortsdrivrutinen. I Windows trycker du på ASIO-inställningsknappen för att öppna drivrutinsinställningspanelen. I Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
-    </message>
-    <message>
-        <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The application will still work with this setting but with restricted performance.</source>
-        <translation type="vanished">Om ingen buffertstorlek är vald och alla inställningar är inaktiverade, används en icke-stödd buffertstorlek av drivrutinen. Applikationen fungerar fortfarande med den här inställningen men med begränsad prestanda.</translation>
-    </message>
-    <message>
-        <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation type="vanished">Den faktiska buffertfördröjningen har påverkan på anslutningsstatusen, den aktuella uppladdningshastigheten och den totala förseningen. Ju lägre buffertstorlek, desto högre är sannolikheten för rött ljus i statusindikatorn (drop outs) och desto högre uppladdningshastighet och desto lägre blir den totala fördröjningen.</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="220"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
         <translation>Buffertinställningen är därför en avvägning mellan ljudkvalitet och total fördröjning.</translation>
-    </message>
-    <message>
-        <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="vanished">Om buffertfördröjningsinställningarna är inaktiverade är det ljuddrivrutinen som begränsar och det är inte möjligt att ändra denna inställning från applikationen. I Windows trycker du på ASIO-inställningsknappen för att öppna drivrutinsinställningspanelen. I Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="250"/>
@@ -1694,10 +1418,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>256 bitars buffertknapp</translation>
     </message>
     <message>
-        <source>ASIO setup push button</source>
-        <translation type="vanished">ASIO-inställningsknapp</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="266"/>
         <source>Skin</source>
         <translation>Skal</translation>
@@ -1711,22 +1431,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../clientsettingsdlg.cpp" line="268"/>
         <source>Skin combo box</source>
         <translation>Kombineringsknapp för skal</translation>
-    </message>
-    <message>
-        <source>Directory server address combo box</source>
-        <translation type="vanished">Kombinationsruta för katalogserveradress</translation>
-    </message>
-    <message>
-        <source>Display Channel Levels</source>
-        <translation type="vanished">Visa kanalnivåer</translation>
-    </message>
-    <message>
-        <source>If enabled, each client channel will display a pre-fader level bar.</source>
-        <translation type="vanished">Om detta är aktiverat kommer varje klientkanal att visa ett nivåfält före varje fader.</translation>
-    </message>
-    <message>
-        <source>Display channel levels check box</source>
-        <translation type="vanished">Visa kryssrutan för visa kanalnivåer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="286"/>
@@ -1743,10 +1447,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../clientsettingsdlg.cpp" line="429"/>
         <source>Mono</source>
         <translation>Mono</translation>
-    </message>
-    <message>
-        <source>and </source>
-        <translation type="vanished">och </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="292"/>
@@ -1821,46 +1521,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Redigeringsruta för en ny klient</translation>
     </message>
     <message>
-        <source>Custom Directory Server Address</source>
-        <translation type="vanished">Anpassad katalogserveradress</translation>
-    </message>
-    <message>
-        <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation type="vanished">Lämna detta tomt om du inte behöver ange adressen till en annan katalogserver än standard.</translation>
-    </message>
-    <message>
-        <source>Directory server address line edit</source>
-        <translation type="vanished">Ändra centralserveradress</translation>
-    </message>
-    <message>
-        <source>Current Connection Status Parameter</source>
-        <translation type="vanished">Parameter för aktuell anslutningsstatus</translation>
-    </message>
-    <message>
-        <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="vanished">Ping-tiden är den tid som krävs för ljudströmmen att resa från klienten till servern och tillbaka igen. Denna fördröjning införs av nätverket och bör vara cirka 20-30 ms. Om denna fördröjning är högre än cirka 50 ms är ditt avstånd till servern för stort eller din internetanslutning är inte tillräcklig.</translation>
-    </message>
-    <message>
-        <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="vanished">Övergripande fördröjning beräknas utifrån den aktuella Ping-tiden och den fördröjning som införts av de aktuella buffertinställningarna.</translation>
-    </message>
-    <message>
-        <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation type="vanished">Uppströmsfrekvensen för ljudet beror på den aktuella ljudpaketstorleken och komprimeringsinställningen. Se till att uppströmshastigheten inte är högre än din tillgängliga internetuppladdningshastighet (kolla detta med en tjänst som exempelvis speedtest.net).</translation>
-    </message>
-    <message>
-        <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="vanished">Om den här LED-indikatorn blir röd kommer du inte ha så kul med att använda </translation>
-    </message>
-    <message>
-        <source> software.</source>
-        <translation type="vanished"> applikationen.</translation>
-    </message>
-    <message>
-        <source>ASIO Setup</source>
-        <translation type="vanished">Inställningar för ASIO</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlg.cpp" line="430"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-in/Stereo-ut</translation>
@@ -1920,26 +1580,14 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../clientsettingsdlg.cpp" line="469"/>
         <location filename="../clientsettingsdlg.cpp" line="608"/>
         <location filename="../clientsettingsdlg.cpp" line="616"/>
-        <location filename="../util.cpp" line="1099"/>
+        <location filename="../util.cpp" line="1106"/>
         <source>None</source>
         <translation>Ingen</translation>
-    </message>
-    <message>
-        <source>preferred</source>
-        <translation type="vanished">föredraget</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="505"/>
         <source>Musician Profile</source>
         <translation>Musikprofil</translation>
-    </message>
-    <message>
-        <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="vanished">Skriv ditt namn eller ett alias här så att de andra musikerna du vill spela med vet vem du är. Du kan också lägga till en bild av instrumentet du spelar och en flagga för det land du befinner dig i. Din stad och din färdighetsnivå som spelar ditt instrument kan också läggas till.</translation>
-    </message>
-    <message>
-        <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="vanished">Det du ställer in här visas på din fader på mixerkortet när du är ansluten till en Jamulus-server. Den här taggen kommer också att visas vid varje klient som är ansluten till samma server som du.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="518"/>
@@ -1950,10 +1598,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../clientsettingsdlg.cpp" line="520"/>
         <source>Instrument picture button</source>
         <translation>Knapp för instrumentbild</translation>
-    </message>
-    <message>
-        <source>Country flag button</source>
-        <translation type="vanished">Knapp för landsflagga</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="524"/>
@@ -1997,311 +1641,287 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Buffertfördröjning: </translation>
     </message>
     <message>
-        <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="vanished">Den valda ljudenheten kunde inte användas på grund av följande fel: </translation>
-    </message>
-    <message>
-        <source> The previous driver will be selected.</source>
-        <translation type="vanished"> Den föregående drivrutinen kommer att väljas.</translation>
-    </message>
-    <message>
-        <source>Ok</source>
-        <translation type="vanished">Okej</translation>
-    </message>
-    <message>
-        <location filename="../util.h" line="610"/>
+        <location filename="../util.h" line="619"/>
         <source>Custom</source>
         <translation>Eget</translation>
     </message>
     <message>
-        <source>All Genres</source>
-        <translation type="vanished">Alla genrer</translation>
-    </message>
-    <message>
-        <location filename="../util.h" line="592"/>
+        <location filename="../util.h" line="601"/>
         <source>Any Genre 2</source>
         <translation>Alla genrer 2</translation>
     </message>
     <message>
-        <location filename="../util.h" line="595"/>
+        <location filename="../util.h" line="604"/>
         <source>Any Genre 3</source>
         <translation>Alla genrer 3</translation>
     </message>
     <message>
-        <location filename="../util.h" line="598"/>
+        <location filename="../util.h" line="607"/>
         <source>Genre Rock</source>
         <translation>Genre Rock</translation>
     </message>
     <message>
-        <location filename="../util.h" line="601"/>
+        <location filename="../util.h" line="610"/>
         <source>Genre Jazz</source>
         <translation>Genre Jazz</translation>
     </message>
     <message>
-        <location filename="../util.h" line="604"/>
+        <location filename="../util.h" line="613"/>
         <source>Genre Classical/Folk</source>
         <translation>Genre Klassisk/Folkmusik</translation>
     </message>
     <message>
-        <location filename="../util.h" line="607"/>
+        <location filename="../util.h" line="616"/>
         <source>Genre Choral/Barbershop</source>
         <translation>Genre Kör/Barbershop</translation>
     </message>
     <message>
-        <location filename="../util.h" line="613"/>
+        <location filename="../util.h" line="622"/>
         <source>Any Genre 1</source>
         <translation>Alla genrer 1</translation>
     </message>
     <message>
-        <source>Genre Classical/Folk/Choral</source>
-        <translation type="vanished">Genre Klassiskt/Folkmusik/Kör</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="vanished">Standard</translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1102"/>
+        <location filename="../util.cpp" line="1109"/>
         <source>Drum Set</source>
         <translation>Trumset</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1105"/>
+        <location filename="../util.cpp" line="1112"/>
         <source>Djembe</source>
         <translation>Djembe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1108"/>
+        <location filename="../util.cpp" line="1115"/>
         <source>Electric Guitar</source>
         <translation>Elgitarr</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1111"/>
+        <location filename="../util.cpp" line="1118"/>
         <source>Acoustic Guitar</source>
         <translation>Akustisk gitarr</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1114"/>
+        <location filename="../util.cpp" line="1121"/>
         <source>Bass Guitar</source>
         <translation>Basgitarr</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1117"/>
+        <location filename="../util.cpp" line="1124"/>
         <source>Keyboard</source>
         <translation>Klaviatur</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1120"/>
+        <location filename="../util.cpp" line="1127"/>
         <source>Synthesizer</source>
         <translation>Synthesizer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1123"/>
+        <location filename="../util.cpp" line="1130"/>
         <source>Grand Piano</source>
         <translation>Flygel</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1126"/>
+        <location filename="../util.cpp" line="1133"/>
         <source>Accordion</source>
         <translation>Dragspel</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1129"/>
+        <location filename="../util.cpp" line="1136"/>
         <source>Vocal</source>
         <translation>Sång</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1132"/>
+        <location filename="../util.cpp" line="1139"/>
         <source>Microphone</source>
         <translation>Mikrofon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1135"/>
+        <location filename="../util.cpp" line="1142"/>
         <source>Harmonica</source>
         <translation>Munspel</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1138"/>
+        <location filename="../util.cpp" line="1145"/>
         <source>Trumpet</source>
         <translation>Trumpet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1141"/>
+        <location filename="../util.cpp" line="1148"/>
         <source>Trombone</source>
         <translation>Trombon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1144"/>
+        <location filename="../util.cpp" line="1151"/>
         <source>French Horn</source>
         <translation>Valthorn</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1147"/>
+        <location filename="../util.cpp" line="1154"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1150"/>
+        <location filename="../util.cpp" line="1157"/>
         <source>Saxophone</source>
         <translation>Saxofon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1153"/>
+        <location filename="../util.cpp" line="1160"/>
         <source>Clarinet</source>
         <translation>Klarinett</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1156"/>
+        <location filename="../util.cpp" line="1163"/>
         <source>Flute</source>
         <translation>Flöjt</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1159"/>
+        <location filename="../util.cpp" line="1166"/>
         <source>Violin</source>
         <translation>Fiol</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1162"/>
+        <location filename="../util.cpp" line="1169"/>
         <source>Cello</source>
         <translation>Cello</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1165"/>
+        <location filename="../util.cpp" line="1172"/>
         <source>Double Bass</source>
         <translation>Kontrabas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1168"/>
+        <location filename="../util.cpp" line="1175"/>
         <source>Recorder</source>
         <translation>Inspelningsapparat</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1171"/>
+        <location filename="../util.cpp" line="1178"/>
         <source>Streamer</source>
         <translation>Streamer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1174"/>
+        <location filename="../util.cpp" line="1181"/>
         <source>Listener</source>
         <translation>Lyssnare</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1177"/>
+        <location filename="../util.cpp" line="1184"/>
         <source>Guitar+Vocal</source>
         <translation>Gitarr+Sång</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1180"/>
+        <location filename="../util.cpp" line="1187"/>
         <source>Keyboard+Vocal</source>
         <translation>Klaviatur+Sång</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1183"/>
+        <location filename="../util.cpp" line="1190"/>
         <source>Bodhran</source>
         <translation>Bodhrán</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1186"/>
+        <location filename="../util.cpp" line="1193"/>
         <source>Bassoon</source>
         <translation>Fagott</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1189"/>
+        <location filename="../util.cpp" line="1196"/>
         <source>Oboe</source>
         <translation>Oboe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1192"/>
+        <location filename="../util.cpp" line="1199"/>
         <source>Harp</source>
         <translation>Harpa</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1195"/>
+        <location filename="../util.cpp" line="1202"/>
         <source>Viola</source>
         <translation>Altfiol</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1198"/>
+        <location filename="../util.cpp" line="1205"/>
         <source>Congas</source>
         <translation>Congas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1201"/>
+        <location filename="../util.cpp" line="1208"/>
         <source>Bongo</source>
         <translation>Bongo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1204"/>
+        <location filename="../util.cpp" line="1211"/>
         <source>Vocal Bass</source>
         <translation>Sång (bas)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1207"/>
+        <location filename="../util.cpp" line="1214"/>
         <source>Vocal Tenor</source>
         <translation>Sång (tenor)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1210"/>
+        <location filename="../util.cpp" line="1217"/>
         <source>Vocal Alto</source>
         <translation>Sång (alt)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1213"/>
+        <location filename="../util.cpp" line="1220"/>
         <source>Vocal Soprano</source>
         <translation>Sång (sopran)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1216"/>
+        <location filename="../util.cpp" line="1223"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1219"/>
+        <location filename="../util.cpp" line="1226"/>
         <source>Mandolin</source>
         <translation>Mandolin</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1222"/>
+        <location filename="../util.cpp" line="1229"/>
         <source>Ukulele</source>
         <translation>Ukulele</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1225"/>
+        <location filename="../util.cpp" line="1232"/>
         <source>Bass Ukulele</source>
         <translation>Ukulele (bas)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1228"/>
+        <location filename="../util.cpp" line="1235"/>
         <source>Vocal Baritone</source>
         <translation>Sång (baryton)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1231"/>
+        <location filename="../util.cpp" line="1238"/>
         <source>Vocal Lead</source>
         <translation>Sång (melodistämma)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1234"/>
+        <location filename="../util.cpp" line="1241"/>
         <source>Mountain Dulcimer</source>
         <translation>Mountain Dulcimer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1237"/>
+        <location filename="../util.cpp" line="1244"/>
         <source>Scratching</source>
         <translation>Skrapning</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1240"/>
+        <location filename="../util.cpp" line="1247"/>
         <source>Rapping</source>
         <translation>Rapp</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1243"/>
+        <location filename="../util.cpp" line="1250"/>
         <source>Vibraphone</source>
         <translation>Vibrafon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1246"/>
+        <location filename="../util.cpp" line="1253"/>
         <source>Conductor</source>
         <translation>Dirigent</translation>
     </message>
@@ -2312,14 +1932,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../clientsettingsdlgbase.ui" line="14"/>
         <source>Settings</source>
         <translation>Inställningar</translation>
-    </message>
-    <message>
-        <source>Soundcard</source>
-        <translation type="vanished">Ljudkort</translation>
-    </message>
-    <message>
-        <source>Device</source>
-        <translation type="vanished">Enhet</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="474"/>
@@ -2397,10 +2009,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../clientsettingsdlgbase.ui" line="99"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
-    </message>
-    <message>
-        <source>Country</source>
-        <translation type="vanished">Land</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="119"/>
@@ -2489,10 +2097,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Rundgångsskydd</translation>
     </message>
     <message>
-        <source>Enable</source>
-        <translation type="vanished">Aktivera</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlgbase.ui" line="1195"/>
         <source>Input Balance</source>
         <translation>Ingångsbalans</translation>
@@ -2508,10 +2112,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Mitten</translation>
     </message>
     <message>
-        <source>Misc</source>
-        <translation type="vanished">Blandade inställningar</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlgbase.ui" line="623"/>
         <source>Audio Channels</source>
         <translation>Ljudkanaler</translation>
@@ -2522,17 +2122,9 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Ljudkvalitet</translation>
     </message>
     <message>
-        <source>Measurements</source>
-        <translation type="vanished">Mätningar</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlgbase.ui" line="993"/>
         <source>Advanced Setup</source>
         <translation>Avancerade inställningar</translation>
-    </message>
-    <message>
-        <source>Custom Central Server Address:</source>
-        <translation type="vanished">Anpassad katalogserveradress:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1071"/>
@@ -2555,18 +2147,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>%</translation>
     </message>
     <message>
-        <source>Local Jitter Buffer</source>
-        <translation type="vanished">Lokal jitterbuffert</translation>
-    </message>
-    <message>
-        <source>Display Channel Levels</source>
-        <translation type="vanished">Visa kanalnivåer</translation>
-    </message>
-    <message>
-        <source>Custom Directory Server Address:</source>
-        <translation type="vanished">Egen katalogserveradress:</translation>
-    </message>
-    <message>
         <location filename="../clientsettingsdlgbase.ui" line="907"/>
         <source>Audio Stream Rate</source>
         <translation>Ljudströmshastighet</translation>
@@ -2576,170 +2156,118 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <source>val</source>
         <translation>val</translation>
     </message>
-    <message>
-        <source>Ping Time</source>
-        <translation type="vanished">Pingtid</translation>
-    </message>
-    <message>
-        <source>Overall Delay</source>
-        <translation type="vanished">Total fördröjning</translation>
-    </message>
 </context>
 <context>
     <name>CConnectDlg</name>
     <message>
-        <location filename="../connectdlg.cpp" line="74"/>
+        <location filename="../connectdlg.cpp" line="144"/>
         <source>Server List</source>
         <translation>Serverlista</translation>
     </message>
     <message>
-        <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation type="vanished">Inställningsfönstret visar en lista över tillgängliga servrar. Serveroperatörer kan valfritt lista sina servrar efter musikgenre. Använd rullgardinsmenyn Lista för att välja en genre, klicka på servern du vill gå med i och tryck på Anslutsknappen för att ansluta till den. Alternativt kan du dubbelklicka på servernamnet. Permanenta servrar (de som har listats längre än 48 timmar) visas med fet stil.</translation>
-    </message>
-    <message>
-        <location filename="../connectdlg.cpp" line="45"/>
+        <location filename="../connectdlg.cpp" line="115"/>
         <source>Directory</source>
         <translation>Katalog</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="46"/>
+        <location filename="../connectdlg.cpp" line="116"/>
         <source>Shows the servers listed by the selected directory. You can add custom directories in Advanced Settings.</source>
         <translation>Visar servrarna listade i den valda katalogen. Du kan lägga till anpassade kataloger i Avancerade inställningar.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="48"/>
+        <location filename="../connectdlg.cpp" line="118"/>
         <source>Directory combo box</source>
         <translation>Kombineringsknapp för kataloger</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="57"/>
+        <location filename="../connectdlg.cpp" line="127"/>
         <source>Filters the server list by the given text. Note that the filter is case insensitive. A single # character will filter for those servers with at least one person connected.</source>
         <translation>Filtrerar serverlistan efter den givna texten. Observera att filtret är skiftlägesokänsligt. Ett enda # tecken kommer att filtrera för de servrar med minst en person ansluten.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="68"/>
+        <location filename="../connectdlg.cpp" line="138"/>
         <source>Uncheck to collapse the server list to show just the server details. Check to show everyone on the servers.</source>
         <translation>Avmarkera för att komprimera serverlistan för att bara visa serverdetaljerna. Markera för att visa alla på servrarna.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="75"/>
+        <location filename="../connectdlg.cpp" line="145"/>
         <source>The Connection Setup window lists the available servers registered with the selected directory. Use the Directory dropdown to change the directory, find the server you want to join in the server list, click on it, and then click the Connect button to connect. Alternatively, double click on the server name to connect.</source>
         <translation>Fönstret Connection Setup listar tillgängliga servrar som är registrerade med den valda katalogen. Använd rullgardinsmenyn Katalog för att ändra katalogen, hitta den server du vill ansluta till i serverlistan, klicka på den och klicka sedan på knappen Anslut för att ansluta. Alternativt kan du dubbelklicka på servernamnet för att ansluta.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="80"/>
+        <location filename="../connectdlg.cpp" line="150"/>
         <source>Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
         <translation>Permanenta servrar (de som har varit listade i mer än 48 timmar) visas i fet stil.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="81"/>
+        <location filename="../connectdlg.cpp" line="151"/>
         <source>You can add custom directories in Advanced Settings.</source>
         <translation>Du kan lägga till anpassade kataloger i Avancerade inställningar.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="83"/>
+        <location filename="../connectdlg.cpp" line="153"/>
         <source>Server list view</source>
         <translation>Serverlista</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="86"/>
+        <location filename="../connectdlg.cpp" line="156"/>
         <source>Server Address</source>
         <translation>Serveradress</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="87"/>
+        <location filename="../connectdlg.cpp" line="157"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
         <translation>Om du känner till serveradressen kan du ansluta till den med hjälp av fältet Servernamn/adress. Ett valfritt portnummer kan läggas till efter serveradressen med ett kolon som separator, t.ex. %1. Fältet visar också en lista över de senast använda serveradresserna.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="97"/>
+        <location filename="../connectdlg.cpp" line="167"/>
         <source>Holds the current server address. It also stores old addresses in the combo box list.</source>
         <translation>Innehåller den aktuella serveradressen. Den lagrar även gamla adresser i listan med kombinationsrutor.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="99"/>
+        <location filename="../connectdlg.cpp" line="169"/>
         <source>Delete server address button</source>
         <translation>Knapp för att ta bort serveradress</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="100"/>
+        <location filename="../connectdlg.cpp" line="170"/>
         <source>Delete Server Address</source>
         <translation>Ta bort serveradressen</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="101"/>
+        <location filename="../connectdlg.cpp" line="171"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
         <translation>Klicka på knappen för att rensa den för närvarande valda serveradressen och ta bort den från listan över sparade servrar.</translation>
     </message>
     <message>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. example.org:</source>
-        <translation type="vanished">Om du känner till en servers IP-adress eller URL kan du ansluta till den i fältet Servernamn/adress. Ett valfritt portnummer kan läggas till efter IP-adressen eller URL:en med ett kolon som separator, t.ex. exempel.org:</translation>
-    </message>
-    <message>
-        <source>. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="vanished">. Fältet visar också en lista över de senast använda serveradresserna.</translation>
-    </message>
-    <message>
-        <location filename="../connectdlg.cpp" line="96"/>
+        <location filename="../connectdlg.cpp" line="166"/>
         <source>Server address edit box</source>
         <translation>Serveradressens redigeringsruta</translation>
     </message>
     <message>
-        <source>Holds the current server IP address or URL. It also stores old URLs in the combo box list.</source>
-        <translation type="vanished">Visar den aktuella serverns IP-adress eller URL. Det lagrar också gamla URL:er i listan med kombinationsrutor.</translation>
-    </message>
-    <message>
-        <source>Server List Selection</source>
-        <translation type="vanished">Val av server</translation>
-    </message>
-    <message>
-        <source>Selects the server list to be shown.</source>
-        <translation type="vanished">Väljer server som ska visas.</translation>
-    </message>
-    <message>
-        <source>Server list selection combo box</source>
-        <translation type="vanished">Kombobox för val av serverlista</translation>
-    </message>
-    <message>
-        <location filename="../connectdlg.cpp" line="56"/>
+        <location filename="../connectdlg.cpp" line="126"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
     <message>
-        <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
-        <translation type="vanished">Serverlistan filtreras av den givna texten. Observera att filtret är känsligt för stora och små bokstäver.</translation>
-    </message>
-    <message>
-        <location filename="../connectdlg.cpp" line="59"/>
+        <location filename="../connectdlg.cpp" line="129"/>
         <source>Filter edit box</source>
         <translation>Redigeringsrutan för filtrering</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="67"/>
+        <location filename="../connectdlg.cpp" line="137"/>
         <source>Show All Musicians</source>
         <translation>Visa alla musiker</translation>
     </message>
     <message>
-        <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
-        <translation type="vanished">Om du markerar den här kryssrutan visas musikerna på alla servrar. Om du avmarkerar kryssrutan minimeras alla listvyer.</translation>
-    </message>
-    <message>
-        <location filename="../connectdlg.cpp" line="71"/>
+        <location filename="../connectdlg.cpp" line="141"/>
         <source>Show all musicians check box</source>
         <translation>Klickruta för att visa alla musiker</translation>
     </message>
     <message>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="obsolete">Om du känner till en servers IP-adress eller URL kan du ansluta till den i fältet Servernamn/adress. Ett valfritt portnummer kan läggas till efter IP-adressen eller URL:en med ett kolon som separator, t.ex. %1. Fältet visar också en lista över de senast använda serveradresserna.</translation>
-    </message>
-    <message>
-        <location filename="../connectdlg.cpp" line="160"/>
+        <location filename="../connectdlg.cpp" line="230"/>
         <source>Filter text, or # for occupied servers</source>
         <translation>Filtrera text eller använd # för att se servrar med användare</translation>
-    </message>
-    <message>
-        <source>Type # for occupied servers</source>
-        <translation type="vanished">Skriv # för upptagna servrar</translation>
     </message>
 </context>
 <context>
@@ -2748,10 +2276,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../connectdlgbase.ui" line="14"/>
         <source>Connection Setup</source>
         <translation>Anslutningsinställning</translation>
-    </message>
-    <message>
-        <source>List</source>
-        <translation type="vanished">Lista</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="35"/>
@@ -2799,10 +2323,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Serveradress</translation>
     </message>
     <message>
-        <source>Server Name/Address</source>
-        <translation type="vanished">Servernamn/ipadress (:port)</translation>
-    </message>
-    <message>
         <location filename="../connectdlgbase.ui" line="138"/>
         <source>C&amp;ancel</source>
         <translation>Av&amp;bryt</translation>
@@ -2816,42 +2336,43 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../util.cpp" line="619"/>
+        <location filename="../util.cpp" line="622"/>
         <source>&amp;Help</source>
         <translation>&amp;Hjälp</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="626"/>
-        <location filename="../util.cpp" line="631"/>
+        <location filename="../util.cpp" line="629"/>
+        <location filename="../util.cpp" line="634"/>
         <source>Getting &amp;Started...</source>
         <translation>Komma &amp;igång...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="627"/>
+        <location filename="../util.cpp" line="630"/>
         <source>Software &amp;Manual...</source>
         <translation>&amp;Manual...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="634"/>
+        <location filename="../util.cpp" line="637"/>
         <source>What&apos;s &amp;This</source>
         <translation>&amp;Vad är detta</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="636"/>
+        <location filename="../util.cpp" line="640"/>
+        <source>P&amp;rivacy policy...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="642"/>
         <source>&amp;About Jamulus...</source>
         <translation>&amp;Om Jamulus...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="638"/>
+        <location filename="../util.cpp" line="644"/>
         <source>About &amp;Qt...</source>
         <translation>Om &amp;Qt...</translation>
     </message>
     <message>
-        <source>&amp;About...</source>
-        <translation type="vanished">&amp;Om...</translation>
-    </message>
-    <message>
-        <location filename="../util.h" line="435"/>
+        <location filename="../util.h" line="436"/>
         <source>About Qt</source>
         <translation>Om Qt</translation>
     </message>
@@ -2859,12 +2380,12 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../util.cpp" line="700"/>
+        <location filename="../util.cpp" line="707"/>
         <source>Restart Required</source>
         <translation>Omstart krävs</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="700"/>
+        <location filename="../util.cpp" line="707"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>Starta om applikationen för att språkändringen ska träda i kraft.</translation>
     </message>
@@ -2872,96 +2393,24 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <source>I &amp;agree to the above licence terms</source>
-        <translation type="vanished">Jag &amp;accepterar ovanstående licensvillkor</translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="595"/>
+        <location filename="../util.cpp" line="598"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>Denna server kräver att du accepterar villkoren innan du kan gå med. Läs dem i chattfönstret.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="596"/>
+        <location filename="../util.cpp" line="599"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Jag har &amp;läst villkoren och håller med.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="597"/>
+        <location filename="../util.cpp" line="600"/>
         <source>Accept</source>
         <translation>Acceptera</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="598"/>
+        <location filename="../util.cpp" line="601"/>
         <source>Decline</source>
         <translation>Neka</translation>
-    </message>
-    <message>
-        <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
-        <translation type="vanished">Genom att ansluta till denna server och godkänna detta meddelande, samtycker du till följande:</translation>
-    </message>
-    <message>
-        <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
-        <translation type="vanished">Du accepterar att all data, ljud eller andra verk som överförs till denna server ägs och skapas av dig eller dina licensgivare, och att du gör dessa data, ljud eller andra verk tillgängliga via följande Creative Commons-licens (för mer information om detta licens, se </translation>
-    </message>
-    <message>
-        <source>You are free to:</source>
-        <translation type="vanished">Du är fri att:</translation>
-    </message>
-    <message>
-        <source>Share</source>
-        <translation type="vanished">Dela</translation>
-    </message>
-    <message>
-        <source>copy and redistribute the material in any medium or format</source>
-        <translation type="vanished">kopiera och omfördela materialet i vilket medium eller format som helst</translation>
-    </message>
-    <message>
-        <source>Adapt</source>
-        <translation type="vanished">Anpssa</translation>
-    </message>
-    <message>
-        <source>remix, transform, and build upon the material</source>
-        <translation type="vanished">remixa, transformera och bygga vidare på materialet</translation>
-    </message>
-    <message>
-        <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
-        <translation type="vanished">Licensgivaren kan inte återkalla dessa friheter så länge du följer licensvillkoren.</translation>
-    </message>
-    <message>
-        <source>Under the following terms:</source>
-        <translation type="vanished">Under följande villkor:</translation>
-    </message>
-    <message>
-        <source>Attribution</source>
-        <translation type="vanished">Erkännande</translation>
-    </message>
-    <message>
-        <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
-        <translation type="vanished">Du måste ge lämplig kredit, ange en länk till licensen och ange om ändringar gjordes. Du kan göra det på något rimligt sätt, men inte på något sätt som antyder att licensgivaren godkänner dig eller din användning.</translation>
-    </message>
-    <message>
-        <source>NonCommercial</source>
-        <translation type="vanished">Ickekommersiell</translation>
-    </message>
-    <message>
-        <source>You may not use the material for commercial purposes.</source>
-        <translation type="vanished">Du får inte använda materialet för kommersiella ändamål.</translation>
-    </message>
-    <message>
-        <source>ShareAlike</source>
-        <translation type="vanished">Dela lika</translation>
-    </message>
-    <message>
-        <source>If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</source>
-        <translation type="vanished">Om du remixar, omvandlar eller bygger på materialet måste du distribuera dina bidrag under samma licens som originalet.</translation>
-    </message>
-    <message>
-        <source>No additional restrictions</source>
-        <translation type="vanished">Inga ytterligare begränsningar</translation>
-    </message>
-    <message>
-        <source>You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</source>
-        <translation type="vanished">Du får inte tillämpa juridiska villkor eller tekniska åtgärder som lagligen begränsar andra från att göra något som licensen tillåter.</translation>
     </message>
 </context>
 <context>
@@ -2989,266 +2438,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <source>No Name</source>
         <translation>Inget namn</translation>
     </message>
-    <message>
-        <source>Musician Profile</source>
-        <translation type="vanished">Musikprofil</translation>
-    </message>
-    <message>
-        <source>Alias/Name</source>
-        <translation type="vanished">Alias/Namn</translation>
-    </message>
-    <message>
-        <source>Instrument</source>
-        <translation type="vanished">Instrument</translation>
-    </message>
-    <message>
-        <source>Country</source>
-        <translation type="vanished">Land</translation>
-    </message>
-    <message>
-        <source>City</source>
-        <translation type="vanished">Stad</translation>
-    </message>
-    <message>
-        <source>Skill</source>
-        <translation type="vanished">Färdighetsnivå</translation>
-    </message>
-    <message>
-        <source>&amp;Close</source>
-        <translation type="vanished">&amp;Stäng</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">Ingen</translation>
-    </message>
-    <message>
-        <source>Beginner</source>
-        <translation type="vanished">Nybörjare</translation>
-    </message>
-    <message>
-        <source>Intermediate</source>
-        <translation type="vanished">Mellannivå</translation>
-    </message>
-    <message>
-        <source>Expert</source>
-        <translation type="vanished">Expert</translation>
-    </message>
-    <message>
-        <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="vanished">Skriv ditt namn eller ett alias här så att de andra musikerna du vill spela med vet vem du är. Du kan också lägga till en bild av instrumentet du spelar och en flagga för det land du befinner dig i. Din stad och din färdighetsnivå som spelar ditt instrument kan också läggas till.</translation>
-    </message>
-    <message>
-        <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="vanished">Det du ställer in här visas på din fader på mixerkortet när du är ansluten till en Jamulus-server. Den här taggen kommer också att visas vid varje klient som är ansluten till samma server som du.</translation>
-    </message>
-    <message>
-        <source>Alias or name edit box</source>
-        <translation type="vanished">Redigeringsruta för alias eller namn</translation>
-    </message>
-    <message>
-        <source>Instrument picture button</source>
-        <translation type="vanished">Knapp för instrumentbild</translation>
-    </message>
-    <message>
-        <source>Country flag button</source>
-        <translation type="vanished">Knapp för landsflagga</translation>
-    </message>
-    <message>
-        <source>City edit box</source>
-        <translation type="vanished">Redigeringsruta för stad</translation>
-    </message>
-    <message>
-        <source>Skill level combo box</source>
-        <translation type="vanished">Kombinationsruta för färdighetsnivå</translation>
-    </message>
-    <message>
-        <source>Drum Set</source>
-        <translation type="vanished">Trumset</translation>
-    </message>
-    <message>
-        <source>Djembe</source>
-        <translation type="vanished">Djembe</translation>
-    </message>
-    <message>
-        <source>Electric Guitar</source>
-        <translation type="vanished">Elgitarr</translation>
-    </message>
-    <message>
-        <source>Acoustic Guitar</source>
-        <translation type="vanished">Akustisk gitarr</translation>
-    </message>
-    <message>
-        <source>Bass Guitar</source>
-        <translation type="vanished">Basgitarr</translation>
-    </message>
-    <message>
-        <source>Keyboard</source>
-        <translation type="vanished">Klaviatur</translation>
-    </message>
-    <message>
-        <source>Synthesizer</source>
-        <translation type="vanished">Synthesizer</translation>
-    </message>
-    <message>
-        <source>Grand Piano</source>
-        <translation type="vanished">Flygel</translation>
-    </message>
-    <message>
-        <source>Accordion</source>
-        <translation type="vanished">Dragspel</translation>
-    </message>
-    <message>
-        <source>Vocal</source>
-        <translation type="vanished">Sång</translation>
-    </message>
-    <message>
-        <source>Microphone</source>
-        <translation type="vanished">Mikrofon</translation>
-    </message>
-    <message>
-        <source>Harmonica</source>
-        <translation type="vanished">Munspel</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation type="vanished">Trumpet</translation>
-    </message>
-    <message>
-        <source>Trombone</source>
-        <translation type="vanished">Trombon</translation>
-    </message>
-    <message>
-        <source>French Horn</source>
-        <translation type="vanished">Valthorn</translation>
-    </message>
-    <message>
-        <source>Tuba</source>
-        <translation type="vanished">Tuba</translation>
-    </message>
-    <message>
-        <source>Saxophone</source>
-        <translation type="vanished">Saxofon</translation>
-    </message>
-    <message>
-        <source>Clarinet</source>
-        <translation type="vanished">Klarinett</translation>
-    </message>
-    <message>
-        <source>Flute</source>
-        <translation type="vanished">Flöjt</translation>
-    </message>
-    <message>
-        <source>Violin</source>
-        <translation type="vanished">Fiol</translation>
-    </message>
-    <message>
-        <source>Cello</source>
-        <translation type="vanished">Cello</translation>
-    </message>
-    <message>
-        <source>Double Bass</source>
-        <translation type="vanished">Kontrabas</translation>
-    </message>
-    <message>
-        <source>Recorder</source>
-        <translation type="vanished">Inspelningsapparat</translation>
-    </message>
-    <message>
-        <source>Streamer</source>
-        <translation type="vanished">Streamer</translation>
-    </message>
-    <message>
-        <source>Listener</source>
-        <translation type="vanished">Lyssnare</translation>
-    </message>
-    <message>
-        <source>Guitar+Vocal</source>
-        <translation type="vanished">Gitarr+Sång</translation>
-    </message>
-    <message>
-        <source>Keyboard+Vocal</source>
-        <translation type="vanished">Klaviatur+Sång</translation>
-    </message>
-    <message>
-        <source>Bodhran</source>
-        <translation type="vanished">Klaviatur+Sång</translation>
-    </message>
-    <message>
-        <source>Bassoon</source>
-        <translation type="vanished">Fagott</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation type="vanished">Oboe</translation>
-    </message>
-    <message>
-        <source>Harp</source>
-        <translation type="vanished">Harpa</translation>
-    </message>
-    <message>
-        <source>Viola</source>
-        <translation type="vanished">Altfiol</translation>
-    </message>
-    <message>
-        <source>Congas</source>
-        <translation type="vanished">Congas</translation>
-    </message>
-    <message>
-        <source>Bongo</source>
-        <translation type="vanished">Bongo</translation>
-    </message>
-    <message>
-        <source>Vocal Bass</source>
-        <translation type="vanished">Sång (bas)</translation>
-    </message>
-    <message>
-        <source>Vocal Tenor</source>
-        <translation type="vanished">Sång (tenor)</translation>
-    </message>
-    <message>
-        <source>Vocal Alto</source>
-        <translation type="vanished">Sång (alt)</translation>
-    </message>
-    <message>
-        <source>Vocal Soprano</source>
-        <translation type="vanished">Sång (sopran)</translation>
-    </message>
-    <message>
-        <source>Banjo</source>
-        <translation type="vanished">Banjo</translation>
-    </message>
-    <message>
-        <source>Mandolin</source>
-        <translation type="vanished">Mandolin</translation>
-    </message>
-    <message>
-        <source>Ukulele</source>
-        <translation type="vanished">Ukulele</translation>
-    </message>
-    <message>
-        <source>Bass Ukulele</source>
-        <translation type="vanished">Ukulele (bas)</translation>
-    </message>
-    <message>
-        <source>Vocal Baritone</source>
-        <translation type="vanished">Sång (baryton)</translation>
-    </message>
-    <message>
-        <source>Vocal Lead</source>
-        <translation type="vanished">Sång (melodistämma)</translation>
-    </message>
-    <message>
-        <source>Mountain Dulcimer</source>
-        <translation type="vanished">Mountain Dulcimer</translation>
-    </message>
-    <message>
-        <source>Scratching</source>
-        <translation type="vanished">Scratching</translation>
-    </message>
-    <message>
-        <source>Rapping</source>
-        <translation type="vanished">Rapp</translation>
-    </message>
 </context>
 <context>
     <name>CServerDlg</name>
@@ -3273,10 +2462,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Kombinationsruta för katalogtyp</translation>
     </message>
     <message>
-        <source>Directory</source>
-        <translation type="obsolete">Katalog</translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="83"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
         <translation>När ett annat värde än &quot;%1&quot; väljs för Katalogen visas om registreringen har lyckats. Om registreringen misslyckades, välj en annan katalog.</translation>
@@ -3285,14 +2470,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../serverdlg.cpp" line="135"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
         <translation>Ingen inspelningskatalog har ställts in eller värdet kan inte användas. Kontrollera värdet på fliken Alternativ.</translation>
-    </message>
-    <message>
-        <source>Recording has been switched off by the UI checkbox.</source>
-        <translation type="obsolete">Inspelningen har stängts av av kryssrutan UI.</translation>
-    </message>
-    <message>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
-        <translation type="obsolete">Inspelningen har stängts av, antingen genom att kryssrutan UI eller SIGUSR2 har tagits emot.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="146"/>
@@ -3376,53 +2553,9 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Nu en katalog</translation>
     </message>
     <message>
-        <source>Show Creative Commons Licence Dialog</source>
-        <translation type="vanished">Visa Creative Commons licensedialog</translation>
-    </message>
-    <message>
-        <source>If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
-        <translation type="vanished">Om den är aktiverad visas en Creative Commons BY-NC-SA 4.0 licensdialog varje gång en ny användare ansluter till servern.</translation>
-    </message>
-    <message>
-        <source>Make My Server Public</source>
-        <translation type="vanished">Gör min server publik</translation>
-    </message>
-    <message>
-        <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="vanished">Om kryssrutan Gör min server publik är markerad, registrerar den här servern sig själv på katalogservern så att alla användare av Jamulus kan se servern i anslutningsdialogens serverlista och ansluta till den. Registreringen av servern förnyas regelbundet för att se till att alla servrar i listan är tillgängliga.</translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="82"/>
         <source>Register Server Status</source>
         <translation>Serverstatus om servern är registrerad</translation>
-    </message>
-    <message>
-        <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="vanished">Om kryssrutan Gör min server publik är markerad kommer detta att visa om registrering på katalogservern är gjord. Om registreringen misslyckades, välj en annan katalogserver.</translation>
-    </message>
-    <message>
-        <source>Custom Directory Server Address</source>
-        <translation type="vanished">Anpassad katalogserveradress</translation>
-    </message>
-    <message>
-        <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="vanished">Den anpassade katalogserveradressen är IP-adressen eller URL:en för katalogservern där serverlistan hanteras.</translation>
-    </message>
-    <message>
-        <source>Directory server address line edit</source>
-        <translation type="vanished">Ändra anpassad katalogserveradress</translation>
-    </message>
-    <message>
-        <source>Server List Selection</source>
-        <translation type="vanished">Val av serverlista</translation>
-    </message>
-    <message>
-        <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation type="vanished">Väljer serverlistan dvs. den katalogserveradress där servern ska läggas till.</translation>
-    </message>
-    <message>
-        <source>Server list selection combo box</source>
-        <translation type="vanished">Kombineringsknapp för val av serverlista</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="89"/>
@@ -3453,18 +2586,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../serverdlg.cpp" line="107"/>
         <source>City where the server is located line edit</source>
         <translation>Ändra var servern befinner sig</translation>
-    </message>
-    <message>
-        <source>Location country</source>
-        <translation type="vanished">Land</translation>
-    </message>
-    <message>
-        <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation type="vanished">Landet där servern ligger kan skrivas in här. Om ett land anges kommer det att visas i listan för anslutningsdialogserver på klienterna.</translation>
-    </message>
-    <message>
-        <source>Country where the server is located combo box</source>
-        <translation type="vanished">Kombineringsknapp för val av serverplacering</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="110"/>
@@ -3508,17 +2629,9 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Huvudinspelningskatalog</translation>
     </message>
     <message>
-        <source>Click the button to open the dialog that allows the main recording directory to be selected. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
-        <translation type="vanished">Klicka på knappen för att öppna dialogrutan som gör det möjligt att välja den huvudsakliga inspelningskatalogen. Den valda platsen måste finnas och vara skrivbar (tillåta skapandet av underkataloger av den användare som Jamulus körs via.). </translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="182"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>Textruta för huvudinspelningskatalog (skrivskyddad)</translation>
-    </message>
-    <message>
-        <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="vanished">Det aktuella värdet för huvudinspelningskatalogen. Det valda värdet måste existera och vara skrivbart (tillåta skapandet av underkataloger av användaren som Jamulus körs av). Klicka på knappen för att öppna dialogrutan som gör det möjligt att välja huvudinspelningskatalogen.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="190"/>
@@ -3541,17 +2654,9 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Knapp för att slå på eller av serverinspelning</translation>
     </message>
     <message>
-        <source>If the Register Server check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="obsolete">Om kryssrutan Registrera Server är markerad kommer detta att visa om registrering på katalogservern är gjord. Om registreringen misslyckades, välj en annan katalogserver.</translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="122"/>
         <source>Jam Recorder</source>
         <translation>Starta serverinspelning</translation>
-    </message>
-    <message>
-        <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
-        <translation type="obsolete">Markerad när inspelaren är aktiverad, annars avmarkerad. Inspelaren kommer att köras när en session pågår, om (inställt korrekt och) aktiverat.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="149"/>
@@ -3590,22 +2695,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Visar inspelarens aktuella status. Dessa värden är möjliga:</translation>
     </message>
     <message>
-        <source>No recording directory has been set or the value is not useable.</source>
-        <translation type="vanished">Ingen inspelningskatalog har ställts in eller värdet kan inte användas.</translation>
-    </message>
-    <message>
-        <source>Recording has been switched off</source>
-        <translation type="vanished">Inspelningen har stängts av</translation>
-    </message>
-    <message>
-        <source> by the UI checkbox</source>
-        <translation type="vanished"> genom kryssrutan</translation>
-    </message>
-    <message>
-        <source>, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="vanished">, antingen genom kryssrutan eller SIGUSR2 som tas emot</translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="143"/>
         <source>There is no one connected to the server to record.</source>
         <translation>Det är ingen ansluten till servern att spela in.</translation>
@@ -3619,10 +2708,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../serverdlg.cpp" line="145"/>
         <source>NOTE</source>
         <translation>NOTERING</translation>
-    </message>
-    <message>
-        <source>If the recording directory is not useable, the problem will be displayed in place of the directory.</source>
-        <translation type="vanished">Om inspelningskatalogen inte kan användas visas problemet istället för katalogen.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="160"/>
@@ -3653,18 +2738,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../serverdlg.cpp" line="172"/>
         <source>Language combo box</source>
         <translation>Kombineringsknapp för språk</translation>
-    </message>
-    <message>
-        <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as).</source>
-        <translation type="obsolete">Klicka på knappen för att öppna dialogrutan som gör det möjligt att välja den huvudsakliga inspelningskatalogen. Den valda platsen måste finnas och vara skrivbar (tillåta skapandet av underkataloger av den användare som Jamulus körs via).</translation>
-    </message>
-    <message>
-        <source>Custom Directory</source>
-        <translation type="obsolete">Anpassad katalog</translation>
-    </message>
-    <message>
-        <source>The custom directory is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="obsolete">Den anpassade katalogen är IP-adressen eller URL:en för katalogservern där serverlistan hanteras.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="202"/>
@@ -3699,10 +2772,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>%1-server</translation>
     </message>
     <message>
-        <source>software upgrade available</source>
-        <translation type="vanished">mjukvaruuppdatering tillgänglig</translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="591"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>Inspelningen kunde inte starta. Kontrollera tillgängligt diskutrymme och behörigheter och försök igen. Fel: </translation>
@@ -3711,10 +2780,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>FEL</translation>
-    </message>
-    <message>
-        <source>Displays the current status of the recorder.</source>
-        <translation type="obsolete">Visar inspelarens aktuella status.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="126"/>
@@ -3738,26 +2803,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>&amp;Avbryt</translation>
     </message>
     <message>
-        <source>&amp;Hide </source>
-        <translation type="vanished">&amp;Göm </translation>
-    </message>
-    <message>
-        <source> server</source>
-        <translation type="vanished"> server</translation>
-    </message>
-    <message>
-        <source>&amp;Open </source>
-        <translation type="vanished">&amp;Öppna </translation>
-    </message>
-    <message>
-        <source> server </source>
-        <translation type="obsolete"> server </translation>
-    </message>
-    <message>
-        <source> Server</source>
-        <translation type="vanished"> Server</translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="392"/>
         <source>&amp;Window</source>
         <translation>&amp;Fönster</translation>
@@ -3766,10 +2811,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../serverdlg.cpp" line="603"/>
         <source>Select Main Recording Directory</source>
         <translation>Välj huvudinspelningskatalog</translation>
-    </message>
-    <message>
-        <source>Predefined Address</source>
-        <translation type="obsolete">Förvald adress</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="56"/>
@@ -3792,71 +2833,59 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Inte aktiv</translation>
     </message>
     <message>
-        <source>Unregistered</source>
-        <translation type="vanished">Oregistrerad</translation>
-    </message>
-    <message>
-        <location filename="../util.h" line="589"/>
+        <location filename="../util.h" line="598"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../util.h" line="636"/>
+        <location filename="../util.h" line="645"/>
         <source>Not registered</source>
         <translation>Ej registrerat</translation>
     </message>
     <message>
-        <location filename="../util.h" line="639"/>
+        <location filename="../util.h" line="648"/>
         <source>Bad address</source>
         <translation>Felaktig adress</translation>
     </message>
     <message>
-        <location filename="../util.h" line="642"/>
+        <location filename="../util.h" line="651"/>
         <source>Registration requested</source>
         <translation>Registreringsförfrågan skickad</translation>
     </message>
     <message>
-        <location filename="../util.h" line="645"/>
+        <location filename="../util.h" line="654"/>
         <source>Registration failed</source>
         <translation>Registreringen misslyckades</translation>
     </message>
     <message>
-        <location filename="../util.h" line="648"/>
+        <location filename="../util.h" line="657"/>
         <source>Check server version</source>
         <translation>Kontrollera serverversionen</translation>
     </message>
     <message>
-        <location filename="../util.h" line="651"/>
+        <location filename="../util.h" line="660"/>
         <source>Registered</source>
         <translation>Registrerad</translation>
     </message>
     <message>
-        <location filename="../util.h" line="654"/>
+        <location filename="../util.h" line="663"/>
         <source>Server list full at directory</source>
         <translation>Katalogens serverlista är full</translation>
     </message>
     <message>
-        <source>Directory Server full</source>
-        <translation type="vanished">Katalogservern är full</translation>
-    </message>
-    <message>
-        <location filename="../util.h" line="657"/>
+        <location filename="../util.h" line="666"/>
         <source>Your server version is too old</source>
         <translation>Din serverversion är för gammal</translation>
     </message>
     <message>
-        <location filename="../util.h" line="660"/>
+        <location filename="../util.h" line="669"/>
         <source>Requirements not fulfilled</source>
         <translation>Kraven uppfylls inte</translation>
     </message>
     <message>
-        <location filename="../util.h" line="663"/>
+        <location filename="../util.h" line="672"/>
         <source>Unknown value %1</source>
         <translation>Okänt värde %1</translation>
-    </message>
-    <message>
-        <source>Unknown value </source>
-        <translation type="vanished">Okänt värde </translation>
     </message>
 </context>
 <context>
@@ -3886,10 +2915,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../serverdlgbase.ui" line="67"/>
         <source>Server Setup</source>
         <translation>Serverinställningar</translation>
-    </message>
-    <message>
-        <source>List</source>
-        <translation type="obsolete">Lista</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
@@ -3958,31 +2983,15 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Aktivera fördröjningspanorering</translation>
     </message>
     <message>
-        <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
-        <translation type="vanished">Visa Creative Commons BY-NC-SA 4.0 licensdialog</translation>
-    </message>
-    <message>
         <location filename="../serverdlgbase.ui" line="338"/>
         <source>Update check</source>
         <translation>Uppdateringskontroll</translation>
-    </message>
-    <message>
-        <source>Make My Server Public (Register My Server in the Server List)</source>
-        <translation type="vanished">Gör min server publik (registrera min server i serverlistan)</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation type="vanished">Genre</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="85"/>
         <location filename="../serverdlgbase.ui" line="179"/>
         <source>STATUS</source>
         <translation>STATUS</translation>
-    </message>
-    <message>
-        <source>Custom Directory Server Address:</source>
-        <translation type="vanished">Anpassad katalogserveradress:</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="110"/>
@@ -3993,26 +3002,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../serverdlgbase.ui" line="125"/>
         <source>Location: City</source>
         <translation>Plats: Stad</translation>
-    </message>
-    <message>
-        <source>Location: Country</source>
-        <translation type="vanished">Plats: Land</translation>
-    </message>
-    <message>
-        <source>Enable jam recorder</source>
-        <translation type="obsolete">Aktivera inspelning</translation>
-    </message>
-    <message>
-        <source>New recording</source>
-        <translation type="obsolete">Ny inspelning</translation>
-    </message>
-    <message>
-        <source>Recordings folder</source>
-        <translation type="obsolete">Inspelningsfolder</translation>
-    </message>
-    <message>
-        <source>TextLabelNameVersion</source>
-        <translation type="obsolete">TextLabelNameVersion</translation>
     </message>
 </context>
 <context>
@@ -4061,118 +3050,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Fel vid stängning av ström: $s</translation>
     </message>
     <message>
-        <source>The Jack server is not running. This software requires a Jack server to run. Normally if the Jack server is not running this software will automatically start the Jack server. It seems that this auto start has not worked. Try to start the Jack server manually.</source>
-        <translation type="vanished">Jack-servern körs inte. Denna programvara kräver att en Jack-server körs. Normalt om Jack-servern inte kör startar programvaran automatiskt Jack-servern. Det verkar som om denna automatiska start inte har fungerat. Försök starta Jack-servern manuellt.</translation>
-    </message>
-    <message>
-        <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
-        <translation type="vanished">Jackservers samplingsfrekvens skiljer sig från den önskade. Den nödvändiga bithastigheten är:</translation>
-    </message>
-    <message>
-        <source>You can use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
-        <translation type="vanished">Du kan använda ett verktyg som &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; för att justera Jack-serverns samplingsfrekvens.</translation>
-    </message>
-    <message>
-        <source>Make sure to set the Frames/Period to a low value like </source>
-        <translation type="vanished">Se till att ställa in ramarna/perioden till ett så lågt värde som </translation>
-    </message>
-    <message>
-        <source> to achieve a low delay.</source>
-        <translation type="vanished"> för att uppnå en låg fördröjning.</translation>
-    </message>
-    <message>
-        <source>The Jack port registering failed.</source>
-        <translation type="vanished">Registreringen av Jack-porten misslyckades.</translation>
-    </message>
-    <message>
-        <source>Cannot activate the Jack client.</source>
-        <translation type="vanished">Kan inte aktivera Jack-klienten.</translation>
-    </message>
-    <message>
-        <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
-        <translation type="vanished">Jack-servern stängdes av. Denna programvara kräver att en Jack-server körs. Försök starta om programvaran för att lösa problemet.</translation>
-    </message>
-    <message>
-        <source>CoreAudio input AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
-        <translation type="vanished">CoreAudio-ingång AudioHardwareGetProperty misslyckades. Det verkar som om det inte finns något ljudkort i systemet.</translation>
-    </message>
-    <message>
-        <source>CoreAudio output AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
-        <translation type="vanished">CoreAudio-utgång AudioHardwareGetProperty misslyckades. Det verkar som om det inte finns något ljudkort i systemet.</translation>
-    </message>
-    <message>
-        <source>The previously selected audio device is no longer available. The system default audio device will be selected instead.</source>
-        <translation type="vanished">Den tidigare valda ljudenheten är inte längre tillgänglig. Systemets standardljudenhet har valts i stället.</translation>
-    </message>
-    <message>
-        <source>Current audio input device is no longer available.</source>
-        <translation type="vanished">Nuvarande ljudingångsenhet är inte längre tillgänglig.</translation>
-    </message>
-    <message>
-        <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation type="vanished">Nuvarande systemljudingångsenhetens samplingsfrekvens för %1 Hz stöds inte. Öppna Audio-MIDI-installationen i Applications-&gt;Utilities och försök att ställa in en samplingsfrekvens på %2 Hz.</translation>
-    </message>
-    <message>
-        <source>Current audio output device is no longer available.</source>
-        <translation type="vanished">Nuvarande ljudutgångsenhet är inte längre tillgänglig.</translation>
-    </message>
-    <message>
-        <source>The current selected audio device is no longer present in the system.</source>
-        <translation type="vanished">Vald ljudenhet är inte längre tillgänglig för programmet.</translation>
-    </message>
-    <message>
-        <source>The audio input device is no longer available.</source>
-        <translation type="vanished">Vald ljudingång är inte längre tillgänglig.</translation>
-    </message>
-    <message>
-        <source>The audio output device is no longer available.</source>
-        <translation type="vanished">Vald ljudutgång är inte längre tillgänglig.</translation>
-    </message>
-    <message>
-        <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation type="vanished">Nuvarande systemljudutgångsenhetens samplingsfrekvens för %1 Hz stöds inte. Öppna Audio-MIDI-installationen i Applications-&gt;Utilities och försök att ställa in en samplingshastighet på %2 Hz.</translation>
-    </message>
-    <message>
-        <source>The audio input stream format for this audio device is not compatible with this software.</source>
-        <translation type="vanished">Ljudingångsströmformatet för denna ljudenhet är inte kompatibelt med den här programvaran.</translation>
-    </message>
-    <message>
-        <source>The audio output stream format for this audio device is not compatible with this software.</source>
-        <translation type="vanished">Ljudutmatningsströmformatet för denna ljudenhet är inte kompatibelt med den här programvaran.</translation>
-    </message>
-    <message>
-        <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
-        <translation type="vanished">Buffertstorlekarna för den aktuella ingångs- och utgångsljudenheten kan inte ställas in på ett gemensamt värde. Välj andra input/output-ljudenheter i systeminställningarna.</translation>
-    </message>
-    <message>
-        <source>The audio driver could not be initialized.</source>
-        <translation type="vanished">Ljuddrivrutinen kunde inte initialiseras.</translation>
-    </message>
-    <message>
-        <source>The audio device does not support the required sample rate. The required sample rate is: </source>
-        <translation type="vanished">Ljudenheten stöder inte den valda samplingsfrekvensen. Den valda provhastigheten är: </translation>
-    </message>
-    <message>
-        <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
-        <translation type="vanished">Ljudenheten stöder inte inställning av önskad samplingsfrekvens. Det här felet kan hända om du har ett ljudgränssnitt som Roland UA-25EX där du ställer in samtalstakten med en hårdvaruskontakt på ljudenheten. Om detta är fallet, ändra provhastigheten till </translation>
-    </message>
-    <message>
-        <source> Hz on the device and restart the </source>
-        <translation type="vanished"> Hz på enheten och starta om </translation>
-    </message>
-    <message>
-        <source> software.</source>
-        <translation type="vanished"> applikationen.</translation>
-    </message>
-    <message>
-        <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
-        <translation type="vanished">Ljudenheten stöder inte det valda antalet kanaler. Det valda antalet kanaler för in- och utmatning är: </translation>
-    </message>
-    <message>
-        <source>Required audio sample format not available.</source>
-        <translation type="vanished">Nödvändigt ljudformat är inte tillgängligt.</translation>
-    </message>
-    <message>
         <location filename="../sound/asio/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
         <translation>Den valda ljudenheten finns inte längre i systemet. Kontrollera din ljudenhet.</translation>
@@ -4212,22 +3089,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <location filename="../sound/asio/sound.cpp" line="555"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
         <translation>Installera en ASIO-drivrutin innan du kör %1. Om du äger en enhet med ASIO-stöd installerar du dess officiella ASIO-drivrutin. Om inte, måste du ladda ner och installera en universell drivrutin så som ASIO4ALL.</translation>
-    </message>
-    <message>
-        <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
-        <translation type="vanished">Installera en ASIO-drivrutin innan du kör %1. Om du äger en enhet med ASIO-stöd installerar du dess officiella ASIO-drivrutin. Om inte, måste du ladda ner och installera en universell drivrutin så som ASIO4ALL.</translation>
-    </message>
-    <message>
-        <source>No ASIO audio device (driver) found.</source>
-        <translation type="vanished">Ingen ASIO-ljudenhet (drivrutin) hittades.</translation>
-    </message>
-    <message>
-        <source>The </source>
-        <translation type="vanished">Programvaran </translation>
-    </message>
-    <message>
-        <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
-        <translation type="vanished"> kräver det låga latentljudgränssnittet ASIO för att fungera korrekt. Detta är inte ett vanligt Windows ljudgränssnitt och därför krävs en speciell ljuddrivrutin. Antingen har ditt ljudkort en inbyggd ASIO-drivrutin (som rekommenderas) eller så kanske du vill använda alternativa drivrutiner som ASIO4All-drivrutinen.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="47"/>
@@ -4313,54 +3174,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
 <context>
     <name>CSoundBase</name>
     <message>
-        <source>Invalid device selection.</source>
-        <translation type="vanished">Ogiltigt enhetsval.</translation>
-    </message>
-    <message>
-        <source>The audio driver properties have changed to a state which is incompatible with this software. The selected audio device could not be used because of the following error:</source>
-        <translation type="vanished">Ljuddrivrutinens egenskaper har ändrats till ett tillstånd som inte är kompatibelt med den här programvaran. Den valda ljudenheten kunde inte användas på grund av följande fel:</translation>
-    </message>
-    <message>
-        <source>Please restart the software.</source>
-        <translation type="vanished">Starta om programvaran.</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Stäng</translation>
-    </message>
-    <message>
-        <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="vanished">Den valda ljudenheten kunde inte användas på grund av följande fel: </translation>
-    </message>
-    <message>
-        <source> The previous driver will be selected.</source>
-        <translation type="vanished"> Den föregående drivrutinen kommer att väljas.</translation>
-    </message>
-    <message>
-        <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation type="vanished">Den tidigare valda ljudenheten är inte längre tillgänglig eller egenskaperna för ljuddrivrutinen har ändrats till ett tillstånd som inte fungerar med den här programvaran. Vi försöker nu hitta en giltig ljudenhet. Den här nya ljudenheten kan orsaka ljudåterkoppling så innan du ansluter till en server, kontrollera inställningen för ljudenheten.</translation>
-    </message>
-    <message>
-        <source>No usable </source>
-        <translation type="vanished">Ingen användbar </translation>
-    </message>
-    <message>
-        <source> audio device (driver) found.</source>
-        <translation type="vanished"> ljudenhet (drivrutin) hittades.</translation>
-    </message>
-    <message>
-        <source>In the following there is a list of all available drivers with the associated error message:</source>
-        <translation type="vanished">I det följande finns en lista över alla tillgängliga drivrutiner med tillhörande felmeddelande:</translation>
-    </message>
-    <message>
-        <source>Do you want to open the ASIO driver setups?</source>
-        <translation type="vanished">Vill du öppna ASIO-drivrutinens inställningar?</translation>
-    </message>
-    <message>
-        <source> could not be started because of audio interface issues.</source>
-        <translation type="vanished"> kunde inte startas på grund av problem med ljudgränssnittet.</translation>
-    </message>
-    <message>
         <location filename="../sound/soundbase.cpp" line="118"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
         <translation>Kan inte använda den valda ljudenheten på grund av följande fel: %1 Den tidigare drivrutinen kommer att väljas.</translation>
@@ -4381,18 +3194,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Du kanske kan åtgärda fel i drivrutinsinställningarna. Vill du öppna dessa inställningar nu?</translation>
     </message>
     <message>
-        <source>No usable %1 audio device found.</source>
-        <translation type="obsolete">Ingen användbar %1 ljudenhet hittades.</translation>
-    </message>
-    <message>
-        <source>These are all the available drivers with error messages:</source>
-        <translation type="obsolete">Det här är alla tillgängliga drivrutiner med felmeddelanden:</translation>
-    </message>
-    <message>
-        <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
-        <translation type="obsolete">Vill du öppna ASIO-drivrutinen för att försöka ändra din konfiguration till ett fungerande tillstånd?</translation>
-    </message>
-    <message>
         <location filename="../sound/soundbase.cpp" line="190"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
         <translation>Kan inte starta %1. Starta om %1 och kontrollera/konfigurera om dina ljudinställningar.</translation>
@@ -4401,114 +3202,66 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
 <context>
     <name>QCoreApplication</name>
     <message>
-        <source>%1, Version %2</source>
-        <translation type="vanished">%1, Version %2</translation>
-    </message>
-    <message>
-        <source>Internet Jam Session Software</source>
-        <translation type="vanished">Internet Jam Session Software</translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1512"/>
+        <location filename="../util.cpp" line="1519"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, Version %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1529"/>
+        <location filename="../util.cpp" line="1536"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Släppt under GNU General Public License version 2 eller senare (GPLv2)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1542"/>
+        <location filename="../util.cpp" line="1549"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
         <translation>Denna applikationen använder följande bibliotek, resurser eller kodavsnitt:</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1544"/>
+        <location filename="../util.cpp" line="1551"/>
         <source>Qt cross-platform application framework</source>
         <translation>Qt cross-platform applikationsramverk</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1545"/>
+        <location filename="../util.cpp" line="1552"/>
         <source>(build)</source>
         <translation>(build)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1545"/>
+        <location filename="../util.cpp" line="1552"/>
         <source>(runtime)</source>
         <translation>(runtime)</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1563"/>
+        <location filename="../util.cpp" line="1570"/>
         <source>Some pixmaps are from the %1</source>
         <translation>Vissa pixmaps kommer från %1</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1569"/>
+        <location filename="../util.cpp" line="1576"/>
         <source>Some sound samples are from %1</source>
         <translation>Vissa ljudfiler kommer från %1</translation>
     </message>
     <message>
-        <source>This program is free software; you can redistribute it and/or modify it under</source>
-        <translation type="obsolete">Detta program är fri programvara; du kan distribuera det och/eller modifiera det</translation>
-    </message>
-    <message>
-        <source>the terms of the GNU General Public License as published by the Free Software</source>
-        <translation type="obsolete">enligt villkoren i GNU General Public License som publicerats av Free Software</translation>
-    </message>
-    <message>
-        <source>Foundation; either version 2 of the License, or (at your option) any later version.</source>
-        <translation type="obsolete">Foundation; antingen version 2 av licensen eller (efter eget val) någon senare version.</translation>
-    </message>
-    <message>
-        <source>There is NO WARRANTY, to the extent permitted by law.</source>
-        <translation type="obsolete">Det finns INGEN GARANTI, i den utsträckning som lagen tillåter.</translation>
-    </message>
-    <message>
-        <source>Using the following libraries, resources or code snippets:</source>
-        <translation type="obsolete">Använda följande bibliotek, resurser eller kodavsnitt:</translation>
-    </message>
-    <message>
-        <source>Qt framework </source>
-        <translation type="obsolete">Qt framework </translation>
-    </message>
-    <message>
-        <source>Opus Interactive Audio Codec</source>
-        <translation type="obsolete">Opus Interactive Audio Codec</translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1559"/>
+        <location filename="../util.cpp" line="1566"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
         <translation>Ljudklangkod av Perry R. Cook och Gary P. Scavone</translation>
     </message>
     <message>
-        <source>Some pixmaps are from the Open Clip Art Library (OCAL)</source>
-        <translation type="obsolete">Vissa pixmaps är från Open Clip Art Library (OCAL)</translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="1566"/>
+        <location filename="../util.cpp" line="1573"/>
         <source>Flag icons by Mark James</source>
         <translation>Flaggsymboler gjorda av Mark James</translation>
-    </message>
-    <message>
-        <source>Copyright (C) 2005-2026 The Jamulus Development Team</source>
-        <translation type="obsolete">Upphovsrätt (C) 2005-2021 The Jamulus Development Team</translation>
-    </message>
-    <message>
-        <source>Released under the GNU General Public License (GPL)</source>
-        <translation type="vanished">Släppt under GNU General Public License (GPL)</translation>
     </message>
 </context>
 <context>
     <name>global</name>
     <message>
-        <location filename="../global.h" line="123"/>
+        <location filename="../global.h" line="124"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
         <translation>En %1-uppgradering är tillgänglig: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;gå till detaljer och nedladdningar&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../global.h" line="273"/>
+        <location filename="../global.h" line="274"/>
         <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
         <translation>För mer information använd hjälpen (hjälpmeny, höger musknapp eller Shift + F1)</translation>
     </message>

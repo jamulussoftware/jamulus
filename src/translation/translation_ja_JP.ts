@@ -162,13 +162,13 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2025 Jamulus 開発チーム</translation>
+        <source>Copyright (C) 2005-2026 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2026 Jamulus 開発チーム</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2025 The Jamulus Development Team</source>
-        <translation>Copyright © 2005-2025 Jamulus 開発チーム</translation>
+        <source>Copyright © 2005-2026 The Jamulus Development Team</source>
+        <translation>Copyright © 2005-2026 Jamulus 開発チーム</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -4317,8 +4317,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>Mark James による国旗アイコン</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2025 The Jamulus Development Team</translation>
+        <source>Copyright (C) 2005-2026 The Jamulus Development Team</source>
+        <translation type="vanished">Copyright (C) 2005-2026 The Jamulus Development Team</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

@@ -210,16 +210,16 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2025 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2025 Volker Fischer e outros</translation>
+        <source>Copyright (C) 2005-2026 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2026 Volker Fischer e outros</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2026 The Jamulus Development Team</source>
         <translation type="vanished">Direitos de Autor (C) 2005-2022 A Equipa de Desenvolvimento do Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
-        <source>Copyright © 2005-2025 The Jamulus Development Team</source>
+        <source>Copyright © 2005-2026 The Jamulus Development Team</source>
         <translation>Direitos de Autor © 2005-2025 A Equipa de Desenvolvimento do Jamulus</translation>
     </message>
     <message>
@@ -247,8 +247,8 @@
         <translation type="vanished">Autor: Volker Fischer</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2025</source>
-        <translation type="vanished">Copyright (C) 2005-2025</translation>
+        <source>Copyright (C) 2005-2026</source>
+        <translation type="vanished">Copyright (C) 2005-2026</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="198"/>
@@ -4878,8 +4878,8 @@ Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, res
         <translation>Ícones de bandeiras por Mark James</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2025 The Jamulus Development Team</source>
-        <translation type="obsolete">Copyright (C) 2005-2025 A Equipa de Desenvolvimento do Jamulus</translation>
+        <source>Copyright (C) 2005-2026 The Jamulus Development Team</source>
+        <translation type="obsolete">Copyright (C) 2005-2026 A Equipa de Desenvolvimento do Jamulus</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

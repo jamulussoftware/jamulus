@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2025
+ * Copyright (c) 2004-2026
  *
  * Author(s):
  *  Volker Fischer
@@ -1578,7 +1578,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** ";
 #    endif
 #endif
-        strVersionText += "\n *** Copyright © 2005-2025 The Jamulus Development Team";
+        strVersionText += "\n *** Copyright © 2005-2026 The Jamulus Development Team";
         strVersionText += "\n";
     }
 

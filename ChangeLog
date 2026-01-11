@@ -1,4 +1,4 @@
-### 3.11.0dev <- NOTE: the release version number will be 3.12.0 ###
+### 3.12.0beta4 <- NOTE: the release version number will be 3.12.0 ###
 
 - Client: Windows: Move ASIO to GPL (#3553).
   (contributed by @gilgongo)

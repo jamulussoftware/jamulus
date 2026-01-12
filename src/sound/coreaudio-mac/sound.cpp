@@ -31,6 +31,7 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
                  const bool,
                  const QString& ) :
     CSoundBase ( "CoreAudio", fpNewProcessCallback, arg, strMIDISetup ),
+    midiClient ( static_cast<MIDIClientRef> ( NULL ) ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {
     // Apple Mailing Lists: Subject: GUI Apps should set kAudioHardwarePropertyRunLoop
@@ -60,23 +61,22 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
     iSelInputRightChannel      = 0;
     iSelOutputLeftChannel      = 0;
     iSelOutputRightChannel     = 0;
+}
 
-    // Optional MIDI initialization --------------------------------------------
-    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
+CSound::~CSound()
+{
+    // Ensure MIDI resources are properly cleaned up
+    DestroyMIDIPort(); // This will destroy the port if it exists
+
+    // Explicitly destroy the client if it exists
+    if ( midiClient != static_cast<MIDIClientRef> ( NULL ) )
     {
-        // create client and ports
-        MIDIClientRef midiClient = static_cast<MIDIClientRef> ( NULL );
-        MIDIClientCreate ( CFSTR ( APP_NAME ), NULL, NULL, &midiClient );
-        MIDIInputPortCreate ( midiClient, CFSTR ( "Input port" ), callbackMIDI, this, &midiInPortRef );
-
-        // open connections from all sources
-        const int iNMIDISources = MIDIGetNumberOfSources();
-
-        for ( int i = 0; i < iNMIDISources; i++ )
+        OSStatus result = MIDIClientDispose ( midiClient );
+        if ( result != noErr )
         {
-            MIDIEndpointRef src = MIDIGetSource ( i );
-            MIDIPortConnectSource ( midiInPortRef, src, NULL );
+            qWarning() << "Failed to dispose CoreAudio MIDI client in destructor. Error code:" << result;
         }
+        midiClient = static_cast<MIDIClientRef> ( NULL );
     }
 }
 
@@ -716,6 +716,87 @@ void CSound::Stop()
 
     // call base class
     CSoundBase::Stop();
+}
+
+void CSound::EnableMIDI ( bool bEnable )
+{
+    if ( bEnable && ( iCtrlMIDIChannel != INVALID_MIDI_CH ) )
+    {
+        // Create MIDI port if we have valid MIDI channel and no port exists
+        if ( midiInPortRef == static_cast<MIDIPortRef> ( NULL ) )
+        {
+            CreateMIDIPort();
+        }
+    }
+    else
+    {
+        // Destroy MIDI port if it exists
+        if ( midiInPortRef != static_cast<MIDIPortRef> ( NULL ) )
+        {
+            DestroyMIDIPort();
+        }
+    }
+}
+
+bool CSound::IsMIDIEnabled() const { return ( midiInPortRef != static_cast<MIDIPortRef> ( NULL ) ); }
+
+void CSound::CreateMIDIPort()
+{
+    if ( midiClient == static_cast<MIDIClientRef> ( NULL ) )
+    {
+        // Create MIDI client
+        OSStatus result = MIDIClientCreate ( CFSTR ( APP_NAME ), NULL, NULL, &midiClient );
+        if ( result != noErr )
+        {
+            qWarning() << "Failed to create CoreAudio MIDI client. Error code:" << result;
+            return;
+        }
+    }
+
+    if ( midiInPortRef == static_cast<MIDIPortRef> ( NULL ) )
+    {
+        // Create MIDI input port
+        OSStatus result = MIDIInputPortCreate ( midiClient, CFSTR ( "Input port" ), callbackMIDI, this, &midiInPortRef );
+        if ( result != noErr )
+        {
+            qWarning() << "Failed to create CoreAudio MIDI input port. Error code:" << result;
+            return;
+        }
+
+        // Connect to all available MIDI sources
+        const int iNMIDISources = MIDIGetNumberOfSources();
+        for ( int i = 0; i < iNMIDISources; i++ )
+        {
+            MIDIEndpointRef src = MIDIGetSource ( i );
+            MIDIPortConnectSource ( midiInPortRef, src, NULL );
+        }
+
+        qInfo() << "CoreAudio MIDI port created and connected to" << iNMIDISources << "sources";
+    }
+}
+
+void CSound::DestroyMIDIPort()
+{
+    if ( midiInPortRef != static_cast<MIDIPortRef> ( NULL ) )
+    {
+        // Disconnect from all sources before disposing
+        const int iNMIDISources = MIDIGetNumberOfSources();
+        for ( int i = 0; i < iNMIDISources; i++ )
+        {
+            MIDIEndpointRef src = MIDIGetSource ( i );
+            MIDIPortDisconnectSource ( midiInPortRef, src );
+        }
+
+        // Dispose of the MIDI input port
+        OSStatus result = MIDIPortDispose ( midiInPortRef );
+        if ( result != noErr )
+        {
+            qWarning() << "Failed to dispose CoreAudio MIDI input port. Error code:" << result;
+        }
+        midiInPortRef = static_cast<MIDIPortRef> ( NULL );
+
+        qInfo() << "CoreAudio MIDI port destroyed";
+    }
 }
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )

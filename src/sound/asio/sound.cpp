@@ -311,7 +311,7 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
     // query the usable buffer sizes
     ASIOGetBufferSize ( &HWBufferInfo.lMinSize, &HWBufferInfo.lMaxSize, &HWBufferInfo.lPreferredSize, &HWBufferInfo.lGranularity );
 
-    //### TEST: BEGIN ###//
+    // ### TEST: BEGIN ###//
     /*
     #include <QMessageBox>
     QMessageBox::information ( 0, "APP_NAME", QString("lMinSize: %1, lMaxSize: %2, lPreferredSize: %3, lGranularity: %4").
@@ -319,12 +319,12 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
     );
     _exit(1);
     */
-    //### TEST: END ###//
+    // ### TEST: END ###//
 
-    //### TODO: BEGIN ###//
-    // see https://github.com/EddieRingle/portaudio/blob/master/src/hostapi/asio/pa_asio.cpp#L1654
-    // (SelectHostBufferSizeForUnspecifiedUserFramesPerBuffer)
-    //### TODO: END ###//
+    // ### TODO: BEGIN ###//
+    //  see https://github.com/EddieRingle/portaudio/blob/master/src/hostapi/asio/pa_asio.cpp#L1654
+    //  (SelectHostBufferSizeForUnspecifiedUserFramesPerBuffer)
+    // ### TODO: END ###//
 
     // calculate "nearest" buffer size and set internal parameter accordingly
     // first check minimum and maximum values
@@ -628,6 +628,30 @@ bool CSound::CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType 
     // check for supported sample types for audio channel mixing (see bufferSwitch)
     return ( ( SamType == ASIOSTInt16LSB ) || ( SamType == ASIOSTInt24LSB ) || ( SamType == ASIOSTInt32LSB ) );
 }
+
+void CSound::EnableMIDI ( bool bEnable )
+{
+    if ( bEnable )
+    {
+        // Enable MIDI only if it's not already enabled
+        if ( !bMidiEnabled && iCtrlMIDIChannel != INVALID_MIDI_CH )
+        {
+            Midi.MidiStart();
+            bMidiEnabled = true;
+        }
+    }
+    else
+    {
+        // Disable MIDI only if it's currently enabled
+        if ( bMidiEnabled )
+        {
+            Midi.MidiStop();
+            bMidiEnabled = false;
+        }
+    }
+}
+
+bool CSound::IsMIDIEnabled() const { return bMidiEnabled; }
 
 void CSound::bufferSwitch ( long index, ASIOBool )
 {

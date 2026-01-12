@@ -865,10 +865,10 @@ int main ( int argc, char** argv )
     Q_INIT_RESOURCE ( resources );
 
 #ifndef SERVER_ONLY
-    //### TEST: BEGIN ###//
-    // activate the following line to activate the test bench,
-    // CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
-    //### TEST: END ###//
+    // ### TEST: BEGIN ###//
+    //  activate the following line to activate the test bench,
+    //  CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
+    // ### TEST: END ###//
 #endif
 
 #ifdef NO_JSON_RPC
@@ -920,20 +920,82 @@ int main ( int argc, char** argv )
 #ifndef SERVER_ONLY
         if ( bIsClient )
         {
-            // Client:
-            // actual client object
+            // Create client with empty MIDI string initially (safer initialization)
             CClient Client ( iPortNumber,
                              iQosNumber,
                              strConnOnStartupAddress,
-                             strMIDISetup,
+                             "", // Always start with empty MIDI
                              bNoAutoJackConnect,
                              strClientName,
                              bEnableIPv6,
                              bMuteMeInPersonalMix );
 
-            // load settings from init-file (command line options override)
+            // Create Settings with the client pointer
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
+
+            // Parse command line MIDI parameters if provided
+            if ( !strMIDISetup.isEmpty() )
+            {
+                QStringList slMIDIParams = strMIDISetup.split ( ";" );
+                if ( slMIDIParams.count() >= 1 )
+                {
+                    Settings.midiChannel = slMIDIParams[0].toInt();
+                    for ( int i = 1; i < slMIDIParams.count(); ++i )
+                    {
+                        QString sParm = slMIDIParams[i].trimmed();
+                        if ( sParm.startsWith ( "f" ) )
+                        {
+                            QStringList slP          = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiFaderOffset = slP[0].toInt();
+                            if ( slP.size() > 1 )
+                            {
+                                Settings.midiFaderCount = slP[1].toInt();
+                            }
+                        }
+                        else if ( sParm.startsWith ( "p" ) )
+                        {
+                            QStringList slP        = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiPanOffset = slP[0].toInt();
+                            if ( slP.size() > 1 )
+                            {
+                                Settings.midiPanCount = slP[1].toInt();
+                            }
+                        }
+                        else if ( sParm.startsWith ( "s" ) )
+                        {
+                            QStringList slP         = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiSoloOffset = slP[0].toInt();
+                            if ( slP.size() > 1 )
+                            {
+                                Settings.midiSoloCount = slP[1].toInt();
+                            }
+                        }
+                        else if ( sParm.startsWith ( "m" ) )
+                        {
+                            QStringList slP         = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiMuteOffset = slP[0].toInt();
+                            if ( slP.size() > 1 )
+                            {
+                                Settings.midiMuteCount = slP[1].toInt();
+                            }
+                        }
+                        else if ( sParm.startsWith ( "o" ) )
+                        {
+                            QStringList slP         = sParm.mid ( 1 ).split ( '*' );
+                            Settings.midiMuteMyself = slP[0].toInt();
+                        }
+                    }
+                }
+
+                // Enable MIDI controller and apply settings when command line MIDI is provided
+                Settings.bUseMIDIController = true;
+                Client.ApplyMIDIMapping ( Settings.GetMIDIMapString() );
+            }
+            else if ( Settings.bUseMIDIController )
+            {
+                Client.ApplyMIDIMapping ( Settings.GetMIDIMapString() );
+            }
 
 #    ifndef NO_JSON_RPC
             if ( pRpcServer )

@@ -117,7 +117,10 @@ public:
     void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType ) { emit ReinitRequest ( eSndCrdResetType ); }
 
     // this needs to be public so that it can be called from CMidi
-    void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
+    void         ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
+    void         SetMIDIMapping ( const QString& strMIDISetup );
+    virtual void EnableMIDI ( bool /* bEnable */ ) {}    // Default empty implementation
+    virtual bool IsMIDIEnabled() const { return false; } // Default false
 
 protected:
     virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
@@ -179,4 +182,5 @@ signals:
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void ControllerInMuteMyself ( bool bMute );
+    void MidiCCReceived ( int ccNumber );
 };

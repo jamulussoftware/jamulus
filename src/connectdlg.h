@@ -32,6 +32,9 @@
 #include <QLocale>
 #include <QtConcurrent>
 #include <QRegularExpression>
+#include <QAccessible>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "global.h"
 #include "util.h"
 #include "settings.h"
@@ -104,8 +107,16 @@ protected:
     void                   RequestServerList();
     void                   EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void                   UpdateDirectoryComboBox();
+    void                   UpdateAccessibleServerInfo();
 
     CClientSettings* pSettings;
+
+    // Accessible navigation panel for screen readers
+    QWidget*     wAccessibleNavPanel;     // Container for accessible navigation
+    QLabel*      lblAccessibleServerInfo; // Label showing current server information (read-only)
+    QPushButton* butAccessiblePrevious;   // Button to navigate to previous server
+    QPushButton* butAccessibleNext;       // Button to navigate to next server
+    QPushButton* butToggleAccessible;     // Button to show/hide accessible panel
 
     QTimer       TimerPing;
     QTimer       TimerReRequestServList;
@@ -132,6 +143,10 @@ public slots:
     void OnDeleteServerAddrClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
+    void OnServerListItemSelectionChanged();
+    void OnAccessiblePreviousClicked();
+    void OnAccessibleNextClicked();
+    void OnToggleAccessibleClicked();
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );

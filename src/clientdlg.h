@@ -175,9 +175,15 @@ public slots:
     void OnSortChannelsByGroupID() { MainMixerBoard->SetFaderSorting ( ST_BY_GROUPID ); }
     void OnSortChannelsByCity() { MainMixerBoard->SetFaderSorting ( ST_BY_CITY ); }
     void OnSortChannelsByChannel() { MainMixerBoard->SetFaderSorting ( ST_BY_SERVER_CHANNEL ); }
-    void OnClearAllStoredSoloMuteSettings();
+
+    void OnClearFaderAllSettings();
+    void OnClearFaderLevelSettings();
+    void OnClearFaderSoloSettings();
+    void OnClearFaderMuteSettings();
+    void OnClearFaderGroupIdSettings();
     void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
     void OnAutoAdjustAllFaderLevels() { MainMixerBoard->AutoAdjustAllFaderLevels(); }
+
     void OnNumMixerPanelRowsChanged ( int value ) { MainMixerBoard->SetNumMixerPanelRows ( value ); }
 
     void OnSettingsStateChanged ( int value );

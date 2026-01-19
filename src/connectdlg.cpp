@@ -318,16 +318,23 @@ void CConnectDlg::RequestServerList()
     }
     cbxDirectory->blockSignals ( false );
 
-    // Get the IP address of the directory server (using the ParseNetworAddress
+    // Get the IP address of the directory server (using the ParseNetworkAddress
     // function) when the connect dialog is opened, this seems to be the correct
     // time to do it. Note that in case of custom directories we
     // use iCustomDirectoryIndex as an index into the vector.
 
     // Allow IPv4 only for communicating with Directories
+#ifdef CLIENT_NO_SRV_CONNECT
     if ( NetworkUtil().ParseNetworkAddress (
              NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
              haDirectoryAddress,
              false ) )
+#else
+    if ( NetworkUtil().ParseNetworkAddressWithSrvDiscovery (
+             NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
+             haDirectoryAddress,
+             false ) )
+#endif
     {
         // send the request for the server list
         emit ReqServerListQuery ( haDirectoryAddress );
@@ -856,6 +863,7 @@ void CConnectDlg::OnTimerPing()
 
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
+        // the data to be parsed is just IP:port, so no SRV discovery is needed
         if ( NetworkUtil().ParseNetworkAddress ( pCurListViewItem->data ( LVC_NAME, Qt::UserRole ).toString(), haServerAddress, bEnableIPv6 ) )
         {
             // if address is valid, send ping message using a new thread

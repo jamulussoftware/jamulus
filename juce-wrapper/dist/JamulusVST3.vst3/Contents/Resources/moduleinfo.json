@@ -1,0 +1,46 @@
+{
+  "Name": "JamulusVST3",
+  "Version": "0.1",
+  "Factory Info": {
+    "Vendor": "yourcompany",
+    "URL": "",
+    "E-Mail": "",
+    "Flags": {
+      "Unicode": true,
+      "Classes Discardable": false,
+      "Component Non Discardable": false,
+    },
+  },
+  "Classes": [
+    {
+      "CID": "ABCDEF019182FAEB4D616E75577A6971",
+      "Category": "Audio Module Class",
+      "Name": "JamulusVST3",
+      "Vendor": "yourcompany",
+      "Version": "0.1",
+      "SDKVersion": "VST 3.8.0",
+      "Sub Categories": [
+        "Fx",
+      ],
+      "Class Flags": 0,
+      "Cardinality": 2147483647,
+      "Snapshots": [
+      ],
+    },
+    {
+      "CID": "ABCDEF011234ABCD4D616E75577A6971",
+      "Category": "Component Controller Class",
+      "Name": "JamulusVST3",
+      "Vendor": "yourcompany",
+      "Version": "0.1",
+      "SDKVersion": "VST 3.8.0",
+      "Sub Categories": [
+        "Fx",
+      ],
+      "Class Flags": 0,
+      "Cardinality": 2147483647,
+      "Snapshots": [
+      ],
+    },
+  ],
+}

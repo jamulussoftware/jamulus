@@ -26,9 +26,10 @@ JamulusPluginEditor::JamulusPluginEditor ( JamulusAudioProcessor& p ) : AudioPro
         guiComponent->onDelayHPChanged       = [this] ( float freq ) { audioProcessor.getProcessor().setDelayHighPass ( freq ); };
 
         // Reverb Callbacks
-        guiComponent->onReverbEnableChanged = [this] ( bool enabled ) { audioProcessor.getProcessor().setReverbEnabled ( enabled ); };
-        guiComponent->onReverbMixChanged    = [this] ( float mix ) { audioProcessor.getProcessor().setReverbMix ( mix ); };
-        guiComponent->onReverbDecayChanged  = [this] ( float decay ) { audioProcessor.getProcessor().setReverbDecay ( decay ); };
+        guiComponent->onReverbEnableChanged  = [this] ( bool enabled ) { audioProcessor.getProcessor().setReverbEnabled ( enabled ); };
+        guiComponent->onReverbMixChanged     = [this] ( float mix ) { audioProcessor.getProcessor().setReverbMix ( mix ); };
+        guiComponent->onReverbDecayChanged   = [this] ( float decay ) { audioProcessor.getProcessor().setReverbDecay ( decay ); };
+        guiComponent->onLimiterEnableChanged = [this] ( bool enabled ) { audioProcessor.getProcessor().setLimiterEnabled ( enabled ); };
 
         addAndMakeVisible ( guiComponent.get() );
     }

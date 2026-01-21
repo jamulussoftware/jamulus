@@ -33,7 +33,8 @@ if (-not (Test-Path $binaryPath)) {
         Write-Warning "Found binary as .dll instead of .vst3. Renaming it back to .vst3 for standard compliance."
         Rename-Item -Path $dllPath -NewName "JamulusVST3.vst3"
         $binaryPath = Join-Path $Vst3Path "Contents\x86_64-win\JamulusVST3.vst3"
-    } else {
+    }
+    else {
         Write-Error "VST3 binary not found at: $binaryPath"
         exit 1
     }
@@ -60,14 +61,27 @@ if ([string]::IsNullOrEmpty($QtBinPath)) {
 }
 
 if ([string]::IsNullOrEmpty($QtBinPath) -or -not (Test-Path (Join-Path $QtBinPath "windeployqt.exe"))) {
-    Write-Error "Could not find windeployqt.exe. Please provide the path to your Qt bin directory (e.g., -QtBinPath 'C:\Qt\6.5.3\msvc2019_64\bin')."
+    Write-Error "Could not find windeployqt.exe."
     exit 1
 }
 
 $windeployqt = Join-Path $QtBinPath "windeployqt.exe"
 Write-Host "Using windeployqt: $windeployqt"
 
-# 3. Run windeployqt in a temporary folder
+# 3. Determine actual target for windeployqt
+# If using Bootstrap Shim, the Qt dependencies are in JamulusCore.dll
+$coreDll = Join-Path (Split-Path $binaryPath) "JamulusCore.dll"
+if (Test-Path $coreDll) {
+    Write-Host "Bootstrap Shim detected. Targeting inner engine: $coreDll"
+    $targetToScan = $coreDll
+}
+else {
+    $targetToScan = $binaryPath
+}
+
+# 4. Run windeployqt in a temporary folder
+Write-Host "Cleaning destination directory of old DLLs..."
+Get-ChildItem -Path $binaryDir -Filter "*.dll" | Remove-Item -Force
 Write-Host "Deploying Qt dependencies (using temporary workspace)..."
 
 $binaryDir = Split-Path -Parent $binaryPath
@@ -77,11 +91,13 @@ $tempDir = Join-Path ([IO.Path]::GetTempPath()) ("jamulus_vst3_deploy_{0}" -f ([
 New-Item -ItemType Directory -Path $tempDir | Out-Null
 
 $tempDll = Join-Path $tempDir "JamulusVST3.dll"
-Copy-Item -Path $binaryPath -Destination $tempDll -Force
+# Copy the Shim (or the plugin) to temp for analysis, but actually we need to copy TARGET
+$tempTarget = Join-Path $tempDir (Split-Path $targetToScan -Leaf)
+Copy-Item -Path $targetToScan -Destination $tempTarget -Force
 
 try {
-    Write-Host "Running windeployqt on: $tempDll"
-    & $windeployqt --release --no-translations --compiler-runtime "$tempDll"
+    Write-Host "Running windeployqt on: $tempTarget"
+    & $windeployqt --no-translations --compiler-runtime "$tempTarget"
 
     if ($LASTEXITCODE -ne 0) {
         Write-Error "windeployqt failed with exit code $LASTEXITCODE"
@@ -100,8 +116,68 @@ try {
         }
     }
 
+    # Manual copy of critical DLLs that windeployqt might skip (but are needed for standalone/remote)
+    $manualCopy = @(
+        "Qt6Gui.dll",
+        "Qt6Widgets.dll",
+        "Qt6OpenGL.dll",
+        "Qt6OpenGLWidgets.dll",
+        "d3dcompiler_47.dll", 
+        "opengl32sw.dll", 
+        "Qt6Svg.dll",
+        "msvcp140.dll",
+        "msvcp140_1.dll",
+        "msvcp140_2.dll",
+        "msvcp140_atomic_wait.dll",
+        "msvcp140_codecvt_ids.dll",
+        "concrt140.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+    )
+
+    foreach ($file in $manualCopy) {
+        $src = Join-Path $QtBinPath $file
+        if (Test-Path $src) {
+            Copy-Item -Path $src -Destination $binaryDir -Force
+            Write-Host "Manually copied: $file"
+        }
+        else {
+            # Fallback to System32
+            $src = Join-Path $env:SystemRoot "System32\$file"
+            if (Test-Path $src) {
+                Copy-Item -Path $src -Destination $binaryDir -Force
+                Write-Host "Manually copied from System32: $file"
+            }
+            else {
+                Write-Warning "Could not find critical dependency: $file"
+            }
+        }
+    }
+
+    # --- MANUALLY ADDED FIXES FOR LOCAL LOAD FAILURE ---
+    # 1. Create qt.conf to tell Qt to look for plugins in the current directory
+    $qtConfPath = Join-Path $binaryDir "qt.conf"
+    Set-Content -Path $qtConfPath -Value "[Paths]`r`nPrefix=." -Encoding Ascii -Verbose
+    Write-Host "Created qt.conf at: $qtConfPath"
+
+    # 2. Copy platforms/qwindows.dll (Critical for GUI init, often missed if not explicitly imported)
+    $qtPlatformsSrc = Join-Path (Get-Item $QtBinPath).Parent.FullName "plugins\platforms"
+    $platformsDest = Join-Path $binaryDir "platforms"
+    if (Test-Path $qtPlatformsSrc) {
+        if (-not (Test-Path $platformsDest)) { New-Item -ItemType Directory -Path $platformsDest | Out-Null }
+        Get-ChildItem -Path $qtPlatformsSrc -Filter "*.dll" | Where-Object { $_.Name -notlike "*d.dll" } | ForEach-Object {
+            Copy-Item -Path $_.FullName -Destination $platformsDest -Force
+            Write-Host "Copied platform plugin: $($_.Name)"
+        }
+    }
+    else {
+        Write-Warning "Could not find Qt platforms directory at: $qtPlatformsSrc"
+    }
+    # ---------------------------------------------------
+
     Write-Host "Successfully deployed Qt dependencies. Please restart your DAW and rescan plugins."
 
-} finally {
+}
+finally {
     Remove-Item -Recurse -Force $tempDir -ErrorAction SilentlyContinue
 }

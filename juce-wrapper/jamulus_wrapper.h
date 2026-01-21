@@ -62,10 +62,11 @@ extern "C"
     // Level Metering
     // ============================================================================
 
+    // Get input level meters (dB, -infinity to 0)
     double jamulus_client_get_level_left ( jamulus_client_t c );
     double jamulus_client_get_level_right ( jamulus_client_t c );
 
-    // Get output level meters (linear 0.0 to 1.0 peak)
+    // Get output level meters (0.0 to 1.0)
     float jamulus_client_get_output_level_left ( jamulus_client_t c );
     float jamulus_client_get_output_level_right ( jamulus_client_t c );
 
@@ -101,9 +102,8 @@ extern "C"
     void jamulus_client_set_instrument ( jamulus_client_t c, int instrument );
     int  jamulus_client_get_instrument ( jamulus_client_t c );
 
-    void        jamulus_client_set_country ( jamulus_client_t c, int country );
-    int         jamulus_client_get_country ( jamulus_client_t c );
-    const char* jamulus_client_get_country_code ( jamulus_client_t c );
+    void jamulus_client_set_country ( jamulus_client_t c, int country );
+    int  jamulus_client_get_country ( jamulus_client_t c );
 
     void        jamulus_client_set_city ( jamulus_client_t c, const char* city );
     const char* jamulus_client_get_city ( jamulus_client_t c );
@@ -111,9 +111,15 @@ extern "C"
     void jamulus_client_set_skill ( jamulus_client_t c, int skill );
     int  jamulus_client_get_skill ( jamulus_client_t c );
 
+    // Get country code (ISO 2-letter code, e.g. "us", "gb", or "none")
+    const char* jamulus_client_get_country_code ( jamulus_client_t c );
+
     // ============================================================================
     // Network Status
     // ============================================================================
+
+    // Get the current ping time in ms, or -1 if not connected
+    int jamulus_client_get_ping_time ( jamulus_client_t c );
 
     // Returns ping time in ms, or -1 if not connected
     // Network statistics
@@ -250,13 +256,6 @@ extern "C"
     void jamulus_client_clear_server_list ( jamulus_client_t c );
 
     // ============================================================================
-    // Network Status
-    // ============================================================================
-
-    // Get the current ping time in ms, or -1 if not connected
-    int jamulus_client_get_ping_time ( jamulus_client_t c );
-
-    // ============================================================================
     // Qt Event Processing (must be called periodically)
     // ============================================================================
 
@@ -277,6 +276,20 @@ extern "C"
     void  jamulus_gui_get_preferred_size ( void* gui, int* width, int* height );
     void  jamulus_gui_repaint ( void* gui );
     void  jamulus_gui_set_active ( bool active );
+
+    // ============================================================================
+    // Resource Loading (Bridge to Qt Resources)
+    // ============================================================================
+
+    // Load a resource (e.g. image) from the Qt Resource System (qrc).
+    // path: The resource path (e.g. "png/instr/res/instruments/violin.png" - no leading ":/")
+    // outData: Pointer to buffer pointer. The function allocates memory using new[], caller must delete[].
+    // outSize: Pointer to receive the size of the data.
+    // Returns true on success, false on failure (not found or empty).
+    // NOTE: Use jamulus_free_resource when done with data.
+    bool jamulus_load_resource ( const char* path, void** outData, int* outSize );
+
+    void jamulus_free_resource ( void* data );
 
 #ifdef __cplusplus
 }

@@ -83,4 +83,17 @@ private:
     // Internal Delay
     bool       delayEnabled = false;
     AudioDelay audioDelay;
+
+    // Limiter Control Methods
+public:
+    void  setLimiterEnabled ( bool enabled ) { limiterEnabled = enabled; }
+    bool  isLimiterEnabled() const { return limiterEnabled; }
+    void  setLimiterThreshold ( float thresh ) { limiterThreshold = thresh; } // 0.0 to 1.0
+    float getLimiterThreshold() const { return limiterThreshold; }
+
+private:
+    // Internal Limiter (soft-knee)
+    bool  limiterEnabled   = false;
+    float limiterThreshold = 0.9f; // Default threshold at ~-0.9dB
+    float limiterEnvelope  = 0.0f; // Envelope follower state
 };

@@ -4,9 +4,13 @@ project(jamulus_core LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 COMPONENTS Core Network Widgets Xml Concurrent Gui LinguistTools QUIET)
-# Qt Multimedia is optional in some Qt builds; try to locate it but do not fail if missing.
-find_package(Qt6 COMPONENTS Multimedia QUIET)
+if (JAMULUS_HEADLESS)
+    find_package(Qt6 COMPONENTS Core Network Xml Concurrent QUIET)
+else()
+    find_package(Qt6 COMPONENTS Core Network Widgets Xml Concurrent Gui LinguistTools QUIET)
+    # Qt Multimedia is optional in some Qt builds; try to locate it but do not fail if missing.
+    find_package(Qt6 COMPONENTS Multimedia QUIET)
+endif()
 
 set(JAMULUS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../")
 
@@ -15,10 +19,13 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+option(JAMULUS_HEADLESS "Build Jamulus core without GUI dependencies" OFF)
+
 # Collect all source files from upstream Jamulus src directory
 file(GLOB_RECURSE ALL_JAMULUS_SOURCES
     ${JAMULUS_ROOT}/src/*.cpp
     ${JAMULUS_ROOT}/src/*/*.cpp
+    ${JAMULUS_ROOT}/src/*.qrc
 )
 
 # Filter sources to platform-relevant files to avoid pulling in mac/android-only code
@@ -40,12 +47,35 @@ foreach(f IN LISTS ALL_JAMULUS_SOURCES)
         # `CSound` stub in the wrapper overrides to avoid pulling in ASIO
         # driver dependencies into the plugin binary.
         if (pos_asio EQUAL -1)
-            list(APPEND JAMULUS_SOURCES_ABS ${f})
+            # HEADLESS SUPPORT:
+            # If JAMULUS_HEADLESS is set, exclude all GUI dialog files (*dlg.cpp)
+            # and other GUI-only components that don't have HEADLESS guards internally
+            string(FIND "${rel}" "dlg.cpp" pos_dlg)
+            string(FIND "${rel}" "analyzerconsole.cpp" pos_analyzer)
+            string(FIND "${rel}" "audiomixerboard.cpp" pos_mixer)
+            string(FIND "${rel}" "levelmeter.cpp" pos_meter)
+            string(FIND "${rel}" "multicolorled.cpp" pos_led)
+            string(FIND "${rel}" "main.cpp" pos_main) # Exclude main entry point
+
+            if (JAMULUS_HEADLESS AND (NOT pos_dlg EQUAL -1 OR NOT pos_analyzer EQUAL -1 OR NOT pos_mixer EQUAL -1 OR NOT pos_meter EQUAL -1 OR NOT pos_led EQUAL -1 OR NOT pos_main EQUAL -1))
+                message(STATUS "Excluding GUI/Main source: ${rel}")
+            else()
+                list(APPEND JAMULUS_SOURCES_ABS ${f})
+            endif()
         endif()
     endif()
 endforeach()
 
+if (JAMULUS_HEADLESS)
+    add_compile_definitions(HEADLESS)
+endif()
+
 add_library(jamulus_core STATIC ${JAMULUS_SOURCES_ABS})
+
+# Force Dynamic Runtime (MD) to match Qt
+set_target_properties(jamulus_core PROPERTIES
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
+)
 
 # If any override sources are provided (e.g. lightweight CSound stub), add them
 # so they can replace upstream platform-specific implementations without
@@ -86,12 +116,20 @@ endif()
 
 set(JAMULUS_QT_LIBS)
 if (TARGET Qt6::Core)
-    list(APPEND JAMULUS_QT_LIBS Qt6::Core Qt6::Network Qt6::Widgets Qt6::Xml Qt6::Concurrent Qt6::Gui)
-    if (TARGET Qt6::Multimedia)
-        list(APPEND JAMULUS_QT_LIBS Qt6::Multimedia)
+    if (JAMULUS_HEADLESS)
+        list(APPEND JAMULUS_QT_LIBS Qt6::Core Qt6::Network Qt6::Xml Qt6::Concurrent)
+    else()
+        list(APPEND JAMULUS_QT_LIBS Qt6::Core Qt6::Network Qt6::Widgets Qt6::Xml Qt6::Concurrent Qt6::Gui)
+        if (TARGET Qt6::Multimedia)
+            list(APPEND JAMULUS_QT_LIBS Qt6::Multimedia)
+        endif()
     endif()
 elseif (TARGET Qt5::Core)
-    list(APPEND JAMULUS_QT_LIBS Qt5::Core Qt5::Network Qt5::Widgets Qt5::Xml Qt5::Concurrent)
+    if (JAMULUS_HEADLESS)
+        list(APPEND JAMULUS_QT_LIBS Qt5::Core Qt6::Network Qt6::Xml Qt6::Concurrent)
+    else()
+        list(APPEND JAMULUS_QT_LIBS Qt5::Core Qt5::Network Qt5::Widgets Qt5::Xml Qt5::Concurrent)
+    endif()
 endif()
 
 target_link_libraries(jamulus_core PRIVATE ${JAMULUS_QT_LIBS})

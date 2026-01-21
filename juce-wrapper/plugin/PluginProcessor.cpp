@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "Resampler.h"
+#include "DebugLogger.h"
 #include <cstring>
 #include <vector>
 #include <cmath>
@@ -9,6 +10,7 @@ static constexpr double JAMULUS_SAMPLE_RATE = 48000.0;
 
 JamulusPluginProcessor::JamulusPluginProcessor()
 {
+    DebugLogger::instance().log("[JamulusPluginProcessor] Constructor called");
     // Intentionally avoid heavy initialization here.
     // Many hosts instantiate plugins during scanning; doing network/Qt init in the
     // constructor can crash or blacklist the plugin.
@@ -16,9 +18,11 @@ JamulusPluginProcessor::JamulusPluginProcessor()
 
 JamulusPluginProcessor::~JamulusPluginProcessor()
 {
+    DebugLogger::instance().log("[JamulusPluginProcessor] Destructor called");
     releaseResources();
     if ( client )
     {
+        DebugLogger::instance().log("[JamulusPluginProcessor] Destroying client");
         jamulus_client_destroy ( client );
         client = nullptr;
     }
@@ -26,6 +30,7 @@ JamulusPluginProcessor::~JamulusPluginProcessor()
 
 void JamulusPluginProcessor::prepareToPlay ( double sampleRate, int samplesPerBlock )
 {
+    DebugLogger::instance().log("[JamulusPluginProcessor] prepareToPlay called. SampleRate: " + std::to_string(sampleRate) + ", BlockSize: " + std::to_string(samplesPerBlock));
     procNumChannels = 2; // stereo for now
     procBlockSize   = samplesPerBlock > 0 ? samplesPerBlock : 128;
     hostSampleRate  = sampleRate;
@@ -36,6 +41,7 @@ void JamulusPluginProcessor::prepareToPlay ( double sampleRate, int samplesPerBl
     needsResampling = std::abs ( hostSampleRate - JAMULUS_SAMPLE_RATE ) >= 1.0;
     if ( needsResampling )
     {
+        DebugLogger::instance().log("[JamulusPluginProcessor] Host sample rate differs from Jamulus, enabling resampling");
         inputResampler.prepare ( hostSampleRate, JAMULUS_SAMPLE_RATE, procNumChannels );
         outputResampler.prepare ( JAMULUS_SAMPLE_RATE, hostSampleRate, procNumChannels );
     }
@@ -43,8 +49,12 @@ void JamulusPluginProcessor::prepareToPlay ( double sampleRate, int samplesPerBl
     // Create and start Jamulus client
     if ( !client )
     {
+        DebugLogger::instance().log("[JamulusPluginProcessor] Creating Jamulus client");
         client        = jamulus_client_create ( 0, nullptr, "JUCE Jamulus Client", false );
         clientStarted = false;
+        if (!client) {
+            DebugLogger::instance().log("[JamulusPluginProcessor] ERROR: jamulus_client_create returned nullptr!");
+        }
     }
 
     if ( client )
@@ -52,10 +62,14 @@ void JamulusPluginProcessor::prepareToPlay ( double sampleRate, int samplesPerBl
         // Start network/codec client (enables channel for network communication)
         if ( !clientStarted )
         {
+            DebugLogger::instance().log("[JamulusPluginProcessor] Starting Jamulus client");
             jamulus_client_start ( client );
             clientStarted = true;
         }
         // Note: No worker thread needed - processBlock calls jamulus_client_process_audio directly
+    }
+    else {
+        DebugLogger::instance().log("[JamulusPluginProcessor] ERROR: client is nullptr after creation!");
     }
 }
 
@@ -165,6 +179,51 @@ void JamulusPluginProcessor::processBlock ( const float** inputs, float** output
         }
     }
 
+    // Apply soft-knee limiter (if enabled)
+    if ( limiterEnabled )
+    {
+        const float attackCoeff  = 0.01f;   // Fast attack (~0.2ms at 48kHz)
+        const float releaseCoeff = 0.0001f; // Slow release (~200ms at 48kHz)
+        const float ratio        = 10.0f;   // High ratio for limiting effect
+        const float knee         = 0.1f;    // Soft knee width
+
+        for ( int i = 0; i < numSamples; ++i )
+        {
+            // Get stereo sample pair
+            float left  = internalOut[static_cast<size_t> ( i ) * 2 + 0];
+            float right = internalOut[static_cast<size_t> ( i ) * 2 + 1];
+
+            // Peak detection (use max of L/R)
+            float peak = std::max ( std::abs ( left ), std::abs ( right ) );
+
+            // Envelope follower
+            if ( peak > limiterEnvelope )
+                limiterEnvelope += ( peak - limiterEnvelope ) * attackCoeff;
+            else
+                limiterEnvelope += ( peak - limiterEnvelope ) * releaseCoeff;
+
+            // Calculate gain reduction
+            float gain = 1.0f;
+            if ( limiterEnvelope > limiterThreshold )
+            {
+                // Soft-knee compression above threshold
+                float overshoot  = limiterEnvelope - limiterThreshold;
+                float compressed = limiterThreshold + overshoot / ratio;
+                gain             = compressed / limiterEnvelope;
+            }
+            else if ( limiterEnvelope > limiterThreshold - knee )
+            {
+                // Soft knee transition
+                float x = ( limiterEnvelope - ( limiterThreshold - knee ) ) / knee;
+                gain    = 1.0f - x * x * 0.05f; // Gentle reduction in knee region
+            }
+
+            // Apply gain reduction
+            internalOut[static_cast<size_t> ( i ) * 2 + 0] = left * gain;
+            internalOut[static_cast<size_t> ( i ) * 2 + 1] = right * gain;
+        }
+    }
+
     // Direct Monitoring: Mix input to output if enabled
     if ( monitorMode )
     {
@@ -198,9 +257,11 @@ void JamulusPluginProcessor::processBlock ( const float** inputs, float** output
 
 void JamulusPluginProcessor::releaseResources()
 {
+    DebugLogger::instance().log("[JamulusPluginProcessor] releaseResources called");
     // stop network/codec client
     if ( client && clientStarted )
     {
+        DebugLogger::instance().log("[JamulusPluginProcessor] Stopping Jamulus client");
         jamulus_client_stop ( client );
         clientStarted = false;
     }
@@ -208,6 +269,7 @@ void JamulusPluginProcessor::releaseResources()
     // Reset resamplers
     if ( needsResampling )
     {
+        DebugLogger::instance().log("[JamulusPluginProcessor] Resetting resamplers");
         inputResampler.reset();
         outputResampler.reset();
     }

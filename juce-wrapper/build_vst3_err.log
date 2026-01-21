@@ -1,0 +1,149 @@
+MSBuild version 17.14.23+b0019275e for .NET Framework
+
+  Checking File Globs
+  Automatic MOC and UIC for target jamulus_vst3_rc_lib
+  jamulus_vst3_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_rc_lib.dir\Release\jamulus_vst3_rc_lib.lib
+  Automatic MOC and UIC for target opus
+  opus.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\libs_opus\Release\opus.lib
+  Automatic MOC and UIC for target jamulus_core
+  jamulus_core.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\libjamulus\Release\jamulus_core.lib
+  Automatic MOC and UIC for target jamulus_wrapper
+  jamulus_wrapper.cpp
+  jamulus_wrapper.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\Release\jamulus_wrapper.lib
+  Automatic MOC and UIC for target jamulus_vst3
+  jamulus_vst3.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_artefacts\Release\JamulusVST3_SharedCode.lib
+  Automatic MOC and UIC for target jamulus_vst3_vst3_helper
+  jamulus_vst3_vst3_helper.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\Release\jamulus_vst3_vst3_helper.exe
+  Automatic MOC and UIC for target jamulus_vst3_VST3
+     Creating library E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.lib and object E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.exp
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4286: symbol 'free' defined in 'libucrt.lib(free.obj)' is imported by 'opus.lib(kiss_fft.obj)' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4217: symbol 'free' defined in 'libucrt.lib(free.obj)' is imported by 'opus.lib(modes.obj)' in function 'opus_custom_mode_create' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4286: symbol 'free' defined in 'libucrt.lib(free.obj)' is imported by 'opus.lib(celt_encoder.obj)' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4286: symbol 'free' defined in 'libucrt.lib(free.obj)' is imported by 'opus.lib(celt_decoder.obj)' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4286: symbol 'free' defined in 'libucrt.lib(free.obj)' is imported by 'opus.lib(mdct.obj)' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4286: symbol 'malloc' defined in 'libucrt.lib(malloc.obj)' is imported by 'opus.lib(rate.obj)' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4286: symbol 'malloc' defined in 'libucrt.lib(malloc.obj)' is imported by 'opus.lib(kiss_fft.obj)' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4217: symbol 'malloc' defined in 'libucrt.lib(malloc.obj)' is imported by 'opus.lib(modes.obj)' in function 'compute_allocation_table' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4286: symbol 'malloc' defined in 'libucrt.lib(malloc.obj)' is imported by 'opus.lib(celt_encoder.obj)' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4286: symbol 'malloc' defined in 'libucrt.lib(malloc.obj)' is imported by 'opus.lib(celt_decoder.obj)' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4286: symbol 'malloc' defined in 'libucrt.lib(malloc.obj)' is imported by 'opus.lib(mdct.obj)' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4217: symbol 'abort' defined in 'libucrt.lib(abort.obj)' is imported by 'opus.lib(celt.obj)' in function 'celt_fatal' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4217: symbol '_set_abort_behavior' defined in 'libucrt.lib(abort.obj)' is imported by 'opus.lib(celt.obj)' in function 'celt_fatal' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4217: symbol '__acrt_iob_func' defined in 'libucrt.lib(_file.obj)' is imported by 'opus.lib(celt.obj)' in function 'celt_fatal' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+LINK : warning LNK4217: symbol '__stdio_common_vfprintf' defined in 'libucrt.lib(output.obj)' is imported by 'opus.lib(celt.obj)' in function '_vfprintf_l' [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+  jamulus_vst3_VST3.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_artefacts\Release\VST3\JamulusVST3.vst3\Contents\x86_64-win\JamulusVST3.vst3
+  		Embedding DLL redirection manifest into plugin	Deploying Qt dependencies	Copying JamulusVST3.vst3 to the default VST3 folder	Generating VST3 manifest from moduleinfo.json
+  removing moduleinfo.json
+  creating E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3
+  Deploying Qt dependencies with windeployqt...
+  E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_artefacts\Release\VST3\JamulusVST3.vst3\Contents\x86_64-win\JamulusVST3.vst3 64 bit, release executable
+  Adding in plugin type generic for module: Qt6Gui
+  Adding in plugin type iconengines for module: Qt6Gui
+  Adding Qt6Svg for qsvgicon.dll from plugin type: iconengines
+  Adding in plugin type imageformats for module: Qt6Gui
+  Adding Qt6Pdf for qpdf.dll from plugin type: imageformats
+  Adding in plugin type networkinformation for module: Qt6Network
+  Adding in plugin type platforminputcontexts for module: Qt6Gui
+  Skipping plugin qtvirtualkeyboardplugin.dll due to disabled dependencies (Qt6Qml Qt6Quick).
+  Adding in plugin type platforms for module: Qt6Gui
+  Adding in plugin type styles for module: Qt6Widgets
+  Adding in plugin type tls for module: Qt6Network
+  Direct dependencies: Qt6Core Qt6Gui Qt6Network Qt6Widgets Qt6Xml
+  All dependencies   : Qt6Core Qt6Gui Qt6Network Qt6Widgets Qt6Xml
+EXEC : warning : Cannot find Visual Studio installation directory, VCINSTALLDIR is not set. [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+  To be deployed     : Qt6Core Qt6Gui Qt6Network Qt6Pdf Qt6Svg Qt6Widgets Qt6Xml
+  Qt6Core.dll is up to date.
+  Qt6Gui.dll is up to date.
+  Qt6Network.dll is up to date.
+  Qt6Pdf.dll is up to date.
+  Qt6Svg.dll is up to date.
+  Qt6Widgets.dll is up to date.
+  Qt6Xml.dll is up to date.
+  D3Dcompiler_47.dll is up to date.
+  dxcompiler.dll is up to date.
+  dxil.dll is up to date.
+  qtuiotouchplugin.dll is up to date.
+  qsvgicon.dll is up to date.
+  qgif.dll is up to date.
+  qicns.dll is up to date.
+  qico.dll is up to date.
+  qjpeg.dll is up to date.
+  qpdf.dll is up to date.
+  qsvg.dll is up to date.
+  qtga.dll is up to date.
+  qtiff.dll is up to date.
+  qwbmp.dll is up to date.
+  qwebp.dll is up to date.
+  qnetworklistmanager.dll is up to date.
+  qwindows.dll is up to date.
+  qmodernwindowsstyle.dll is up to date.
+  qcertonlybackend.dll is up to date.
+  qopensslbackend.dll is up to date.
+  qschannelbackend.dll is up to date.
+  Error copying directory from "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3" to "C:/Program Files/Common Files/VST3/JamulusVST3.vst3".
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: The command "setlocal [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: "C:\Program Files\CMake\bin\cmake.exe" -E echo "removing moduleinfo.json" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: "C:\Program Files\CMake\bin\cmake.exe" -E remove -f "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/moduleinfo.json" "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/Resources/moduleinfo.json" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmErrorLevel [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: exit /b %1 [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :VCEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: setlocal [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: "C:\Program Files\CMake\bin\cmake.exe" -E echo "creating E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: "C:\Program Files\CMake\bin\cmake.exe" -E make_directory "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/Resources" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: Release\jamulus_vst3_vst3_helper.exe > "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/Resources/moduleinfo.json" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmErrorLevel [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: exit /b %1 [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :VCEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: setlocal [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: mt.exe -nologo -manifest "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/plugin/JamulusVST3.manifest" "-outputresource:E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/x86_64-win/JamulusVST3.vst3";"#2" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmErrorLevel [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: exit /b %1 [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :VCEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: setlocal [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: "C:\Program Files\CMake\bin\cmake.exe" -E echo "Deploying Qt dependencies with windeployqt..." [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: C:\Qt\6.7.3\msvc2022_64\bin\windeployqt.exe --release --no-translations --no-opengl-sw --compiler-runtime "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/x86_64-win/JamulusVST3.vst3" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmErrorLevel [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: exit /b %1 [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :VCEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: setlocal [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: "C:\Program Files\CMake\bin\cmake.exe" -E copy_directory "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3" "C:/Program Files/Common Files/VST3/JamulusVST3.vst3" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmErrorLevel [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: exit /b %1 [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :VCEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: setlocal [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: "C:\Program Files\CMake\bin\cmake.exe" -E echo "Generating manifest.ttl from moduleinfo.json" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: "C:\Program Files\CMake\bin\cmake.exe" -E env PYTHONIOENCODING=UTF-8 python "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/plugin/generate_vst3_manifest.py" "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/Resources/moduleinfo.json" "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/x86_64-win/manifest.ttl" [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmErrorLevel [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: exit /b %1 [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :cmDone [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: if %errorlevel% neq 0 goto :VCEnd [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :VCEnd" exited with code 1. [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]

@@ -1,0 +1,17 @@
+MSBuild version 18.0.5+e22287bf1 for .NET Framework
+
+  Checking File Globs
+  Automatic MOC and UIC for target jamulus_vst3_rc_lib
+  jamulus_vst3_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_rc_lib.dir\Release\jamulus_vst3_rc_lib.lib
+  Automatic MOC and UIC for target opus
+  opus.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\libs_opus\Release\opus.lib
+  Automatic MOC and UIC for target jamulus_core
+  jamulus_core.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\libjamulus\Release\jamulus_core.lib
+  Automatic MOC and UIC for target jamulus_wrapper
+  jamulus_wrapper.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\Release\jamulus_wrapper.lib
+  Automatic MOC and UIC for target jamulus_vst3
+  jamulus_vst3.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_artefacts\Release\JamulusVST3_SharedCode.lib
+  Automatic MOC and UIC for target jamulus_vst3_vst3_helper
+  jamulus_vst3_vst3_helper.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\Release\jamulus_vst3_vst3_helper.exe
+  Automatic MOC and UIC for target jamulus_vst3_VST3
+LINK : fatal error LNK1194: cannot delay-load 'Qt6Network.dll' due to import of data symbol '"__declspec(dllimport) public: static struct QMetaObject const QAbstractSocket::staticMetaObject" (__imp_?staticMetaObject@QAbstractSocket@@2UQMetaObject@@B)'; link without /DELAYLOAD:Qt6Network.dll [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_VST3.vcxproj]

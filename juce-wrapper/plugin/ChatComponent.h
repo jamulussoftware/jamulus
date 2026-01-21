@@ -294,6 +294,8 @@ private:
 class ChatComponent : public juce::Component, private juce::Timer
 {
 public:
+    static constexpr const char* SIG_PREFIX = "[[VST]]"; // Use a more unique but standard-character prefix to avoid mojibake
+
     ChatComponent ( jamulus_client_t client, bool panelMode = false ) : jamulusClient ( client ), isPanelMode ( panelMode )
     {
         // Title bar with pop-out button
@@ -312,6 +314,29 @@ public:
                 onPopOut();
         };
         popOutButton.setVisible ( isPanelMode );
+
+        // Clear button (Icon in header, "Clear" in footer)
+        addAndMakeVisible ( clearButton );
+        clearButton.setTooltip ( "Clear chat history" );
+        clearButton.onClick = [this]() { messageList.clearMessages(); };
+
+        // Save button (Icon in header, "Save" in footer)
+        addAndMakeVisible ( saveButton );
+        saveButton.setTooltip ( "Save chat to file" );
+        saveButton.onClick = [this]() { saveChat(); };
+        if ( isPanelMode )
+        {
+            clearButton.setButtonText ( "C" ); // 'C' for Clear
+            saveButton.setButtonText ( "S" );  // 'S' for Save
+        }
+        else
+        {
+            clearButton.setButtonText ( "Clear" );
+            saveButton.setButtonText ( "Save" );
+        }
+
+        clearButton.setVisible ( true );
+        saveButton.setVisible ( true );
 
         // Pop-in button (only in popup window mode)
         addAndMakeVisible ( popInButton );
@@ -348,17 +373,7 @@ public:
         sendButton.setButtonText ( "Send" );
         sendButton.onClick = [this]() { sendMessage(); };
 
-        // Clear button (only in popup mode)
-        addAndMakeVisible ( clearButton );
-        clearButton.setButtonText ( "Clear" );
-        clearButton.onClick = [this]() { messageList.clearMessages(); };
-        clearButton.setVisible ( !isPanelMode );
-
-        // Save button - opens system file save dialog
-        addAndMakeVisible ( saveButton );
-        saveButton.setButtonText ( "Save" );
-        saveButton.onClick = [this]() { saveChat(); };
-        saveButton.setVisible ( !isPanelMode );
+        // (Buttons configured above)
 
         // Only add welcome message if not restoring from shared storage
         if ( !isPanelMode ) // Will be populated by setMessages() in panel mode
@@ -419,6 +434,8 @@ public:
         {
             closeButton.setBounds ( header.removeFromRight ( 30 ).reduced ( 2 ) );
             popOutButton.setBounds ( header.removeFromRight ( 30 ).reduced ( 2 ) );
+            saveButton.setBounds ( header.removeFromRight ( 30 ).reduced ( 2 ) );
+            clearButton.setBounds ( header.removeFromRight ( 30 ).reduced ( 2 ) );
             titleLabel.setBounds ( header.reduced ( 5, 0 ) );
         }
         else
@@ -452,10 +469,11 @@ public:
         messageList.setSize ( messageViewport.getWidth() - messageViewport.getScrollBarThickness(), messageList.getHeight() );
     }
 
-    std::function<void()>                       onClose;
-    std::function<void()>                       onPopOut;
-    std::function<void()>                       onPopIn;
-    std::function<void ( const juce::String& )> onMessageSent;
+    std::function<void()>                                            onClose;
+    std::function<void()>                                            onPopOut;
+    std::function<void()>                                            onPopIn;
+    std::function<void ( const juce::String& )>                      onMessageSent;
+    std::function<void ( const juce::String&, const juce::String& )> onSignalingMessageReceived;
 
 private:
     void timerCallback() override
@@ -485,7 +503,19 @@ private:
                 {
                     juce::String sender = fullMsg.substring ( 0, colonPos );
                     juce::String text   = fullMsg.substring ( colonPos + 2 );
-                    addChatMessage ( sender, text );
+
+                    // Check for signaling prefix
+                    if ( text.startsWith ( SIG_PREFIX ) )
+                    {
+                        if ( onSignalingMessageReceived )
+                        {
+                            onSignalingMessageReceived ( sender, text.substring ( juce::String ( SIG_PREFIX ).length() ) );
+                        }
+                    }
+                    else
+                    {
+                        addChatMessage ( sender, text );
+                    }
                 }
                 else
                 {

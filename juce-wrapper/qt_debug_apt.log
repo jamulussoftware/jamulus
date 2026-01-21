@@ -1,0 +1,28 @@
+qt.core.plugin.factoryloader: checking directory path "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/x86_64-win/platforms" ...
+qt.core.plugin.factoryloader: looking at "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/x86_64-win/platforms/qwindows.dll"
+qt.core.plugin.loader: Found metadata in lib E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/x86_64-win/platforms/qwindows.dll, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "windows"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QWindowsIntegrationPlugin",
+    "debug": false,
+    "version": 395008
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("windows")
+qt.core.plugin.factoryloader: checking directory path "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/bin/Release/platforms" ...
+qt.core.library: "E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/x86_64-win/platforms/qwindows.dll" loaded library
+QObject::moveToThread: Current thread (0x12cb0082350) is not the object's thread (0x12cb0135640).
+Cannot move to target thread (0x12cb0082350)
+
+qt.qpa.plugin: Could not load the Qt platform plugin "windows" in "" even though it was found.
+This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+
+Available platform plugins are: windows.
+

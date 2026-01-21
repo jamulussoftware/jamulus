@@ -1,0 +1,44 @@
+Target: build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3
+Resolved module candidates: 1
+  - build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3\Contents\x86_64-win\JamulusVST3.vst3
+
+=== Scanning module: build/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3\Contents\x86_64-win\JamulusVST3.vst3 ===
+fileMightContainThisPluginType: true
+LoadLibraryW (no DLL directory setup): OK
+GetProcAddress(GetPluginFactory): OK
+
+Found plugin types: 1
+
+=== Type 0 ===
+Name: JamulusVST3
+DescriptiveName: JamulusVST3
+Manufacturer: yourcompany
+Category: Fx
+Format: VST3
+Identifier: E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_artefacts\Release\VST3\JamulusVST3.vst3\Contents\x86_64-win\JamulusVST3.vst3
+UniqueId: -57155291
+IsInstrument: false
+NumInputs: 2
+NumOutputs: 2
+CreatePluginInstance: OK
+Resolved description:
+Name: JamulusVST3
+DescriptiveName: JamulusVST3
+Manufacturer: yourcompany
+Category: Fx
+Format: VST3
+Identifier: E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_vst3_artefacts\Release\VST3\JamulusVST3.vst3\Contents\x86_64-win\JamulusVST3.vst3
+UniqueId: -57155291
+IsInstrument: false
+NumInputs: 2
+NumOutputs: 2
+
+--- Simulating host workflow ---
+hasEditor: false
+Calling prepareToPlay(48000, 512)...
+prepareToPlay: OK
+Calling processBlock...
+processBlock: OK
+hasEditor (queried again): false
+Processing 10 more audio blocks...
+Multi-block processing: OK

@@ -1,20 +1,24 @@
 #include "JucePluginAdapter.h"
 #include "PluginEditor.h"
+#include "DebugLogger.h"
 
 JamulusAudioProcessor::~JamulusAudioProcessor() = default;
 
 void JamulusAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
+    DebugLogger::instance().log("[JamulusAudioProcessor] prepareToPlay called");
     impl.prepareToPlay(sampleRate, samplesPerBlock);
 }
 
 void JamulusAudioProcessor::releaseResources()
 {
+    DebugLogger::instance().log("[JamulusAudioProcessor] releaseResources called");
     impl.releaseResources();
 }
 
 void JamulusAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
+    DebugLogger::instance().log("[JamulusAudioProcessor] processBlock called");
     const int numSamples = buffer.getNumSamples();
     
     // Determine which input to use
@@ -84,5 +88,6 @@ juce::AudioProcessorEditor* JamulusAudioProcessor::createEditor()
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
+    DebugLogger::instance().log("[JucePluginAdapter] createPluginFilter called");
     return new JamulusAudioProcessor();
 }

@@ -10,23 +10,46 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 # Prefer Qt6, but accept Qt5 as a fallback. Require at least one.
-find_package(Qt6 COMPONENTS Core Network Widgets Xml Concurrent Gui QUIET)
-if (Qt6_FOUND)
-    set(QT_LIBS Qt6::Core Qt6::Network Qt6::Widgets Qt6::Xml Qt6::Concurrent Qt6::Gui)
-else()
-    find_package(Qt5 COMPONENTS Core Network Widgets Xml Concurrent QUIET)
-    if (Qt5_FOUND)
-        set(QT_LIBS Qt5::Core Qt5::Network Qt5::Widgets Qt5::Xml Qt5::Concurrent)
+# Prefer Qt6, but accept Qt5 as a fallback. Require at least one.
+if (JAMULUS_HEADLESS)
+    find_package(Qt6 COMPONENTS Core Network Xml Concurrent QUIET)
+    if (Qt6_FOUND)
+        set(QT_LIBS Qt6::Core Qt6::Network Qt6::Xml Qt6::Concurrent)
     else()
-        message(FATAL_ERROR "Could not find Qt6 or Qt5. Please set Qt6_DIR or Qt5_DIR or add Qt to CMAKE_PREFIX_PATH.")
+        find_package(Qt5 COMPONENTS Core Network Xml Concurrent QUIET)
+        if (Qt5_FOUND)
+            set(QT_LIBS Qt5::Core Qt5::Network Qt5::Xml Qt5::Concurrent)
+        else()
+             message(FATAL_ERROR "Could not find Qt6 or Qt5 (Headless). Please check CMAKE_PREFIX_PATH.")
+        endif()
+    endif()
+else()
+    find_package(Qt6 COMPONENTS Core Network Widgets Xml Concurrent Gui QUIET)
+    if (Qt6_FOUND)
+        set(QT_LIBS Qt6::Core Qt6::Network Qt6::Widgets Qt6::Xml Qt6::Concurrent Qt6::Gui)
+    else()
+        find_package(Qt5 COMPONENTS Core Network Widgets Xml Concurrent QUIET)
+        if (Qt5_FOUND)
+            set(QT_LIBS Qt5::Core Qt5::Network Qt5::Widgets Qt5::Xml Qt5::Concurrent)
+        else()
+            message(FATAL_ERROR "Could not find Qt6 or Qt5. Please set Qt6_DIR or Qt5_DIR or add Qt to CMAKE_PREFIX_PATH.")
+        endif()
     endif()
 endif()
+
+# Dynamic link VC++ runtime to match Qt and standard VST3 practices
+# MSVC Runtime setting removed to fix build configuration
 
 add_library(jamulus_wrapper STATIC
     jamulus_wrapper.cpp
     virtual_sound/virtual_sound.h
     plugin/PluginProcessor.cpp
     plugin/PluginProcessor.h
+)
+
+# Force Dynamic Runtime (MD) to match Qt, preventing heap corruption across DLL boundaries
+set_target_properties(jamulus_wrapper PROPERTIES
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
 )
 
 target_sources(jamulus_wrapper PRIVATE audio_fifo.cpp)
@@ -41,8 +64,13 @@ endif()
 
 # We need GUI support now - remove HEADLESS define
 target_compile_definitions(jamulus_wrapper PRIVATE APP_VERSION=\"0.0.0\" NOMINMAX)
+if (JAMULUS_HEADLESS)
+    target_compile_definitions(jamulus_wrapper PRIVATE HEADLESS)
+endif()
 
 # Build Jamulus core as a static library and link it into the wrapper
+    # Enable Headless mode to exclude GUI dialogs from the core library
+    set(JAMULUS_HEADLESS ON CACHE BOOL "Force headless build for wrapper" FORCE)
     add_subdirectory(libjamulus)
     # jamulus_wrapper exposes the jamulus core API to consumers (plugins), so
     # propagate linkage to the core as PUBLIC so downstream targets linking

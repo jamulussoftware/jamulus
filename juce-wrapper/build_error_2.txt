@@ -1,0 +1,19 @@
+MSBuild version 18.0.5+e22287bf1 for .NET Framework
+
+  Checking File Globs
+  Automatic MOC and UIC for target jamulus_engine_rc_lib
+  jamulus_engine_rc_lib.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_engine_rc_lib.dir\Release\jamulus_engine_rc_lib.lib
+  Automatic MOC and UIC for target opus
+  opus.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\libs_opus\Release\opus.lib
+  Automatic MOC and UIC for target jamulus_core
+  jamulus_core.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\libjamulus\Release\jamulus_core.lib
+  Automatic MOC and UIC for target jamulus_wrapper
+  jamulus_wrapper.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\Release\jamulus_wrapper.lib
+  Automatic MOC and UIC for target jamulus_engine
+  jamulus_engine.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_engine_artefacts\Release\JamulusCore_SharedCode.lib
+  Automatic MOC and UIC for target jamulus_engine_vst3_helper
+  jamulus_engine_vst3_helper.vcxproj -> E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\Release\jamulus_engine_vst3_helper.exe
+  Automatic MOC and UIC for target jamulus_engine_VST3
+     Creating library E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_engine_artefacts/Release/VST3/JamulusCore.lib and object E:/Web stuff/Jamulus VST Wrapper/jamulus/juce-wrapper/build/plugin/jamulus_engine_artefacts/Release/VST3/JamulusCore.exp
+jamulus_wrapper.lib(jamulus_wrapper.obj) : error LNK2019: unresolved external symbol "void __cdecl qInitResources_resources(void)" (?qInitResources_resources@@YAXXZ) referenced in function "void __cdecl ensureQtApp(void)" (?ensureQtApp@@YAXXZ) [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_engine_VST3.vcxproj]
+E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_engine_artefacts\Release\VST3\JamulusCore.vst3\Contents\x86_64-win\JamulusCore.vst3 : fatal error LNK1120: 1 unresolved externals [E:\Web stuff\Jamulus VST Wrapper\jamulus\juce-wrapper\build\plugin\jamulus_engine_VST3.vcxproj]

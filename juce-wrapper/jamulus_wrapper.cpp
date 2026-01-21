@@ -1,15 +1,19 @@
 #include "jamulus_wrapper.h"
+#include "plugin/DebugLogger.h"
 #include <QString>
 #include "../libjamulus/../src/client.h"
 #include "../libjamulus/../src/settings.h"
-#include "../libjamulus/../src/clientdlg.h"
-#include <QApplication>
+#include <QCoreApplication>
 #include <QLibraryInfo>
 #include <QTimer>
-#include <QWindow>
+#include <QFile>
+#ifndef HEADLESS
+#    include <QWindow>
+#endif
 #include <new>
 #include "audio_fifo.h"
 #include <memory>
+#include <mutex>
 #include <thread>
 #include <atomic>
 #include <chrono>
@@ -17,6 +21,9 @@
 #include <vector>
 #include <set>
 #include <map>
+
+// Initialise resources compiled into the static lib
+int qInitResources_resources();
 
 #ifdef _WIN32
 #    include <windows.h>
@@ -52,84 +59,43 @@ static void setupQtPaths()
     QString pluginDir = getPluginDirectory();
     if ( !pluginDir.isEmpty() )
     {
+        DebugLogger::instance().log ( "[jamulus_wrapper] Setting QT_PLUGIN_PATH to: " + pluginDir.toStdString() );
         // Tell Qt to look for plugins in the same directory as this DLL
         qputenv ( "QT_PLUGIN_PATH", pluginDir.toUtf8() );
+
+        // CRITICAL FOR WINDOWS: qwindows.dll in ./platforms/ needs to find Qt6Gui.dll in ./
+        // We must add the plugin directory to the DLL search path.
+        SetDllDirectoryW ( (LPCWSTR) pluginDir.utf16() );
+    }
+    else
+    {
+        DebugLogger::instance().log ( "[jamulus_wrapper] getPluginDirectory() returned empty!" );
     }
 }
 #else
 static void setupQtPaths() {}
 #endif
 
-// Global Qt application instance and event pump timer
-static QApplication* g_qtApp          = nullptr;
-static QTimer*       g_eventPumpTimer = nullptr;
+// Global Qt application instance
+// static QCoreApplication* g_qtApp = nullptr; // Not strictly needed if we use instance()
 
-// Global event filter that intercepts Close and other problematic events on ALL widgets
-// to prevent dialogs from triggering logic that could crash the plugin.
-class GlobalEventFilter : public QObject
-{
-public:
-    explicit GlobalEventFilter ( QObject* parent = nullptr ) : QObject ( parent ) {}
-
-    // Set the main embedded window to protect from focus events
-    void setEmbeddedWindow ( QWidget* w ) { embeddedWindow = w; }
-
-protected:
-    bool eventFilter ( QObject* watched, QEvent* event ) override
-    {
-        QWidget* w = qobject_cast<QWidget*> ( watched );
-
-        // Intercept close events on the MAIN embedded window only - convert to hide
-        if ( event->type() == QEvent::Close )
-        {
-            if ( w && w == embeddedWindow )
-            {
-                w->hide();
-                event->ignore();
-                return true;
-            }
-            // Let other dialogs (Settings, Chat, etc.) close normally - they just hide themselves
-        }
-
-        // Only block focus/activation events on the EMBEDDED window (not popup dialogs)
-        if ( w && w == embeddedWindow )
-        {
-            switch ( event->type() )
-            {
-            case QEvent::WindowActivate:
-            case QEvent::WindowDeactivate:
-            case QEvent::FocusIn:
-            case QEvent::FocusOut:
-            case QEvent::FocusAboutToChange:
-            case QEvent::ActivationChange:
-                return true;
-            default:
-                break;
-            }
-        }
-
-        return QObject::eventFilter ( watched, event );
-    }
-
-private:
-    QWidget* embeddedWindow = nullptr;
-};
-
-// Global event filter instance
-static GlobalEventFilter* g_globalFilter = nullptr;
+// Global reference count for active clients
+static int g_clientRefCount = 0;
 
 // Global GUI instances - forward declare
-static CClientSettings* g_settings  = nullptr;
-static CClientDlg*      g_clientDlg = nullptr;
+// Global GUI instances - forward declare
+static CClientSettings* g_settings = nullptr;
+// static CClientDlg*      g_clientDlg = nullptr;
 
 // Re-entrancy guard for Qt initialization
-static bool g_qtAppInitializing = false;
+static std::atomic<bool> g_qtAppInitializing{ false };
 
 // Ensure QApplication exists and event processing is set up
 static void ensureQtApp()
 {
     // Guard against re-entrant calls during Qt initialization
-    if ( g_qtAppInitializing )
+    // Guard against re-entrant calls during Qt initialization
+    if ( g_qtAppInitializing.exchange ( true ) )
     {
         return;
     }
@@ -137,30 +103,50 @@ static void ensureQtApp()
     static bool s_pathsSetup = false;
     if ( !s_pathsSetup )
     {
+        // Still setup paths just in case (e.g. for plugins if headless needs them)
         setupQtPaths();
         s_pathsSetup = true;
     }
 
-    if ( !QApplication::instance() )
+    if ( QCoreApplication::instance() )
     {
-        g_qtAppInitializing = true;
-
-        static int   fakeArgc   = 1;
-        static char  fakeArg0[] = "jamulus_vst3";
-        static char* fakeArgv[] = { fakeArg0, nullptr };
-        g_qtApp                 = new QApplication ( fakeArgc, fakeArgv );
-
-        // Install global event filter to intercept close events on all windows
-        g_globalFilter = new GlobalEventFilter ( g_qtApp );
-        g_qtApp->installEventFilter ( g_globalFilter );
-
-        // Create a timer to pump Qt events since we're not running exec()
-        g_eventPumpTimer = new QTimer();
-        QObject::connect ( g_eventPumpTimer, &QTimer::timeout, []() { QApplication::processEvents ( QEventLoop::AllEvents, 10 ); } );
-        g_eventPumpTimer->start ( 16 ); // ~60fps event processing
-
         g_qtAppInitializing = false;
+        return;
     }
+
+    unsigned long tid = GetCurrentThreadId();
+    DebugLogger::instance().log ( "[jamulus_wrapper] ensureQtApp called on thread " + std::to_string ( tid ) );
+
+    static int   fakeArgc   = 1;
+    static char* fakeArg0   = _strdup ( "jamulus_vst3" );
+    static char* fakeArgv[] = { fakeArg0, nullptr };
+
+    try
+    {
+        DebugLogger::instance().log ( "[jamulus_wrapper] Creating QCoreApplication (Headless)." );
+
+        // HEADLESS MODE: Always use QCoreApplication.
+        // No SetDllDirectory needed because we don't load qwindows.dll.
+        new QCoreApplication ( fakeArgc, fakeArgv );
+
+        // Initialise resources compiled into the static lib
+        qInitResources_resources();
+    }
+    catch ( const std::exception& e )
+    {
+        DebugLogger::instance().log ( std::string ( "[jamulus_wrapper] CRITICAL: QCoreApplication constructor failed: " ) + e.what() );
+        g_qtAppInitializing = false;
+        return;
+    }
+    catch ( ... )
+    {
+        DebugLogger::instance().log ( "[jamulus_wrapper] CRITICAL: QCoreApplication constructor failed with unknown exception!" );
+        g_qtAppInitializing = false;
+        return;
+    }
+
+    DebugLogger::instance().log ( "[jamulus_wrapper] QCoreApplication created successfully." );
+    g_qtAppInitializing = false;
 }
 
 // ============================================================================
@@ -169,11 +155,11 @@ static void ensureQtApp()
 
 // Channel info cache
 static CVector<CChannelInfo> s_channelList;
-static QMutex                s_channelMutex;
+static std::mutex            s_channelMutex;
 
 // Channel levels cache (updated via CLChannelLevelListReceived signal)
 static std::vector<uint16_t> s_channelLevels;
-static QMutex                s_channelLevelsMutex;
+static std::mutex            s_channelLevelsMutex;
 
 // Ping time storage
 static int s_lastPingTime = -1;
@@ -181,12 +167,12 @@ static int s_myChannelId  = -1;
 
 // Chat message queue
 static std::deque<std::string> s_chatQueue;
-static QMutex                  s_chatMutex;
+static std::mutex              s_chatMutex;
 static char                    s_chatBuffer[4096] = { 0 };
 
 // Server list cache
 static std::vector<jamulus_server_info_t> s_serverList;
-static QMutex                             s_serverListMutex;
+static std::mutex                         s_serverListMutex;
 
 // WrapperClient: exposes a bridge to call CClient::ProcessSndCrdAudioData
 // from the plugin/audio thread by converting to/from the Jamulus internal
@@ -246,6 +232,8 @@ public:
         outPeakL.store ( 0.0f );
         outPeakR.store ( 0.0f );
     }
+
+    virtual ~WrapperClient() override { StopWorker(); }
 
     // Process interleaved float audio (frames x channels) in-place: input -> output
     // Returns 0 on success.
@@ -328,7 +316,8 @@ public:
         }
 
         // Apply decay to atomic peaks (simple envelope follower)
-        float decay = 0.95f; // Adjust for responsiveness
+        // Slower decay (0.992) ensures peaks are held long enough for the GUI to see them at 30Hz
+        float decay = 0.992f;
         float prevL = outPeakL.load();
         float prevR = outPeakR.load();
         outPeakL.store ( std::max ( curPeakL, prevL * decay ) );
@@ -367,11 +356,11 @@ public:
 
     void StopWorker()
     {
-        if ( !workerRunning.load() )
-            return;
         workerRunning.store ( false );
         if ( worker.joinable() )
+        {
             worker.join();
+        }
     }
 
     // Overrides to trick Jamulus into thinking it's running even without a sound device
@@ -459,7 +448,7 @@ public:
         CClient::OnConClientListMesReceived ( vecChanInfo );
 
         // Now cache the RAW list for the VST GUI
-        QMutexLocker lock ( &s_channelMutex );
+        std::lock_guard<std::mutex> lock ( s_channelMutex );
         s_channelList = vecChanInfo;
     }
 
@@ -467,7 +456,7 @@ public:
     {
         // Update raw levels before base class might reorder them
         {
-            QMutexLocker lock ( &s_channelLevelsMutex );
+            std::lock_guard<std::mutex> lock ( s_channelLevelsMutex );
             s_channelLevels.clear();
             for ( int i = 0; i < vecLevelList.Size(); ++i )
             {
@@ -487,7 +476,7 @@ public:
 
     void ClearInternalLists()
     {
-        QMutexLocker lock ( &s_channelMutex );
+        std::lock_guard<std::mutex> lock ( s_channelMutex );
         s_channelList.Init ( 0 );
         QMutexLocker levelLock ( &s_channelLevelsMutex );
         s_channelLevels.clear();
@@ -534,7 +523,7 @@ extern "C"
 
     static void updateChatMessage ( QString strChatText )
     {
-        QMutexLocker lock ( &s_chatMutex );
+        std::lock_guard<std::mutex> lock ( s_chatMutex );
         s_chatQueue.push_back ( strChatText.toStdString() );
     }
 
@@ -543,7 +532,7 @@ extern "C"
     static void updateServerList ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
     {
         (void) InetAddr;
-        QMutexLocker lock ( &s_serverListMutex );
+        std::lock_guard<std::mutex> lock ( s_serverListMutex );
 
         // Don't clear - merge/update entries
         for ( int i = 0; i < vecServerInfo.Size(); ++i )
@@ -604,9 +593,9 @@ extern "C"
 
     static void updateServerPingAndClients ( CHostAddress InetAddr, int iPingTime, int iNumClients )
     {
-        QMutexLocker lock ( &s_serverListMutex );
-        QString      addrStr  = InetAddr.toString();
-        QByteArray   addrUtf8 = addrStr.toUtf8();
+        std::lock_guard<std::mutex> lock ( s_serverListMutex );
+        QString                     addrStr  = InetAddr.toString();
+        QByteArray                  addrUtf8 = addrStr.toUtf8();
 
         for ( auto& srv : s_serverList )
         {
@@ -627,6 +616,8 @@ extern "C"
     {
         // Ensure QApplication exists for Qt widgets
         ensureQtApp();
+
+        g_clientRefCount++;
 
         // Minimal parameters: qos=0, empty MIDI setup, no auto jack connect, not muted
         // Allocate without throwing; return null on allocation failure.
@@ -660,22 +651,45 @@ extern "C"
         if ( !c )
             return;
 
-        // If this client is associated with the GUI, clean up GUI first
+        // If this client is associated with the GUI, clean up GUI handles
         WrapperClient* wc = reinterpret_cast<WrapperClient*> ( c );
-        if ( g_clientDlg )
-        {
-            // Hide and delete the dialog before deleting the client it references
-            g_clientDlg->hide();
-            // delete g_clientDlg; // DISABLED: Crash risk on unload
-            g_clientDlg = nullptr;
-        }
+
+        // Hide and clear dialog if it belongs to this client or if it's the last client
+        // if ( g_clientDlg )
+        // {
+        //     g_clientDlg->hide();
+        //     // We use deleteLater to ensure no pending events for the dialog cause a crash
+        //     g_clientDlg->deleteLater();
+        //     g_clientDlg = nullptr;
+        // }
+
         if ( g_settings )
         {
             delete g_settings;
             g_settings = nullptr;
         }
 
-        delete wc;
+        // Decrement ref count and cleanup global resources if last one
+        g_clientRefCount--;
+        if ( g_clientRefCount <= 0 )
+        {
+            // if ( g_eventPumpTimer )
+            // {
+            //     g_eventPumpTimer->stop();
+            //     delete g_eventPumpTimer;
+            //     g_eventPumpTimer = nullptr;
+            // }
+
+            // Final pump to handle deleteLater
+            if ( QCoreApplication::instance() )
+            {
+                QCoreApplication::processEvents ( QEventLoop::AllEvents, 100 );
+            }
+
+            g_clientRefCount = 0; // Ensure it doesn't go negative
+        }
+
+        delete wc; // This will join the worker thread
     }
 
     int jamulus_client_start ( jamulus_client_t c )
@@ -704,6 +718,8 @@ extern "C"
         bool ok = client->SetServerAddr ( QString ( addr ? addr : "" ) );
         return ok ? 0 : -1;
     }
+
+    int jamulus_client_connect ( jamulus_client_t c, const char* addr ) { return jamulus_client_set_server_addr ( c, addr ); }
 
     int jamulus_client_process_audio ( jamulus_client_t c, const float* in, float* out, int frames, int channels )
     {
@@ -1100,7 +1116,7 @@ extern "C"
     int jamulus_client_get_num_channels ( jamulus_client_t c )
     {
         (void) c;
-        QMutexLocker lock ( &s_channelMutex );
+        std::lock_guard<std::mutex> lock ( s_channelMutex );
         return s_channelList.Size();
     }
 
@@ -1119,7 +1135,7 @@ extern "C"
         if ( !c || !info )
             return false;
 
-        QMutexLocker lock ( &s_channelMutex );
+        std::lock_guard<std::mutex> lock ( s_channelMutex );
         if ( index < 0 || index >= s_channelList.Size() )
             return false;
 
@@ -1184,6 +1200,14 @@ extern "C"
         if ( !c )
             return;
         WrapperClient* wc = reinterpret_cast<WrapperClient*> ( c );
+
+        // Clamp gain to valid range [0.0, 0.99] to prevent protocol overflow
+        // Jamulus uses 16-bit integer for gain (fGain * 32768), so values >= 1.0 could overflow
+        // Using 0.99 as max to ensure we stay safely under the limit
+        if ( gain < 0.0f )
+            gain = 0.0f;
+        if ( gain > 0.99f )
+            gain = 0.99f;
 
         int myChannelId = s_myChannelId; // Server channel ID for "me"
         if ( channel_id == -1 || channel_id == myChannelId )
@@ -1316,8 +1340,8 @@ extern "C"
         bool isSoloed = wc->AnyChannelSoloed();
 
         // Get all channels and apply solo logic
-        QMutexLocker lock ( &s_channelMutex );
-        int          numChannels = s_channelList.Size();
+        std::lock_guard<std::mutex> lock ( s_channelMutex );
+        int                         numChannels = s_channelList.Size();
 
         for ( int i = 0; i < numChannels; ++i )
         {
@@ -1519,7 +1543,7 @@ extern "C"
     const char* jamulus_client_get_chat_message ( jamulus_client_t c )
     {
         (void) c;
-        QMutexLocker lock ( &s_chatMutex );
+        std::lock_guard<std::mutex> lock ( s_chatMutex );
         if ( s_chatQueue.empty() )
         {
             return "";
@@ -1594,7 +1618,7 @@ extern "C"
         // Get copy of server addresses to ping (avoid holding lock during network ops)
         std::vector<QString> addressesToPing;
         {
-            QMutexLocker lock ( &s_serverListMutex );
+            std::lock_guard<std::mutex> lock ( s_serverListMutex );
             for ( const auto& srv : s_serverList )
             {
                 addressesToPing.push_back ( QString ( srv.address ) );
@@ -1616,7 +1640,7 @@ extern "C"
     int jamulus_client_get_num_servers ( jamulus_client_t c )
     {
         (void) c;
-        QMutexLocker lock ( &s_serverListMutex );
+        std::lock_guard<std::mutex> lock ( s_serverListMutex );
         return static_cast<int> ( s_serverList.size() );
     }
 
@@ -1626,7 +1650,7 @@ extern "C"
         if ( !info )
             return false;
 
-        QMutexLocker lock ( &s_serverListMutex );
+        std::lock_guard<std::mutex> lock ( s_serverListMutex );
         if ( index < 0 || index >= static_cast<int> ( s_serverList.size() ) )
             return false;
 
@@ -1637,7 +1661,7 @@ extern "C"
     void jamulus_client_clear_server_list ( jamulus_client_t c )
     {
         (void) c;
-        QMutexLocker lock ( &s_serverListMutex );
+        std::lock_guard<std::mutex> lock ( s_serverListMutex );
         s_serverList.clear();
     }
 
@@ -1647,9 +1671,9 @@ extern "C"
 
     void jamulus_process_events ( void )
     {
-        if ( QApplication::instance() )
+        if ( QCoreApplication::instance() )
         {
-            QApplication::processEvents ( QEventLoop::AllEvents, 10 );
+            QCoreApplication::processEvents ( QEventLoop::AllEvents, 10 );
         }
     }
 
@@ -1663,250 +1687,124 @@ extern "C"
 
         ensureQtApp();
 
-        WrapperClient* wc = reinterpret_cast<WrapperClient*> ( c );
+        // Qt GUI is deprecated. Headless mode.
+        DebugLogger::instance().log ( "[jamulus_wrapper] jamulus_gui_create: Headless mode. No Qt GUI created." );
 
-        // Create settings if not exists (needs CClient* and an ini file name)
-        if ( !g_settings )
-        {
-            g_settings = new CClientSettings ( wc, QString() ); // Empty string = use default ini location
-        }
-
-        // Create dialog if not exists
-        if ( !g_clientDlg )
-        {
-            g_clientDlg = new CClientDlg ( wc,         // CClient*
-                                           g_settings, // CClientSettings*
-                                           QString(),  // strConnOnStartupAddress
-                                           QString(),  // strMIDISetup
-                                           false,      // bShowComplRegConnList
-                                           false,      // bShowAnalyzerConsole
-                                           false,      // bMuteStream
-                                           false,      // bEnableIPv6
-                                           nullptr     // parent
-            );
-
-            // Make it frameless and non-focusable to prevent crashes
-            // Don't use WindowStaysOnTopHint - it's annoying when switching apps
-            g_clientDlg->setWindowFlags ( Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus );
-            g_clientDlg->setAttribute ( Qt::WA_ShowWithoutActivating, true );
-
-            // Register this as the embedded window to protect from focus events
-            if ( g_globalFilter )
-            {
-                g_globalFilter->setEmbeddedWindow ( g_clientDlg );
-            }
-
-            // Hide ASIO/sound card related widgets - audio comes from host, not ASIO
-            // The settings dialog is a separate top-level window, so we need to search
-            // all application top-level widgets
-
-            QStringList widgetsToHide = {
-                "cbxSoundcard",                   // Sound card dropdown
-                "lblSoundcardDevice",             // "Audio Device" label
-                "butDriverSetup",                 // "ASIO Device Settings" button
-                "FrameSoundcardChannelSelection", // Channel selection frame
-                "lblInputChannelL",
-                "lblInputChannelR",
-                "lblOutputChannelL",
-                "lblOutputChannelR",
-                "cbxLInChan",
-                "cbxRInChan",
-                "cbxLOutChan",
-                "cbxROutChan",
-                "rbtBufferDelayPreferred", // Buffer delay options
-                "rbtBufferDelayDefault",
-                "rbtBufferDelaySafe",
-                "grbSoundCrdBufDelay", // Buffer delay group
-            };
-
-            // Search in ALL top-level widgets (dialogs) and hide matching widgets
-            for ( QWidget* topLevel : QApplication::topLevelWidgets() )
-            {
-                QList<QWidget*> allWidgets = topLevel->findChildren<QWidget*>();
-                for ( QWidget* w : allWidgets )
-                {
-                    if ( widgetsToHide.contains ( w->objectName() ) )
-                    {
-                        w->hide();
-                    }
-                }
-            }
-            // Note: CloseToHideFilter is now installed globally on QApplication in ensureQtApp()
-        }
-
-        return g_clientDlg;
+        static int dummyGui = 1;
+        return &dummyGui;
     }
 
-    void jamulus_gui_destroy ( void* gui )
+    void jamulus_gui_destroy ( void* gui ) { (void) gui; }
+
+    void jamulus_gui_show ( void* gui ) { (void) gui; }
+    void jamulus_gui_hide ( void* gui ) { (void) gui; }
+
+    void jamulus_gui_get_preferred_size ( void* gui, int* width, int* height )
     {
-        // Don't actually destroy - keep the singleton alive
-        // The dialog will be hidden when the editor closes
+        if ( width && height )
+        {
+            *width  = 0;
+            *height = 0;
+        }
+    }
+
+    void jamulus_gui_repaint ( void* gui ) { (void) gui; }
+
+    void jamulus_gui_set_native_parent ( void* gui, void* parent )
+    {
         (void) gui;
-    }
-
-    // Helper to ensure window stays non-activatable
-    static void ensureNoActivate ( QWidget* w )
-    {
-#ifdef _WIN32
-        if ( w )
-        {
-            HWND hwnd    = reinterpret_cast<HWND> ( w->winId() );
-            LONG exStyle = GetWindowLong ( hwnd, GWL_EXSTYLE );
-            if ( !( exStyle & WS_EX_NOACTIVATE ) )
-            {
-                SetWindowLong ( hwnd, GWL_EXSTYLE, exStyle | WS_EX_NOACTIVATE );
-            }
-        }
-#else
-        (void) w;
-#endif
-    }
-
-    void jamulus_gui_show ( void* gui )
-    {
-        if ( gui )
-        {
-            QWidget* w = reinterpret_cast<QWidget*> ( gui );
-            w->show();
-
-#ifdef _WIN32
-            HWND hwnd = reinterpret_cast<HWND> ( w->winId() );
-            // Position at (0,0) and force redraw
-            SetWindowPos ( hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_FRAMECHANGED );
-            // Invalidate and force immediate repaint at Windows level
-            InvalidateRect ( hwnd, NULL, TRUE );
-            UpdateWindow ( hwnd );
-#endif
-
-            // Qt-level updates
-            w->raise();
-            w->repaint();
-
-            // Schedule follow-up repaints
-            QTimer::singleShot ( 100, w, [w]() {
-                if ( w->isVisible() )
-                {
-#ifdef _WIN32
-                    HWND hwnd = reinterpret_cast<HWND> ( w->winId() );
-                    InvalidateRect ( hwnd, NULL, TRUE );
-                    UpdateWindow ( hwnd );
-#endif
-                    w->repaint();
-                }
-            } );
-        }
-    }
-
-    void jamulus_gui_hide ( void* gui )
-    {
-        if ( gui )
-        {
-            QWidget* w = reinterpret_cast<QWidget*> ( gui );
-            w->hide();
-        }
+        (void) parent;
     }
 
     void* jamulus_gui_get_native_handle ( void* gui )
     {
-        if ( !gui )
-            return nullptr;
-        QWidget* w = reinterpret_cast<QWidget*> ( gui );
-        return reinterpret_cast<void*> ( w->winId() );
+        (void) gui;
+        return nullptr;
     }
 
     void jamulus_gui_set_parent ( void* gui, void* parentHwnd )
     {
-#ifdef _WIN32
-        if ( !gui || !parentHwnd )
-            return;
-
-        QWidget* w      = reinterpret_cast<QWidget*> ( gui );
-        HWND     qtHwnd = reinterpret_cast<HWND> ( w->winId() );
-        HWND     parent = reinterpret_cast<HWND> ( parentHwnd );
-
-        // Make it a child window with simple style
-        LONG_PTR style = GetWindowLongPtr ( qtHwnd, GWL_STYLE );
-        style          = ( style & ~WS_POPUP ) | WS_CHILD;
-        SetWindowLongPtr ( qtHwnd, GWL_STYLE, style );
-
-        // Set the parent
-        SetParent ( qtHwnd, parent );
-
-        // Position at origin of parent
-        SetWindowPos ( qtHwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE | SWP_FRAMECHANGED );
-#else
         (void) gui;
         (void) parentHwnd;
-#endif
     }
 
-    void jamulus_gui_resize ( void* gui, int width, int height )
+    void jamulus_gui_resize ( void* gui, int w, int h )
     {
-        if ( gui )
-        {
-            QWidget* w = reinterpret_cast<QWidget*> ( gui );
-#ifdef _WIN32
-            HWND hwnd = reinterpret_cast<HWND> ( w->winId() );
-            SetWindowPos ( hwnd, HWND_TOP, 0, 0, width, height, SWP_NOACTIVATE | SWP_NOZORDER );
-#else
-            w->move ( 0, 0 );
-            w->resize ( width, height );
-#endif
-        }
+        (void) gui;
+        (void) w;
+        (void) h;
     }
 
     void jamulus_gui_position ( void* gui, int x, int y )
     {
-        if ( gui )
-        {
-            QWidget* w = reinterpret_cast<QWidget*> ( gui );
-            w->move ( x, y );
-            ensureNoActivate ( w ); // Re-apply after move
-        }
+        (void) gui;
+        (void) x;
+        (void) y;
     }
 
-    void jamulus_gui_get_preferred_size ( void* gui, int* width, int* height )
+    void jamulus_gui_set_active ( bool active ) { (void) active; }
+
+    // ============================================================================
+    // Server List / Directory (Legacy Stubs Removed - Implemented Above)
+    // ============================================================================
+
+    // Chat Stubs
+
+    // Dialog Stubs
+    void jamulus_gui_show_connect_dialog ( void* gui ) { (void) gui; }
+    void jamulus_gui_show_chat_dialog ( void* gui ) { (void) gui; }
+    void jamulus_gui_show_settings_dialog ( void* gui ) { (void) gui; }
+
+    // ============================================================================
+    // Resource Loading
+    // ============================================================================
+
+#include <QFile>
+
+    bool jamulus_load_resource ( const char* path, void** outData, int* outSize )
     {
-        if ( gui && width && height )
+        if ( !path || !outData || !outSize )
+            return false;
+
+        ensureQtApp();
+
+        QString qPath = QString::fromUtf8 ( path );
+        if ( !qPath.startsWith ( ":/" ) )
         {
-            QWidget* w    = reinterpret_cast<QWidget*> ( gui );
-            QSize    hint = w->sizeHint();
-            *width        = hint.width();
-            *height       = hint.height();
+            qPath.prepend ( ":/" );
         }
+
+        if ( !QFile::exists ( qPath ) )
+        {
+            // DebugLogger::instance().log ( "[jamulus_wrapper] Resource not found: " + qPath.toStdString() );
+            return false;
+        }
+
+        QFile file ( qPath );
+        if ( !file.open ( QIODevice::ReadOnly ) )
+        {
+            DebugLogger::instance().log ( "[jamulus_wrapper] Failed to open resource: " + qPath.toStdString() );
+            return false;
+        }
+
+        QByteArray blob = file.readAll();
+        if ( blob.isEmpty() )
+            return false;
+
+        *outSize = blob.size();
+        *outData = new char[blob.size()];
+        if ( !*outData )
+            return false;
+
+        memcpy ( *outData, blob.constData(), blob.size() );
+
+        return true;
     }
 
-    void jamulus_gui_repaint ( void* gui )
+    void jamulus_free_resource ( void* data )
     {
-        if ( gui )
-        {
-            QWidget* w = reinterpret_cast<QWidget*> ( gui );
-            w->repaint();
-            // Also repaint all child widgets
-            for ( QWidget* child : w->findChildren<QWidget*>() )
-            {
-                child->repaint();
-            }
-        }
-    }
-
-    void jamulus_gui_set_active ( bool active )
-    {
-        // Pause or resume Qt event pump based on whether the GUI is visible/active
-        if ( g_eventPumpTimer )
-        {
-            if ( active )
-            {
-                if ( !g_eventPumpTimer->isActive() )
-                {
-                    g_eventPumpTimer->start ( 16 );
-                }
-            }
-            else
-            {
-                g_eventPumpTimer->stop();
-            }
-        }
+        if ( data )
+            delete[] static_cast<char*> ( data );
     }
 
 } // extern "C"

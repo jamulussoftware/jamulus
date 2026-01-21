@@ -12,15 +12,20 @@ else()
     # is available and we can proceed without find_package.
 endif()
 
-juce_add_plugin(jamulus_vst3
-    PRODUCT_NAME "JamulusVST3"
+# ==============================================================================
+# 1. THE CORE ENGINE (Renamed from jamulus_vst3 to jamulus_engine)
+# ==============================================================================
+# Use juce_add_plugin but we will force it to be a plain DLL
+# Target name is jamulus_engine to avoid conflict with libjamulus's "jamulus_core"
+juce_add_plugin(jamulus_engine
+    PRODUCT_NAME "JamulusCore"
     VERSION 0.1
     IS_SYNTH FALSE
     NEEDS_MIDI FALSE
     FORMATS VST3
 )
 
-target_sources(jamulus_vst3 PRIVATE
+target_sources(jamulus_engine PRIVATE
     PluginProcessor.cpp
     PluginProcessor.h
     PluginEditor.cpp
@@ -29,90 +34,117 @@ target_sources(jamulus_vst3 PRIVATE
 
 # Add the JUCE adapter which implements `createPluginFilter()` expected
 # by JUCE's plugin client code.
-target_sources(jamulus_vst3 PRIVATE
+target_sources(jamulus_engine PRIVATE
     JucePluginAdapter.cpp
     JucePluginAdapter.h
 )
 
-# Include the local ASIO shim in the plugin shared-code so final plugin
-# artefacts get the ASIO stub symbols (e.g. ASIOControlPanel) available
-# at link time.
-target_sources(jamulus_vst3 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../asioshim.cpp)
+# Force Dynamic Runtime (MD) to match Qt
+set_target_properties(jamulus_engine PROPERTIES
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
+)
 
-## Link against JUCE audio processors target. When JUCE is added as a subdirectory
-## the module targets are namespaced as `juce::juce_audio_processors`. When found
-## via `find_package` they may be exported as `JUCE::juce_audio_processors`. Try
-## the modern `juce::` target first and fall back to `JUCE::` if necessary.
+# Include the local ASIO shim in the plugin shared-code
+target_sources(jamulus_engine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../asioshim.cpp)
+
+## Link against JUCE audio processors target.
 if (TARGET juce::juce_audio_processors)
-    target_link_libraries(jamulus_vst3 PRIVATE jamulus_wrapper juce::juce_audio_processors)
+    target_link_libraries(jamulus_engine PRIVATE jamulus_wrapper juce::juce_audio_processors)
 elseif (TARGET JUCE::juce_audio_processors)
-    target_link_libraries(jamulus_vst3 PRIVATE jamulus_wrapper JUCE::juce_audio_processors)
+    target_link_libraries(jamulus_engine PRIVATE jamulus_wrapper JUCE::juce_audio_processors)
 else()
-    message(FATAL_ERROR "Could not find a JUCE audio_processors target. Ensure JUCE is available via add_subdirectory or find_package.")
+    message(FATAL_ERROR "Could not find a JUCE audio_processors target.")
 endif()
 
 # Link Qt for the plugin editor GUI
-find_package(Qt6 COMPONENTS Core Widgets Gui QUIET)
-if (TARGET Qt6::Widgets)
-    target_link_libraries(jamulus_vst3 PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui)
+find_package(Qt6 COMPONENTS Core Network QUIET)
+if (TARGET Qt6::Core)
+    target_link_libraries(jamulus_engine PRIVATE Qt6::Core Qt6::Network)
 endif()
 
-# Prevent JUCE from erroring when building only the VST3 client in this headless
-# wrapper build. Disable VST3 replacement of VST2 parameter IDs (we only ship
-# VST3 here) to avoid automation ID mismatch checks in JUCE sources.
-target_compile_definitions(jamulus_vst3 PRIVATE JUCE_VST3_CAN_REPLACE_VST2=0)
+# Prevent JUCE from erroring when building only the VST3 client
+target_compile_definitions(jamulus_engine PRIVATE JUCE_VST3_CAN_REPLACE_VST2=0)
 
 # Ensure the platform-specific plugin artefact targets link the wrapper too.
-# JUCE generates additional targets like `<name>_VST3`; add the wrapper
-# dependency if those targets exist so static symbols (e.g. ASIO shim)
-# are available at final link time.
-if (TARGET jamulus_vst3_VST3)
-    target_link_libraries(jamulus_vst3_VST3 PRIVATE jamulus_wrapper)
-    
-    # Embed a Windows manifest that enables DLL redirection so Qt DLLs can be
-    # found in the same directory as the plugin module. This is critical for
-    # VST3 hosts that don't add the plugin's directory to the DLL search path.
+if (TARGET jamulus_engine_VST3)
+    target_link_libraries(jamulus_engine_VST3 PRIVATE jamulus_wrapper)
+
+    # Embed Manifest into Core DLL (for Qt Redirection)
     if (WIN32)
         set(MANIFEST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/JamulusVST3.manifest")
         if (EXISTS "${MANIFEST_FILE}")
-            # Use mt.exe post-build to embed the manifest
-            # The -outputresource option takes a path and resource ID without space
-            add_custom_command(TARGET jamulus_vst3_VST3 POST_BUILD
-                COMMAND mt.exe -nologo -manifest "${MANIFEST_FILE}" "-outputresource:$<TARGET_FILE:jamulus_vst3_VST3>;#2"
-                COMMENT "Embedding DLL redirection manifest into plugin"
+            add_custom_command(TARGET jamulus_engine_VST3 POST_BUILD
+                COMMAND mt.exe -nologo -manifest "${MANIFEST_FILE}" "-outputresource:$<TARGET_FILE:jamulus_engine_VST3>;#2"
+                COMMENT "Embedding DLL redirection manifest into Core DLL"
                 VERBATIM
             )
         endif()
-        # Copy the built VST3 to the default VST3 folder after build
-        set(VST3_OUTPUT "${CMAKE_BINARY_DIR}/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3")
-        set(VST3_DEST "C:/Program Files/Common Files/VST3/JamulusVST3.vst3")
-        add_custom_command(TARGET jamulus_vst3_VST3 POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory "${VST3_OUTPUT}" "${VST3_DEST}"
-            COMMENT "Copying JamulusVST3.vst3 to the default VST3 folder"
-            VERBATIM
-        )
     endif()
 endif()
-if (TARGET jamulus_vst3_VST2)
-    target_link_libraries(jamulus_vst3_VST2 PRIVATE jamulus_wrapper)
+
+if (TARGET jamulus_engine_VST2)
+    target_link_libraries(jamulus_engine_VST2 PRIVATE jamulus_wrapper)
 endif()
 
-target_include_directories(jamulus_vst3 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(jamulus_engine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-set_target_properties(jamulus_vst3 PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+# Set output name to JamulusCore so it produces JamulusCore.dll (inside the bundle)
+# We want this to be a plain DLL, typically JUCE VST3 targets generate a bundle structure.
+# We will hijack the output so we can copy the .vst3/Contents/x86_64-win/JamulusCore.vst3 -> .dll
+
+
+# ==============================================================================
+# 2. THE BOOTSTRAP SHIM (The new Entry Point)
+# ==============================================================================
+add_library(jamulus_control MODULE vst3_bootstrap.cpp)
+
+# Static Runtime (/MT), Output "JamulusVST3"
+set_target_properties(jamulus_control PROPERTIES
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+    SUFFIX ".vst3"
+    OUTPUT_NAME "JamulusVST3"
 )
 
-# Generate a minimal VST3 manifest and install it into the built VST3 target directory.
-# Some JUCE/CMake configurations don't produce a manifest.ttl automatically; add
-# a small post-build step to place a minimal manifest alongside the plugin binary.
-if (TARGET jamulus_vst3_VST3)
-    # Ensure a manifest.ttl is generated from moduleinfo.json (in case helper output is incomplete).
-    set(MODULEINFO "$<TARGET_FILE_DIR:jamulus_vst3_VST3>/../Resources/moduleinfo.json")
-    set(MANIFEST_OUT "$<TARGET_FILE_DIR:jamulus_vst3_VST3>/manifest.ttl")
-    add_custom_command(TARGET jamulus_vst3_VST3 POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E echo "Generating manifest.ttl from moduleinfo.json"
-        COMMAND ${CMAKE_COMMAND} -E env "PYTHONIOENCODING=UTF-8" python "${CMAKE_CURRENT_SOURCE_DIR}/generate_vst3_manifest.py" "${CMAKE_BINARY_DIR}/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/Resources/moduleinfo.json" "${CMAKE_BINARY_DIR}/plugin/jamulus_vst3_artefacts/Release/VST3/JamulusVST3.vst3/Contents/x86_64-win/manifest.ttl"
-        COMMENT "Generating VST3 manifest from moduleinfo.json"
+# ==============================================================================
+# 3. POST-BUILD DEPLOYMENT
+# ==============================================================================
+if (TARGET jamulus_control)
+    # Define the Staging Bundle Directory
+    set(BUNDLE_DIR "${CMAKE_BINARY_DIR}/plugin/jamulus_shim_bundle/JamulusVST3.vst3")
+    set(CONTENTS_DIR "${BUNDLE_DIR}/Contents/x86_64-win")
+
+    # 1. Create the Bundle Structure
+    add_custom_command(TARGET jamulus_control POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CONTENTS_DIR}"
+        COMMENT "Creating VST3 bundle structure"
+    )
+
+    # 2. Copy the Shim Binary (JamulusVST3.vst3) into the bundle
+    add_custom_command(TARGET jamulus_control POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:jamulus_control>" "${CONTENTS_DIR}/JamulusVST3.vst3"
+        COMMENT "Copying Shim binary to bundle"
+    )
+
+    # 3. Copy the Core Engine (JamulusCore.dll) into the bundle
+    # Note: We take the output of jamulus_engine_VST3 (which is a .vst3 file) and rename it to .dll
+    add_custom_command(TARGET jamulus_control POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:jamulus_engine_VST3>" "${CONTENTS_DIR}/JamulusCore.dll"
+        COMMENT "Deploying JamulusCore engine to VST3 bundle"
+    )
+
+    # 4. Copy Bundle to Dist
+    set(DIST_DIR "${CMAKE_BINARY_DIR}/../dist/JamulusVST3.vst3")
+    add_custom_command(TARGET jamulus_control POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${BUNDLE_DIR}" "${DIST_DIR}"
+        COMMENT "Copying assembled VST3 bundle to dist: ${DIST_DIR}"
+    )
+
+    # 5. Copy Basic Qt DLLs
+    set(QT_BIN_DIR "C:/Qt/6.7.3/msvc2022_64/bin")
+    add_custom_command(TARGET jamulus_control POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${QT_BIN_DIR}/Qt6Core.dll" "${DIST_DIR}/Contents/x86_64-win/"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${QT_BIN_DIR}/Qt6Network.dll" "${DIST_DIR}/Contents/x86_64-win/"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${QT_BIN_DIR}/Qt6Xml.dll" "${DIST_DIR}/Contents/x86_64-win/"
+        COMMENT "Copying basic Qt DLLs to dist bundle"
     )
 endif()

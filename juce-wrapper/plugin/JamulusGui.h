@@ -21,12 +21,24 @@ static juce::File getSettingsFile()
     return settingsDir.getChildFile ( "settings.json" );
 }
 
-// Helper to get asset paths
-static juce::File getAssetDir()
+// Helper to load image from embedded resources via wrapper
+static juce::Image getEmbeddedImage ( const juce::String& resourcePath )
 {
-    // Attempt to find the res directory relative to the source
-    // In a real VST we might bundle these, but for now we'll use the dev path
-    return juce::File ( "e:/Web stuff/Jamulus VST Wrapper/jamulus/src/res" );
+    void* data = nullptr;
+    int   size = 0;
+
+    if ( jamulus_load_resource ( resourcePath.toRawUTF8(), &data, &size ) && data && size > 0 )
+    {
+        // Load image from memory
+        juce::Image img = juce::ImageCache::getFromMemory ( data, size );
+
+        // Free the raw buffer allocated by the wrapper
+        jamulus_free_resource ( data );
+
+        return img;
+    }
+
+    return juce::Image();
 }
 
 static juce::Image getInstrumentImage ( int instrument )
@@ -57,44 +69,32 @@ static juce::Image getInstrumentImage ( int instrument )
                                              "scratching.png",   "rapping.png",
                                              "vibraphone.png",   "conductor.png" };
 
-    juce::File file;
+    juce::String filename = "none.png";
     if ( instrument >= 0 && instrument < (int) ( sizeof ( instrumentFiles ) / sizeof ( instrumentFiles[0] ) ) )
     {
-        file = getAssetDir().getChildFile ( "instruments" ).getChildFile ( instrumentFiles[instrument] );
-    }
-    else
-    {
-        file = getAssetDir().getChildFile ( "instruments" ).getChildFile ( "none.png" );
+        filename = instrumentFiles[instrument];
     }
 
-    return juce::ImageCache::getFromFile ( file );
+    // Path in .qrc: prefix="/png/instr" file="res/instruments/..."
+    // Note: The qrc file has <file>res/instruments/name.png</file> inside <qresource prefix="/png/instr">
+    // Access path: :/png/instr/res/instruments/name.png
+    return getEmbeddedImage ( "png/instr/res/instruments/" + filename );
 }
 
 static juce::Image getFlagImage ( const char* countryCode )
 {
     juce::String code ( countryCode );
-    DBG ( "getFlagImage called with code: '" << code << "'" );
 
     if ( code.isEmpty() || code == "none" )
-    {
-        DBG ( "  -> Loading flagnone.png" );
-        return juce::ImageCache::getFromFile ( getAssetDir().getChildFile ( "flags" ).getChildFile ( "flagnone.png" ) );
-    }
+        return juce::Image();
 
     // Some common fixes
     if ( code.equalsIgnoreCase ( "uk" ) )
         code = "gb";
 
-    auto file = getAssetDir().getChildFile ( "flags" ).getChildFile ( code.toLowerCase() + ".png" );
-    DBG ( "  -> Trying to load: " << file.getFullPathName() << " exists: " << ( file.existsAsFile() ? "yes" : "no" ) );
-
-    if ( !file.existsAsFile() )
-    {
-        DBG ( "  -> File not found, loading flagnone.png" );
-        return juce::ImageCache::getFromFile ( getAssetDir().getChildFile ( "flags" ).getChildFile ( "flagnone.png" ) );
-    }
-
-    return juce::ImageCache::getFromFile ( file );
+    // Path in .qrc: prefix="/png/flags" file="res/flags/..."
+    // Access path: :/png/flags/res/flags/xx.png
+    return getEmbeddedImage ( "png/flags/res/flags/" + code.toLowerCase() + ".png" );
 }
 
 //==============================================================================
@@ -139,6 +139,102 @@ public:
 
 private:
     juce::Colour colour = juce::Colours::transparentBlack;
+};
+
+//==============================================================================
+// Private Chat Component (VST to VST)
+//==============================================================================
+class PrivateChatComponent : public juce::Component
+{
+public:
+    PrivateChatComponent ( int remoteId, const juce::String& remoteName, std::function<void ( const juce::String& )> onSend ) :
+        targetId ( remoteId ),
+        targetName ( remoteName ),
+        onSendCallback ( onSend )
+    {
+        addAndMakeVisible ( chatDisplay );
+        chatDisplay.setMultiLine ( true );
+        chatDisplay.setReadOnly ( true );
+        chatDisplay.setScrollbarsShown ( true );
+        chatDisplay.setColour ( juce::TextEditor::backgroundColourId, juce::Colour ( 0xff212121 ) );
+
+        addAndMakeVisible ( inputEdit );
+        inputEdit.setReturnKeyStartsNewLine ( false );
+        inputEdit.onReturnKey = [this]() { sendMessage(); };
+
+        addAndMakeVisible ( sendButton );
+        sendButton.setButtonText ( "Send" );
+        sendButton.onClick = [this]() { sendMessage(); };
+
+        addMessage ( "SYSTEM", "Secure P2P Signaling session started with " + targetName );
+    }
+
+    void addMessage ( const juce::String& sender, const juce::String& text )
+    {
+        juce::String timestamp = juce::Time::getCurrentTime().toString ( false, true, false );
+        chatDisplay.moveCaretToEnd();
+        chatDisplay.insertTextAtCaret ( "[" + timestamp + "] " + sender + ": " + text + "\n" );
+    }
+
+    void resized() override
+    {
+        auto bounds = getLocalBounds().reduced ( 10 );
+        auto bottom = bounds.removeFromBottom ( 30 );
+        sendButton.setBounds ( bottom.removeFromRight ( 60 ) );
+        bottom.removeFromRight ( 5 );
+        inputEdit.setBounds ( bottom );
+        chatDisplay.setBounds ( bounds.removeFromTop ( bounds.getHeight() - 10 ) );
+    }
+
+private:
+    void sendMessage()
+    {
+        juce::String text = inputEdit.getText().trim();
+        if ( text.isEmpty() )
+            return;
+
+        addMessage ( "Me", text );
+        if ( onSendCallback )
+            onSendCallback ( text );
+
+        inputEdit.clear();
+    }
+
+    int                                         targetId;
+    juce::String                                targetName;
+    std::function<void ( const juce::String& )> onSendCallback;
+    juce::TextEditor                            chatDisplay;
+    juce::TextEditor                            inputEdit;
+    juce::TextButton                            sendButton;
+};
+
+class PrivateChatWindow : public juce::DocumentWindow
+{
+public:
+    PrivateChatWindow ( int id, const juce::String& name, std::function<void ( const juce::String& )> onSend ) :
+        DocumentWindow ( "Private Chat: " + name, juce::Colour ( 0xff323232 ), allButtons )
+    {
+        auto* comp = new PrivateChatComponent ( id, name, onSend );
+        setContentOwned ( comp, true );
+        setResizable ( true, true );
+        setUsingNativeTitleBar ( true );
+        setSize ( 320, 400 );
+        setVisible ( true );
+    }
+
+    void closeButtonPressed() override
+    {
+        if ( onWindowClosed )
+            onWindowClosed();
+    }
+
+    void addMessage ( const juce::String& sender, const juce::String& text )
+    {
+        if ( auto* comp = dynamic_cast<PrivateChatComponent*> ( getContentComponent() ) )
+            comp->addMessage ( sender, text );
+    }
+
+    std::function<void()> onWindowClosed;
 };
 
 //==============================================================================
@@ -235,9 +331,10 @@ private:
             grad.point2   = { 0, area.getY() };
 
             grad.addColour ( 0.0, juce::Colour ( 0xff00cc66 ) ); // Green at bottom
-            grad.addColour ( juce::jmap ( -12.0f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colour ( 0xff00cc66 ) );
-            grad.addColour ( juce::jmap ( 0.0f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colours::yellow );
-            grad.addColour ( juce::jmap ( 0.1f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colours::red );
+            grad.addColour ( juce::jmap ( -18.0f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colour ( 0xff00cc66 ) );
+            grad.addColour ( juce::jmap ( -12.0f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colours::yellow );
+            grad.addColour ( juce::jmap ( -3.0f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colours::yellow );
+            grad.addColour ( juce::jmap ( 0.0f, -60.0f, 6.0f, 0.0f, 1.0f ), juce::Colours::red );
             grad.addColour ( 1.0, juce::Colours::red );
 
             g.setGradientFill ( grad );
@@ -487,6 +584,19 @@ public:
         };
         groupButton.addMouseListener ( this, false );
 
+        // 5. VST Peer Indicator (Initially hidden)
+        addAndMakeVisible ( vstSupportButton );
+        vstSupportButton.setButtonText ( "V" );
+        vstSupportButton.setTooltip ( "VST Peer Detected - Click for Private Chat / P2P" );
+        vstSupportButton.setColour ( juce::TextButton::buttonColourId, juce::Colour ( 0xff00ffff ).withAlpha ( 0.6f ) );
+        vstSupportButton.setColour ( juce::TextButton::textColourOnId, juce::Colours::black );
+        vstSupportButton.setColour ( juce::TextButton::textColourOffId, juce::Colours::black );
+        vstSupportButton.setVisible ( false );
+        vstSupportButton.onClick = [this]() {
+            if ( onVstClicked )
+                onVstClicked ( channelId );
+        };
+
         addAndMakeVisible ( levelMeter );
     }
 
@@ -721,6 +831,8 @@ public:
         faderDbLabel.setText ( ( db <= -59.5f ) ? "-oo" : juce::String ( db, 1 ), juce::dontSendNotification );
     }
 
+    void setPan ( float p ) { panSlider.setValue ( p, juce::dontSendNotification ); }
+
     int  getChannelId() const { return channelId; }
     bool getIsMe() const { return isMe; }
 
@@ -810,12 +922,15 @@ public:
         panSlider.setBounds ( bounds.removeFromTop ( 40 ).reduced ( 15, 0 ) );
 
         // 2. dB Readouts
-        auto readoutArea  = bounds.removeFromTop ( 18 );
-        auto leftReadout  = readoutArea.removeFromLeft ( readoutArea.getWidth() / 2 );
-        auto rightReadout = readoutArea;
+        auto readoutArea = bounds.removeFromTop ( 18 );
+        faderDbLabel.setBounds ( readoutArea.removeFromLeft ( readoutArea.getWidth() / 2 ).reduced ( 1 ) );
+        peakDbLabel.setBounds ( readoutArea.reduced ( 1 ) );
 
-        faderDbLabel.setBounds ( leftReadout.reduced ( 1 ) );
-        peakDbLabel.setBounds ( rightReadout.reduced ( 1 ) );
+        // VST Badge (Top Right of name area)
+        if ( vstSupportButton.isVisible() )
+        {
+            vstSupportButton.setBounds ( getWidth() - 25, 5, 20, 16 );
+        }
 
         // 3. Buttons at bottom (Ordered: M/S above B/G)
         auto bottomRow = bounds.removeFromBottom ( 22 );
@@ -841,12 +956,19 @@ public:
         faderSlider.setBounds ( leftCol.withSizeKeepingCentre ( 24, leftCol.getHeight() ) ); // Wider slot for lever knob
     }
 
+    void setVstPeer ( bool isPeer )
+    {
+        vstSupportButton.setVisible ( isPeer );
+        resized();
+    }
+
     std::function<void ( int, float )> onGainChanged;
     std::function<void ( int, float )> onPanChanged;
     std::function<void ( int, bool )>  onMuteChanged;
     std::function<void ( int, bool )>  onSoloChanged;
     std::function<void ( int, bool )>  onBoostChanged;
     std::function<void ( int, int )>   onGroupChanged;
+    std::function<void ( int )>        onVstClicked;
     std::function<void ( int, bool )>  onMonoChanged;
 
 private:
@@ -866,6 +988,8 @@ private:
     juce::TextButton soloButton;
     juce::TextButton boostButton;
     juce::TextButton groupButton;
+    juce::TextButton vstSupportButton;
+
     LevelMeter       levelMeter;
     FaderLookAndFeel faderLook; // Custom look
 };
@@ -885,8 +1009,17 @@ public:
                 cb ( testToneEnabled );
         };
     }
-    JamulusGuiComponent ( jamulus_client_t client ) : jamulusClient ( client )
+    JamulusGuiComponent ( jamulus_client_t client ) : jamulusClient ( client ), connectComp ( client )
     {
+        // Connect Component setup (hidden by default)
+        addChildComponent ( connectComp );
+        connectComp.onConnectRequested = [this] ( const juce::String& addr ) {
+            if ( jamulusClient )
+                jamulus_client_set_server_addr ( jamulusClient, addr.toRawUTF8() );
+            connectComp.setVisible ( false );
+        };
+        connectComp.onCancel = [this]() { connectComp.setVisible ( false ); };
+
         // Title
         addAndMakeVisible ( titleLabel );
         titleLabel.setText ( "Jamulus VST3", juce::dontSendNotification );
@@ -938,8 +1071,10 @@ public:
             else
                 // Above 100: convert to dB gain (+1 to +6 dB)
                 mainVolume = static_cast<float> ( std::pow ( 10.0, ( sliderVal - 100.0 ) / 20.0 ) );
+
             if ( onMainVolumeChanged )
                 onMainVolumeChanged ( mainVolume );
+            saveSettings();
         };
 
         // Auto Level button
@@ -950,32 +1085,42 @@ public:
         autoLevelButton.onClick = [this]() {
             autoLevelEnabled = autoLevelButton.getToggleState();
             updateAutoLevelButtonColor();
+
             if ( !autoLevelEnabled )
             {
-                // Restore gains to manual settings when disabled
-                for ( auto& strip : channelStrips )
+                // Clear auto-level state for non-boosted channels only
+                // Boosted channels keep their per-channel auto-level active
+                for ( auto it = autoLevelCurrentGains.begin(); it != autoLevelCurrentGains.end(); )
                 {
-                    int id = strip->getChannelId();
-                    if ( id != -1 )
+                    int id = it->first;
+                    if ( !channelBoosts.count ( id ) || !channelBoosts[id] )
                     {
-                        float faderGain = channelGains.count ( id ) ? channelGains[id] : 0.75f;
-                        float boost     = ( channelBoosts.count ( id ) && channelBoosts[id] ) ? 2.0f : 1.0f;
-                        jamulus_client_set_channel_gain ( jamulusClient, id, faderGain * boost );
+                        autoLevelPeakLevels.erase ( id );
+                        autoLevelPeakHoldCounters.erase ( id );
+                        autoLevelChannelActiveTicks.erase ( id );
+                        it = autoLevelCurrentGains.erase ( it );
+                    }
+                    else
+                    {
+                        ++it;
                     }
                 }
-
-                // Clear auto-level state
-                autoLevelCurrentGains.clear();
-                autoLevelPeakLevels.clear();
-                autoLevelPeakHoldCounters.clear();
+                saveSettings(); // Ensure the mode change is persisted
             }
         };
 
-        // Auto Level settings (cog) button
-        addAndMakeVisible ( autoLevelSettingsButton );
-        autoLevelSettingsButton.setButtonText ( juce::String::charToString ( 0x2699 ) ); // Gear unicode
-        autoLevelSettingsButton.setTooltip ( "Auto Level Settings" );
-        autoLevelSettingsButton.onClick = [this]() { showAutoLevelSettingsPopup(); };
+        // Limiter button (replaces auto-level settings cog)
+        addAndMakeVisible ( limiterButton );
+        limiterButton.setButtonText ( "Limiter" );
+        limiterButton.setClickingTogglesState ( true );
+        limiterButton.setTooltip ( "Enable soft limiter on master output to prevent clipping" );
+        limiterButton.onClick = [this]() {
+            bool enabled = limiterButton.getToggleState();
+            if ( onLimiterEnableChanged )
+                onLimiterEnableChanged ( enabled );
+            updateLimiterButtonColor();
+            saveSettings();
+        };
 
         // Master Output Meters
         addAndMakeVisible ( masterMeterL );
@@ -1030,6 +1175,7 @@ public:
         inputFaderSlider.setTextBoxStyle ( juce::Slider::NoTextBox, true, 0, 0 );
         inputFaderSlider.onValueChange = [this]() {
             jamulus_client_set_input_fader ( jamulusClient, static_cast<int> ( inputFaderSlider.getValue() ) );
+            saveSettings();
         };
 
         // FX Button (opens FX panel with reverb and delay)
@@ -1182,10 +1328,10 @@ public:
         sliderMeterArea.removeFromTop ( 1 );
         masterMeterR.setBounds ( sliderMeterArea.removeFromTop ( 4 ) );
 
-        // Auto Level button + cog
-        auto autoLevelArea = toolbar.removeFromLeft ( 100 );
-        autoLevelButton.setBounds ( autoLevelArea.removeFromLeft ( 75 ).reduced ( 3, 8 ) );
-        autoLevelSettingsButton.setBounds ( autoLevelArea.reduced ( 2, 10 ) );
+        // Auto Level button + Limiter button
+        auto autoLevelArea = toolbar.removeFromLeft ( 160 );
+        autoLevelButton.setBounds ( autoLevelArea.removeFromLeft ( 80 ).reduced ( 3, 8 ) );
+        limiterButton.setBounds ( autoLevelArea.reduced ( 3, 8 ) );
 
         // Status area on right
         disconnectButton.setBounds ( toolbar.removeFromRight ( 90 ).reduced ( 5 ) );
@@ -1255,9 +1401,13 @@ public:
         bounds.removeFromTop ( 10 );
 
         // Local (Me) strip on the left - fixed, no scrolling
-        const int localStripWidth = 105;
-        auto      localBounds     = bounds.removeFromLeft ( localStripWidth );
-        localStripContainer.setBounds ( localBounds );
+        // Use same width as left controls area (140px) to align with FX/MON buttons
+        const int leftControlsWidth = 140;
+        const int localStripWidth   = 105;
+        auto      localAreaBounds   = bounds.removeFromLeft ( leftControlsWidth );
+        // Center the strip within the area
+        int stripX = ( leftControlsWidth - localStripWidth ) / 2;
+        localStripContainer.setBounds ( localAreaBounds.getX() + stripX, localAreaBounds.getY(), localStripWidth, localAreaBounds.getHeight() );
 
         // Remote channels viewport (scrollable) with scroll arrows
         const int arrowWidth = 20;
@@ -1266,16 +1416,29 @@ public:
         auto leftArrowBounds = bounds.removeFromLeft ( arrowWidth );
         scrollLeftArrow.setBounds ( leftArrowBounds.reduced ( 2, 30 ) );
 
-        // Main viewport for remote channels
-        auto viewportBounds = bounds.removeFromRight ( bounds.getWidth() - arrowWidth );
-        mixerViewport.setBounds ( viewportBounds );
+        // Right scroll arrow (on the far right)
+        auto rightArrowBounds = bounds.removeFromRight ( arrowWidth );
+        scrollRightArrow.setBounds ( rightArrowBounds.reduced ( 2, 30 ) );
 
-        // Right scroll arrow
-        scrollRightArrow.setBounds ( bounds.reduced ( 2, 30 ) );
+        // Main viewport for remote channels (in the middle)
+        mixerViewport.setBounds ( bounds );
 
         // Update mixer container width based on number of channels
         updateMixerLayout();
         updateScrollArrows();
+
+        // Connect Dialog Overlay (On top if visible)
+        if ( connectComp.isVisible() )
+        {
+            auto dialogBounds = getLocalBounds().reduced ( 40 );
+            // Limit max size
+            if ( dialogBounds.getWidth() > 800 )
+                dialogBounds = dialogBounds.withSizeKeepingCentre ( 800, dialogBounds.getHeight() );
+            if ( dialogBounds.getHeight() > 600 )
+                dialogBounds = dialogBounds.withSizeKeepingCentre ( dialogBounds.getWidth(), 600 );
+
+            connectComp.setBounds ( dialogBounds );
+        }
     }
 
 private:
@@ -1283,6 +1446,9 @@ private:
     bool             testToneEnabled = false;
     void             timerCallback() override
     {
+        // Manually pump Qt event loop since we're running headless QCoreApplication
+        jamulus_process_events();
+
         if ( !jamulusClient )
             return;
 
@@ -1300,9 +1466,9 @@ private:
         inputMeterL.setLevel ( linearL );
         inputMeterR.setLevel ( linearR );
 
-        // Master output meters
-        masterMeterL.setLevel ( jamulus_client_get_output_level_left ( jamulusClient ) );
-        masterMeterR.setLevel ( jamulus_client_get_output_level_right ( jamulusClient ) );
+        // Master output meters (scaled by main volume to show actual output level)
+        masterMeterL.setLevel ( jamulus_client_get_output_level_left ( jamulusClient ) * mainVolume );
+        masterMeterR.setLevel ( jamulus_client_get_output_level_right ( jamulusClient ) * mainVolume );
 
         // Update connection status
         bool connected = jamulus_client_is_connected ( jamulusClient );
@@ -1400,12 +1566,37 @@ private:
         {
             pingLabel.setText ( "Ping: --", juce::dontSendNotification );
             pingLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
-
-            delayLabel.setText ( "Delay: --", juce::dontSendNotification );
-            delayLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
-
             delayLight.setColour ( juce::Label::backgroundColourId, juce::Colours::transparentBlack );
             jitterLight.setColour ( juce::Label::backgroundColourId, juce::Colours::transparentBlack );
+        }
+
+        // --- VST Peer Discovery & Signaling ---
+        if ( connected )
+        {
+            // Instead of periodic chat heartbeats (which spam everyone),
+            // we ensure our own city always ends with our marker for silent discovery.
+            const char*  myCity = jamulus_client_get_city ( jamulusClient );
+            juce::String cityStr ( myCity );
+            if ( !cityStr.endsWith ( "(V)" ) )
+            {
+                cityStr = cityStr.trim() + " (V)";
+                jamulus_client_set_city ( jamulusClient, cityStr.toRawUTF8() );
+            }
+
+            // Cleanup stale peers (not seen for 15 seconds) - still useful if we get chat signals
+            auto             now = juce::Time::getCurrentTime();
+            juce::Array<int> staleIds;
+            for ( auto const& [id, lastSeen] : vstPeers )
+            {
+                if ( ( now - lastSeen ).inSeconds() > 15 )
+                    staleIds.add ( id );
+            }
+            for ( int id : staleIds )
+            {
+                vstPeers.erase ( id );
+                vstPeerNames.erase ( id );
+                lastChannelsHash = 0; // Force UI refresh to remove V icons
+            }
         }
 
         // Update channel list if anything changed (count, IDs, names, icons)
@@ -1439,14 +1630,21 @@ private:
             updateChannelStrips();
         }
 
-        // 2. Identify global Solo state
+        int myChannelId = jamulus_client_get_my_channel_id ( jamulusClient );
+
+        // 2. Identify global Solo state (from map, only for active channels)
         bool anySolo = false;
-        for ( auto& s : channelStrips )
+        for ( int i = 0; i < numChannels; ++i )
         {
-            if ( !s->getIsMe() && s->isSoloed() )
+            jamulus_channel_info_t info;
+            if ( jamulus_client_get_channel_info ( jamulusClient, i, &info ) )
             {
-                anySolo = true;
-                break;
+                int mapId = ( info.id == myChannelId && myChannelId != -1 ) ? -1 : info.id;
+                if ( mapId != -1 && channelSolos.count ( mapId ) && channelSolos[mapId] )
+                {
+                    anySolo = true;
+                    break;
+                }
             }
         }
 
@@ -1457,22 +1655,40 @@ private:
             jamulus_channel_info_t info;
             if ( jamulus_client_get_channel_info ( jamulusClient, i, &info ) )
             {
-                float lvl               = info.level / 65535.0f;
+                // Server caps level at 15. Scaling by 1.07 ensures 15/15 hits 0dBFS visually.
+                float lvl               = ( info.level / 65535.0f ) * 1.07f;
                 rawInputLevels[info.id] = lvl;
                 channelLevels[info.id]  = lvl; // Store for auto-level brain
             }
         }
 
         // 4. Update Auto Level "Brain" Calculation
-        if ( autoLevelEnabled && !channelStrips.empty() )
+        // This runs for:
+        // - All non-grouped remote channels when global auto-level is enabled
+        // - Individual channels with boost enabled (per-channel auto-level)
+        bool anyBoostedChannels = false;
+        for ( auto& strip : channelStrips )
+        {
+            if ( !strip->getIsMe() && channelBoosts.count ( strip->getChannelId() ) && channelBoosts[strip->getChannelId()] )
+            {
+                anyBoostedChannels = true;
+                break;
+            }
+        }
+
+        if ( ( autoLevelEnabled || anyBoostedChannels ) && !channelStrips.empty() )
         {
             const float timerIntervalMs    = 50.0f;
             const float noiseFloor         = 0.02f;
-            const float targetLevelLinear  = 0.5f;
+            const float baseTargetLevel    = 0.5f;
             const int   holdTicks          = 100;
             const float attackCoeff        = 1.0f - std::exp ( -timerIntervalMs / autoLevelAttackMs );
             const float releaseCoeff       = 1.0f - std::exp ( -timerIntervalMs / autoLevelReleaseMs );
             const float longTermDecayCoeff = 1.0f - std::exp ( -timerIntervalMs / 10000.0f );
+
+            // Ducking: only when global auto-level is on AND there are boosted channels
+            // Non-boosted channels are reduced to make boosted channels stand out
+            const float duckingFactor = ( autoLevelEnabled && anyBoostedChannels ) ? 0.75f : 1.0f; // 75% = about -2.5dB reduction
 
             for ( auto& strip : channelStrips )
             {
@@ -1480,8 +1696,13 @@ private:
                 if ( id == -1 || strip->getIsMe() )
                     continue;
 
-                // Skip grouped channels from the auto-level brain
-                if ( channelGroups.count ( id ) && channelGroups[id] != -1 )
+                // Determine if this channel should be auto-leveled:
+                // 1. Global auto-level is on AND channel is not grouped, OR
+                // 2. Channel has boost enabled (per-channel auto-level)
+                bool globalAutoLevel = autoLevelEnabled && ( !channelGroups.count ( id ) || channelGroups[id] == -1 );
+                bool boostAutoLevel  = channelBoosts.count ( id ) && channelBoosts[id];
+
+                if ( !globalAutoLevel && !boostAutoLevel )
                     continue;
 
                 if ( !channelLevels.count ( id ) )
@@ -1491,7 +1712,7 @@ private:
                 // Initialize tracking if not yet done
                 if ( !autoLevelCurrentGains.count ( id ) )
                 {
-                    float faderVolume         = channelGains.count ( id ) ? channelGains[id] : 0.75f;
+                    float faderVolume         = channelGains.count ( id ) ? channelGains[id] : 1.0f;
                     float boostMult           = ( channelBoosts.count ( id ) && channelBoosts[id] ) ? 2.0f : 1.0f;
                     autoLevelCurrentGains[id] = faderVolume * boostMult;
                 }
@@ -1534,13 +1755,32 @@ private:
                     continue;
                 }
 
-                float targetGain = juce::jlimit ( 0.1f, 4.0f, targetLevelLinear / longTermPeak );
+                // Boost factor: 1.85x (~5.3dB louder) to make boosted channels stand out
+                // Apply ducking to non-boosted channels when auto-level and boosted channels are both active
+                bool  isBoosted     = channelBoosts.count ( id ) && channelBoosts[id];
+                float boostFactor   = isBoosted ? 1.85f : duckingFactor; // Boosted gets 1.85x, non-boosted gets ducked
+                float currentTarget = baseTargetLevel * boostFactor;
+
+                // Calculate target gain, with conservative limits to prevent clipping
+                float targetGain = juce::jlimit ( 0.1f, 2.0f, currentTarget / longTermPeak );
+
+                // Anti-clipping: If current level * targetGain would exceed 0.95, reduce gain
+                float estimatedOutput = currentLevel * targetGain;
+                if ( estimatedOutput > 0.95f && currentLevel > noiseFloor )
+                {
+                    targetGain = 0.95f / currentLevel;
+                    targetGain = juce::jlimit ( 0.1f, 2.0f, targetGain );
+                }
+
                 float smoothingCoeff =
                     ( currentLevel > ( longTermPeak * 1.3f ) && ( targetGain < autoLevelCurrentGains[id] ) ) ? attackCoeff : releaseCoeff;
                 if ( isNew )
                     smoothingCoeff *= 0.5f;
 
                 autoLevelCurrentGains[id] += ( targetGain - autoLevelCurrentGains[id] ) * smoothingCoeff;
+
+                // Final clamp to ensure we never exceed safe output (0.95)
+                autoLevelCurrentGains[id] = juce::jlimit ( 0.0f, 0.95f, autoLevelCurrentGains[id] );
             }
         }
 
@@ -1551,26 +1791,28 @@ private:
             bool isMe = strip->getIsMe();
 
             // Determine if the channel should be silent
-            bool isMutedLocally = strip->isMuted();
-            bool isSoloedOut    = anySolo && !strip->isSoloed() && !isMe;
-            bool silenced       = isMutedLocally || isSoloedOut;
+            bool isMutedLocally  = channelMutes.count ( id ) && channelMutes[id];
+            bool isSoloedLocally = channelSolos.count ( id ) && channelSolos[id];
+            bool isSoloedOut     = anySolo && !isSoloedLocally && !isMe;
+            bool silenced        = isMutedLocally || isSoloedOut;
 
             float finalGain = 0.0f;
             if ( !silenced )
             {
-                // Is this channel controlled by auto-level?
-                bool autoLeveled = autoLevelEnabled && !isMe && ( !channelGroups.count ( id ) || channelGroups[id] == -1 );
+                // Is this channel controlled by auto-level (global or per-channel via boost)?
+                bool globalAutoLevel = autoLevelEnabled && !isMe && ( !channelGroups.count ( id ) || channelGroups[id] == -1 );
+                bool boostAutoLevel  = !isMe && channelBoosts.count ( id ) && channelBoosts[id];
 
-                if ( autoLeveled && autoLevelCurrentGains.count ( id ) )
+                if ( ( globalAutoLevel || boostAutoLevel ) && autoLevelCurrentGains.count ( id ) )
                 {
+                    // Use the auto-level calculated gain
                     finalGain = autoLevelCurrentGains[id];
                 }
                 else
                 {
-                    float baseFader = channelGains.count ( id ) ? channelGains[id] : 0.75f;
-                    // Boost applies to remote tracks. Local track boost is native in Jamulus.
-                    float boost = ( !isMe && channelBoosts.count ( id ) && channelBoosts[id] ) ? 2.0f : 1.0f;
-                    finalGain   = baseFader * boost;
+                    // Manual mode: just use fader (no boost multiplier since boost now means auto-level)
+                    float baseFader = channelGains.count ( id ) ? channelGains[id] : 1.0f;
+                    finalGain       = baseFader;
                 }
             }
 
@@ -1584,37 +1826,16 @@ private:
                 strip->setLevel ( rawInputLevels[id] * finalGain );
             }
 
-            static std::map<int, float> dispatcherLastSentGains;
-            if ( std::abs ( finalGain - dispatcherLastSentGains[id] ) > 0.0001f )
+            if ( !dispatcherLastSentGains.count ( id ) || std::abs ( finalGain - dispatcherLastSentGains[id] ) > 0.0001f )
             {
-                jamulus_client_set_channel_gain ( jamulusClient, id, finalGain );
+                // Dispatch gain to Jamulus. Use -1 for "Me" track for robust handling.
+                jamulus_client_set_channel_gain ( jamulusClient, isMe ? -1 : id, finalGain );
                 dispatcherLastSentGains[id] = finalGain;
             }
         }
 
-        // Process Qt events to keep the Jamulus client running
+        // Process Qt events so gain/pan timers can fire
         jamulus_process_events();
-
-        // Process Qt events to keep the Jamulus client running
-        jamulus_process_events();
-    }
-
-    void showConnectDialog()
-    {
-        if ( !connectDialog )
-        {
-            connectDialog                     = std::make_unique<ConnectComponent> ( jamulusClient );
-            connectDialog->onConnectRequested = [this] ( const juce::String& address ) {
-                if ( jamulusClient )
-                {
-                    jamulus_client_set_server_addr ( jamulusClient, address.toRawUTF8() );
-                    jamulus_client_start ( jamulusClient );
-                }
-                hideAllDialogs();
-            };
-            connectDialog->onCancel = [this]() { hideAllDialogs(); };
-        }
-        showDialog ( connectDialog.get() );
     }
 
     void showSettingsDialog()
@@ -1718,7 +1939,10 @@ private:
                 chatButton.setToggleState ( false, juce::dontSendNotification );
                 toggleChatPanel();
             };
-            chatPanel->onPopOut = [this]() { popOutChat(); };
+            chatPanel->onPopOut                   = [this]() { popOutChat(); };
+            chatPanel->onSignalingMessageReceived = [this] ( const juce::String& sender, const juce::String& payload ) {
+                handleVstSignal ( sender, payload );
+            };
 
             // Restore previous messages
             if ( !sharedChatMessages.empty() )
@@ -1764,7 +1988,13 @@ private:
         }
 
         // Create pop-out window
-        chatWindow                 = std::make_unique<ChatWindow> ( jamulusClient );
+        chatWindow = std::make_unique<ChatWindow> ( jamulusClient );
+        if ( auto* chatComp = dynamic_cast<ChatComponent*> ( chatWindow->getContentComponent() ) )
+        {
+            chatComp->onSignalingMessageReceived = [this] ( const juce::String& sender, const juce::String& payload ) {
+                handleVstSignal ( sender, payload );
+            };
+        }
         chatWindow->onWindowClosed = [this]() {
             // Save messages before closing
             if ( auto* chatComp = dynamic_cast<ChatComponent*> ( chatWindow->getContentComponent() ) )
@@ -1814,8 +2044,7 @@ private:
 
     void hideAllDialogs()
     {
-        if ( connectDialog )
-            removeChildComponent ( connectDialog.get() );
+        connectComp.setVisible ( false );
         if ( settingsDialog )
             removeChildComponent ( settingsDialog.get() );
         // Note: chatPanel is handled separately via toggle
@@ -1886,36 +2115,52 @@ private:
 
         for ( const auto& ci : stripsToCreate )
         {
-            DBG ( "Channel " << ci.info.id << ": " << ci.info.name << " Inst: " << ci.info.instrument << " Country: " << ci.info.country_code );
+            juce::String userName ( ci.info.name );
+            DBG ( "Channel " << ci.info.id << ": " << userName << " Inst: " << ci.info.instrument << " Country: " << ci.info.country_code );
             auto strip = std::make_unique<ChannelStrip>();
-            strip->setChannelInfo ( ci.info.id,
-                                    juce::String ( ci.info.name ),
+            // Force the "Me" track ID to -1 so its local settings map entries are stable
+            int faderId = ci.isMe ? -1 : ci.info.id;
+            strip->setChannelInfo ( faderId,
+                                    userName,
                                     ci.info.instrument,
                                     ci.info.country_code,
-                                    ci.info.skill_level,
+                                    ci.isMe ? jamulus_client_get_skill ( jamulusClient ) : ci.info.skill_level,
                                     ci.isMe );
-
             auto stripPtr        = strip.get();
-            strip->onGainChanged = [this, stripPtr, isPersonalTrack = ci.isMe] ( int id, float gain ) {
-                float oldGain = channelGains.count ( id ) ? channelGains[id] : 0.75f;
+            strip->onGainChanged = [this, stripPtr, isPersonalTrack = ci.isMe, userName] ( int id, float gain ) {
+                float oldGain = channelGains.count ( id ) ? channelGains[id] : 1.0f;
+
+                // Update persistence
+                if ( !userName.isEmpty() )
+                {
+                    userPersistenceMap[userName].gain = gain;
+                    saveSettings();
+                }
 
                 // Use the previous non-zero gain as reference if the current gain is 0
-                float refOldGain = ( oldGain > 0.001f ) ? oldGain : ( previousGains.count ( id ) ? previousGains[id] : 0.75f );
+                float refOldGain = ( oldGain > 0.001f ) ? oldGain : ( previousGains.count ( id ) ? previousGains[id] : 1.0f );
 
                 channelGains[id] = gain;
                 if ( gain > 0.001f )
                     previousGains[id] = gain;
 
-                // For the local track, we don't multiply gain. The boost button is
-                // mapped to the native Jamulus input boost elsewhere.
                 if ( isPersonalTrack )
                 {
                     jamulus_client_set_channel_gain ( jamulusClient, id, gain );
                 }
                 else
                 {
-                    float boost = channelBoosts.count ( id ) && channelBoosts[id] ? 2.0f : 1.0f;
-                    jamulus_client_set_channel_gain ( jamulusClient, id, gain * boost );
+                    // Check if this channel is under auto-level control
+                    bool globalAutoLevel = autoLevelEnabled && ( !channelGroups.count ( id ) || channelGroups[id] == -1 );
+                    bool boostAutoLevel  = channelBoosts.count ( id ) && channelBoosts[id];
+
+                    if ( !globalAutoLevel && !boostAutoLevel )
+                    {
+                        // Not auto-leveled - dispatch gain immediately
+                        jamulus_client_set_channel_gain ( jamulusClient, id, gain );
+                        dispatcherLastSentGains[id] = gain;
+                    }
+                    // Auto-leveled channels are managed by timerCallback
                 }
 
                 // Proportional Group Sync
@@ -1929,8 +2174,8 @@ private:
                         // Only sync external tracks
                         if ( otherId != id && !s->getIsMe() && channelGroups.count ( otherId ) && channelGroups[otherId] == gid )
                         {
-                            float otherG   = channelGains.count ( otherId ) ? channelGains[otherId] : 0.75f;
-                            float otherRef = ( otherG > 0.001f ) ? otherG : ( previousGains.count ( otherId ) ? previousGains[otherId] : 0.75f );
+                            float otherG   = channelGains.count ( otherId ) ? channelGains[otherId] : 1.0f;
+                            float otherRef = ( otherG > 0.001f ) ? otherG : ( previousGains.count ( otherId ) ? previousGains[otherId] : 1.0f );
 
                             float otherNewGain = juce::jlimit ( 0.0f, 1.0f, otherRef * ratio );
 
@@ -1948,61 +2193,165 @@ private:
                     }
                 }
             };
-            strip->onPanChanged  = [this] ( int id, float pan ) { jamulus_client_set_channel_pan ( jamulusClient, id, pan ); };
+            strip->onPanChanged = [this, userName] ( int id, float pan ) {
+                jamulus_client_set_channel_pan ( jamulusClient, id, pan );
+                if ( !userName.isEmpty() )
+                {
+                    userPersistenceMap[userName].pan = pan;
+                    saveSettings();
+                }
+            };
             strip->onMuteChanged = [this] ( int id, bool muted ) {
-                // We handle muting in timerCallback's gain update loop to avoid conflicts with auto-level
+                channelMutes[id] = muted;
+                // Immediately apply mute effect
+                if ( muted )
+                {
+                    jamulus_client_set_channel_gain ( jamulusClient, id, 0.0f );
+                    dispatcherLastSentGains[id] = 0.0f;
+                }
+                else
+                {
+                    // Restore gain (timerCallback will recalculate proper value)
+                    float gain = channelGains.count ( id ) ? channelGains[id] : 1.0f;
+                    jamulus_client_set_channel_gain ( jamulusClient, id, gain );
+                    dispatcherLastSentGains[id] = gain;
+                }
             };
             strip->onSoloChanged = [this] ( int id, bool solo ) {
-                // We handle solo in timerCallback's gain update loop
+                channelSolos[id] = solo;
+                // Solo logic is complex (affects all channels), let timerCallback handle it
+                // Force a full re-dispatch by clearing cache
+                dispatcherLastSentGains.clear();
             };
             strip->onBoostChanged = [this, isPersonalTrack = ci.isMe] ( int id, bool boosted ) {
                 channelBoosts[id] = boosted;
 
-                // User track ("Me") or manual tracks should update immediately.
-                // Tracks under Auto-Level wait for the timer pass (unless grouped).
-                bool autoLeveled = autoLevelEnabled && !isPersonalTrack && ( !channelGroups.count ( id ) || channelGroups[id] == -1 );
-
                 if ( isPersonalTrack )
                 {
                     // For the local track, we use the native Jamulus input boost (1=0dB, 2=6dB)
-                    // This is much safer than multiplying the input fader.
                     jamulus_client_set_input_boost ( jamulusClient, boosted ? 2 : 1 );
 
                     // Also update monitoring gain (return level)
-                    float gain = channelGains.count ( id ) ? channelGains[id] : 0.75f;
+                    float gain = channelGains.count ( id ) ? channelGains[id] : 1.0f;
                     jamulus_client_set_channel_gain ( jamulusClient, id, gain );
+                    saveSettings();
                 }
-                else if ( !autoLeveled )
+                else
                 {
-                    // Regular remote track - apply UI boost multiplier
-                    float gain  = channelGains.count ( id ) ? channelGains[id] : 0.75f;
-                    float boost = boosted ? 2.0f : 1.0f;
-                    jamulus_client_set_channel_gain ( jamulusClient, id, gain * boost );
+                    // Boost on remote tracks enables per-channel auto-level
+                    if ( boosted )
+                    {
+                        // Initialize auto-level tracking from current fader position
+                        float faderVolume         = channelGains.count ( id ) ? channelGains[id] : 1.0f;
+                        autoLevelCurrentGains[id] = faderVolume;
+                        // Peak tracking will be initialized on next timer tick
+                    }
+                    else
+                    {
+                        // Restore manual fader gain when boost is disabled
+                        float gain = channelGains.count ( id ) ? channelGains[id] : 1.0f;
+                        jamulus_client_set_channel_gain ( jamulusClient, id, gain );
+                        dispatcherLastSentGains[id] = gain;
+
+                        // Clear auto-level tracking for this channel
+                        autoLevelCurrentGains.erase ( id );
+                        autoLevelPeakLevels.erase ( id );
+                        autoLevelPeakHoldCounters.erase ( id );
+                        autoLevelChannelActiveTicks.erase ( id );
+                    }
                 }
             };
             strip->onGroupChanged = [this] ( int id, int groupId ) { channelGroups[id] = groupId; };
-            strip->onMonoChanged  = [this, isPersonalTrack = ci.isMe] ( int id, bool mono ) {
+            strip->onMonoChanged  = [this, isPersonalTrack = ci.isMe, userName] ( int id, bool mono ) {
                 if ( isPersonalTrack )
                 {
                     isMeMono = mono;
                     if ( fxPanel )
                         fxPanel->setMonoConstraint ( mono );
                 }
-            };
 
-            // Restore states
+                if ( !userName.isEmpty() )
+                {
+                    userPersistenceMap[userName].isMono = mono;
+                    saveSettings();
+                }
+            };
+            strip->onVstClicked = [this] ( int id ) { openPrivateChat ( id ); };
+
+            // VST Peer Detection (Silent via City Marker OR via previous Signals)
+            bool isVstPeer = false;
+            if ( !ci.isMe )
+            {
+                // check if we have a signal-based record
+                if ( vstPeers.count ( ci.info.id ) )
+                    isVstPeer = true;
+                else
+                {
+                    // check for silent city marker "(V)"
+                    juce::String city ( ci.info.city );
+                    if ( city.endsWith ( "(V)" ) )
+                    {
+                        isVstPeer = true;
+                        // Cache it so we recognize them for signaling too
+                        vstPeers[ci.info.id]     = juce::Time::getCurrentTime();
+                        vstPeerNames[ci.info.id] = juce::String ( ci.info.name );
+                    }
+                }
+            }
+            strip->setVstPeer ( isVstPeer );
+
+            // Restore states (Session Priority -> Persistence -> Defaults)
             if ( ci.info.id != -1 )
             {
-                strip->setMute ( ci.info.muted );
-                strip->setSolo ( ci.info.solo );
+                if ( channelMutes.count ( ci.info.id ) )
+                    strip->setMute ( channelMutes[ci.info.id] );
+                else
+                {
+                    strip->setMute ( ci.info.muted );
+                    channelMutes[ci.info.id] = ci.info.muted;
+                }
+
+                if ( channelSolos.count ( ci.info.id ) )
+                    strip->setSolo ( channelSolos[ci.info.id] );
+                else
+                {
+                    strip->setSolo ( ci.info.solo );
+                    channelSolos[ci.info.id] = ci.info.solo;
+                }
+
                 if ( channelBoosts.count ( ci.info.id ) )
                     strip->setBoost ( channelBoosts[ci.info.id] );
                 if ( channelGroups.count ( ci.info.id ) )
                     strip->setGroup ( channelGroups[ci.info.id] );
-                if ( channelGains.count ( ci.info.id ) )
-                    strip->setGain ( channelGains[ci.info.id] );
-                else
-                    channelGains[ci.info.id] = ci.info.gain;
+            }
+
+            if ( channelGains.count ( ci.info.id ) )
+            {
+                strip->setGain ( channelGains[ci.info.id] );
+            }
+            else if ( !userName.isEmpty() && userPersistenceMap.count ( userName ) )
+            {
+                auto& p = userPersistenceMap[userName];
+                strip->setGain ( p.gain );
+                strip->setPan ( p.pan );
+                strip->setMonoMode ( p.isMono ); // Note: this will trigger onMonoChanged callback
+
+                channelGains[ci.info.id] = p.gain;
+
+                // Sync with Jamulus client for the new channel
+                if ( ci.info.id != -1 )
+                {
+                    // jamulus_client_set_channel_gain is deferred to timerCallback
+                    // to ensure solo/mute logic is applied correctly.
+                    jamulus_client_set_channel_pan ( jamulusClient, ci.info.id, p.pan );
+                }
+            }
+            else
+            {
+                // Default from Jamulus info (or unity if not available)
+                float g                  = ( ci.info.id != -1 && ci.info.gain > 0.001f ) ? ci.info.gain : 1.0f;
+                channelGains[ci.info.id] = g;
+                strip->setGain ( g );
             }
 
             // Local "Me" strip goes in fixed container, remote strips go in scrollable mixer
@@ -2014,6 +2363,114 @@ private:
         }
 
         updateMixerLayout();
+    }
+
+    void handleVstSignal ( const juce::String& sender, const juce::String& payload )
+    {
+        // Payload format: "CHANNEL_ID;COMMAND;DATA"
+        int firstSemi = payload.indexOf ( ";" );
+        if ( firstSemi <= 0 )
+            return;
+
+        int          senderId = payload.substring ( 0, firstSemi ).getIntValue();
+        juce::String cmdData  = payload.substring ( firstSemi + 1 );
+
+        int          secondSemi = cmdData.indexOf ( ";" );
+        juce::String cmd        = ( secondSemi > 0 ) ? cmdData.substring ( 0, secondSemi ) : cmdData;
+        juce::String data       = ( secondSemi > 0 ) ? cmdData.substring ( secondSemi + 1 ) : "";
+
+        if ( cmd == "HELO" )
+        {
+            // Peer discovery
+            bool alreadyPeer       = vstPeers.count ( senderId ) > 0;
+            vstPeers[senderId]     = juce::Time::getCurrentTime();
+            vstPeerNames[senderId] = sender;
+
+            if ( !alreadyPeer )
+            {
+                lastChannelsHash = 0; // Refresh UI
+            }
+        }
+        else if ( cmd == "CHAT" )
+        {
+            // Private chat message
+            // The 'data' part of the payload is "RECIPIENT_ID;MESSAGE"
+            int thirdSemi = data.indexOf ( ";" );
+            if ( thirdSemi <= 0 )
+                return; // Malformed private chat message
+
+            int          recipientId = data.substring ( 0, thirdSemi ).getIntValue();
+            juce::String message     = data.substring ( thirdSemi + 1 );
+
+            int myId = jamulus_client_get_my_channel_id ( jamulusClient );
+            if ( myId == -1 )
+                return; // Not fully joined yet
+
+            if ( recipientId == myId )
+            {
+                onPrivateMessageReceived ( senderId, message );
+            }
+        }
+    }
+
+    void sendVstSignal ( const juce::String& cmd, const juce::String& data = "" )
+    {
+        if ( !jamulusClient )
+            return;
+
+        int myId = jamulus_client_get_my_channel_id ( jamulusClient );
+        if ( myId == -1 )
+            return; // Not fully joined yet
+
+        juce::String payload = juce::String ( myId ) + ";" + cmd;
+        if ( data.isNotEmpty() )
+            payload += ";" + data;
+
+        juce::String fullMsg = juce::String ( ChatComponent::SIG_PREFIX ) + payload;
+        jamulus_client_send_chat_message ( jamulusClient, fullMsg.toRawUTF8() );
+    }
+
+    void onPrivateMessageReceived ( int senderId, const juce::String& text )
+    {
+        if ( privateChatWindows.count ( senderId ) )
+        {
+            privateChatWindows[senderId]->addMessage ( vstPeerNames[senderId], text );
+        }
+        else
+        {
+            // For now, auto-open window if message received
+            openPrivateChat ( senderId );
+            if ( privateChatWindows.count ( senderId ) ) // Check if it was successfully opened
+                privateChatWindows[senderId]->addMessage ( vstPeerNames[senderId], text );
+        }
+    }
+
+    // --- Private Chat ---
+    void openPrivateChat ( int channelId )
+    {
+        if ( vstPeerNames.count ( channelId ) )
+        {
+            if ( privateChatWindows.count ( channelId ) )
+            {
+                privateChatWindows[channelId]->toFront ( true );
+                return;
+            }
+
+            auto name = vstPeerNames[channelId];
+            auto win  = std::make_unique<PrivateChatWindow> ( channelId, name, [this, channelId] ( const juce::String& msg ) {
+                int myId = jamulus_client_get_my_channel_id ( jamulusClient );
+                if ( myId != -1 )
+                {
+                    // Format for private chat: "RECIPIENT_ID;MESSAGE"
+                    juce::String privateData = juce::String ( channelId ) + ";" + msg;
+                    sendVstSignal ( "CHAT", privateData );
+                }
+            } );
+
+            win->onWindowClosed = [this, channelId]() { privateChatWindows.erase ( channelId ); };
+
+            privateChatWindows[channelId] = std::move ( win );
+        }
     }
 
     void updateMixerLayout()
@@ -2086,7 +2543,16 @@ private:
         scrollRightArrow.setAlpha ( showRight ? 1.0f : 0.3f );
     }
 
+    // Connect Dialog
+    void showConnectDialog()
+    {
+        connectComp.setVisible ( true );
+        connectComp.toFront ( true );
+        resized();
+    }
+
     jamulus_client_t jamulusClient;
+    ConnectComponent connectComp;
     bool             wasConnected     = false;
     int              lastNumChannels  = 0;
     juce::uint64     lastChannelsHash = 0;
@@ -2118,7 +2584,7 @@ private:
 
     // Auto Level controls
     juce::TextButton     autoLevelButton;
-    juce::TextButton     autoLevelSettingsButton;
+    juce::TextButton     limiterButton;
     bool                 autoLevelEnabled   = false;
     float                autoLevelAttackMs  = 50.0f;           // Fast attack for limiting loud signals
     float                autoLevelReleaseMs = 600.0f;          // Slow release for smooth recovery
@@ -2170,22 +2636,43 @@ private:
         }
     } mixerContainer;
     std::vector<std::unique_ptr<ChannelStrip>> channelStrips;
-    std::map<int, float>                       channelGains;  // Track fader values per channel
-    std::map<int, float>                       previousGains; // Track last non-zero gain for sync
-    std::map<int, bool>                        channelBoosts; // Track boost state per channel
-    std::map<int, int>                         channelGroups; // Track group state (ID) per channel
-    std::map<int, float>                       channelLevels; // Track current levels for auto-leveling
+    std::map<int, float>                       channelGains;            // Track fader values per channel
+    std::map<int, float>                       previousGains;           // Track last non-zero gain for sync
+    std::map<int, bool>                        channelBoosts;           // Track boost state per channel
+    std::map<int, bool>                        channelMutes;            // Track mute state per channel
+    std::map<int, bool>                        channelSolos;            // Track solo state per channel
+    std::map<int, int>                         channelGroups;           // Track group state (ID) per channel
+    std::map<int, float>                       channelLevels;           // Track current levels for auto-leveling
+    std::map<int, float>                       dispatcherLastSentGains; // Track last sent to Jamulus
     bool                                       autoLevelBoostEnabled = false;
 
+    // Persisted User Settings
+    struct UserPersistence
+    {
+        float gain   = 1.0f;
+        float pan    = 0.0f;
+        bool  isMono = false;
+    };
+    std::map<juce::String, UserPersistence> userPersistenceMap;
+
     // Dialogs
-    std::unique_ptr<ConnectComponent>  connectDialog;
+    // Dialogs
+    // std::unique_ptr<ConnectComponent>  connectDialog; // Removed in favor of member connectComp
     std::unique_ptr<SettingsComponent> settingsDialog;
     juce::Component*                   currentDialog = nullptr;
 
     // Chat panel and window
     std::unique_ptr<ChatComponent> chatPanel;
     std::unique_ptr<ChatWindow>    chatWindow;
-    std::vector<ChatMessage>       sharedChatMessages; // Persistent chat storage
+    // VST Peer Discovery
+    int                                               vstHeartbeatCounter = 0;
+    std::map<int, juce::Time>                         vstPeers;     // channelId -> lastSeen
+    std::map<int, juce::String>                       vstPeerNames; // channelId -> name (for chat matching)
+    std::map<int, std::unique_ptr<PrivateChatWindow>> privateChatWindows;
+
+    // Saved chat state for sharing between panel/window
+    std::vector<ChatMessage> sharedChatMessages;
+    // Persistent chat storage
 
     // FX Panel
     std::unique_ptr<FXPanelComponent> fxPanel;
@@ -2242,45 +2729,31 @@ private:
         }
     }
 
-    void showAutoLevelSettingsPopup()
+    void updateLimiterButtonColor()
     {
-        auto popup = std::make_unique<juce::Component>();
-        popup->setSize ( 220, 130 );
-
-        // Attack Time
-        auto* attackLabel = new juce::Label ( "attackLabel", "Attack Time:" );
-        attackLabel->setColour ( juce::Label::textColourId, juce::Colours::white );
-        attackLabel->setBounds ( 10, 10, 100, 25 );
-        popup->addAndMakeVisible ( attackLabel );
-
-        auto* attackSlider = new juce::Slider();
-        attackSlider->setRange ( 10.0, 500.0, 5.0 );
-        attackSlider->setValue ( autoLevelAttackMs );
-        attackSlider->setTextBoxStyle ( juce::Slider::TextBoxRight, false, 50, 20 );
-        attackSlider->setTextValueSuffix ( " ms" );
-        attackSlider->setBounds ( 10, 35, 200, 25 );
-        attackSlider->onValueChange = [this, attackSlider]() { autoLevelAttackMs = static_cast<float> ( attackSlider->getValue() ); };
-        popup->addAndMakeVisible ( attackSlider );
-
-        // Release Time
-        auto* releaseLabel = new juce::Label ( "releaseLabel", "Release Time:" );
-        releaseLabel->setColour ( juce::Label::textColourId, juce::Colours::white );
-        releaseLabel->setBounds ( 10, 65, 100, 25 );
-        popup->addAndMakeVisible ( releaseLabel );
-
-        auto* releaseSlider = new juce::Slider();
-        releaseSlider->setRange ( 100.0, 3000.0, 50.0 );
-        releaseSlider->setValue ( autoLevelReleaseMs );
-        releaseSlider->setTextBoxStyle ( juce::Slider::TextBoxRight, false, 50, 20 );
-        releaseSlider->setTextValueSuffix ( " ms" );
-        releaseSlider->setBounds ( 10, 90, 200, 25 );
-        releaseSlider->onValueChange = [this, releaseSlider]() { autoLevelReleaseMs = static_cast<float> ( releaseSlider->getValue() ); };
-        popup->addAndMakeVisible ( releaseSlider );
-
-        juce::CallOutBox::launchAsynchronously ( std::move ( popup ), autoLevelSettingsButton.getScreenBounds(), nullptr );
+        if ( limiterButton.getToggleState() )
+        {
+            // Orange glow when limiter is active
+            juce::Colour orangeGlow ( 0xffff9900 );
+            limiterButton.setColour ( juce::TextButton::buttonColourId, orangeGlow );
+            limiterButton.setColour ( juce::TextButton::buttonOnColourId, orangeGlow );
+            limiterButton.setColour ( juce::TextButton::textColourOnId, juce::Colours::black );
+            limiterButton.setColour ( juce::TextButton::textColourOffId, juce::Colours::black );
+        }
+        else
+        {
+            juce::Colour defaultColor = juce::LookAndFeel::getDefaultLookAndFeel().findColour ( juce::TextButton::buttonColourId );
+            limiterButton.setColour ( juce::TextButton::buttonColourId, defaultColor );
+            limiterButton.setColour ( juce::TextButton::buttonOnColourId, defaultColor );
+            limiterButton.setColour ( juce::TextButton::textColourOnId, juce::Colours::white );
+            limiterButton.setColour ( juce::TextButton::textColourOffId, juce::Colours::white );
+        }
     }
 
 public:
+    // Limiter Callbacks
+    std::function<void ( bool )> onLimiterEnableChanged;
+
     // Callbacks that the editor can set
     std::function<void ( bool )>  onSidechainChanged;
     std::function<void ( bool )>  onMonitorModeChanged; // true = server return, false = direct thru
@@ -2363,6 +2836,45 @@ private:
             jamulus_client_set_new_client_level ( jamulusClient, static_cast<int> ( obj->getProperty ( "newClientLevel" ) ) );
         if ( obj->hasProperty ( "smallBuffers" ) )
             jamulus_client_set_small_buffers ( jamulusClient, static_cast<bool> ( obj->getProperty ( "smallBuffers" ) ) );
+
+        // Feature Toggles (Auto Level, Limiter)
+        if ( obj->hasProperty ( "autoLevelEnabled" ) )
+        {
+            autoLevelEnabled = static_cast<bool> ( obj->getProperty ( "autoLevelEnabled" ) );
+            autoLevelButton.setToggleState ( autoLevelEnabled, juce::dontSendNotification );
+            updateAutoLevelButtonColor();
+        }
+        if ( obj->hasProperty ( "limiterEnabled" ) )
+        {
+            bool lim = static_cast<bool> ( obj->getProperty ( "limiterEnabled" ) );
+            limiterButton.setToggleState ( lim, juce::dontSendNotification );
+            if ( onLimiterEnableChanged )
+                onLimiterEnableChanged ( lim );
+            updateLimiterButtonColor();
+        }
+
+        // Remote User Persistence
+        userPersistenceMap.clear();
+        if ( obj->hasProperty ( "userSettings" ) )
+        {
+            auto* userSettingsArr = obj->getProperty ( "userSettings" ).getArray();
+            if ( userSettingsArr )
+            {
+                for ( const auto& v : *userSettingsArr )
+                {
+                    auto* uobj = v.getDynamicObject();
+                    if ( uobj )
+                    {
+                        juce::String    name = uobj->getProperty ( "name" );
+                        UserPersistence p;
+                        p.gain                   = (float) uobj->getProperty ( "gain" );
+                        p.pan                    = (float) uobj->getProperty ( "pan" );
+                        p.isMono                 = (bool) uobj->getProperty ( "isMono" );
+                        userPersistenceMap[name] = p;
+                    }
+                }
+            }
+        }
     }
 
 public:
@@ -2391,6 +2903,24 @@ public:
         obj->setProperty ( "serverJitterBuffer", jamulus_client_get_server_jitter_buffer ( jamulusClient ) );
         obj->setProperty ( "newClientLevel", jamulus_client_get_new_client_level ( jamulusClient ) );
         obj->setProperty ( "smallBuffers", jamulus_client_get_small_buffers ( jamulusClient ) );
+
+        // Feature Toggles
+        obj->setProperty ( "autoLevelEnabled", autoLevelEnabled );
+        bool lim = limiterButton.getToggleState();
+        obj->setProperty ( "limiterEnabled", lim );
+
+        // Remote User Persistence
+        juce::Array<juce::var> userSettingsArr;
+        for ( auto const& [name, p] : userPersistenceMap )
+        {
+            juce::DynamicObject::Ptr uobj = new juce::DynamicObject();
+            uobj->setProperty ( "name", name );
+            uobj->setProperty ( "gain", p.gain );
+            uobj->setProperty ( "pan", p.pan );
+            uobj->setProperty ( "isMono", p.isMono );
+            userSettingsArr.add ( juce::var ( uobj.get() ) );
+        }
+        obj->setProperty ( "userSettings", userSettingsArr );
 
         auto file = getSettingsFile();
         file.replaceWithText ( juce::JSON::toString ( juce::var ( obj.get() ) ) );

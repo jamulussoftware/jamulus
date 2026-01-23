@@ -750,7 +750,7 @@ bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& 
     return false;
 }
 
-#ifndef CLIENT_NO_SRV_CONNECT
+#ifndef DISABLE_SRV_DNS
 bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
 {
     // init requested host address with invalid address first
@@ -806,20 +806,22 @@ bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& Hos
     }
     return false;
 }
+#endif
 
-bool NetworkUtil::ParseNetworkAddressWithSrvDiscovery ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
 {
+#ifndef DISABLE_SRV_DNS
     // Try SRV-based discovery first:
     if ( ParseNetworkAddressSrv ( strAddress, HostAddress, bEnableIPv6 ) )
     {
         return true;
     }
-    // Try regular connect via plain IP or host name lookup (A/AAAA):
-    return ParseNetworkAddress ( strAddress, HostAddress, bEnableIPv6 );
-}
 #endif
+    // Try regular connect via plain IP or host name lookup (A/AAAA):
+    return ParseNetworkAddressBare ( strAddress, HostAddress, bEnableIPv6 );
+}
 
-bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
 {
     QHostAddress InetAddr;
     unsigned int iNetPort = DEFAULT_PORT_NUMBER;

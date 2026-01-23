@@ -805,7 +805,7 @@ bool CServerListManager::Load()
             continue;
         }
 
-        NetworkUtil::ParseNetworkAddress ( slLine[0], haServerHostAddr, bEnableIPv6 );
+        NetworkUtil::ParseNetworkAddressBare ( slLine[0], haServerHostAddr, bEnableIPv6 );
         int iIdx = IndexOf ( haServerHostAddr );
         if ( iIdx != INVALID_INDEX )
         {
@@ -981,12 +981,8 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
     // changed in the meanwhile.
     // Allow IPv4 only for communicating with Directories
     // Use SRV DNS discovery for directory connections, fallback to A/AAAA if none.
-    const QString strNetworkAddress = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
-#ifndef CLIENT_NO_SRV_CONNECT
-    const bool bDirectoryAddressValid = NetworkUtil().ParseNetworkAddressWithSrvDiscovery ( strNetworkAddress, DirectoryAddress, false );
-#else
-    const bool bDirectoryAddressValid = NetworkUtil().ParseNetworkAddress ( strNetworkAddress, DirectoryAddress, false );
-#endif
+    const QString strNetworkAddress      = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
+    const bool    bDirectoryAddressValid = NetworkUtil::ParseNetworkAddress ( strNetworkAddress, DirectoryAddress, false );
 
     // lock the mutex again now that the address has been resolved.
     locker.relock();

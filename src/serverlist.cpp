@@ -805,6 +805,8 @@ bool CServerListManager::Load()
             continue;
         }
 
+        // This uses ParseNetworkAddressBare because it is just parsing ip:host that was saved to the file.
+        // Therefore no SRV lookup is appropriate.
         NetworkUtil::ParseNetworkAddressBare ( slLine[0], haServerHostAddr, bEnableIPv6 );
         int iIdx = IndexOf ( haServerHostAddr );
         if ( iIdx != INVALID_INDEX )

@@ -588,12 +588,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Send the request to two servers for redundancy if either or both of them
     // has a higher release version number, the reply will trigger the notification.
 
-    if ( NetworkUtil::ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    // Don't use SRV resolution when resolving update servers.
+
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 
-    if ( NetworkUtil::ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }

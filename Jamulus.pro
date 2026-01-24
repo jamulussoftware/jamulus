@@ -1182,6 +1182,12 @@ contains(CONFIG, "disable_version_check") {
     DEFINES += DISABLE_VERSION_CHECK
 }
 
+# disable SRV resolution in DNS if requested (#3556)
+contains(CONFIG, "disable_srv_dns") {
+    message(The use of SRV records in DNS is disabled.)
+    DEFINES += DISABLE_SRV_DNS
+}
+
 # Enable formatting all code via `make clang_format`.
 # Note: When extending the list of file extensions or when adding new code directories,
 # be sure to update .github/workflows/coding-style-check.yml and .clang-format-ignore as well.

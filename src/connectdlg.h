@@ -132,6 +132,7 @@ public slots:
     void OnDeleteServerAddrClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
+    void OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWidgetItem* previous );
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );

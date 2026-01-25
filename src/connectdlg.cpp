@@ -1149,8 +1149,8 @@ void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWi
     else
     {
         // It's a server
-        announcement = current->text ( LVC_NAME ) + ", " + tr ( "Ping" ) + " " + current->text ( LVC_PING ) + ", " + current->text ( LVC_CLIENTS ) + ", " +
-                       current->text ( LVC_LOCATION ) + ", " + current->text ( LVC_VERSION );
+        announcement = current->text ( LVC_NAME ) + ", " + tr ( "Ping" ) + " " + current->text ( LVC_PING ) + ", " + current->text ( LVC_CLIENTS ) +
+                       ", " + current->text ( LVC_LOCATION ) + ", " + current->text ( LVC_VERSION );
     }
     QAccessible::updateAccessibility ( new QAccessibleAnnouncementEvent ( lvwServers, announcement ) );
 #endif

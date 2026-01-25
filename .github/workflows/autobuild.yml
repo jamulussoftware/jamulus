@@ -129,7 +129,7 @@ jobs:
               echo 'Triggered by a tag push, building all targets'
               build_all_targets 'true'
             fi
-            if [[ "${GITHUB_REF}" == "refs/heads/autobuild"* ]]; then
+            if [[ "${GITHUB_REF}" =~ ^refs/heads/autobuild ]]; then
               echo 'Triggered by a push to an autobuild* branch, building all targets'
               build_all_targets 'true'
             fi

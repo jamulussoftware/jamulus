@@ -164,7 +164,9 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
         }
 
         CHostAddress haDirectoryAddress;
-        if ( NetworkUtil().ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, false ) )
+
+        // Allow IPv4 only for communicating with Directories
+        if ( NetworkUtil::ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, false ) )
         {
             // send the request for the server list
             pClient->CreateCLReqServerListMes ( haDirectoryAddress );

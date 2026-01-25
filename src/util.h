@@ -53,7 +53,7 @@
 #include <QElapsedTimer>
 #include <QTextBoundaryFinder>
 #include <QTimer>
-#ifndef CLIENT_NO_SRV_CONNECT
+#ifndef DISABLE_SRV_DNS
 #    include <QDnsLookup>
 #endif
 #ifndef _WIN32
@@ -1055,11 +1055,11 @@ class NetworkUtil
 public:
     static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 );
 
-#ifndef CLIENT_NO_SRV_CONNECT
+#ifndef DISABLE_SRV_DNS
     static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
-    static bool ParseNetworkAddressWithSrvDiscovery ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 #endif
     static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+    static bool ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();

@@ -24,7 +24,7 @@
 
 #include "connectdlg.h"
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 8, 0 )
 #    include <QAccessible>
 #    include <QAccessibleAnnouncementEvent>
 #endif
@@ -1116,7 +1116,7 @@ void CConnectDlg::UpdateDirectoryComboBox()
 
 void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWidgetItem* )
 {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 8, 0 )
     if ( !current )
         return;
 
@@ -1124,7 +1124,7 @@ void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWi
     if ( current->parent() )
     {
         // It's a client
-        announcement = current->text ( LVC_NAME );
+        announcement         = current->text ( LVC_NAME );
         QVariant countryData = current->data ( LVC_NAME, Qt::UserRole );
         if ( countryData.isValid() )
         {

@@ -988,6 +988,11 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         if ( bIsFirstPing )
         {
             pCurListViewItem->setHidden ( false );
+
+            if ( pCurListViewItem == lvwServers->currentItem() )
+            {
+                OnCurrentServerItemChanged ( pCurListViewItem, nullptr );
+            }
         }
 
         // Update sorting. Note that the sorting must be the last action for the
@@ -1037,6 +1042,11 @@ void CConnectDlg::SetServerVersionResult ( const CHostAddress& InetAddr, const Q
 
         // and store sortable mapped version number
         pCurListViewItem->setData ( LVC_VERSION, Qt::UserRole, mapVersionStr ( strVersion ) );
+
+        if ( pCurListViewItem == lvwServers->currentItem() )
+        {
+            OnCurrentServerItemChanged ( pCurListViewItem, nullptr );
+        }
     }
 }
 
@@ -1120,6 +1130,11 @@ void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWi
     if ( !current )
         return;
 
+    if ( !current->parent() && current->text ( LVC_PING ).isEmpty() )
+    {
+        return;
+    }
+
     QString announcement;
     if ( current->parent() )
     {
@@ -1134,8 +1149,8 @@ void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWi
     else
     {
         // It's a server
-        announcement = current->text ( LVC_NAME ) + ", " + current->text ( LVC_CLIENTS ) + ", " + current->text ( LVC_LOCATION ) + ", " +
-                       tr ( "Ping" ) + " " + current->text ( LVC_PING );
+        announcement = current->text ( LVC_NAME ) + ", " + tr ( "Ping" ) + " " + current->text ( LVC_PING ) + ", " + current->text ( LVC_CLIENTS ) + ", " +
+                       current->text ( LVC_LOCATION ) + ", " + current->text ( LVC_VERSION );
     }
     QAccessible::updateAccessibility ( new QAccessibleAnnouncementEvent ( lvwServers, announcement ) );
 #endif

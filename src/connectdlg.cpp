@@ -24,6 +24,11 @@
 
 #include "connectdlg.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 8, 0 )
+#    include <QAccessible>
+#    include <QAccessibleAnnouncementEvent>
+#endif
+
 /* Implementation *************************************************************/
 
 // mapVersionStr - converts a version number to a sortable string
@@ -243,6 +248,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     // to get default return key behaviour working
     QObject::connect ( lvwServers, &QTreeWidget::activated, this, &CConnectDlg::OnConnectClicked );
+    QObject::connect ( lvwServers, &QTreeWidget::currentItemChanged, this, &CConnectDlg::OnCurrentServerItemChanged );
 
     // line edit
     QObject::connect ( edtFilter, &QLineEdit::textEdited, this, &CConnectDlg::OnFilterTextEdited );
@@ -567,6 +573,7 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVect
 
             if ( vecChanInfo[i].eCountry != QLocale::AnyCountry )
             {
+                pNewChildListViewItem->setData ( LVC_NAME, Qt::UserRole, QLocale::countryToString ( vecChanInfo[i].eCountry ) );
                 // try to load the country flag icon
                 QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( vecChanInfo[i].eCountry ) );
 
@@ -981,6 +988,11 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         if ( bIsFirstPing )
         {
             pCurListViewItem->setHidden ( false );
+
+            if ( pCurListViewItem == lvwServers->currentItem() )
+            {
+                OnCurrentServerItemChanged ( pCurListViewItem, nullptr );
+            }
         }
 
         // Update sorting. Note that the sorting must be the last action for the
@@ -1030,6 +1042,11 @@ void CConnectDlg::SetServerVersionResult ( const CHostAddress& InetAddr, const Q
 
         // and store sortable mapped version number
         pCurListViewItem->setData ( LVC_VERSION, Qt::UserRole, mapVersionStr ( strVersion ) );
+
+        if ( pCurListViewItem == lvwServers->currentItem() )
+        {
+            OnCurrentServerItemChanged ( pCurListViewItem, nullptr );
+        }
     }
 }
 
@@ -1105,4 +1122,37 @@ void CConnectDlg::UpdateDirectoryComboBox()
             cbxDirectory->addItem ( pSettings->vstrDirectoryAddress[i], i );
         }
     }
+}
+
+void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWidgetItem* )
+{
+    // Announce the currently selected server or client to screen readers.
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 8, 0 )
+    if ( !current )
+        return;
+
+    if ( !current->parent() && current->text ( LVC_PING ).isEmpty() )
+    {
+        return;
+    }
+
+    QString announcement;
+    if ( current->parent() )
+    {
+        // It's a client
+        announcement         = current->text ( LVC_NAME );
+        QVariant countryData = current->data ( LVC_NAME, Qt::UserRole );
+        if ( countryData.isValid() )
+        {
+            announcement += ", " + countryData.toString();
+        }
+    }
+    else
+    {
+        // It's a server
+        announcement = current->text ( LVC_NAME ) + ", " + tr ( "Ping" ) + " " + current->text ( LVC_PING ) + ", " + current->text ( LVC_CLIENTS ) +
+                       ", " + current->text ( LVC_LOCATION ) + ", " + current->text ( LVC_VERSION );
+    }
+    QAccessible::updateAccessibility ( new QAccessibleAnnouncementEvent ( lvwServers, announcement ) );
+#endif
 }

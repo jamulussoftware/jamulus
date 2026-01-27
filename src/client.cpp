@@ -28,7 +28,6 @@
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
                    const quint16  iQosNumber,
-                   const QString& strConnOnStartupAddress,
                    const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
@@ -184,13 +183,6 @@ CClient::CClient ( const quint16  iPortNumber,
     // start the socket (it is important to start the socket after all
     // initializations and connections)
     Socket.Start();
-
-    // do an immediate start if a server address is given
-    if ( !strConnOnStartupAddress.isEmpty() )
-    {
-        SetServerAddr ( strConnOnStartupAddress );
-        Start();
-    }
 }
 
 CClient::~CClient()
@@ -388,7 +380,7 @@ void CClient::CreateServerJitterBufferMessage()
 void CClient::OnCLPingReceived ( CHostAddress InetAddr, int iMs )
 {
     // make sure we are running and the server address is correct
-    if ( IsRunning() && ( InetAddr == Channel.GetAddress() ) )
+    if ( Channel.IsEnabled() && ( InetAddr == Channel.GetAddress() ) )
     {
         // take care of wrap arounds (if wrapping, do not use result)
         const int iCurDiff = EvaluatePingMessage ( iMs );
@@ -862,11 +854,8 @@ void CClient::OnHandledSignal ( int sigNum )
     {
     case SIGINT:
     case SIGTERM:
-        // if connected, terminate connection (needed for headless mode)
-        if ( IsRunning() )
-        {
-            Stop();
-        }
+        // if connected, terminate connection
+        Disconnect();
 
         // this should trigger OnAboutToQuit
         QCoreApplication::instance()->exit();
@@ -985,24 +974,32 @@ void CClient::Start()
 
 void CClient::Stop()
 {
-    // stop audio interface
-    Sound.Stop();
+    // start disconnection
+    // Channel.Disconnect() should automatically disable Channel as soon as disconnected.
+    // Note that this only works if sound is active!
+    Channel.Disconnect();
 
-    // disable channel
-    Channel.SetEnable ( false );
-
-    // wait for approx. 100 ms to make sure no audio packet is still in the
-    // network queue causing the channel to be reconnected right after having
-    // received the disconnect message (seems not to gain much, disconnect is
-    // still not working reliably)
-    QTime DieTime = QTime::currentTime().addMSecs ( 100 );
-    while ( QTime::currentTime() < DieTime )
+    QTime DieTime = QTime::currentTime().addMSecs ( 500 );
+    while ( ( QTime::currentTime() < DieTime ) && Channel.IsEnabled() )
     {
         // exclude user input events because if we use AllEvents, it happens
         // that if the user initiates a connection and disconnection quickly
         // (e.g. quickly pressing enter five times), the software can get into
         // an unknown state
         QCoreApplication::processEvents ( QEventLoop::ExcludeUserInputEvents, 100 );
+    }
+
+    // Now stop the audio interface
+    Sound.Stop();
+
+    // in case we timed out, log warning and make sure Channel is disabled
+    if ( Channel.IsEnabled() )
+    {
+        //### TODO: BEGIN ###//
+        // Add error logging
+        //### TODO: END ###//
+
+        Channel.SetEnable ( false );
     }
 
     // Send disconnect message to server (Since we disable our protocol
@@ -1020,6 +1017,46 @@ void CClient::Stop()
     // Allow hibernation or display dimming if the app is running again (Windows)
     SetThreadExecutionState ( ES_CONTINUOUS );
 #endif
+}
+
+bool CClient::Connect ( QString strServerAddress, QString strServerName )
+{
+    if ( !Channel.IsEnabled() )
+    {
+        // Set server address and connect if valid address was supplied
+        if ( SetServerAddr ( strServerAddress ) )
+        {
+
+            Start();
+
+            emit Connecting ( strServerName );
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool CClient::Disconnect()
+{
+    if ( Channel.IsEnabled() )
+    {
+        Stop();
+
+        emit Disconnected();
+
+        return true;
+    }
+    else
+    {
+        // make sure sound is stopped too
+        Sound.Stop();
+
+        emit Disconnected();
+
+        return false;
+    }
 }
 
 void CClient::Init()

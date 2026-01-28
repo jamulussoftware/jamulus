@@ -11,10 +11,7 @@ param (
     #
     # The following version pinnings are semi-automatically checked for
     # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-    #[string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
-    [string] $AsioSDKName = "ASIOSDK",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
-    [string] $NsisName = "nsis-3.11",
     [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.11/nsis-3.11.zip",
     [string] $BuildOption = ""
 )
@@ -129,8 +126,6 @@ Function Install-Dependency
         [Parameter(Mandatory=$true)]
         [string] $Uri,
         [Parameter(Mandatory=$true)]
-        [string] $Name,
-        [Parameter(Mandatory=$true)]
         [string] $Destination
     )
 
@@ -141,7 +136,11 @@ Function Install-Dependency
     }
 
     $TempFileName = [System.IO.Path]::GetTempFileName() + ".zip"
-    $TempDir = [System.IO.Path]::GetTempPath()
+    $TempPath = [System.IO.Path]::GetTempPath()
+    $TempGuid = [System.Guid]::NewGuid()
+    # Create a unique empty directory to unpack into
+    $TempDir = (Join-Path $TempPath $TempGuid)
+    New-Item -ItemType Directory -Path $TempDir
 
     if ($Uri -Match "downloads.sourceforge.net")
     {
@@ -152,7 +151,10 @@ Function Install-Dependency
     echo $TempFileName
     Expand-Archive -Path $TempFileName -DestinationPath $TempDir -Force
     echo $WindowsPath\$Destination
-    Move-Item -Path "$TempDir\$Name" -Destination "$WindowsPath\$Destination" -Force
+    # Because we unpacked into a new directory, we can use * for the directory in the archive,
+    # so that we do not need to know the directory name the archive was packed from.
+    Move-Item -Path "$TempDir\*" -Destination "$WindowsPath\$Destination" -Force
+    Remove-Item -Path $TempDir -Recurse -Force
     Remove-Item -Path $TempFileName -Force
 }
 
@@ -163,16 +165,12 @@ Function Install-Dependencies
       Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
     }
     Initialize-Module-Here -m "VSSetup"
-    Install-Dependency -Uri $NsisUrl `
-        -Name $NsisName -Destination "..\libs\NSIS\NSIS-source"
+    Install-Dependency -Uri $NsisUrl -Destination "..\libs\NSIS\NSIS-source"
 
     if ($BuildOption -Notmatch "jack") {
         # Don't download ASIO SDK on Jamulus JACK builds to save
         # resources and to be extra-sure license-wise.
-	Set-PSDebug -Trace 2
-        Install-Dependency -Uri $AsioSDKUrl `
-            -Name $AsioSDKName -Destination "..\libs\ASIOSDK2"
-	Set-PSDebug -Off
+        Install-Dependency -Uri $AsioSDKUrl -Destination "..\libs\ASIOSDK2"
     }
 }
 

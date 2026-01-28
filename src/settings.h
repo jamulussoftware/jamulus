@@ -157,6 +157,7 @@ public:
         eDirectoryType ( AT_DEFAULT ),
         bEnableFeedbackDetection ( true ),
         bEnableAudioAlerts ( false ),
+        bShowToolTips ( true ),
         vecWindowPosSettings(), // empty array
         vecWindowPosChat(),     // empty array
         vecWindowPosConnect(),  // empty array
@@ -191,6 +192,7 @@ public:
     int              iCustomDirectoryIndex; // index of selected custom directory
     bool             bEnableFeedbackDetection;
     bool             bEnableAudioAlerts;
+    bool             bShowToolTips;
 
     // window position/state settings
     QByteArray vecWindowPosSettings;

@@ -116,6 +116,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
         opus_custom_encoder_ctl ( OpusEncoderMono[i], OPUS_SET_COMPLEXITY ( 1 ) );
         opus_custom_encoder_ctl ( OpusEncoderStereo[i], OPUS_SET_COMPLEXITY ( 1 ) );
 
+        // enable lowest decoder complexity for Opus64 decoders to enable DRED
+        opus_custom_decoder_ctl ( Opus64DecoderMono[i], OPUS_SET_COMPLEXITY ( 5 ) );
+        opus_custom_decoder_ctl ( Opus64DecoderStereo[i], OPUS_SET_COMPLEXITY ( 5 ) );
+
         // init double-to-normal frame size conversion buffers -----------------
         // use worst case memory initialization to avoid allocating memory in
         // the time-critical thread

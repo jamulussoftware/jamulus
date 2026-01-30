@@ -227,7 +227,7 @@ jobs:
           - config_name:            MacOS (artifacts)
             target_os:              macos
             building_on_os:         macos-15
-            base_command:           QT_VERSION=6.10.1 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
+            base_command:           QT_VERSION=6.10.2 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
             # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
             run_codeql:             false
             xcode_version:          16.3.0
@@ -249,7 +249,7 @@ jobs:
           - config_name:            iOS (artifacts)
             target_os:              ios
             building_on_os:         macos-15
-            base_command:           QT_VERSION=6.7.3 ./.github/autobuild/ios.sh
+            base_command:           QT_VERSION=6.10.2 ./.github/autobuild/ios.sh
             # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:

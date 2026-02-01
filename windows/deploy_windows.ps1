@@ -11,7 +11,7 @@ param (
     #
     # The following version pinnings are semi-automatically checked for
     # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-    [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
+    [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/ASIO-SDK_2.3.4_2025-10-15.zip",
     [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.11/nsis-3.11.zip",
     [string] $BuildOption = ""
 )

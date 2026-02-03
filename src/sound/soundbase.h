@@ -71,13 +71,9 @@ class CSoundBase : public QThread
 {
     Q_OBJECT
 public:
-#ifndef SERVER_ONLY
-    static void ParseMIDICommandLineParams ( const QString& strMIDISetup, CClientSettings& Settings );
-#endif
     CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                  void ( *fpNewProcessCallback ) ( CVector<int16_t>& psData, void* pParg ),
-                 void*          pParg,
-                 const QString& strMIDISetup );
+                 void* pParg );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize ) { return iNewPrefMonoBufferSize; }
     virtual void Start()
@@ -115,6 +111,7 @@ public:
     virtual void OpenDriverSetup() {}
 
     virtual const QString& GetMIDIDevice() { return strMIDIDevice; }
+    virtual void           SetMIDIDevice ( const QString& strDevice ) { strMIDIDevice = strDevice; }
 
     bool IsRunning() const { return bRun; }
     bool IsCallbackEntered() const { return bCallbackEntered; }
@@ -125,9 +122,20 @@ public:
 
     // this needs to be public so that it can be called from CMidi
     void         ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
-    void         SetMIDIMapping ( const QString& strMIDISetup );
     virtual void EnableMIDI ( bool /* bEnable */ ) {}    // Default empty implementation
     virtual bool IsMIDIEnabled() const { return false; } // Default false
+
+    void SetCtrlMIDIChannel ( int iCh ) { iCtrlMIDIChannel = iCh; }
+
+    void SetMIDIControllerMapping ( int iFaderOffset,
+                                    int iFaderCount,
+                                    int iPanOffset,
+                                    int iPanCount,
+                                    int iSoloOffset,
+                                    int iSoloCount,
+                                    int iMuteOffset,
+                                    int iMuteCount,
+                                    int iMuteMyselfCC );
 
 protected:
     virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }

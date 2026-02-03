@@ -515,12 +515,8 @@ void CSound::Stop()
     }
 }
 
-CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ),
-                 void*          arg,
-                 const QString& strMIDISetup,
-                 const bool,
-                 const QString& ) :
-    CSoundBase ( "ASIO", fpNewCallback, arg, strMIDISetup ),
+CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg, const bool, const QString& ) :
+    CSoundBase ( "ASIO", fpNewCallback, arg ),
     lNumInChan ( 0 ),
     lNumInChanPlusAddChan ( 0 ),
     lNumOutChan ( 0 ),

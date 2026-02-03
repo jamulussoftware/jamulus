@@ -23,19 +23,21 @@
 \******************************************************************************/
 
 #include "client.h"
+#include "settings.h"
 #include "util.h"
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
                    const quint16  iQosNumber,
                    const QString& strConnOnStartupAddress,
-                   const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
                    const bool     bNEnableIPv6,
                    const bool     bNMuteMeInPersonalMix ) :
     ChannelInfo(),
     strClientName ( strNClientName ),
+    pSignalHandler ( CSignalHandler::getSingletonP() ),
+    pSettings ( nullptr ),
     Channel ( false ), /* we need a client channel -> "false" */
     CurOpusEncoder ( nullptr ),
     CurOpusDecoder ( nullptr ),
@@ -49,7 +51,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bMuteOutStream ( false ),
     fMuteOutStreamGain ( 1.0f ),
     Socket ( &Channel, iPortNumber, iQosNumber, "", bNEnableIPv6 ),
-    Sound ( AudioCallback, this, strMIDISetup, bNoAutoJackConnect, strNClientName ),
+    Sound ( AudioCallback, this, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
     iReverbLevel ( 0 ),
@@ -68,8 +70,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK ( true ),
     bEnableIPv6 ( bNEnableIPv6 ),
     bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
-    iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
-    pSignalHandler ( CSignalHandler::getSingletonP() )
+    iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL )
 {
     int iOpusError;
 
@@ -192,6 +193,29 @@ CClient::CClient ( const quint16  iPortNumber,
     {
         SetServerAddr ( strConnOnStartupAddress );
         Start();
+    }
+}
+
+// MIDI setup will be handled after settings are assigned
+void CClient::ApplyMidiSettingsFromConfig()
+{
+    if ( pSettings )
+    {
+        Sound.SetCtrlMIDIChannel ( pSettings->iMidiChannel );
+        Sound.SetMIDIControllerMapping ( pSettings->iMidiFaderOffset,
+                                         pSettings->iMidiFaderCount,
+                                         pSettings->iMidiPanOffset,
+                                         pSettings->iMidiPanCount,
+                                         pSettings->iMidiSoloOffset,
+                                         pSettings->iMidiSoloCount,
+                                         pSettings->iMidiMuteOffset,
+                                         pSettings->iMidiMuteCount,
+                                         pSettings->iMidiMuteMyself );
+        Sound.EnableMIDI ( pSettings->bUseMIDIController );
+        if ( !pSettings->strMidiDevice.isEmpty() )
+        {
+            Sound.SetMIDIDevice ( pSettings->strMidiDevice );
+        }
     }
 }
 
@@ -1548,8 +1572,6 @@ void CClient::FreeClientChannel ( const int iServerChannelID )
                                     .arg ( iActiveChannels ) );
      */
 }
-
-void CClient::ApplyMIDIMapping ( const QString& midiMap ) { Sound.SetMIDIMapping ( midiMap ); }
 
 void CClient::OnMidiCCReceived ( int ccNumber ) { emit MidiCCReceived ( ccNumber ); }
 

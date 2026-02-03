@@ -62,10 +62,9 @@ class CSound : public CSoundBase
 public:
     CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
              void*          arg,
-             const QString& strMIDISetup,
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
-        CSoundBase ( "Jack", fpNewProcessCallback, arg, strMIDISetup ),
+        CSoundBase ( "Jack", fpNewProcessCallback, arg ),
         iJACKBufferSizeMono ( 0 ),
         bJackWasShutDown ( false ),
         fInOutLatencyMs ( 0.0f )
@@ -125,12 +124,8 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* pParg ),
-             void*          pParg,
-             const QString& strMIDISetup,
-             const bool,
-             const QString& ) :
-        CSoundBase ( "nosound", fpNewProcessCallback, pParg, strMIDISetup ),
+    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* pParg ), void* pParg, const bool, const QString& ) :
+        CSoundBase ( "nosound", fpNewProcessCallback, pParg ),
         HighPrecisionTimer ( true )
     {
         HighPrecisionTimer.Start();

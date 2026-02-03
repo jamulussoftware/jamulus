@@ -182,7 +182,7 @@ void CSound::EnableMIDI ( bool bEnable )
 {
     if ( bEnable && ( iCtrlMIDIChannel != INVALID_MIDI_CH ) )
     {
-        // Create MIDI port if we have valid MIDI channel and no port exists
+        // Create MIDI port if we have a valid MIDI channel and no port exists
         if ( input_port_midi == nullptr )
         {
             CreateMIDIPort();

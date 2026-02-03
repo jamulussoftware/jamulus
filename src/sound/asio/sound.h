@@ -55,7 +55,7 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg, const QString& strMIDISetup, const bool, const QString& );
+    CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg, const bool, const QString& );
 
     virtual ~CSound();
 

@@ -29,7 +29,6 @@
 CClientDlg::CClientDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
                          const QString&   strConnOnStartupAddress,
-                         const QString&   strMIDISetup,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
@@ -220,7 +219,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
 
     // Pass through flag for MIDICtrlUsed
-    MainMixerBoard->SetMIDICtrlUsed ( !strMIDISetup.isEmpty() );
+    MainMixerBoard->SetMIDICtrlUsed ( pSettings->bUseMIDIController );
 
     // reset mixer board
     MainMixerBoard->HideAll();

@@ -102,7 +102,6 @@ int main ( int argc, char** argv )
     QString      strJsonRpcBindIP            = DEFAULT_JSON_RPC_LISTEN_ADDRESS;
     quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
-    QString      strMIDISetup                = "";
     QString      strConnOnStartupAddress     = "";
     QString      strIniFileName              = "";
     QString      strHTMLStatusFileName       = "";
@@ -535,17 +534,10 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Controller MIDI channel ---------------------------------------------
-        if ( GetStringArgument ( argc,
-                                 argv,
-                                 i,
-                                 "--ctrlmidich", // no short form
-                                 "--ctrlmidich",
-                                 strArgument ) )
+        // MIDI
+        if ( GetStringArgument ( argc, argv, i, "", "--ctrlmidich", strArgument ) )
         {
-            strMIDISetup = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- MIDI controller settings: %1" ).arg ( strMIDISetup ) );
-            CommandLineOptions << "--ctrlmidich";
+            CommandLineOptions << ( QString ( "--ctrlmidich=" ) + strArgument );
             ClientOnlyOptions << "--ctrlmidich";
             continue;
         }
@@ -920,26 +912,13 @@ int main ( int argc, char** argv )
 #ifndef SERVER_ONLY
         if ( bIsClient )
         {
-            // Create client with empty MIDI string initially (safer initialization)
-            CClient Client ( iPortNumber,
-                             iQosNumber,
-                             strConnOnStartupAddress,
-                             "", // Always start with empty MIDI
-                             bNoAutoJackConnect,
-                             strClientName,
-                             bEnableIPv6,
-                             bMuteMeInPersonalMix );
+            CClient Client ( iPortNumber, iQosNumber, strConnOnStartupAddress, bNoAutoJackConnect, strClientName, bEnableIPv6, bMuteMeInPersonalMix );
 
             // Create Settings with the client pointer
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
-
-            // Parse command line MIDI parameters if provided
-            CSoundBase::ParseMIDICommandLineParams ( strMIDISetup, Settings );
-            if ( Settings.bUseMIDIController )
-            {
-                Client.ApplyMIDIMapping ( Settings.GetMIDIMapString() );
-            }
+            Client.SetSettings ( &Settings );
+            Client.ApplyMidiSettingsFromConfig();
 
 #    ifndef NO_JSON_RPC
             if ( pRpcServer )
@@ -962,7 +941,6 @@ int main ( int argc, char** argv )
                 CClientDlg ClientDlg ( &Client,
                                        &Settings,
                                        strConnOnStartupAddress,
-                                       strMIDISetup,
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
                                        bMuteStream,

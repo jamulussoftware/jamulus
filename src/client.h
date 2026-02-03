@@ -127,7 +127,6 @@ public:
     CClient ( const quint16  iPortNumber,
               const quint16  iQosNumber,
               const QString& strConnOnStartupAddress,
-              const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
               const bool     bNEnableIPv6,
@@ -301,9 +300,18 @@ public:
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;
 
-    void ApplyMIDIMapping ( const QString& midiMap );
+public:
+    // Assign settings pointer
+    void SetSettings ( CClientSettings* settings ) { pSettings = settings; }
+
+    // Apply MIDI settings from config
+    void ApplyMidiSettingsFromConfig();
 
 protected:
+    // Signal handler must be declared before pSettings for correct init order
+    CSignalHandler* pSignalHandler;
+    // Pointer to settings for MIDI and other config
+    CClientSettings* pSettings;
     // callback function must be static, otherwise it does not work
     static void AudioCallback ( CVector<short>& psData, void* arg );
 
@@ -412,8 +420,6 @@ protected:
     int    minGainOrPanId;
     int    maxGainOrPanId;
     int    iCurPingTime;
-
-    CSignalHandler* pSignalHandler;
 
 protected slots:
     void OnHandledSignal ( int sigNum );

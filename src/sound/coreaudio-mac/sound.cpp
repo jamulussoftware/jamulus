@@ -25,12 +25,8 @@
 #include "sound.h"
 
 /* Implementation *************************************************************/
-CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
-                 void*          arg,
-                 const QString& strMIDISetup,
-                 const bool,
-                 const QString& ) :
-    CSoundBase ( "CoreAudio", fpNewProcessCallback, arg, strMIDISetup ),
+CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ), void* arg, const bool, const QString& ) :
+    CSoundBase ( "CoreAudio", fpNewProcessCallback, arg ),
     midiClient ( static_cast<MIDIClientRef> ( NULL ) ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {

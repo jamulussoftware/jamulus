@@ -68,7 +68,7 @@ LED bar:      lbr
 
 /* Definitions ****************************************************************/
 // define this macro to get debug output
-//#define _DEBUG_
+// #define _DEBUG_
 #undef _DEBUG_
 
 // version and application name (use version from qt prject file)

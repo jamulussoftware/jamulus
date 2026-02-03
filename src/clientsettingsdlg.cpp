@@ -792,22 +792,23 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
         int CClientSettings::*member;
     };
 
-    const MidiSpinBoxMapping midiMappings[] = { { spnChannel, &CClientSettings::midiChannel },
-                                                { spnMuteMyself, &CClientSettings::midiMuteMyself },
-                                                { spnFaderOffset, &CClientSettings::midiFaderOffset },
-                                                { spnFaderCount, &CClientSettings::midiFaderCount },
-                                                { spnPanOffset, &CClientSettings::midiPanOffset },
-                                                { spnPanCount, &CClientSettings::midiPanCount },
-                                                { spnSoloOffset, &CClientSettings::midiSoloOffset },
-                                                { spnSoloCount, &CClientSettings::midiSoloCount },
-                                                { spnMuteOffset, &CClientSettings::midiMuteOffset },
-                                                { spnMuteCount, &CClientSettings::midiMuteCount } };
+    const MidiSpinBoxMapping midiMappings[] = { { spnChannel, &CClientSettings::iMidiChannel },
+                                                { spnMuteMyself, &CClientSettings::iMidiMuteMyself },
+                                                { spnFaderOffset, &CClientSettings::iMidiFaderOffset },
+                                                { spnFaderCount, &CClientSettings::iMidiFaderCount },
+                                                { spnPanOffset, &CClientSettings::iMidiPanOffset },
+                                                { spnPanCount, &CClientSettings::iMidiPanCount },
+                                                { spnSoloOffset, &CClientSettings::iMidiSoloOffset },
+                                                { spnSoloCount, &CClientSettings::iMidiSoloCount },
+                                                { spnMuteOffset, &CClientSettings::iMidiMuteOffset },
+                                                { spnMuteCount, &CClientSettings::iMidiMuteCount } };
 
     for ( const MidiSpinBoxMapping& mapping : midiMappings )
     {
         QObject::connect ( mapping.spinBox, static_cast<void ( QSpinBox::* ) ( int )> ( &QSpinBox::valueChanged ), this, [this, mapping] ( int v ) {
             pSettings->*( mapping.member ) = v;
-            ApplyMIDIMappingFromSettings();
+            // Apply MIDI settings changes immediately
+            pClient->ApplyMidiSettingsFromConfig();
         } );
     }
 
@@ -815,14 +816,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
         pSettings->bUseMIDIController = checked;
         SetMIDIControlsEnabled ( checked );
 
-        if ( checked )
-        {
-            pClient->ApplyMIDIMapping ( pSettings->GetMIDIMapString() );
-        }
-        else
-        {
-            pClient->ApplyMIDIMapping ( "" );
-        }
+        // Apply MIDI enable/disable immediately
+        pClient->ApplyMidiSettingsFromConfig();
 
         emit MIDIControllerUsageChanged ( checked );
     } );
@@ -871,16 +866,16 @@ void CClientSettingsDlg::showEvent ( QShowEvent* event )
     pcbxSkill->setCurrentIndex ( pcbxSkill->findData ( static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) ) );
 
     // MIDI tab: set widgets from settings
-    spnChannel->setValue ( pSettings->midiChannel );
-    spnMuteMyself->setValue ( pSettings->midiMuteMyself );
-    spnFaderOffset->setValue ( pSettings->midiFaderOffset );
-    spnFaderCount->setValue ( pSettings->midiFaderCount );
-    spnPanOffset->setValue ( pSettings->midiPanOffset );
-    spnPanCount->setValue ( pSettings->midiPanCount );
-    spnSoloOffset->setValue ( pSettings->midiSoloOffset );
-    spnSoloCount->setValue ( pSettings->midiSoloCount );
-    spnMuteOffset->setValue ( pSettings->midiMuteOffset );
-    spnMuteCount->setValue ( pSettings->midiMuteCount );
+    spnChannel->setValue ( pSettings->iMidiChannel );
+    spnMuteMyself->setValue ( pSettings->iMidiMuteMyself );
+    spnFaderOffset->setValue ( pSettings->iMidiFaderOffset );
+    spnFaderCount->setValue ( pSettings->iMidiFaderCount );
+    spnPanOffset->setValue ( pSettings->iMidiPanOffset );
+    spnPanCount->setValue ( pSettings->iMidiPanCount );
+    spnSoloOffset->setValue ( pSettings->iMidiSoloOffset );
+    spnSoloCount->setValue ( pSettings->iMidiSoloCount );
+    spnMuteOffset->setValue ( pSettings->iMidiMuteOffset );
+    spnMuteCount->setValue ( pSettings->iMidiMuteCount );
     chbUseMIDIController->setChecked ( pSettings->bUseMIDIController );
 
     SetMIDIControlsEnabled ( chbUseMIDIController->isChecked() );
@@ -1330,20 +1325,6 @@ void CClientSettingsDlg::OnAudioPanValueChanged ( int value )
 {
     pClient->SetAudioInFader ( value );
     UpdateAudioFaderSlider();
-}
-
-void CClientSettingsDlg::ApplyMIDIMappingFromSettings()
-{
-    // Only apply MIDI mapping if the controller is enabled
-    if ( pSettings->bUseMIDIController )
-    {
-        pClient->ApplyMIDIMapping ( pSettings->GetMIDIMapString() );
-    }
-    else
-    {
-        // If disabled, ensure no MIDI mapping is applied
-        pClient->ApplyMIDIMapping ( "" );
-    }
 }
 
 void CClientSettingsDlg::ResetMidiLearn()

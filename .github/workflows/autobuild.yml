@@ -249,12 +249,12 @@ jobs:
           - config_name:            iOS (artifacts)
             target_os:              ios
             building_on_os:         macos-15
-            base_command:           QT_VERSION=6.7.3 ./.github/autobuild/ios.sh
+            base_command:           QT_VERSION=5.15.2 ./.github/autobuild/ios.sh
             # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:
             run_codeql:             false
-            xcode_version:          16.3.0
+            xcode_version:          26.2
 
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows

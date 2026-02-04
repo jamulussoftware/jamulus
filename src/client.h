@@ -301,10 +301,7 @@ public:
     QString          strClientName;
 
 public:
-    // Assign settings pointer
-    void SetSettings ( CClientSettings* settings ) { pSettings = settings; }
-
-    // Apply MIDI settings from config
+    void SetSettings ( CClientSettings* settings );
     void ApplyMidiSettingsFromConfig();
 
 protected:

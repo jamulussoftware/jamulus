@@ -243,7 +243,6 @@ public:
     int     iMidiMuteCount;
     bool    bUseMIDIController;
     QString strMidiDevice;
-    QString GetMIDIMapString() const;
 
 protected:
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit ) override;

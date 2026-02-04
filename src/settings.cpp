@@ -200,6 +200,8 @@ void CSettings::PutIniSetting ( QDomDocument& xmlFile, const QString& sSection, 
     xmlKey.appendChild ( currentValue );
 }
 
+#ifndef SERVER_ONLY
+
 // Parse MIDI commmand line parameters and update MIDI variables
 void CSettings::ParseCtrlMidiCh ( const QString& strMidiMap,
                                   int&           iMidiChannel,
@@ -318,7 +320,6 @@ void CSettings::ParseCtrlMidiCh ( const QString& strMidiMap,
     bUseMIDIController = true;
 }
 
-#ifndef SERVER_ONLY
 // Client settings -------------------------------------------------------------
 void CClientSettings::LoadFaderSettings ( const QString& strCurFileName )
 {
@@ -579,31 +580,58 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }
 
-    // MIDI settings from XML
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "midichannel", 0, 16, iValue ) )
-        iMidiChannel = iValue;
-
-    struct MidiSettingEntry
+    // MIDI settings: check command line first, then fall back to XML
+    bool bMidiFromCommandLine = false;
+    for ( const QString& option : CommandLineOptions )
     {
-        const char* key;
-        int*        variable;
-    };
-    MidiSettingEntry midiSettings[] = { { "midifaderoffset", &iMidiFaderOffset },
-                                        { "midifadercount", &iMidiFaderCount },
-                                        { "midipanoffset", &iMidiPanOffset },
-                                        { "midipancount", &iMidiPanCount },
-                                        { "midisolooffset", &iMidiSoloOffset },
-                                        { "midisolocount", &iMidiSoloCount },
-                                        { "midimuteoffset", &iMidiMuteOffset },
-                                        { "midimutecount", &iMidiMuteCount },
-                                        { "midimutemyself", &iMidiMuteMyself } };
-    for ( const auto& entry : midiSettings )
-    {
-        if ( GetNumericIniSet ( IniXMLDocument, "client", entry.key, 0, 127, iValue ) )
-            *( entry.variable ) = iValue;
+        if ( option.startsWith ( "--ctrlmidich=" ) )
+        {
+            QString strMidiMap = option.section ( '=', 1 );
+            CSettings::ParseCtrlMidiCh ( strMidiMap,
+                                         iMidiChannel,
+                                         iMidiFaderOffset,
+                                         iMidiFaderCount,
+                                         iMidiPanOffset,
+                                         iMidiPanCount,
+                                         iMidiSoloOffset,
+                                         iMidiSoloCount,
+                                         iMidiMuteOffset,
+                                         iMidiMuteCount,
+                                         iMidiMuteMyself,
+                                         bUseMIDIController,
+                                         &strMidiDevice );
+            bMidiFromCommandLine = true;
+            break;
+        }
     }
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "usemidicontroller", bValue ) )
-        bUseMIDIController = bValue;
+
+    if ( !bMidiFromCommandLine )
+    {
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "midichannel", 0, 16, iValue ) )
+            iMidiChannel = iValue;
+
+        struct MidiSettingEntry
+        {
+            const char* key;
+            int*        variable;
+        };
+        MidiSettingEntry midiSettings[] = { { "midifaderoffset", &iMidiFaderOffset },
+                                            { "midifadercount", &iMidiFaderCount },
+                                            { "midipanoffset", &iMidiPanOffset },
+                                            { "midipancount", &iMidiPanCount },
+                                            { "midisolooffset", &iMidiSoloOffset },
+                                            { "midisolocount", &iMidiSoloCount },
+                                            { "midimuteoffset", &iMidiMuteOffset },
+                                            { "midimutecount", &iMidiMuteCount },
+                                            { "midimutemyself", &iMidiMuteMyself } };
+        for ( const auto& entry : midiSettings )
+        {
+            if ( GetNumericIniSet ( IniXMLDocument, "client", entry.key, 0, 127, iValue ) )
+                *( entry.variable ) = iValue;
+        }
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "usemidicontroller", bValue ) )
+            bUseMIDIController = bValue;
+    }
 
     // custom directories
 
@@ -699,28 +727,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
 
     // fader settings
     ReadFaderSettingsFromXML ( IniXMLDocument );
-
-    // Apply command-line MIDI parameters if present (overwrite .ini values)
-    for ( const QString& option : CommandLineOptions )
-    {
-        if ( option.startsWith ( "--ctrlmidich=" ) )
-        {
-            QString strMidiMap = option.section ( '=', 1 );
-            CSettings::ParseCtrlMidiCh ( strMidiMap,
-                                         iMidiChannel,
-                                         iMidiFaderOffset,
-                                         iMidiFaderCount,
-                                         iMidiPanOffset,
-                                         iMidiPanCount,
-                                         iMidiSoloOffset,
-                                         iMidiSoloCount,
-                                         iMidiMuteOffset,
-                                         iMidiMuteCount,
-                                         iMidiMuteMyself,
-                                         bUseMIDIController,
-                                         &strMidiDevice );
-        }
-    }
 }
 void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument )
 {
@@ -934,21 +940,6 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
 
     // fader settings
     WriteFaderSettingsToXML ( IniXMLDocument );
-}
-
-QString CClientSettings::GetMIDIMapString() const
-{
-    return QString ( "%1;f%2*%3;p%4*%5;s%6*%7;m%8*%9;o%10" )
-        .arg ( iMidiChannel )
-        .arg ( iMidiFaderOffset )
-        .arg ( iMidiFaderCount )
-        .arg ( iMidiPanOffset )
-        .arg ( iMidiPanCount )
-        .arg ( iMidiSoloOffset )
-        .arg ( iMidiSoloCount )
-        .arg ( iMidiMuteOffset )
-        .arg ( iMidiMuteCount )
-        .arg ( iMidiMuteMyself );
 }
 
 void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )

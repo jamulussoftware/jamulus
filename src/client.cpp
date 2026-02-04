@@ -197,25 +197,29 @@ CClient::CClient ( const quint16  iPortNumber,
 }
 
 // MIDI setup will be handled after settings are assigned
+void CClient::SetSettings ( CClientSettings* settings )
+{
+    pSettings = settings;
+    ApplyMidiSettingsFromConfig();
+}
+
 void CClient::ApplyMidiSettingsFromConfig()
 {
-    if ( pSettings )
+    // Apply MIDI settings
+    Sound.SetCtrlMIDIChannel ( pSettings->iMidiChannel );
+    Sound.SetMIDIControllerMapping ( pSettings->iMidiFaderOffset,
+                                     pSettings->iMidiFaderCount,
+                                     pSettings->iMidiPanOffset,
+                                     pSettings->iMidiPanCount,
+                                     pSettings->iMidiSoloOffset,
+                                     pSettings->iMidiSoloCount,
+                                     pSettings->iMidiMuteOffset,
+                                     pSettings->iMidiMuteCount,
+                                     pSettings->iMidiMuteMyself );
+    Sound.EnableMIDI ( pSettings->bUseMIDIController );
+    if ( !pSettings->strMidiDevice.isEmpty() )
     {
-        Sound.SetCtrlMIDIChannel ( pSettings->iMidiChannel );
-        Sound.SetMIDIControllerMapping ( pSettings->iMidiFaderOffset,
-                                         pSettings->iMidiFaderCount,
-                                         pSettings->iMidiPanOffset,
-                                         pSettings->iMidiPanCount,
-                                         pSettings->iMidiSoloOffset,
-                                         pSettings->iMidiSoloCount,
-                                         pSettings->iMidiMuteOffset,
-                                         pSettings->iMidiMuteCount,
-                                         pSettings->iMidiMuteMyself );
-        Sound.EnableMIDI ( pSettings->bUseMIDIController );
-        if ( !pSettings->strMidiDevice.isEmpty() )
-        {
-            Sound.SetMIDIDevice ( pSettings->strMidiDevice );
-        }
+        Sound.SetMIDIDevice ( pSettings->strMidiDevice );
     }
 }
 

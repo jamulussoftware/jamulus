@@ -126,7 +126,7 @@
     <message>
         <location filename="../util.cpp" line="563"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Japanska</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="571"/>
@@ -1587,7 +1587,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlg.cpp" line="505"/>
         <source>Musician Profile</source>
-        <translation>Musikprofil</translation>
+        <translation>Musikerprofil</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="518"/>
@@ -1998,7 +1998,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="79"/>
         <source>Musician&apos;s Profile</source>
-        <translation>Musikprofil</translation>
+        <translation>Musikers profil</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="89"/>
@@ -2207,7 +2207,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../connectdlg.cpp" line="153"/>
         <source>Server list view</source>
-        <translation>Serverlista</translation>
+        <translation>Serverlistevy</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="156"/>
@@ -2359,7 +2359,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../util.cpp" line="640"/>
         <source>P&amp;rivacy policy...</source>
-        <translation type="unfinished"></translation>
+        <translation>Integritetspolicy...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="642"/>

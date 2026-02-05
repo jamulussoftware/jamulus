@@ -62,11 +62,6 @@ public:
 };
 
 /* Classes ********************************************************************/
-
-#ifndef SERVER_ONLY
-class CClientSettings;
-#endif
-
 class CSoundBase : public QThread
 {
     Q_OBJECT

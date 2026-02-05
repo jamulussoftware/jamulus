@@ -46,22 +46,6 @@ class CSettings : public QObject
     Q_OBJECT
 
 public:
-    // Parse a --ctrlmidich MIDI mapping string and update MIDI variables
-    static void ParseCtrlMidiCh ( const QString& strMidiMap,
-                                  int&           iMidiChannel,
-                                  int&           iMidiFaderOffset,
-                                  int&           iMidiFaderCount,
-                                  int&           iMidiPanOffset,
-                                  int&           iMidiPanCount,
-                                  int&           iMidiSoloOffset,
-                                  int&           iMidiSoloCount,
-                                  int&           iMidiMuteOffset,
-                                  int&           iMidiMuteCount,
-                                  int&           iMidiMuteMyself,
-                                  bool&          bUseMIDIController,
-                                  QString*       strMIDIDevice = nullptr );
-
-public:
     CSettings() :
         vecWindowPosMain(), // empty array
         strLanguage ( "" ),
@@ -200,6 +184,21 @@ public:
 
     void LoadFaderSettings ( const QString& strCurFileName );
     void SaveFaderSettings ( const QString& strCurFileName );
+
+    // Parse a --ctrlmidich MIDI mapping string and update MIDI variables
+    static void ParseCtrlMidiCh ( const QString& strMidiMap,
+                                  int&           iMidiChannel,
+                                  int&           iMidiFaderOffset,
+                                  int&           iMidiFaderCount,
+                                  int&           iMidiPanOffset,
+                                  int&           iMidiPanCount,
+                                  int&           iMidiSoloOffset,
+                                  int&           iMidiSoloCount,
+                                  int&           iMidiMuteOffset,
+                                  int&           iMidiMuteCount,
+                                  int&           iMidiMuteMyself,
+                                  bool&          bUseMIDIController,
+                                  QString*       strMIDIDevice = nullptr );
 
     // general settings
     CVector<QString> vecStoredFaderTags;

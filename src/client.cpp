@@ -200,11 +200,7 @@ CClient::CClient ( const quint16  iPortNumber,
 void CClient::SetSettings ( CClientSettings* settings )
 {
     pSettings = settings;
-    ApplyMidiSettingsFromConfig();
-}
 
-void CClient::ApplyMidiSettingsFromConfig()
-{
     // Apply MIDI settings
     Sound.SetCtrlMIDIChannel ( pSettings->iMidiChannel );
     Sound.SetMIDIControllerMapping ( pSettings->iMidiFaderOffset,

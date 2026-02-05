@@ -1348,7 +1348,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="10" column="0">
-           <widget class="QGroupBox" name="muteGroup">
+           <widget class="QGroupBox" name="grbMidiMute">
             <property name="font">
              <font>
               <weight>50</weight>
@@ -1472,7 +1472,7 @@
            </widget>
           </item>
           <item row="8" column="0">
-           <widget class="QGroupBox" name="soloGroup">
+           <widget class="QGroupBox" name="grbMidiSolo">
             <property name="font">
              <font>
               <weight>50</weight>
@@ -1622,7 +1622,7 @@
            </spacer>
           </item>
           <item row="6" column="0">
-           <widget class="QGroupBox" name="panGroup">
+           <widget class="QGroupBox" name="grbMidiPan">
             <property name="font">
              <font>
               <weight>50</weight>
@@ -1906,7 +1906,7 @@
            </spacer>
           </item>
           <item row="4" column="0">
-           <widget class="QGroupBox" name="faderGroup">
+           <widget class="QGroupBox" name="grbMidiFader">
             <property name="font">
              <font>
               <weight>50</weight>

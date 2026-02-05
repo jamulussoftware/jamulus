@@ -23,7 +23,6 @@
 \******************************************************************************/
 
 #include "soundbase.h"
-#include "../settings.h"
 
 // This is used as a lookup table for parsing option letters, mapping
 // a single character to an EMidiCtlType

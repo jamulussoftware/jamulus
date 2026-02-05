@@ -119,6 +119,8 @@ public:
     // can store here other information about an active channel
 };
 
+class CClientSettings;
+
 class CClient : public QObject
 {
     Q_OBJECT
@@ -302,7 +304,6 @@ public:
 
 public:
     void SetSettings ( CClientSettings* settings );
-    void ApplyMidiSettingsFromConfig();
 
 protected:
     // Signal handler must be declared before pSettings for correct init order

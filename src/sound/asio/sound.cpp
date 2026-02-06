@@ -633,7 +633,6 @@ void CSound::EnableMIDI ( bool bEnable )
         if ( !bMidiEnabled && iCtrlMIDIChannel != INVALID_MIDI_CH )
         {
             Midi.MidiStart();
-            bMidiEnabled = Midi.IsActive(); // Only set to true if MIDI actually started
         }
     }
     else
@@ -642,9 +641,9 @@ void CSound::EnableMIDI ( bool bEnable )
         if ( bMidiEnabled )
         {
             Midi.MidiStop();
-            bMidiEnabled = false;
         }
     }
+    bMidiEnabled = Midi.IsActive();
 }
 
 bool CSound::IsMIDIEnabled() const { return bMidiEnabled; }

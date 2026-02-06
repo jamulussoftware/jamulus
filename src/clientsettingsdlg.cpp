@@ -813,7 +813,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     QObject::connect ( chbUseMIDIController, &QCheckBox::toggled, this, [this] ( bool checked ) {
         pSettings->bUseMIDIController = checked;
-        SetMIDIControlsEnabled ( checked );
         pClient->SetSettings ( pSettings );
 
         // Check if MIDI was actually enabled successfully
@@ -825,8 +824,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
             SetMIDIControlsEnabled ( false );
             QMessageBox::warning ( this, tr ( "Could not open MIDI port" ), tr ( "Please check your OS configuration." ) );
         }
-
-        emit MIDIControllerUsageChanged ( pSettings->bUseMIDIController );
+        else
+        {
+            SetMIDIControlsEnabled ( checked );
+            emit MIDIControllerUsageChanged ( pSettings->bUseMIDIController );
+        }
     } );
 
     // MIDI Learn buttons

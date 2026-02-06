@@ -381,52 +381,43 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
     /// @rpc_method jamulusclient/setMidiSettings
     /// @brief Sets one or more MIDI controller settings.
     /// @param {object} params - Any subset of MIDI settings fields to set.
-    /// @result {string} result - Always "ok".
+    /// @result {string} result - "ok" on success, or error message if MIDI failed to enable.
     pRpcServer->HandleMethod ( "jamulusclient/setMidiSettings", [=] ( const QJsonObject& params, QJsonObject& response ) {
-        if ( params.contains ( "bUseMIDIController" ) )
+        bool bPreviousMIDIState = m_pSettings->bUseMIDIController;
+
+        QHash<QString, std::function<void ( const QJsonValue& )>> setters = {
+            { "bUseMIDIController", [this] ( const QJsonValue& v ) { m_pSettings->bUseMIDIController = v.toBool(); } },
+            { "midiChannel", [this] ( const QJsonValue& v ) { m_pSettings->iMidiChannel = v.toInt(); } },
+            { "midiMuteMyself", [this] ( const QJsonValue& v ) { m_pSettings->iMidiMuteMyself = v.toInt(); } },
+            { "midiFaderOffset", [this] ( const QJsonValue& v ) { m_pSettings->iMidiFaderOffset = v.toInt(); } },
+            { "midiFaderCount", [this] ( const QJsonValue& v ) { m_pSettings->iMidiFaderCount = v.toInt(); } },
+            { "midiPanOffset", [this] ( const QJsonValue& v ) { m_pSettings->iMidiPanOffset = v.toInt(); } },
+            { "midiPanCount", [this] ( const QJsonValue& v ) { m_pSettings->iMidiPanCount = v.toInt(); } },
+            { "midiSoloOffset", [this] ( const QJsonValue& v ) { m_pSettings->iMidiSoloOffset = v.toInt(); } },
+            { "midiSoloCount", [this] ( const QJsonValue& v ) { m_pSettings->iMidiSoloCount = v.toInt(); } },
+            { "midiMuteOffset", [this] ( const QJsonValue& v ) { m_pSettings->iMidiMuteOffset = v.toInt(); } },
+            { "midiMuteCount", [this] ( const QJsonValue& v ) { m_pSettings->iMidiMuteCount = v.toInt(); } } };
+
+        for ( auto it = setters.constBegin(); it != setters.constEnd(); ++it )
         {
-            m_pSettings->bUseMIDIController = params["bUseMIDIController"].toBool();
+            if ( params.contains ( it.key() ) )
+            {
+                it.value() ( params[it.key()] );
+            }
         }
-        if ( params.contains ( "midiChannel" ) )
+
+        // Apply settings to actually enable/disable MIDI
+        pClient->SetSettings ( m_pSettings );
+
+        // Check if MIDI was requested but failed to enable
+        if ( m_pSettings->bUseMIDIController && !pClient->IsMIDIEnabled() )
         {
-            m_pSettings->iMidiChannel = params["midiChannel"].toInt();
+            // Restore previous state on failure
+            m_pSettings->bUseMIDIController = bPreviousMIDIState;
+            response["error"]               = CRpcServer::CreateJsonRpcError ( 1, "Failed to open MIDI port" );
+            return;
         }
-        if ( params.contains ( "midiMuteMyself" ) )
-        {
-            m_pSettings->iMidiMuteMyself = params["midiMuteMyself"].toInt();
-        }
-        if ( params.contains ( "midiFaderOffset" ) )
-        {
-            m_pSettings->iMidiFaderOffset = params["midiFaderOffset"].toInt();
-        }
-        if ( params.contains ( "midiFaderCount" ) )
-        {
-            m_pSettings->iMidiFaderCount = params["midiFaderCount"].toInt();
-        }
-        if ( params.contains ( "midiPanOffset" ) )
-        {
-            m_pSettings->iMidiPanOffset = params["midiPanOffset"].toInt();
-        }
-        if ( params.contains ( "midiPanCount" ) )
-        {
-            m_pSettings->iMidiPanCount = params["midiPanCount"].toInt();
-        }
-        if ( params.contains ( "midiSoloOffset" ) )
-        {
-            m_pSettings->iMidiSoloOffset = params["midiSoloOffset"].toInt();
-        }
-        if ( params.contains ( "midiSoloCount" ) )
-        {
-            m_pSettings->iMidiSoloCount = params["midiSoloCount"].toInt();
-        }
-        if ( params.contains ( "midiMuteOffset" ) )
-        {
-            m_pSettings->iMidiMuteOffset = params["midiMuteOffset"].toInt();
-        }
-        if ( params.contains ( "midiMuteCount" ) )
-        {
-            m_pSettings->iMidiMuteCount = params["midiMuteCount"].toInt();
-        }
+
         response["result"] = "ok";
     } );
 }

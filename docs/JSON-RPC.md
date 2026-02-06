@@ -188,6 +188,23 @@ Results:
 | result.clients | array | The client list. See jamulusclient/clientListReceived for the format. |
 
 
+### jamulusclient/getMidiSettings
+
+Returns all MIDI controller settings.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | object | MIDI settings object. |
+
+
 ### jamulusclient/pollServerList
 
 Request list of servers in a directory.
@@ -238,6 +255,23 @@ Results:
 | Name | Type | Description |
 | --- | --- | --- |
 | result | string | Always "ok". |
+
+
+### jamulusclient/setMidiSettings
+
+Sets one or more MIDI controller settings.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | Any subset of MIDI settings fields to set. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | "ok" on success, or error message if MIDI failed to enable. |
 
 
 ### jamulusclient/setName

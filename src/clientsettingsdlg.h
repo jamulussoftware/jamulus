@@ -119,4 +119,26 @@ signals:
     void AudioChannelsChanged();
     void CustomDirectoriesChanged();
     void NumMixerPanelRowsChanged ( int value );
+    void MIDIControllerUsageChanged ( bool bEnabled );
+
+private:
+    enum MidiLearnTarget
+    {
+        None,
+        MuteMyself,
+        Fader,
+        Pan,
+        Solo,
+        Mute
+    };
+    MidiLearnTarget midiLearnTarget;
+
+    QPushButton* midiLearnButtons[5];
+    void         SetMidiLearnTarget ( MidiLearnTarget target, QPushButton* activeButton );
+    void         ResetMidiLearn();
+    void         SetMIDIControlsEnabled ( bool enabled );
+
+private slots:
+    void OnLearnButtonClicked();
+    void OnMidiCCReceived ( int ccNumber );
 };

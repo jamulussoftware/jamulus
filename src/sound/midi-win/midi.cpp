@@ -39,6 +39,11 @@ extern CSound* pSound;
 
 void CMidi::MidiStart()
 {
+    if ( m_bIsActive )
+    {
+        return; // MIDI is already active, no need to start again
+    }
+
     QString selMIDIDevice = pSound->GetMIDIDevice();
 
     /* Get the number of MIDI In devices in this computer */
@@ -87,20 +92,35 @@ void CMidi::MidiStart()
             continue; // try next device, if any
         }
 
-        // success, add it to list of open handles
+        // Success, add it to the list of open handles
         vecMidiInHandles.append ( hMidiIn );
+    }
+
+    if ( !vecMidiInHandles.isEmpty() )
+    {
+        m_bIsActive = true; // Set active state if at least one device was started
     }
 }
 
 void CMidi::MidiStop()
 {
-    // stop MIDI if running
+    if ( !m_bIsActive )
+    {
+        return; // MIDI is already stopped, no need to stop again
+    }
+
+    // Stop MIDI if running
     for ( int i = 0; i < vecMidiInHandles.size(); i++ )
     {
         midiInStop ( vecMidiInHandles.at ( i ) );
         midiInClose ( vecMidiInHandles.at ( i ) );
     }
+
+    vecMidiInHandles.clear(); // Clear the list of handles
+    m_bIsActive = false;      // Set active state to false
 }
+
+bool CMidi::IsActive() const { return m_bIsActive; }
 
 // See https://learn.microsoft.com/en-us/previous-versions//dd798460(v=vs.85)
 // for the definition of the MIDI input callback function.

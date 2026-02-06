@@ -68,7 +68,7 @@ LED bar:      lbr
 
 /* Definitions ****************************************************************/
 // define this macro to get debug output
-//#define _DEBUG_
+// #define _DEBUG_
 #undef _DEBUG_
 
 // version and application name (use version from qt prject file)
@@ -267,6 +267,7 @@ LED bar:      lbr
 #define SETTING_TAB_USER     0
 #define SETTING_TAB_AUDIONET 1
 #define SETTING_TAB_ADVANCED 2
+#define SETTING_TAB_MIDI     3
 
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT \

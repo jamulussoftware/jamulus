@@ -41,6 +41,7 @@
 
 /* Classes ********************************************************************/
 class CSettings : public QObject
+
 {
     Q_OBJECT
 
@@ -164,6 +165,18 @@ public:
         bWindowWasShownChat ( false ),
         bWindowWasShownConnect ( false ),
         bOwnFaderFirst ( false ),
+        iMidiChannel ( 0 ),
+        iMidiMuteMyself ( 0 ),
+        iMidiFaderOffset ( 0 ),
+        iMidiFaderCount ( 0 ),
+        iMidiPanOffset ( 0 ),
+        iMidiPanCount ( 0 ),
+        iMidiSoloOffset ( 0 ),
+        iMidiSoloCount ( 0 ),
+        iMidiMuteOffset ( 0 ),
+        iMidiMuteCount ( 0 ),
+        bUseMIDIController ( false ),
+        strMidiDevice ( "" ),
         pClient ( pNCliP )
     {
         SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
@@ -171,6 +184,21 @@ public:
 
     void LoadFaderSettings ( const QString& strCurFileName );
     void SaveFaderSettings ( const QString& strCurFileName );
+
+    // Parse a --ctrlmidich MIDI mapping string and update MIDI variables
+    static void ParseCtrlMidiCh ( const QString& strMidiMap,
+                                  int&           iMidiChannel,
+                                  int&           iMidiFaderOffset,
+                                  int&           iMidiFaderCount,
+                                  int&           iMidiPanOffset,
+                                  int&           iMidiPanCount,
+                                  int&           iMidiSoloOffset,
+                                  int&           iMidiSoloCount,
+                                  int&           iMidiMuteOffset,
+                                  int&           iMidiMuteCount,
+                                  int&           iMidiMuteMyself,
+                                  bool&          bUseMIDIController,
+                                  QString*       strMIDIDevice = nullptr );
 
     // general settings
     CVector<QString> vecStoredFaderTags;
@@ -200,6 +228,20 @@ public:
     bool       bWindowWasShownChat;
     bool       bWindowWasShownConnect;
     bool       bOwnFaderFirst;
+
+    // MIDI settings
+    int     iMidiChannel;
+    int     iMidiMuteMyself;
+    int     iMidiFaderOffset;
+    int     iMidiFaderCount;
+    int     iMidiPanOffset;
+    int     iMidiPanCount;
+    int     iMidiSoloOffset;
+    int     iMidiSoloCount;
+    int     iMidiMuteOffset;
+    int     iMidiMuteCount;
+    bool    bUseMIDIController;
+    QString strMidiDevice;
 
 protected:
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool isAboutToQuit ) override;

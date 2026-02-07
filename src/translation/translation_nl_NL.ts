@@ -126,7 +126,7 @@
     <message>
         <location filename="../util.cpp" line="563"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Japans</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="571"/>
@@ -2357,7 +2357,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.cpp" line="640"/>
         <source>P&amp;rivacy policy...</source>
-        <translation type="unfinished"></translation>
+        <translation>P&amp;rivacyverklaring...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="642"/>
@@ -2578,7 +2578,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="90"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
-        <translation>De servernaam identificeert uw server in de serverlijst. Als er geen naam wordt opgegeven zal het IP-adres worden getoond.</translation>
+        <translation>De servernaam identificeert uw server in de serverlijst.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="96"/>

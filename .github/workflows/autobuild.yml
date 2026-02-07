@@ -360,6 +360,13 @@ jobs:
         id:                         build
         run:                        ${{ matrix.config.base_command }} build
         env:
+          ## Creating certificates
+          #  Generate the certificates from Xcode. You can Manage Certificates in Apple Accounts settings or the Apple Developer account page.
+          #  In Xcode Settings: Right click on Developer ID Application, Mac App Distribution (does not exist, maybe also developer id application??) and Mac Installer Distribution certificates.
+          #  Select "Export Certificate"
+          #  Set a secure password.
+          #  For every certificate, export it as base64 encoded string with `base64 -i certificate.p12`
+          #  Set the certificates based on the variables below
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
           MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT }} # Base64 encoded Developer ID Application certificate. See https://help.apple.com/xcode/mac/current/#/dev154b28f09
           MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }} # Password protecting secrets.MACOS_CERTIFICATE

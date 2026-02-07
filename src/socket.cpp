@@ -119,7 +119,7 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
         // set the QoS
         const int tos = (int) iQosNumber; // Quality of Service
-        setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, &tos, sizeof ( tos ) );
+        setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) );
 
         UdpSocketAddr.sa6.sin6_family = AF_INET6;
         UdpSocketAddr.sa6.sin6_addr   = in6addr_any;

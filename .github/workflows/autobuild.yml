@@ -368,12 +368,12 @@ jobs:
           #  For every certificate, export it as base64 encoded string with `base64 -i certificate.p12`
           #  Set the certificates based on the variables below
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
-          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT }} # Base64 encoded Developer ID Application certificate. See https://help.apple.com/xcode/mac/current/#/dev154b28f09
-          MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }} # Password protecting secrets.MACOS_CERTIFICATE
-          MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }} # Certificate ID of secrets.MACOS_CERTIFICATE. If unknown, import secrets.MACOS_CERT into keychain and get the hash via "security find-identity -v"
-          MAC_STORE_INST_CERT:      ${{ secrets.MACAPP_INST_CERT }} # Base64 encoded Mac Installer Distribution certificate
-          MAC_STORE_INST_CERT_PWD:  ${{ secrets.MACAPP_INST_CERT_PWD }}
-          MAC_STORE_INST_CERT_ID:   ${{ secrets.MACAPP_INST_CERT_ID }}
+          MACOS_CERTIFICATE_DEV_ID_APPLICATION:        ${{ secrets.MACOS_CERT }} # Base64 encoded Developer ID Application certificate. See https://help.apple.com/xcode/mac/current/#/dev154b28f09
+          MACOS_CERTIFICATE_DEV_ID_APPLICATION_PWD:    ${{ secrets.MACOS_CERT_PWD }} # Password protecting secrets.MACOS_CERTIFICATE_DEV_ID_APPLICATION
+          MACOS_CERTIFICATE_DEV_ID_APPLICATION_ID:     ${{ secrets.MACOS_CERT_ID }} # Certificate ID of secrets.MACOS_CERTIFICATE_DEV_ID_APPLICATION. If unknown, import secrets.MACOS_CERT into keychain and get the hash via "security find-identity -v"
+          MACOS_CERTIFICATE_INST_DISTRIBUTION:      ${{ secrets.MACAPP_INST_CERT }} # Base64 encoded Mac Installer Distribution certificate
+          MACOS_CERTIFICATE_INST_DISTRIBUTION_PWD:  ${{ secrets.MACAPP_INST_CERT_PWD }}
+          MACOS_CERTIFICATE_INST_DISTRIBUTION_ID:   ${{ secrets.MACAPP_INST_CERT_ID }}
           MAC_STORE_APP_CERT:       ${{ secrets.MACAPP_CERT }} # Base64 encoded Mac App Distribution certificate
           MAC_STORE_APP_CERT_PWD:   ${{ secrets.MACAPP_CERT_PWD }}
           MAC_STORE_APP_CERT_ID:    ${{ secrets.MACAPP_CERT_ID }}

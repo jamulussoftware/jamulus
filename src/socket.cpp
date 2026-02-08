@@ -115,11 +115,17 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         // The IPV6_V6ONLY socket option must be false in order for the socket to listen on both protocols.
         // On Linux it's false by default on most (all?) distros, but on Windows it is true by default
         const uint8_t no = 0;
-        setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*) &no, sizeof ( no ) );
+        if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*) &no, sizeof ( no ) ) == -1 )
+        {
+            throw CGenErr ( "setsockopt for IPV6_V6ONLY failed", "Network Error" );
+        }
 
         // set the QoS
         const int tos = (int) iQosNumber; // Quality of Service
-        setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) );
+        if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) ) == -1 )
+        {
+            throw CGenErr ( "setsockopt for IPV6_TCLASS failed", "Network Error" );
+        }
 
         UdpSocketAddr.sa6.sin6_family = AF_INET6;
         UdpSocketAddr.sa6.sin6_addr   = in6addr_any;
@@ -148,7 +154,10 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
         // set the QoS
         const char tos = (char) iQosNumber; // Quality of Service
-        setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof ( tos ) );
+        if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof ( tos ) ) == -1 )
+        {
+            throw CGenErr ( "setsockopt for IP_TOS failed", "Network Error" );
+        }
 
         // preinitialize socket in address (only the port number is missing)
         UdpSocketAddr.sa4.sin_family      = AF_INET;

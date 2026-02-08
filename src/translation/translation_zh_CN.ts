@@ -126,7 +126,7 @@
     <message>
         <location filename="../util.cpp" line="563"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>日语</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="571"/>
@@ -2359,7 +2359,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="640"/>
         <source>P&amp;rivacy policy...</source>
-        <translation type="unfinished"></translation>
+        <translation>隐私政策(&amp;R)...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="642"/>

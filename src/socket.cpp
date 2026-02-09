@@ -122,16 +122,20 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
         // set the QoS
         const int tos = (int) iQosNumber; // Quality of Service
+#if !defined( Q_OS_WIN )
         if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
             throw CGenErr ( "setsockopt for IPV6_TCLASS failed", "Network Error" );
         }
+#endif
 
+#if !defined( Q_OS_DARWIN )
         // set the QoS for IPv4 as well, as this is a dual-protocol socket
         if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
             throw CGenErr ( "setsockopt for IP_TOS failed", "Network Error" );
         }
+#endif
 
         UdpSocketAddr.sa6.sin6_family = AF_INET6;
         UdpSocketAddr.sa6.sin6_addr   = in6addr_any;

@@ -51,6 +51,8 @@
 #define INVALID_CHANNEL_ID ( MAX_NUM_CHANNELS + 1 )
 
 /* Classes ********************************************************************/
+class CentralDefense;
+
 template<unsigned int slotId>
 class CServerSlots : public CServerSlots<slotId - 1>
 {
@@ -168,6 +170,9 @@ public:
 
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
     bool IsDelayPanningEnabled() { return bDelayPan; }
+
+    CServerLogging* GetLogging() { return &Logging; }
+
 
 protected:
     // access functions for actual channels
@@ -307,6 +312,8 @@ protected:
     CSignalHandler* pSignalHandler;
 
     std::unique_ptr<CThreadPool> pThreadPool;
+
+    CentralDefense* m_centralDefense = nullptr;
 
 signals:
     void Started();

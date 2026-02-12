@@ -126,7 +126,7 @@
     <message>
         <location filename="../util.cpp" line="563"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Japončina</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="571"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2026 The Jamulus Development Team</source>
-        <translation>Autorské práva © 2005-2024 Tím vývojárov Jamulus</translation>
+        <translation>Autorské práva © 2005-2026 Tím vývojárov Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -787,7 +787,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="338"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>Triediť používateľov podľa &amp;kanála</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="396"/>
@@ -961,7 +961,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
-        <translation>S&amp;tíšiť ma</translation>
+        <translation>S&amp;tíš ma</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="505"/>
@@ -1034,7 +1034,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished">Automatický prepínač vyr. pamäte chvenia</translation>
+        <translation>Prepínač automatickej vyr. pamäte chvenia</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="129"/>
@@ -1049,7 +1049,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="142"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ak používate ovládač kX ASIO, zabezpečte, aby boli ASIO vstupy v nastaveniach kX DSP pripojené.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="149"/>
@@ -1079,7 +1079,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="173"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished">Povoliť malú vyrovnávaciu pamäť pre sieť</translation>
+        <translation>Malá vyrovnávaciu pamäť pre sieť</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="180"/>
@@ -1114,7 +1114,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="235"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Týmto otvoríte nastavenia ovládača vašej zvukovej karty. Niektoré ovládače Vám umožnia zmeniť nastavenia vyrovnávacej pamäte, iné, ako napríklad ASIO4ALL, umožňujú vybrať vstupy alebo výstupy vášho zariadenia (zariadení). Viac informácií nájdete na stránke jamulus.io.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="240"/>
@@ -1174,7 +1174,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ak chcete pridať ďalšie adresáre do rozbaľovacej ponuky Pripojenia, dodatočné adresy môžete vložiť sem.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="369"/>
@@ -1189,7 +1189,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknite na tlačidlo na vymazanie aktuálne vybraného adresára.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="450"/>
@@ -1255,7 +1255,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="215"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>Skutočné oneskorenie vyrovnávacej pamäte má vplyv na pripojenie, aktuálnu rýchlosť odosielania a celkové oneskorenie. Čím nižšia je veľkosť vyrovnávacej pamäte, tým vyššia je pravdepodobnosť , že indikátor stavu bude červený (výpadky) a tým vyššia je rýchlosť odosielania a nižšie celkové oneskorenie.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="271"/>
@@ -1280,12 +1280,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="375"/>
         <source>Audio Upstream Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Rýchlosť odosielania zvuku</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="376"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation type="unfinished"></translation>
+        <translation>Závisí od aktuálnej veľkosti audio paketu a nastavenia kompresie. Uistite sa, že rýchlosť odosielania nie je vyššia ako vaša dostupná rýchlosť odosielania internetu (skontrolujte ju pomocou služby ako je napr. speedtest.net).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>
@@ -1295,7 +1295,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="385"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Upravte množstvo riadkov na paneli mixéra.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="388"/>
@@ -1305,12 +1305,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="390"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">Ochrana pred spätnou väzbou</translation>
+        <translation>Ochrana pred spätnou väzbou</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished">Zapnite ochranu pred spätnou väzbou na detekciu akustickej väzby medzi mikrofónom a reproduktormi.</translation>
+        <translation>Zabraňuje vzniku spätnej väzby medzi mikrofónom a reproduktormi.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="392"/>
@@ -1320,12 +1320,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished">Zvukové upozornenia</translation>
+        <translation>Zvukové upozornenia</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="396"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished">Povoľte zvukové upozornenie pri prijatí správy v chate a keď sa pripojí nový klient. Pre prehratie upozornenia možno budete potrebovať ďalšie zariadenie zvuku.</translation>
+        <translation>Spustiť zvukové upozornenie pri prijatí správy v chate a pri pripojení nového klienta. Pre prehratie upozornenia môže byť potrebné ďalšie zariadenie zvuku.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="398"/>
@@ -2313,7 +2313,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzia</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>
@@ -2504,7 +2504,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <location filename="../serverdlg.cpp" line="206"/>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>Server List Filename</source>
-        <translation type="unfinished">Meno súboru so zoznamom na serveri</translation>
+        <translation>Meno súboru so zoznamom serverov</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="207"/>
@@ -2610,7 +2610,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../serverdlg.cpp" line="122"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Povoliť nahrávanie</translation>
+        <translation>Nahrávanie džemov</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="149"/>
@@ -2952,7 +2952,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished">Zapnúť posun oneskorenia</translation>
+        <translation>Oneskorenie panorámovania</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
@@ -2983,7 +2983,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished">Povoliť nahrávanie džemov</translation>
+        <translation>Nahrávanie džemov</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>

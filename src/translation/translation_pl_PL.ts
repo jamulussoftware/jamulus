@@ -144,7 +144,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation></translation>
+        <translation>TextLabelVersion</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>

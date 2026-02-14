@@ -23,19 +23,21 @@
 \******************************************************************************/
 
 #include "client.h"
+#include "settings.h"
 #include "util.h"
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
                    const quint16  iQosNumber,
                    const QString& strConnOnStartupAddress,
-                   const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
                    const bool     bNEnableIPv6,
                    const bool     bNMuteMeInPersonalMix ) :
     ChannelInfo(),
     strClientName ( strNClientName ),
+    pSignalHandler ( CSignalHandler::getSingletonP() ),
+    pSettings ( nullptr ),
     Channel ( false ), /* we need a client channel -> "false" */
     CurOpusEncoder ( nullptr ),
     CurOpusDecoder ( nullptr ),
@@ -49,7 +51,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bMuteOutStream ( false ),
     fMuteOutStreamGain ( 1.0f ),
     Socket ( &Channel, iPortNumber, iQosNumber, "", bNEnableIPv6 ),
-    Sound ( AudioCallback, this, strMIDISetup, bNoAutoJackConnect, strNClientName ),
+    Sound ( AudioCallback, this, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
     iReverbLevel ( 0 ),
@@ -68,8 +70,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK ( true ),
     bEnableIPv6 ( bNEnableIPv6 ),
     bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
-    iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
-    pSignalHandler ( CSignalHandler::getSingletonP() )
+    iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL )
 {
     int iOpusError;
 
@@ -173,6 +174,8 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( pSignalHandler, &CSignalHandler::HandledSignal, this, &CClient::OnHandledSignal );
 
+    QObject::connect ( &Sound, &CSoundBase::MidiCCReceived, this, [this] ( int ccNumber ) { emit MidiCCReceived ( ccNumber ); } );
+
     // start timer so that elapsed time works
     PreciseTime.start();
 
@@ -191,6 +194,29 @@ CClient::CClient ( const quint16  iPortNumber,
         SetServerAddr ( strConnOnStartupAddress );
         Start();
     }
+}
+
+// MIDI setup will be handled after settings are assigned
+void CClient::SetSettings ( CClientSettings* settings )
+{
+    pSettings = settings;
+
+    // Apply MIDI settings
+    Sound.SetCtrlMIDIChannel ( pSettings->iMidiChannel );
+    Sound.SetMIDIControllerMapping ( pSettings->iMidiFaderOffset,
+                                     pSettings->bMidiFaderEnabled ? pSettings->iMidiFaderCount : 0,
+                                     pSettings->iMidiPanOffset,
+                                     pSettings->bMidiPanEnabled ? pSettings->iMidiPanCount : 0,
+                                     pSettings->iMidiSoloOffset,
+                                     pSettings->bMidiSoloEnabled ? pSettings->iMidiSoloCount : 0,
+                                     pSettings->iMidiMuteOffset,
+                                     pSettings->bMidiMuteEnabled ? pSettings->iMidiMuteCount : 0,
+                                     pSettings->bMidiMuteMyselfEnabled ? pSettings->iMidiMuteMyself : 0 );
+    if ( !pSettings->strMidiDevice.isEmpty() )
+    {
+        Sound.SetMIDIDevice ( pSettings->strMidiDevice );
+    }
+    Sound.EnableMIDI ( pSettings->bUseMIDIController );
 }
 
 CClient::~CClient()
@@ -1546,6 +1572,8 @@ void CClient::FreeClientChannel ( const int iServerChannelID )
                                     .arg ( iActiveChannels ) );
      */
 }
+
+void CClient::OnMidiCCReceived ( int ccNumber ) { emit MidiCCReceived ( ccNumber ); }
 
 // find, and optionally create, a client channel for the supplied server channel ID
 // returns a client channel ID or INVALID_INDEX

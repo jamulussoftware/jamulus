@@ -117,7 +117,7 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         const int no = 0;
         if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*) &no, sizeof ( no ) ) == -1 )
         {
-            throw CGenErr ( "setsockopt for IPV6_V6ONLY failed", "Network Error" );
+            throw CGenErr ( "request to support IPv4 over IPv6 failed", "Network Error" );
         }
 
         // set the QoS
@@ -125,7 +125,7 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 #if !defined( Q_OS_WIN )
         if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
-            throw CGenErr ( "setsockopt for IPV6_TCLASS failed", "Network Error" );
+            throw CGenErr ( "request to set ToS for IPv6 failed", "Network Error" );
         }
 #endif
 
@@ -133,7 +133,7 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         // set the QoS for IPv4 as well, as this is a dual-protocol socket
         if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
-            throw CGenErr ( "setsockopt for IP_TOS failed", "Network Error" );
+            throw CGenErr ( "request to set ToS for IPv4 over IPv6 failed", "Network Error" );
         }
 #endif
 
@@ -166,7 +166,7 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         const int tos = (int) iQosNumber; // Quality of Service
         if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
-            throw CGenErr ( "setsockopt for IP_TOS failed", "Network Error" );
+            throw CGenErr ( "request to set ToS for IPv4 failed", "Network Error" );
         }
 
         // preinitialize socket in address (only the port number is missing)

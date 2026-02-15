@@ -129,7 +129,7 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         }
 #endif
 
-#if !defined( Q_OS_DARWIN )
+#if !defined( Q_OS_DARWIN ) && !defined( Q_OS_WIN )
         // set the QoS for IPv4 as well, as this is a dual-protocol socket
         if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
@@ -162,12 +162,14 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
             throw CGenErr ( "IPv4 requested but not available on this system.", "Network Error" );
         }
 
+#if !defined( Q_OS_WIN )
         // set the QoS
         const int tos = (int) iQosNumber; // Quality of Service
         if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
             throw CGenErr ( "request to set ToS for IPv4 failed", "Network Error" );
         }
+#endif
 
         // preinitialize socket in address (only the port number is missing)
         UdpSocketAddr.sa4.sin_family      = AF_INET;

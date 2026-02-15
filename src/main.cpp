@@ -222,8 +222,12 @@ int main ( int argc, char** argv )
         // Quality of Service --------------------------------------------------
         if ( GetNumericArgument ( argc, argv, i, "-Q", "--qos", 0, 255, rDbleArgument ) )
         {
+#if defined( Q_OS_WIN )
+            qWarning() << "QoS is currently not available under Windows - ignoring";
+#else
             iQosNumber = static_cast<quint16> ( rDbleArgument );
             qInfo() << qUtf8Printable ( QString ( "- selected QoS value: %1" ).arg ( iQosNumber ) );
+#endif
             CommandLineOptions << "--qos";
             continue;
         }

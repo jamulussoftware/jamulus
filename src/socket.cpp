@@ -114,12 +114,28 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
         // The IPV6_V6ONLY socket option must be false in order for the socket to listen on both protocols.
         // On Linux it's false by default on most (all?) distros, but on Windows it is true by default
-        const uint8_t no = 0;
-        setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*) &no, sizeof ( no ) );
+        const int no = 0;
+        if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*) &no, sizeof ( no ) ) == -1 )
+        {
+            throw CGenErr ( "request to support IPv4 over IPv6 failed", "Network Error" );
+        }
 
         // set the QoS
-        const char tos = (char) iQosNumber; // Quality of Service
-        setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, &tos, sizeof ( tos ) );
+        const int tos = (int) iQosNumber; // Quality of Service
+#if !defined( Q_OS_WIN )
+        if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) ) == -1 )
+        {
+            throw CGenErr ( "request to set ToS for IPv6 failed", "Network Error" );
+        }
+#endif
+
+#if !defined( Q_OS_DARWIN ) && !defined( Q_OS_WIN )
+        // set the QoS for IPv4 as well, as this is a dual-protocol socket
+        if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
+        {
+            throw CGenErr ( "request to set ToS for IPv4 over IPv6 failed", "Network Error" );
+        }
+#endif
 
         UdpSocketAddr.sa6.sin6_family = AF_INET6;
         UdpSocketAddr.sa6.sin6_addr   = in6addr_any;
@@ -146,9 +162,14 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
             throw CGenErr ( "IPv4 requested but not available on this system.", "Network Error" );
         }
 
+#if !defined( Q_OS_WIN )
         // set the QoS
-        const char tos = (char) iQosNumber; // Quality of Service
-        setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof ( tos ) );
+        const int tos = (int) iQosNumber; // Quality of Service
+        if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
+        {
+            throw CGenErr ( "request to set ToS for IPv4 failed", "Network Error" );
+        }
+#endif
 
         // preinitialize socket in address (only the port number is missing)
         UdpSocketAddr.sa4.sin_family      = AF_INET;
@@ -251,6 +272,50 @@ CSocket::~CSocket()
 #endif
 }
 
+#if defined( Q_OS_DARWIN )
+// sendto_ipv4_with_tos - helper function for macOS to set TOS when sending IPv4 over IPv6 socket
+static ssize_t sendto_ipv4_with_tos ( int fd, const void* buf, size_t len, int flags, const struct sockaddr* dest, socklen_t destlen, int tos )
+{
+    // For a description of 'struct cmsghdr' and the 'CMSG_xxx' macros, see 'man 3 cmsg' on a Linux machine.
+    // The macOS man pages are less descriptive, but the API is the same, being based on the BSD socket interface.
+
+    // The cmsg buffer is only set up once (tos doesn't change) so can be static
+    static union
+    {
+        unsigned char  cbuf[CMSG_SPACE ( sizeof ( int ) )];
+        struct cmsghdr h;
+    } u;
+    static socklen_t clen = 0;
+
+    if ( clen == 0 )
+    {
+        // set up the cmsg buffer
+        memset ( u.cbuf, 0, sizeof ( u.cbuf ) );
+
+        u.h.cmsg_level = IPPROTO_IP;
+        u.h.cmsg_type  = IP_TOS;
+        u.h.cmsg_len   = CMSG_LEN ( sizeof ( int ) );
+        memcpy ( CMSG_DATA ( &u.h ), &tos, sizeof ( int ) );
+        clen = (socklen_t) u.h.cmsg_len;
+    }
+
+    struct iovec iov;
+    iov.iov_base = const_cast<void*> ( buf );
+    iov.iov_len  = len;
+
+    struct msghdr msg;
+
+    msg.msg_name       = const_cast<sockaddr*> ( dest );
+    msg.msg_namelen    = destlen;
+    msg.msg_iov        = &iov;
+    msg.msg_iovlen     = 1;
+    msg.msg_control    = (void*) u.cbuf;
+    msg.msg_controllen = clen;
+
+    return sendmsg ( fd, &msg, flags );
+}
+#endif
+
 void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddress& HostAddr )
 {
     int status = 0;
@@ -290,12 +355,23 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
                     addr[2] = htonl ( 0xFFFF );
                     addr[3] = htonl ( HostAddr.InetAddr.toIPv4Address() );
 
+#if defined( Q_OS_DARWIN )
+                    // In macOS we need to set TOS explicitly when sending IPv4 over IPv6 socket
+                    status = sendto_ipv4_with_tos ( UdpSocket,
+                                                    (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                                                    iVecSizeOut,
+                                                    0,
+                                                    &UdpSocketAddr.sa,
+                                                    sizeof ( UdpSocketAddr.sa6 ),
+                                                    (int) iQosNumber );
+#else
                     status = sendto ( UdpSocket,
                                       (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
                                       iVecSizeOut,
                                       0,
                                       &UdpSocketAddr.sa,
                                       sizeof ( UdpSocketAddr.sa6 ) );
+#endif
                 }
                 else
                 {

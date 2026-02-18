@@ -495,6 +495,9 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/x86cpu.h \
     $$files(libs/opus/silk/x86/*.h)
 
+HEADERS += src/centraldefense.h
+SOURCES += src/centraldefense.cpp
+
 SOURCES += src/plugins/audioreverb.cpp \
     src/buffer.cpp \
     src/channel.cpp \

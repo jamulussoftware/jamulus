@@ -37,6 +37,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     bIsEnabled ( false ),
     bIsServer ( bNIsServer ),
     bIsIdentified ( false ),
+    bDisconnectAndDisable ( false ),
     iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
     SignalLevelMeter ( false, 0.5 ) // server mode with mono out and faster smoothing
 {
@@ -125,7 +126,8 @@ void CChannel::SetEnable ( const bool bNEnStat )
     QMutexLocker locker ( &Mutex );
 
     // set internal parameter
-    bIsEnabled = bNEnStat;
+    bIsEnabled            = bNEnStat;
+    bDisconnectAndDisable = false;
 
     // The support for the packet sequence number must be reset if the client
     // disconnects from a server since we do not yet know if the next server we
@@ -511,6 +513,24 @@ void CChannel::Disconnect()
         // (assuming that no audio packet is received in the meantime)
         iConTimeOut = 1; // a small number > 0
     }
+
+    if ( !bIsServer )
+    {
+        if ( IsConnected() )
+        {
+            // for a Client, block further audio data and disable the channel as soon as Disconnect() is called
+            // TODO: Add reasoning from #2550
+            bDisconnectAndDisable = true;
+        }
+        else
+        {
+            // For disconnected clients set defaults
+
+            bDisconnectAndDisable = false;
+            bIsEnabled            = false;
+            iConTimeOut           = 0;
+        }
+    }
 }
 
 void CChannel::PutProtocolData ( const int iRecCounter, const int iRecID, const CVector<uint8_t>& vecbyMesBodyData, const CHostAddress& RecHostAddr )
@@ -532,9 +552,9 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData, const i
     EPutDataStat eRet = PS_GEN_ERROR;
 
     // Only process audio data if:
-    // - for client only: the packet comes from the server we want to talk to
+    // - for client only: the packet comes from the server we want to talk to and we aren't disconnecting
     // - the channel is enabled
-    if ( ( bIsServer || ( GetAddress() == RecHostAddr ) ) && IsEnabled() )
+    if ( ( bIsServer || ( !bIsServer && GetAddress() == RecHostAddr && !bDisconnectAndDisable ) ) && IsEnabled() )
     {
         MutexSocketBuf.lock();
         {
@@ -622,6 +642,11 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData, const int iNumByte
                 eGetStatus  = GS_CHAN_NOW_DISCONNECTED;
                 iConTimeOut = 0; // make sure we do not have negative values
 
+                if ( bDisconnectAndDisable && !bIsServer )
+                {
+                    bDisconnectAndDisable = false;
+                    bIsEnabled            = false;
+                }
                 // reset network transport properties
                 ResetNetworkTransportProperties();
             }
@@ -643,6 +668,13 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData, const int iNumByte
         {
             // channel is disconnected
             eGetStatus = GS_CHAN_NOT_CONNECTED;
+
+            if ( bDisconnectAndDisable && !bIsServer )
+            {
+                bDisconnectAndDisable = false;
+                bIsEnabled            = false;
+                iConTimeOut           = 0;
+            }
         }
     }
     MutexSocketBuf.unlock();

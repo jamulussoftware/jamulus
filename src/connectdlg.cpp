@@ -117,31 +117,37 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     // Add help text to controls -----------------------------------------------
     // directory
-    QString strDirectoryWT = "<b>" + tr ( "Directory" ) + ":</b> " +
-                             tr ( "Shows the servers listed by the selected directory. "
-                                  "You can add custom directories in Advanced Settings." );
-    QString strDirectoryAN = tr ( "Directory combo box" );
-
-    lblList->setWhatsThis ( strDirectoryWT );
-    lblList->setAccessibleName ( strDirectoryAN );
+    QString strDirectoryWT = "<b>" + tr ( "Directory" ) + ":</b> " + tr ( "The list of available directories." ) + "<br/>" +
+                             tr ( "Select a directory to list the servers registered with it." ) + "<br/>" +
+                             tr ( "You can add custom directories in Advanced Settings." );
+    lblDirectory->setWhatsThis ( strDirectoryWT );
+    lblDirectory->setToolTip ( strDirectoryWT );
     cbxDirectory->setWhatsThis ( strDirectoryWT );
+    cbxDirectory->setToolTip ( strDirectoryWT );
+
+    QString strDirectoryAN = tr ( "Directory combo box" );
+    lblDirectory->setAccessibleName ( strDirectoryAN );
     cbxDirectory->setAccessibleName ( strDirectoryAN );
 
     // filter
     QString strFilterWT = "<b>" + tr ( "Filter" ) + ":</b> " +
                           tr ( "Filters the server list by the given text. Note that the filter is case insensitive. "
                                "A single # character will filter for those servers with at least one person connected." );
-    QString strFilterAN = tr ( "Filter edit box" );
     lblFilter->setWhatsThis ( strFilterWT );
+    lblFilter->setToolTip ( strFilterWT );
     edtFilter->setWhatsThis ( strFilterWT );
+    edtFilter->setToolTip ( strFilterWT );
 
+    QString strFilterAN = tr ( "Filter edit box" );
     lblFilter->setAccessibleName ( strFilterAN );
     edtFilter->setAccessibleName ( strFilterAN );
 
     // show all mucisians
-    chbExpandAll->setWhatsThis ( "<b>" + tr ( "Show All Musicians" ) + ":</b> " +
-                                 tr ( "Uncheck to collapse the server list to show just the server details. "
-                                      "Check to show everyone on the servers." ) );
+    QString strExpandAllWT = "<b>" + tr ( "Show All Musicians" ) + ":</b> " +
+                             tr ( "Uncheck to collapse the server list to show just the server details. "
+                                  "Check to show everyone on the servers." );
+    chbExpandAll->setWhatsThis ( strExpandAllWT );
+    chbExpandAll->setToolTip ( strExpandAllWT );
 
     chbExpandAll->setAccessibleName ( tr ( "Show all musicians check box" ) );
 
@@ -155,6 +161,11 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
                                "<br>" + tr ( "Permanent servers (those that have been listed for longer than 48 hours) are shown in bold." ) +
                                "<br>" + tr ( "You can add custom directories in Advanced Settings." ) );
 
+    lvwServers->setToolTip ( "<b>" + tr ( "Server List" ) + ":</b> " +
+                             tr ( "The list of servers registered with the selected directory. "
+                                  "Click the server you want to join, then click the Connect button or "
+                                  "double click the server to connect." ) );
+
     lvwServers->setAccessibleName ( tr ( "Server list view" ) );
 
     // server address
@@ -166,15 +177,20 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
                                .arg ( QString ( "<tt>example.org:%1</tt>" ).arg ( DEFAULT_PORT_NUMBER ) );
 
     lblServerAddr->setWhatsThis ( strServAddrH );
+    lblServerAddr->setToolTip ( strServAddrH );
     cbxServerAddr->setWhatsThis ( strServAddrH );
+    cbxServerAddr->setToolTip ( strServAddrH );
 
     cbxServerAddr->setAccessibleName ( tr ( "Server address edit box" ) );
     cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server address. It also stores old addresses in the combo box list." ) );
 
+    QString strDeleteServerAddrWT = "<b>" + tr ( "Delete Server Address" ) + ":</b> " +
+                                    tr ( "Click the button to clear the currently selected server address "
+                                         "and delete it from the list of stored servers." );
+    tbtDeleteServerAddr->setWhatsThis ( strDeleteServerAddrWT );
+    tbtDeleteServerAddr->setToolTip ( strDeleteServerAddrWT );
+
     tbtDeleteServerAddr->setAccessibleName ( tr ( "Delete server address button" ) );
-    tbtDeleteServerAddr->setWhatsThis ( "<b>" + tr ( "Delete Server Address" ) + ":</b> " +
-                                        tr ( "Click the button to clear the currently selected server address "
-                                             "and delete it from the list of stored servers." ) );
     tbtDeleteServerAddr->setText ( u8"\u232B" );
 
     UpdateDirectoryComboBox();

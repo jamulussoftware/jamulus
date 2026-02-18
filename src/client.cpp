@@ -107,6 +107,10 @@ CClient::CClient ( const quint16  iPortNumber,
     opus_custom_encoder_ctl ( OpusEncoderMono, OPUS_SET_COMPLEXITY ( 1 ) );
     opus_custom_encoder_ctl ( OpusEncoderStereo, OPUS_SET_COMPLEXITY ( 1 ) );
 
+    // enable lowest decoder complexity for Opus64 decoders to enable DRED
+    opus_custom_decoder_ctl ( Opus64DecoderMono, OPUS_SET_COMPLEXITY ( 5 ) );
+    opus_custom_decoder_ctl ( Opus64DecoderStereo, OPUS_SET_COMPLEXITY ( 5 ) );
+
     // Connections -------------------------------------------------------------
     // connections for the protocol mechanism
     QObject::connect ( &Channel, &CChannel::MessReadyForSending, this, &CClient::OnSendProtMessage );

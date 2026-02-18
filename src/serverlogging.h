@@ -44,6 +44,8 @@ public:
     void AddServerStopped();
 
     void AddNewConnection ( const QHostAddress& ClientInetAddr, const int iNumberOfConnectedClients );
+    void AddEarlyConnection(const QHostAddress& ClientInetAddr, int iNumberOfConnectedClients);
+
 
 protected:
     void    operator<< ( const QString& sNewStr );

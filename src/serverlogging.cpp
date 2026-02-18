@@ -55,6 +55,17 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr, cons
     *this << strLogStr;                      // in log file
 }
 
+
+void CServerLogging::AddEarlyConnection(const QHostAddress& ClientInetAddr, int iNumberOfConnectedClients)
+{
+    const QString strLogStr =
+        CurTimeDatetoLogString() + ", " + ClientInetAddr.toString() + ", new connection detected (" + QString::number(iNumberOfConnectedClients) + ")";
+    qInfo() << qUtf8Printable(strLogStr); // Console
+    *this << strLogStr;                   // Log file (uses operator<<, which is protected but accessible here)
+}
+
+
+
 void CServerLogging::AddServerStopped()
 {
     const QString strLogStr = CurTimeDatetoLogString() + ",, server idling "

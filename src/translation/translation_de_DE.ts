@@ -126,7 +126,7 @@
     <message>
         <location filename="../util.cpp" line="563"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Japanese</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="571"/>
@@ -174,7 +174,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="198"/>
         <source>&amp;OK</source>
-        <translation></translation>
+        <translation>&amp;OK</translation>
     </message>
 </context>
 <context>
@@ -205,7 +205,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="977"/>
         <source>Server</source>
-        <translation></translation>
+        <translation>Server</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="986"/>
@@ -358,12 +358,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="224"/>
         <source>PAN</source>
-        <translation></translation>
+        <translation>PAN</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="225"/>
         <source>MUTE</source>
-        <translation></translation>
+        <translation>MUTE</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="226"/>
@@ -378,12 +378,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="238"/>
         <source>M</source>
-        <translation></translation>
+        <translation>M</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="239"/>
         <source>S</source>
-        <translation></translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="240"/>
@@ -393,7 +393,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="796"/>
         <source>Alias/Name</source>
-        <translation></translation>
+        <translation>Alias/Name</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="803"/>
@@ -935,12 +935,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientdlgbase.ui" line="295"/>
         <source>L</source>
-        <translation></translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="305"/>
         <source>R</source>
-        <translation></translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="330"/>
@@ -1429,7 +1429,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../clientsettingsdlg.cpp" line="292"/>
         <location filename="../clientsettingsdlg.cpp" line="429"/>
         <source>Mono</source>
-        <translation></translation>
+        <translation>Mono</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="292"/>
@@ -1461,7 +1461,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../clientsettingsdlg.cpp" line="307"/>
         <location filename="../clientsettingsdlg.cpp" line="431"/>
         <source>Stereo</source>
-        <translation></translation>
+        <translation>Stereo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="38"/>
@@ -1940,13 +1940,13 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../clientsettingsdlgbase.ui" line="494"/>
         <location filename="../clientsettingsdlgbase.ui" line="557"/>
         <source>L</source>
-        <translation></translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="510"/>
         <location filename="../clientsettingsdlgbase.ui" line="573"/>
         <source>R</source>
-        <translation></translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="537"/>
@@ -2056,7 +2056,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="750"/>
         <source>Auto</source>
-        <translation></translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="759"/>
@@ -2142,7 +2142,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1086"/>
         <source>%</source>
-        <translation></translation>
+        <translation>%</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="907"/>
@@ -2357,7 +2357,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../util.cpp" line="640"/>
         <source>P&amp;rivacy policy...</source>
-        <translation type="unfinished"></translation>
+        <translation>P&amp;rivatsphäre…</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="642"/>
@@ -2963,7 +2963,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../serverdlgbase.ui" line="85"/>
         <location filename="../serverdlgbase.ui" line="179"/>
         <source>STATUS</source>
-        <translation></translation>
+        <translation>STATUS</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="253"/>

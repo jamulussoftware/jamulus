@@ -314,7 +314,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="158"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation type="unfinished">Setter panoreringen fra venstre til høyre for kanalen. Fungerer kun i stereo, eller helst i mono inn/stereo ut-modus</translation>
+        <translation>Setter panoreringen fra venstre til høyre for kanalen. Fungerer kun i stereo, eller helst i mono inn/stereo ut-modus.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="160"/>

@@ -1,4 +1,4 @@
-; SPANISH translation
+; Spanish translation
 
 LangString DESKTOP_SET_SHORTCUT ${LANG_SPANISH} \
     "Crear acceso directo en Escritorio"

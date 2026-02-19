@@ -55,7 +55,7 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg, const QString& strMIDISetup, const bool, const QString& );
+    CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg, const bool, const QString& );
 
     virtual ~CSound();
 
@@ -81,6 +81,11 @@ public:
     virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
     virtual float GetInOutLatencyMs() { return fInOutLatencyMs; }
+
+    // MIDI port toggle
+    virtual void        EnableMIDI ( bool bEnable );
+    virtual bool        IsMIDIEnabled() const;
+    virtual QStringList GetMIDIDevNames();
 
 protected:
     virtual QString LoadAndInitializeDriver ( QString strDriverName, bool bOpenDriverSetup );
@@ -138,4 +143,7 @@ protected:
 
     // Windows native MIDI support
     CMidi Midi;
+
+private:
+    bool bMidiEnabled = false; // Tracks the runtime state of MIDI
 };

@@ -39,8 +39,7 @@ char const sMidiCtlChar[] = {
 /* Implementation *************************************************************/
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          void ( *fpNewProcessCallback ) ( CVector<int16_t>& psData, void* pParg ),
-                         void*          pParg,
-                         const QString& strMIDISetup ) :
+                         void* pParg ) :
     fpProcessCallback ( fpNewProcessCallback ),
     pProcessCallbackArg ( pParg ),
     bRun ( false ),
@@ -49,13 +48,9 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
     iCtrlMIDIChannel ( INVALID_MIDI_CH ),
     aMidiCtls ( 128 )
 {
-    // parse the MIDI setup command line argument string
-    ParseCommandLineArgument ( strMIDISetup );
-
     // initializations for the sound card names (default)
     lNumDevs          = 1;
     strDriverNames[0] = strSystemDriverTechniqueName;
-
     // set current device
     strCurDevName = ""; // default device
 }
@@ -235,101 +230,67 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 /******************************************************************************\
 * MIDI handling                                                                *
 \******************************************************************************/
-void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
+
+void CSoundBase::SetMIDIControllerMapping ( int iFaderOffset,
+                                            int iFaderCount,
+                                            int iPanOffset,
+                                            int iPanCount,
+                                            int iSoloOffset,
+                                            int iSoloCount,
+                                            int iMuteOffset,
+                                            int iMuteCount,
+                                            int iMuteMyselfCC )
 {
-    int iMIDIOffsetFader = 70; // Behringer X-TOUCH: offset of 0x46
-
-    // parse the server info string according to definition: there is
-    // the legacy definition with just one or two numbers that only
-    // provides a definition for the controller offset of the level
-    // controllers (default 70 for the sake of Behringer X-Touch)
-    // [MIDI channel];[offset for level]
-    //
-    // The more verbose new form is a sequence of offsets for various
-    // controllers: at the current point, 'f', 'p', 's', and 'm' are
-    // parsed for fader, pan, solo, mute controllers respectively.
-    // However, at the current point of time only 'f' and 'p'
-    // controllers are actually implemented.  The syntax for a Korg
-    // nanoKONTROL2 with 8 fader controllers starting at offset 0 and
-    // 8 pan controllers starting at offset 16 would be
-    //
-    // [MIDI channel];f0*8;p16*8
-    //
-    // Namely a sequence of letters indicating the kind of controller,
-    // followed by the offset of the first such controller, followed
-    // by * and a count for number of controllers (if more than 1)
-    if ( !strMIDISetup.isEmpty() )
+    // Clear all previous MIDI mappings
+    for ( int i = 0; i < aMidiCtls.size(); ++i )
     {
-        // split the different parameter strings
-        const QStringList slMIDIParams = strMIDISetup.split ( ";" );
+        aMidiCtls[i] = { None, 0 };
+    }
 
-        // [MIDI channel]
-        if ( slMIDIParams.count() >= 1 )
+    // Map fader controllers
+    for ( int i = 0; i < iFaderCount && i < MAX_NUM_CHANNELS; ++i )
+    {
+        int iCC = iFaderOffset + i;
+        if ( iCC >= 0 && iCC < 128 )
         {
-            iCtrlMIDIChannel = slMIDIParams[0].toUInt();
+            aMidiCtls[iCC] = { Fader, i };
         }
+    }
 
-        bool bSimple = true; // Indicates the legacy kind of specifying
-                             // the fader controller offset without an
-                             // indication of the count of controllers
-
-        // [offset for level]
-        if ( slMIDIParams.count() >= 2 )
+    // Map pan controllers
+    for ( int i = 0; i < iPanCount && i < MAX_NUM_CHANNELS; ++i )
+    {
+        int iCC = iPanOffset + i;
+        if ( iCC >= 0 && iCC < 128 )
         {
-            int i = slMIDIParams[1].toUInt ( &bSimple );
-            // if the second parameter can be parsed as a number, we
-            // have the legacy specification of controllers.
-            if ( bSimple )
-                iMIDIOffsetFader = i;
+            aMidiCtls[iCC] = { Pan, i };
         }
+    }
 
-        if ( bSimple )
+    // Map solo controllers
+    for ( int i = 0; i < iSoloCount && i < MAX_NUM_CHANNELS; ++i )
+    {
+        int iCC = iSoloOffset + i;
+        if ( iCC >= 0 && iCC < 128 )
         {
-            // For the legacy specification, we consider every controller
-            // up to the maximum number of channels (or the maximum
-            // controller number) a fader.
-            for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-            {
-                if ( i + iMIDIOffsetFader > 127 )
-                    break;
-                aMidiCtls[i + iMIDIOffsetFader] = { EMidiCtlType::Fader, i };
-            }
-            return;
+            aMidiCtls[iCC] = { Solo, i };
         }
+    }
 
-        // We have named controllers
-
-        for ( int i = 1; i < slMIDIParams.count(); i++ )
+    // Map mute controllers
+    for ( int i = 0; i < iMuteCount && i < MAX_NUM_CHANNELS; ++i )
+    {
+        int iCC = iMuteOffset + i;
+        if ( iCC >= 0 && iCC < 128 )
         {
-            QString sParm = slMIDIParams[i].trimmed();
-            if ( sParm.isEmpty() )
-                continue;
-
-            int iCtrl = QString ( sMidiCtlChar ).indexOf ( sParm[0] );
-            if ( iCtrl < 0 )
-                continue;
-            EMidiCtlType eTyp = static_cast<EMidiCtlType> ( iCtrl );
-
-            if ( eTyp == Device )
-            {
-                // save MIDI device name to select
-                strMIDIDevice = sParm.mid ( 1 );
-            }
-            else
-            {
-                const QStringList slP    = sParm.mid ( 1 ).split ( '*' );
-                int               iFirst = slP[0].toUInt();
-                int               iNum   = ( slP.count() > 1 ) ? slP[1].toUInt() : 1;
-                for ( int iOff = 0; iOff < iNum; iOff++ )
-                {
-                    if ( iOff >= MAX_NUM_CHANNELS )
-                        break;
-                    if ( iFirst + iOff >= 128 )
-                        break;
-                    aMidiCtls[iFirst + iOff] = { eTyp, iOff };
-                }
-            }
+            aMidiCtls[iCC] = { Mute, i };
         }
+    }
+
+    // Map mute myself controller
+    if ( iMuteMyselfCC >= 0 && iMuteMyselfCC < 128 )
+    {
+        aMidiCtls[iMuteMyselfCC] = { MuteMyself, 0 };
     }
 }
 
@@ -367,7 +328,9 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
                     {
                         const CMidiCtlEntry& cCtrl  = aMidiCtls[vMIDIPaketBytes[1]];
                         const int            iValue = vMIDIPaketBytes[2];
-                        ;
+
+                        emit MidiCCReceived ( vMIDIPaketBytes[1] );
+
                         switch ( cCtrl.eType )
                         {
                         case Fader:

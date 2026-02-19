@@ -70,6 +70,7 @@ protected:
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
     virtual void showEvent ( QShowEvent* );
+    virtual bool eventFilter ( QObject* obj, QEvent* event ) override;
 
     CClient*         pClient;
     CClientSettings* pSettings;
@@ -106,6 +107,7 @@ public slots:
     void OnTabChanged();
     void OnMakeTabChange ( int iTabIdx );
     void OnAudioPanValueChanged ( int value );
+    void OnMidiDeviceActivated ( int iMidiDevIdx );
 
 #if defined( _WIN32 ) && !defined( WITH_JACK )
     // Only include this slot for Windows when JACK is NOT used
@@ -119,4 +121,28 @@ signals:
     void AudioChannelsChanged();
     void CustomDirectoriesChanged();
     void NumMixerPanelRowsChanged ( int value );
+    void MIDIControllerUsageChanged ( bool bEnabled );
+
+private:
+    enum MidiLearnTarget
+    {
+        None,
+        MuteMyself,
+        Fader,
+        Pan,
+        Solo,
+        Mute
+    };
+    MidiLearnTarget midiLearnTarget;
+
+    QPushButton* midiLearnButtons[5];
+    void         SetMidiLearnTarget ( MidiLearnTarget target, QPushButton* activeButton );
+    void         ResetMidiLearn();
+    void         SetMIDIControlsEnabled ( bool enabled );
+    void         UpdateMIDIDeviceSelection ( bool bShowWarnings = true );
+
+private slots:
+    void OnLearnButtonClicked();
+    void OnMidiCCReceived ( int ccNumber );
+    void OnMIDIPickupModeToggled ( bool checked );
 };

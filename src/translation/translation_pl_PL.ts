@@ -2359,7 +2359,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../util.cpp" line="640"/>
         <source>P&amp;rivacy policy...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Polityka poprawności...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="642"/>

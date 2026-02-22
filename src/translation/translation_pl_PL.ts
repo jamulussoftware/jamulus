@@ -126,7 +126,7 @@
     <message>
         <location filename="../util.cpp" line="563"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>japoński</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="571"/>

@@ -1059,17 +1059,17 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../clientsettingsdlg.cpp" line="162"/>
         <source>Left input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Výberové okno Ľavého vstupného kanála</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="164"/>
         <source>Right input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Výberové okno pravého vstupného kanála</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="166"/>
         <source>Left output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Výberové okno ľavého výstupného kanála</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="168"/>

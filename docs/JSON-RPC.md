@@ -188,6 +188,40 @@ Results:
 | result.clients | array | The client list. See jamulusclient/clientListReceived for the format. |
 
 
+### jamulusclient/getMidiDevices
+
+Returns a list of available MIDI input devices.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | array | Array of MIDI device name strings. |
+
+
+### jamulusclient/getMidiSettings
+
+Returns all MIDI controller settings.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | object | MIDI settings object. |
+
+
 ### jamulusclient/pollServerList
 
 Request list of servers in a directory.
@@ -232,6 +266,23 @@ Parameters:
 | --- | --- | --- |
 | params.channelIndex | number | The channel index of the fader to be set. |
 | params.level | number | The fader level in range 0..100. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
+### jamulusclient/setMidiSettings
+
+Sets one or more MIDI controller settings.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | Any subset of MIDI settings fields to set. |
 
 Results:
 

@@ -85,21 +85,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     }
 
     // optional MIDI initialization
-    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
-    {
-        input_port_midi = jack_port_register ( pJackClient, "input midi", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
-
-        if ( input_port_midi == nullptr )
-        {
-            throw CGenErr ( QString ( tr ( "The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. "
-                                           "Afterwards, check if another MIDI program can connect to JACK." ) )
-                                .arg ( APP_NAME ) );
-        }
-    }
-    else
-    {
-        input_port_midi = nullptr;
-    }
+    input_port_midi = nullptr;
 
     // tell the JACK server that we are ready to roll
     if ( jack_activate ( pJackClient ) )
@@ -190,6 +176,127 @@ void CSound::Stop()
 {
     // call base class
     CSoundBase::Stop();
+}
+
+void CSound::EnableMIDI ( bool bEnable )
+{
+    if ( bEnable )
+    {
+        // Create MIDI port if no port exists
+        if ( input_port_midi == nullptr )
+        {
+            CreateMIDIPort();
+        }
+    }
+    else
+    {
+        // Destroy MIDI port if it exists
+        if ( input_port_midi != nullptr )
+        {
+            DestroyMIDIPort();
+        }
+    }
+}
+
+bool CSound::IsMIDIEnabled() const { return ( input_port_midi != nullptr ); }
+
+QStringList CSound::GetMIDIDevNames()
+{
+    QStringList deviceNamesList;
+
+    if ( pJackClient == nullptr )
+    {
+        return deviceNamesList;
+    }
+
+    // Get all MIDI output ports (which are inputs from Jamulus' perspective)
+    const char** ports = jack_get_ports ( pJackClient, nullptr, JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput );
+
+    if ( ports != nullptr )
+    {
+        for ( int i = 0; ports[i] != nullptr; i++ )
+        {
+            deviceNamesList.append ( QString ( ports[i] ) );
+        }
+
+        jack_free ( ports );
+    }
+
+    return deviceNamesList;
+}
+
+void CSound::CreateMIDIPort()
+{
+    if ( pJackClient != nullptr && input_port_midi == nullptr )
+    {
+        input_port_midi = jack_port_register ( pJackClient, "input midi", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
+
+        if ( input_port_midi == nullptr )
+        {
+            qWarning() << "Failed to create JACK MIDI port at runtime";
+            return;
+        }
+
+        // Log available MIDI devices
+        const char** ports      = jack_get_ports ( pJackClient, nullptr, JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput );
+        int          numDevices = 0;
+
+        if ( ports != nullptr )
+        {
+            // Count devices
+            while ( ports[numDevices] != nullptr )
+            {
+                numDevices++;
+            }
+
+            qInfo() << qUtf8Printable ( QString ( "- MIDI devices found: %1" ).arg ( numDevices ) );
+
+            // List all devices
+            for ( int i = 0; i < numDevices; i++ )
+            {
+                QString deviceName = QString ( ports[i] );
+                if ( !strMIDIDevice.isEmpty() && strMIDIDevice != deviceName )
+                {
+                    qInfo() << qUtf8Printable ( QString ( "  %1: %2 (ignored)" ).arg ( i ).arg ( deviceName ) );
+                }
+                else
+                {
+                    qInfo() << qUtf8Printable ( QString ( "  %1: %2" ).arg ( i ).arg ( deviceName ) );
+                }
+            }
+
+            jack_free ( ports );
+        }
+        else
+        {
+            qInfo() << "- MIDI devices found: 0";
+        }
+
+        // Connect to selected MIDI device if one is specified
+        if ( !strMIDIDevice.isEmpty() )
+        {
+            const char* ourPortName = jack_port_name ( input_port_midi );
+            if ( jack_connect ( pJackClient, strMIDIDevice.toUtf8().constData(), ourPortName ) != 0 )
+            {
+                qWarning() << "Failed to connect JACK MIDI port" << strMIDIDevice << "to" << ourPortName;
+            }
+        }
+    }
+}
+
+void CSound::DestroyMIDIPort()
+{
+    if ( pJackClient != nullptr && input_port_midi != nullptr )
+    {
+        if ( jack_port_unregister ( pJackClient, input_port_midi ) == 0 )
+        {
+            input_port_midi = nullptr;
+        }
+        else
+        {
+            qWarning() << "Failed to destroy JACK MIDI port";
+        }
+    }
 }
 
 int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )

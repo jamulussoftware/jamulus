@@ -71,6 +71,9 @@ while ($ts = <*.ts>) {
 				my $content = $translation->to_literal();
 				if ($content =~ /\&(.)/) {
 					push @{$keys{$language}{$contextname}{uc $1}}, $content . " (" . $source . ")";
+				} elsif ($content ne '') {
+					# have a translation but without accelerator key
+					printf "\n*** TRANSLATION MISSING ACCELERATOR KEY ***\nOriginal: %s\nTranslation: %s\n\n", $source, $content;
 				}
 			}
 		}

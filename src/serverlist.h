@@ -141,6 +141,7 @@ public:
                          const QString& strServerPublicIP,
                          const int      iNumChannels,
                          const bool     bNEnableIPv6,
+                         const bool     bNEnableTcp,
                          CProtocol*     pNConLProt );
 
     void    SetServerName ( const QString& strNewName );
@@ -192,6 +193,7 @@ protected:
     EDirectoryType DirectoryType;
 
     bool bEnableIPv6;
+    bool bEnableTcp;
 
     CHostAddress ServerPublicIP;
     CHostAddress ServerPublicIP6;

@@ -369,6 +369,12 @@ public slots:
     void OnCLReqConnClientsList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection )
     {
         ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList(), pTcpConnection );
+
+        // if TCP is enabled but this request is on UDP, say TCP is supported
+        if ( bEnableTcp && !pTcpConnection )
+        {
+            ConnLessProtocol.CreateCLTcpSupportedMes ( InetAddr );
+        }
     }
 
     void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo )

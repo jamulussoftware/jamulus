@@ -753,7 +753,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="335"/>
         <source>Sort Users by &amp;City</source>
-        <translation>Sortera användarna efter S&amp;tad</translation>
+        <translation>Sortera användarna efter &amp;Stad</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="302"/>
@@ -858,7 +858,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientdlg.cpp" line="338"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation>Sortera användare efter kanal</translation>
+        <translation>Sortera användare efter &amp;Kanal</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="396"/>
@@ -2359,7 +2359,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../util.cpp" line="640"/>
         <source>P&amp;rivacy policy...</source>
-        <translation>Integritetspolicy...</translation>
+        <translation>Integ&amp;ritetspolicy...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="642"/>

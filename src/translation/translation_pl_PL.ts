@@ -891,7 +891,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientdlg.cpp" line="302"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation>Wyczyść wszystkie ustawienia solo/wycissz</translation>
+        <translation>&amp;Wyczyść wszystkie ustawienia solo/wycissz</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="783"/>

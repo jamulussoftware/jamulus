@@ -126,7 +126,7 @@
     <message>
         <location filename="../util.cpp" line="563"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>japoński</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="571"/>
@@ -144,7 +144,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation></translation>
+        <translation>TextLabelVersion</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
@@ -891,7 +891,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientdlg.cpp" line="302"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation>Wyczyść wszystkie ustawienia solo/wycissz</translation>
+        <translation>&amp;Wyczyść wszystkie ustawienia solo/wycissz</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="783"/>
@@ -2359,7 +2359,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../util.cpp" line="640"/>
         <source>P&amp;rivacy policy...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Polityka poprawności...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="642"/>

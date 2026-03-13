@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "server.h"
+#include "centraldefense.h"
 
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,
@@ -301,6 +302,34 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
 
+
+    // --- Central Defense Integration ---
+    m_centralDefense = new CentralDefense(QUrl("https://jamulus.live/asn-ip-client-blocks.txt"),
+                                          QUrl("http://ip-api.com/json/"),
+                                          60,
+                                          this);
+
+    connect(m_centralDefense, &CentralDefense::updated, this, [](int a, int b){
+    //    qInfo() << "Central Defense updated. ASNs:" << a << "CIDRs:" << b;
+    });
+
+    // Banhammer: Disconnect active audio clients if they are blocked
+    connect(m_centralDefense, &CentralDefense::addressBlocked, this, [this](const QHostAddress& addr, const QString& reason) {
+        qInfo() << "Central Defense: Blocking active client from" << addr.toString() << "Reason:" << reason;
+
+        for (int i = 0; i < iMaxNumChannels; i++) {
+            if (vecChannels[i].IsConnected()) {
+                if (vecChannels[i].GetAddress().InetAddr == addr) {
+                    qInfo() << "Disconnecting Channel" << i << "due to block.";
+                    vecChannels[i].Disconnect();
+                }
+            }
+        }
+    });
+
+    m_centralDefense->start();
+    // -----------------------------------
+
     // start the socket (it is important to start the socket after all
     // initializations and connections)
     Socket.Start();
@@ -378,6 +407,31 @@ void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
+
+    // --- Central Defense: Trap the Bouncer's Whistle (FORCE SYNC) ---
+    if ( m_centralDefense )
+    {
+        bool bIsBlocked = false;
+
+        // FIX: Added 'this' as the 3rd argument and moved Qt::DirectConnection to the 5th.
+        // This satisfies the specific Qt 5 overload for lambdas with connection types.
+        QMetaObject::Connection conn = connect( m_centralDefense, &CentralDefense::addressBlocked, this,
+            [&bIsBlocked]( const QHostAddress&, const QString& ) {
+                bIsBlocked = true;
+            }, Qt::DirectConnection );
+
+        // Run the check
+        m_centralDefense->checkAndLookup( RecHostAddr.InetAddr );
+
+        disconnect( conn );
+
+        if ( bIsBlocked )
+        {
+            // Abort immediately. We haven't sent the "Welcome" message yet,
+            // so the client will just time out.
+            return;
+        }
+    }
 
     // inform the client about its own ID at the server (note that this
     // must be the first message to be sent for a new connection)

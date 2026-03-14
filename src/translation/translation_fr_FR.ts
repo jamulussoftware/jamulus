@@ -867,7 +867,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="404"/>
         <source>&amp;MIDI Control Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paramètres de contrôle &amp;MIDI</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="792"/>

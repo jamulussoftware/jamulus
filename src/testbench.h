@@ -218,7 +218,7 @@ public slots:
             vecServerInfo[0].strCity          = GenRandomString();
             vecServerInfo[0].strName          = GenRandomString();
 
-            Protocol.CreateCLServerListMes ( CurHostAddress, vecServerInfo );
+            Protocol.CreateCLServerListMes ( CurHostAddress, vecServerInfo, nullptr );
             break;
 
         case 20: // PROTMESSID_CLM_REQ_SERVER_LIST
@@ -261,7 +261,7 @@ public slots:
             vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
             vecChanInfo[0].strName = GenRandomString();
 
-            Protocol.CreateCLConnClientsListMes ( CurHostAddress, vecChanInfo );
+            Protocol.CreateCLConnClientsListMes ( CurHostAddress, vecChanInfo, nullptr );
             break;
 
         case 29: // PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST

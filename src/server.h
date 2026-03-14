@@ -42,6 +42,7 @@
 #include "util.h"
 #include "serverlogging.h"
 #include "serverlist.h"
+#include "tcpserver.h"
 #include "recorder/jamcontroller.h"
 
 #include "threadpool.h"
@@ -104,6 +105,7 @@ public:
               const bool         bDisableRecording,
               const bool         bNDelayPan,
               const bool         bNEnableIPv6,
+              const bool         bNEnableTcp,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -270,6 +272,7 @@ protected:
 
     // actual working objects
     CHighPrioSocket Socket;
+    CTcpServer      TcpServer;
 
     // logging
     CServerLogging Logging;
@@ -298,6 +301,9 @@ protected:
 
     // enable IPv6
     bool bEnableIPv6;
+
+    // enable TCP Server
+    bool bEnableTcp;
 
     // messaging
     QString      strWelcomeMessage;
@@ -334,9 +340,9 @@ public slots:
 
     void OnServerFull ( CHostAddress RecHostAddr );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection );
 
-    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
+    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection );
 
     void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
 
@@ -356,11 +362,20 @@ public slots:
         }
     }
 
-    void OnCLReqServerList ( CHostAddress InetAddr ) { ServerListManager.RetrieveAll ( InetAddr ); }
+    void OnCLReqServerList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection ) { ServerListManager.RetrieveAll ( InetAddr, pTcpConnection ); }
 
     void OnCLReqVersionAndOS ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
 
-    void OnCLReqConnClientsList ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
+    void OnCLReqConnClientsList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection )
+    {
+        ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList(), pTcpConnection );
+
+        // if TCP is enabled but this request is on UDP, say TCP is supported
+        if ( bEnableTcp && !pTcpConnection )
+        {
+            ConnLessProtocol.CreateCLTcpSupportedMes ( InetAddr );
+        }
+    }
 
     void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo )
     {

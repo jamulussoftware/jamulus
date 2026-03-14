@@ -128,9 +128,11 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& strServerPublicIP,
                                          const int      iNumChannels,
                                          const bool     bNEnableIPv6,
+                                         const bool     bNEnableTcp,
                                          CProtocol*     pNConLProt ) :
     DirectoryType ( AT_NONE ),
     bEnableIPv6 ( bNEnableIPv6 ),
+    bEnableTcp ( bNEnableTcp ),
     ServerListFileName ( strServerListFileName ),
     strDirectoryAddress ( "" ),
     bIsDirectory ( false ),
@@ -663,7 +665,7 @@ void CServerListManager::Remove ( const CHostAddress& InetAddr )
  and allow the client connect dialogue instead to use the IP and Port from which the list was received.
 
  */
-void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
+void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -709,7 +711,9 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
             }
 
             // do not send a "ping" to a server local to the directory (no need)
-            if ( !serverIsInternal )
+            // also only do so if processing a request over UDP, not TCP,
+            // as the client will always try UDP before TCP.
+            if ( !serverIsInternal && !pTcpConnection )
             {
                 // create "send empty message" for all other registered servers
                 // this causes the server (vecServerInfo[iIdx].HostAddr)
@@ -722,8 +726,18 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
         // send the server list to the client, since we do not know that the client
         // has a UDP fragmentation issue, we send both lists, the reduced and the
         // normal list after each other
-        pConnLessProtocol->CreateCLRedServerListMes ( InetAddr, vecServerInfo );
-        pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo );
+        if ( !pTcpConnection )
+        {
+            // no need for reduced list if on TCP
+            pConnLessProtocol->CreateCLRedServerListMes ( InetAddr, vecServerInfo );
+        }
+        pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo, pTcpConnection );
+
+        // if TCP is enabled but this request is on UDP, say TCP is supported
+        if ( bEnableTcp && !pTcpConnection )
+        {
+            pConnLessProtocol->CreateCLTcpSupportedMes ( InetAddr );
+        }
     }
 }
 

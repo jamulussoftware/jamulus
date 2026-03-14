@@ -200,10 +200,11 @@ check_or_add_pr() {
     title_suggestion_in_pr=$(gh pr view "$id" --json body,comments,reviews --jq '(.body), (.comments[] .body), (.reviews[] .body)' |
         grep -oP '^\bCHANGELOG:\s*\K([^\\]{5,})' | tail -n1 | sanitize_title || true)
     if [[ "${title_suggestion_in_pr}" ]]; then
-        title="${title_suggestion_in_pr}"
         if [[ "${title_suggestion_in_pr}" == "SKIP" ]]; then
+            echo "-> Skipping PR #${id} ($title, @${author})"
             return
         fi
+        title="${title_suggestion_in_pr}"
     fi
     echo -n "-> Missing PR #${id} (${title}, @${author})"
     if [[ "${ACTION}" != add-missing-entries ]]; then

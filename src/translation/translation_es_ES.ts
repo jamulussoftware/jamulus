@@ -867,7 +867,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="404"/>
         <source>&amp;MIDI Control Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración Control &amp;MIDI...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="792"/>
@@ -1310,72 +1310,72 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="402"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/desactivar puerto entrada MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
         <source>MIDI-in port check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Casilla puerto entrada MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="405"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo Pick-up</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="406"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuando se habilita, los controles MIDI de fader y volumen esperarán a que la posición del controlador físico iguale el valor actual en software antes de responder. Esto evita saltos repentinos cuando el controlador físico no está en sincronización con el software.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="409"/>
         <source>Pick-up Mode check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Casilla de Modo Pick-up</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="412"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona el puerto MIDI de salida al que conectarse. Jamulus conectará su puerto de entrada automáticamente al dispositivo seleccionado cuando se habilita. También puedes utilizar el gestor de conexiones de tu elección para cambiar las conexiones manualmente.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="416"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona la fuente de MIDI al que conectarse. Jamulus conectará su puerto de entrada MIDI automáticamente al dispositivo seleccionado cuando se habiliata. También puedes utilizar Configuración Audio MIDI para cambiar las conexiones manualmente.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="420"/>
         <source>Select which MIDI input device(s) Jamulus should listen to. Select &apos;All Devices&apos; to receive MIDI from all connected devices, or choose a specific device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona el/los dispositivo/s a los que debe responder Jamulus. Selecciona &apos;Todos los Dispositivos&apos; para recibir MIDI de todos los dispositivos conectados, o elige un dispositivo específico.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="423"/>
         <source>MIDI input device combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Desplegable de dispositivo entrada MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="425"/>
         <source>MIDI controller settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración controlador MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hay un parámetro global de canal MIDI (0-16) y dos parámetros que puedes establecer para cada elemento controlado: Primer MIDI CC y números CC consecutivos (cuenta). Primero establece el canal en el que quieres que Jamulus reciba (0 para todos los canales). Luego, para cada elemento que quieres controlar (fader de volumen, paneo, solo, mute) establece el primer MIDI CC (número CC desde el cual empezar) y la cantidad de números CC consecutivos. Hay una excepción que no requiere establecer números CC consecutivos que es el parámetro de &quot;Silenciarme yo&quot; - solo requiere un único número CC ya que solo se aplica al flujo de audio de uno mismo.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>You can either type in the MIDI CC values or use the &quot;Learn&quot; button: click on &quot;Learn&quot;, actuate the fader/knob/button on your MIDI controller, and the MIDI CC number will be detected and saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Puedes o bien introducir los valores MIDI CC o utilizar el botón de &quot;Aprende&quot;: haz clic en &quot;Aprende&quot;, mueve/pulsa el fader/potenciómetro/botón de tu controlador MIDI, y el número CC será detectado y guardado.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="446"/>
         <source>MIDI channel combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Desplegable canal MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Campo número MIDI CC de Silenciarme Yo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>

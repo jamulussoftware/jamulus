@@ -1360,22 +1360,22 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hay un parámetro global de canal MIDI (0-16) y dos parámetros que puedes establecer para cada elemento controlado: Primer MIDI CC y números CC consecutivos (cuenta). Primero establece el canal en el que quieres que Jamulus reciba (0 para todos los canales). Luego, para cada elemento que quieres controlar (fader de volumen, paneo, solo, mute) establece el primer MIDI CC (número CC desde el cual empezar) y la cantidad de números CC consecutivos. Hay una excepción que no requiere establecer números CC consecutivos que es el parámetro de &quot;Silenciarme yo&quot; - solo requiere un único número CC ya que solo se aplica al flujo de audio de uno mismo.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>You can either type in the MIDI CC values or use the &quot;Learn&quot; button: click on &quot;Learn&quot;, actuate the fader/knob/button on your MIDI controller, and the MIDI CC number will be detected and saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Puedes o bien introducir los valores MIDI CC o utilizar el botón de &quot;Aprende&quot;: haz clic en &quot;Aprende&quot;, mueve/pulsa el fader/potenciómetro/botón de tu controlador MIDI, y el número CC será detectado y guardado.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="446"/>
         <source>MIDI channel combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Desplegable canal MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Campo número MIDI CC de Silenciarme Yo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>

@@ -1340,7 +1340,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="416"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation>Selecciona la fuente de MIDI al que conectarse. Jamulus conectará su puerto de entrada MIDI automáticamente al dispositivo seleccionado cuando se habiliata. También puedes utilizar Configuración Audio MIDI para cambiar las conexiones manualmente.</translation>
+        <translation>Selecciona la fuente de MIDI al que conectarse. Jamulus conectará su puerto de entrada MIDI automáticamente al dispositivo seleccionado cuando se habilita. También puedes utilizar Configuración Audio MIDI para cambiar las conexiones manualmente.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="420"/>

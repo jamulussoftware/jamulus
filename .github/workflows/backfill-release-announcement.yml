@@ -1,0 +1,72 @@
+name: Backfill Release Announcement
+
+# This workflow runs tools/backfill-release-announcement.sh to populate
+# ReleaseAnnouncement.md with every merged PR since a given release tag.
+#
+# Trigger it once after a release tag is cut (e.g. r3_11_0) and this workflow
+# file is merged to main.  It processes PRs in chronological order, calling
+# the GitHub Models API (gpt-4o-mini) for each one so the announcement builds
+# up exactly as it would have done if the per-PR workflow had been running all
+# along.
+#
+# The resulting commit is pushed directly to main.  Review it and amend or
+# revert as needed before the release is published.
+
+on:
+  workflow_dispatch:
+    inputs:
+      since_tag:
+        description: >-
+          Git release tag to backfill from.
+          PRs merged *after* this tag will be processed.
+          (default: r3_11_0)
+        required: false
+        default: 'r3_11_0'
+      dry_run:
+        description: >-
+          Set to 'true' to print what would happen without making any changes.
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+permissions: {}
+
+jobs:
+  backfill:
+    name: Backfill from ${{ inputs.since_tag }}
+    # Only run in the main jamulussoftware repo to avoid accidentally pushing
+    # to a fork and consuming AI quota.
+    if: github.repository_owner == 'jamulussoftware'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      models: read
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Run backfill script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOURCE_REPO: jamulussoftware/jamulus
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          bash tools/backfill-release-announcement.sh "${{ inputs.since_tag }}"
+
+      - name: Commit and push updated announcement
+        if: inputs.dry_run != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git add ReleaseAnnouncement.md
+          # Exit cleanly if nothing changed (all PRs were internal/skipped).
+          git diff --staged --quiet && echo "Nothing to commit." && exit 0
+          git commit -m "docs: backfill Release Announcement from ${{ inputs.since_tag }}"
+          git push

@@ -75,7 +75,7 @@ fi
 
 info()    { printf "${C_CYAN}→${C_RESET} %s\n"           "$*"; }
 success() { printf "${C_GREEN}✓${C_RESET} %s\n"          "$*"; }
-warn()    { printf "${C_YELLOW}⚠${C_RESET}  %s\n"        "$*"; }
+warn()    { printf "${C_YELLOW}⚠${C_RESET}  %s\n"        "$*" >&2; }
 heading() { printf "\n${C_BOLD}%s${C_RESET}\n"            "$*"; }
 
 require_cmd() {

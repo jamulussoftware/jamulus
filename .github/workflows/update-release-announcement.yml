@@ -129,7 +129,7 @@ jobs:
       - name: Update Release Announcement with GitHub Copilot
         id: update-announcement
         if: steps.check-skip.outputs.skip == 'false'
-        uses: actions/ai-inference@v1
+        uses: actions/ai-inference@v2
         with:
           # Use the pre-built prompt that has all content already embedded and
           # properly escaped — no file_input substitution needed.
@@ -256,7 +256,7 @@ jobs:
       - name: Update Release Announcement with GitHub Copilot
         id: update-announcement
         if: steps.check-skip.outputs.skip == 'false'
-        uses: actions/ai-inference@v1
+        uses: actions/ai-inference@v2
         with:
           # Use the pre-built prompt that has all content already embedded and
           # properly escaped — no file_input substitution needed.

@@ -48,13 +48,13 @@ messages:
   - role: user
     content: |
       Current working announcement:
-      ---
+      ====
       {{current_announcement}}
-      ---
+      ====
 
       Newly merged pull request:
       {{pr_info}}
-      ---
+      ====
 
       Update the Release Announcement to include any user-relevant changes from this PR.
       Return the complete updated Markdown document only.

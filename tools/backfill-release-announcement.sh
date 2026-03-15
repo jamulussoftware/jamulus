@@ -223,7 +223,7 @@ call_model_api() {
 
     local user_content
     user_content=$(printf \
-        'Current working announcement:\n---\n%s\n---\n\nNewly merged pull request:\n%s\n---\n\nUpdate the Release Announcement to include any user-relevant changes from this PR.\nReturn the complete updated Markdown document only.' \
+        'Current working announcement:\n====\n%s\n====\n\nNewly merged pull request:\n%s\n====\n\nUpdate the Release Announcement to include any user-relevant changes from this PR.\nReturn the complete updated Markdown document only.' \
         "$current_announcement" "$pr_info")
 
     # Build the request payload using jq so that strings are properly escaped.

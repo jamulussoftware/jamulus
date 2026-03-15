@@ -1,16 +1,21 @@
 name: Update Release Announcement
 
-# This workflow updates the working Release Announcement (ReleaseAnnouncement.md)
-# using GitHub Copilot whenever a pull request is merged to main.
-# The announcement targets Client users (musicians) and Server operators, and is
-# intentionally separate from the ChangeLog.
+# This workflow maintains ReleaseAnnouncement.md — a working draft of the release
+# announcement for Client users and Server operators — separate from the technical ChangeLog.
 #
-# We use pull_request_target so the workflow has write access to the base repository
-# even when the source branch comes from a fork.
-# WARNING: pull_request_target runs in a privileged context.
-# - The workflow file and scripts always come from the base branch (main), not the PR.
-# - Only PR *metadata* (title, body, author) is passed to the AI; no code from the PR
-#   is checked out or executed.
+# On every merged PR to main: GitHub Copilot updates the draft with any user-relevant
+# changes from that PR, in the same conversational bullet-point style used in real
+# Jamulus beta/release announcements on GitHub Discussions.
+#
+# On every full release tag (r<x>_<y>_<z>, no suffix): the draft is reset to the pristine
+# template, ready for the next development cycle. Pre-release tags (beta, rc) do NOT reset
+# the draft, so it can continue to build up until the final release.
+#
+# Security note (pull_request_target):
+# - The workflow file and the AI prompt always come from main, never from the PR branch.
+# - PR content is written to a temp file via an env variable before being passed to the
+#   AI — it never touches a YAML value directly, preventing injection issues.
+# - No code from the PR is ever checked out or executed.
 # See: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
 
 on:
@@ -19,13 +24,16 @@ on:
       - closed
     branches:
       - main
+  push:
+    tags:
+      - "r*"
 
 permissions: {}
 
 jobs:
-  update-release-announcement:
-    name: Update Release Announcement
-    # Only run for actual merges (not just closed PRs) on the main jamulussoftware repo.
+  update-announcement:
+    name: Update announcement for merged PR
+    # Only run on actual merges (not just closed PRs) in the main jamulussoftware repo.
     if: >-
       github.repository_owner == 'jamulussoftware' &&
       github.event.pull_request.merged == true
@@ -53,78 +61,35 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Read current Release Announcement
-        id: read-announcement
+      - name: Prepare PR metadata for AI prompt
+        id: prep-pr-info
         if: steps.check-skip.outputs.skip == 'false'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          # Use a random delimiter to safely capture multi-line file content.
-          delimiter="EOF_${RANDOM}_${RANDOM}"
-          {
-            printf 'content<<%s\n' "$delimiter"
-            cat ReleaseAnnouncement.md
-            printf '%s\n' "$delimiter"
-          } >> "$GITHUB_OUTPUT"
+          # Write all PR metadata to a temp file so it can be safely passed to the AI
+          # via file_input, avoiding any YAML injection from PR body content.
+          printf 'PR #%s — %s\nby @%s\n\n%s\n' \
+            "$PR_NUMBER" "$PR_TITLE" "$PR_AUTHOR" "$PR_BODY" \
+            > "${RUNNER_TEMP}/pr_info.txt"
 
       - name: Update Release Announcement with GitHub Copilot
         id: update-announcement
         if: steps.check-skip.outputs.skip == 'false'
         uses: actions/ai-inference@v1
         with:
-          model: openai/gpt-4o-mini
-          system-prompt: |
-            You are a technical writer maintaining the Release Announcement for Jamulus —
-            a free, open-source application that lets musicians rehearse, perform, and jam
-            together in real time over the internet.
-
-            The Release Announcement is a curated, user-friendly document for two audiences:
-
-            1. **Client users** — musicians who use the Jamulus client application to play
-               with others online. They care about improved sound quality, new UI features,
-               connection improvements, new instruments or chat features, and bug fixes that
-               affect their playing experience.
-
-            2. **Server operators** — people who run Jamulus servers to host sessions.
-               They care about stability improvements, new configuration options, resource
-               usage changes, new administration tools (such as JSON-RPC additions), and
-               security fixes.
-
-            Rules:
-            - Write in clear, friendly, non-technical language for these two audiences.
-            - Add content under the correct heading: "For Client Users",
-              "For Server Operators", or "For Platform-Specific Changes".
-            - Use bullet points (- ) for individual changes within each section.
-            - Only include changes that are relevant and meaningful to these audiences.
-            - Omit internal/developer-only changes such as build system updates, CI changes,
-              code style fixes, tooling improvements, and dependency bumps unless they have
-              a direct, noticeable impact on users.
-            - Preserve and improve existing content — do not remove or overwrite it.
-            - If the PR introduces no changes relevant to these audiences, return the current
-              announcement completely unchanged.
-            - Output the COMPLETE updated Markdown document and nothing else.
-          prompt: |
-            Current Release Announcement:
-            ---
-            ${{ steps.read-announcement.outputs.content }}
-            ---
-
-            Newly merged pull request #${{ github.event.pull_request.number }}:
-            Title: ${{ github.event.pull_request.title }}
-            Author: @${{ github.event.pull_request.user.login }}
-
-            PR description:
-            ${{ github.event.pull_request.body }}
-            ---
-
-            Update the Release Announcement to include any changes from this PR that are
-            relevant to Client users or Server operators. Return the complete updated
-            Markdown document only.
+          prompt-file: '.github/prompts/release-announcement.prompt.yml'
+          file_input: |
+            current_announcement: ReleaseAnnouncement.md
+            pr_info: ${{ runner.temp }}/pr_info.txt
 
       - name: Write updated Release Announcement
         if: steps.check-skip.outputs.skip == 'false'
-        env:
-          UPDATED_CONTENT: ${{ steps.update-announcement.outputs.response }}
         run: |
-          printf '%s\n' "$UPDATED_CONTENT" > ReleaseAnnouncement.md
+          cp "${{ steps.update-announcement.outputs.response-file }}" ReleaseAnnouncement.md
 
       - name: Commit and push updated announcement
         if: steps.check-skip.outputs.skip == 'false'
@@ -138,3 +103,50 @@ jobs:
           git diff --staged --quiet && exit 0
           git commit -m "docs: update Release Announcement for PR #${{ github.event.pull_request.number }}"
           git push
+
+  reset-after-release:
+    name: Reset announcement after full release
+    # Only run on tag pushes in the main jamulussoftware repo.
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Check if this is a full (non-prerelease) release tag
+        id: check-tag
+        run: |
+          # Match only clean version tags like r3_12_0.
+          # Tags with any suffix (e.g. r3_12_0beta1, r3_12_0rc1) are pre-releases
+          # and intentionally do NOT reset the draft, so it keeps building up
+          # towards the final release announcement.
+          if [[ "${GITHUB_REF_NAME}" =~ ^r([0-9]+)_([0-9]+)_([0-9]+)$ ]]; then
+            echo "is_full_release=true" >> "$GITHUB_OUTPUT"
+            echo "version=${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_full_release=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Reset Release Announcement to template
+        if: steps.check-tag.outputs.is_full_release == 'true'
+        run: |
+          cp .github/release-announcement-template.md ReleaseAnnouncement.md
+
+      - name: Commit and push reset announcement
+        if: steps.check-tag.outputs.is_full_release == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git add ReleaseAnnouncement.md
+          git diff --staged --quiet && exit 0
+          git commit -m "docs: reset Release Announcement after v${{ steps.check-tag.outputs.version }} release"
+          git push
+

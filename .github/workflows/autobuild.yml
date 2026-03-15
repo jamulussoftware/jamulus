@@ -40,6 +40,8 @@ on:
       - 'COPYING'
       - 'APPLEAPPSTORE.LICENCE.WAIVER'
       - 'ReleaseAnnouncement.md'
+      - '.github/release-announcement-template.md'
+      - '.github/prompts/**'
       - '.github/ISSUE_TEMPLATE/*'
       - '.github/pull_request_template.md'
   pull_request:
@@ -54,6 +56,8 @@ on:
       - 'COPYING'
       - 'APPLEAPPSTORE.LICENCE.WAIVER'
       - 'ReleaseAnnouncement.md'
+      - '.github/release-announcement-template.md'
+      - '.github/prompts/**'
       - '.github/ISSUE_TEMPLATE/*'
       - '.github/pull_request_template.md'
 

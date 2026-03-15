@@ -58,3 +58,4 @@ jamulus_plugin_import.cpp
 /debian/
 
 .github/instructions
+node_modules

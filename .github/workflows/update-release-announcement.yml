@@ -76,21 +76,64 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          # Write all PR metadata to a temp file so it can be safely passed to the AI
-          # via file_input, avoiding any YAML injection from PR body content.
+          # Write all PR metadata to a temp file so it can be safely passed to the AI,
+          # avoiding any injection issues from PR body content.
           printf 'PR #%s — %s\nby @%s\n\n%s\n' \
             "$PR_NUMBER" "$PR_TITLE" "$PR_AUTHOR" "$PR_BODY" \
             > "${RUNNER_TEMP}/pr_info.txt"
+
+      - name: Build complete AI prompt
+        id: build-prompt
+        if: steps.check-skip.outputs.skip == 'false'
+        run: |
+          # Build a complete, self-contained YAML prompt file using Python so that the
+          # multi-line file content is properly indented and escaped.  This avoids the
+          # issue where actions/ai-inference performs a raw {{variable}} text substitution
+          # before YAML parsing, which breaks the block-scalar structure when the
+          # substituted content contains lines starting at column 0.
+          python3 - "${RUNNER_TEMP}/prompt.yml" "${RUNNER_TEMP}/pr_info.txt" \
+              ReleaseAnnouncement.md \
+              '.github/prompts/release-announcement.prompt.yml' <<'PYEOF'
+          import sys, yaml
+          output_file, info_file, announcement_file, template_file = sys.argv[1:5]
+          with open(announcement_file, encoding='utf-8') as f:
+              announcement = f.read()
+          with open(info_file, encoding='utf-8') as f:
+              info = f.read()
+          with open(template_file, encoding='utf-8') as f:
+              template = yaml.safe_load(f)
+          system_prompt = next(
+              m['content'] for m in template['messages'] if m['role'] == 'system'
+          )
+          user_content = (
+              'Current working announcement:\n====\n'
+              + announcement
+              + '\n====\n\nNewly merged pull request:\n'
+              + info
+              + '\n====\n\nUpdate the Release Announcement to include any user-relevant '
+              + 'changes from this PR.\nReturn the complete updated Markdown document only.'
+          )
+          complete = {
+              'messages': [
+                  {'role': 'system', 'content': system_prompt},
+                  {'role': 'user',   'content': user_content},
+              ],
+              'model': template.get('model', 'openai/gpt-4o-mini'),
+              'modelParameters': template.get('modelParameters', {}),
+          }
+          with open(output_file, 'w', encoding='utf-8') as f:
+              yaml.dump(complete, f, allow_unicode=True,
+                        default_flow_style=False, sort_keys=False)
+          PYEOF
 
       - name: Update Release Announcement with GitHub Copilot
         id: update-announcement
         if: steps.check-skip.outputs.skip == 'false'
         uses: actions/ai-inference@v1
         with:
-          prompt-file: '.github/prompts/release-announcement.prompt.yml'
-          file_input: |
-            current_announcement: ReleaseAnnouncement.md
-            pr_info: ${{ runner.temp }}/pr_info.txt
+          # Use the pre-built prompt that has all content already embedded and
+          # properly escaped — no file_input substitution needed.
+          prompt-file: '${{ runner.temp }}/prompt.yml'
 
       - name: Write updated Release Announcement
         if: steps.check-skip.outputs.skip == 'false'
@@ -160,21 +203,64 @@ jobs:
           COMMIT_AUTHOR: ${{ github.event.head_commit.author.username }}
           BRANCH_NAME: ${{ github.ref_name }}
         run: |
-          # Write commit metadata to a temp file so it can be safely passed to the AI
-          # via file_input, avoiding any YAML injection from the commit message content.
+          # Write commit metadata to a temp file so it can be safely passed to the AI,
+          # avoiding any injection issues from the commit message content.
           printf 'Commit %s on branch %s\nby @%s\n\n%s\n' \
             "$COMMIT_SHA" "$BRANCH_NAME" "$COMMIT_AUTHOR" "$COMMIT_MESSAGE" \
             > "${RUNNER_TEMP}/commit_info.txt"
+
+      - name: Build complete AI prompt
+        id: build-prompt
+        if: steps.check-skip.outputs.skip == 'false'
+        run: |
+          # Build a complete, self-contained YAML prompt file using Python so that the
+          # multi-line file content is properly indented and escaped.  This avoids the
+          # issue where actions/ai-inference performs a raw {{variable}} text substitution
+          # before YAML parsing, which breaks the block-scalar structure when the
+          # substituted content contains lines starting at column 0.
+          python3 - "${RUNNER_TEMP}/prompt.yml" "${RUNNER_TEMP}/commit_info.txt" \
+              ReleaseAnnouncement.md \
+              '.github/prompts/release-announcement.prompt.yml' <<'PYEOF'
+          import sys, yaml
+          output_file, info_file, announcement_file, template_file = sys.argv[1:5]
+          with open(announcement_file, encoding='utf-8') as f:
+              announcement = f.read()
+          with open(info_file, encoding='utf-8') as f:
+              info = f.read()
+          with open(template_file, encoding='utf-8') as f:
+              template = yaml.safe_load(f)
+          system_prompt = next(
+              m['content'] for m in template['messages'] if m['role'] == 'system'
+          )
+          user_content = (
+              'Current working announcement:\n====\n'
+              + announcement
+              + '\n====\n\nRecently pushed commit:\n'
+              + info
+              + '\n====\n\nUpdate the Release Announcement to include any user-relevant '
+              + 'changes from this commit.\nReturn the complete updated Markdown document only.'
+          )
+          complete = {
+              'messages': [
+                  {'role': 'system', 'content': system_prompt},
+                  {'role': 'user',   'content': user_content},
+              ],
+              'model': template.get('model', 'openai/gpt-4o-mini'),
+              'modelParameters': template.get('modelParameters', {}),
+          }
+          with open(output_file, 'w', encoding='utf-8') as f:
+              yaml.dump(complete, f, allow_unicode=True,
+                        default_flow_style=False, sort_keys=False)
+          PYEOF
 
       - name: Update Release Announcement with GitHub Copilot
         id: update-announcement
         if: steps.check-skip.outputs.skip == 'false'
         uses: actions/ai-inference@v1
         with:
-          prompt-file: '.github/prompts/release-announcement.prompt.yml'
-          file_input: |
-            current_announcement: ReleaseAnnouncement.md
-            pr_info: ${{ runner.temp }}/commit_info.txt
+          # Use the pre-built prompt that has all content already embedded and
+          # properly escaped — no file_input substitution needed.
+          prompt-file: '${{ runner.temp }}/prompt.yml'
 
       - name: Write updated Release Announcement
         if: steps.check-skip.outputs.skip == 'false'

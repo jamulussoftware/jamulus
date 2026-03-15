@@ -314,7 +314,7 @@ for row in $(jq -r '.[] | @base64' <<< "$PR_JSON"); do
 
     # ── commit this PR's change as its own commit ──────────────────────────
     git add "$ANNOUNCEMENT_FILE"
-    git commit -m "Release announcement: ${pr_info}"
+    git commit -m "docs: Release Announcement for PR #${pr_number} — ${pr_title}"
     PROCESSED=$((PROCESSED + 1))
 done
 

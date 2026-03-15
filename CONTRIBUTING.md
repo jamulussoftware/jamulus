@@ -100,6 +100,8 @@ Admins reserve the right to do this as they see fit.
 
 The ChangeLog must be updated for each new feature or bug fix. Please include a single-sentence suggestion for that as part of your pull request description after the `CHANGELOG: ` keyword. Do not modify the ChangeLog file as part of your PR as it will lead to conflicts.
 
+The same `CHANGELOG:` line is also used to automatically update the working [Release Announcement draft](ReleaseAnnouncement.md), which is a curated summary for end users and server operators. Use `CHANGELOG: SKIP` to skip both the ChangeLog entry and the Release Announcement update for purely internal changes (CI, build system, code style fixes, etc.).
+
 If you are a first-time contributor/translator, please add your name to the contributors/translators list in the About dialog of Jamulus (see in `src/util.cpp` in the constructor function `CAboutDlg::CAboutDlg()`).
 
 ### Merging pull requests

@@ -60,3 +60,9 @@ messages:
       Return the complete updated Markdown document only.
 
 model: openai/gpt-4o-mini
+modelParameters:
+  # High token limit to ensure the full document is always returned without truncation.
+  # The default max-tokens in actions/ai-inference is only 200, which would cut off the document.
+  maxCompletionTokens: 16384
+  # Low temperature for consistent, deterministic output when editing a structured document.
+  temperature: 0.1

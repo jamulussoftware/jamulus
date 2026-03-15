@@ -88,8 +88,15 @@ jobs:
 
       - name: Write updated Release Announcement
         if: steps.check-skip.outputs.skip == 'false'
+        env:
+          RESPONSE_FILE: ${{ steps.update-announcement.outputs.response-file }}
         run: |
-          cp "${{ steps.update-announcement.outputs.response-file }}" ReleaseAnnouncement.md
+          # Guard against an empty or missing response, which would wipe the file.
+          if [ ! -s "$RESPONSE_FILE" ]; then
+            echo "Warning: AI returned an empty response — skipping update."
+            exit 0
+          fi
+          cp "$RESPONSE_FILE" ReleaseAnnouncement.md
 
       - name: Commit and push updated announcement
         if: steps.check-skip.outputs.skip == 'false'
@@ -127,8 +134,11 @@ jobs:
           # and intentionally do NOT reset the draft, so it keeps building up
           # towards the final release announcement.
           if [[ "${GITHUB_REF_NAME}" =~ ^r([0-9]+)_([0-9]+)_([0-9]+)$ ]]; then
+            major="${BASH_REMATCH[1]}"
+            minor="${BASH_REMATCH[2]}"
+            patch="${BASH_REMATCH[3]}"
             echo "is_full_release=true" >> "$GITHUB_OUTPUT"
-            echo "version=${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}" >> "$GITHUB_OUTPUT"
+            echo "version=${major}.${minor}.${patch}" >> "$GITHUB_OUTPUT"
           else
             echo "is_full_release=false" >> "$GITHUB_OUTPUT"
           fi

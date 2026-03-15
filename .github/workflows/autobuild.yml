@@ -39,6 +39,7 @@ on:
       - 'COMPILING.md'
       - 'COPYING'
       - 'APPLEAPPSTORE.LICENCE.WAIVER'
+      - 'ReleaseAnnouncement.md'
       - '.github/ISSUE_TEMPLATE/*'
       - '.github/pull_request_template.md'
   pull_request:
@@ -52,6 +53,7 @@ on:
       - 'COMPILING.md'
       - 'COPYING'
       - 'APPLEAPPSTORE.LICENCE.WAIVER'
+      - 'ReleaseAnnouncement.md'
       - '.github/ISSUE_TEMPLATE/*'
       - '.github/pull_request_template.md'
 

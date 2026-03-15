@@ -1,0 +1,140 @@
+name: Update Release Announcement
+
+# This workflow updates the working Release Announcement (ReleaseAnnouncement.md)
+# using GitHub Copilot whenever a pull request is merged to main.
+# The announcement targets Client users (musicians) and Server operators, and is
+# intentionally separate from the ChangeLog.
+#
+# We use pull_request_target so the workflow has write access to the base repository
+# even when the source branch comes from a fork.
+# WARNING: pull_request_target runs in a privileged context.
+# - The workflow file and scripts always come from the base branch (main), not the PR.
+# - Only PR *metadata* (title, body, author) is passed to the AI; no code from the PR
+#   is checked out or executed.
+# See: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+
+on:
+  pull_request_target:
+    types:
+      - closed
+    branches:
+      - main
+
+permissions: {}
+
+jobs:
+  update-release-announcement:
+    name: Update Release Announcement
+    # Only run for actual merges (not just closed PRs) on the main jamulussoftware repo.
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      models: read
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Always check out the base branch (main), never the PR branch.
+          ref: main
+
+      - name: Check if announcement update should be skipped
+        id: check-skip
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # Skip when the PR author explicitly marked the change as not user-facing.
+          if printf '%s\n' "$PR_BODY" | grep -qE '^CHANGELOG:[[:space:]]*SKIP[[:space:]]*$'; then
+            echo "Skipping: PR is marked CHANGELOG: SKIP"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Read current Release Announcement
+        id: read-announcement
+        if: steps.check-skip.outputs.skip == 'false'
+        run: |
+          # Use a random delimiter to safely capture multi-line file content.
+          delimiter="EOF_${RANDOM}_${RANDOM}"
+          {
+            printf 'content<<%s\n' "$delimiter"
+            cat ReleaseAnnouncement.md
+            printf '%s\n' "$delimiter"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Update Release Announcement with GitHub Copilot
+        id: update-announcement
+        if: steps.check-skip.outputs.skip == 'false'
+        uses: actions/ai-inference@v1
+        with:
+          model: openai/gpt-4o-mini
+          system-prompt: |
+            You are a technical writer maintaining the Release Announcement for Jamulus —
+            a free, open-source application that lets musicians rehearse, perform, and jam
+            together in real time over the internet.
+
+            The Release Announcement is a curated, user-friendly document for two audiences:
+
+            1. **Client users** — musicians who use the Jamulus client application to play
+               with others online. They care about improved sound quality, new UI features,
+               connection improvements, new instruments or chat features, and bug fixes that
+               affect their playing experience.
+
+            2. **Server operators** — people who run Jamulus servers to host sessions.
+               They care about stability improvements, new configuration options, resource
+               usage changes, new administration tools (such as JSON-RPC additions), and
+               security fixes.
+
+            Rules:
+            - Write in clear, friendly, non-technical language for these two audiences.
+            - Add content under the correct heading: "For Client Users",
+              "For Server Operators", or "For Platform-Specific Changes".
+            - Use bullet points (- ) for individual changes within each section.
+            - Only include changes that are relevant and meaningful to these audiences.
+            - Omit internal/developer-only changes such as build system updates, CI changes,
+              code style fixes, tooling improvements, and dependency bumps unless they have
+              a direct, noticeable impact on users.
+            - Preserve and improve existing content — do not remove or overwrite it.
+            - If the PR introduces no changes relevant to these audiences, return the current
+              announcement completely unchanged.
+            - Output the COMPLETE updated Markdown document and nothing else.
+          prompt: |
+            Current Release Announcement:
+            ---
+            ${{ steps.read-announcement.outputs.content }}
+            ---
+
+            Newly merged pull request #${{ github.event.pull_request.number }}:
+            Title: ${{ github.event.pull_request.title }}
+            Author: @${{ github.event.pull_request.user.login }}
+
+            PR description:
+            ${{ github.event.pull_request.body }}
+            ---
+
+            Update the Release Announcement to include any changes from this PR that are
+            relevant to Client users or Server operators. Return the complete updated
+            Markdown document only.
+
+      - name: Write updated Release Announcement
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          UPDATED_CONTENT: ${{ steps.update-announcement.outputs.response }}
+        run: |
+          printf '%s\n' "$UPDATED_CONTENT" > ReleaseAnnouncement.md
+
+      - name: Commit and push updated announcement
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git add ReleaseAnnouncement.md
+          # Exit cleanly if the AI returned the document unchanged (nothing to commit).
+          git diff --staged --quiet && exit 0
+          git commit -m "docs: update Release Announcement for PR #${{ github.event.pull_request.number }}"
+          git push

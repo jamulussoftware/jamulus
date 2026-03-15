@@ -88,6 +88,7 @@ require_cmd() {
 
 # ── pre-flight checks ──────────────────────────────────────────────────────
 
+require_cmd git
 require_cmd gh
 require_cmd jq
 require_cmd curl
@@ -197,6 +198,19 @@ if [[ -z "$SYSTEM_PROMPT" ]]; then
     exit 1
 fi
 
+# ── configure git identity (required for commits) ─────────────────────────
+# Use existing config when available; fall back to neutral defaults so the
+# script works in CI environments that have no pre-configured identity.
+
+if [[ "$DRY_RUN" != "true" ]]; then
+    if ! git config user.email > /dev/null 2>&1; then
+        git config user.email "actions@github.com"
+    fi
+    if ! git config user.name > /dev/null 2>&1; then
+        git config user.name "github-actions[bot]"
+    fi
+fi
+
 # ── process each PR ────────────────────────────────────────────────────────
 
 call_model_api() {
@@ -297,6 +311,10 @@ for row in $(jq -r '.[] | @base64' <<< "$PR_JSON"); do
     # ── write the updated file ─────────────────────────────────────────────
     printf '%s' "$updated_announcement" > "$ANNOUNCEMENT_FILE"
     success "Updated announcement with changes from PR #${pr_number}."
+
+    # ── commit this PR's change as its own commit ──────────────────────────
+    git add "$ANNOUNCEMENT_FILE"
+    git commit -m "Release announcement: ${pr_info}"
     PROCESSED=$((PROCESSED + 1))
 done
 
@@ -310,9 +328,8 @@ info "PRs with no user-relevant changes: ${UNCHANGED}"
 if [[ "$DRY_RUN" == "true" ]]; then
     warn "DRY_RUN=true — no files were modified."
 else
-    success "ReleaseAnnouncement.md has been updated."
+    success "ReleaseAnnouncement.md has been updated and each change committed."
     echo
-    echo "Review the result, then commit with:"
-    echo "  git add ReleaseAnnouncement.md"
-    echo "  git commit -m 'docs: backfill Release Announcement from ${SINCE_TAG}'"
+    echo "Push all commits with:"
+    echo "  git push"
 fi

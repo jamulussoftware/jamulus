@@ -7,6 +7,10 @@ name: Update Release Announcement
 # changes from that PR, in the same conversational bullet-point style used in real
 # Jamulus beta/release announcements on GitHub Discussions.
 #
+# On every push to an autobuild* branch: GitHub Copilot updates the draft on that branch
+# with any user-relevant changes from the HEAD commit. This lets developers preview how
+# their changes would appear in the announcement before the PR is merged.
+#
 # On every full release tag (r<x>_<y>_<z>, no suffix): the draft is reset to the pristine
 # template, ready for the next development cycle. Pre-release tags (beta, rc) do NOT reset
 # the draft, so it can continue to build up until the final release.
@@ -25,6 +29,8 @@ on:
     branches:
       - main
   push:
+    branches:
+      - "autobuild**"
     tags:
       - "r*"
 
@@ -109,6 +115,91 @@ jobs:
           # Exit cleanly if the AI returned the document unchanged (nothing to commit).
           git diff --staged --quiet && exit 0
           git commit -m "docs: update Release Announcement for PR #${{ github.event.pull_request.number }}"
+          git push
+
+  update-announcement-on-autobuild:
+    name: Update announcement for autobuild push
+    # Run on autobuild branch pushes in the main jamulussoftware repo.
+    # Skip when the pusher is the bot itself to prevent an infinite commit loop:
+    # autobuild.yml already has ReleaseAnnouncement.md in paths-ignore, so the
+    # bot commit will not re-trigger the build, but it would re-trigger this workflow.
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      startsWith(github.ref, 'refs/heads/autobuild') &&
+      github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      models: read
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Check out the autobuild branch being pushed, so the announcement is
+          # updated and committed directly on that branch.
+          ref: ${{ github.ref }}
+
+      - name: Check if announcement update should be skipped
+        id: check-skip
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          # Skip when the commit message explicitly marks the change as not user-facing.
+          if printf '%s\n' "$COMMIT_MESSAGE" | grep -qE '^CHANGELOG:[[:space:]]*SKIP[[:space:]]*$'; then
+            echo "Skipping: commit is marked CHANGELOG: SKIP"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Prepare commit metadata for AI prompt
+        id: prep-commit-info
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          COMMIT_SHA: ${{ github.event.head_commit.id }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_AUTHOR: ${{ github.event.head_commit.author.username }}
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: |
+          # Write commit metadata to a temp file so it can be safely passed to the AI
+          # via file_input, avoiding any YAML injection from the commit message content.
+          printf 'Commit %s on branch %s\nby @%s\n\n%s\n' \
+            "$COMMIT_SHA" "$BRANCH_NAME" "$COMMIT_AUTHOR" "$COMMIT_MESSAGE" \
+            > "${RUNNER_TEMP}/commit_info.txt"
+
+      - name: Update Release Announcement with GitHub Copilot
+        id: update-announcement
+        if: steps.check-skip.outputs.skip == 'false'
+        uses: actions/ai-inference@v1
+        with:
+          prompt-file: '.github/prompts/release-announcement.prompt.yml'
+          file_input: |
+            current_announcement: ReleaseAnnouncement.md
+            pr_info: ${{ runner.temp }}/commit_info.txt
+
+      - name: Write updated Release Announcement
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          RESPONSE_FILE: ${{ steps.update-announcement.outputs.response-file }}
+        run: |
+          # Guard against an empty or missing response, which would wipe the file.
+          if [ ! -s "$RESPONSE_FILE" ]; then
+            echo "Warning: AI returned an empty response — skipping update."
+            exit 0
+          fi
+          cp "$RESPONSE_FILE" ReleaseAnnouncement.md
+
+      - name: Commit and push updated announcement
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git add ReleaseAnnouncement.md
+          # Exit cleanly if the AI returned the document unchanged (nothing to commit).
+          git diff --staged --quiet && exit 0
+          git commit -m "docs: update Release Announcement for ${{ github.sha }}"
           git push
 
   reset-after-release:

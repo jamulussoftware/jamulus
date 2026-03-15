@@ -29,10 +29,13 @@
 # Requirements: git, GitHub CLI (gh), jq, curl
 #
 # Usage:
-#   ./tools/backfill-release-announcement.sh [SINCE_TAG]
+#   ./tools/backfill-release-announcement.sh [SINCE_TAG [UNTIL_TAG]]
 #
 #   SINCE_TAG   git tag of the release to start from (default: r3_11_0).
 #               PRs merged *after* this tag's date will be included.
+#   UNTIL_TAG   git tag or release to stop at (optional).
+#               PRs merged *on or before* this tag's date will be included.
+#               Useful for processing in batches to avoid API rate limits.
 #
 # Environment variables:
 #   GITHUB_TOKEN   GitHub token with 'models: read' scope (required for AI).
@@ -41,6 +44,19 @@
 #                      (default: ReleaseAnnouncement.md).
 #   DRY_RUN        Set to 'true' to print what would be done without making
 #                  any changes (useful for testing).
+#   UNTIL_DATE     ISO 8601 date/timestamp upper bound for merged PRs.
+#                  Alternative to UNTIL_TAG when you don't have a tag handy
+#                  (e.g. UNTIL_DATE=2025-06-01T00:00:00Z).
+#   FROM_PR        Only process PRs with number >= this value (inclusive).
+#                  Useful for resuming a partial run or processing in batches
+#                  by PR number (e.g. FROM_PR=3560).
+#   TO_PR          Only process PRs with number <= this value (inclusive).
+#                  Combine with FROM_PR to process a specific PR number range
+#                  (e.g. TO_PR=3580).
+#   DELAY_SECS     Seconds to sleep between AI API calls (default: 0).
+#                  Set to 4 or 5 when running long backfills to stay within
+#                  the GitHub Models API rate limit (≈15 requests/minute on
+#                  the free tier).  Example: DELAY_SECS=5
 #
 # The script calls the GitHub Models API (openai/gpt-4o-mini) to produce a
 # user-friendly summary for each PR and adds it to the announcement document.
@@ -49,16 +65,29 @@
 #
 # PRs whose body contains a line matching "CHANGELOG: SKIP" are skipped
 # unconditionally, consistent with the per-PR workflow behaviour.
+#
+# Rate limiting: the GitHub Models API free tier allows ~15 requests/minute
+# and ~150 requests/day.  When backfilling many PRs in one run the script will
+# hit the per-minute limit.  Remedies:
+#   1. Set DELAY_SECS=5 to pace calls (processes ~12 PRs/minute).
+#   2. Use UNTIL_TAG / FROM_PR + TO_PR to split the work into smaller batches
+#      and run each batch separately.
 
 set -eu -o pipefail
 
 SINCE_TAG="${1:-r3_11_0}"
+UNTIL_TAG="${2:-}"
 SOURCE_REPO="${SOURCE_REPO:-jamulussoftware/jamulus}"
 ANNOUNCEMENT_FILE="${ANNOUNCEMENT_FILE:-ReleaseAnnouncement.md}"
 DRY_RUN="${DRY_RUN:-false}"
 MODELS_ENDPOINT="${MODELS_ENDPOINT:-https://models.github.ai/inference/chat/completions}"
 MODEL="${MODEL:-openai/gpt-4o-mini}"
+UNTIL_DATE="${UNTIL_DATE:-}"
+FROM_PR="${FROM_PR:-}"
+TO_PR="${TO_PR:-}"
+DELAY_SECS="${DELAY_SECS:-0}"
 PR_LIST_LIMIT=500
+MAX_PR_NUMBER=2147483647  # upper bound when TO_PR is not specified
 
 # Colours for interactive output (suppressed when not on a terminal)
 if [[ -t 1 ]]; then
@@ -145,21 +174,71 @@ fi
 
 info "Tag ${SINCE_TAG} resolves to date: ${TAG_DATE}"
 
+# ── look up the until-tag date (if specified) ──────────────────────────────
+
+if [[ -n "$UNTIL_TAG" && -z "$UNTIL_DATE" ]]; then
+    heading "Resolving upper-bound tag ${UNTIL_TAG} in ${SOURCE_REPO} …"
+
+    UNTIL_DATE=$(
+        GH_REPO="$SOURCE_REPO" gh release view "$UNTIL_TAG" \
+            --json publishedAt --jq '.publishedAt' 2>/dev/null \
+        || GH_REPO="$SOURCE_REPO" gh api \
+            "/repos/${SOURCE_REPO}/git/refs/tags/${UNTIL_TAG}" \
+            --jq '.object.sha' 2>/dev/null \
+            | xargs -I{} GH_REPO="$SOURCE_REPO" gh api \
+                "/repos/${SOURCE_REPO}/git/tags/{}" \
+                --jq '.tagger.date' 2>/dev/null \
+        || true
+    )
+
+    if [[ -z "$UNTIL_DATE" ]]; then
+        UNTIL_DATE=$(
+            GH_REPO="$SOURCE_REPO" gh api \
+                "/repos/${SOURCE_REPO}/commits/tags/${UNTIL_TAG}" \
+                --jq '.commit.committer.date' 2>/dev/null || true
+        )
+    fi
+
+    if [[ -z "$UNTIL_DATE" ]]; then
+        echo "ERROR: Could not resolve date for tag '${UNTIL_TAG}' in ${SOURCE_REPO}." >&2
+        echo "       Check that the tag exists and that your token has read access." >&2
+        exit 1
+    fi
+
+    info "Tag ${UNTIL_TAG} resolves to date: ${UNTIL_DATE}"
+fi
+
 # ── fetch the PR list ──────────────────────────────────────────────────────
 
-heading "Fetching merged PRs in ${SOURCE_REPO} after ${TAG_DATE} …"
+if [[ -n "$UNTIL_DATE" ]]; then
+    heading "Fetching merged PRs in ${SOURCE_REPO} after ${TAG_DATE} up to ${UNTIL_DATE} …"
+else
+    heading "Fetching merged PRs in ${SOURCE_REPO} after ${TAG_DATE} …"
+fi
 
 # gh pr list returns JSON; we sort by mergedAt ascending so the announcement
 # builds up in the same order that changes actually landed.
+PR_SEARCH="merged:>${TAG_DATE} base:main"
+if [[ -n "$UNTIL_DATE" ]]; then
+    PR_SEARCH="${PR_SEARCH} merged:<=${UNTIL_DATE}"
+fi
 PR_JSON=$(
     GH_REPO="$SOURCE_REPO" gh pr list \
         --state merged \
         --base main \
-        --search "merged:>${TAG_DATE} base:main" \
+        --search "$PR_SEARCH" \
         --limit "$PR_LIST_LIMIT" \
         --json number,title,author,body,mergedAt,labels \
         --jq 'sort_by(.mergedAt)'
 )
+
+# Apply optional PR-number range filter (FROM_PR / TO_PR)
+if [[ -n "$FROM_PR" || -n "$TO_PR" ]]; then
+    _from="${FROM_PR:-0}"
+    _to="${TO_PR:-$MAX_PR_NUMBER}"
+    PR_JSON=$(jq --argjson from "$_from" --argjson to "$_to" \
+        '[.[] | select(.number >= $from and .number <= $to)]' <<< "$PR_JSON")
+fi
 
 PR_COUNT=$(jq 'length' <<< "$PR_JSON")
 info "Found ${PR_COUNT} merged PRs to process."
@@ -258,16 +337,33 @@ call_model_api() {
             temperature: 0.1
         }')
 
-    local response
-    response=$(curl -s -f \
+    # Use a temp file so we can capture both the body and the HTTP status code.
+    # curl -s -f would hide the status; -w '%{http_code}' lets us detect 429.
+    local tmpfile
+    tmpfile=$(mktemp)
+    local http_code
+    http_code=$(curl -s \
+        -o "$tmpfile" \
+        -w '%{http_code}' \
         -X POST "$MODELS_ENDPOINT" \
         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         -H "Content-Type: application/json" \
-        -d "$payload") || {
-            warn "HTTP request to Models API failed for this PR — keeping current announcement."
-            printf '%s' "$current_announcement"
-            return
-        }
+        -d "$payload") 2>/dev/null || true
+    local response
+    response=$(cat "$tmpfile" 2>/dev/null || true)
+    rm -f "$tmpfile"
+
+    if [[ "$http_code" != "200" ]]; then
+        if [[ "$http_code" == "429" ]]; then
+            warn "Models API rate limit hit (HTTP 429) — keeping current announcement."
+            warn "  Tip: set DELAY_SECS=5 to pace calls, or use UNTIL_TAG/FROM_PR/TO_PR"
+            warn "  to split the backfill into smaller batches."
+        else
+            warn "HTTP ${http_code} from Models API — keeping current announcement."
+        fi
+        printf '%s' "$current_announcement"
+        return
+    fi
 
     local updated
     updated=$(jq -r '.choices[0].message.content // empty' <<< "$response")
@@ -358,6 +454,12 @@ for row in $(jq -r '.[] | @base64' <<< "$PR_JSON"); do
     fi
     git commit -m "docs: Release Announcement for PR #${pr_number} — ${pr_title}"
     PROCESSED=$((PROCESSED + 1))
+
+    # ── optional delay between API calls ──────────────────────────────────
+    if [[ "${DELAY_SECS:-0}" -gt 0 ]]; then
+        info "Sleeping ${DELAY_SECS}s before next API call (DELAY_SECS)…"
+        sleep "$DELAY_SECS"
+    fi
 done
 
 # ── summary ────────────────────────────────────────────────────────────────

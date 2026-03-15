@@ -1556,17 +1556,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>You can either type in the MIDI CC values or use the &quot;Learn&quot; button: click on &quot;Learn&quot;, actuate the fader/knob/button on your MIDI controller, and the MIDI CC number will be detected and saved.</source>
-        <translation>Vous pouvez au choix saisir les valeurs CC MIDI ou utiliser le bouton &quot;Apprendre&quot;&#xa0;: cliquer sur &quot;Apprendre&quot;, actionnez le potar/bouton/inter sur le contrôleur MIDI, et le CC MIDI sera détecté et enregistré.</translation>
+        <translation>Vous pouvez au choix saisir les valeurs CC MIDI ou utiliser le bouton &quot;Apprendre&quot;&#xa0;: cliquer sur &quot;Apprendre&quot;, actionnez le chariot/potard/bouton sur le contrôleur MIDI, et le numéro de CC MIDI sera détecté et sauvegardé.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="446"/>
         <source>MIDI channel combo box</source>
-        <translation>Boîte de définition Canal MIDI</translation>
+        <translation>Boîte de choix du canal MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation>Boîte de choix CC MIDI Mute Moi</translation>
+        <translation>Boîte de sélection du décalage de CC MIDI d&apos;auto-sourdine</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
@@ -1576,17 +1576,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="449"/>
         <source>Pan offset spin box</source>
-        <translation>Boîte de choix Décalage de panoramique</translation>
+        <translation>Boîte de sélection du décalage de panoramique</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="450"/>
         <source>Solo offset spin box</source>
-        <translation>Boîte de choix Décalage de Solo</translation>
+        <translation>Boîte de sélection du décalage de solo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>Mute offset spin box</source>
-        <translation>Boîte de choix Décalage de sourdine</translation>
+        <translation>Boîte de sélection du décalage de sourdine</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="452"/>

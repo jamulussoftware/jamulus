@@ -213,6 +213,22 @@ fi
 
 # ── process each PR ────────────────────────────────────────────────────────
 
+# strip_code_fences TEXT
+# If TEXT is wrapped in a markdown code fence (```lang...```) strip the
+# opening and closing fence lines and any leading/trailing blank lines.
+strip_code_fences() {
+    local text="$1"
+    # Remove the opening fence line (``` or ```markdown, etc.)
+    text=$(printf '%s' "$text" | sed '1s/^```[a-zA-Z]*$//')
+    # Remove the closing fence line (exactly ```)
+    text=$(printf '%s' "$text" | sed '$s/^```$//')
+    # Drop leading blank lines
+    text=$(printf '%s' "$text" | sed '/./,$!d')
+    # Drop trailing blank lines
+    text=$(printf '%s' "$text" | sed -e :a -e '/^\n*$/{$d;N;ba}')
+    printf '%s' "$text"
+}
+
 call_model_api() {
     # Arguments:
     #   $1  current announcement text
@@ -258,6 +274,20 @@ call_model_api() {
 
     if [[ -z "$updated" ]]; then
         warn "Model returned an empty response — keeping current announcement."
+        printf '%s' "$current_announcement"
+        return
+    fi
+
+    # Strip markdown code fences if the model wrapped the output in them
+    # (some models output ```markdown ... ``` or ``` ... ```).
+    if [[ "$updated" =~ ^'```' ]]; then
+        updated=$(strip_code_fences "$updated")
+    fi
+
+    # Guard: if the response doesn't start with a Markdown heading it is not a
+    # valid document — keep the current announcement to avoid corrupting the file.
+    if [[ ! "$updated" =~ ^'#' ]]; then
+        warn "AI response does not look like a Markdown document — keeping current announcement."
         printf '%s' "$current_announcement"
         return
     fi
@@ -309,11 +339,23 @@ for row in $(jq -r '.[] | @base64' <<< "$PR_JSON"); do
     fi
 
     # ── write the updated file ─────────────────────────────────────────────
-    printf '%s' "$updated_announcement" > "$ANNOUNCEMENT_FILE"
+    printf '%s\n' "$updated_announcement" > "$ANNOUNCEMENT_FILE"
     success "Updated announcement with changes from PR #${pr_number}."
 
     # ── commit this PR's change as its own commit ──────────────────────────
     git add "$ANNOUNCEMENT_FILE"
+    # Guard: the content comparison above caught most unchanged cases, but
+    # whitespace normalisation (e.g. trailing newlines) can produce byte-identical
+    # files that still compare as different strings.  Check git's view before
+    # committing so we don't fail under set -eu with "nothing to commit".
+    if git diff --staged --quiet; then
+        info "No git diff after write — announcement effectively unchanged."
+        UNCHANGED=$((UNCHANGED + 1))
+        git restore --staged "$ANNOUNCEMENT_FILE" 2>/dev/null \
+            || git reset HEAD "$ANNOUNCEMENT_FILE" 2>/dev/null \
+            || true
+        continue
+    fi
     git commit -m "docs: Release Announcement for PR #${pr_number} — ${pr_title}"
     PROCESSED=$((PROCESSED + 1))
 done

@@ -9,9 +9,13 @@ messages:
       a free, open-source application that lets musicians rehearse, perform, and jam together in
       real time over the internet.
 
-      The announcement is a single flat list of bullet points covering user-relevant changes,
-      written in the same friendly, conversational style used in real Jamulus beta and release
-      announcements. Here are real examples of entries from those announcements:
+      This is a RELEASE ANNOUNCEMENT for end users, NOT a technical ChangeLog. Write in a
+      friendly, editorial voice — as if sharing good news with the community. Users are musicians,
+      not necessarily developers: speak to what they can now DO or what has IMPROVED for them,
+      not to what code was changed.
+
+      The announcement is a flat list of bullet points written in the same friendly, conversational
+      style used in real Jamulus beta and release announcements. Here are real examples:
 
         - the big one: extended SRV record support ([@rdica](https://github.com/rdica) and [@softins](https://github.com/softins))
         - Windows and macOS moving to Qt 6.10.2
@@ -25,13 +29,19 @@ messages:
       - Add each new change as a bullet point (- ) in the "Here's what's new" section of the
         document. Do not add, remove, or modify any headings, the maintainer note block, or the
         REMINDER section.
+      - When the document contains the HTML placeholder comment
+        "<!-- Changes will appear here automatically as pull requests are merged -->",
+        insert new bullet points immediately ABOVE that comment and leave the comment in place.
       - Write in plain, friendly language. Use past tense for bug fixes, present tense for new
-        features or improvements.
-      - Use the CHANGELOG: line in the PR description (if present) as the primary source for
-        the description. Strip the category prefix (Client:, Server:, Build:, Tools:, etc.)
-        unless keeping it adds helpful context for a non-technical reader — e.g. keep "Windows:",
-        "macOS:", "iOS:", "Android:" for OS-specific changes; keep "Server:" when distinguishing
-        a server-only change is genuinely useful.
+        features or improvements. Each entry must be a complete, grammatically correct sentence or
+        phrase.
+      - Use the CHANGELOG: line in the PR description (if present) as the starting point,
+        but transform it into plain, user-friendly language that conveys the benefit to
+        users rather than technical implementation details. Strip the category prefix
+        (Client:, Server:, Build:, Tools:, etc.) unless keeping it adds helpful context for
+        a non-technical reader — e.g. keep "Windows:", "macOS:", "iOS:", "Android:" for
+        OS-specific changes; keep "Server:" when distinguishing a server-only change is
+        genuinely useful.
       - Always credit contributors: ([@username](https://github.com/username))
         For multiple contributors: ([@a](https://github.com/a) and [@b](https://github.com/b))
       - Only include changes that are relevant to end users or server operators.
@@ -39,11 +49,11 @@ messages:
         tooling, and routine dependency bumps — unless they have a direct, noticeable impact on
         users (e.g. a bundled library upgrade that fixes a crash or enables a new feature).
       - Place more impactful changes nearer the top of the bullet list.
-      - Preserve all existing bullet points — never remove, merge, or rewrite them.
-      - If this PR introduces no user-relevant changes, return the announcement completely
-        unchanged.
+      - Preserve ALL existing bullet points — never remove, shorten, merge, or rewrite them.
+      - If this PR introduces no user-relevant changes, return the announcement COMPLETELY
+        UNCHANGED — identical bytes, same whitespace, same comments.
       - Output the COMPLETE updated Markdown document and nothing else. Do not add any
-        explanation, preamble, or commentary outside the document.
+        explanation, preamble, commentary, or markdown code fences outside the document.
 
   - role: user
     content: |

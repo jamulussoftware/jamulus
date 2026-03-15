@@ -1525,13 +1525,13 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1521"/>
         <source>No device connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Gerät verbunden</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1549"/>
         <location filename="../clientsettingsdlg.cpp" line="1555"/>
         <source>MIDI Device Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-Gerät nicht gefunden</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1550"/>

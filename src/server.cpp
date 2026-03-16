@@ -475,8 +475,14 @@ void CServer::OnServerFull ( CHostAddress RecHostAddr )
     ConnLessProtocol.CreateCLServerFullMes ( RecHostAddr );
 }
 
-void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection )
+void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, bool bUseTcpClient )
 {
+    if ( bUseTcpClient )
+    {
+        qWarning() << "Server send cannot use TCP client";
+        return;
+    }
+
     // the protocol queries me to call the function to send the message
     // send it through the network
     if ( pTcpConnection )

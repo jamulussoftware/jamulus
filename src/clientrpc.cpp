@@ -171,7 +171,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         if ( NetworkUtil::ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, false ) )
         {
             // send the request for the server list
-            pClient->CreateCLReqServerListMes ( haDirectoryAddress );
+            pClient->CreateCLReqServerListMes ( haDirectoryAddress, false ); // UDP
             response["result"] = "ok";
         }
         else

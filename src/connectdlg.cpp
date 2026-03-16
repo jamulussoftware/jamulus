@@ -336,7 +336,7 @@ void CConnectDlg::RequestServerList()
              false ) )
     {
         // send the request for the server list
-        emit ReqServerListQuery ( haDirectoryAddress );
+        emit ReqServerListQuery ( haDirectoryAddress, false ); // UDP
 
         // start timer, if this message did not get any respond to retransmit
         // the server list request message
@@ -379,7 +379,7 @@ void CConnectDlg::OnTimerReRequestServList()
     {
         // note that this is a connection less message which may get lost
         // and therefore it makes sense to re-transmit it
-        emit ReqServerListQuery ( haDirectoryAddress );
+        emit ReqServerListQuery ( haDirectoryAddress, false ); // UDP
     }
 }
 
@@ -981,7 +981,7 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         // connected clients, if not then request the client names
         if ( iNumClients != pCurListViewItem->childCount() )
         {
-            emit CreateCLServerListReqConnClientsListMes ( InetAddr );
+            emit CreateCLServerListReqConnClientsListMes ( InetAddr, false ); // UDP
         }
 
         // this is the first time a ping time was received, set item to visible

@@ -278,9 +278,15 @@ public:
 
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr ); }
+    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr, bool bUseTcpClient )
+    {
+        ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, bUseTcpClient );
+    }
 
-    void CreateCLReqServerListMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqServerListMes ( InetAddr ); }
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr, bool bUseTcpClient )
+    {
+        ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, bUseTcpClient );
+    }
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
 

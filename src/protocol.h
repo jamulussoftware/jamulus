@@ -145,14 +145,14 @@ public:
     void CreateCLUnregisterServerMes ( const CHostAddress& InetAddr );
     void CreateCLServerListMes ( const CHostAddress& InetAddr, const CVector<CServerInfo> vecServerInfo, CTcpConnection* pTcpConnection );
     void CreateCLRedServerListMes ( const CHostAddress& InetAddr, const CVector<CServerInfo> vecServerInfo );
-    void CreateCLReqServerListMes ( const CHostAddress& InetAddr );
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr, bool bUseTcpClient );
     void CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr, const CHostAddress& TargetInetAddr );
     void CreateCLEmptyMes ( const CHostAddress& InetAddr );
     void CreateCLDisconnection ( const CHostAddress& InetAddr );
     void CreateCLVersionAndOSMes ( const CHostAddress& InetAddr );
     void CreateCLReqVersionAndOSMes ( const CHostAddress& InetAddr );
     void CreateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo, CTcpConnection* pTcpConnection );
-    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
+    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr, bool bUseTcpClient );
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
     void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr );
@@ -252,7 +252,8 @@ protected:
     void CreateAndImmSendConLessMessage ( const int               iID,
                                           const CVector<uint8_t>& vecData,
                                           const CHostAddress&     InetAddr,
-                                          CTcpConnection*         pTcpConnection = nullptr );
+                                          CTcpConnection*         pTcpConnection = nullptr,
+                                          bool                    bUseTcpClient  = false );
 
     bool EvaluateJitBufMes ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();

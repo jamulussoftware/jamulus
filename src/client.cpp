@@ -251,14 +251,19 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
 }
 
-void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection )
+void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, bool bUseTcpClient )
 {
-    // the protocol queries me to call the function to send the message
-    // send it through the network
     if ( pTcpConnection )
     {
-        // send to the connected socket directly
-        pTcpConnection->pTcpSocket->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
+        qWarning() << "Client send cannot use TCP server";
+        return;
+    }
+
+    // the protocol queries me to call the function to send the message
+    // send it through the network
+    if ( bUseTcpClient )
+    {
+        // create a TCP client connection and send message
     }
     else
     {

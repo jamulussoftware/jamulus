@@ -544,10 +544,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
 }
 
-void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr )
-{
-    Q_UNUSED ( InetAddr );
-}
+void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr ) { Q_UNUSED ( InetAddr ); }
 
 void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo )
 {

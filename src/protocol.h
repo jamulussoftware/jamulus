@@ -314,7 +314,7 @@ public slots:
 signals:
     // transmitting
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
-    void CLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection );
+    void CLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, bool bUseTcpClient );
 
     // receiving
     void ChangeJittBufSize ( int iNewJitBufSize );

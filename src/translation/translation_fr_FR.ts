@@ -1541,7 +1541,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="423"/>
         <source>MIDI input device combo box</source>
-        <translation type="unfinished">Boîte de sélection Entrée MIDI</translation>
+        <translation>Boîte de sélection du périphérique d&apos;entrée MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="425"/>
@@ -1551,7 +1551,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation>Il y a un paramètre canal MIDI global (0-16) et deux paramètres pour chaque élément contrôlé&#xa0;: le premier MIDI CC et les CC consecutifs (nombres). Réglez d&apos;abord le canal que vous voulez que Jamulus écoute (0 pour tous les canaux). Puis, pour chaque élément que vous désirez contrôler (volume, pano, solo, muet), indiquez le premier CC MIDI (numéro de CC de début) et le nombre de CC. Seul le paramètre &quot;Mute Moi&quot; ne nécessite pas la définition du nombre de CC - il n&apos;a besoin que d&apos;un CC car il ne s&apos;applique qu&apos;à notre propre et unique flux audio.</translation>
+        <translation>Il y a un paramètre canal MIDI global (0-16) et deux paramètres pour chaque élément contrôlé&#xa0;: le premier MIDI CC et les CC consécutifs (décompte). Réglez d&apos;abord le canal que vous voulez que Jamulus écoute (0 pour tous les canaux). Puis, pour chaque élément que vous désirez contrôler (chariot de volume, panoramique, solo, sourdine), indiquez le premier CC MIDI (numéro CC de début) et le nombre de CC consécutifs (décompte). Il y a une exception qui ne nécessite pas de définir des numéros CC consécutifs&#xa0;: il s&apos;agit du paramètre &quot;Me mettre en sourdine&quot; qui ne nécessite qu&apos;un seul numéro CC, car il s&apos;applique uniquement à son propre flux audio.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
@@ -1571,7 +1571,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>Fader offset spin box</source>
-        <translation type="unfinished">Boîte de choix Décalage de fader</translation>
+        <translation>Boîte de sélection du décalage du chariot</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="449"/>
@@ -1596,17 +1596,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="453"/>
         <source>Fader offset MIDI learn button</source>
-        <translation>Bouton d&apos;apprentissage décalage fader MIDI</translation>
+        <translation>Bouton d&apos;apprentissage MIDI de décalage du chariot</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="454"/>
         <source>Pan offset MIDI learn button</source>
-        <translation>Bouton d&apos;apprentissage décalage panoramique MIDI</translation>
+        <translation>Bouton d&apos;apprentissage MIDI de décalage du panoramique</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="455"/>
         <source>Solo offset MIDI learn button</source>
-        <translation>Bouton d&apos;apprentissage Décalage Solo MIDI</translation>
+        <translation>Bouton d&apos;apprentissage MIDI de décalage du solo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="456"/>
@@ -2302,7 +2302,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1365"/>
         <source>MIDI-in</source>
-        <translation type="unfinished">Entrée MIDI</translation>
+        <translation>Entrée MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1391"/>

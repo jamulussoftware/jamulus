@@ -144,7 +144,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation>Version d&apos;étiquette de texte</translation>
+        <translation>TextLabelVersion</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
@@ -1516,7 +1516,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="406"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation>Quand cette option est activée, les contrôles de fader et de panoramique attendront pour réagir que la position du contrôleur physique rejoigne celle du logiciel. Ceci empêche les brusque changements qui se produiraient quand les contrôles ne sont pas synchronisés.</translation>
+        <translation>Quand cette option est activée, les contrôles d&apos;atténuateur et de panoramique MIDI attendront pour réagir que la position du contrôleur physique rejoigne celle du logiciel. Ceci empêche les brusque changements qui se produiraient quand les contrôles ne sont pas synchronisés.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="409"/>
@@ -1526,17 +1526,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="412"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation>Choisir à quel port MIDI-out se connecter. Jamulus connectera automatiquement son port d&apos;entrée MIDI au périphérique choisi. Vous pouvez aussi utiliser votre gestionnaire de connexions préféré pour modifier les connexions.</translation>
+        <translation>Choisir à quel port de sortie MIDI se connecter. Jamulus connectera automatiquement son port d&apos;entrée MIDI au périphérique choisi lorsqu&apos;il est actif. Vous pouvez aussi utiliser votre gestionnaire de connexions préféré pour modifier les connexions.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="416"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation>Sélectionner à quelle source MIDI se connecter. Jamulus connectera automatiquement son port d&apos;entrée MIDI au périphérique choisi. Vous pouvez aussi utiliser Réglages Audio MIDI pour modifier les connexions.</translation>
+        <translation>Sélectionner à quelle source MIDI se connecter. Jamulus connectera automatiquement son port d&apos;entrée MIDI au périphérique choisi lorsqu&apos;il est actif. Vous pouvez aussi utiliser Réglages Audio MIDI pour modifier les connexions.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="420"/>
         <source>Select which MIDI input device(s) Jamulus should listen to. Select &apos;All Devices&apos; to receive MIDI from all connected devices, or choose a specific device.</source>
-        <translation>Choisir les périphériques d&apos;entrée MIDI que Jamulus doit écouter. Sélectionner &quot;Tous les périphériques&quot; pour recevoir du MIDI de tous les périphérique connectés, ou choisissez un périphérique particulier.</translation>
+        <translation>Choisir le(s) périphérique(s) d&apos;entrée MIDI que Jamulus doit écouter. Sélectionner &quot;Tous les périphériques&quot; pour recevoir du MIDI de tous les périphérique connectés, ou choisissez un périphérique particulier.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="423"/>
@@ -1611,7 +1611,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="456"/>
         <source>Mute offset MIDI learn button</source>
-        <translation>Bouton d&apos;apprentissage Décalage sourdine MIDI</translation>
+        <translation>Bouton d&apos;apprentissage MIDI Mute décalé</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="460"/>
@@ -1706,7 +1706,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="896"/>
         <source>Please check your OS configuration.</source>
-        <translation>Merci de vérifier la configuration de votre SE.</translation>
+        <translation>Merci de vérifier la configuration de votre système d&apos;exploitation.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1451"/>
@@ -1748,7 +1748,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1556"/>
         <source>The MIDI device &quot;%1&quot; is not currently available. Select a different device from the dropdown to connect.</source>
-        <translation>Périphérique MIDI &quot;%1&quot; actuellement non disponible. Choisissez un autre périphérique dans la liste déroulante.</translation>
+        <translation>Périphérique MIDI &quot;%1&quot; actuellement non disponible. Choisissez un autre périphérique dans la liste déroulante pour le connecter.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1603"/>
@@ -1759,7 +1759,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1604"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check your OS configuration.</source>
-        <translation>Connexion au périphérique MIDI &quot;%1&quot; impossible. Veuillez vérifier la configuration de votre SE.</translation>
+        <translation>Connexion au périphérique MIDI &quot;%1&quot; impossible. Veuillez vérifier la configuration de votre système d&apos;exploitation.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1610"/>
@@ -2442,7 +2442,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1803"/>
         <source>Mute</source>
-        <translation>Muet</translation>
+        <translation>Couper le son</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1940"/>

@@ -45,19 +45,41 @@ def get_prs_with_discussions(tag1, tag2):
         sys.exit(1)
 
 def run_ollama_logic(new_prs_json, old_summary, model):
-    # Your comprehensive prompt remains the same
-    prompt = f"""
-    You are a technical writer maintaining the working Release Announcement draft for Jamulus...
+    # Defining the style guide based on your provided examples
+    style_guide = """
+    STYLE COMPARISON (Follow the 'GOOD' example):
     
-    [... PROMPT TRUNCATED FOR BREVITY - USE YOUR EXISTING PROMPT HERE ...]
+    BAD (Technical Bullets):
+    - iOS: Fixed crash on Qt6 after closing the chat window
+    - iOS: Fixed app hang if the language was changed
+    - Android: Connect dialog now shows as fullscreen
+    
+    GOOD (Narrative Prose):
+    "The mobile interface has received significant attention. iOS has been upgraded to Qt 6, 
+    and the compact view is now the default on both iOS and Android—a much better fit for 
+    smaller screens. We've also polished the experience with a proper app icon and 
+    fixes for several crashes and hangs."
+    """
+
+    prompt = f"""
+    You are a technical writer for Jamulus (real-time music rehearsal software).
+    
+    {style_guide}
+
+    TASK:
+    1. Review the NEW PR DATA.
+    2. Summarize the changes into the EXISTING SUMMARY using the 'GOOD' narrative style.
+    3. Group by audience (## For everyone, ## For mobile users, etc.).
+    4. Focus on the USER BENEFIT (what they can DO) rather than the technical fix (PR numbers).
+    5. If many small fixes exist for one area (like iOS), group them into one cohesive paragraph.
 
     EXISTING SUMMARY:
     {old_summary if old_summary else "No existing summary provided."}
 
-    NEW PR DATA (Cleaned Discussion Context):
+    NEW PR DATA:
     {new_prs_json}
 
-    RETURN ONLY THE COMPLETE UPDATED MARKDOWN DOCUMENT AS THE FINAL OUTPUT.
+    RETURN ONLY THE UPDATED MARKDOWN DOCUMENT. NO BULLET POINTS.
     """
     
     response = ollama.chat(model=model, messages=[{'role': 'user', 'content': prompt}])

@@ -81,7 +81,7 @@ SOURCE_REPO="${SOURCE_REPO:-jamulussoftware/jamulus}"
 ANNOUNCEMENT_FILE="${ANNOUNCEMENT_FILE:-ReleaseAnnouncement.md}"
 DRY_RUN="${DRY_RUN:-false}"
 MODELS_ENDPOINT="${MODELS_ENDPOINT:-https://models.github.ai/inference/chat/completions}"
-MODEL="${MODEL:-openai/gpt-4o-mini}"
+MODEL="${MODEL:-openai/gpt-4o}"
 UNTIL_DATE="${UNTIL_DATE:-}"
 FROM_PR="${FROM_PR:-}"
 TO_PR="${TO_PR:-}"
@@ -308,6 +308,133 @@ strip_code_fences() {
     printf '%s' "$text"
 }
 
+# fetch_pr_thread PR_NUMBER
+#   Fetches the full PR discussion thread (body, comments, reviews) and
+#   prints a formatted text block to stdout.  Returns 1 on failure.
+fetch_pr_thread() {
+    local pr_number="$1"
+
+    local pr_data
+    pr_data=$(GH_REPO="$SOURCE_REPO" gh pr view "$pr_number" \
+        --json body,comments,reviews 2>/dev/null) || return 1
+
+    if [[ -z "$pr_data" ]]; then
+        return 1
+    fi
+
+    printf '%s' "$pr_data" | python3 -c '
+import json, sys
+
+try:
+    data = json.load(sys.stdin)
+except (json.JSONDecodeError, ValueError):
+    sys.exit(1)
+
+body = data.get("body", "") or ""
+comments = data.get("comments", []) or []
+reviews = data.get("reviews", []) or []
+
+parts = []
+if body.strip():
+    parts.append("## PR Description\n" + body.strip())
+
+if comments:
+    comment_parts = []
+    for c in comments:
+        author = c.get("author", {}).get("login", "unknown")
+        created = (c.get("createdAt", "") or "")[:10]
+        cbody = (c.get("body", "") or "").strip()
+        if cbody:
+            comment_parts.append(f"@{author} ({created}):\n{cbody}")
+    if comment_parts:
+        parts.append("## Discussion\n" + "\n\n".join(comment_parts))
+
+if reviews:
+    review_parts = []
+    for r in reviews:
+        author = r.get("author", {}).get("login", "unknown")
+        state = r.get("state", "")
+        created = (r.get("submittedAt", r.get("createdAt", "")) or "")[:10]
+        rbody = (r.get("body", "") or "").strip()
+        if rbody:
+            review_parts.append(f"@{author} ({state}, {created}):\n{rbody}")
+    if review_parts:
+        parts.append("## Reviews\n" + "\n\n".join(review_parts))
+
+if not parts:
+    sys.exit(1)
+
+print("\n\n".join(parts), end="")
+'
+}
+
+# summarize_pr_thread PR_NUMBER PR_TITLE PR_AUTHOR THREAD_TEXT
+#   Calls the AI to produce a concise factual summary of the full PR thread.
+#   Prints the summary to stdout.  Returns 1 on failure.
+summarize_pr_thread() {
+    local pr_number="$1"
+    local pr_title="$2"
+    local pr_author="$3"
+    local thread_text="$4"
+
+    local summary_prompt
+    summary_prompt='You are a technical writer summarising a GitHub Pull Request for use in a release announcement.
+
+Given the full PR thread below (description, discussion comments, and code reviews), write a concise factual summary (under 300 words) that captures:
+1. **What changed**: the concrete code/feature/behaviour change in its final form
+2. **Why**: the motivation or problem being solved
+3. **User impact**: how this affects people who use the software
+
+Focus on the FINAL outcome, not the evolution of the discussion.  If reviewers suggested changes that were adopted, describe the end result, not the back-and-forth.
+
+Ignore: CI bot comments, merge-conflict chatter, style nits, "LGTM" reviews without substantive body text, and process comments (like labelling or milestone changes).'
+
+    local user_content
+    user_content=$(printf 'PR #%s — %s\nby @%s\n\nFull PR thread:\n%s' \
+        "$pr_number" "$pr_title" "$pr_author" "$thread_text")
+
+    local payload
+    payload=$(jq -n \
+        --arg model  "$MODEL" \
+        --arg system "$summary_prompt" \
+        --arg user   "$user_content" \
+        '{
+            model: $model,
+            messages: [
+                { role: "system", content: $system },
+                { role: "user",   content: $user   }
+            ],
+            max_completion_tokens: 2048,
+            temperature: 0.1
+        }')
+
+    local tmpfile http_code response summary
+    tmpfile=$(mktemp)
+    http_code=$(curl -s \
+        -o "$tmpfile" \
+        -w '%{http_code}' \
+        -X POST "$MODELS_ENDPOINT" \
+        -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+        -H "Content-Type: application/json" \
+        -d "$payload") 2>/dev/null || true
+
+    response=$(cat "$tmpfile" 2>/dev/null || true)
+    rm -f "$tmpfile"
+
+    if [[ "$http_code" != "200" ]]; then
+        warn "HTTP ${http_code} from Models API during PR thread summarisation."
+        return 1
+    fi
+
+    summary=$(jq -r '.choices[0].message.content // empty' <<< "$response")
+    if [[ -z "$summary" ]]; then
+        warn "Model returned empty summary."
+        return 1
+    fi
+
+    printf '%s' "$summary"
+}
+
 call_model_api() {
     # Arguments:
     #   $1  current announcement text
@@ -419,9 +546,26 @@ for row in $(jq -r '.[] | @base64' <<< "$PR_JSON"); do
         continue
     fi
 
+    # ── fetch and summarise the full PR thread ────────────────────────────
+    info "Fetching full PR thread for #${pr_number}…"
+    thread_text=$(fetch_pr_thread "$pr_number") || true
+    if [[ -n "$thread_text" ]]; then
+        info "Fetched PR thread ($(printf '%s' "$thread_text" | wc -c | tr -d ' ') bytes). Summarising…"
+        pr_summary=$(summarize_pr_thread "$pr_number" "$pr_title" "$pr_author" "$thread_text") || true
+        if [[ -z "$pr_summary" ]]; then
+            info "Could not summarise PR thread — using PR body only."
+            pr_summary="$pr_body"
+        else
+            info "Generated PR thread summary."
+        fi
+    else
+        info "Could not fetch full PR thread — using PR body only."
+        pr_summary="$pr_body"
+    fi
+
     # ── build the PR info block ────────────────────────────────────────────
     pr_info=$(printf 'PR #%s — %s\nby @%s\n\n%s\n' \
-        "$pr_number" "$pr_title" "$pr_author" "$pr_body")
+        "$pr_number" "$pr_title" "$pr_author" "$pr_summary")
 
     # ── call the AI ────────────────────────────────────────────────────────
     current_announcement=$(cat "$ANNOUNCEMENT_FILE")

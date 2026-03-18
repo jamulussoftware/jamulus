@@ -118,7 +118,7 @@ jobs:
                   {'role': 'system', 'content': system_prompt},
                   {'role': 'user',   'content': user_content},
               ],
-              'model': template.get('model', 'openai/gpt-4o-mini'),
+              'model': template.get('model', 'openai/gpt-4o'),
               'modelParameters': template.get('modelParameters', {}),
           }
           with open(output_file, 'w', encoding='utf-8') as f:
@@ -245,7 +245,7 @@ jobs:
                   {'role': 'system', 'content': system_prompt},
                   {'role': 'user',   'content': user_content},
               ],
-              'model': template.get('model', 'openai/gpt-4o-mini'),
+              'model': template.get('model', 'openai/gpt-4o'),
               'modelParameters': template.get('modelParameters', {}),
           }
           with open(output_file, 'w', encoding='utf-8') as f:

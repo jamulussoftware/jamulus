@@ -14,27 +14,37 @@ messages:
       not necessarily developers: speak to what they can now DO or what has IMPROVED for them,
       not to what code was changed.
 
-      The announcement is a flat list of bullet points written in the same friendly, conversational
-      style used in real Jamulus beta and release announcements. Here are real examples:
+      STYLE — NARRATIVE PROSE, NOT BULLET POINTS:
+      The announcement is organised into audience-grouped sections, each written as short,
+      friendly narrative paragraphs — the way a magazine might preview an upcoming release.
+      DO NOT use bullet-point lists. Instead, weave each change into flowing prose that
+      explains what changed AND why it matters to the reader.
 
-        - the big one: extended SRV record support ([@rdica](https://github.com/rdica) and [@softins](https://github.com/softins))
-        - Windows and macOS moving to Qt 6.10.2
-        - a new Japanese translation ([@tsukurun](https://github.com/tsukurun))
-        - fixed a crash in the Connect dialog ([@ann0see](https://github.com/ann0see))
-        - Windows: Jamulus now prevents the screen saver from activating while you are connected ([@ann0see](https://github.com/ann0see))
-        - added a JSON-RPC method to control server directory settings ([@pljones](https://github.com/pljones))
-        - client RPC support for controlling fader levels ([@corrados](https://github.com/corrados))
+      Each audience section starts with a level-2 heading (##) and is separated from the next
+      by "---". Use these standard section headings when applicable:
+
+        ## For everyone
+        ## For Windows users
+        ## For macOS users
+        ## For mobile users (iOS & Android)
+        ## For server operators
+        ## Translations
+
+      When a change is significant enough to deserve its own spotlight, give it a dedicated
+      level-2 heading (e.g. "## MIDI gets a proper settings interface") placed BEFORE the
+      audience sections it relates to. Use subsections (### ⚠️ Breaking change,
+      ### Deprecation notice) when warranted.
 
       Rules:
-      - Add each new change as a bullet point (- ) in the "Here's what's new" section of the
-        document. Do not add, remove, or modify any headings, the maintainer note block, or the
+      - Integrate each new change into the MOST APPROPRIATE audience section of the document
+        as narrative prose. Create a new audience section if one does not yet exist for the
+        relevant audience. Do not add, remove, or modify the maintainer note block or the
         REMINDER section.
       - When the document contains the HTML placeholder comment
         "<!-- Changes will appear here automatically as pull requests are merged -->",
-        insert new bullet points immediately ABOVE that comment and leave the comment in place.
+        insert new content immediately ABOVE that comment and leave the comment in place.
       - Write in plain, friendly language. Use past tense for bug fixes, present tense for new
-        features or improvements. Each entry must be a complete, grammatically correct sentence or
-        phrase.
+        features or improvements. Every paragraph must be complete, grammatically correct prose.
       - Use the CHANGELOG: line in the PR description (if present) as the starting point,
         but transform it into plain, user-friendly language that conveys the benefit to
         users rather than technical implementation details. Strip the category prefix
@@ -42,14 +52,19 @@ messages:
         a non-technical reader — e.g. keep "Windows:", "macOS:", "iOS:", "Android:" for
         OS-specific changes; keep "Server:" when distinguishing a server-only change is
         genuinely useful.
-      - Always credit contributors: ([@username](https://github.com/username))
-        For multiple contributors: ([@a](https://github.com/a) and [@b](https://github.com/b))
+      - Do NOT credit individual contributors inline. The document ends with a single generic
+        thank-you line: "*A big thanks to all contributors who made this release possible.*"
       - Only include changes that are relevant to end users or server operators.
         Omit purely internal changes: CI configuration, build system, code style, developer
         tooling, and routine dependency bumps — unless they have a direct, noticeable impact on
         users (e.g. a bundled library upgrade that fixes a crash or enables a new feature).
-      - Place more impactful changes nearer the top of the bullet list.
-      - Preserve ALL existing bullet points — never remove, shorten, merge, or rewrite them.
+      - Within each section, mention more impactful changes first.
+      - When a new PR updates or extends a feature already described in the announcement,
+        revise the existing paragraph to reflect the final state of that feature rather than
+        adding a separate entry. The reader should see one clear description of what the
+        feature does NOW, not a history of how it evolved across PRs.
+      - Do not remove paragraphs about unrelated features. Only rewrite prose that directly
+        overlaps with the new PR's changes.
       - If this PR introduces no user-relevant changes, return the announcement COMPLETELY
         UNCHANGED — identical bytes, same whitespace, same comments.
       - Output the COMPLETE updated Markdown document and nothing else. Do not add any
@@ -69,10 +84,10 @@ messages:
       Update the Release Announcement to include any user-relevant changes from this PR.
       Return the complete updated Markdown document only.
 
-model: openai/gpt-4o-mini
+model: openai/gpt-4o
 modelParameters:
   # High token limit to ensure the full document is always returned without truncation.
   # The default max-tokens in actions/ai-inference is only 200, which would cut off the document.
   maxCompletionTokens: 16384
   # Low temperature for consistent, deterministic output when editing a structured document.
-  temperature: 0.1
+  temperature: 0.2

@@ -59,19 +59,34 @@ def sanitize_pr_data(raw_json):
     }
 
 def run_ollama_logic(new_pr_data, old_summary, model):
+    # Determine if this looks like a minor fix
+    is_fix = any(word in new_pr_data['title'].lower() for word in ['fix', 'correct', 'typo'])
+
     """Enforces narrative style using Few-Shot examples."""
     style_guide = """
-    STYLE GUIDELINE:
+    STYLE GUIDELINES:
     - NO BULLET POINTS. Use friendly, editorial narrative prose. 
     - GROUP BY AUDIENCE: ## For everyone, ## For Windows users, ## For macOS users, ## For mobile users (iOS & Android), ## For server operators, ## Translations. 
     - FOCUS ON BENEFITS: Describe what users can DO now, not code changes. 
     - DEDUPLICATE: If a feature is already mentioned, update the existing paragraph. 
+    - CLARITY: If you are unsure of the user benefit, do not write a whole new heading.
+      Add a single, simple sentence to the most relevant 'For users' section.
+      Example: "The iOS 'About' dialog now correctly displays the operating system version."
+    SPECIAL INSTRUCTION FOR THIS PR:
+    {'This is a minor fix. DO NOT create a new level-2 (##) heading. Only add a single sentence to an existing section.' if is_fix else 'Integrate this normally.'}
     """
     high_bar_rule = """
     - THE HIGH BAR RULE: Only mention changes that significantly improve the 
       musician's experience. If a PR is purely "housekeeping" (like copyright 
       updates, minor internal refactoring, or CI fixes), return the document 
       UNCHANGED.
+    - CRITICAL RULES FOR TRUTH:
+      1. NO GUESSING: Do not invent benefits. Only describe benefits explicitly mentioned
+         in the PR Body or Developer Comments.
+      2. THE "ABOUT BOX" RULE: If a fix only affects internal metadata or the 'About'
+         dialog, describe it simply as "UI polish" or "Information accuracy."
+      3. CHECK THE CODE: If the diff shows changes to `src/util.h` or version strings,
+         it usually means the 'About' box or internal identification is being corrected.
     - AGGREGATE SMALL FIXES: Do not give a dedicated paragraph to every bug fix. 
       For example, small iOS fixes should be woven into one "Mobile Improvements" paragraph.
     - DELETE THE FILLER: If the existing text contains fluff (e.g., "demonstrates 
@@ -80,9 +95,9 @@ def run_ollama_logic(new_pr_data, old_summary, model):
     """
 
     prompt = f"""
-    You are a technical writer for Jamulus.
-    {style_guide}
+    You are a technical writer for Jamulus. You must follow the following rules and guidance.
     {high_bar_rule}
+    {style_guide}
 
     TASK:
     Integrate this ONE new Pull Request into the EXISTING Release Announcement.

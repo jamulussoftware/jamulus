@@ -163,16 +163,27 @@ def main():
         raw_details = subprocess.check_output(f'gh pr view {pr_num} --json number,title,body,comments,reviews', shell=True, text=True)
         sanitized_pr = sanitize_pr_data(raw_details)
 
-        # AI processing
+        # 4. AI processing
         updated_ra = run_ollama_logic(sanitized_pr, current_content, args.model)
 
-        # CLEAN THE OUTPUT
+        # ... clean the output
         updated_ra = strip_markdown_fences(updated_ra)
 
         with open(args.file, 'w') as f:
             f.write(updated_ra)
 
-        # 4. Git Commit
+        # ... Verification Check: Did it actually change?
+        # -w ignores whitespace changes. --exit-code returns 0 if NO changes.
+        diff_check = subprocess.run(
+            ["git", "diff", "-w", "--exit-code", args.file], 
+            capture_output=True
+        )
+        
+        if diff_check.returncode == 0:
+            print(f"   > Result: No user-facing changes for #{pr_num}. Skipping commit.")
+            continue
+
+        # 5. Git Commit
         commit_msg = f"[bot] RA: Merge #{pr_num}: {pr_title}"
         subprocess.run(["git", "add", args.file], check=True)
         subprocess.run(["git", "commit", "-m", commit_msg], check=True)

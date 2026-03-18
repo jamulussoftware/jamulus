@@ -32,7 +32,7 @@ As always, all feedback on the new version is welcome. Please raise any problems
 
 ---
 
-**REMINDER:** Those of you with virus checkers are likely to find the Windows installer incorrectly flagged as a virus. This is because the installer is open source and virus checkers cannot be bothered to check what it installs, so assume that it's going to be malign. If you download the installer _only from the official release_, you should be safe to ignore any warning.
+**REMINDER:** Those of you with virus checkers are likely to find the Windows installer incorrectly flagged as a virus. This is because the installer is open source and virus checkers cannot be bothered to check what it installs, so assume that it's going to be malign. If you download the installer *only from the official release*, you should be safe to ignore any warning.
 
 ---
 

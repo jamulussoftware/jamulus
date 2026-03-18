@@ -12,7 +12,7 @@ def get_universal_timestamp(identifier):
     Supports: pr123, Tags, SHAs, and Branches.
     """
     target = identifier
-    
+
     # 1. Resolve PR to its merge commit SHA
     if identifier.lower().startswith("pr"):
         pr_id = identifier[2:]
@@ -20,7 +20,7 @@ def get_universal_timestamp(identifier):
             print(f"   > Resolving PR #{pr_id} to its merge commit...")
             cmd = f"gh pr view {pr_id} --json mergeCommit -q .mergeCommit.oid"
             target = subprocess.check_output(cmd, shell=True, text=True).strip()
-            
+
             if not target or target == "null":
                 print(f"Error: PR #{pr_id} has no merge commit (is it merged?)")
                 sys.exit(1)
@@ -49,7 +49,7 @@ def sanitize_pr_data(raw_json):
     data = json.loads(raw_json)
     # Remove "(Fixes #123)" and "(Closes #123)"
     clean_body = re.sub(r'\(?(Fixes|Closes) #\d+\)?', '', data.get("body", ""), flags=re.IGNORECASE)
-    
+
     return {
         "number": data.get("number"),
         "title": data.get("title"),
@@ -65,10 +65,10 @@ def run_ollama_logic(new_pr_data, old_summary, model):
     """Enforces narrative style using Few-Shot examples."""
     style_guide = """
     STYLE GUIDELINES:
-    - NO BULLET POINTS. Use friendly, editorial narrative prose. 
-    - GROUP BY AUDIENCE: ## For everyone, ## For Windows users, ## For macOS users, ## For mobile users (iOS & Android), ## For server operators, ## Translations. 
-    - FOCUS ON BENEFITS: Describe what users can DO now, not code changes. 
-    - DEDUPLICATE: If a feature is already mentioned, update the existing paragraph. 
+    - NO BULLET POINTS. Use friendly, editorial narrative prose.
+    - GROUP BY AUDIENCE: ## For everyone, ## For Windows users, ## For macOS users, ## For mobile users (iOS & Android), ## For server operators, ## Translations.
+    - FOCUS ON BENEFITS: Describe what users can DO now, not code changes.
+    - DEDUPLICATE: If a feature is already mentioned, update the existing paragraph.
     - CLARITY: If you are unsure of the user benefit, do not write a whole new heading.
       Add a single, simple sentence to the most relevant 'For users' section.
       Example: "The iOS 'About' dialog now correctly displays the operating system version."
@@ -76,9 +76,9 @@ def run_ollama_logic(new_pr_data, old_summary, model):
     {'This is a minor fix. DO NOT create a new level-2 (##) heading. Only add a single sentence to an existing section.' if is_fix else 'Integrate this normally.'}
     """
     high_bar_rule = """
-    - THE HIGH BAR RULE: Only mention changes that significantly improve the 
-      musician's experience. If a PR is purely "housekeeping" (like copyright 
-      updates, minor internal refactoring, or CI fixes), return the document 
+    - THE HIGH BAR RULE: Only mention changes that significantly improve the
+      musician's experience. If a PR is purely "housekeeping" (like copyright
+      updates, minor internal refactoring, or CI fixes), return the document
       UNCHANGED.
     - CRITICAL RULES FOR TRUTH:
       1. NO GUESSING: Do not invent benefits. Only describe benefits explicitly mentioned
@@ -87,9 +87,9 @@ def run_ollama_logic(new_pr_data, old_summary, model):
          dialog, describe it simply as "UI polish" or "Information accuracy."
       3. CHECK THE CODE: If the diff shows changes to `src/util.h` or version strings,
          it usually means the 'About' box or internal identification is being corrected.
-    - AGGREGATE SMALL FIXES: Do not give a dedicated paragraph to every bug fix. 
+    - AGGREGATE SMALL FIXES: Do not give a dedicated paragraph to every bug fix.
       For example, small iOS fixes should be woven into one "Mobile Improvements" paragraph.
-    - DELETE THE FILLER: If the existing text contains fluff (e.g., "demonstrates 
+    - DELETE THE FILLER: If the existing text contains fluff (e.g., "demonstrates
       our ongoing commitment"), remove it. Keep the announcement punchy.
     - CHANGELOG SKIP: Unless counter-indicated in the discussion, such PRs should be skipped.
     """
@@ -101,7 +101,7 @@ def run_ollama_logic(new_pr_data, old_summary, model):
 
     TASK:
     Integrate this ONE new Pull Request into the EXISTING Release Announcement.
-    If the change is significant, give it a dedicated level-2 heading before the audience sections. 
+    If the change is significant, give it a dedicated level-2 heading before the audience sections.
 
     EXISTING ANNOUNCEMENT:
     {old_summary if old_summary else "# Jamulus Release Announcement"}
@@ -111,9 +111,20 @@ def run_ollama_logic(new_pr_data, old_summary, model):
 
     RETURN THE COMPLETE UPDATED MARKDOWN DOCUMENT ONLY.
     """
-    
+
     response = ollama.chat(model=model, messages=[{'role': 'user', 'content': prompt}])
     return response['message']['content'].strip()
+
+def strip_markdown_fences(text):
+    """
+    Removes ```markdown ... ``` or ``` ... ``` wrappers
+    that LLMs often add to their responses.
+    """
+    # Remove the opening fence (with or without 'markdown' tag)
+    text = re.sub(r'^```(markdown)?\n', '', text, flags=re.IGNORECASE)
+    # Remove the closing fence
+    text = re.sub(r'\n```$', '', text)
+    return text.strip()
 
 def main():
     parser = argparse.ArgumentParser(description="Progressive Release Announcement Generator")
@@ -143,16 +154,20 @@ def main():
     for pr in todo_prs:
         pr_num = pr['number']
         pr_title = pr['title']
-        
+
         with open(args.file, 'r') as f:
             current_content = f.read()
 
         print(f"--- Processing PR #{pr_num}: {pr_title} ---")
-        
+
         raw_details = subprocess.check_output(f'gh pr view {pr_num} --json number,title,body,comments,reviews', shell=True, text=True)
         sanitized_pr = sanitize_pr_data(raw_details)
 
+        # AI processing
         updated_ra = run_ollama_logic(sanitized_pr, current_content, args.model)
+
+        # CLEAN THE OUTPUT
+        updated_ra = strip_markdown_fences(updated_ra)
 
         with open(args.file, 'w') as f:
             f.write(updated_ra)

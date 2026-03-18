@@ -81,6 +81,7 @@ def run_ollama_logic(new_pr_data, old_summary, model):
       musician's experience. If a PR is purely "housekeeping" (like copyright
       updates, minor internal refactoring, or CI fixes), return the document
       UNCHANGED.
+    - ALWAYS MENTION: New features, new languages (specify the language), extending existing features to new platforms, and significant bug fixes that affect user experience.  Highlight deprecated features and platform compatibility changes.
     - CRITICAL RULES FOR TRUTH:
       1. NO GUESSING: Do not invent benefits. Only describe benefits explicitly mentioned
          in the PR Body or Developer Comments.

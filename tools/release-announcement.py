@@ -100,7 +100,9 @@ def run_ollama_logic(new_pr_data, old_summary, model):
     {style_guide}
 
     TASK:
-    Integrate this ONE new Pull Request into the EXISTING Release Announcement.
+    Integrate this Pull Request into the EXISTING Release Announcement.
+    Apply the "High Bar Rule" to determine if this PR should be mentioned at all.
+    If the PR is not significant enough to mention, return the existing announcement UNCHANGED.
     If the change is significant, give it a dedicated level-2 heading before the audience sections.
 
     EXISTING ANNOUNCEMENT:

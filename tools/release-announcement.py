@@ -67,10 +67,22 @@ def run_ollama_logic(new_pr_data, old_summary, model):
     - FOCUS ON BENEFITS: Describe what users can DO now, not code changes. 
     - DEDUPLICATE: If a feature is already mentioned, update the existing paragraph. 
     """
+    high_bar_rule = """
+    - THE HIGH BAR RULE: Only mention changes that significantly improve the 
+      musician's experience. If a PR is purely "housekeeping" (like copyright 
+      updates, minor internal refactoring, or CI fixes), return the document 
+      UNCHANGED.
+    - AGGREGATE SMALL FIXES: Do not give a dedicated paragraph to every bug fix. 
+      For example, small iOS fixes should be woven into one "Mobile Improvements" paragraph.
+    - DELETE THE FILLER: If the existing text contains fluff (e.g., "demonstrates 
+      our ongoing commitment"), remove it. Keep the announcement punchy.
+    - CHANGELOG SKIP: Unless counter-indicated in the discussion, such PRs should be skipped.
+    """
 
     prompt = f"""
     You are a technical writer for Jamulus.
     {style_guide}
+    {high_bar_rule}
 
     TASK:
     Integrate this ONE new Pull Request into the EXISTING Release Announcement.

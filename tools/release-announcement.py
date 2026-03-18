@@ -72,6 +72,7 @@ def run_ollama_logic(new_pr_data, old_summary, model):
     - CLARITY: If you are unsure of the user benefit, do not write a whole new heading.
       Add a single, simple sentence to the most relevant 'For users' section.
       Example: "The iOS 'About' dialog now correctly displays the operating system version."
+    - NEVER MAKE CHANGES TO THE TEMPLATE TEXT. Only add new sections if the PR introduces a significant new feature or improvement that is not already covered.
     SPECIAL INSTRUCTION FOR THIS PR:
     {'This is a minor fix. DO NOT create a new level-2 (##) heading. Only add a single sentence to an existing section.' if is_fix else 'Integrate this normally.'}
     """
@@ -104,6 +105,7 @@ def run_ollama_logic(new_pr_data, old_summary, model):
     Apply the "High Bar Rule" to determine if this PR should be mentioned at all.
     If the PR is not significant enough to mention, return the existing announcement UNCHANGED.
     If the change is significant, give it a dedicated level-2 heading before the audience sections.
+    RETURN THE COMPLETE UPDATED MARKDOWN DOCUMENT ONLY WITHOUT ANY PREFIX OR SUFFIX TEXT OR MARKERS.
 
     EXISTING ANNOUNCEMENT:
     {old_summary if old_summary else "# Jamulus Release Announcement"}
@@ -111,7 +113,7 @@ def run_ollama_logic(new_pr_data, old_summary, model):
     NEW PR TO INTEGRATE:
     {json.dumps(new_pr_data, indent=2)}
 
-    RETURN THE COMPLETE UPDATED MARKDOWN DOCUMENT ONLY.
+    RETURN THE COMPLETE UPDATED MARKDOWN DOCUMENT ONLY WITHOUT ANY PREFIX OR SUFFIX TEXT OR MARKERS. Do not explain your reasoning. Do not include any notes or comments. Only return the markdown content.
     """
 
     response = ollama.chat(model=model, messages=[{'role': 'user', 'content': prompt}])

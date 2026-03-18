@@ -1501,12 +1501,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="402"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation>Activer/désactiver le port MIDI-in</translation>
+        <translation>Activer/désactiver le port d&apos;entrée MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
         <source>MIDI-in port check box</source>
-        <translation>Case à cocher Port MIDI-in</translation>
+        <translation>Case à cocher du port d&apos;entrée MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="405"/>
@@ -1516,7 +1516,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="406"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation>Quand cette option est activée, les contrôles d&apos;atténuateur et de panoramique MIDI attendront pour réagir que la position du contrôleur physique rejoigne celle du logiciel. Ceci empêche les brusque changements qui se produiraient quand les contrôles ne sont pas synchronisés.</translation>
+        <translation>Quand cette option est activée, les contrôles MIDI de chariot et de panoramique attendront pour réagir que la position du contrôleur physique rejoigne celle du logiciel. Ceci empêche les changements brusques qui se produiraient quand les contrôleurs physiques ne sont pas synchronisés avec le logiciel.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="409"/>
@@ -1526,12 +1526,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="412"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation>Choisir à quel port de sortie MIDI se connecter. Jamulus connectera automatiquement son port d&apos;entrée MIDI au périphérique choisi lorsqu&apos;il est actif. Vous pouvez aussi utiliser votre gestionnaire de connexions préféré pour modifier les connexions.</translation>
+        <translation>Choisir à quel port de sortie MIDI se connecter. Jamulus connectera automatiquement son port d&apos;entrée MIDI au périphérique choisi lorsqu&apos;activé. Vous pouvez aussi utiliser votre gestionnaire de connexions préféré pour modifier manuellement les connexions.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="416"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation>Sélectionner à quelle source MIDI se connecter. Jamulus connectera automatiquement son port d&apos;entrée MIDI au périphérique choisi lorsqu&apos;il est actif. Vous pouvez aussi utiliser Réglages Audio MIDI pour modifier les connexions.</translation>
+        <translation>Sélectionner à quelle source MIDI se connecter. Jamulus connectera automatiquement son port d&apos;entrée MIDI au périphérique choisi lorsqu&apos;activé. Vous pouvez aussi utiliser les réglages audio MIDI pour modifier manuellement les connexions.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="420"/>
@@ -1591,7 +1591,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="452"/>
         <source>Mute Myself MIDI learn button</source>
-        <translation>Bouton d&apos;apprentissage MIDI Mute Moi</translation>
+        <translation>Bouton d&apos;apprentissage du auto-sourdine MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="453"/>
@@ -1611,7 +1611,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="456"/>
         <source>Mute offset MIDI learn button</source>
-        <translation>Bouton d&apos;apprentissage MIDI Mute décalé</translation>
+        <translation>Bouton d&apos;apprentissage du décalage de la sourdine MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="460"/>

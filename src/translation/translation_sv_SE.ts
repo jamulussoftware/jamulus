@@ -677,7 +677,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="404"/>
         <source>&amp;MIDI Control Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIDI -kontrollinställningar...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="747"/>
@@ -1528,7 +1528,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlg.cpp" line="402"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera/avaktivera MINI-inport</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>

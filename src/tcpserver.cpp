@@ -46,6 +46,7 @@ CTcpServer::~CTcpServer()
         qInfo() << "- stopping Jamulus-TCP server";
         pTcpServer->close();
     }
+    pTcpServer->deleteLater();
 }
 
 bool CTcpServer::Start()

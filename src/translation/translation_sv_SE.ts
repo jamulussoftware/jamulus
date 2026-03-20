@@ -1533,7 +1533,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
         <source>MIDI-in port check box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-ingångsport kryssruta</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="405"/>

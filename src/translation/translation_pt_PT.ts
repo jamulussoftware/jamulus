@@ -2447,12 +2447,12 @@ Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, res
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1803"/>
         <source>Mute</source>
-        <translation type="unfinished">Silenciar</translation>
+        <translation>Silenciar</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1940"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="2199"/>
@@ -2585,12 +2585,12 @@ Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, res
     <message>
         <location filename="../connectdlg.cpp" line="176"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation>Clique no botão para limpar o endereço do servidor selecionado e eliminá-lo da lista dos servidores guardados.</translation>
+        <translation>Clique no botão para limpar o endereço do servidor atualmente selecionado e eliminá-lo da lista dos servidores guardados.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="1153"/>
         <source>Ping</source>
-        <translation type="unfinished">Ping</translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="171"/>

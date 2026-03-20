@@ -98,9 +98,9 @@ void CTcpServer::OnNewConnection()
         }
     }
 
-    CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket, peerAddress );
-
     qDebug() << "- Jamulus-TCP: received connection from:" << peerAddress.InetAddr.toString();
+
+    CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket, peerAddress );
 
     // allocate memory for network receive and send buffer in samples
     CVector<uint8_t> vecbyRecBuf;
@@ -120,11 +120,15 @@ void CTcpServer::OnNewConnection()
         int              iRecID;
         CVector<uint8_t> vecbyMesBodyData;
 
+        qDebug() << "- readyRead(), bytesAvailable() =" << pTcpConnection->pTcpSocket->bytesAvailable();
+
         long iNumBytesRead = pTcpConnection->pTcpSocket->read ( (char*) &vecbyRecBuf[0], MESS_HEADER_LENGTH_BYTE );
         if ( iNumBytesRead == -1 )
         {
             return;
         }
+
+        qDebug() << "- iNumBytesRead =" << iNumBytesRead;
 
         if ( iNumBytesRead < MESS_HEADER_LENGTH_BYTE )
         {
@@ -139,6 +143,8 @@ void CTcpServer::OnNewConnection()
         {
             return;
         }
+
+        qDebug() << "- iNumBytesRead2 =" << iNumBytesRead2;
 
         if ( iNumBytesRead2 < iPayloadLength )
         {
@@ -170,6 +176,8 @@ void CTcpServer::OnNewConnection()
                 //### TODO: END ###//
             }
         }
+
+        qDebug() << "- end of readyRead(), bytesAvailable() =" << pTcpConnection->pTcpSocket->bytesAvailable();
     } );
 }
 

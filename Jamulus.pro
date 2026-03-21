@@ -400,6 +400,7 @@ HEADERS += src/plugins/audioreverb.h \
     src/settings.h \
     src/socket.h \
     src/tcpserver.h \
+    src/tcpconnection.h \
     src/util.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
@@ -509,6 +510,7 @@ SOURCES += src/plugins/audioreverb.cpp \
     src/signalhandler.cpp \
     src/socket.cpp \
     src/tcpserver.cpp \
+    src/tcpconnection.cpp \
     src/util.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \

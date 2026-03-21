@@ -31,7 +31,7 @@
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
-#include "tcpserver.h"
+#include "tcpconnection.h"
 #ifndef _WIN32
 #    include <netinet/in.h>
 #    include <sys/socket.h>

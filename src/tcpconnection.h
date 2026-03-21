@@ -31,8 +31,6 @@
 #include <QVector>
 #include <memory>
 
-#include "tcpconnection.h"
-
 #include "global.h"
 #include "util.h"
 
@@ -41,29 +39,30 @@
 // channel class and server class is defined here.
 class CServer; // forward declaration of CServer
 // class CChannel;       // forward declaration of CChannel
-// class CTcpConnection; // forward declaration of CTcpConnection
 
 /* Classes ********************************************************************/
-class CTcpServer : public QObject
+class CTcpConnection : public QObject
 {
     Q_OBJECT
 
 public:
-    CTcpServer ( CServer* pNServP, const QString& strServerBindIP, int iPort, bool bEnableIPv6 );
-    virtual ~CTcpServer();
+    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer = nullptr );
+    ~CTcpConnection() {}
 
-    bool Start();
+    QTcpSocket*  pTcpSocket;
+    CHostAddress tcpAddress;
+    CHostAddress udpAddress;
 
 private:
-    CServer*      pServer; // for server
-    const QString strServerBindIP;
-    const int     iPort;
-    const bool    bEnableIPv6;
-    QTcpServer*   pTcpServer;
+    CServer*         pServer;
+    int              iPos;
+    int              iPayloadRemain;
+    CVector<uint8_t> vecbyRecBuf;
 
-    // signals:
-    //     void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr, CTcpConnection* pTcpConnection );
+signals:
+    void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr, CTcpConnection* pTcpConnection );
 
 protected slots:
-    void OnNewConnection();
+    void OnDisconnected();
+    void OnReadyRead();
 };

@@ -23,10 +23,11 @@
  \******************************************************************************/
 
 #include "tcpserver.h"
+//#include "tcpconnection.h"
 
 #include "protocol.h"
 #include "server.h"
-#include "channel.h"
+//#include "channel.h"
 
 CTcpServer::CTcpServer ( CServer* pNServP, const QString& strServerBindIP, int iPort, bool bEnableIPv6 ) :
     pServer ( pNServP ),
@@ -35,7 +36,6 @@ CTcpServer::CTcpServer ( CServer* pNServP, const QString& strServerBindIP, int i
     bEnableIPv6 ( bEnableIPv6 ),
     pTcpServer ( new QTcpServer ( this ) )
 {
-    connect ( this, &CTcpServer::ProtocolCLMessageReceived, pServer, &CServer::OnProtocolCLMessageReceived );
     connect ( pTcpServer, &QTcpServer::newConnection, this, &CTcpServer::OnNewConnection );
 }
 
@@ -100,89 +100,5 @@ void CTcpServer::OnNewConnection()
 
     qDebug() << "- Jamulus-TCP: received connection from:" << peerAddress.InetAddr.toString();
 
-    CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket, peerAddress );
-
-    // allocate memory for network receive and send buffer in samples
-    CVector<uint8_t> vecbyRecBuf;
-    vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
-
-    connect ( pSocket, &QTcpSocket::disconnected, [this, pTcpConnection]() {
-        qDebug() << "- Jamulus-TCP: connection from:" << pTcpConnection->tcpAddress.InetAddr.toString() << "closed";
-        pTcpConnection->pTcpSocket->deleteLater();
-        delete pTcpConnection;
-    } );
-
-    connect ( pSocket, &QTcpSocket::readyRead, [this, pTcpConnection, vecbyRecBuf]() {
-        // handle received Jamulus protocol packet
-
-        // check if this is a protocol message
-        int              iRecCounter;
-        int              iRecID;
-        CVector<uint8_t> vecbyMesBodyData;
-
-        qDebug() << "- readyRead(), bytesAvailable() =" << pTcpConnection->pTcpSocket->bytesAvailable();
-
-        long iNumBytesRead = pTcpConnection->pTcpSocket->read ( (char*) &vecbyRecBuf[0], MESS_HEADER_LENGTH_BYTE );
-        if ( iNumBytesRead == -1 )
-        {
-            return;
-        }
-
-        qDebug() << "- iNumBytesRead =" << iNumBytesRead;
-
-        if ( iNumBytesRead < MESS_HEADER_LENGTH_BYTE )
-        {
-            qDebug() << "-- short read: expected" << MESS_HEADER_LENGTH_BYTE << "bytes, got" << iNumBytesRead;
-            return;
-        }
-
-        long iPayloadLength = CProtocol::GetBodyLength ( vecbyRecBuf );
-
-        long iNumBytesRead2 = pTcpConnection->pTcpSocket->read ( (char*) &vecbyRecBuf[MESS_HEADER_LENGTH_BYTE], iPayloadLength );
-        if ( iNumBytesRead2 == -1 )
-        {
-            return;
-        }
-
-        qDebug() << "- iNumBytesRead2 =" << iNumBytesRead2;
-
-        if ( iNumBytesRead2 < iPayloadLength )
-        {
-            qDebug() << "-- short read: expected" << iPayloadLength << "bytes, got" << iNumBytesRead2;
-            return;
-        }
-
-        iNumBytesRead += iNumBytesRead2;
-
-        qDebug() << "- Jamulus-TCP: received protocol message of length" << iNumBytesRead;
-
-        if ( !CProtocol::ParseMessageFrame ( vecbyRecBuf, iNumBytesRead, vecbyMesBodyData, iRecCounter, iRecID ) )
-        {
-            qDebug() << "- Jamulus-TCP: message parsed OK, ID =" << iRecID;
-
-            // this is a protocol message, check the type of the message
-            if ( CProtocol::IsConnectionLessMessageID ( iRecID ) )
-            {
-                //### TODO: BEGIN ###//
-                // a copy of the vector is used -> avoid malloc in real-time routine
-                emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, pTcpConnection->tcpAddress, pTcpConnection );
-                //### TODO: END ###//
-            }
-            else
-            {
-                //### TODO: BEGIN ###//
-                // a copy of the vector is used -> avoid malloc in real-time routine
-                // emit ProtocolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, pTcpConnection->tcpAddress, pTcpConnection );
-                //### TODO: END ###//
-            }
-        }
-
-        qDebug() << "- end of readyRead(), bytesAvailable() =" << pTcpConnection->pTcpSocket->bytesAvailable();
-    } );
+    new CTcpConnection ( pSocket, peerAddress, pServer ); // will auto-delete on disconnect
 }
-
-#if 0
-void CTcpServer::Send ( QTcpSocket* pSocket ) {
-    // pSocket->write ( );
-}
-#endif

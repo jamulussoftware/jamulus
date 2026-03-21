@@ -31,7 +31,7 @@
 #include <cmath>
 #include "global.h"
 #include "util.h"
-#include "tcpserver.h"
+#include "tcpconnection.h"
 
 /* Definitions ****************************************************************/
 // protocol message IDs

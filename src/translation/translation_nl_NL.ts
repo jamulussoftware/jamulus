@@ -1565,7 +1565,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="406"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation>Wanneer deze functie is ingeschakeld, wachten de MIDI-fader- en pan-regelaars totdat de positie van de fysieke controller overeenkomt met de huidige waarde in de software voordat ze reageren. Dit voorkomt abrupte sprongen wanneer uw fysieke controller niet synchroon loopt met de software.</translation>
+        <translation>Wanneer deze functie is ingeschakeld, wachten de MIDI-fader- en balans-regelaars totdat de positie van de fysieke controller overeenkomt met de huidige waarde in de software voordat ze reageren. Dit voorkomt abrupte sprongen wanneer uw fysieke controller niet synchroon loopt met de software.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="409"/>

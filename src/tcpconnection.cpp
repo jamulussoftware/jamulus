@@ -143,3 +143,13 @@ void CTcpConnection::OnReadyRead()
 
     qDebug() << "- end of readyRead(), bytesAvailable() =" << pTcpSocket->bytesAvailable();
 }
+
+qint64 CTcpConnection::write ( const char* data, qint64 maxSize )
+{
+    if ( !pTcpSocket )
+    {
+        return -1;
+    }
+
+    return pTcpSocket->write ( data, maxSize );
+}

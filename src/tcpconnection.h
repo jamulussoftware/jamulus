@@ -49,11 +49,13 @@ public:
     CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer = nullptr );
     ~CTcpConnection() {}
 
+    qint64 write ( const char* data, qint64 maxSize );
+
+private:
     QTcpSocket*  pTcpSocket;
     CHostAddress tcpAddress;
     CHostAddress udpAddress;
 
-private:
     CServer*         pServer;
     int              iPos;
     int              iPayloadRemain;

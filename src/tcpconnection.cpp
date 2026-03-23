@@ -122,6 +122,12 @@ void CTcpConnection::OnReadyRead()
                         // a copy of the vector is used -> avoid malloc in real-time routine
                         emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, tcpAddress, this );
                         //### TODO: END ###//
+
+                        // disconnect if we are a client
+                        if ( !pServer )
+                        {
+                            pTcpSocket->disconnectFromHost();
+                        }
                     }
                     else
                     {

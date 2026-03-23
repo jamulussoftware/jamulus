@@ -264,6 +264,24 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
     if ( bUseTcpClient )
     {
         // create a TCP client connection and send message
+        QTcpSocket* pSocket = new QTcpSocket ( this );
+
+        connect ( pSocket, &QTcpSocket::errorOccurred, this, [this, pSocket] ( QAbstractSocket::SocketError err ) {
+            Q_UNUSED ( err );
+
+            qWarning() << "- TCP connection error:" << pSocket->errorString();
+            // may want to specifically handle ConnectionRefusedError?
+            pSocket->deleteLater();
+        } );
+
+        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, InetAddr, vecMessage]() {
+            // connection succeeded, give it to a CTcpConnection
+            CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket, InetAddr, nullptr ); // client connection, will self-delete on disconnect
+
+            pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
+
+            // the CTcpConnection object will pass the reply back up to CProtocol
+        } );
     }
     else
     {

@@ -23,11 +23,8 @@
  \******************************************************************************/
 
 #include "tcpserver.h"
-//#include "tcpconnection.h"
 
-#include "protocol.h"
 #include "server.h"
-//#include "channel.h"
 
 CTcpServer::CTcpServer ( CServer* pNServP, const QString& strServerBindIP, int iPort, bool bEnableIPv6 ) :
     pServer ( pNServP ),
@@ -98,7 +95,7 @@ void CTcpServer::OnNewConnection()
         }
     }
 
-    qDebug() << "- Jamulus-TCP: received connection from:" << peerAddress.InetAddr.toString();
+    qDebug() << "- Jamulus-TCP: received connection from:" << peerAddress.toString();
 
-    new CTcpConnection ( pSocket, peerAddress, pServer ); // will auto-delete on disconnect
+    new CTcpConnection ( pSocket, peerAddress, pServer, nullptr ); // will auto-delete on disconnect
 }

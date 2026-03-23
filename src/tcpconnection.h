@@ -35,10 +35,10 @@
 #include "util.h"
 
 // The header files channel.h and server.h require to include this header file
-// so we get a cyclic dependency. To solve this issue, a prototype of the
-// channel class and server class is defined here.
-class CServer; // forward declaration of CServer
-// class CChannel;       // forward declaration of CChannel
+// so we get a cyclic dependency. To solve this issue, prototypes of the
+// channel class and server class are defined here.
+class CServer;  // forward declaration of CServer
+class CChannel; // forward declaration of CChannel
 
 /* Classes ********************************************************************/
 class CTcpConnection : public QObject
@@ -46,7 +46,7 @@ class CTcpConnection : public QObject
     Q_OBJECT
 
 public:
-    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer = nullptr );
+    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel );
     ~CTcpConnection() {}
 
     qint64 write ( const char* data, qint64 maxSize );
@@ -56,7 +56,9 @@ private:
     CHostAddress tcpAddress;
     CHostAddress udpAddress;
 
-    CServer*         pServer;
+    CServer*  pServer;
+    CChannel* pChannel;
+
     int              iPos;
     int              iPayloadRemain;
     CVector<uint8_t> vecbyRecBuf;
@@ -64,7 +66,7 @@ private:
 signals:
     void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr, CTcpConnection* pTcpConnection );
 
-protected slots:
+private slots:
     void OnDisconnected();
     void OnReadyRead();
 };

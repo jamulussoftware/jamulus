@@ -276,12 +276,15 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
 
         connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, InetAddr, vecMessage]() {
             // connection succeeded, give it to a CTcpConnection
-            CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket, InetAddr, nullptr ); // client connection, will self-delete on disconnect
+            CTcpConnection* pTcpConnection =
+                new CTcpConnection ( pSocket, InetAddr, nullptr, &Channel ); // client connection, will self-delete on disconnect
 
             pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
 
-            // the CTcpConnection object will pass the reply back up to CProtocol
+            // the CTcpConnection object will pass the reply back up to CClient::Channel
         } );
+
+        pSocket->connectToHost ( InetAddr.InetAddr, InetAddr.iPort );
     }
     else
     {

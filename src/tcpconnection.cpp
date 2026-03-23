@@ -28,10 +28,11 @@
 #include "server.h"
 #include "channel.h"
 
-CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer ) :
+CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel ) :
     pTcpSocket ( pTcpSocket ),
     tcpAddress ( tcpAddress ),
-    pServer ( pServer )
+    pServer ( pServer ),
+    pChannel ( pChannel )
 {
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
     iPos           = 0;
@@ -39,17 +40,23 @@ CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcp
 
     connect ( pTcpSocket, &QTcpSocket::disconnected, this, &CTcpConnection::OnDisconnected );
     connect ( pTcpSocket, &QTcpSocket::readyRead, this, &CTcpConnection::OnReadyRead );
+
     if ( pServer )
     {
         connect ( this, &CTcpConnection::ProtocolCLMessageReceived, pServer, &CServer::OnProtocolCLMessageReceived );
+    }
+
+    if ( pChannel )
+    {
+        connect ( this, &CTcpConnection::ProtocolCLMessageReceived, pChannel, &CChannel::OnProtocolCLMessageReceived );
     }
 }
 
 void CTcpConnection::OnDisconnected()
 {
-    qDebug() << "- Jamulus-TCP: disconnected from:" << tcpAddress.InetAddr.toString();
+    qDebug() << "- Jamulus-TCP: disconnected from:" << tcpAddress.toString();
     pTcpSocket->deleteLater();
-    delete this;
+    deleteLater(); // delete this object in the next event loop
 }
 
 void CTcpConnection::OnReadyRead()
@@ -124,7 +131,7 @@ void CTcpConnection::OnReadyRead()
                         //### TODO: END ###//
 
                         // disconnect if we are a client
-                        if ( !pServer )
+                        if ( pChannel )
                         {
                             pTcpSocket->disconnectFromHost();
                         }

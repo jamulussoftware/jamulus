@@ -544,7 +544,18 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
 }
 
-void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr ) { Q_UNUSED ( InetAddr ); }
+void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr )
+{
+    qDebug() << "- TCP supported at server" << InetAddr.toString();
+
+    // if we haven't received the serverlist, it must have got lost due to fragmentation
+    // retry using TCP instead
+    if ( !bServerListReceived )
+    {
+        // send the request for the server list
+        emit ReqServerListQuery ( InetAddr, true ); // TCP
+    }
+}
 
 void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo )
 {

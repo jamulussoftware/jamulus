@@ -205,7 +205,6 @@ jobs:
           - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-22.04
-            building_container:     ubuntu:20.04
             base_command:           ./.github/autobuild/linux_deb.sh
             run_codeql:             true
             is_main_build_target:   true
@@ -213,14 +212,12 @@ jobs:
           - config_name:            Linux .deb armhf (artifacts)
             target_os:              linux
             building_on_os:         ubuntu-22.04-arm
-            building_container:     ubuntu:20.04
             base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
             run_codeql:             false
 
           - config_name:            Linux .deb arm64 (artifacts)
             target_os:              linux
             building_on_os:         ubuntu-22.04-arm
-            building_container:     ubuntu:20.04
             base_command:           TARGET_ARCH=arm64 ./.github/autobuild/linux_deb.sh
             run_codeql:             false
 

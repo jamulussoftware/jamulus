@@ -374,7 +374,7 @@ public slots:
         // if TCP is enabled but this request is on UDP, say TCP is supported
         if ( bEnableTcp && !pTcpConnection )
         {
-            ConnLessProtocol.CreateCLTcpSupportedMes ( InetAddr );
+            ConnLessProtocol.CreateCLTcpSupportedMes ( InetAddr, PROTMESSID_CLM_CONN_CLIENTS_LIST );
         }
     }
 

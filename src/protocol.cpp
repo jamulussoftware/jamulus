@@ -436,7 +436,14 @@ CONNECTION LESS MESSAGES
 
 - PROTMESSID_CLM_TCP_SUPPORTED: TCP supported message
 
-    note: does not have any data -> n = 0
+    +----------------------------------------------------------+
+    | 2 bytes ID of message to be potentially retried over TCP |
+    +----------------------------------------------------------+
+
+    the ID indicates which type of message preceded it:
+    - PROTMESSID_CLM_SERVER_LIST
+    - PROTMESSID_CLM_CONN_CLIENTS_LIST
+    - 0 (sent on new incoming audio stream)
 
 */
 
@@ -931,7 +938,7 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
         break;
 
     case PROTMESSID_CLM_TCP_SUPPORTED:
-        EvaluateCLTcpSupportedMes ( InetAddr );
+        EvaluateCLTcpSupportedMes ( InetAddr, vecbyMesBodyData );
         break;
     }
 }
@@ -2596,15 +2603,31 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, con
     return false; // no error
 }
 
-void CProtocol::CreateCLTcpSupportedMes ( const CHostAddress& InetAddr )
+void CProtocol::CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const int iID )
 {
-    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_TCP_SUPPORTED, CVector<uint8_t> ( 0 ), InetAddr );
+    int iPos = 0; // init position pointer
+
+    // build data vector (2 bytes long)
+    CVector<uint8_t> vecData ( 2 );
+
+    // message ID just sent (2 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iID ), 2 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_TCP_SUPPORTED, vecData, InetAddr );
 }
 
-bool CProtocol::EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr )
+bool CProtocol::EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData )
 {
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 2 )
+    {
+        return true; // return error code
+    }
+
     // invoke message action
-    emit CLTcpSupported ( InetAddr );
+    emit CLTcpSupported ( InetAddr, static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) ) );
 
     return false; // no error
 }

@@ -544,16 +544,27 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
 }
 
-void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr )
+void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr, int iID )
 {
-    qDebug() << "- TCP supported at server" << InetAddr.toString();
+    qDebug() << "- TCP supported at server" << InetAddr.toString() << "for ID =" << iID;
 
-    // if we haven't received the serverlist, it must have got lost due to fragmentation
-    // retry using TCP instead
-    if ( !bServerListReceived )
+    switch ( iID )
     {
-        // send the request for the server list
-        emit ReqServerListQuery ( InetAddr, true ); // TCP
+    case PROTMESSID_CLM_SERVER_LIST:
+        // if we haven't received the serverlist, it must have got lost due to fragmentation
+        // retry using TCP instead
+        if ( !bServerListReceived )
+        {
+            // send the request for the server list
+            emit ReqServerListQuery ( InetAddr, true ); // TCP
+        }
+        break;
+
+    case PROTMESSID_CLM_CONN_CLIENTS_LIST:
+        break;
+
+    default:
+        break;
     }
 }
 

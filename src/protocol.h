@@ -155,7 +155,7 @@ public:
     void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr, bool bUseTcpClient );
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
-    void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr );
+    void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const int iID );
 
     static int GetBodyLength ( const CVector<uint8_t>& vecbyData );
 
@@ -291,7 +291,7 @@ protected:
     bool EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection );
     bool EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
-    bool EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr );
+    bool EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
 
     int iOldRecID;
     int iOldRecCnt;
@@ -358,5 +358,5 @@ signals:
     void CLReqConnClientsList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection );
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
-    void CLTcpSupported ( CHostAddress InetAddr );
+    void CLTcpSupported ( CHostAddress InetAddr, int iID );
 };

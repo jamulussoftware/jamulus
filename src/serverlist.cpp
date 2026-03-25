@@ -736,7 +736,7 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr, CTcpConnect
         // if TCP is enabled but this request is on UDP, say TCP is supported
         if ( bEnableTcp && !pTcpConnection )
         {
-            pConnLessProtocol->CreateCLTcpSupportedMes ( InetAddr );
+            pConnLessProtocol->CreateCLTcpSupportedMes ( InetAddr, PROTMESSID_CLM_SERVER_LIST );
         }
     }
 }

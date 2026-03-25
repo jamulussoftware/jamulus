@@ -266,7 +266,12 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
         // create a TCP client connection and send message
         QTcpSocket* pSocket = new QTcpSocket ( this );
 
-        connect ( pSocket, &QTcpSocket::errorOccurred, this, [this, pSocket] ( QAbstractSocket::SocketError err ) {
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 15, 0 )
+#    define ERRORSIGNAL &QTcpSocket::errorOccurred
+#else
+#    define ERRORSIGNAL QOverload<QAbstractSocket::SocketError>::of ( &QAbstractSocket::error )
+#endif
+        connect ( pSocket, ERRORSIGNAL, this, [this, pSocket] ( QAbstractSocket::SocketError err ) {
             Q_UNUSED ( err );
 
             qWarning() << "- TCP connection error:" << pSocket->errorString();

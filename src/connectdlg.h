@@ -95,6 +95,15 @@ public:
     };
 
 protected:
+    // UDP/TCP mode for fetching client list - stored in data field for LVC_CLIENTS column
+    enum EClientFetchMode
+    {
+        CFM_UDP_REQUEST, // set when sending request by UDP
+        CFM_UDP_RESULT,  // set when received a client list by UDP
+        CFM_TCP,         // set when "TCP Supported" message arrives but client list has not arrived -
+                         // re-request using TCP and remain in TCP mode
+    };
+
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 

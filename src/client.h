@@ -278,9 +278,15 @@ public:
 
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr ); }
+    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr, bool bUseTcpClient )
+    {
+        ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, bUseTcpClient );
+    }
 
-    void CreateCLReqServerListMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqServerListMes ( InetAddr ); }
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr, bool bUseTcpClient )
+    {
+        ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, bUseTcpClient );
+    }
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
 
@@ -427,7 +433,7 @@ protected slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
 
-    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr );
+    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection );
 
     void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
     void OnJittBufSizeChanged ( int iNewJitBufSize );
@@ -442,7 +448,7 @@ protected slots:
     }
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, bool bUseTcpClient );
 
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
 
@@ -470,6 +476,8 @@ signals:
     void CLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
 
     void CLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
+
+    void CLTcpSupported ( CHostAddress InetAddr, int iID );
 
     void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
 

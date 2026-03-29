@@ -69,6 +69,8 @@ public:
 
     void SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList = false );
 
+    void SetTcpSupported ( const CHostAddress& InetAddr, int iID );
+
     void SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo );
 
     void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
@@ -93,6 +95,15 @@ public:
     };
 
 protected:
+    // UDP/TCP mode for fetching client list - stored in data field for LVC_CLIENTS column
+    enum EClientFetchMode
+    {
+        CFM_UDP_REQUEST, // set when sending request by UDP
+        CFM_UDP_RESULT,  // set when received a client list by UDP
+        CFM_TCP,         // set when "TCP Supported" message arrives but client list has not arrived -
+                         // re-request using TCP and remain in TCP mode
+    };
+
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 
@@ -135,8 +146,8 @@ public slots:
     void OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWidgetItem* previous );
 
 signals:
-    void ReqServerListQuery ( CHostAddress InetAddr );
+    void ReqServerListQuery ( CHostAddress InetAddr, bool bUseTcpClient );
     void CreateCLServerListPingMes ( CHostAddress InetAddr );
     void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
-    void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
+    void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr, bool bUseTcpClient );
 };

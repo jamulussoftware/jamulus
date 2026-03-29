@@ -145,6 +145,8 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLRedServerListReceived, this, &CClient::CLRedServerListReceived );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLTcpSupported, this, &CClient::CLTcpSupported );
+
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::CLConnClientsListMesReceived );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived, this, &CClient::OnCLPingReceived );
@@ -249,11 +251,50 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
 }
 
-void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, bool bUseTcpClient )
 {
+    if ( pTcpConnection )
+    {
+        qWarning() << "Client send cannot use TCP server";
+        return;
+    }
+
     // the protocol queries me to call the function to send the message
     // send it through the network
-    Socket.SendPacket ( vecMessage, InetAddr );
+    if ( bUseTcpClient )
+    {
+        // create a TCP client connection and send message
+        QTcpSocket* pSocket = new QTcpSocket ( this );
+
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 15, 0 )
+#    define ERRORSIGNAL &QTcpSocket::errorOccurred
+#else
+#    define ERRORSIGNAL QOverload<QAbstractSocket::SocketError>::of ( &QAbstractSocket::error )
+#endif
+        connect ( pSocket, ERRORSIGNAL, this, [this, pSocket] ( QAbstractSocket::SocketError err ) {
+            Q_UNUSED ( err );
+
+            qWarning() << "- TCP connection error:" << pSocket->errorString();
+            // may want to specifically handle ConnectionRefusedError?
+            pSocket->deleteLater();
+        } );
+
+        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, InetAddr, vecMessage]() {
+            // connection succeeded, give it to a CTcpConnection
+            CTcpConnection* pTcpConnection =
+                new CTcpConnection ( pSocket, InetAddr, nullptr, &Channel ); // client connection, will self-delete on disconnect
+
+            pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
+
+            // the CTcpConnection object will pass the reply back up to CClient::Channel
+        } );
+
+        pSocket->connectToHost ( InetAddr.InetAddr, InetAddr.iPort );
+    }
+    else
+    {
+        Socket.SendPacket ( vecMessage, InetAddr );
+    }
 }
 
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
@@ -268,10 +309,10 @@ void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
     }
 }
 
-void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr )
+void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection )
 {
     // connection less messages are always processed
-    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
+    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr, pTcpConnection );
 }
 
 void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )

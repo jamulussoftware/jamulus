@@ -2317,7 +2317,7 @@ Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, res
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1417"/>
         <source>0 (all)</source>
-        <translation>o (todos)</translation>
+        <translation>0 (todos)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1422"/>
@@ -2402,7 +2402,7 @@ Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, res
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1518"/>
         <source>Pick-up Mode</source>
-        <translation>Modo Pick-up</translation>
+        <translation>Modo de Recolha</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1546"/>

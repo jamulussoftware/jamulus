@@ -867,7 +867,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="404"/>
         <source>&amp;MIDI Control Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIDI-besturinginstellingen...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="792"/>
@@ -1183,17 +1183,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../clientsettingsdlg.cpp" line="889"/>
         <location filename="../clientsettingsdlg.cpp" line="896"/>
         <source>Could not open MIDI port</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-poort kon niet worden geopend</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="890"/>
         <source>No MIDI devices found. Please connect a MIDI device and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen MIDI-apparaten gevonden. Sluit een MIDI-apparaat aan en probeer het opnieuw.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="896"/>
         <source>Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Controleer uw besturingssysteemconfiguratie.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1451"/>
@@ -1550,117 +1550,117 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="402"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-ingang in-/uitschakelen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
         <source>MIDI-in port check box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-in poort selectievakje</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="405"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Volgstand-modus</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="406"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wanneer deze functie is ingeschakeld, wachten de MIDI-fader- en balans-regelaars totdat de positie van de fysieke controller overeenkomt met de huidige waarde in de software voordat ze reageren. Dit voorkomt abrupte sprongen wanneer uw fysieke controller niet synchroon loopt met de software.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="409"/>
         <source>Pick-up Mode check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Volgstand-modus selectievakje</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="412"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer de MIDI-uitgangspoort waarmee u verbinding wilt maken. Jamulus verbindt automatisch de MIDI-ingangspoort met het geselecteerde apparaat wanneer deze functie is ingeschakeld. U kunt ook uw favoriete verbindingsbeheerder gebruiken om de verbindingen handmatig te wijzigen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="416"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer de MIDI-bron waarmee u verbinding wilt maken. Jamulus verbindt automatisch de MIDI-ingangspoort met het geselecteerde apparaat wanneer dit is ingeschakeld. U kunt ook Audio MIDI instellingen gebruiken om de verbindingen handmatig te wijzigen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="420"/>
         <source>Select which MIDI input device(s) Jamulus should listen to. Select &apos;All Devices&apos; to receive MIDI from all connected devices, or choose a specific device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer naar welke MIDI-ingangsapparaten Jamulus moet luisteren. Selecteer &apos;Alle apparaten&apos; om MIDI van alle aangesloten apparaten te ontvangen, of kies een specifiek apparaat.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="423"/>
         <source>MIDI input device combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-ingangsapparaat combobox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="425"/>
         <source>MIDI controller settings</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-controller instellingen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is één globale MIDI-kanaalparameter (0-16) en twee parameters die u voor elk te bedienen item kunt instellen: de eerste MIDI CC en het aantal opeenvolgende CC-nummers. Stel eerst het kanaal in waarop Jamulus moet luisteren (0 voor alle kanalen). Stel vervolgens voor elk item dat u wilt bedienen (volumefader, balans, solo, demp) de eerste MIDI CC (het CC-nummer waarmee u wilt beginnen) en het aantal opeenvolgende CC-nummers in. Er is één uitzondering waarbij het instellen van opeenvolgende CC-nummers niet nodig is: de parameter &quot;Demp mijzelf&quot;. Deze vereist slechts één CC-nummer, omdat deze alleen van toepassing is op uw eigen audiostream.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>You can either type in the MIDI CC values or use the &quot;Learn&quot; button: click on &quot;Learn&quot;, actuate the fader/knob/button on your MIDI controller, and the MIDI CC number will be detected and saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Je kunt de MIDI CC-waarden handmatig invoeren of de knop &quot;Leren&quot; gebruiken: klik op &quot;Leren&quot;, bedien de fader/knop op je MIDI-controller en het MIDI CC-nummer wordt gedetecteerd en opgeslagen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="446"/>
         <source>MIDI channel combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-kanaal combobox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Demp mijzelf MIDI CC-nummer spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>Fader offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Fader offset spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="449"/>
         <source>Pan offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Balans offset spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="450"/>
         <source>Solo offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo offset spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>Mute offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Demp offset spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="452"/>
         <source>Mute Myself MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Demp mijzelf MIDI-leerknop</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="453"/>
         <source>Fader offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Fader offset MIDI-leerknop</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="454"/>
         <source>Pan offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Balans offset MIDI-leerknop</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="455"/>
         <source>Solo offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo offset MIDI-leerknop</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="456"/>
         <source>Mute offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Demp offset MIDI-leerknop</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="460"/>
@@ -1721,55 +1721,55 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1483"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Leren</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1518"/>
         <location filename="../clientsettingsdlg.cpp" line="1605"/>
         <source>All Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle apparaten</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1521"/>
         <source>No device connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen apparaat aangesloten</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1549"/>
         <location filename="../clientsettingsdlg.cpp" line="1555"/>
         <source>MIDI Device Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-apparaat niet gevonden</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1550"/>
         <source>The MIDI device &quot;%1&quot; could not be found. Using all available devices instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het MIDI-apparaat &quot;%1&quot; kon niet worden gevonden. In plaats daarvan worden alle beschikbare apparaten gebruikt.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1556"/>
         <source>The MIDI device &quot;%1&quot; is not currently available. Select a different device from the dropdown to connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het MIDI-apparaat &quot;%1&quot; is momenteel niet beschikbaar. Selecteer een ander apparaat in het keuzemenu om verbinding te maken.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1603"/>
         <location filename="../clientsettingsdlg.cpp" line="1609"/>
         <source>MIDI Device Connection Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-apparaatverbinding mislukt</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1604"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon geen verbinding maken met MIDI-apparaat &quot;%1&quot;. Controleer uw besturingssysteemconfiguratie.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1610"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check that the device is available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon geen verbinding maken met MIDI-apparaat &quot;%1&quot;. Controleer of het apparaat beschikbaar is.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1631"/>
         <source>Listening...</source>
-        <translation type="unfinished"></translation>
+        <translation>Luisteren...</translation>
     </message>
     <message>
         <location filename="../util.h" line="619"/>
@@ -2297,117 +2297,117 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1341"/>
         <source>MIDI Control</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-besturing</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1365"/>
         <source>MIDI-in</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-in</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1391"/>
         <source>MIDI Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-kanaal</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1417"/>
         <source>0 (all)</source>
-        <translation type="unfinished"></translation>
+        <translation>0 (alle)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1422"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1427"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1432"/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1437"/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1442"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1447"/>
         <source>6</source>
-        <translation type="unfinished"></translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1452"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation>7</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1457"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1462"/>
         <source>9</source>
-        <translation type="unfinished"></translation>
+        <translation>9</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1467"/>
         <source>10</source>
-        <translation type="unfinished"></translation>
+        <translation>10</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1472"/>
         <source>11</source>
-        <translation type="unfinished"></translation>
+        <translation>11</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1477"/>
         <source>12</source>
-        <translation type="unfinished"></translation>
+        <translation>12</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1482"/>
         <source>13</source>
-        <translation type="unfinished"></translation>
+        <translation>13</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1487"/>
         <source>14</source>
-        <translation type="unfinished"></translation>
+        <translation>14</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1492"/>
         <source>15</source>
-        <translation type="unfinished"></translation>
+        <translation>15</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1497"/>
         <source>16</source>
-        <translation type="unfinished"></translation>
+        <translation>16</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1518"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Volgstand-modus</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1546"/>
         <source>Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>Demp mijzelf</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1569"/>
         <source>MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1604"/>
@@ -2416,12 +2416,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../clientsettingsdlgbase.ui" line="1995"/>
         <location filename="../clientsettingsdlgbase.ui" line="2119"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Leren</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1679"/>
         <source>Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Fader</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1702"/>
@@ -2429,7 +2429,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../clientsettingsdlgbase.ui" line="1963"/>
         <location filename="../clientsettingsdlgbase.ui" line="2087"/>
         <source>First MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>Eerste MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1763"/>
@@ -2437,22 +2437,22 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../clientsettingsdlgbase.ui" line="2024"/>
         <location filename="../clientsettingsdlgbase.ui" line="2148"/>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1803"/>
         <source>Mute</source>
-        <translation type="unfinished">Demp</translation>
+        <translation>Demp</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1940"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="2199"/>
         <source>MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-apparaat</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="623"/>
@@ -2590,7 +2590,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../connectdlg.cpp" line="1153"/>
         <source>Ping</source>
-        <translation type="unfinished">Ping</translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="171"/>
@@ -2615,7 +2615,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../connectdlg.cpp" line="146"/>
         <source>Show all musicians check box</source>
-        <translation>Toon alle muzikanten checkbox</translation>
+        <translation>Toon alle muzikanten selectievakje</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="235"/>

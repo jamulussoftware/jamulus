@@ -169,6 +169,9 @@ public:
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
     bool IsDelayPanningEnabled() { return bDelayPan; }
 
+    CServerLogging* GetLogging() { return &Logging; }
+
+
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }

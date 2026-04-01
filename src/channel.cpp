@@ -81,7 +81,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
     QObject::connect ( &Protocol, &CProtocol::ChangeChanPan, this, &CChannel::OnChangeChanPan );
 
-    QObject::connect ( &Protocol, &CProtocol::ClientIDReceived, this, &CChannel::ClientIDReceived );
+    QObject::connect ( &Protocol, &CProtocol::ClientIDReceived, this, &CChannel::OnClientIDReceived );
 
     QObject::connect ( &Protocol, &CProtocol::MuteStateHasChangedReceived, this, &CChannel::MuteStateHasChangedReceived );
 
@@ -711,4 +711,10 @@ void CChannel::UpdateSocketBufferSize()
         // buffer memory since we just adjust the size here
         SetSockBufNumFrames ( SockBuf.GetAutoSetting(), true );
     }
+}
+
+void CChannel::OnClientIDReceived ( int iChanID )
+{
+    qDebug() << Q_FUNC_INFO << "iChanID =" << iChanID;
+    emit ClientIDReceived ( iChanID );
 }

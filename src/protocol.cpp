@@ -360,6 +360,11 @@ CONNECTION LESS MESSAGES
     +--------------------+--------------+
 
 
+- PROTMESSID_CLM_EMPTY_MESSAGE: Empty message (No-op)
+
+    note: does not have any data -> n = 0
+
+
 - PROTMESSID_CLM_DISCONNECTION: Disconnect message
 
     note: does not have any data -> n = 0
@@ -436,14 +441,23 @@ CONNECTION LESS MESSAGES
 
 - PROTMESSID_CLM_TCP_SUPPORTED: TCP supported message
 
-    +----------------------------------------------------------+
-    | 2 bytes ID of message to be potentially retried over TCP |
-    +----------------------------------------------------------+
+    +-------------------------------------------------------+
+    | 2 bytes ID of message to be potentially sent over TCP |
+    +-------------------------------------------------------+
 
-    the ID indicates which type of message preceded it:
+    the ID indicates which type of message relates to it:
     - PROTMESSID_CLM_SERVER_LIST
     - PROTMESSID_CLM_CONN_CLIENTS_LIST
-    - 0 (sent on new incoming audio stream)
+    - PROTMESSID_CLM_CLIENT_ID
+
+
+- PROTMESSID_CLM_CLIENT_ID: Sends the client's channel ID back to the server
+
+    +---------------------------------+
+    | 1 byte channel ID of the client |
+    +---------------------------------+
+
+    the ID informs the server with which channel to associate the TCP connection
 
 */
 
@@ -939,6 +953,10 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
 
     case PROTMESSID_CLM_TCP_SUPPORTED:
         EvaluateCLTcpSupportedMes ( InetAddr, vecbyMesBodyData );
+        break;
+
+    case PROTMESSID_CLM_CLIENT_ID:
+        EvaluateCLClientIDMes ( InetAddr, vecbyMesBodyData, pTcpConnection );
         break;
     }
 }
@@ -2628,6 +2646,38 @@ bool CProtocol::EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr, const 
 
     // invoke message action
     emit CLTcpSupported ( InetAddr, static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) ) );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iChanID, CTcpConnection* pTcpConnection )
+{
+    int iPos = 0; // init position pointer
+
+    // build data vector (1 byte long)
+    CVector<uint8_t> vecData ( 1 );
+
+    // channel ID (1 byte)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CLIENT_ID, vecData, InetAddr, pTcpConnection );
+}
+
+bool CProtocol::EvaluateCLClientIDMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData, CTcpConnection* pTcpConnection )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 1 )
+    {
+        return true; // return error code
+    }
+
+    // channel ID
+    const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // invoke message action
+    emit CLClientIDReceived ( InetAddr, iCurID, pTcpConnection );
 
     return false; // no error
 }

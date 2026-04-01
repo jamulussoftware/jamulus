@@ -390,7 +390,7 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
     // if TCP is enabled, we need to announce this first, before sending Client ID
     if ( bEnableTcp )
     {
-        ConnLessProtocol.CreateCLTcpSupportedMes ( vecChannels[iChID].GetAddress(), 0 );
+        ConnLessProtocol.CreateCLTcpSupportedMes ( vecChannels[iChID].GetAddress(), PROTMESSID_CLM_CLIENT_ID );
     }
 
     // inform the client about its own ID at the server (note that this

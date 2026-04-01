@@ -145,7 +145,7 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLRedServerListReceived, this, &CClient::CLRedServerListReceived );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLTcpSupported, this, &CClient::CLTcpSupported );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLTcpSupported, this, &CClient::OnCLTcpSupported );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::CLConnClientsListMesReceived );
 
@@ -1016,6 +1016,15 @@ void CClient::OnClientIDReceived ( int iServerChanID )
         ClearClientChannels();
     }
 
+    // if TCP Supported has been received, make TCP connection to server
+    iClientID = iServerChanID; // for sending back to server over TCP
+
+    if ( bTcpSupported )
+    {
+        // *** Make TCP connection
+        qDebug() << Q_FUNC_INFO << "need to make TCP connection for" << iClientID;
+    }
+
     // allocate and map client-side channel 0
     int iChanID = FindClientChannel ( iServerChanID, true ); // should always return channel 0
 
@@ -1030,10 +1039,31 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     emit ClientIDReceived ( iChanID );
 }
 
+void CClient::OnCLTcpSupported ( CHostAddress InetAddr, int iID )
+{
+    if ( iID != PROTMESSID_CLM_CLIENT_ID )
+    {
+        emit CLTcpSupported ( InetAddr, iID ); // pass to connect dialog
+    }
+
+    // if client ID already received, make TCP connection to server
+    bTcpSupported = true;
+
+    if ( iClientID != INVALID_INDEX )
+    {
+        // *** Make TCP connection
+        qDebug() << Q_FUNC_INFO << "need to make TCP connection for" << iClientID;
+    }
+}
+
 void CClient::Start()
 {
     // init object
     Init();
+
+    // clear TCP info
+    iClientID     = INVALID_INDEX;
+    bTcpSupported = false;
 
     // initialise client channels
     ClearClientChannels();

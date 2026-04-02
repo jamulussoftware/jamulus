@@ -549,8 +549,6 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
 
 void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr, int iID )
 {
-    qDebug() << "- TCP supported at server" << InetAddr.toString() << "for ID =" << iID;
-
     switch ( iID )
     {
     case PROTMESSID_CLM_SERVER_LIST:

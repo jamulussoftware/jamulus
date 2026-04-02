@@ -22,8 +22,6 @@
  *
  \******************************************************************************/
 
-#include "tcpserver.h"
-
 #include "protocol.h"
 #include "server.h"
 #include "channel.h"

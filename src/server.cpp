@@ -282,6 +282,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqConnClientsList, this, &CServer::OnCLReqConnClientsList );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLClientIDReceived, this, &CServer::OnCLClientIDReceived );
+
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged, this, &CServer::SvrRegStatusChanged );
 
     QObject::connect ( &JamController, &recorder::CJamController::RestartRecorder, this, &CServer::RestartRecorder );
@@ -494,6 +496,11 @@ void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
     {
         Socket.SendPacket ( vecMessage, InetAddr );
     }
+}
+
+void CServer::OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpConnection* pTcpConnection )
+{
+    qDebug() << "- client ID" << iChanID << "received from" << InetAddr.toString() << "with TCP connection" << pTcpConnection;
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )

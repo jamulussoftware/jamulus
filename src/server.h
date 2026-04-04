@@ -398,6 +398,8 @@ public slots:
 
     void OnCLDisconnection ( CHostAddress InetAddr );
 
+    void OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpConnection* pTcpConnection );
+
     void OnAboutToQuit();
 
     void OnHandledSignal ( int sigNum );

@@ -400,7 +400,7 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
     // Send an empty channel list in order to force clients to reset their
     // audio mixer state. This is required to trigger clients to re-send their
     // gain levels upon reconnecting after server restarts.
-    vecChannels[iChID].CreateConClientListMes ( CVector<CChannelInfo> ( 0 ) );
+    vecChannels[iChID].CreateConClientListMes ( CVector<CChannelInfo> ( 0 ), ConnLessProtocol );
 
     // query support for split messages in the client
     vecChannels[iChID].CreateReqSplitMessSupportMes();
@@ -1239,7 +1239,7 @@ void CServer::CreateAndSendChanListForAllConChannels()
         if ( vecChannels[i].IsConnected() )
         {
             // send message
-            vecChannels[i].CreateConClientListMes ( vecChanInfo );
+            vecChannels[i].CreateConClientListMes ( vecChanInfo, ConnLessProtocol );
         }
     }
 
@@ -1256,7 +1256,7 @@ void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
     CVector<CChannelInfo> vecChanInfo ( CreateChannelList() );
 
     // now send connected channels list to the channel with the ID "iCurChanID"
-    vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
+    vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo, ConnLessProtocol );
 }
 
 void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText )

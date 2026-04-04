@@ -164,7 +164,7 @@ public:
     void CreateReqChannelLevelListMes() { Protocol.CreateReqChannelLevelListMes(); }
     //### TODO: END ###//
 
-    void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo ) { Protocol.CreateConClientListMes ( vecChanInfo ); }
+    void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo, CProtocol& ConnLessProtocol );
 
     void CreateRecorderStateMes ( const ERecorderState eRecorderState ) { Protocol.CreateRecorderStateMes ( eRecorderState ); }
 

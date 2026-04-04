@@ -26,6 +26,7 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
+    pTcpConnection ( nullptr ),
     vecfGains ( MAX_NUM_CHANNELS, 1.0f ),
     vecfPannings ( MAX_NUM_CHANNELS, 0.5f ),
     iCurSockBufNumFrames ( INVALID_INDEX ),
@@ -717,4 +718,20 @@ void CChannel::OnClientIDReceived ( int iChanID )
 {
     qDebug() << Q_FUNC_INFO << "iChanID =" << iChanID;
     emit ClientIDReceived ( iChanID );
+}
+
+void CChannel::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo, CProtocol& ConnLessProtocol )
+{
+    if ( pTcpConnection )
+    {
+        qDebug() << "- sending client list via TCP";
+
+        ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, vecChanInfo, pTcpConnection );
+    }
+    else
+    {
+        qDebug() << "- sending client list via UDP";
+
+        Protocol.CreateConClientListMes ( vecChanInfo );
+    }
 }

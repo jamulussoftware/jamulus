@@ -501,6 +501,31 @@ void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
 void CServer::OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpConnection* pTcpConnection )
 {
     qDebug() << "- client ID" << iChanID << "received from" << InetAddr.toString() << "with TCP connection" << pTcpConnection;
+
+    if ( iChanID < 0 || iChanID >= iMaxNumChannels || !vecChannels[iChanID].IsConnected() )
+    {
+        // ID out of range or channel not connected - reject connection
+        pTcpConnection->disconnectFromHost();
+        qDebug() << "- rejected invalid client ID";
+        return;
+    }
+
+    CChannel* pChannel = &vecChannels[iChanID];
+
+    qDebug() << "- request to link TCP connection with UDP client at" << pChannel->GetAddress().toString();
+
+    // compare IP addresses, but not port numbers
+    if ( InetAddr.InetAddr != pChannel->GetAddress().InetAddr )
+    {
+        // IP address mismatch - reject connection
+        pTcpConnection->disconnectFromHost();
+        qDebug() << "- rejected mismatched IP address";
+        return;
+    }
+
+    // link TCP connection with UDP channel
+    pTcpConnection->SetChannel ( pChannel );
+    pChannel->SetTcpConnection ( pTcpConnection );
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )

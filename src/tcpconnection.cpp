@@ -164,3 +164,11 @@ qint64 CTcpConnection::write ( const char* data, qint64 maxSize )
 
     return pTcpSocket->write ( data, maxSize );
 }
+
+void CTcpConnection::disconnectFromHost()
+{
+    if ( pTcpSocket )
+    {
+        pTcpSocket->disconnectFromHost();
+    }
+}

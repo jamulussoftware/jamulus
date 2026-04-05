@@ -50,6 +50,7 @@ public:
     ~CTcpConnection() {}
 
     qint64 write ( const char* data, qint64 maxSize );
+    void   disconnectFromHost();
 
 private:
     QTcpSocket*  pTcpSocket;

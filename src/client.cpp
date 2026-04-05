@@ -282,7 +282,8 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
         connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, InetAddr, vecMessage]() {
             // connection succeeded, give it to a CTcpConnection
             CTcpConnection* pTcpConnection =
-                new CTcpConnection ( pSocket, InetAddr, nullptr, &Channel ); // client connection, will self-delete on disconnect
+                new CTcpConnection ( pSocket, InetAddr, nullptr, &Channel, true ); // client connection, auto-disconn, will self-delete on disconnect
+            // TODO: do not set bDisconAfterRecv when sending CLM_CLIENT_ID for long-term connection
 
             pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
 

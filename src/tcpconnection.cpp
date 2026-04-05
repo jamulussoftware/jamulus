@@ -26,11 +26,16 @@
 #include "server.h"
 #include "channel.h"
 
-CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel ) :
+CTcpConnection::CTcpConnection ( QTcpSocket*         pTcpSocket,
+                                 const CHostAddress& tcpAddress,
+                                 CServer*            pServer,
+                                 CChannel*           pChannel,
+                                 bool                bDisconAfterRecv ) :
     pTcpSocket ( pTcpSocket ),
     tcpAddress ( tcpAddress ),
     pServer ( pServer ),
-    pChannel ( pChannel )
+    pChannel ( pChannel ),
+    bDisconAfterRecv ( bDisconAfterRecv )
 {
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
     iPos           = 0;
@@ -128,8 +133,8 @@ void CTcpConnection::OnReadyRead()
                         emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, tcpAddress, this );
                         //### TODO: END ###//
 
-                        // disconnect if we are a client
-                        if ( pChannel )
+                        // disconnect if it's not a persistent connection
+                        if ( bDisconAfterRecv )
                         {
                             pTcpSocket->disconnectFromHost();
                         }

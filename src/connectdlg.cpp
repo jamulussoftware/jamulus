@@ -336,7 +336,7 @@ void CConnectDlg::RequestServerList()
              false ) )
     {
         // send the request for the server list
-        emit ReqServerListQuery ( haDirectoryAddress, false ); // UDP
+        emit ReqServerListQuery ( haDirectoryAddress, PROTO_UDP );
 
         // start timer, if this message did not get any respond to retransmit
         // the server list request message
@@ -379,7 +379,7 @@ void CConnectDlg::OnTimerReRequestServList()
     {
         // note that this is a connection less message which may get lost
         // and therefore it makes sense to re-transmit it
-        emit ReqServerListQuery ( haDirectoryAddress, false ); // UDP
+        emit ReqServerListQuery ( haDirectoryAddress, PROTO_UDP );
     }
 }
 
@@ -557,7 +557,7 @@ void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr, int iID )
         if ( !bServerListReceived )
         {
             // send the request for the server list
-            emit ReqServerListQuery ( InetAddr, true ); // TCP
+            emit ReqServerListQuery ( InetAddr, PROTO_TCP_ONCE ); // Close TCP connection after receiving reply
         }
         break;
 
@@ -578,7 +578,7 @@ void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr, int iID )
                     eFetchMode = CFM_TCP;
                     pCurListViewItem->setData ( LVC_CLIENTS, Qt::UserRole, eFetchMode ); // remember for future fetches
 
-                    emit CreateCLServerListReqConnClientsListMes ( InetAddr, true ); // TCP
+                    emit CreateCLServerListReqConnClientsListMes ( InetAddr, PROTO_TCP_ONCE ); // Close TCP connection after receiving reply
                 }
             }
         }
@@ -1045,7 +1045,7 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
                 eFetchMode = CFM_UDP_REQUEST;
                 pCurListViewItem->setData ( LVC_CLIENTS, Qt::UserRole, eFetchMode );
             }
-            emit CreateCLServerListReqConnClientsListMes ( InetAddr, eFetchMode == CFM_TCP ); // UDP or TCP
+            emit CreateCLServerListReqConnClientsListMes ( InetAddr, eFetchMode == CFM_TCP ? PROTO_TCP_ONCE : PROTO_UDP );
         }
 
         // this is the first time a ping time was received, set item to visible

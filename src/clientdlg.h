@@ -202,15 +202,15 @@ public slots:
 
     void OnNewLocalInputText ( QString strChatText ) { pClient->CreateChatTextMes ( strChatText ); }
 
-    void OnReqServerListQuery ( CHostAddress InetAddr, bool bUseTcpClient ) { pClient->CreateCLReqServerListMes ( InetAddr, bUseTcpClient ); }
+    void OnReqServerListQuery ( CHostAddress InetAddr, enum EProtoMode eProtoMode ) { pClient->CreateCLReqServerListMes ( InetAddr, eProtoMode ); }
 
     void OnCreateCLServerListPingMes ( CHostAddress InetAddr ) { pClient->CreateCLServerListPingMes ( InetAddr ); }
 
     void OnCreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr ) { pClient->CreateCLServerListReqVerAndOSMes ( InetAddr ); }
 
-    void OnCreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr, bool bUseTcpClient )
+    void OnCreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr, enum EProtoMode eProtoMode )
     {
-        pClient->CreateCLServerListReqConnClientsListMes ( InetAddr, bUseTcpClient );
+        pClient->CreateCLServerListReqConnClientsListMes ( InetAddr, eProtoMode );
     }
 
     void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )

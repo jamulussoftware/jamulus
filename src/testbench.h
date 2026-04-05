@@ -222,7 +222,7 @@ public slots:
             break;
 
         case 20: // PROTMESSID_CLM_REQ_SERVER_LIST
-            Protocol.CreateCLReqServerListMes ( CurHostAddress, false );
+            Protocol.CreateCLReqServerListMes ( CurHostAddress, PROTO_UDP );
             break;
 
         case 21: // PROTMESSID_CLM_SEND_EMPTY_MESSAGE
@@ -265,7 +265,7 @@ public slots:
             break;
 
         case 29: // PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST
-            Protocol.CreateCLReqConnClientsListMes ( CurHostAddress, false );
+            Protocol.CreateCLReqConnClientsListMes ( CurHostAddress, PROTO_UDP );
             break;
 
         case 30: // PROTMESSID_CLM_CHANNEL_LEVEL_LIST

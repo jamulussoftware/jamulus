@@ -477,9 +477,9 @@ void CServer::OnServerFull ( CHostAddress RecHostAddr )
     ConnLessProtocol.CreateCLServerFullMes ( RecHostAddr );
 }
 
-void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, bool bUseTcpClient )
+void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode )
 {
-    if ( bUseTcpClient )
+    if ( eProtoMode != PROTO_UDP )
     {
         qWarning() << "Server send cannot use TCP client";
         return;

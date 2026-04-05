@@ -251,7 +251,7 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
 }
 
-void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, bool bUseTcpClient )
+void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode )
 {
     if ( pTcpConnection )
     {
@@ -261,7 +261,7 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
 
     // the protocol queries me to call the function to send the message
     // send it through the network
-    if ( bUseTcpClient )
+    if ( eProtoMode != PROTO_UDP )
     {
         // create a TCP client connection and send message
         QTcpSocket* pSocket = new QTcpSocket ( this );
@@ -279,11 +279,13 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
             pSocket->deleteLater();
         } );
 
-        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, InetAddr, vecMessage]() {
+        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, InetAddr, vecMessage, eProtoMode]() {
             // connection succeeded, give it to a CTcpConnection
-            CTcpConnection* pTcpConnection =
-                new CTcpConnection ( pSocket, InetAddr, nullptr, &Channel, true ); // client connection, auto-disconn, will self-delete on disconnect
-            // TODO: do not set bDisconAfterRecv when sending CLM_CLIENT_ID for long-term connection
+            CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket,
+                                                                  InetAddr,
+                                                                  nullptr,
+                                                                  &Channel,
+                                                                  eProtoMode == PROTO_TCP_ONCE ); // client connection, will self-delete on disconnect
 
             pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
 

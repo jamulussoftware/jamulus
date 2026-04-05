@@ -278,14 +278,14 @@ public:
 
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr, bool bUseTcpClient )
+    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr, enum EProtoMode eProtoMode )
     {
-        ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, bUseTcpClient );
+        ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, eProtoMode );
     }
 
-    void CreateCLReqServerListMes ( const CHostAddress& InetAddr, bool bUseTcpClient )
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr, enum EProtoMode eProtoMode )
     {
-        ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, bUseTcpClient );
+        ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, eProtoMode );
     }
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
@@ -453,7 +453,7 @@ protected slots:
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
     void OnCLTcpSupported ( CHostAddress InetAddr, int iID );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, bool bUseTcpClient );
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
 
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
 

@@ -101,6 +101,14 @@
 #define MESS_SPLIT_PART_SIZE_BYTES 550
 #define MAX_NUM_MESS_SPLIT_PARTS   ( MAX_SIZE_BYTES_NETW_BUF / MESS_SPLIT_PART_SIZE_BYTES )
 
+/* Enum for protocol mode *****************************************************/
+enum EProtoMode
+{
+    PROTO_UDP,
+    PROTO_TCP_ONCE,
+    PROTO_TCP_LONG,
+};
+
 /* Classes ********************************************************************/
 class CProtocol : public QObject
 {
@@ -146,14 +154,14 @@ public:
     void CreateCLUnregisterServerMes ( const CHostAddress& InetAddr );
     void CreateCLServerListMes ( const CHostAddress& InetAddr, const CVector<CServerInfo> vecServerInfo, CTcpConnection* pTcpConnection );
     void CreateCLRedServerListMes ( const CHostAddress& InetAddr, const CVector<CServerInfo> vecServerInfo );
-    void CreateCLReqServerListMes ( const CHostAddress& InetAddr, bool bUseTcpClient );
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr, enum EProtoMode eProtoMode );
     void CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr, const CHostAddress& TargetInetAddr );
     void CreateCLEmptyMes ( const CHostAddress& InetAddr );
     void CreateCLDisconnection ( const CHostAddress& InetAddr );
     void CreateCLVersionAndOSMes ( const CHostAddress& InetAddr );
     void CreateCLReqVersionAndOSMes ( const CHostAddress& InetAddr );
     void CreateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo, CTcpConnection* pTcpConnection );
-    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr, bool bUseTcpClient );
+    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr, enum EProtoMode eProtoMode );
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
     void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const int iID );
@@ -255,7 +263,7 @@ protected:
                                           const CVector<uint8_t>& vecData,
                                           const CHostAddress&     InetAddr,
                                           CTcpConnection*         pTcpConnection = nullptr,
-                                          bool                    bUseTcpClient  = false );
+                                          enum EProtoMode         eProtoMode     = PROTO_UDP );
 
     bool EvaluateJitBufMes ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
@@ -317,7 +325,7 @@ public slots:
 signals:
     // transmitting
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
-    void CLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, bool bUseTcpClient );
+    void CLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
 
     // receiving
     void ChangeJittBufSize ( int iNewJitBufSize );

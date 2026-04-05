@@ -146,8 +146,8 @@ public slots:
     void OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWidgetItem* previous );
 
 signals:
-    void ReqServerListQuery ( CHostAddress InetAddr, bool bUseTcpClient );
+    void ReqServerListQuery ( CHostAddress InetAddr, enum EProtoMode eProtoMode );
     void CreateCLServerListPingMes ( CHostAddress InetAddr );
     void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
-    void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr, bool bUseTcpClient );
+    void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr, enum EProtoMode eProtoMode );
 };

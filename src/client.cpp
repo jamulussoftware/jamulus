@@ -147,7 +147,7 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLTcpSupported, this, &CClient::OnCLTcpSupported );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::CLConnClientsListMesReceived );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::OnCLConnClientsListMesReceived );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived, this, &CClient::OnCLPingReceived );
 
@@ -1062,6 +1062,20 @@ void CClient::OnCLTcpSupported ( CHostAddress InetAddr, int iID )
         qDebug() << Q_FUNC_INFO << "need to make TCP connection for" << iClientID;
         Q_ASSERT ( InetAddr == Channel.GetAddress() );
         ConnLessProtocol.CreateCLClientIDMes ( InetAddr, iClientID, PROTO_TCP_LONG ); // create persistent TCP connection
+    }
+}
+
+void CClient::OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo )
+{
+    // test if we are receiving for the connect dialog or a connected session
+    qDebug() << Q_FUNC_INFO << "Channel.IsConnected() =" << Channel.IsConnected();
+    if ( Channel.IsConnected() )
+    {
+        OnConClientListMesReceived ( vecChanInfo ); // connected session
+    }
+    else
+    {
+        emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo ); // connect dialog
     }
 }
 

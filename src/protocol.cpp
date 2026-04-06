@@ -2650,7 +2650,7 @@ bool CProtocol::EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr, const 
     return false; // no error
 }
 
-void CProtocol::CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iChanID, CTcpConnection* pTcpConnection )
+void CProtocol::CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iChanID, enum EProtoMode eProtoMode )
 {
     int iPos = 0; // init position pointer
 
@@ -2660,7 +2660,7 @@ void CProtocol::CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iC
     // channel ID (1 byte)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
 
-    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CLIENT_ID, vecData, InetAddr, pTcpConnection );
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CLIENT_ID, vecData, InetAddr, nullptr, eProtoMode );
 }
 
 bool CProtocol::EvaluateCLClientIDMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData, CTcpConnection* pTcpConnection )

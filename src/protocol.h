@@ -165,7 +165,7 @@ public:
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
     void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const int iID );
-    void CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iChanID, CTcpConnection* pTcpConnection );
+    void CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iChanID, enum EProtoMode eProtoMode );
 
     static int GetBodyLength ( const CVector<uint8_t>& vecbyData );
 

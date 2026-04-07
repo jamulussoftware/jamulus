@@ -46,7 +46,7 @@ class CTcpConnection : public QObject
     Q_OBJECT
 
 public:
-    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel, bool bDisconAfterRecv = false );
+    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel, bool bDisconAfterRecv );
     ~CTcpConnection() {}
 
     void      SetChannel ( CChannel* pChan ) { pChannel = pChan; }

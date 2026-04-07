@@ -46,7 +46,7 @@ class CTcpConnection : public QObject
     Q_OBJECT
 
 public:
-    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel, bool bDisconAfterRecv );
+    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel, bool bIsSession );
     ~CTcpConnection() {}
 
     void      SetChannel ( CChannel* pChan ) { pChannel = pChan; }
@@ -54,6 +54,8 @@ public:
 
     qint64 write ( const char* data, qint64 maxSize );
     void   disconnectFromHost();
+
+    bool IsSession() { return bIsSession; }
 
 private:
     QTcpSocket*  pTcpSocket;
@@ -63,7 +65,7 @@ private:
     CServer*  pServer;
     CChannel* pChannel;
 
-    const bool bDisconAfterRecv;
+    const bool bIsSession;
 
     int              iPos;
     int              iPayloadRemain;

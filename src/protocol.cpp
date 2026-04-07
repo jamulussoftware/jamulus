@@ -936,7 +936,7 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
         break;
 
     case PROTMESSID_CLM_CONN_CLIENTS_LIST:
-        EvaluateCLConnClientsListMes ( InetAddr, vecbyMesBodyData );
+        EvaluateCLConnClientsListMes ( InetAddr, vecbyMesBodyData, pTcpConnection );
         break;
 
     case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
@@ -2456,7 +2456,7 @@ void CProtocol::CreateCLConnClientsListMes ( const CHostAddress& InetAddr, const
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CONN_CLIENTS_LIST, vecData, InetAddr, pTcpConnection );
 }
 
-bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData, CTcpConnection* pTcpConnection )
 {
     int                   iPos     = 0; // init position pointer
     const int             iDataLen = vecData.Size();
@@ -2510,7 +2510,7 @@ bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, con
     }
 
     // invoke message action
-    emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo );
+    emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo, pTcpConnection );
 
     return false; // no error
 }

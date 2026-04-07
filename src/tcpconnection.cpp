@@ -26,16 +26,12 @@
 #include "server.h"
 #include "channel.h"
 
-CTcpConnection::CTcpConnection ( QTcpSocket*         pTcpSocket,
-                                 const CHostAddress& tcpAddress,
-                                 CServer*            pServer,
-                                 CChannel*           pChannel,
-                                 bool                bDisconAfterRecv ) :
+CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel, bool bIsSession ) :
     pTcpSocket ( pTcpSocket ),
     tcpAddress ( tcpAddress ),
     pServer ( pServer ),
     pChannel ( pChannel ),
-    bDisconAfterRecv ( bDisconAfterRecv )
+    bIsSession ( bIsSession )
 {
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
     iPos           = 0;
@@ -59,6 +55,10 @@ void CTcpConnection::OnDisconnected()
 {
     qDebug() << "- Jamulus-TCP: disconnected from:" << tcpAddress.toString();
     pTcpSocket->deleteLater();
+    if ( pChannel && pChannel->GetTcpConnection() == this )
+    {
+        pChannel->SetTcpConnection ( nullptr ); // unlink from channel
+    }
     deleteLater(); // delete this object in the next event loop
 }
 
@@ -133,8 +133,8 @@ void CTcpConnection::OnReadyRead()
                         emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, tcpAddress, this );
                         //### TODO: END ###//
 
-                        // disconnect if it's not a persistent connection
-                        if ( bDisconAfterRecv )
+                        // disconnect if it's not a client session connection
+                        if ( !pServer && !bIsSession )
                         {
                             pTcpSocket->disconnectFromHost();
                         }

@@ -285,7 +285,12 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
                                                                   InetAddr,
                                                                   nullptr,
                                                                   &Channel,
-                                                                  eProtoMode == PROTO_TCP_ONCE ); // client connection, will self-delete on disconnect
+                                                                  eProtoMode == PROTO_TCP_LONG ); // client connection, will self-delete on disconnect
+
+            if ( eProtoMode == PROTO_TCP_LONG )
+            {
+                Channel.SetTcpConnection ( pTcpConnection ); // link session connection with channel
+            }
 
             pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
 
@@ -1065,16 +1070,17 @@ void CClient::OnCLTcpSupported ( CHostAddress InetAddr, int iID )
     }
 }
 
-void CClient::OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo )
+void CClient::OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo, CTcpConnection* pTcpConnection )
 {
     // test if we are receiving for the connect dialog or a connected session
-    qDebug() << Q_FUNC_INFO << "Channel.IsConnected() =" << Channel.IsConnected();
-    if ( Channel.IsConnected() )
+    if ( pTcpConnection && pTcpConnection->IsSession() )
     {
+        qDebug() << "- sending client list to client dialog";
         OnConClientListMesReceived ( vecChanInfo ); // connected session
     }
     else
     {
+        qDebug() << "- sending client list to connect dialog";
         emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo ); // connect dialog
     }
 }
@@ -1107,6 +1113,14 @@ void CClient::Stop()
 {
     // stop audio interface
     Sound.Stop();
+
+    // close any session TCP connection
+    CTcpConnection* pTcpConnection = Channel.GetTcpConnection();
+    if ( pTcpConnection )
+    {
+        Channel.SetTcpConnection ( nullptr );
+        pTcpConnection->disconnectFromHost();
+    }
 
     // disable channel
     Channel.SetEnable ( false );

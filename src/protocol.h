@@ -297,7 +297,7 @@ protected:
     bool EvaluateCLDisconnectionMes ( const CHostAddress& InetAddr );
     bool EvaluateCLVersionAndOSMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqVersionAndOSMes ( const CHostAddress& InetAddr );
-    bool EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
+    bool EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData, CTcpConnection* pTcpConnection );
     bool EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection );
     bool EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
@@ -365,7 +365,7 @@ signals:
     void CLDisconnection ( CHostAddress InetAddr );
     void CLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
     void CLReqVersionAndOS ( CHostAddress InetAddr );
-    void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
+    void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo, CTcpConnection* pTcpConnection );
     void CLReqConnClientsList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection );
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );

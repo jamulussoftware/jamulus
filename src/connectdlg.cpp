@@ -552,12 +552,12 @@ void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr, int iID )
     switch ( iID )
     {
     case PROTMESSID_CLM_SERVER_LIST:
-        // if we haven't received the serverlist, it must have got lost due to fragmentation
+        // if we haven't received the serverlist, it might have got lost due to fragmentation
         // retry using TCP instead
         if ( !bServerListReceived )
         {
             // send the request for the server list
-            emit ReqServerListQuery ( InetAddr, PROTO_TCP_ONCE ); // Close TCP connection after receiving reply
+            emit ReqServerListQuery ( InetAddr, PROTO_TCP_ONCE ); // close TCP connection after receiving reply
         }
         break;
 
@@ -578,7 +578,7 @@ void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr, int iID )
                     eFetchMode = CFM_TCP;
                     pCurListViewItem->setData ( LVC_CLIENTS, Qt::UserRole, eFetchMode ); // remember for future fetches
 
-                    emit CreateCLServerListReqConnClientsListMes ( InetAddr, PROTO_TCP_ONCE ); // Close TCP connection after receiving reply
+                    emit CreateCLServerListReqConnClientsListMes ( InetAddr, PROTO_TCP_ONCE ); // close TCP connection after receiving reply
                 }
             }
         }

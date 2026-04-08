@@ -2313,11 +2313,11 @@ bool CProtocol::EvaluateCLSendEmptyMesMes ( const CVector<uint8_t>& vecData )
     return false; // no error
 }
 
-void CProtocol::CreateCLEmptyMes ( const CHostAddress& InetAddr )
+void CProtocol::CreateCLEmptyMes ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection )
 {
     // special message: for this message there exist no Evaluate
     // function
-    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_EMPTY_MESSAGE, CVector<uint8_t> ( 0 ), InetAddr );
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_EMPTY_MESSAGE, CVector<uint8_t> ( 0 ), InetAddr, pTcpConnection );
 }
 
 void CProtocol::CreateCLDisconnection ( const CHostAddress& InetAddr )

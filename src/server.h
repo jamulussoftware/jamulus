@@ -359,7 +359,7 @@ public slots:
         // only send empty message if not a directory
         if ( !ServerListManager.IsDirectory() )
         {
-            ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr );
+            ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr, nullptr );
         }
     }
 

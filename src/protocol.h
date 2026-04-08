@@ -156,7 +156,7 @@ public:
     void CreateCLRedServerListMes ( const CHostAddress& InetAddr, const CVector<CServerInfo> vecServerInfo );
     void CreateCLReqServerListMes ( const CHostAddress& InetAddr, enum EProtoMode eProtoMode );
     void CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr, const CHostAddress& TargetInetAddr );
-    void CreateCLEmptyMes ( const CHostAddress& InetAddr );
+    void CreateCLEmptyMes ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection );
     void CreateCLDisconnection ( const CHostAddress& InetAddr );
     void CreateCLVersionAndOSMes ( const CHostAddress& InetAddr );
     void CreateCLReqVersionAndOSMes ( const CHostAddress& InetAddr );

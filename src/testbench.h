@@ -230,7 +230,7 @@ public slots:
             break;
 
         case 22: // PROTMESSID_CLM_EMPTY_MESSAGE
-            Protocol.CreateCLEmptyMes ( CurHostAddress );
+            Protocol.CreateCLEmptyMes ( CurHostAddress, nullptr );
             break;
 
         case 23: // PROTMESSID_CLM_DISCONNECTION

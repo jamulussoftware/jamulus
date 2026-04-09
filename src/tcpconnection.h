@@ -48,12 +48,10 @@ class CTcpConnection : public QObject
     Q_OBJECT
 
 public:
-    CTcpConnection ( QTcpSocket*         pTcpSocket,
-                     const CHostAddress& tcpAddress,
-                     CServer*            pServer,
-                     CClient*            pClient,
-                     CChannel*           pChannel,
-                     bool                bIsSession );
+#ifndef SERVER_ONLY
+    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CClient* pClient, CChannel* pChannel, bool bIsSession );
+#endif
+    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer );
     ~CTcpConnection() {}
 
     void      SetChannel ( CChannel* pChan ) { pChannel = pChan; }
@@ -67,10 +65,8 @@ public:
 private:
     QTcpSocket*  pTcpSocket;
     CHostAddress tcpAddress;
-    CHostAddress udpAddress;
 
     CServer*  pServer;
-    CClient*  pClient;
     CChannel* pChannel;
 
     const bool bIsSession;

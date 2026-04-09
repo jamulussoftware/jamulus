@@ -24,19 +24,17 @@
 
 #include "protocol.h"
 #include "server.h"
-#include "client.h"
+#ifndef SERVER_ONLY
+#    include "client.h"
+#endif
 #include "channel.h"
 
-CTcpConnection::CTcpConnection ( QTcpSocket*         pTcpSocket,
-                                 const CHostAddress& tcpAddress,
-                                 CServer*            pServer,
-                                 CClient*            pClient,
-                                 CChannel*           pChannel,
-                                 bool                bIsSession ) :
+#ifndef SERVER_ONLY
+// TCP connection used by client
+CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CClient* pClient, CChannel* pChannel, bool bIsSession ) :
     pTcpSocket ( pTcpSocket ),
     tcpAddress ( tcpAddress ),
-    pServer ( pServer ),
-    pClient ( pClient ),
+    pServer ( nullptr ),
     pChannel ( pChannel ),
     bIsSession ( bIsSession )
 {
@@ -47,23 +45,34 @@ CTcpConnection::CTcpConnection ( QTcpSocket*         pTcpSocket,
     connect ( pTcpSocket, &QTcpSocket::disconnected, this, &CTcpConnection::OnDisconnected );
     connect ( pTcpSocket, &QTcpSocket::readyRead, this, &CTcpConnection::OnReadyRead );
 
-    if ( pServer )
-    {
-        connect ( this, &CTcpConnection::ProtocolCLMessageReceived, pServer, &CServer::OnProtocolCLMessageReceived );
-    }
+    connect ( this, &CTcpConnection::ProtocolCLMessageReceived, pChannel, &CChannel::OnProtocolCLMessageReceived );
 
-    if ( pChannel )
-    {
-        connect ( this, &CTcpConnection::ProtocolCLMessageReceived, pChannel, &CChannel::OnProtocolCLMessageReceived );
-    }
-
-    if ( pClient && bIsSession )
+    if ( bIsSession )
     {
         // set up keepalive CLM_EMPTY_MESSAGE over TCP session connection
         connect ( this, &CTcpConnection::CLSendEmptyMes, pClient, &CClient::OnCLSendEmptyMes );
         connect ( &TimerKeepalive, &QTimer::timeout, this, &CTcpConnection::OnTimerKeepalive );
         TimerKeepalive.start ( TCP_KEEPALIVE_INTERVAL_MS );
     }
+}
+#endif
+
+// TCP connection used by server
+CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer ) :
+    pTcpSocket ( pTcpSocket ),
+    tcpAddress ( tcpAddress ),
+    pServer ( pServer ),
+    pChannel ( nullptr ),
+    bIsSession ( false )
+{
+    vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
+    iPos           = 0;
+    iPayloadRemain = 0;
+
+    connect ( pTcpSocket, &QTcpSocket::disconnected, this, &CTcpConnection::OnDisconnected );
+    connect ( pTcpSocket, &QTcpSocket::readyRead, this, &CTcpConnection::OnReadyRead );
+
+    connect ( this, &CTcpConnection::ProtocolCLMessageReceived, pServer, &CServer::OnProtocolCLMessageReceived );
 }
 
 void CTcpConnection::OnDisconnected()

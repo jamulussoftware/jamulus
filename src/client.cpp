@@ -284,7 +284,6 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
             // connection succeeded, give it to a CTcpConnection
             CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket,
                                                                   InetAddr,
-                                                                  nullptr,
                                                                   this,
                                                                   &Channel,
                                                                   eProtoMode == PROTO_TCP_LONG ); // client connection, will self-delete on disconnect

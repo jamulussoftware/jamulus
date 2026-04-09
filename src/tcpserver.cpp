@@ -97,5 +97,5 @@ void CTcpServer::OnNewConnection()
 
     qDebug() << "- Jamulus-TCP: received connection from:" << peerAddress.toString();
 
-    new CTcpConnection ( pSocket, peerAddress, pServer, nullptr, nullptr, false ); // will auto-delete on disconnect
+    new CTcpConnection ( pSocket, peerAddress, pServer ); // will auto-delete on disconnect
 }

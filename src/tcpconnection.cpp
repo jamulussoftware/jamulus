@@ -24,12 +24,19 @@
 
 #include "protocol.h"
 #include "server.h"
+#include "client.h"
 #include "channel.h"
 
-CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel, bool bIsSession ) :
+CTcpConnection::CTcpConnection ( QTcpSocket*         pTcpSocket,
+                                 const CHostAddress& tcpAddress,
+                                 CServer*            pServer,
+                                 CClient*            pClient,
+                                 CChannel*           pChannel,
+                                 bool                bIsSession ) :
     pTcpSocket ( pTcpSocket ),
     tcpAddress ( tcpAddress ),
     pServer ( pServer ),
+    pClient ( pClient ),
     pChannel ( pChannel ),
     bIsSession ( bIsSession )
 {
@@ -49,11 +56,20 @@ CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcp
     {
         connect ( this, &CTcpConnection::ProtocolCLMessageReceived, pChannel, &CChannel::OnProtocolCLMessageReceived );
     }
+
+    if ( pClient && bIsSession )
+    {
+        // set up keepalive CLM_EMPTY_MESSAGE over TCP session connection
+        connect ( this, &CTcpConnection::CLSendEmptyMes, pClient, &CClient::OnCLSendEmptyMes );
+        connect ( &TimerKeepalive, &QTimer::timeout, this, &CTcpConnection::OnTimerKeepalive );
+        TimerKeepalive.start ( TCP_KEEPALIVE_INTERVAL_MS );
+    }
 }
 
 void CTcpConnection::OnDisconnected()
 {
     qDebug() << "- Jamulus-TCP: disconnected from:" << tcpAddress.toString();
+    TimerKeepalive.stop();
     pTcpSocket->deleteLater();
     if ( pChannel && pChannel->GetTcpConnection() == this )
     {
@@ -158,6 +174,12 @@ void CTcpConnection::OnReadyRead()
     }
 
     qDebug() << "- end of readyRead(), bytesAvailable() =" << pTcpSocket->bytesAvailable();
+}
+
+void CTcpConnection::OnTimerKeepalive()
+{
+    // qDebug() << "- Keepalive timer" << this << "to TCP" << tcpAddress.toString();
+    emit CLSendEmptyMes ( tcpAddress, this );
 }
 
 qint64 CTcpConnection::write ( const char* data, qint64 maxSize )

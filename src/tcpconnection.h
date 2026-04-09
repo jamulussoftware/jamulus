@@ -40,13 +40,20 @@
 class CServer;  // forward declaration of CServer
 class CChannel; // forward declaration of CChannel
 
+#define TCP_KEEPALIVE_INTERVAL_MS 15000
+
 /* Classes ********************************************************************/
 class CTcpConnection : public QObject
 {
     Q_OBJECT
 
 public:
-    CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcpAddress, CServer* pServer, CChannel* pChannel, bool bIsSession );
+    CTcpConnection ( QTcpSocket*         pTcpSocket,
+                     const CHostAddress& tcpAddress,
+                     CServer*            pServer,
+                     CClient*            pClient,
+                     CChannel*           pChannel,
+                     bool                bIsSession );
     ~CTcpConnection() {}
 
     void      SetChannel ( CChannel* pChan ) { pChannel = pChan; }
@@ -63,6 +70,7 @@ private:
     CHostAddress udpAddress;
 
     CServer*  pServer;
+    CClient*  pClient;
     CChannel* pChannel;
 
     const bool bIsSession;
@@ -71,10 +79,14 @@ private:
     int              iPayloadRemain;
     CVector<uint8_t> vecbyRecBuf;
 
+    QTimer TimerKeepalive;
+
 signals:
     void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr, CTcpConnection* pTcpConnection );
+    void CLSendEmptyMes ( CHostAddress InetAddr, CTcpConnection* pTcpConnection );
 
 private slots:
     void OnDisconnected();
     void OnReadyRead();
+    void OnTimerKeepalive();
 };

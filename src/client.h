@@ -469,6 +469,12 @@ protected slots:
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo, CTcpConnection* pTcpConnection );
 
+public slots:
+    void OnCLSendEmptyMes ( CHostAddress InetAddr, CTcpConnection* pTcpConnection )
+    {
+        ConnLessProtocol.CreateCLEmptyMes ( InetAddr, pTcpConnection );
+    }
+
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );

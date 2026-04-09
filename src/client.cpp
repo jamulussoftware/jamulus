@@ -1026,7 +1026,7 @@ void CClient::OnClientIDReceived ( int iServerChanID )
         ClearClientChannels();
     }
 
-    // if TCP Supported has been received, make TCP connection to server
+    // if TCP Supported has already been received, make TCP connection to server
     iClientID = iServerChanID; // for sending back to server over TCP
 
     if ( bTcpSupported )

@@ -267,20 +267,40 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
         // create a TCP client connection and send message
         QTcpSocket* pSocket = new QTcpSocket ( this );
 
+        // timer for TCP connect timeout shorter than Qt default 30 seconds
+        QTimer* pTimer = new QTimer ( this );
+        pTimer->setSingleShot ( true );
+
+        connect ( pTimer, &QTimer::timeout, this, [this, pSocket, pTimer]() {
+            if ( pSocket->state() != QAbstractSocket::ConnectedState )
+            {
+                pSocket->abort();
+                pSocket->deleteLater();
+                qDebug() << "- TCP connect timeout";
+            }
+            pTimer->deleteLater();
+        } );
+
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 15, 0 )
 #    define ERRORSIGNAL &QTcpSocket::errorOccurred
 #else
 #    define ERRORSIGNAL QOverload<QAbstractSocket::SocketError>::of ( &QAbstractSocket::error )
 #endif
-        connect ( pSocket, ERRORSIGNAL, this, [this, pSocket] ( QAbstractSocket::SocketError err ) {
+        connect ( pSocket, ERRORSIGNAL, this, [this, pSocket, pTimer] ( QAbstractSocket::SocketError err ) {
             Q_UNUSED ( err );
+
+            pTimer->stop();
+            pTimer->deleteLater();
 
             qWarning() << "- TCP connection error:" << pSocket->errorString();
             // may want to specifically handle ConnectionRefusedError?
             pSocket->deleteLater();
         } );
 
-        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, InetAddr, vecMessage, eProtoMode]() {
+        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, pTimer, InetAddr, vecMessage, eProtoMode]() {
+            pTimer->stop();
+            pTimer->deleteLater();
+
             // connection succeeded, give it to a CTcpConnection
             CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket,
                                                                   InetAddr,
@@ -299,6 +319,7 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
         } );
 
         pSocket->connectToHost ( InetAddr.InetAddr, InetAddr.iPort );
+        pTimer->start ( TCP_CONNECT_TIMEOUT_MS );
     }
     else
     {

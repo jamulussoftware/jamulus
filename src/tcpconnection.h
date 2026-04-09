@@ -40,6 +40,7 @@
 class CServer;  // forward declaration of CServer
 class CChannel; // forward declaration of CChannel
 
+#define TCP_CONNECT_TIMEOUT_MS    3000
 #define TCP_KEEPALIVE_INTERVAL_MS 15000
 
 /* Classes ********************************************************************/

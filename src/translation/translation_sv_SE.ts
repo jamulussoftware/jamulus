@@ -1528,7 +1528,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlg.cpp" line="402"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation>Aktivera/avaktivera MINI-inport</translation>
+        <translation>Aktivera/avaktivera MIDI-inport</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>

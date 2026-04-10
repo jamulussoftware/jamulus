@@ -886,7 +886,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientdlg.cpp" line="404"/>
         <source>&amp;MIDI Control Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIDI Einstellungen…</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="747"/>
@@ -1310,117 +1310,117 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="402"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-in Port aktivieren/deaktivieren</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
         <source>MIDI-in port check box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-in Port Checkbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="405"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Pickup Modus</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="406"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn aktiviert, reagieren MIDI-Fader- und Panoramaregler erst, wenn die physische Position des Controllers mit dem aktuellen Softwarewert übereinstimmt. Dadurch werden plötzliche Sprünge vermieden, wenn der physische Controller nicht mit der Software synchron ist.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="409"/>
         <source>Pick-up Mode check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Pickup Modus Checkbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="412"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle den MIDI-Ausgangsport aus, mit dem eine Verbindung hergestellt werden soll. Jamulus verbindet seinen MIDI-Eingangsport mit dem ausgewählten Gerät falls aktiviert. Du kannst auch einen Verbindungsmanager deiner Wahl verwenden, um die Verbindungen manuell zu ändern.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="416"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle die MIDI-Quelle aus, mit der du eine Verbindung herstellen möchtest. Jamulus verbindet seinen MIDI-Eingangsport automatisch mit dem ausgewählten Gerät falls aktiviert. Du kannst auch das Audio MIDI Setup verwenden, um die Verbindungen manuell zu ändern.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="420"/>
         <source>Select which MIDI input device(s) Jamulus should listen to. Select &apos;All Devices&apos; to receive MIDI from all connected devices, or choose a specific device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle die/das MIDI Input Gerät/Geräte aus, auf die Jamulus hören soll. Wähle &apos;Alle Geräte&apos; aus um MIDI von allen angeschlossenen Geräten zu nutzen oder wähle ein spezifisches Gerät aus.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="423"/>
         <source>MIDI input device combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Input Gerät Kombobox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="425"/>
         <source>MIDI controller settings</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Controller Einstellungen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es gibt einen globalen MIDI-Kanalparameter (0–16) und zwei konfigurierbare Parameter pro zu steuerndem Element: die erste MIDI-CC-Nummer und die Anzahl der aufeinanderfolgenden CC-Nummern. Lege zunächst den Kanal fest, auf dem Jamulus lauschen soll (0 = alle Kanäle). Anschließend konfigurierst du für jedes zu steuernde Element (Lautstärke-Fader, Pan, Solo, Stummschalten) die erste MIDI-CC-Nummer und die Anzahl der dahinter folgenden CC-Nummern. Eine Ausnahme bildet der Parameter Stummschalten – dieser benötigt nur eine einzige CC-Nummer, da er ausschließlich auf deinen eigenen Audiostream wirkt.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>You can either type in the MIDI CC values or use the &quot;Learn&quot; button: click on &quot;Learn&quot;, actuate the fader/knob/button on your MIDI controller, and the MIDI CC number will be detected and saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du kannst entweder den MIDI CC Wert eintippen, oder den &quot;Lernen&quot; Button nutzen: Klicke auf &quot;Lernen&quot;, bewege den Regler/Knopf/etc. auf deinem MIDI Controller um die MIDI CC Nummer zu finden und zu speichern.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="446"/>
         <source>MIDI channel combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Kanal Combobox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Stummschalten MIDI CC Nummer Spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>Fader offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler Offset Spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="449"/>
         <source>Pan offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Pan offset Spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="450"/>
         <source>Solo offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo offset Spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>Mute offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Mute offset Spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="452"/>
         <source>Mute Myself MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Stummschalten MIDI Lernen Knopf</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="453"/>
         <source>Fader offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler Offset Lernen Knopf</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="454"/>
         <source>Pan offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Pan Offset Lernen Knopf</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="455"/>
         <source>Solo offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo Offset Lernen Knopf</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="456"/>
         <source>Mute offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mute Offset MIDI Lernen Knopf</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="460"/>
@@ -1489,17 +1489,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../clientsettingsdlg.cpp" line="889"/>
         <location filename="../clientsettingsdlg.cpp" line="896"/>
         <source>Could not open MIDI port</source>
-        <translation type="unfinished"></translation>
+        <translation>Konnte MIDI Port nicht öffnen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="890"/>
         <source>No MIDI devices found. Please connect a MIDI device and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurden keine MIDI Geräte gefunden. Verbinde ein MIDI Gerät und versuche es erneut.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="896"/>
         <source>Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte überprüfe deine Betriebssystemkonfiguration.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1451"/>
@@ -1514,55 +1514,55 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1483"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Lernen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1518"/>
         <location filename="../clientsettingsdlg.cpp" line="1605"/>
         <source>All Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Geräte</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1521"/>
         <source>No device connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Gerät verbunden</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1549"/>
         <location filename="../clientsettingsdlg.cpp" line="1555"/>
         <source>MIDI Device Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-Gerät nicht gefunden</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1550"/>
         <source>The MIDI device &quot;%1&quot; could not be found. Using all available devices instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das MIDI Gerät &quot;%1&quot; konnte nicht gefunden werden. Es werden nun alle verfügbaren Geräte genutzt.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1556"/>
         <source>The MIDI device &quot;%1&quot; is not currently available. Select a different device from the dropdown to connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das MIDI Gerät &quot;%1&quot; ist momentan nicht verfügbar. Wähle ein anderes Gerät aus dem Menü aus um eine Verbindung aufzubauen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1603"/>
         <location filename="../clientsettingsdlg.cpp" line="1609"/>
         <source>MIDI Device Connection Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Gerätekonfiguration fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1604"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit dem MIDI Gerät &quot;%1&quot; fehlgeschlagen. Bitte überprüfe deine Betriebssystemkonfiguration.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1610"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check that the device is available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit dem MIDI Gerät &quot;%1&quot; fehlgeschlagen. Bitte überprüfe, ob das Gerät verfügbar ist.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1631"/>
         <source>Listening...</source>
-        <translation type="unfinished"></translation>
+        <translation>Höre zu…</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="221"/>
@@ -2302,117 +2302,117 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1341"/>
         <source>MIDI Control</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Control</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1365"/>
         <source>MIDI-in</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-in</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1391"/>
         <source>MIDI Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Kanal</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1417"/>
         <source>0 (all)</source>
-        <translation type="unfinished"></translation>
+        <translation>0 (alle)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1422"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1427"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1432"/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1437"/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1442"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1447"/>
         <source>6</source>
-        <translation type="unfinished"></translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1452"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation>7</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1457"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1462"/>
         <source>9</source>
-        <translation type="unfinished"></translation>
+        <translation>9</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1467"/>
         <source>10</source>
-        <translation type="unfinished"></translation>
+        <translation>10</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1472"/>
         <source>11</source>
-        <translation type="unfinished"></translation>
+        <translation>11</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1477"/>
         <source>12</source>
-        <translation type="unfinished"></translation>
+        <translation>12</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1482"/>
         <source>13</source>
-        <translation type="unfinished"></translation>
+        <translation>13</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1487"/>
         <source>14</source>
-        <translation type="unfinished"></translation>
+        <translation>14</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1492"/>
         <source>15</source>
-        <translation type="unfinished"></translation>
+        <translation>15</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1497"/>
         <source>16</source>
-        <translation type="unfinished"></translation>
+        <translation>16</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1518"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Pickup Modus</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1546"/>
         <source>Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>Stummschalten</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1569"/>
         <source>MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1604"/>
@@ -2421,12 +2421,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../clientsettingsdlgbase.ui" line="1995"/>
         <location filename="../clientsettingsdlgbase.ui" line="2119"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Lernen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1679"/>
         <source>Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1702"/>
@@ -2434,7 +2434,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../clientsettingsdlgbase.ui" line="1963"/>
         <location filename="../clientsettingsdlgbase.ui" line="2087"/>
         <source>First MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>Erste MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1763"/>
@@ -2442,22 +2442,22 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../clientsettingsdlgbase.ui" line="2024"/>
         <location filename="../clientsettingsdlgbase.ui" line="2148"/>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1803"/>
         <source>Mute</source>
-        <translation type="unfinished">Mute</translation>
+        <translation>Mute</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1940"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="2199"/>
         <source>MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Gerät</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="623"/>
@@ -2590,7 +2590,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../connectdlg.cpp" line="1153"/>
         <source>Ping</source>
-        <translation type="unfinished">Ping</translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="171"/>

@@ -336,7 +336,7 @@ void CConnectDlg::RequestServerList()
              false ) )
     {
         // send the request for the server list
-        emit ReqServerListQuery ( haDirectoryAddress );
+        emit ReqServerListQuery ( haDirectoryAddress, PROTO_UDP );
 
         // start timer, if this message did not get any respond to retransmit
         // the server list request message
@@ -379,7 +379,7 @@ void CConnectDlg::OnTimerReRequestServList()
     {
         // note that this is a connection less message which may get lost
         // and therefore it makes sense to re-transmit it
-        emit ReqServerListQuery ( haDirectoryAddress );
+        emit ReqServerListQuery ( haDirectoryAddress, PROTO_UDP );
     }
 }
 
@@ -531,6 +531,9 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
         // store host address
         pNewListViewItem->setData ( LVC_NAME, Qt::UserRole, CurHostAddress.toString() );
 
+        enum EClientFetchMode eFetchMode = CFM_UDP_REQUEST;                  // start off in UDP mode
+        pNewListViewItem->setData ( LVC_CLIENTS, Qt::UserRole, eFetchMode ); // initialise fetch mode
+
         // per default expand the list item (if not "show all servers")
         if ( bShowAllMusicians )
         {
@@ -544,6 +547,48 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
 }
 
+void CConnectDlg::SetTcpSupported ( const CHostAddress& InetAddr, int iID )
+{
+    switch ( iID )
+    {
+    case PROTMESSID_CLM_SERVER_LIST:
+        // if we haven't received the serverlist, it might have got lost due to fragmentation
+        // retry using TCP instead
+        if ( !bServerListReceived )
+        {
+            // send the request for the server list
+            emit ReqServerListQuery ( InetAddr, PROTO_TCP_ONCE ); // close TCP connection after receiving reply
+        }
+        break;
+
+    case PROTMESSID_CLM_CONN_CLIENTS_LIST:
+        // find the server with the correct address
+        {
+            CMappedTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
+
+            if ( pCurListViewItem )
+            {
+                // find the current fetch mode for the client list for this server
+                enum EClientFetchMode eFetchMode =
+                    static_cast<enum EClientFetchMode> ( pCurListViewItem->data ( LVC_CLIENTS, Qt::UserRole ).toInt() );
+
+                if ( eFetchMode == CFM_UDP_REQUEST )
+                {
+                    // client list not yet received - switch to TCP mode
+                    eFetchMode = CFM_TCP;
+                    pCurListViewItem->setData ( LVC_CLIENTS, Qt::UserRole, eFetchMode ); // remember for future fetches
+
+                    emit CreateCLServerListReqConnClientsListMes ( InetAddr, PROTO_TCP_ONCE ); // close TCP connection after receiving reply
+                }
+            }
+        }
+        break;
+
+    default:
+        break;
+    }
+}
+
 void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo )
 {
     // find the server with the correct address
@@ -551,6 +596,16 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVect
 
     if ( pCurListViewItem )
     {
+        // find the current fetch mode for the client list for this server
+        enum EClientFetchMode eFetchMode = static_cast<enum EClientFetchMode> ( pCurListViewItem->data ( LVC_CLIENTS, Qt::UserRole ).toInt() );
+
+        if ( eFetchMode != CFM_TCP )
+        {
+            // not switched to TCP mode - set to UDP for successful fetch
+            eFetchMode = CFM_UDP_RESULT;
+            pCurListViewItem->setData ( LVC_CLIENTS, Qt::UserRole, eFetchMode );
+        }
+
         // first remove any existing children
         DeleteAllListViewItemChilds ( pCurListViewItem );
 
@@ -981,7 +1036,16 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         // connected clients, if not then request the client names
         if ( iNumClients != pCurListViewItem->childCount() )
         {
-            emit CreateCLServerListReqConnClientsListMes ( InetAddr );
+            // find the current fetch mode for the client list for this server
+            enum EClientFetchMode eFetchMode = static_cast<enum EClientFetchMode> ( pCurListViewItem->data ( LVC_CLIENTS, Qt::UserRole ).toInt() );
+
+            if ( eFetchMode != CFM_TCP )
+            {
+                // not switched to TCP mode - reset for next UDP fetch
+                eFetchMode = CFM_UDP_REQUEST;
+                pCurListViewItem->setData ( LVC_CLIENTS, Qt::UserRole, eFetchMode );
+            }
+            emit CreateCLServerListReqConnClientsListMes ( InetAddr, eFetchMode == CFM_TCP ? PROTO_TCP_ONCE : PROTO_UDP );
         }
 
         // this is the first time a ping time was received, set item to visible

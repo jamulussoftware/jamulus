@@ -141,6 +141,7 @@ public:
                          const QString& strServerPublicIP,
                          const int      iNumChannels,
                          const bool     bNEnableIPv6,
+                         const bool     bNEnableTcp,
                          CProtocol*     pNConLProt );
 
     void    SetServerName ( const QString& strNewName );
@@ -168,7 +169,7 @@ public:
 
     void Append ( const CHostAddress& InetAddr, const CHostAddress& LInetAddr, const CServerCoreInfo& ServerInfo, const QString strVersion = "" );
     void Remove ( const CHostAddress& InetAddr );
-    void RetrieveAll ( const CHostAddress& InetAddr );
+    void RetrieveAll ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection );
 
     void StoreRegistrationResult ( ESvrRegResult eStatus );
 
@@ -192,6 +193,7 @@ protected:
     EDirectoryType DirectoryType;
 
     bool bEnableIPv6;
+    bool bEnableTcp;
 
     CHostAddress ServerPublicIP;
     CHostAddress ServerPublicIP6;

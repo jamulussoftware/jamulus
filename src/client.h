@@ -278,9 +278,15 @@ public:
 
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr ); }
+    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr, enum EProtoMode eProtoMode )
+    {
+        ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, eProtoMode );
+    }
 
-    void CreateCLReqServerListMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqServerListMes ( InetAddr ); }
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr, enum EProtoMode eProtoMode )
+    {
+        ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, eProtoMode );
+    }
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
 
@@ -422,12 +428,16 @@ protected:
     int    maxGainOrPanId;
     int    iCurPingTime;
 
+    // for TCP protocol support
+    bool bTcpSupported;
+    int  iClientID;
+
 protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
 
-    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr );
+    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection );
 
     void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
     void OnJittBufSizeChanged ( int iNewJitBufSize );
@@ -441,8 +451,9 @@ protected slots:
         }
     }
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
+    void OnCLTcpSupported ( CHostAddress InetAddr, int iID );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
 
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
 
@@ -456,6 +467,13 @@ protected slots:
     void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
     void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo, CTcpConnection* pTcpConnection );
+
+public slots:
+    void OnCLSendEmptyMes ( CHostAddress InetAddr, CTcpConnection* pTcpConnection )
+    {
+        ConnLessProtocol.CreateCLEmptyMes ( InetAddr, pTcpConnection );
+    }
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
@@ -470,6 +488,8 @@ signals:
     void CLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
 
     void CLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
+
+    void CLTcpSupported ( CHostAddress InetAddr, int iID );
 
     void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
 

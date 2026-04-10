@@ -1330,22 +1330,22 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="409"/>
         <source>Pick-up Mode check box</source>
-        <translation>Pickup Modus checkbox</translation>
+        <translation>Pickup Modus Checkbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="412"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation>Wähle den MIDI-Ausgangsport aus, mit dem eine Verbindung hergestellt werden soll. Jamulus verbindet seinen MIDI-Eingangsport bei Aktivierung automatisch mit dem ausgewählten Gerät. Du kannst auch einen Verbindungsmanager deiner Wahl verwenden, um die Verbindungen manuell zu ändern.</translation>
+        <translation>Wähle den MIDI-Ausgangsport aus, mit dem eine Verbindung hergestellt werden soll. Jamulus verbindet seinen MIDI-Eingangsport mit dem ausgewählten Gerät falls aktiviert. Du kannst auch einen Verbindungsmanager deiner Wahl verwenden, um die Verbindungen manuell zu ändern.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="416"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation>Wähle die MIDI-Quelle aus, mit der du eine Verbindung herstellen möchtest. Jamulus verbindet seinen MIDI-Eingangsport automatisch mit dem ausgewählten Gerät, sobald du es aktivierst. Du kannst auch das Audio MIDI Setup verwenden, um die Verbindungen manuell zu ändern.</translation>
+        <translation>Wähle die MIDI-Quelle aus, mit der du eine Verbindung herstellen möchtest. Jamulus verbindet seinen MIDI-Eingangsport automatisch mit dem ausgewählten Gerät falls aktiviert. Du kannst auch das Audio MIDI Setup verwenden, um die Verbindungen manuell zu ändern.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="420"/>
         <source>Select which MIDI input device(s) Jamulus should listen to. Select &apos;All Devices&apos; to receive MIDI from all connected devices, or choose a specific device.</source>
-        <translation>Wähle die/das MIDI Input Gerät/Geräte aus, auf die Jamulus hören soll. Wähle &apos;Alle Geräte&apos; aus um MIDI von allen angeschlossenen Geräten zu nutzen oder wähle spezifisch ein Gerät aus.</translation>
+        <translation>Wähle die/das MIDI Input Gerät/Geräte aus, auf die Jamulus hören soll. Wähle &apos;Alle Geräte&apos; aus um MIDI von allen angeschlossenen Geräten zu nutzen oder wähle ein spezifisches Gerät aus.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="423"/>
@@ -1360,7 +1360,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation>Es gibt einen globalen MIDI-Kanalparameter (0–16) und zwei Einstellungen, die du für jedes zu steuernde Element festlegen kannst: erste MIDI-CC und Anzahl aufeinanderfolgender CC-Nummern. Lege zunächst den Kanal fest, auf dem Jamulus hören soll (0 = alle Kanäle). Für jedes Element, das du steuern möchtest – z.B. Lautstärke-Regler, Pan, Solo oder Stummschalten – gebe die erste MIDI-CC (Startnummer) und die Anzahl der aufeinanderfolgenden CC-Nummern an. Für Stummschalten gilt eine Ausnahme: Hier reicht eine einzelne CC-Nummer, da das Feature nur auf den eigenen Audiostream wirkt.</translation>
+        <translation>Es gibt einen globalen MIDI-Kanalparameter (0–16) und zwei konfigurierbare Parameter pro zu steuerndem Element: die erste MIDI-CC-Nummer und die Anzahl der aufeinanderfolgenden CC-Nummern. Lege zunächst den Kanal fest, auf dem Jamulus lauschen soll (0 = alle Kanäle). Anschließend konfigurierst du für jedes zu steuernde Element (Lautstärke-Fader, Pan, Solo, Stummschalten) die erste MIDI-CC-Nummer und die Anzahl der dahinter folgenden CC-Nummern. Eine Ausnahme bildet der Parameter Stummschalten – dieser benötigt nur eine einzige CC-Nummer, da er ausschließlich auf deinen eigenen Audiostream wirkt.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
@@ -1375,7 +1375,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation>Stummschalten MIDI CC Nummer spin box</translation>
+        <translation>Stummschalten MIDI CC Nummer Spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
@@ -1385,7 +1385,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="449"/>
         <source>Pan offset spin box</source>
-        <translation>Pan offset spinbox</translation>
+        <translation>Pan offset Spinbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="450"/>
@@ -1410,17 +1410,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="454"/>
         <source>Pan offset MIDI learn button</source>
-        <translation>Pan offset Lernen Knopf</translation>
+        <translation>Pan Offset Lernen Knopf</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="455"/>
         <source>Solo offset MIDI learn button</source>
-        <translation>Solo offset Lernen Knopf</translation>
+        <translation>Solo Offset Lernen Knopf</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="456"/>
         <source>Mute offset MIDI learn button</source>
-        <translation>Mute offset MIDI Lernen Knopf</translation>
+        <translation>Mute Offset MIDI Lernen Knopf</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="460"/>
@@ -1552,7 +1552,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1604"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check your OS configuration.</source>
-        <translation>Verbindung mit dem MIDI Gerät &quot;%1&quot; fehlgeschlagen. Bitte überprüfe deine Betribssystemkonfiguration.</translation>
+        <translation>Verbindung mit dem MIDI Gerät &quot;%1&quot; fehlgeschlagen. Bitte überprüfe deine Betriebssystemkonfiguration.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1610"/>
@@ -2402,7 +2402,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1518"/>
         <source>Pick-up Mode</source>
-        <translation>Pick-up Modus</translation>
+        <translation>Pickup Modus</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1546"/>

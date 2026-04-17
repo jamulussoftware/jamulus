@@ -1410,6 +1410,10 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             Channel.PrepAndSendPacket ( &Socket, vecCeltData, iCeltNumCodedBytes );
         }
     }
+    else
+    {
+
+    }
 
     // Receive signal ----------------------------------------------------------
     // in case of mute stream, store local data

@@ -230,6 +230,9 @@ LED bar:      lbr
 // defines the time interval at which the ping time is updated in the GUI
 #define PING_UPDATE_TIME_MS 500 // ms
 
+// defines a factor to compensate for larger than ideal jitter buffer sizes for estimated overall delay calculation
+#define JITTBUF_COMP_FACTOR 0.7f
+
 // defines the time interval at which the ping time is updated for the server list
 #define PING_UPDATE_TIME_SERVER_LIST_MS 2500 // ms
 

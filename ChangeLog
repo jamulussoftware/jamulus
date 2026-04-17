@@ -60,7 +60,7 @@
 - iOS: Add workaround from QTBUG-129651 for iOS FFMPEG linking (#3581).
   (contributed by @ann0see)
 
-- iOS: Upgrade build to Qt 6 (#3445).
+- iOS: Upgrade build for Qt 6 compatibility (#3445).
   (contributed by @ann0see)
 
 - iOS: Return correct operating system version if run as server (#3360).

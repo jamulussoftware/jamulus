@@ -1156,6 +1156,9 @@ void CClient::Init()
             case AQ_HIGH:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY_DBLE_FRAMESIZE;
                 break;
+            case AQ_RAW:
+                iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof(int16_t);
+                break;
             }
         }
         else
@@ -1174,6 +1177,9 @@ void CClient::Init()
                 break;
             case AQ_HIGH:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE;
+                break;
+            case AQ_RAW:
+                iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof(int16_t);
                 break;
             }
         }
@@ -1199,6 +1205,9 @@ void CClient::Init()
             case AQ_HIGH:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
                 break;
+            case AQ_RAW:
+                iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof(int16_t);
+                break;
             }
         }
         else
@@ -1217,6 +1226,9 @@ void CClient::Init()
                 break;
             case AQ_HIGH:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
+                break;
+            case AQ_RAW:
+                iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof(int16_t);
                 break;
             }
         }
@@ -1412,7 +1424,9 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     }
     else
     {
-
+        // Send raw samples instead of OPUS
+        memcpy ( &vecCeltData[0], &vecsStereoSndCrd[0], iCeltNumCodedBytes );
+        Channel.PrepAndSendPacket ( &Socket, vecCeltData, iCeltNumCodedBytes );
     }
 
     // Receive signal ----------------------------------------------------------

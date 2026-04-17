@@ -885,7 +885,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             {
                 if ( bIsRawAudio )
                 {
-                    memcpy ( &vecvecsData[iChanCnt][iOffset], &vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
+                    memcpy ( &vecvecsData[iChanCnt][iOffset], &vecvecbyCodedData[iChanCnt][0], iCeltNumCodedBytes );
                 }
                 else
                 {

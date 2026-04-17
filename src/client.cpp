@@ -1444,24 +1444,41 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // get pointer to coded data and manage the flags
         if ( bReceiveDataOk )
         {
-            pCurCodedData = &vecbyNetwData[0];
-
+            if ( eAudioQuality == AQ_RAW )
+            {
+                memcpy ( &vecsStereoSndCrd[0], &vecbyNetwData[0], iCeltNumCodedBytes );
+                pCurCodedData = nullptr;
+            }
+            else
+            {
+                pCurCodedData = &vecbyNetwData[0];
+            }
             // on any valid received packet, we clear the initialization phase flag
             bIsInitializationPhase = false;
         }
         else
         {
-            // for lost packets use null pointer as coded input data
-            pCurCodedData = nullptr;
-
+            if ( eAudioQuality == AQ_RAW )
+            {
+                memset ( &vecsStereoSndCrd[0], 0, iCeltNumCodedBytes );
+                pCurCodedData = nullptr;
+            }
+            else
+            {
+                // for lost packets use null pointer as coded input data
+                pCurCodedData = nullptr;
+            }
             // invalidate the buffer OK status flag
             bJitterBufferOK = false;
         }
 
-        // OPUS decoding
-        if ( CurOpusDecoder != nullptr )
+        if ( eAudioQuality != AQ_RAW )
         {
-            iUnused = opus_custom_decode ( CurOpusDecoder, pCurCodedData, iCeltNumCodedBytes, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples );
+            // OPUS decoding
+            if ( CurOpusDecoder != nullptr )
+            {
+                iUnused = opus_custom_decode ( CurOpusDecoder, pCurCodedData, iCeltNumCodedBytes, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples );
+            }
         }
     }
 

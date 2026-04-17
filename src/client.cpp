@@ -1389,23 +1389,26 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
-    for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )
+    if ( eAudioQuality != AQ_RAW )
     {
-        // OPUS encoding
-        if ( CurOpusEncoder != nullptr )
+        for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )
         {
-            if ( bMuteOutStream )
+            // OPUS encoding
+            if ( CurOpusEncoder != nullptr )
             {
-                iUnused = opus_custom_encode ( CurOpusEncoder, &vecZeros[j], iOPUSFrameSizeSamples, &vecCeltData[0], iCeltNumCodedBytes );
+                if ( bMuteOutStream )
+                {
+                    iUnused = opus_custom_encode ( CurOpusEncoder, &vecZeros[j], iOPUSFrameSizeSamples, &vecCeltData[0], iCeltNumCodedBytes );
+                }
+                else
+                {
+                    iUnused = opus_custom_encode ( CurOpusEncoder, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples, &vecCeltData[0], iCeltNumCodedBytes );
+                }
             }
-            else
-            {
-                iUnused = opus_custom_encode ( CurOpusEncoder, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples, &vecCeltData[0], iCeltNumCodedBytes );
-            }
-        }
 
-        // send coded audio through the network
-        Channel.PrepAndSendPacket ( &Socket, vecCeltData, iCeltNumCodedBytes );
+            // send coded audio through the network
+            Channel.PrepAndSendPacket ( &Socket, vecCeltData, iCeltNumCodedBytes );
+        }
     }
 
     // Receive signal ----------------------------------------------------------

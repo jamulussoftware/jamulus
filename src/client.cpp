@@ -1424,8 +1424,15 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     }
     else
     {
-        // Send raw samples instead of OPUS
-        memcpy ( &vecCeltData[0], &vecsStereoSndCrd[0], iCeltNumCodedBytes );
+        if ( !bMuteOutStream )
+        {
+            // Send raw samples instead of OPUS
+            memcpy ( &vecCeltData[0], &vecsStereoSndCrd[0], iCeltNumCodedBytes );
+        }
+        else
+        {
+            memset ( &vecCeltData[0], 0, iCeltNumCodedBytes );
+        }
         Channel.PrepAndSendPacket ( &Socket, vecCeltData, iCeltNumCodedBytes );
     }
 

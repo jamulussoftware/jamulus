@@ -1176,7 +1176,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
             DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
         }
 
-        if ( iCeltNumCodedBytes != iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] * sizeof( int16_t ) )
+        if ( iCeltNumCodedBytes != iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] * sizeof ( int16_t ) )
         {
             // OPUS encoding
             if ( pCurOpusEncoder != nullptr )

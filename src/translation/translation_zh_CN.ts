@@ -868,7 +868,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="404"/>
         <source>&amp;MIDI Control Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI控制器选项(&amp;M)...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="792"/>
@@ -1478,117 +1478,117 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="402"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation type="unfinished"></translation>
+        <translation>启用/禁用MIDI输入端口</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
         <source>MIDI-in port check box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI输入端口勾选框</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="405"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>拾音器模式</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="406"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation type="unfinished"></translation>
+        <translation>启用后，MIDI 推子和平移控件将等待物理控制器位置与当前软件值匹配，然后再做出响应。当您的物理控制器与软件不同步时，这可以防止对应的值突然变化。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="409"/>
         <source>Pick-up Mode check box</source>
-        <translation type="unfinished"></translation>
+        <translation>拾音器模式勾选框</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="412"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>选择要连接的 MIDI 输出端口。启用后，Jamulus 会自动将其 MIDI 输入端口连接到所选设备。您还可以使用选择的连接管理器手动更改连接。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="416"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>选择要连接的 MIDI 源。启用后，Jamulus 将自动将其 MIDI 输入端口连接到所选设备。您还可以使用音频 MIDI 设置来手动更改连接。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="420"/>
         <source>Select which MIDI input device(s) Jamulus should listen to. Select &apos;All Devices&apos; to receive MIDI from all connected devices, or choose a specific device.</source>
-        <translation type="unfinished"></translation>
+        <translation>选择 Jamulus 应监听的 MIDI 输入设备。选择“所有设备”以从所有连接的设备接收 MIDI，或选择一个特定的设备。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="423"/>
         <source>MIDI input device combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 输入设备下拉框</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="425"/>
         <source>MIDI controller settings</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 控制器设置</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>有一个全局 MIDI 通道参数 (0-16) 和两个可为每个控制项目设置的参数：第一个 MIDI CC 和连续 CC 编号（计数）。首先设置您希望 Jamulus 收听的通道（0 表示所有通道）。然后，对于要控制的每个项目（音量推子、声相、独奏、静音），设置第一个 MIDI CC（从其开始的 CC 编号）和连续 CC 编号的数量（计数）。有一个例外，不需要建立连续的 CC 编号，即“静音自己”参数 - 它只需要一个 CC 编号，因为它仅适用于自己的音频流。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>You can either type in the MIDI CC values or use the &quot;Learn&quot; button: click on &quot;Learn&quot;, actuate the fader/knob/button on your MIDI controller, and the MIDI CC number will be detected and saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>您可以输入 MIDI CC 值或使用“学习”按钮：单击“学习”，启动 MIDI 控制器上的推子/旋钮/按钮，将检测并保存 MIDI CC 编号。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="446"/>
         <source>MIDI channel combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 通道下拉框</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>静音自己 MIDI CC 数字输入控件</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>Fader offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>推子偏移量输入控件</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="449"/>
         <source>Pan offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>生相偏移量输入控件</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="450"/>
         <source>Solo offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>独奏偏移量输入控件</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>Mute offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>静音偏移量输入控件</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="452"/>
         <source>Mute Myself MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>静音自己 MIDI 学习按钮</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="453"/>
         <source>Fader offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>推子偏移量 MIDI 学习按钮</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="454"/>
         <source>Pan offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>声像偏移量 MIDI 学习按钮</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="455"/>
         <source>Solo offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>独奏偏移量 MIDI 学习按钮</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="456"/>
         <source>Mute offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>独奏偏移量 MIDI 学习按钮</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="508"/>
@@ -1628,55 +1628,55 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1483"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>学习</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1518"/>
         <location filename="../clientsettingsdlg.cpp" line="1605"/>
         <source>All Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>所有设备</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1521"/>
         <source>No device connected</source>
-        <translation type="unfinished"></translation>
+        <translation>没有已连接的设备</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1549"/>
         <location filename="../clientsettingsdlg.cpp" line="1555"/>
         <source>MIDI Device Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 设备未找到</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1550"/>
         <source>The MIDI device &quot;%1&quot; could not be found. Using all available devices instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 设备 &quot;%1&quot; 未找到。将使用所有可用设备。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1556"/>
         <source>The MIDI device &quot;%1&quot; is not currently available. Select a different device from the dropdown to connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 设备 &quot;%1&quot; 当前不可用。请从下拉框选择一个不同的设备以连接。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1603"/>
         <location filename="../clientsettingsdlg.cpp" line="1609"/>
         <source>MIDI Device Connection Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 设备连接失败</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1604"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法连接到 MIDI 设备 &quot;%1&quot;。请检查你的系统配置。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1610"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check that the device is available.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法连接到 MIDI 设备 &quot;%1&quot;。请检查这个设备是否可用。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1631"/>
         <source>Listening...</source>
-        <translation type="unfinished"></translation>
+        <translation>监听中...</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
@@ -1791,17 +1791,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="889"/>
         <location filename="../clientsettingsdlg.cpp" line="896"/>
         <source>Could not open MIDI port</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开 MIDI 端口</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="890"/>
         <source>No MIDI devices found. Please connect a MIDI device and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>未找到 MIDI 设备。请连接一个 MIDI 设备后再试一次。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="896"/>
         <source>Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>请检查你的系统配置。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1038"/>
@@ -2304,22 +2304,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1341"/>
         <source>MIDI Control</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 控制器</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1365"/>
         <source>MIDI-in</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 输入</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1391"/>
         <source>MIDI Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 通道</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1417"/>
         <source>0 (all)</source>
-        <translation type="unfinished"></translation>
+        <translation>0 (所有)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1422"/>
@@ -2404,17 +2404,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1518"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>拾音器模式</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1546"/>
         <source>Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>静音自己</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1569"/>
         <source>MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1604"/>
@@ -2423,12 +2423,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="1995"/>
         <location filename="../clientsettingsdlgbase.ui" line="2119"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>学习</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1679"/>
         <source>Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>推子</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1702"/>
@@ -2436,7 +2436,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="1963"/>
         <location filename="../clientsettingsdlgbase.ui" line="2087"/>
         <source>First MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>第一个 MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1763"/>
@@ -2444,7 +2444,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="2024"/>
         <location filename="../clientsettingsdlgbase.ui" line="2148"/>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>计数</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1803"/>
@@ -2459,7 +2459,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="2199"/>
         <source>MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 设备</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="623"/>
@@ -2592,7 +2592,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="1153"/>
         <source>Ping</source>
-        <translation type="unfinished">Ping</translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="171"/>

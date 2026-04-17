@@ -23,6 +23,9 @@
 \******************************************************************************/
 
 #include "server.h"
+#include "global.h"
+#include "util.h"
+#include <cstdint>
 
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,
@@ -874,27 +877,46 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
                 return;
             }
 
+            const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
+            const bool bIsRawAudio = ( iCeltNumCodedBytes == iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] * sizeof(int16_t) );
+
             // get pointer to coded data
             if ( eGetStat == GS_BUFFER_OK )
             {
-                pCurCodedData = &vecvecbyCodedData[iChanCnt][0];
+                if ( bIsRawAudio )
+                {
+                    memcpy ( &vecvecsData[iChanCnt][iOffset], &vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
+                }
+                else
+                {
+                    pCurCodedData = &vecvecbyCodedData[iChanCnt][0];
+                }
             }
             else
             {
-                // for lost packets use null pointer as coded input data
-                pCurCodedData = nullptr;
+                if ( bIsRawAudio )
+                {
+                    memset ( &vecvecsData[iChanCnt][iOffset], 0, iCeltNumCodedBytes );
+                }
+                else
+                {
+                    // for lost packets use null pointer as coded input data
+                    pCurCodedData = nullptr;
+                }
             }
 
-            // OPUS decode received data stream
-            if ( CurOpusDecoder != nullptr )
+            if ( !bIsRawAudio )
             {
-                const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
+                // OPUS decode received data stream
+                if ( CurOpusDecoder != nullptr )
+                {
 
-                iUnused = opus_custom_decode ( CurOpusDecoder,
-                                               pCurCodedData,
-                                               iCeltNumCodedBytes,
-                                               &vecvecsData[iChanCnt][iOffset],
-                                               iClientFrameSizeSamples );
+                    iUnused = opus_custom_decode ( CurOpusDecoder,
+                                                pCurCodedData,
+                                                iCeltNumCodedBytes,
+                                                &vecvecsData[iChanCnt][iOffset],
+                                                iClientFrameSizeSamples );
+                }
             }
         }
 
@@ -1154,30 +1176,45 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
             DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
         }
 
-        // OPUS encoding
-        if ( pCurOpusEncoder != nullptr )
+        if ( iCeltNumCodedBytes !=  iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] * sizeof(int16_t))
         {
-            //### TODO: BEGIN ###//
-            // find a better place than this: the setting does not change all the time so for speed
-            // optimization it would be better to set it only if the network frame size is changed
-            opus_custom_encoder_ctl ( pCurOpusEncoder,
-                                      OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
-            //### TODO: END ###//
+            // OPUS encoding
+            if ( pCurOpusEncoder != nullptr )
+            {
+                //### TODO: BEGIN ###//
+                // find a better place than this: the setting does not change all the time so for speed
+                // optimization it would be better to set it only if the network frame size is changed
+                opus_custom_encoder_ctl ( pCurOpusEncoder,
+                                        OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+                //### TODO: END ###//
 
+                for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+                {
+                    const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
+
+                    iUnused = opus_custom_encode ( pCurOpusEncoder,
+                                                &vecsSendData[iOffset],
+                                                iClientFrameSizeSamples,
+                                                &vecvecbyCodedData[iChanCnt][0],
+                                                iCeltNumCodedBytes );
+
+                    // send separate mix to current clients
+                    vecChannels[iCurChanID].PrepAndSendPacket ( &Socket, vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
+                }
+            }
+        }
+        else
+        {
             for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
             {
                 const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
 
-                iUnused = opus_custom_encode ( pCurOpusEncoder,
-                                               &vecsSendData[iOffset],
-                                               iClientFrameSizeSamples,
-                                               &vecvecbyCodedData[iChanCnt][0],
-                                               iCeltNumCodedBytes );
+                memcpy ( &vecvecbyCodedData[iChanCnt][0], &vecsSendData[iOffset], iCeltNumCodedBytes );
 
-                // send separate mix to current clients
                 vecChannels[iCurChanID].PrepAndSendPacket ( &Socket, vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
             }
         }
+
     }
 
     Q_UNUSED ( iUnused )

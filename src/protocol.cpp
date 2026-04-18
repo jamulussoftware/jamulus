@@ -1864,7 +1864,7 @@ void CProtocol::CreateCLRegisterServerExMes ( const CHostAddress& InetAddr, cons
     const QByteArray strUTF8LInetAddr = LInetAddr.InetAddr.toString().toUtf8();
     const QByteArray strUTF8Name      = ServerInfo.strName.toUtf8();
     const QByteArray strUTF8City      = ServerInfo.strCity.toUtf8();
-    const QByteArray strUTF8Version   = QString ( APP_VERSION ).toUtf8();
+    const QByteArray strUTF8Version   = QString ( VERSION ).toUtf8();
 
     // size of current message body
     const int iEntrLen = 2 +                           // server internal port number

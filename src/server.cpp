@@ -23,9 +23,6 @@
 \******************************************************************************/
 
 #include "server.h"
-#include "global.h"
-#include "util.h"
-#include <cstdint>
 
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,

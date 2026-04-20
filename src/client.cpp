@@ -1157,7 +1157,14 @@ void CClient::Init()
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY_DBLE_FRAMESIZE;
                 break;
             case AQ_RAW:
-                iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                if ( Channel.bRawAudioIsSupported )
+                {
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                }
+                else
+                {
+                    iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY_DBLE_FRAMESIZE;
+                }
                 break;
             }
         }
@@ -1179,7 +1186,14 @@ void CClient::Init()
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE;
                 break;
             case AQ_RAW:
-                iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                if ( Channel.bRawAudioIsSupported )
+                {
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                }
+                else
+                {
+                    iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE;
+                }
                 break;
             }
         }
@@ -1206,7 +1220,14 @@ void CClient::Init()
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
                 break;
             case AQ_RAW:
-                iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                if ( Channel.bRawAudioIsSupported )
+                {
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                }
+                else
+                {
+                    iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
+                }
                 break;
             }
         }
@@ -1228,7 +1249,14 @@ void CClient::Init()
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
                 break;
             case AQ_RAW:
-                iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                if ( Channel.bRawAudioIsSupported )
+                {
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                }
+                else
+                {
+                    iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
+                }
                 break;
             }
         }
@@ -1401,7 +1429,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
-    if ( eAudioQuality != AQ_RAW )
+    if ( eAudioQuality != AQ_RAW || !Channel.bRawAudioIsSupported )
     {
         for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )
         {
@@ -1451,7 +1479,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // get pointer to coded data and manage the flags
         if ( bReceiveDataOk )
         {
-            if ( eAudioQuality == AQ_RAW )
+            if ( eAudioQuality == AQ_RAW && Channel.bRawAudioIsSupported )
             {
                 memcpy ( &vecsStereoSndCrd[0], &vecbyNetwData[0], iCeltNumCodedBytes );
                 pCurCodedData = nullptr;
@@ -1465,7 +1493,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
         else
         {
-            if ( eAudioQuality == AQ_RAW )
+            if ( eAudioQuality == AQ_RAW && Channel.bRawAudioIsSupported )
             {
                 memset ( &vecsStereoSndCrd[0], 0, iCeltNumCodedBytes );
                 pCurCodedData = nullptr;
@@ -1479,7 +1507,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             bJitterBufferOK = false;
         }
 
-        if ( eAudioQuality != AQ_RAW )
+        if ( eAudioQuality != AQ_RAW || !Channel.bRawAudioIsSupported )
         {
             // OPUS decoding
             if ( CurOpusDecoder != nullptr )

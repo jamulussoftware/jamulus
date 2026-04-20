@@ -169,6 +169,9 @@ public:
 
     double UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio, const int iInSize, const bool bIsStereoIn );
 
+    bool bRawAudioIsSupported = false;
+
+
 protected:
     bool ProtocolIsEnabled();
 

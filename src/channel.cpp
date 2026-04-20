@@ -135,7 +135,6 @@ void CChannel::SetEnable ( const bool bNEnStat )
     // since the SetEnable(true) is set AFTER the Init() in the client -> we
     // simply set it regardless of the state which does not hurt.
     bUseSequenceNumber   = false;
-    bRawAudioIsSupported = false;
 
     // if channel is not enabled, reset time out count and protocol
     if ( !bNEnStat )
@@ -149,7 +148,6 @@ void CChannel::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString 
 {
     // check if audio packet counter is supported by the server (minimum version is 3.6.0)
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
-    bRawAudioIsSupported = ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 11, 1 ) ) >= 0 ) ? true : false;
     if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 6, 0 ) ) >= 0 )
     {
         // activate sequence counter and update the audio stream properties (which

@@ -171,7 +171,6 @@ public:
 
     bool bRawAudioIsSupported = false;
 
-
 protected:
     bool ProtocolIsEnabled();
 

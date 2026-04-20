@@ -134,7 +134,7 @@ void CChannel::SetEnable ( const bool bNEnStat )
     // function. NOTE that it is important to reset this parameter on SetEnable(false)
     // since the SetEnable(true) is set AFTER the Init() in the client -> we
     // simply set it regardless of the state which does not hurt.
-    bUseSequenceNumber   = false;
+    bUseSequenceNumber = false;
 
     // if channel is not enabled, reset time out count and protocol
     if ( !bNEnStat )

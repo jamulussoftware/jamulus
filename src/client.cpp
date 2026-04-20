@@ -395,6 +395,17 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
     emit ConClientListMesReceived ( vecChanInfo );
 }
 
+void CClient::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 11, 1 ) ) >= 0 )
+    {
+        bRawAudioIsSupported = true;
+        Init();
+    }
+#endif
+}
+
 void CClient::CreateServerJitterBufferMessage()
 {
     // per definition in the client: if auto jitter buffer is enabled, both,
@@ -1157,7 +1168,7 @@ void CClient::Init()
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY_DBLE_FRAMESIZE;
                 break;
             case AQ_RAW:
-                if ( Channel.bRawAudioIsSupported )
+                if ( bRawAudioIsSupported )
                 {
                     iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
                 }
@@ -1186,7 +1197,7 @@ void CClient::Init()
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE;
                 break;
             case AQ_RAW:
-                if ( Channel.bRawAudioIsSupported )
+                if ( bRawAudioIsSupported )
                 {
                     iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
                 }
@@ -1220,7 +1231,7 @@ void CClient::Init()
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
                 break;
             case AQ_RAW:
-                if ( Channel.bRawAudioIsSupported )
+                if ( bRawAudioIsSupported )
                 {
                     iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
                 }
@@ -1249,7 +1260,7 @@ void CClient::Init()
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
                 break;
             case AQ_RAW:
-                if ( Channel.bRawAudioIsSupported )
+                if ( bRawAudioIsSupported )
                 {
                     iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
                 }
@@ -1429,7 +1440,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
-    if ( eAudioQuality != AQ_RAW || !Channel.bRawAudioIsSupported )
+    if ( eAudioQuality != AQ_RAW || !bRawAudioIsSupported )
     {
         for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )
         {
@@ -1479,7 +1490,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // get pointer to coded data and manage the flags
         if ( bReceiveDataOk )
         {
-            if ( eAudioQuality == AQ_RAW && Channel.bRawAudioIsSupported )
+            if ( eAudioQuality == AQ_RAW && bRawAudioIsSupported )
             {
                 memcpy ( &vecsStereoSndCrd[0], &vecbyNetwData[0], iCeltNumCodedBytes );
                 pCurCodedData = nullptr;
@@ -1493,7 +1504,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
         else
         {
-            if ( eAudioQuality == AQ_RAW && Channel.bRawAudioIsSupported )
+            if ( eAudioQuality == AQ_RAW && bRawAudioIsSupported )
             {
                 memset ( &vecsStereoSndCrd[0], 0, iCeltNumCodedBytes );
                 pCurCodedData = nullptr;
@@ -1507,7 +1518,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             bJitterBufferOK = false;
         }
 
-        if ( eAudioQuality != AQ_RAW || !Channel.bRawAudioIsSupported )
+        if ( eAudioQuality != AQ_RAW || !bRawAudioIsSupported )
         {
             // OPUS decoding
             if ( CurOpusDecoder != nullptr )

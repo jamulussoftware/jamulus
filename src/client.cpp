@@ -1035,6 +1035,10 @@ void CClient::Stop()
     // disable channel
     Channel.SetEnable ( false );
 
+    // Fall back to opus in case raw was used
+    bRawAudioIsSupported = false;
+    Init();
+
     // wait for approx. 100 ms to make sure no audio packet is still in the
     // network queue causing the channel to be reconnected right after having
     // received the disconnect message (seems not to gain much, disconnect is

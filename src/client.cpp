@@ -405,6 +405,11 @@ void CClient::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString s
         bRawAudioIsSupported = true;
         Init();
     }
+    else
+    {
+        bRawAudioIsSupported = false;
+        Init();
+    }
 #endif
 }
 

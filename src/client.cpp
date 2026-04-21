@@ -400,7 +400,7 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 void CClient::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
-    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 11, 1 ) ) >= 0 )
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 11, 1 ) ) == 0 )
     {
         bRawAudioIsSupported = true;
         Init();

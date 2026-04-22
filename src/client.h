@@ -438,7 +438,6 @@ protected slots:
     {
         if ( InetAddr == Channel.GetAddress() )
         {
-            bRawAudioIsSupported = false;
             emit Disconnected();
         }
     }

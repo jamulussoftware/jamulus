@@ -270,7 +270,7 @@ LED bar:      lbr
 #define MAX_LEN_SERVER_NAME         20
 #define MAX_LEN_IP_ADDRESS          15
 #define MAX_LEN_SERVER_CITY         20
-#define MAX_LEN_VERSION_TEXT        30
+#define MAX_LEN_VERSION_TEXT        50
 
 // define Settings tab indexes
 #define SETTING_TAB_USER     0

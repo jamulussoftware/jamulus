@@ -605,7 +605,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // audio quality
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audioquality", 0, 2 /* AQ_HIGH */, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audioquality", 0, 3 /* AQ_RAW */, iValue ) )
     {
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }

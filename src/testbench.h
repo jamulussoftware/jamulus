@@ -218,11 +218,11 @@ public slots:
             vecServerInfo[0].strCity          = GenRandomString();
             vecServerInfo[0].strName          = GenRandomString();
 
-            Protocol.CreateCLServerListMes ( CurHostAddress, vecServerInfo );
+            Protocol.CreateCLServerListMes ( CurHostAddress, vecServerInfo, nullptr );
             break;
 
         case 20: // PROTMESSID_CLM_REQ_SERVER_LIST
-            Protocol.CreateCLReqServerListMes ( CurHostAddress );
+            Protocol.CreateCLReqServerListMes ( CurHostAddress, PROTO_UDP );
             break;
 
         case 21: // PROTMESSID_CLM_SEND_EMPTY_MESSAGE
@@ -230,7 +230,7 @@ public slots:
             break;
 
         case 22: // PROTMESSID_CLM_EMPTY_MESSAGE
-            Protocol.CreateCLEmptyMes ( CurHostAddress );
+            Protocol.CreateCLEmptyMes ( CurHostAddress, nullptr );
             break;
 
         case 23: // PROTMESSID_CLM_DISCONNECTION
@@ -261,11 +261,11 @@ public slots:
             vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
             vecChanInfo[0].strName = GenRandomString();
 
-            Protocol.CreateCLConnClientsListMes ( CurHostAddress, vecChanInfo );
+            Protocol.CreateCLConnClientsListMes ( CurHostAddress, vecChanInfo, nullptr );
             break;
 
         case 29: // PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST
-            Protocol.CreateCLReqConnClientsListMes ( CurHostAddress );
+            Protocol.CreateCLReqConnClientsListMes ( CurHostAddress, PROTO_UDP );
             break;
 
         case 30: // PROTMESSID_CLM_CHANNEL_LEVEL_LIST

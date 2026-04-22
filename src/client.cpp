@@ -145,7 +145,9 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLRedServerListReceived, this, &CClient::CLRedServerListReceived );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::CLConnClientsListMesReceived );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLTcpSupported, this, &CClient::OnCLTcpSupported );
+
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::OnCLConnClientsListMesReceived );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived, this, &CClient::OnCLPingReceived );
 
@@ -249,11 +251,80 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
 }
 
-void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode )
 {
+    if ( pTcpConnection )
+    {
+        // already have TCP connection - just send and return
+        pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
+        return;
+    }
+
     // the protocol queries me to call the function to send the message
     // send it through the network
-    Socket.SendPacket ( vecMessage, InetAddr );
+    if ( eProtoMode != PROTO_UDP )
+    {
+        // create a TCP client connection and send message
+        QTcpSocket* pSocket = new QTcpSocket ( this );
+
+        // timer for TCP connect timeout shorter than Qt default 30 seconds
+        QTimer* pTimer = new QTimer ( this );
+        pTimer->setSingleShot ( true );
+
+        connect ( pTimer, &QTimer::timeout, this, [this, pSocket, pTimer]() {
+            if ( pSocket->state() != QAbstractSocket::ConnectedState )
+            {
+                pSocket->abort();
+                pSocket->deleteLater();
+                qDebug() << "- TCP connect timeout";
+            }
+            pTimer->deleteLater();
+        } );
+
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 15, 0 )
+#    define ERRORSIGNAL &QTcpSocket::errorOccurred
+#else
+#    define ERRORSIGNAL QOverload<QAbstractSocket::SocketError>::of ( &QAbstractSocket::error )
+#endif
+        connect ( pSocket, ERRORSIGNAL, this, [this, pSocket, pTimer] ( QAbstractSocket::SocketError err ) {
+            Q_UNUSED ( err );
+
+            pTimer->stop();
+            pTimer->deleteLater();
+
+            qWarning() << "- TCP connection error:" << pSocket->errorString();
+            // may want to specifically handle ConnectionRefusedError?
+            pSocket->deleteLater();
+        } );
+
+        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, pTimer, InetAddr, vecMessage, eProtoMode]() {
+            pTimer->stop();
+            pTimer->deleteLater();
+
+            // connection succeeded, give it to a CTcpConnection
+            CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket,
+                                                                  InetAddr,
+                                                                  this,
+                                                                  &Channel,
+                                                                  eProtoMode == PROTO_TCP_LONG ); // client connection, will self-delete on disconnect
+
+            if ( eProtoMode == PROTO_TCP_LONG )
+            {
+                Channel.SetTcpConnection ( pTcpConnection ); // link session connection with channel
+            }
+
+            pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
+
+            // the CTcpConnection object will pass the reply back up to CClient::Channel
+        } );
+
+        pSocket->connectToHost ( InetAddr.InetAddr, InetAddr.iPort );
+        pTimer->start ( TCP_CONNECT_TIMEOUT_MS );
+    }
+    else
+    {
+        Socket.SendPacket ( vecMessage, InetAddr );
+    }
 }
 
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
@@ -268,10 +339,10 @@ void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
     }
 }
 
-void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr )
+void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection )
 {
     // connection less messages are always processed
-    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
+    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr, pTcpConnection );
 }
 
 void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
@@ -975,6 +1046,16 @@ void CClient::OnClientIDReceived ( int iServerChanID )
         ClearClientChannels();
     }
 
+    // if TCP Supported has already been received, make TCP connection to server
+    iClientID = iServerChanID; // for sending back to server over TCP
+
+    if ( bTcpSupported )
+    {
+        // *** Make TCP connection
+        qDebug() << Q_FUNC_INFO << "need to make TCP connection for" << iClientID;
+        ConnLessProtocol.CreateCLClientIDMes ( Channel.GetAddress(), iClientID, PROTO_TCP_LONG ); // create persistent TCP connection
+    }
+
     // allocate and map client-side channel 0
     int iChanID = FindClientChannel ( iServerChanID, true ); // should always return channel 0
 
@@ -989,10 +1070,51 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     emit ClientIDReceived ( iChanID );
 }
 
+void CClient::OnCLTcpSupported ( CHostAddress InetAddr, int iID )
+{
+    qDebug() << "- TCP supported at server" << InetAddr.toString() << "for ID =" << iID;
+
+    if ( iID != PROTMESSID_CLM_CLIENT_ID )
+    {
+        emit CLTcpSupported ( InetAddr, iID ); // pass to connect dialog
+        return;
+    }
+
+    // if client ID already received, make TCP connection to server
+    bTcpSupported = true;
+
+    if ( iClientID != INVALID_INDEX )
+    {
+        // *** Make TCP connection
+        qDebug() << Q_FUNC_INFO << "need to make TCP connection for" << iClientID;
+        Q_ASSERT ( InetAddr == Channel.GetAddress() );
+        ConnLessProtocol.CreateCLClientIDMes ( InetAddr, iClientID, PROTO_TCP_LONG ); // create persistent TCP connection
+    }
+}
+
+void CClient::OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo, CTcpConnection* pTcpConnection )
+{
+    // test if we are receiving for the connect dialog or a connected session
+    if ( pTcpConnection && pTcpConnection->IsSession() )
+    {
+        qDebug() << "- sending client list to client dialog";
+        OnConClientListMesReceived ( vecChanInfo ); // connected session
+    }
+    else
+    {
+        qDebug() << "- sending client list to connect dialog";
+        emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo ); // connect dialog
+    }
+}
+
 void CClient::Start()
 {
     // init object
     Init();
+
+    // clear TCP info
+    iClientID     = INVALID_INDEX;
+    bTcpSupported = false;
 
     // initialise client channels
     ClearClientChannels();
@@ -1013,6 +1135,14 @@ void CClient::Stop()
 {
     // stop audio interface
     Sound.Stop();
+
+    // close any session TCP connection
+    CTcpConnection* pTcpConnection = Channel.GetTcpConnection();
+    if ( pTcpConnection )
+    {
+        Channel.SetTcpConnection ( nullptr );
+        pTcpConnection->disconnectFromHost();
+    }
 
     // disable channel
     Channel.SetEnable ( false );

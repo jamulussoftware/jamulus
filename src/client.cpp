@@ -1190,7 +1190,7 @@ void CClient::Init()
             case AQ_RAW:
                 if ( bRawAudioIsSupported && Channel.IsEnabled() )
                 {
-                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t ) * iSndCrdFrameSizeFactor;
                 }
                 else
                 {
@@ -1219,7 +1219,7 @@ void CClient::Init()
             case AQ_RAW:
                 if ( bRawAudioIsSupported && Channel.IsEnabled() )
                 {
-                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t ) * iSndCrdFrameSizeFactor;
                 }
                 else
                 {
@@ -1253,7 +1253,7 @@ void CClient::Init()
             case AQ_RAW:
                 if ( bRawAudioIsSupported && Channel.IsEnabled() )
                 {
-                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t ) * iSndCrdFrameSizeFactor;
                 }
                 else
                 {
@@ -1282,7 +1282,7 @@ void CClient::Init()
             case AQ_RAW:
                 if ( bRawAudioIsSupported && Channel.IsEnabled() )
                 {
-                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t ) * iSndCrdFrameSizeFactor;
                 }
                 else
                 {
@@ -1483,6 +1483,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     }
     else
     {
+        // This only works when iSndCrdFrameSizeFactor == 1 (not for buffer size 256)
+        // TODO: fill network buffer with correct data
         if ( !bMuteOutStream )
         {
             // Send raw samples instead of OPUS

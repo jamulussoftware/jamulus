@@ -875,7 +875,9 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             }
 
             const int  iOffset     = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
-            const bool bIsRawAudio = ( iCeltNumCodedBytes == iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] * sizeof ( int16_t ) );
+            // Recognise a raw audio packet by its size
+            // Greater or equal is used to account for iSndSndCrdFrameSizeFactor, which is not known to the server. Could modulo be used here insted?
+            const bool bIsRawAudio = ( iCeltNumCodedBytes >= iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] * sizeof ( int16_t ) );
 
             // get pointer to coded data
             if ( eGetStat == GS_BUFFER_OK )

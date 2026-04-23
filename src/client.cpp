@@ -420,6 +420,7 @@ void CClient::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString s
         Sound.Start();
     }
 #endif
+    Q_UNUSED ( eOSType );
 }
 
 void CClient::CreateServerJitterBufferMessage()

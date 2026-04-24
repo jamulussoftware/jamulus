@@ -211,8 +211,8 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
     /// @param {object} params - No parameters (empty object).
     /// @result {string} result - The socket address of the current directory, usable as params.directory in jamulusclient/pollServerList.
     pRpcServer->HandleMethod ( "jamulusclient/getCurrentDirectory", [=] ( const QJsonObject& params, QJsonObject& response ) {
-        response["result"] = NetworkUtil::GetDirectoryAddress ( m_pSettings->eDirectoryType,
-                                                                m_pSettings->vstrDirectoryAddress[m_pSettings->iCustomDirectoryIndex] );
+        response["result"] =
+            NetworkUtil::GetDirectoryAddress ( m_pSettings->eDirectoryType, m_pSettings->vstrDirectoryAddress[m_pSettings->iCustomDirectoryIndex] );
         Q_UNUSED ( params );
     } );
 

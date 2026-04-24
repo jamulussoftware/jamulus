@@ -2588,7 +2588,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Klik op de knop om het momenteel geselecteerde serveradres te wissen en het uit de lijst met opgeslagen servers te verwijderen.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation>Ping</translation>
     </message>

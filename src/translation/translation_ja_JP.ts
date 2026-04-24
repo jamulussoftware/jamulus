@@ -2588,7 +2588,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>ボタンをクリックすると、現在選択されているサーバーアドレスがクリアされ、保存済みサーバーリストから削除されます。</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation type="unfinished">Ping</translation>
     </message>

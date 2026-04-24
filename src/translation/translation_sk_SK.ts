@@ -2588,7 +2588,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation>Kliknite na tlačidlo pre vyčistenie aktuálne vybranej adresy servera a jej vymazanie zo zoznamu uložených serverov.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation>Ping</translation>
     </message>

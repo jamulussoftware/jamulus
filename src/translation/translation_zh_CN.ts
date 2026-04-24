@@ -2590,7 +2590,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>单击该按钮可清除当前选择的服务器地址，并将其从存储的服务器列表中删除。</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation>Ping</translation>
     </message>

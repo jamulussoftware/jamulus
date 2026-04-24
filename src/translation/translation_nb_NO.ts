@@ -2616,7 +2616,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="unfinished">Filtrer tekst, eller # for tjenere som ikke er tomme</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation type="unfinished">Svartidsforespørsel</translation>
     </message>

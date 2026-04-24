@@ -1191,7 +1191,7 @@ void CClient::Init()
             case AQ_RAW:
                 if ( bRawAudioIsSupported && Channel.IsEnabled() )
                 {
-                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t ) * iSndCrdFrameSizeFactor;
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
                 }
                 else
                 {
@@ -1220,7 +1220,7 @@ void CClient::Init()
             case AQ_RAW:
                 if ( bRawAudioIsSupported && Channel.IsEnabled() )
                 {
-                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t ) * iSndCrdFrameSizeFactor;
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
                 }
                 else
                 {
@@ -1254,7 +1254,7 @@ void CClient::Init()
             case AQ_RAW:
                 if ( bRawAudioIsSupported && Channel.IsEnabled() )
                 {
-                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t ) * iSndCrdFrameSizeFactor;
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
                 }
                 else
                 {
@@ -1283,7 +1283,7 @@ void CClient::Init()
             case AQ_RAW:
                 if ( bRawAudioIsSupported && Channel.IsEnabled() )
                 {
-                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t ) * iSndCrdFrameSizeFactor;
+                    iCeltNumCodedBytes = iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t );
                 }
                 else
                 {
@@ -1461,9 +1461,9 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
-    if ( eAudioQuality != AQ_RAW || !bRawAudioIsSupported )
+    for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )
     {
-        for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )
+        if ( eAudioQuality != AQ_RAW || !bRawAudioIsSupported )
         {
             // OPUS encoding
             if ( CurOpusEncoder != nullptr )
@@ -1477,25 +1477,22 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                     iUnused = opus_custom_encode ( CurOpusEncoder, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples, &vecCeltData[0], iCeltNumCodedBytes );
                 }
             }
-
             // send coded audio through the network
             Channel.PrepAndSendPacket ( &Socket, vecCeltData, iCeltNumCodedBytes );
         }
-    }
-    else
-    {
-        // This only works when iSndCrdFrameSizeFactor == 1 (not for buffer size 256)
-        // TODO: fill network buffer with correct data
-        if ( !bMuteOutStream )
-        {
-            // Send raw samples instead of OPUS
-            memcpy ( &vecCeltData[0], &vecsStereoSndCrd[0], iCeltNumCodedBytes );
-        }
         else
         {
-            memset ( &vecCeltData[0], 0, iCeltNumCodedBytes );
+            if ( !bMuteOutStream )
+            {
+                // Send raw samples instead of OPUS
+                memcpy ( &vecCeltData[0], &vecsStereoSndCrd[j], iCeltNumCodedBytes );
+            }
+            else
+            {
+                memset ( &vecCeltData[0], 0, iCeltNumCodedBytes );
+            }
+            Channel.PrepAndSendPacket ( &Socket, vecCeltData, iCeltNumCodedBytes );
         }
-        Channel.PrepAndSendPacket ( &Socket, vecCeltData, iCeltNumCodedBytes );
     }
 
     // Receive signal ----------------------------------------------------------
@@ -1515,7 +1512,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         {
             if ( eAudioQuality == AQ_RAW && bRawAudioIsSupported )
             {
-                memcpy ( &vecsStereoSndCrd[0], &vecbyNetwData[0], iCeltNumCodedBytes );
+                memcpy ( &vecsStereoSndCrd[j], &vecbyNetwData[0], iCeltNumCodedBytes );
                 pCurCodedData = nullptr;
             }
             else
@@ -1529,7 +1526,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         {
             if ( eAudioQuality == AQ_RAW && bRawAudioIsSupported )
             {
-                memset ( &vecsStereoSndCrd[0], 0, iCeltNumCodedBytes );
+                memset ( &vecsStereoSndCrd[j], 0, iCeltNumCodedBytes );
                 pCurCodedData = nullptr;
             }
             else

@@ -2588,7 +2588,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <translation>Klicke den Button um die momentan ausgewählte Serveradresse aus der Liste von gespeicherten Servern zu löschen.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation>Ping</translation>
     </message>

@@ -2588,7 +2588,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Kliknij przycisk aby wyczyścić wybrany adres serwera i usunąć go z listy przechowywanych serwerów.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation type="unfinished">Ping</translation>
     </message>

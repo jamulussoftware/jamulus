@@ -2588,7 +2588,7 @@ Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, res
         <translation>Clique no botão para limpar o endereço do servidor atualmente selecionado e eliminá-lo da lista dos servidores guardados.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation>Ping</translation>
     </message>

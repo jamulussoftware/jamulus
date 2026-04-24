@@ -2590,7 +2590,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Klicka på knappen för att rensa den för närvarande valda serveradressen och ta bort den från listan över sparade servrar.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation type="unfinished">Ping</translation>
     </message>

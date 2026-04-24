@@ -2588,7 +2588,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <translation>Cliquez sur le bouton pour effacer l&apos;adresse du serveur actuellement sélectionné et la supprimer de la liste des serveurs enregistrés.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation>Ping</translation>
     </message>

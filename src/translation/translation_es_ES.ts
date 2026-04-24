@@ -2588,7 +2588,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation>Haz clic para borrar la dirección de servidor seleccionada y eliminarla de la lista de servidores guardados.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation>Ping</translation>
     </message>

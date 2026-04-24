@@ -1,7 +1,61 @@
 ### 3.11.0dev <- NOTE: the release version number will be 3.12.0 ###
 
+- Client+Server: Correct QoS setting for IPv6 (#3622).
+  (contributed by @rdica)
+
+- Tools: Updated checkkeys.pl to flag missing accelerator key in translation (#3635).
+  (contributed by @softins)
+
+- Tools: Updated changelog-helper to report skipped PRs (#3639).
+  (contributed by @softins)
+
+- Server/Client: Allow registration and display of longer version numbers (#3657).
+  (contributed by @softins)
+
 - Extended SRV record support (#3556).
   (contributed by @softins, @rdica)
+
+- Client RPC: Added a jamulusclient/setFaderLevel method to the RPC remote interface (#3571).
+  (contributed by @corrados)
+
+- Client RPC: Added jamulusclient/pollServerList methods and jamulusclient/receivedServerList notification to JSON-RPC interface (#3479).
+  (contributed by @ann0see)
+
+- Server RPC: Added jamulusserver/setDirectory request (#3533).
+  (contributed by @pljones)
+
+- iOS/Android: Use compact view as default view on mobile OS for better usability (#3587).
+  (contributed by @ann0see)
+
+- Added link to privacy policy (#3586).
+  (contributed by @ann0see)
+
+- Tools: checkkeys.pl now automatically finds the translation directory (#3590).
+  (contributed by @softins)
+
+- Tools: updated checkkeys.pl to use XML::LibXML (#3558).
+  (contributed by @softins)
+
+- Tools: added improvements to changelog-helper.sh (#3459).
+  (contributed by @softins)
+
+- Tools: Added missing Makefile.in files to Opus 1.5.2 distro (#3488).
+  (contributed by @softins)
+
+- Translations updated from Hosted Weblate (#3540, #3453, #3441, #3388, #3652, #3638, #3620, #3656).
+  (contributed by @weblate)
+
+- Translation: Added Japanese translation (#3568).
+  (contributed by @tsukurun)
+
+- Translation: Updated Slovak translation (#3650).
+  (contributed by @jose1711)
+
+- Client: Added MIDI tab to Settings GUI exposing MIDI parameters. MIDI Learn feature also added (#3502).
+  (contributed by @ignotus666)
+
+- Client: Added screen-reader accessibility to server list in the Connect dialog (#3606).
+  (contributed by @chigkim)
 
 - Client: Bug: Fix missing variables passed to connect dialog (#3578).
   (contributed by @ann0see)
@@ -27,29 +81,17 @@
 - Client: Added native MIDI support to the ASIO (non-Jack) Windows build (#3431).
   (contributed by @softins)
 
-- Client RPC: Added a jamulusclient/setFaderLevel method to the RPC remote interface (#3571).
-  (contributed by @corrados)
-
-- Client RPC: Added jamulusclient/pollServerList methods and jamulusclient/receivedServerList notification to JSON-RPC interface (#3479).
-  (contributed by @ann0see)
-
 - Server: Disabled swap memory usage on Linux (#3381).
   (contributed by @dtinth)
 
 - Server: The `-m`/`--htmlstatus` option is considered deprecated and has been replaced by JSON RPC's `jamulusserver/getClients` method. The `-m` option will be removed in future (#3398).
   (contributed by @ann0see)
 
-- Server RPC: Added jamulusserver/setDirectory request (#3533).
-  (contributed by @pljones)
-
 - Windows: Avoid screensaver or sleeping if connected to a server (#3498).
   (contributed by @ann0see)
 
 - Linux: Reorder service initialization to wait for network interface before starting the Server (#3440).
   (contributed by @rdica)
-
-- iOS/Android: Use compact view as default view on mobile OS for better usability (#3587).
-  (contributed by @ann0see)
 
 - iOS: Fixed GUI issue preventing the connect dialog to show correctly (#3343).
   (contributed by @ann0see)
@@ -75,26 +117,20 @@
 - iOS: Fix crash on Qt6 after closing the chat window (#3413).
   (contributed by @ann0see)
 
-- Added Japanese translation (ja_JP) (#3568).
-  (contributed by @tsukurun)
+- Build: Updated bundled Qt6 to version 6.10.1 (iOS 6.7.3) (#3407, #3262, #3599).
+  (contributed by @app/github-actions)
 
-- Translations updated from Hosted Weblate (#3540, #3453, #3441, #3388).
-  (contributed by @weblate)
+- Build: Updated Windows Installer base (NSIS) to version 3.11 (#3483).
+  (contributed by @app/github-actions)
 
-- Added link to privacy policy (#3586).
-  (contributed by @ann0see)
+- Build: Bump maxim-lobanov/setup-xcode from 1.6.0 to 1.7.0 (#3645).
+  (contributed by @app/dependabot)
 
-- Tools: checkkeys.pl now automatically finds the translation directory (#3590).
-  (contributed by @softins)
+- Build: Bump actions/download-artifact from 7 to 8 (#3633).
+  (contributed by @app/dependabot)
 
-- Tools: updated checkkeys.pl to use XML::LibXML (#3558).
-  (contributed by @softins)
-
-- Tools: added improvements to changelog-helper.sh (#3459).
-  (contributed by @softins)
-
-- Tools: Added missing Makefile.in files to Opus 1.5.2 distro (#3488).
-  (contributed by @softins)
+- Build: Bump actions/upload-artifact from 6 to 7 (#3634).
+  (contributed by @app/dependabot)
 
 - Build: Improvements and ASIO fix for Windows dependencies (#3612).
   (contributed by @softins)
@@ -121,12 +157,6 @@
   (contributed by @app/github-actions)
 
 - Build: Bump Qt6 from 6.10.1 to 6.10.2 (#3616).
-  (contributed by @app/github-actions)
-
-- Build: Updated bundled Qt6 to version 6.9.1 (iOS 6.7.3) (#3407, #3262).
-  (contributed by @app/github-actions)
-
-- Build: Updated Windows Installer base (NSIS) to version 3.11 (#3483).
   (contributed by @app/github-actions)
 
 - Build: Updated create-dmg (macOS) to version 1.2.3 (#3561).

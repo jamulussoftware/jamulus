@@ -1533,13 +1533,10 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             bJitterBufferOK = false;
         }
 
-        if ( eAudioQuality != AQ_RAW || !bRawAudioIsSupported )
+        if ( ( eAudioQuality != AQ_RAW || !bRawAudioIsSupported ) && CurOpusDecoder != nullptr )
         {
             // OPUS decoding
-            if ( CurOpusDecoder != nullptr )
-            {
-                iUnused = opus_custom_decode ( CurOpusDecoder, pCurCodedData, iCeltNumCodedBytes, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples );
-            }
+            iUnused = opus_custom_decode ( CurOpusDecoder, pCurCodedData, iCeltNumCodedBytes, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples );
         }
     }
 

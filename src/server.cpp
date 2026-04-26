@@ -1190,7 +1190,6 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                                                    iClientFrameSizeSamples,
                                                    &vecvecbyCodedData[iChanCnt][0],
                                                    iCeltNumCodedBytes );
-
                 }
             }
         }

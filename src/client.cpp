@@ -418,7 +418,7 @@ void CClient::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString s
         Sound.Start();
     }
 #endif
-    emit VersionAndOSReceived( eOSType, strVersion );
+    emit VersionAndOSReceived ( eOSType, strVersion );
 }
 
 void CClient::CreateServerJitterBufferMessage()

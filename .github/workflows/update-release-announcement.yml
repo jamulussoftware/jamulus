@@ -1,0 +1,246 @@
+name: Update Release Announcement
+
+# This workflow maintains ReleaseAnnouncement.md — a working draft of the release
+# announcement for Client users and Server operators — separate from the technical ChangeLog.
+#
+# On every merged PR to main: GitHub Copilot updates the draft with any user-relevant
+# changes from that PR, in the same conversational bullet-point style used in real
+# Jamulus beta/release announcements on GitHub Discussions.
+#
+# On every push to an autobuild* branch: GitHub Copilot generates a draft announcement
+# for the HEAD commit and uploads it as a workflow artifact. This lets developers preview
+# how their changes would appear in the announcement before the PR is merged, without
+# creating any commits on the branch.
+#
+# On every full release tag (r<x>_<y>_<z>, no suffix): the draft is reset to the pristine
+# template, ready for the next development cycle. Pre-release tags (beta, rc) do NOT reset
+# the draft, so it can continue to build up until the final release.
+#
+# Security note (pull_request_target):
+# - The workflow file and the AI prompt always come from main, never from the PR branch.
+# - PR content is written to a temp file via an env variable before being passed to the
+#   AI — it never touches a YAML value directly, preventing injection issues.
+# - No code from the PR is ever checked out or executed.
+# See: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+
+on:
+  pull_request_target:
+    types:
+      - closed
+    branches:
+      - main
+  push:
+    branches:
+      - "autobuild**"
+    tags:
+      - "r*"
+
+permissions: {}
+
+jobs:
+  update-announcement:
+    name: Update announcement for merged PR
+    # Only run on actual merges (not just closed PRs) in the main jamulussoftware repo.
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      models: read
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Always check out the base branch (main), never the PR branch.
+          ref: main
+          fetch-depth: 2
+
+      - name: Check if announcement update should be skipped
+        id: check-skip
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # Skip when the PR author explicitly marked the change as not user-facing.
+          if printf '%s\n' "$PR_BODY" | grep -qE '^CHANGELOG:[[:space:]]*SKIP[[:space:]]*$'; then
+            echo "Skipping: PR is marked CHANGELOG: SKIP"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Prepare PR metadata for AI prompt
+        id: prep-pr-info
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # Write all PR metadata to a temp file so it can be safely passed to the AI,
+          # avoiding any injection issues from PR body content.
+          printf 'PR #%s — %s\nby @%s\n\n%s\n' \
+            "$PR_NUMBER" "$PR_TITLE" "$PR_AUTHOR" "$PR_BODY" \
+            > "${RUNNER_TEMP}/pr_info.txt"
+
+      - name: Install release announcement package
+        if: steps.check-skip.outputs.skip == 'false'
+        run: |
+          python3 -m pip install --user ./tools/release_announcement
+
+      - name: Update Release Announcement with GitHub Copilot
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 -m release_announcement \
+            "pr${{ github.event.pull_request.number }}" \
+            --file ReleaseAnnouncement.md \
+            --backend actions
+
+      - name: Push updated announcement commits
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git push
+
+  update-announcement-on-autobuild:
+    name: Update announcement for autobuild push
+    # Run on autobuild branch pushes. The result is uploaded as an artifact, not
+    # committed, so there is no push-loop risk and no contents: write needed.
+    if: startsWith(github.ref, 'refs/heads/autobuild')
+    runs-on: ubuntu-latest
+    permissions:
+      models: read
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Check out the autobuild branch being pushed so the script can resolve
+          # SHA~ and read the current ReleaseAnnouncement.md as a baseline.
+          ref: ${{ github.ref }}
+          fetch-depth: 2
+
+      - name: Check if announcement update should be skipped
+        id: check-skip
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          # Skip when the commit message explicitly marks the change as not user-facing.
+          if printf '%s\n' "$COMMIT_MESSAGE" | grep -qE '^CHANGELOG:[[:space:]]*SKIP[[:space:]]*$'; then
+            echo "Skipping: commit is marked CHANGELOG: SKIP"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Prepare commit metadata for AI prompt
+        id: prep-commit-info
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          COMMIT_SHA: ${{ github.event.head_commit.id }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_AUTHOR: ${{ github.event.head_commit.author.username }}
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: |
+          # Write commit metadata to a temp file so it can be safely passed to the AI,
+          # avoiding any injection issues from the commit message content.
+          printf 'Commit %s on branch %s\nby @%s\n\n%s\n' \
+            "$COMMIT_SHA" "$BRANCH_NAME" "$COMMIT_AUTHOR" "$COMMIT_MESSAGE" \
+            > "${RUNNER_TEMP}/commit_info.txt"
+
+      - name: Install release announcement package
+        if: steps.check-skip.outputs.skip == 'false'
+        run: |
+          python3 -m pip install --user ./tools/release_announcement
+
+      - name: Update Release Announcement with GitHub Copilot
+        if: steps.check-skip.outputs.skip == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get the commit message and author
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          COMMIT_AUTHOR=$(git log -1 --pretty=%an)
+
+          # Create a temporary file with commit info
+          printf 'Commit %s\nby @%s\n\n%s\n' \
+            "${{ github.sha }}" "$COMMIT_AUTHOR" "$COMMIT_MSG" \
+            > "${RUNNER_TEMP}/commit_info.txt"
+
+          # Call the release announcement script
+          python3 -m release_announcement \
+            "${{ github.sha }}" \
+            --file ReleaseAnnouncement.md \
+            --backend actions
+
+      - name: Check if announcement was updated
+        id: check-updated
+        if: steps.check-skip.outputs.skip == 'false'
+        run: |
+          if git diff --quiet ReleaseAnnouncement.md; then
+            echo "updated=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "updated=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload draft announcement as artifact
+        if: steps.check-skip.outputs.skip == 'false' && steps.check-updated.outputs.updated == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: draft-release-announcement
+          path: ReleaseAnnouncement.md
+          retention-days: 14
+
+  reset-after-release:
+    name: Reset announcement after full release
+    # Only run on tag pushes in the main jamulussoftware repo.
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Check if this is a full (non-prerelease) release tag
+        id: check-tag
+        run: |
+          # Match only clean version tags like r3_12_0.
+          # Tags with any suffix (e.g. r3_12_0beta1, r3_12_0rc1) are pre-releases
+          # and intentionally do NOT reset the draft, so it keeps building up
+          # towards the final release announcement.
+          if [[ "${GITHUB_REF_NAME}" =~ ^r([0-9]+)_([0-9]+)_([0-9]+)$ ]]; then
+            major="${BASH_REMATCH[1]}"
+            minor="${BASH_REMATCH[2]}"
+            patch="${BASH_REMATCH[3]}"
+            echo "is_full_release=true" >> "$GITHUB_OUTPUT"
+            echo "version=${major}.${minor}.${patch}" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_full_release=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Reset Release Announcement to template
+        if: steps.check-tag.outputs.is_full_release == 'true'
+        run: |
+          cp .github/release-announcement-template.md ReleaseAnnouncement.md
+
+      - name: Commit and push reset announcement
+        if: steps.check-tag.outputs.is_full_release == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git add ReleaseAnnouncement.md
+          git diff --staged --quiet && exit 0
+          git commit -m "docs: reset Release Announcement after v${{ steps.check-tag.outputs.version }} release"
+          git push

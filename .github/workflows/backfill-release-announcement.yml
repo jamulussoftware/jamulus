@@ -1,0 +1,130 @@
+name: Backfill Release Announcement
+run-name: Backfill from ${{ inputs.since_tag || 'r3_11_0' }}${{ inputs.dry_run == 'true' && ' (dry run)' || '' }}
+
+# This workflow runs the release_announcement Python package to populate
+# ReleaseAnnouncement.md with every merged PR since a given release tag.
+#
+# Trigger it once after a release tag is cut (e.g. r3_11_0) and this workflow
+# file is merged to main.  It processes PRs in chronological order, calling
+# the GitHub Models API (openai/gpt-4o) for each one so the announcement builds
+# up exactly as it would have done if the per-PR workflow had been running all
+# along.
+#
+# The script commits one separate commit per PR that produced a user-relevant
+# change, then those commits are pushed back to the branch for review via PR.
+# Run this workflow from a non-main branch; the push step will update that branch.
+
+on:
+  workflow_dispatch:
+    inputs:
+      since_tag:
+        description: >-
+          **Git release tag** to backfill from.
+          PRs merged *after* this tag will be processed.
+          (default: r3_11_0)
+        required: false
+        default: 'r3_11_0'
+      dry_run:
+        description: >-
+          **Dry run**: commit changes locally but do not push; attach
+          ReleaseAnnouncement.md as a workflow artifact for review.
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      allow_repo_override:
+        description: >-
+          **Allow non-jamulussoftware repositories**: set to 'true' to run this workflow
+          outside the canonical repository owner.
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+permissions: {}
+
+jobs:
+  backfill:
+    name: Backfill release announcement
+    # Default safety behavior limits execution to the canonical owner.
+    # Set workflow_dispatch input allow_repo_override=true to bypass this.
+    if: github.repository_owner == 'jamulussoftware' || inputs.allow_repo_override == 'true'
+    runs-on: ubuntu-latest
+    env:
+      SINCE_TAG: ${{ inputs.since_tag || 'r3_11_0' }}
+      DRY_RUN: ${{ inputs.dry_run || 'false' }}
+    permissions:
+      contents: write
+      models: read
+
+    steps:
+      - name: Refuse to run on main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "::error::Backfill must not run directly on main. Trigger this workflow from a non-main branch and merge via PR."
+          exit 1
+
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Fetch tags
+        run: |
+          git fetch --force --tags "https://github.com/${{ github.repository }}.git"
+
+      - name: Configure git identity
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      - name: Install release announcement package
+        run: |
+          python3 -m pip install --user ./tools/release_announcement
+
+      - name: Record baseline commit
+        id: baseline
+        run: |
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Run backfill script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DRY_RUN_FLAG=""
+          [[ "$DRY_RUN" == "true" ]] && DRY_RUN_FLAG="--dry-run"
+          python3 -m release_announcement \
+            "$SINCE_TAG" \
+            "HEAD" \
+            --file ReleaseAnnouncement.md \
+            --backend actions \
+            --delay-secs 5 \
+            $DRY_RUN_FLAG
+
+      - name: Check if backfill created commits
+        id: check-updated
+        run: |
+          current_commit=$(git rev-parse HEAD)
+          if [[ "$current_commit" == "${{ steps.baseline.outputs.commit }}" ]]; then
+            echo "updated=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "updated=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Push commits
+        if: env.DRY_RUN != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push
+
+      - name: Upload updated announcement
+        if: steps.check-updated.outputs.updated == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: ReleaseAnnouncement-updated
+          path: ReleaseAnnouncement.md
+

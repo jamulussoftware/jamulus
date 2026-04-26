@@ -1191,8 +1191,6 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                                                    &vecvecbyCodedData[iChanCnt][0],
                                                    iCeltNumCodedBytes );
 
-                    // send separate mix to current clients
-                    vecChannels[iCurChanID].PrepAndSendPacket ( &Socket, vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
                 }
             }
         }
@@ -1203,10 +1201,10 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                 const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
 
                 memcpy ( &vecvecbyCodedData[iChanCnt][0], &vecsSendData[iOffset], iCeltNumCodedBytes );
-
-                vecChannels[iCurChanID].PrepAndSendPacket ( &Socket, vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
             }
         }
+        // send separate mix to current clients
+        vecChannels[iCurChanID].PrepAndSendPacket ( &Socket, vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
     }
 
     Q_UNUSED ( iUnused )

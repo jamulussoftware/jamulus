@@ -1526,13 +1526,9 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             if ( eAudioQuality == AQ_RAW && bRawAudioIsSupported )
             {
                 memset ( &vecsStereoSndCrd[j], 0, iCeltNumCodedBytes );
-                pCurCodedData = nullptr;
             }
-            else
-            {
-                // for lost packets use null pointer as coded input data
-                pCurCodedData = nullptr;
-            }
+            // for lost packets use null pointer as coded input data
+            pCurCodedData = nullptr;
             // invalidate the buffer OK status flag
             bJitterBufferOK = false;
         }

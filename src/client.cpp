@@ -70,7 +70,8 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK ( true ),
     bEnableIPv6 ( bNEnableIPv6 ),
     bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
-    iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL )
+    iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
+    bRawAudioIsSupported ( false )
 {
     int iOpusError;
 

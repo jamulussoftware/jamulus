@@ -884,7 +884,8 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             // iNumAudioChannels is either 1 for mono or 2 for stereo and mono-in/stereo-out
             // sizeof ( int16_t ) is the size in bytes for the raw pcm audio data = 2
             // Sizes other than that are considered OPUS coded because those depend on hardcoded sizes in client.h
-            const bool bIsRawAudio = ( iCeltNumCodedBytes == static_cast<int> ( iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] * sizeof ( int16_t ) ) );
+            const bool bIsRawAudio =
+                ( iCeltNumCodedBytes == static_cast<int> ( iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] * sizeof ( int16_t ) ) );
 
             // get pointer to coded data
             if ( eGetStat == GS_BUFFER_OK )

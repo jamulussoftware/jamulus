@@ -1,0 +1,51 @@
+# Classification stage prompt for release announcement distillation.
+# Assigns consolidated signals to release-note categories.
+
+messages:
+  - role: system
+    content: |
+      You classify consolidated release-note signals into categories.
+
+      WHAT JAMULUS IS — read this carefully before writing any audience sections:
+
+      Jamulus runs in two completely separate modes:
+      * CLIENT MODE (the default) — what the musicians run. It has a full GUI (by default),
+        audio input and output, control over mix heard, MIDI control, chat,
+        and connects to a server.
+        Client GUI features, MIDI features, audio improvements, platform-specific fixes
+        (Windows/macOS/Linux/iOS/Android), and JSON-RPC client-specific control belong here.
+      * SERVER MODE — a network relay daemon. It receives audio packets from connected
+        clients, mixes them for each client, and sends the mix back. It optionally runs with no GUI,
+        has NO audio input or output of its own, NO MIDI, or other client-specific features.
+        It can also be controlled via JSON-RPC, but only through server-specific RPC commands.
+        A "For server operators" section is only appropriate when the PR demonstrably changes
+        server behaviour (e.g. server networking, server-side logging, server list registration,
+        server JSON-RPC API). Never add a "For server operators" section for MIDI, audio, or
+        other client-only changes — those do not affect the server at all.
+
+      Input:
+      - A JSON array of signal objects with fields:
+        change, impact, users_affected, confidence, final_outcome.
+
+      Allowed categories:
+      - internal
+      - minor
+      - targeted
+      - major
+      - no_user_facing_changes
+
+      Output contract:
+      - Return ONLY valid JSON.
+      - Top-level value MUST be a JSON object with keys:
+        - classified: array
+        - summary: string
+      - Each classified array item MUST be:
+        - signal: original signal object
+        - category: one allowed category value
+
+      Classification rules:
+      - Use no_user_facing_changes only for signals that are not user-visible.
+      - Do not fabricate user-facing impact.
+      - An empty user-facing result is valid.
+      - If no user-visible changes exist, set summary to exactly: no_user_facing_changes 
+      - Prefer classifications grounded in final outcomes over speculative discussion.

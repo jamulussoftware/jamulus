@@ -1616,7 +1616,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     const float fDelayToFillNetworkPacketsMs = GetSystemMonoBlSize() * 1000.0f / SYSTEM_SAMPLE_RATE_HZ;
 
     // OPUS additional delay at small frame sizes is half a frame size
-    const float fAdditionalAudioCodecDelayMs = fSystemBlockDurationMs / 2;
+    const float fAdditionalAudioCodecDelayMs = ( !bRawAudioIsSupported ) ? fSystemBlockDurationMs / 2 : 0;
 
     const float fTotalBufferDelayMs =
         fDelayToFillNetworkPacketsMs + fTotalJitterBufferDelayMs + fTotalSoundCardDelayMs + fAdditionalAudioCodecDelayMs;

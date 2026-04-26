@@ -1301,8 +1301,11 @@ void CClient::Init()
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
     vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
 
-    opus_custom_encoder_ctl ( CurOpusEncoder,
+    if ( !bRawAudioIsSupported )
+    {
+        opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iOPUSFrameSizeSamples ) ) );
+    }
 
     // inits for network and channel
     vecbyNetwData.Init ( iCeltNumCodedBytes );

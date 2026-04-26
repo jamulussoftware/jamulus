@@ -505,7 +505,8 @@ enum EAudioQuality
     // used for settings and the comobo box index -> enum values must be fixed!
     AQ_LOW    = 0,
     AQ_NORMAL = 1,
-    AQ_HIGH   = 2
+    AQ_HIGH   = 2,
+    AQ_RAW    = 3
 };
 
 // Get data status enum --------------------------------------------------------

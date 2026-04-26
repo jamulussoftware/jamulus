@@ -1,3 +1,7 @@
+### 3.11.1dev ###
+
+- Add uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023)
+
 ### 3.11.0dev <- NOTE: the release version number will be 3.12.0 ###
 
 - Client+Server: Correct QoS setting for IPv6 (#3622).

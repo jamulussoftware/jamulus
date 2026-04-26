@@ -135,8 +135,6 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &Channel, &CChannel::LicenceRequired, this, &CClient::LicenceRequired );
 
-    QObject::connect ( &Channel, &CChannel::VersionAndOSReceived, this, &CClient::VersionAndOSReceived );
-
     QObject::connect ( &Channel, &CChannel::VersionAndOSReceived, this, &CClient::OnVersionAndOSReceived );
 
     QObject::connect ( &Channel, &CChannel::RecorderStateReceived, this, &CClient::RecorderStateReceived );
@@ -420,7 +418,7 @@ void CClient::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString s
         Sound.Start();
     }
 #endif
-    Q_UNUSED ( eOSType );
+    emit VersionAndOSReceived( eOSType, strVersion );
 }
 
 void CClient::CreateServerJitterBufferMessage()

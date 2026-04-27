@@ -2592,7 +2592,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation>Clique no botão para limpar o endereço de servidor selecionado e excluí-lo da lista de servidores armazenados.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation type="unfinished">Ping</translation>
     </message>

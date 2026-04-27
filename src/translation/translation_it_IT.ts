@@ -2589,7 +2589,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <translation>Fare clic sul pulsante per cancellare l&apos;indirizzo del server attualmente selezionato ed eliminarlo dall&apos;elenco dei server memorizzati.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation type="unfinished">Ping</translation>
     </message>

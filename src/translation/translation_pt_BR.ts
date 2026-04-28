@@ -1731,7 +1731,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <location filename="../clientsettingsdlg.cpp" line="1518"/>
         <location filename="../clientsettingsdlg.cpp" line="1605"/>
         <source>All Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Todos os Dispositivos</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1521"/>
@@ -1773,7 +1773,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1631"/>
         <source>Listening...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvindo</translation>
     </message>
     <message>
         <location filename="../util.h" line="619"/>

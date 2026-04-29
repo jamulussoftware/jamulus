@@ -129,7 +129,7 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         }
 #endif
 
-#if !defined( Q_OS_DARWIN ) && !defined( Q_OS_WIN )
+#if !defined( Q_OS_BSD4 ) && !defined( Q_OS_WIN )
         // set the QoS for IPv4 as well, as this is a dual-protocol socket
         if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
@@ -272,8 +272,8 @@ CSocket::~CSocket()
 #endif
 }
 
-#if defined( Q_OS_DARWIN )
-// sendto_ipv4_with_tos - helper function for macOS to set TOS when sending IPv4 over IPv6 socket
+#if defined( Q_OS_BSD4 )
+// sendto_ipv4_with_tos - helper function for macOS and FreeBSD to set TOS when sending IPv4 over IPv6 socket
 static ssize_t sendto_ipv4_with_tos ( int fd, const void* buf, size_t len, int flags, const struct sockaddr* dest, socklen_t destlen, int tos )
 {
     // For a description of 'struct cmsghdr' and the 'CMSG_xxx' macros, see 'man 3 cmsg' on a Linux machine.
@@ -355,8 +355,8 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
                     addr[2] = htonl ( 0xFFFF );
                     addr[3] = htonl ( HostAddr.InetAddr.toIPv4Address() );
 
-#if defined( Q_OS_DARWIN )
-                    // In macOS we need to set TOS explicitly when sending IPv4 over IPv6 socket
+#if defined( Q_OS_BSD4 )
+                    // In macOS and FreeBSD we need to set TOS explicitly when sending IPv4 over IPv6 socket
                     status = sendto_ipv4_with_tos ( UdpSocket,
                                                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
                                                     iVecSizeOut,

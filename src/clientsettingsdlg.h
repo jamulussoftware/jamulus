@@ -69,7 +69,7 @@ protected:
     void    UpdateAudioFaderSlider();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
-    virtual void showEvent ( QShowEvent* );
+    virtual void showEvent ( QShowEvent* ) override;
     virtual bool eventFilter ( QObject* obj, QEvent* event ) override;
 
     CClient*         pClient;

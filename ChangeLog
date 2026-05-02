@@ -1,5 +1,11 @@
 ### 3.11.0dev <- NOTE: the release version number will be 3.12.0 ###
 
+- FreeBSD: make -6 option work properly with both IPv6 and IPv4 peers (#3664).
+  (contributed by @softins)
+
+- Added missing override specifiers for virtual methods (#3667).
+  (contributed by @softins)
+
 - Client+Server: Correct QoS setting for IPv6 (#3622).
   (contributed by @rdica)
 
@@ -42,14 +48,14 @@
 - Tools: Added missing Makefile.in files to Opus 1.5.2 distro (#3488).
   (contributed by @softins)
 
-- Translations updated from Hosted Weblate (#3540, #3453, #3441, #3388, #3652, #3638, #3620, #3656).
-  (contributed by @weblate)
-
 - Translation: Added Japanese translation (#3568).
   (contributed by @tsukurun)
 
 - Translation: Updated Slovak translation (#3650).
   (contributed by @jose1711)
+
+- Translations updated from Hosted Weblate (#3540, #3453, #3441, #3388, #3652, #3638, #3620, #3656, #3663).
+  (contributed by @weblate)
 
 - Client: Added MIDI tab to Settings GUI exposing MIDI parameters. MIDI Learn feature also added (#3502).
   (contributed by @ignotus666)

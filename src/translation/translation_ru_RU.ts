@@ -2586,7 +2586,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation type="unfinished"></translation>
     </message>

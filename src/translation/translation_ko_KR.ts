@@ -2588,7 +2588,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>버튼을 클릭하면 현재 선택한 서버 주소가 지워지고 저장된 서버 목록에서 삭제됩니다.</translation>
     </message>
     <message>
-        <location filename="../connectdlg.cpp" line="1153"/>
+        <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
         <translation type="unfinished">Ping</translation>
     </message>

@@ -509,6 +509,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( pClient, &CClient::CLRedServerListReceived, this, &CClientDlg::OnCLRedServerListReceived );
 
+    QObject::connect ( pClient, &CClient::CLTcpSupported, this, &CClientDlg::OnCLTcpSupported );
+
     QObject::connect ( pClient, &CClient::CLConnClientsListMesReceived, this, &CClientDlg::OnCLConnClientsListMesReceived );
 
     QObject::connect ( pClient, &CClient::CLPingTimeWithNumClientsReceived, this, &CClientDlg::OnCLPingTimeWithNumClientsReceived );

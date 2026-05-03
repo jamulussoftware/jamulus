@@ -26,6 +26,7 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
+    pTcpConnection ( nullptr ),
     vecfGains ( MAX_NUM_CHANNELS, 1.0f ),
     vecfPannings ( MAX_NUM_CHANNELS, 0.5f ),
     iCurSockBufNumFrames ( INVALID_INDEX ),
@@ -81,7 +82,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
     QObject::connect ( &Protocol, &CProtocol::ChangeChanPan, this, &CChannel::OnChangeChanPan );
 
-    QObject::connect ( &Protocol, &CProtocol::ClientIDReceived, this, &CChannel::ClientIDReceived );
+    QObject::connect ( &Protocol, &CProtocol::ClientIDReceived, this, &CChannel::OnClientIDReceived );
 
     QObject::connect ( &Protocol, &CProtocol::MuteStateHasChangedReceived, this, &CChannel::MuteStateHasChangedReceived );
 
@@ -710,5 +711,27 @@ void CChannel::UpdateSocketBufferSize()
         // use auto setting result from channel, make sure we preserve the
         // buffer memory since we just adjust the size here
         SetSockBufNumFrames ( SockBuf.GetAutoSetting(), true );
+    }
+}
+
+void CChannel::OnClientIDReceived ( int iChanID )
+{
+    qDebug() << Q_FUNC_INFO << "iChanID =" << iChanID;
+    emit ClientIDReceived ( iChanID );
+}
+
+void CChannel::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo, CProtocol& ConnLessProtocol )
+{
+    if ( pTcpConnection )
+    {
+        qDebug() << "- sending client list via TCP";
+
+        ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, vecChanInfo, pTcpConnection );
+    }
+    else
+    {
+        qDebug() << "- sending client list via UDP";
+
+        Protocol.CreateConClientListMes ( vecChanInfo );
     }
 }

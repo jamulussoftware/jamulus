@@ -129,7 +129,7 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         }
 #endif
 
-#if !defined( Q_OS_DARWIN ) && !defined( Q_OS_WIN )
+#if !defined( Q_OS_BSD4 ) && !defined( Q_OS_WIN )
         // set the QoS for IPv4 as well, as this is a dual-protocol socket
         if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
@@ -272,17 +272,23 @@ CSocket::~CSocket()
 #endif
 }
 
-#if defined( Q_OS_DARWIN )
-// sendto_ipv4_with_tos - helper function for macOS to set TOS when sending IPv4 over IPv6 socket
+#if defined( Q_OS_BSD4 )
+// sendto_ipv4_with_tos - helper function for macOS and FreeBSD to set TOS when sending IPv4 over IPv6 socket
 static ssize_t sendto_ipv4_with_tos ( int fd, const void* buf, size_t len, int flags, const struct sockaddr* dest, socklen_t destlen, int tos )
 {
     // For a description of 'struct cmsghdr' and the 'CMSG_xxx' macros, see 'man 3 cmsg' on a Linux machine.
     // The macOS man pages are less descriptive, but the API is the same, being based on the BSD socket interface.
 
+#    if defined( Q_OS_FREEBSD )
+    using tos_cmsg_type = unsigned char;
+#    else
+    using tos_cmsg_type = int;
+#    endif
+
     // The cmsg buffer is only set up once (tos doesn't change) so can be static
     static union
     {
-        unsigned char  cbuf[CMSG_SPACE ( sizeof ( int ) )];
+        unsigned char  cbuf[CMSG_SPACE ( sizeof ( tos_cmsg_type ) )];
         struct cmsghdr h;
     } u;
     static socklen_t clen = 0;
@@ -290,26 +296,30 @@ static ssize_t sendto_ipv4_with_tos ( int fd, const void* buf, size_t len, int f
     if ( clen == 0 )
     {
         // set up the cmsg buffer
-        memset ( u.cbuf, 0, sizeof ( u.cbuf ) );
+        memset ( &u, 0, sizeof ( u ) );
 
         u.h.cmsg_level = IPPROTO_IP;
         u.h.cmsg_type  = IP_TOS;
-        u.h.cmsg_len   = CMSG_LEN ( sizeof ( int ) );
-        memcpy ( CMSG_DATA ( &u.h ), &tos, sizeof ( int ) );
-        clen = (socklen_t) u.h.cmsg_len;
+        u.h.cmsg_len   = CMSG_LEN ( sizeof ( tos_cmsg_type ) );
+
+        tos_cmsg_type tosvalue = static_cast<tos_cmsg_type> ( tos & 0xFF );
+        memcpy ( CMSG_DATA ( &u.h ), &tosvalue, sizeof ( tosvalue ) );
+        clen = CMSG_SPACE ( sizeof ( tos_cmsg_type ) );
     }
 
     struct iovec iov;
+    memset ( &iov, 0, sizeof ( iov ) );
     iov.iov_base = const_cast<void*> ( buf );
     iov.iov_len  = len;
 
     struct msghdr msg;
+    memset ( &msg, 0, sizeof ( msg ) );
 
     msg.msg_name       = const_cast<sockaddr*> ( dest );
     msg.msg_namelen    = destlen;
     msg.msg_iov        = &iov;
     msg.msg_iovlen     = 1;
-    msg.msg_control    = (void*) u.cbuf;
+    msg.msg_control    = u.cbuf;
     msg.msg_controllen = clen;
 
     return sendmsg ( fd, &msg, flags );
@@ -355,8 +365,8 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
                     addr[2] = htonl ( 0xFFFF );
                     addr[3] = htonl ( HostAddr.InetAddr.toIPv4Address() );
 
-#if defined( Q_OS_DARWIN )
-                    // In macOS we need to set TOS explicitly when sending IPv4 over IPv6 socket
+#if defined( Q_OS_BSD4 )
+                    // In macOS and FreeBSD we need to set TOS explicitly when sending IPv4 over IPv6 socket
                     status = sendto_ipv4_with_tos ( UdpSocket,
                                                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
                                                     iVecSizeOut,

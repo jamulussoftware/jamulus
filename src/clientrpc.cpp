@@ -183,6 +183,39 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         response["result"] = "ok";
     } );
 
+    /// @rpc_method jamulusclient/getDirectories
+    /// @brief Returns the list of directories in the same order as presented in Jamulus.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {array} result - Array of directory socket address strings, usable as params.directory in jamulusclient/pollServerList.
+    pRpcServer->HandleMethod ( "jamulusclient/getDirectories", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        QJsonArray arrDirectories;
+        // built-in directories in UI order
+        for ( int i = AT_DEFAULT; i < AT_CUSTOM; i++ )
+        {
+            arrDirectories.append ( NetworkUtil::GetDirectoryAddress ( static_cast<EDirectoryType> ( i ), "" ) );
+        }
+        // custom directories — stored newest-first, displayed oldest-first (reverse iteration)
+        for ( int i = MAX_NUM_SERVER_ADDR_ITEMS - 1; i >= 0; i-- )
+        {
+            if ( !m_pSettings->vstrDirectoryAddress[i].isEmpty() )
+            {
+                arrDirectories.append ( m_pSettings->vstrDirectoryAddress[i] );
+            }
+        }
+        response["result"] = arrDirectories;
+        Q_UNUSED ( params );
+    } );
+
+    /// @rpc_method jamulusclient/getCurrentDirectory
+    /// @brief Returns the currently selected directory socket address.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {string} result - The socket address of the current directory, usable as params.directory in jamulusclient/pollServerList.
+    pRpcServer->HandleMethod ( "jamulusclient/getCurrentDirectory", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        response["result"] =
+            NetworkUtil::GetDirectoryAddress ( m_pSettings->eDirectoryType, m_pSettings->vstrDirectoryAddress[m_pSettings->iCustomDirectoryIndex] );
+        Q_UNUSED ( params );
+    } );
+
     /// @rpc_method jamulus/getMode
     /// @brief Returns the current mode, i.e. whether Jamulus is running as a server or client.
     /// @param {object} params - No parameters (empty object).

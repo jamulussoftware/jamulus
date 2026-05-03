@@ -410,7 +410,8 @@ protected:
     QMutex MutexDriverReinit;
 
     // server settings
-    int iServerSockBufNumFrames;
+    int  iServerSockBufNumFrames;
+    bool bRawAudioIsSupported;
 
     // for ping measurement
     QElapsedTimer PreciseTime;
@@ -456,6 +457,7 @@ protected slots:
     void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
     void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

@@ -494,6 +494,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxAudioQuality->addItem ( tr ( "Low" ) );    // AQ_LOW
     cbxAudioQuality->addItem ( tr ( "Normal" ) ); // AQ_NORMAL
     cbxAudioQuality->addItem ( tr ( "High" ) );   // AQ_HIGH
+    cbxAudioQuality->addItem ( tr ( "Max" ) );    // AQ_RAW
     cbxAudioQuality->setCurrentIndex ( static_cast<int> ( pClient->GetAudioQuality() ) );
 
     // GUI design (skin) combo box

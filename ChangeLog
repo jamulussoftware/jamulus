@@ -193,6 +193,11 @@
   (contributed by @app/dependabot)
 
 
+### 3.11.1dev ###
+
+- Add uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023)
+
+
 ### 3.11.0 (2024-09-21) ###
 
 - Client: Added "Delete Entry" button to Advanced Settings, Custom Directories (#3260).

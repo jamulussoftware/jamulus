@@ -58,6 +58,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
     - name: Install pylint
-      run: pip install --user "pylint < 3.0"
+      # Keep pylint >= 3.0: pylint<3.0 can crash with Python 3.12 (astroid visit_typealias error).
+      run: pip install --user "pylint >= 3.0"
     - name: Check Python files with pylint
       run: find ./tools -name '*.py' -print -exec pylint {} +

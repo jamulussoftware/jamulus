@@ -1,0 +1,31 @@
+=== Baseline Completion Summary ===
+
+DateTime: 2026-04-04T15:22:13Z
+Status: ✅ COMPLETE
+
+Baseline Directory: .vscode/release-announcement-baseline-20260404_161752
+Total Scenarios: 8 (all completed with exit code 0)
+Total Duration: ~3.5 minutes across all runs
+
+Scenario Results:
+  github__pr3429                                     exit=0  duration_ms=  7445
+  github__pr3502                                     exit=0  duration_ms= 15546
+  github__pr3625                                     exit=0  duration_ms=  3935
+  github__tag_r3_12_0beta4_to_r3_12_0beta5           exit=0  duration_ms=  6301
+  ollama__pr3429                                     exit=0  duration_ms= 14638
+  ollama__pr3502                                     exit=0  duration_ms=128914
+  ollama__pr3625                                     exit=0  duration_ms=  4238
+  ollama__tag_r3_12_0beta4_to_r3_12_0beta5           exit=0  duration_ms=  6755
+
+Verification:
+  ✅ All 8 scenario directories present
+  ✅ Each scenario has timing.txt with valid start/end timestamps
+  ✅ All scenarios completed with exit_code=0
+  ✅ Git worktree clean (untracked: ini-*, tools/release_announcement/)
+  ✅ ReleaseAnnouncement.md restored to initial state
+
+Deliverables:
+  ✅ .vscode/run-release-announcement-baseline.sh (executable)
+  ✅ .vscode/BASELINE_MATRIX_README.md (comprehensive agent guide)
+  ✅ .vscode/release-announcement-baseline-20260404_161752/ (baseline artifacts)
+  ✅ Timing reference table updated in README

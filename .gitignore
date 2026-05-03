@@ -57,3 +57,7 @@ jamulus_plugin_import.cpp
 .github_release_changelog.md
 /debian/
 .github/instructions/awesome-copilot-instructions
+**/__pycache__
+dist/
+*.egg-info/
+*.egg-info

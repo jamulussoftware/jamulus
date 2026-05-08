@@ -48,18 +48,16 @@ Function Write-Log {
 }
 
 # Execute native command with errorlevel handling and memory-safe logging
-Function Invoke-Native-Command {
-    param([string]$Cmd, [string[]]$Arguments, [int]$Max = 500) # Fixed: Do not use reserved $Args
+Function Invoke-Native-Command([string]$Cmd, [string[]]$Arguments, [int]$Max = 500) {
     Write-Log "Executing: $Cmd $($Arguments -join ' ')" -Level DEBUG
     $Buf = [Collections.Generic.Queue[string]]::new()
+    $Local:ErrorActionPreference = "Continue"
 
     & $Cmd @Arguments 2>&1 | ForEach-Object {
-        $L = $_.ToString(); $Buf.Enqueue($L)
+        $Buf.Enqueue(($L = $_.ToString()))
         if ($Buf.Count -gt $Max) { [void]$Buf.Dequeue() }
 
-        # Filtered real-time output
-        if ($DebugMode) { Write-Host "    $L" -ForegroundColor DarkGray }
-        elseif ($L.Length -lt 120 -and $L -notmatch "warning C\d+" -and $L.Trim()) {
+        if ($DebugMode -or ($L.Length -lt 120 -and $L -notmatch "warning C\d+" -and $L.Trim())) {
             Write-Host "    $L" -ForegroundColor DarkGray
         }
     }

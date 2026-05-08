@@ -225,7 +225,9 @@ Function Build-App {
     Write-Log "Deploying Qt dependencies..."
     Invoke-Native-Command $Env:QtWinDeployPath ("--$Cfg", "--compiler-runtime", "--dir=$DeployPath\$Arch", "$BuildPath\$Cfg\$AppName.exe")
     Move-Item "$BuildPath\$Cfg\$AppName.exe" "$DeployPath\$Arch" -Force
-    Invoke-Native-Command "nmake" (@("clean") + $MkArgs)
+    $CleanArgs = @("clean")
+    if (-not $DebugMode) { $CleanArgs += "/S" }
+    Invoke-Native-Command "nmake" $CleanArgs
     Set-Location $RootPath
 }
 

@@ -49,11 +49,11 @@ Function Write-Log {
 
 # Execute native command with errorlevel handling and memory-safe logging
 Function Invoke-Native-Command {
-    param([string]$Cmd, [string[]]$Args, [int]$Max = 500)
-    Write-Log "Executing: $Cmd $($Args -join ' ')" -Level DEBUG
+    param([string]$Cmd, [string[]]$Arguments, [int]$Max = 500) # Fixed: Do not use reserved $Args
+    Write-Log "Executing: $Cmd $($Arguments -join ' ')" -Level DEBUG
     $Buf = [Collections.Generic.Queue[string]]::new()
 
-    & $Cmd @Args 2>&1 | ForEach-Object {
+    & $Cmd @Arguments 2>&1 | ForEach-Object {
         $L = $_.ToString(); $Buf.Enqueue($L)
         if ($Buf.Count -gt $Max) { [void]$Buf.Dequeue() }
 

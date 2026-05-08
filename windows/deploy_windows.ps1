@@ -81,7 +81,7 @@ Function Clean-Build-Environment {
     Write-Log "Build and Deploy directories initialized."
 }
 
-# For sourceforge links we need to get the correct mirror (especially NISIS)
+# For sourceforge links we need to get the correct mirror (especially NSIS)
 Function Get-RedirectedUrl {
     param([Parameter(Mandatory=$true)][string]$url)
     $sleep = 10; $maxSleep = 80

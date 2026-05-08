@@ -47,28 +47,30 @@ Function Write-Log {
     }
 }
 
-# Execute native command with errorlevel handling
+# Execute native command with errorlevel handling and memory-safe logging
 Function Invoke-Native-Command {
-    param([string]$Command, [string[]]$Arguments)
-    Write-Log "Executing: $Command $($Arguments -join ' ')" -Level DEBUG
-    $Output = [System.Collections.Generic.List[string]]::new()
+    param([string]$Cmd, [string[]]$Args, [int]$Max = 500)
+    Write-Log "Executing: $Cmd $($Args -join ' ')" -Level DEBUG
+    $Buf = [Collections.Generic.Queue[string]]::new()
 
-    & "$Command" @Arguments 2>&1 | ForEach-Object {
-        $Line = $_.ToString(); $Output.Add($Line)
-        if ($DebugMode) { Write-Host "    $Line" -ForegroundColor DarkGray }
-        elseif ($Line.Length -lt 120 -and $Line -notmatch "warning C\d+" -and -not [string]::IsNullOrWhiteSpace($Line)) {
-            Write-Host "    $Line" -ForegroundColor DarkGray
+    & $Cmd @Args 2>&1 | ForEach-Object {
+        $L = $_.ToString(); $Buf.Enqueue($L)
+        if ($Buf.Count -gt $Max) { [void]$Buf.Dequeue() }
+
+        # Filtered real-time output
+        if ($DebugMode) { Write-Host "    $L" -ForegroundColor DarkGray }
+        elseif ($L.Length -lt 120 -and $L -notmatch "warning C\d+" -and $L.Trim()) {
+            Write-Host "    $L" -ForegroundColor DarkGray
         }
     }
 
-    if ($LastExitCode -Ne 0) {
-        $ErrMsg = "Native command $Command returned exit code $LastExitCode"
-        Write-Log $ErrMsg -Level ERROR
+    if ($LastExitCode -ne 0) {
+        Write-Log "Command $Cmd failed with exit code $LastExitCode" -Level ERROR
         if (-not $DebugMode) {
-            Write-Log "--- Command Output Log ---" -Level ERROR
-            $Output | ForEach-Object { Write-Log $_ -Level ERROR }
+            Write-Log "--- Last $Max lines ---" -Level ERROR
+            $Buf | ForEach-Object { Write-Log $_ -Level ERROR }
         }
-        Throw $ErrMsg
+        Throw "Native command failed."
     }
 }
 

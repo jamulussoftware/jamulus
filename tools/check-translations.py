@@ -39,7 +39,7 @@ import argparse
 import re
 import sys
 import xml.etree.ElementTree as ET
-from collections import defaultdict
+from collections import defaultdict, Counter
 from dataclasses import dataclass
 from enum import IntEnum
 from pathlib import Path
@@ -103,14 +103,17 @@ def check_language_header(ts_file: Path, root):
     return []
 
 def check_empty_translation(ctx: MessageContext):
-    if not ctx.translation and ctx.tr_type != "unfinished":
+    # Added .strip() here instead of during string extraction
+    if not ctx.translation.strip() and ctx.tr_type != "unfinished":
         return [WarningItem(ctx.ts_file, ctx.line,
                             f"{ctx.lang}: empty translation for '{ctx.excerpt}...'",
                             Severity.SEVERE)]
     return []
 
 def check_placeholders(ctx: MessageContext):
-    if ctx.tr_type != "unfinished" and set(PLACEHOLDER_RE.findall(ctx.source)) != set(PLACEHOLDER_RE.findall(ctx.translation)):
+    # Replaced set() with Counter() to ensure exact placeholder counts match
+    if ctx.tr_type != "unfinished" and Counter(PLACEHOLDER_RE.findall(ctx.source)) != Counter(
+        PLACEHOLDER_RE.findall(ctx.translation)):
         return [WarningItem(ctx.ts_file, ctx.line,
                             f"{ctx.lang}: placeholder mismatch for '{ctx.excerpt}...'\n"
                             f"Source: {ctx.source}\nTranslation: {ctx.translation}",
@@ -118,7 +121,8 @@ def check_placeholders(ctx: MessageContext):
     return []
 
 def check_html(ctx: MessageContext):
-    if HTML_TAG_RE.search(ctx.source) and not HTML_TAG_RE.search(ctx.translation) and ctx.tr_type != "unfinished":
+    if HTML_TAG_RE.search(ctx.source) and not HTML_TAG_RE.search(
+        ctx.translation) and ctx.tr_type != "unfinished":
         return [WarningItem(ctx.ts_file, ctx.line,
                             f"{ctx.lang}: HTML missing for '{ctx.excerpt}...'\n"
                             f"Source: {ctx.source}\nTranslation: {ctx.translation}",
@@ -157,14 +161,18 @@ def detect_warnings(ts_file: Path):
 
     for context in root.findall("context"):
         for message, line in zip(context.findall("message"), message_lines):
-            source = (message.findtext("source") or "").strip()
+            # Removed .strip() so whitespace rules trigger correctly
+            source = message.findtext("source") or ""
             tr_elem = message.find("translation")
             translation = ""
             tr_type = ""
             if tr_elem is not None:
-                translation = (tr_elem.text or "").strip()
+                # Removed .strip() here as well
+                translation = tr_elem.text or ""
                 tr_type = tr_elem.attrib.get("type", "")
-            excerpt = source[:30].replace("\n", " ")
+
+            # Excerpt can still be stripped just for cleaner logging
+            excerpt = source.strip()[:30].replace("\n", " ")
 
             ctx = MessageContext(ts_file, line, file_lang, source, translation, tr_type, excerpt)
 
@@ -180,7 +188,8 @@ def detect_warnings(ts_file: Path):
 # CLI
 def main():
     parser = argparse.ArgumentParser(description="Qt TS translation checker with extended rules")
-    parser.add_argument("--ts-dir", type=Path, default=Path("src/translation"),
+    # Updated default path to be more reliable in CI environments
+    parser.add_argument("--ts-dir", type=Path, default=Path("../src/translation"),
                         help="Directory containing translation_*.ts files")
     parser.add_argument("--strict", action="store_true",
                         help="Exit non-zero if any warning is found")
@@ -209,7 +218,7 @@ def main():
             print(f"{BOLD}{file}{RESET} {CYAN}line {line}{RESET}: {color}{w.message}{RESET}")
 
     # Test summary
-    failures_by_language = defaultdict(lambda: {"severe":0, "warning":0})
+    failures_by_language = defaultdict(lambda: {"severe": 0, "warning": 0})
     all_languages = set()
 
     for w in all_warnings:

@@ -33,7 +33,6 @@ $DeployPath = "$RootPath\deploy"
 $WindowsPath ="$RootPath\windows"
 $AppName = "Jamulus"
 
-# --- Centralized Logging Function ---
 Function Write-Log {
     param([Parameter(Mandatory=$true)][AllowNull()][AllowEmptyString()][string]$Message, [ValidateSet("INFO","WARN","ERROR","STEP","DEBUG")][string]$Level="INFO")
     if ($null -eq $Message) { $Message = "" }
@@ -84,7 +83,7 @@ Function Clean-Build-Environment {
     Write-Log "Build and Deploy directories initialized."
 }
 
-# For sourceforge links we need to get the correct mirror (especially NISIS)
+# For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
 Function Get-RedirectedUrl {
     param([Parameter(Mandatory=$true)][string]$url)
     $sleep = 10; $maxSleep = 80

@@ -55,10 +55,12 @@ YELLOW = "\033[33m"
 RED = "\033[31m"
 RESET = "\033[0m"
 
+
 # Severity Enum
 class Severity(IntEnum):
     WARNING = 1
     SEVERE = 2
+
 
 # Data structures
 @dataclass(frozen=True)
@@ -71,12 +73,15 @@ class MessageContext:
     tr_type: str
     excerpt: str
 
+
 @dataclass(frozen=True)
 class WarningItem:
     ts_file: Path
     line: int
+    lang: str
     message: str
     severity: Severity
+
 
 # Helpers
 def approximate_message_lines(text: str):
@@ -92,86 +97,95 @@ def approximate_message_lines(text: str):
         else:
             yield 0
 
+
 # Checks
-def check_language_header(ts_file: Path, root):
-    file_lang = ts_file.stem.replace("translation_", "")
+def check_language_header(ts_file: Path, root, file_lang: str):
     header_lang = root.attrib.get("language", "")
     if header_lang != file_lang:
-        return [WarningItem(ts_file, 0,
+        return [WarningItem(ts_file, 0, file_lang,
                             f"Language header mismatch '{header_lang}' != '{file_lang}'",
                             Severity.WARNING)]
     return []
 
+
 def check_empty_translation(ctx: MessageContext):
-    # Added .strip() here instead of during string extraction
     if not ctx.translation.strip() and ctx.tr_type != "unfinished":
-        return [WarningItem(ctx.ts_file, ctx.line,
+        return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
                             f"{ctx.lang}: empty translation for '{ctx.excerpt}...'",
                             Severity.SEVERE)]
     return []
 
+
 def check_placeholders(ctx: MessageContext):
-    # Replaced set() with Counter() to ensure exact placeholder counts match
     if ctx.tr_type != "unfinished" and Counter(PLACEHOLDER_RE.findall(ctx.source)) != Counter(
         PLACEHOLDER_RE.findall(ctx.translation)):
-        return [WarningItem(ctx.ts_file, ctx.line,
+        return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
                             f"{ctx.lang}: placeholder mismatch for '{ctx.excerpt}...'\n"
                             f"Source: {ctx.source}\nTranslation: {ctx.translation}",
                             Severity.WARNING)]
     return []
 
+
 def check_html(ctx: MessageContext):
     if HTML_TAG_RE.search(ctx.source) and not HTML_TAG_RE.search(
         ctx.translation) and ctx.tr_type != "unfinished":
-        return [WarningItem(ctx.ts_file, ctx.line,
+        return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
                             f"{ctx.lang}: HTML missing for '{ctx.excerpt}...'\n"
                             f"Source: {ctx.source}\nTranslation: {ctx.translation}",
                             Severity.WARNING)]
     return []
 
+
 def check_whitespace(ctx: MessageContext):
-    if ctx.source != ctx.source.strip() or ctx.translation != ctx.translation.strip():
-        return [WarningItem(ctx.ts_file, ctx.line,
-                            f"{ctx.lang}: leading/trailing whitespace difference for '{ctx.excerpt}...'",
+    if not ctx.translation or ctx.tr_type == "unfinished":
+        return []
+
+    # Check if leading/trailing whitespace presence matches between source and translation
+    src_lead = ctx.source != ctx.source.lstrip()
+    src_trail = ctx.source != ctx.source.rstrip()
+    tr_lead = ctx.translation != ctx.translation.lstrip()
+    tr_trail = ctx.translation != ctx.translation.rstrip()
+
+    if src_lead != tr_lead or src_trail != tr_trail:
+        return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
+                            f"{ctx.lang}: leading/trailing whitespace mismatch for '{ctx.excerpt}...'",
                             Severity.WARNING)]
     return []
 
+
 def check_newline_consistency(ctx: MessageContext):
     if ctx.source.endswith("\n") != ctx.translation.endswith("\n"):
-        return [WarningItem(ctx.ts_file, ctx.line,
+        return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
                             f"{ctx.lang}: newline mismatch for '{ctx.excerpt}...'",
                             Severity.WARNING)]
     return []
 
+
 # Detect warnings
-def detect_warnings(ts_file: Path):
+def detect_warnings(ts_file: Path, file_lang: str):
     try:
         text = ts_file.read_text(encoding="utf-8")
         root = ET.fromstring(text)
     except (OSError, ET.ParseError) as exc:
-        return [WarningItem(ts_file, 0,
+        return [WarningItem(ts_file, 0, file_lang,
                             f"Error reading or parsing XML: {exc}",
                             Severity.SEVERE)]
 
     warnings = []
-    warnings.extend(check_language_header(ts_file, root))
+    warnings.extend(check_language_header(ts_file, root, file_lang))
 
-    file_lang = ts_file.stem.replace("translation_", "")
     message_lines = approximate_message_lines(text)
 
     for context in root.findall("context"):
         for message, line in zip(context.findall("message"), message_lines):
-            # Removed .strip() so whitespace rules trigger correctly
             source = message.findtext("source") or ""
             tr_elem = message.find("translation")
             translation = ""
             tr_type = ""
             if tr_elem is not None:
-                # Removed .strip() here as well
                 translation = tr_elem.text or ""
                 tr_type = tr_elem.attrib.get("type", "")
 
-            # Excerpt can still be stripped just for cleaner logging
             excerpt = source.strip()[:30].replace("\n", " ")
 
             ctx = MessageContext(ts_file, line, file_lang, source, translation, tr_type, excerpt)
@@ -185,10 +199,10 @@ def detect_warnings(ts_file: Path):
 
     return warnings
 
+
 # CLI
 def main():
     parser = argparse.ArgumentParser(description="Qt TS translation checker with extended rules")
-    # Updated default path to be more reliable in CI environments
     parser.add_argument("--ts-dir", type=Path, default=Path("../src/translation"),
                         help="Directory containing translation_*.ts files")
     parser.add_argument("--strict", action="store_true",
@@ -198,18 +212,30 @@ def main():
     if not args.ts_dir.exists():
         print(f"Directory not found: {args.ts_dir}", file=sys.stderr)
         return 2
+
     ts_files = sorted(args.ts_dir.glob("translation_*.ts"))
     if not ts_files:
         print(f"No TS files found in {args.ts_dir}", file=sys.stderr)
         return 2
 
     all_warnings = []
+    failures_by_language = defaultdict(lambda: {"severe": 0, "warning": 0})
+
     for ts_file in ts_files:
-        all_warnings.extend(detect_warnings(ts_file))
+        lang = ts_file.stem.replace("translation_", "")
+        failures_by_language[
+            lang]  # Initializes default counters for this language even if 0 warnings exist
+        all_warnings.extend(detect_warnings(ts_file, lang))
 
     grouped = defaultdict(list)
     for w in all_warnings:
         grouped[(w.ts_file, w.line)].append(w)
+
+        # Populate failures summary using the embedded WarningItem lang
+        if w.severity == Severity.SEVERE:
+            failures_by_language[w.lang]["severe"] += 1
+        else:
+            failures_by_language[w.lang]["warning"] += 1
 
     # Detailed output
     for (file, line), messages in sorted(grouped.items()):
@@ -218,19 +244,8 @@ def main():
             print(f"{BOLD}{file}{RESET} {CYAN}line {line}{RESET}: {color}{w.message}{RESET}")
 
     # Test summary
-    failures_by_language = defaultdict(lambda: {"severe": 0, "warning": 0})
-    all_languages = set()
-
-    for w in all_warnings:
-        lang = w.ts_file.stem.replace("translation_", "")
-        all_languages.add(lang)
-        if w.severity == Severity.SEVERE:
-            failures_by_language[lang]["severe"] += 1
-        else:
-            failures_by_language[lang]["warning"] += 1
-
     print("\n== Test Summary ==")
-    for lang in sorted(all_languages):
+    for lang in sorted(failures_by_language.keys()):
         counts = failures_by_language[lang]
         print(f"{BOLD}[{lang}]{RESET} Severe: {counts['severe']}, Warnings: {counts['warning']}")
 
@@ -242,6 +257,7 @@ def main():
         return 1
 
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

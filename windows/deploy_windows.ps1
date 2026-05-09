@@ -47,28 +47,31 @@ Function Write-Log {
     }
 }
 
-# Execute native command with errorlevel handling and memory-safe logging
-Function Invoke-Native-Command([string]$Cmd, [string[]]$Arguments, [int]$Max = 500) {
-    Write-Log "Executing: $Cmd $($Arguments -join ' ')" -Level DEBUG
-    $Buf = [Collections.Generic.Queue[string]]::new()
-    $Local:ErrorActionPreference = "Continue"
+# Execute native command with errorlevel handling
+Function Invoke-Native-Command {
+    param([Parameter(Mandatory)][string]$Command, [string[]]$Arguments, [switch]$SuppressStdErr)
+    Write-Log "Executing: $Command $($Arguments -join ' ')" "DEBUG"
+    $Out = [Collections.Generic.List[string]]::new()
 
-    & $Cmd @Arguments 2>&1 | ForEach-Object {
-        $Buf.Enqueue(($L = $_.ToString()))
-        if ($Buf.Count -gt $Max) { [void]$Buf.Dequeue() }
+    $PrevEA = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+    try {
+        & $Command @Arguments 2>&1 | ForEach-Object {
+            $IsErr = $_ -is [Management.Automation.ErrorRecord]
+            if ($IsErr -and $SuppressStdErr) { return }
 
-        if ($DebugMode -or ($L.Length -lt 120 -and $L -notmatch "warning C\d+" -and $L.Trim())) {
-            Write-Host "    $L" -ForegroundColor DarkGray
+            $Line = if ($IsErr) { $_.TargetObject -as [string] } else { $_.ToString() }
+            if ([string]::IsNullOrWhiteSpace($Line)) { return }
+
+            $Out.Add($Line)
+            $Color = if ($IsErr -and $DebugMode) { "DarkYellow" } else { "DarkGray" }
+            if ($DebugMode -or -not $IsErr) { Write-Host "    $Line" -ForegroundColor $Color }
         }
-    }
+    } finally { $ErrorActionPreference = $PrevEA }
 
-    if ($LastExitCode -ne 0) {
-        Write-Log "Command $Cmd failed with exit code $LastExitCode" -Level ERROR
-        if (-not $DebugMode) {
-            Write-Log "--- Last $Max lines ---" -Level ERROR
-            $Buf | ForEach-Object { Write-Log $_ -Level ERROR }
-        }
-        Throw "Native command failed."
+    if ($LastExitCode) {
+        Write-Log ($Err = "Native command $Command failed (Exit: $LastExitCode)") "ERROR"
+        if (-not $DebugMode) { $Out.ForEach({ Write-Log $_ "ERROR" }) }
+        throw $Err
     }
 }
 
@@ -81,7 +84,7 @@ Function Clean-Build-Environment {
     Write-Log "Build and Deploy directories initialized."
 }
 
-# For sourceforge links we need to get the correct mirror (especially NSIS)
+# For sourceforge links we need to get the correct mirror (especially NISIS)
 Function Get-RedirectedUrl {
     param([Parameter(Mandatory=$true)][string]$url)
     $sleep = 10; $maxSleep = 80
@@ -208,7 +211,9 @@ Function Build-App {
     Invoke-Native-Command $Env:QtQmakePath ("$RootPath\$AppName.pro", $QmkCfg, "-o", "$BuildPath\Makefile")
 
     Set-Location $BuildPath
-    $MkArgs = @($Cfg)
+
+    # Add /NOLOGO to stop the Microsoft header from being generated
+    $MkArgs = @("/NOLOGO", $Cfg)
     if (-not $DebugMode) { $MkArgs += "/S" }
 
     if ($Env:QtJomPath) {
@@ -223,9 +228,10 @@ Function Build-App {
     Write-Log "Deploying Qt dependencies..."
     Invoke-Native-Command $Env:QtWinDeployPath ("--$Cfg", "--compiler-runtime", "--dir=$DeployPath\$Arch", "$BuildPath\$Cfg\$AppName.exe")
     Move-Item "$BuildPath\$Cfg\$AppName.exe" "$DeployPath\$Arch" -Force
-    $CleanArgs = @("clean")
-    if (-not $DebugMode) { $CleanArgs += "/S" }
-    Invoke-Native-Command "nmake" $CleanArgs
+
+    # Use the new switch to drop the 'Could Not Find' stderr stream entirely
+    Invoke-Native-Command "nmake" (@("clean") + $MkArgs) -SuppressStdErr
+
     Set-Location $RootPath
 }
 

@@ -83,6 +83,8 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
     QObject::connect ( &Protocol, &CProtocol::ClientIDReceived, this, &CChannel::ClientIDReceived );
 
+    QObject::connect ( &Protocol, &CProtocol::RawAudioSupported, this, &CChannel::RawAudioSupported );
+
     QObject::connect ( &Protocol, &CProtocol::MuteStateHasChangedReceived, this, &CChannel::MuteStateHasChangedReceived );
 
     QObject::connect ( &Protocol, &CProtocol::ChangeChanInfo, this, &CChannel::OnChangeChanInfo );

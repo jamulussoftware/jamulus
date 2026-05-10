@@ -31,4 +31,4 @@ jobs:
       - name: "Check for duplicate hotkeys (will not fail)"
         run: perl ./tools/checkkeys.pl
       - name: "Check application translations"
-        run: ./tools/check-translations.py
+        run: ./tools/check-translations.py --ts-dir src/translation

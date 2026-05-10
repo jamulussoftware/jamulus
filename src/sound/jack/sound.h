@@ -62,10 +62,9 @@ class CSound : public CSoundBase
 public:
     CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
              void*          arg,
-             const QString& strMIDISetup,
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
-        CSoundBase ( "Jack", fpNewProcessCallback, arg, strMIDISetup ),
+        CSoundBase ( "Jack", fpNewProcessCallback, arg ),
         iJACKBufferSizeMono ( 0 ),
         bJackWasShutDown ( false ),
         fInOutLatencyMs ( 0.0f )
@@ -86,7 +85,10 @@ public:
     virtual void Start();
     virtual void Stop();
 
-    virtual float GetInOutLatencyMs() { return fInOutLatencyMs; }
+    virtual float       GetInOutLatencyMs() { return fInOutLatencyMs; }
+    virtual void        EnableMIDI ( bool bEnable ) override;
+    virtual bool        IsMIDIEnabled() const override;
+    virtual QStringList GetMIDIDevNames() override;
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function
@@ -105,6 +107,8 @@ protected:
     void OpenJack ( const bool bNoAutoJackConnect, const char* jackClientName );
 
     void CloseJack();
+    void CreateMIDIPort();
+    void DestroyMIDIPort();
 
     // callbacks
     static int     process ( jack_nframes_t nframes, void* arg );
@@ -121,12 +125,8 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* pParg ),
-             void*          pParg,
-             const QString& strMIDISetup,
-             const bool,
-             const QString& ) :
-        CSoundBase ( "nosound", fpNewProcessCallback, pParg, strMIDISetup ),
+    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* pParg ), void* pParg, const bool, const QString& ) :
+        CSoundBase ( "nosound", fpNewProcessCallback, pParg ),
         HighPrecisionTimer ( true )
     {
         HighPrecisionTimer.Start();

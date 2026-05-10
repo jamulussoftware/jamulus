@@ -1126,6 +1126,8 @@ void CConnectDlg::UpdateDirectoryComboBox()
 
 void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWidgetItem* )
 {
+    Q_UNUSED ( current );
+
     // Announce the currently selected server or client to screen readers.
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 8, 0 )
     if ( !current )

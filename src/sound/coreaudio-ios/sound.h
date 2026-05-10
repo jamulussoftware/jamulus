@@ -33,11 +33,7 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
-             void*          arg,
-             const QString& strMIDISetup,
-             const bool,
-             const QString& );
+    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ), void* arg, const bool, const QString& );
     ~CSound();
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );

@@ -80,7 +80,6 @@ public:
     CClientDlg ( CClient*         pNCliP,
                  CClientSettings* pNSetP,
                  const QString&   strConnOnStartupAddress,
-                 const QString&   strMIDISetup,
                  const bool       bNewShowComplRegConnList,
                  const bool       bShowAnalyzerConsole,
                  const bool       bMuteStream,
@@ -245,6 +244,8 @@ public slots:
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones
+
+    void OnMIDIControllerUsageChanged ( bool bEnabled );
 
 signals:
     void SendTabChange ( int iTabIdx );

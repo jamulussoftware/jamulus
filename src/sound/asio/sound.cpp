@@ -515,12 +515,8 @@ void CSound::Stop()
     }
 }
 
-CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ),
-                 void*          arg,
-                 const QString& strMIDISetup,
-                 const bool,
-                 const QString& ) :
-    CSoundBase ( "ASIO", fpNewCallback, arg, strMIDISetup ),
+CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg, const bool, const QString& ) :
+    CSoundBase ( "ASIO", fpNewCallback, arg ),
     lNumInChan ( 0 ),
     lNumInChanPlusAddChan ( 0 ),
     lNumOutChan ( 0 ),
@@ -627,6 +623,48 @@ bool CSound::CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType 
 {
     // check for supported sample types for audio channel mixing (see bufferSwitch)
     return ( ( SamType == ASIOSTInt16LSB ) || ( SamType == ASIOSTInt24LSB ) || ( SamType == ASIOSTInt32LSB ) );
+}
+
+void CSound::EnableMIDI ( bool bEnable )
+{
+    if ( bEnable )
+    {
+        // Enable MIDI only if it's not already enabled
+        if ( !bMidiEnabled && iCtrlMIDIChannel != INVALID_MIDI_CH )
+        {
+            Midi.MidiStart();
+        }
+    }
+    else
+    {
+        // Disable MIDI only if it's currently enabled
+        if ( bMidiEnabled )
+        {
+            Midi.MidiStop();
+        }
+    }
+    bMidiEnabled = Midi.IsActive();
+}
+
+bool CSound::IsMIDIEnabled() const { return bMidiEnabled; }
+
+QStringList CSound::GetMIDIDevNames()
+{
+    QStringList deviceNamesList;
+    int         numDevices = midiInGetNumDevs();
+
+    for ( int i = 0; i < numDevices; i++ )
+    {
+        MIDIINCAPS mic;
+        MMRESULT   result = midiInGetDevCaps ( i, &mic, sizeof ( MIDIINCAPS ) );
+
+        if ( result == MMSYSERR_NOERROR )
+        {
+            deviceNamesList.append ( QString ( mic.szPname ) );
+        }
+    }
+
+    return deviceNamesList;
 }
 
 void CSound::bufferSwitch ( long index, ASIOBool )

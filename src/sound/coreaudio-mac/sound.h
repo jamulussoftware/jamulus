@@ -38,30 +38,33 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
-             void*          arg,
-             const QString& strMIDISetup,
-             const bool,
-             const QString& );
+    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ), void* arg, const bool, const QString& );
 
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
-    virtual void Start();
-    virtual void Stop();
+    virtual ~CSound();
+
+    virtual int  Init ( const int iNewPrefMonoBufferSize ) override;
+    virtual void Start() override;
+    virtual void Stop() override;
 
     // channel selection
-    virtual int     GetNumInputChannels() { return iNumInChanPlusAddChan; }
-    virtual QString GetInputChannelName ( const int iDiD ) { return sChannelNamesInput[iDiD]; }
-    virtual void    SetLeftInputChannel ( const int iNewChan );
-    virtual void    SetRightInputChannel ( const int iNewChan );
-    virtual int     GetLeftInputChannel() { return iSelInputLeftChannel; }
-    virtual int     GetRightInputChannel() { return iSelInputRightChannel; }
+    virtual int     GetNumInputChannels() override { return iNumInChanPlusAddChan; }
+    virtual QString GetInputChannelName ( const int iDiD ) override { return sChannelNamesInput[iDiD]; }
+    virtual void    SetLeftInputChannel ( const int iNewChan ) override;
+    virtual void    SetRightInputChannel ( const int iNewChan ) override;
+    virtual int     GetLeftInputChannel() override { return iSelInputLeftChannel; }
+    virtual int     GetRightInputChannel() override { return iSelInputRightChannel; }
 
-    virtual int     GetNumOutputChannels() { return iNumOutChan; }
-    virtual QString GetOutputChannelName ( const int iDiD ) { return sChannelNamesOutput[iDiD]; }
-    virtual void    SetLeftOutputChannel ( const int iNewChan );
-    virtual void    SetRightOutputChannel ( const int iNewChan );
-    virtual int     GetLeftOutputChannel() { return iSelOutputLeftChannel; }
-    virtual int     GetRightOutputChannel() { return iSelOutputRightChannel; }
+    virtual int     GetNumOutputChannels() override { return iNumOutChan; }
+    virtual QString GetOutputChannelName ( const int iDiD ) override { return sChannelNamesOutput[iDiD]; }
+    virtual void    SetLeftOutputChannel ( const int iNewChan ) override;
+    virtual void    SetRightOutputChannel ( const int iNewChan ) override;
+    virtual int     GetLeftOutputChannel() override { return iSelOutputLeftChannel; }
+    virtual int     GetRightOutputChannel() override { return iSelOutputRightChannel; }
+
+    // MIDI functions
+    virtual void        EnableMIDI ( const bool bEnable ) override;
+    virtual bool        IsMIDIEnabled() const override;
+    virtual QStringList GetMIDIDevNames() override;
 
     // these variables/functions should be protected but cannot since we want
     // to access them from the callback function
@@ -94,7 +97,7 @@ public:
     CVector<int>   vecNumOutBufChan;
 
 protected:
-    virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
+    virtual QString LoadAndInitializeDriver ( QString strDriverName, bool ) override;
 
     QString CheckDeviceCapabilities ( const int iDriverIdx );
     void    UpdateChSelection();
@@ -107,6 +110,9 @@ protected:
     void GetAudioDeviceInfos ( const AudioDeviceID DeviceID, QString& strDeviceName, bool& bIsInput, bool& bIsOutput );
 
     bool ConvertCFStringToQString ( const CFStringRef stringRef, QString& sOut );
+
+    void CreateMIDIPort();
+    void DestroyMIDIPort();
 
     // callbacks
     static OSStatus deviceNotification ( AudioDeviceID, UInt32, const AudioObjectPropertyAddress* inAddresses, void* inRefCon );
@@ -126,7 +132,8 @@ protected:
     AudioDeviceIOProcID audioInputProcID;
     AudioDeviceIOProcID audioOutputProcID;
 
-    MIDIPortRef midiInPortRef;
+    MIDIClientRef midiClient;
+    MIDIPortRef   midiInPortRef;
 
     QString sChannelNamesInput[MAX_NUM_IN_OUT_CHANNELS];
     QString sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];

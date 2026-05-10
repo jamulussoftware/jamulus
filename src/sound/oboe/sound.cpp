@@ -29,12 +29,8 @@
 
 const uint8_t CSound::RING_FACTOR = 20;
 
-CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
-                 void*          arg,
-                 const QString& strMIDISetup,
-                 const bool,
-                 const QString& ) :
-    CSoundBase ( "Oboe", fpNewProcessCallback, arg, strMIDISetup )
+CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ), void* arg, const bool, const QString& ) :
+    CSoundBase ( "Oboe", fpNewProcessCallback, arg )
 {
 #ifdef ANDROIDDEBUG
     qInstallMessageHandler ( myMessageHandler );

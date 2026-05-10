@@ -6,6 +6,8 @@
 # Author(s):
 #  ChatGPT
 #  ann0see
+#  JaminShanti
+#  Gemini
 #  The Jamulus Development Team
 #
 ##############################################################################
@@ -111,7 +113,7 @@ def check_language_header(ts_file: Path, root, file_lang: str):
 def check_empty_translation(ctx: MessageContext):
     if not ctx.translation.strip() and ctx.tr_type != "unfinished":
         return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
-                            f"{ctx.lang}: empty translation for '{ctx.excerpt}...'",
+                            f"Empty translation for '{ctx.excerpt}'",
                             Severity.SEVERE)]
     return []
 
@@ -119,20 +121,20 @@ def check_empty_translation(ctx: MessageContext):
 def check_placeholders(ctx: MessageContext):
     if ctx.tr_type != "unfinished" and Counter(PLACEHOLDER_RE.findall(ctx.source)) != Counter(
         PLACEHOLDER_RE.findall(ctx.translation)):
-        return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
-                            f"{ctx.lang}: placeholder mismatch for '{ctx.excerpt}...'\n"
-                            f"Source: {ctx.source}\nTranslation: {ctx.translation}",
-                            Severity.WARNING)]
+        msg = (f"Placeholder mismatch for '{ctx.excerpt}'\n"
+               f"Source: {ctx.source}\n"
+               f"Trans:  {ctx.translation}")
+        return [WarningItem(ctx.ts_file, ctx.line, ctx.lang, msg, Severity.WARNING)]
     return []
 
 
 def check_html(ctx: MessageContext):
     if HTML_TAG_RE.search(ctx.source) and not HTML_TAG_RE.search(
         ctx.translation) and ctx.tr_type != "unfinished":
-        return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
-                            f"{ctx.lang}: HTML missing for '{ctx.excerpt}...'\n"
-                            f"Source: {ctx.source}\nTranslation: {ctx.translation}",
-                            Severity.WARNING)]
+        msg = (f"HTML missing for '{ctx.excerpt}'\n"
+               f"Source: {ctx.source}\n"
+               f"Trans:  {ctx.translation}")
+        return [WarningItem(ctx.ts_file, ctx.line, ctx.lang, msg, Severity.WARNING)]
     return []
 
 
@@ -148,7 +150,7 @@ def check_whitespace(ctx: MessageContext):
 
     if src_lead != tr_lead or src_trail != tr_trail:
         return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
-                            f"{ctx.lang}: leading/trailing whitespace mismatch for '{ctx.excerpt}...'",
+                            f"Leading/trailing whitespace mismatch for '{ctx.excerpt}'",
                             Severity.WARNING)]
     return []
 
@@ -156,7 +158,7 @@ def check_whitespace(ctx: MessageContext):
 def check_newline_consistency(ctx: MessageContext):
     if ctx.source.endswith("\n") != ctx.translation.endswith("\n"):
         return [WarningItem(ctx.ts_file, ctx.line, ctx.lang,
-                            f"{ctx.lang}: newline mismatch for '{ctx.excerpt}...'",
+                            f"Newline mismatch for '{ctx.excerpt}'",
                             Severity.WARNING)]
     return []
 
@@ -178,15 +180,26 @@ def detect_warnings(ts_file: Path, file_lang: str):
 
     for context in root.findall("context"):
         for message, line in zip(context.findall("message"), message_lines):
-            source = message.findtext("source") or ""
+
+            # Safely extract source text
+            source_elem = message.find("source")
+            source = "".join(source_elem.itertext()) if source_elem is not None else ""
+
+            # Safely extract translation text (handling Qt plural <numerusform> elements)
             tr_elem = message.find("translation")
             translation = ""
             tr_type = ""
             if tr_elem is not None:
-                translation = tr_elem.text or ""
                 tr_type = tr_elem.attrib.get("type", "")
+                numerus_forms = tr_elem.findall("numerusform")
+                if numerus_forms:
+                    translation = " ".join("".join(n.itertext()) for n in numerus_forms)
+                else:
+                    translation = "".join(tr_elem.itertext())
 
-            excerpt = source.strip()[:30].replace("\n", " ")
+            # Format a clean excerpt without blindly adding '...' to tiny strings
+            source_clean = source.strip().replace("\n", " ")
+            excerpt = source_clean[:30] + ("..." if len(source_clean) > 30 else "")
 
             ctx = MessageContext(ts_file, line, file_lang, source, translation, tr_type, excerpt)
 
@@ -223,25 +236,35 @@ def main():
 
     for ts_file in ts_files:
         lang = ts_file.stem.replace("translation_", "")
-        failures_by_language[
-            lang]  # Initializes default counters for this language even if 0 warnings exist
+        failures_by_language[lang]  # Initializes default counters
         all_warnings.extend(detect_warnings(ts_file, lang))
 
+    # Group output by file
     grouped = defaultdict(list)
     for w in all_warnings:
-        grouped[(w.ts_file, w.line)].append(w)
+        grouped[w.ts_file].append(w)
 
-        # Populate failures summary using the embedded WarningItem lang
         if w.severity == Severity.SEVERE:
             failures_by_language[w.lang]["severe"] += 1
         else:
             failures_by_language[w.lang]["warning"] += 1
 
-    # Detailed output
-    for (file, line), messages in sorted(grouped.items()):
-        for w in messages:
+    # Detailed clean column output
+    for file in sorted(grouped.keys()):
+        messages = grouped[file]
+        print(f"\n{BOLD}File: {file.name}{RESET}")
+
+        for w in sorted(messages, key=lambda x: x.line):
             color = RED if w.severity == Severity.SEVERE else YELLOW
-            print(f"{BOLD}{file}{RESET} {CYAN}line {line}{RESET}: {color}{w.message}{RESET}")
+            sev_text = "SEVERE " if w.severity == Severity.SEVERE else "WARNING"
+
+            msg_lines = w.message.split("\n")
+            # Print the primary warning line
+            print(f"  {CYAN}Line {w.line:<4}{RESET} | {color}{sev_text}{RESET} | {msg_lines[0]}")
+
+            # Print any secondary data (like HTML/Placeholder source & trans contexts) properly aligned
+            for extra_line in msg_lines[1:]:
+                print(f"            |         | {extra_line}")
 
     # Test summary
     print("\n== Test Summary ==")

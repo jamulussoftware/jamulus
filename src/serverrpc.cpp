@@ -56,6 +56,57 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
         Q_UNUSED ( params );
     } );
 
+    /// @rpc_notification jamulusserver/clientConnected
+    /// @brief Emitted when a client has connected to the server.
+    /// @param {number} params.id - The channel ID assigned to the client.
+    /// @param {string} params.address - The client's address.
+    /// @param {number} params.totalChannels - Number of total channels connected to the server.
+    connect ( pServer, &CServer::ClientConnected, [=] ( const int iChanID, const QHostAddress RecHostAddr, const int iTotChans ) {
+        pRpcServer->BroadcastNotification ( "jamulusserver/clientConnected",
+                                            QJsonObject{
+                                                { "id", iChanID },
+                                                { "address", RecHostAddr.toString() },
+                                                { "totalChannels", iTotChans },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusserver/clientDisconnected
+    /// @brief Emitted when a client has disconnected from the server.
+    /// @param {number} params.id - The channel ID assigned to the client.
+    connect ( pServer, &CServer::ClientDisconnected, [=] ( const int iChanID ) {
+        pRpcServer->BroadcastNotification ( "jamulusserver/clientDisconnected",
+                                            QJsonObject{
+                                                { "id", iChanID },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusserver/chatMessageReceived
+    /// @brief Emitted when a chat message is received from either a Jamulus or RPC client and to be broadcast to all connected clients.
+    /// @param {string} params.chatMessage - Chat message text.
+    connect ( pServer, &CServer::sentChatMessage, [=] ( const QString& strChatText ) {
+        pRpcServer->BroadcastNotification ( "jamulusserver/chatMessageReceived",
+                                            QJsonObject{
+                                                { "chatMessage", strChatText },
+                                            } );
+    } );
+
+    /// @rpc_method jamulusserver/broadcastChatMessage
+    /// @brief Sends a message (as the server) to all connected clients. This can be used to broadcast messages from external sources (e.g. scripts or
+    /// monitoring tools).
+    /// @param {string} params.chatMessage - The chat message text.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusserver/broadcastChatMessage", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonChatMessage = params["chatMessage"];
+        if ( !jsonChatMessage.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: chatMessage is not a string" );
+            return;
+        }
+
+        pServer->SendChatTextToAllConChannels ( jsonChatMessage.toString() );
+        response["result"] = "ok";
+    } );
+
     /// @rpc_method jamulusserver/getRecorderStatus
     /// @brief Returns the recorder state.
     /// @param {object} params - No parameters (empty object).

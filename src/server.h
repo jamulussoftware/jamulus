@@ -331,6 +331,8 @@ signals:
     void Started();
     void Stopped();
     void ClientDisconnected ( const int iChID );
+    void ClientConnected ( const int iChID, const QHostAddress RecHostAddr, const int iTotChans );
+    void sentChatMessage ( const QString& strChatText );
     void SvrRegStatusChanged();
     void AudioFrame ( const int              iChID,
                       const QString          stChName,

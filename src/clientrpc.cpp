@@ -497,6 +497,23 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         response["result"] = jsonDevices;
         Q_UNUSED ( params );
     } );
+
+    /// @rpc_method jamulusclient/setMuted
+    /// @brief Mutes or unmutes the client.
+    /// @param {boolean} params.muted - muted (true or false).
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusclient/setMuted", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto muted = params["muted"];
+        if ( !muted.isBool() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: muted is not a boolean" );
+            return;
+        }
+
+        pClient->OnRPCInMuteMyself ( muted.toBool() );
+
+        response["result"] = "ok";
+    } );
 }
 
 QJsonValue CClientRpc::SerializeSkillLevel ( ESkillLevel eSkillLevel )

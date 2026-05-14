@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <assemblyIdentity
+    type="win32"
+    name="JamulusPlus"
+    version="0.1.0.0"
+    processorArchitecture="amd64"
+  />
+  <description>JamulusPlus Plugin</description>
+  
+  <!-- Enable DLL redirection: Windows will look for DLLs in the same directory as this module -->
+  <file name="Qt6Core.dll" />
+  <file name="Qt6Network.dll" />
+  <!-- GUI DLLs were previously removed for Headless build, now enabled -->
+  <file name="Qt6Gui.dll" />
+  <file name="Qt6Widgets.dll" />
+  <file name="Qt6Xml.dll" />
+  <file name="Qt6Svg.dll" />
+  <file name="Qt6Multimedia.dll" />
+  <file name="Qt6OpenGL.dll" />
+  <file name="Qt6OpenGLWidgets.dll" />
+  <file name="D3Dcompiler_47.dll" />
+  <file name="opengl32sw.dll" />
+  <file name="vcruntime140.dll" />
+  <file name="vcruntime140_1.dll" />
+  <file name="msvcp140.dll" />
+  <file name="msvcp140_1.dll" />
+  <file name="msvcp140_2.dll" />
+  <file name="msvcp140_atomic_wait.dll" />
+  <file name="msvcp140_codecvt_ids.dll" />
+  <file name="concrt140.dll" />
+  
+  <!-- Request DPI awareness for proper scaling in hosts -->
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/pm</dpiAware>
+      <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2</dpiAwareness>
+    </windowsSettings>
+  </application>
+  
+  <!-- Request common controls v6 for modern UI -->
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity
+        type="win32"
+        name="Microsoft.Windows.Common-Controls"
+        version="6.0.0.0"
+        processorArchitecture="*"
+        publicKeyToken="6595b64144ccf1df"
+        language="*"
+      />
+    </dependentAssembly>
+  </dependency>
+</assembly>

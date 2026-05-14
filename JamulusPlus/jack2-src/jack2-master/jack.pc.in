@@ -1,0 +1,12 @@
+prefix=@PREFIX@
+exec_prefix=@PREFIX@
+libdir=@LIBDIR@
+includedir=@INCLUDEDIR@
+server_libs=-L@LIBDIR@ -l@SERVERLIB@
+jack_implementation=jack2
+
+Name: jack
+Description: the Jack Audio Connection Kit: a low-latency synchronous callback-based media server
+Version: @JACK_VERSION@
+Libs: -L${libdir} -l@CLIENTLIB@
+Cflags: -I${includedir}

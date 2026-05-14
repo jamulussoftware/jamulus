@@ -1,3 +1,6 @@
 [submodule "libs/oboe"]
 	path = libs/oboe
 	url = ../../google/oboe.git
+[submodule "JamulusPlus/third_party/JUCE"]
+	path = JamulusPlus/third_party/JUCE
+	url = https://github.com/juce-framework/JUCE.git

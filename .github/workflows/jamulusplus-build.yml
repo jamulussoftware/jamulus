@@ -36,21 +36,19 @@ jobs:
 
       - name: Checkout JamulusPlus JUCE submodule
         run: |
-          git submodule sync -- JamulusPlus/third_party/JUCE
-          git submodule update --init --depth 1 JamulusPlus/third_party/JUCE
+          git submodule update --init --depth 1 -- JamulusPlus/third_party/JUCE
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
       - name: Configure
         run: >
-          cmake -S JamulusPlus -B JamulusPlus/b -G Ninja
-          -DCMAKE_BUILD_TYPE=Release
+          cmake -S JamulusPlus -B JamulusPlus/build-ci-windows -G "Visual Studio 17 2022" -A x64
           -DENABLE_STANDALONE=ON
 
       - name: Build
         run: >
-          cmake --build JamulusPlus/b --config Release
+          cmake --build JamulusPlus/build-ci-windows --config Release
           --target jamulus_engine_VST3 jamulus_engine_Standalone
 
       - name: Upload VST3
@@ -58,7 +56,7 @@ jobs:
         with:
           name: JamulusPlus-windows-vst3
           if-no-files-found: error
-          path: JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
+          path: JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
 
       - name: Upload Standalone
         uses: actions/upload-artifact@v4
@@ -66,7 +64,7 @@ jobs:
           name: JamulusPlus-windows-standalone
           if-no-files-found: error
           path: |
-            JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/**
+            JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone/**
             JamulusPlus/dist/JamulusPlus-Standalone/**
 
       - name: Package Release Assets
@@ -74,11 +72,11 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path release-assets | Out-Null
-          Compress-Archive -Path "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip" -Force
+          Compress-Archive -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip" -Force
           if (Test-Path "JamulusPlus/dist/JamulusPlus-Standalone") {
             Compress-Archive -Path "JamulusPlus/dist/JamulusPlus-Standalone" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
           } else {
-            Compress-Archive -Path "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/*" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
+            Compress-Archive -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone/*" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
           }
 
       - name: Publish Release Assets
@@ -103,19 +101,17 @@ jobs:
 
       - name: Checkout JamulusPlus JUCE submodule
         run: |
-          git submodule sync -- JamulusPlus/third_party/JUCE
-          git submodule update --init --depth 1 JamulusPlus/third_party/JUCE
+          git submodule update --init --depth 1 -- JamulusPlus/third_party/JUCE
 
       - name: Configure
         run: >
-          cmake -S JamulusPlus -B JamulusPlus/b -G Ninja
-          -DCMAKE_BUILD_TYPE=Release
+          cmake -S JamulusPlus -B JamulusPlus/build-ci-macos -G Xcode
           -DENABLE_AU=ON
           -DENABLE_STANDALONE=ON
 
       - name: Build
         run: >
-          cmake --build JamulusPlus/b --config Release
+          cmake --build JamulusPlus/build-ci-macos --config Release
           --target jamulus_engine_VST3 jamulus_engine_AU jamulus_engine_Standalone
 
       - name: Upload VST3
@@ -123,14 +119,14 @@ jobs:
         with:
           name: JamulusPlus-macos-vst3
           if-no-files-found: error
-          path: JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
+          path: JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
 
       - name: Upload AU
         uses: actions/upload-artifact@v4
         with:
           name: JamulusPlus-macos-au
           if-no-files-found: error
-          path: JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component
+          path: JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component
 
       - name: Upload Standalone
         uses: actions/upload-artifact@v4
@@ -138,19 +134,19 @@ jobs:
           name: JamulusPlus-macos-standalone
           if-no-files-found: error
           path: |
-            JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app
+            JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app
             JamulusPlus/dist/JamulusPlus.app
 
       - name: Package Release Assets
         if: startsWith(github.ref, 'refs/tags/V')
         run: |
           mkdir -p release-assets
-          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-vst3.zip"
-          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-au.zip"
+          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-vst3.zip"
+          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-au.zip"
           if [ -d "JamulusPlus/dist/JamulusPlus.app" ]; then
             ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/dist/JamulusPlus.app" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip"
           else
-            ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip"
+            ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip"
           fi
 
       - name: Publish Release Assets

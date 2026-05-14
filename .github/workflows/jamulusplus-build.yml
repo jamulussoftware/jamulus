@@ -32,7 +32,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
+
+      - name: Checkout JamulusPlus JUCE submodule
+        run: |
+          git submodule sync -- JamulusPlus/third_party/JUCE
+          git submodule update --init --depth 1 JamulusPlus/third_party/JUCE
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -94,7 +99,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
+
+      - name: Checkout JamulusPlus JUCE submodule
+        run: |
+          git submodule sync -- JamulusPlus/third_party/JUCE
+          git submodule update --init --depth 1 JamulusPlus/third_party/JUCE
 
       - name: Configure
         run: >

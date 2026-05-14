@@ -94,7 +94,7 @@ std::vector<NetEndpoint> JUCE_Resolver::resolveSrv ( const std::string& domain )
 #else
     // POSIX implementation using res_query
     unsigned char response[4096];
-    int len = res_query ( domain.c_str(), C_IN, T_SRV, response, sizeof ( response ) );
+    int len = res_query ( domain.c_str(), ns_c_in, ns_t_srv, response, sizeof ( response ) );
     if ( len >= 0 )
     {
         ns_msg msg;
@@ -103,7 +103,7 @@ std::vector<NetEndpoint> JUCE_Resolver::resolveSrv ( const std::string& domain )
             for ( int i = 0; i < ns_msg_count ( msg, ns_s_an ); i++ )
             {
                 ns_rr rr;
-                if ( ns_parserr ( &msg, ns_s_an, i, &rr ) >= 0 && ns_rr_type ( rr ) == T_SRV )
+                if ( ns_parserr ( &msg, ns_s_an, i, &rr ) >= 0 && ns_rr_type ( rr ) == ns_t_srv )
                 {
                     const unsigned char* rdata = ns_rr_rdata ( rr );
                     uint16_t priority = ns_get16 ( rdata );

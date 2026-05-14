@@ -21,7 +21,7 @@ on:
       - 'JamulusPlus/**'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-windows:
@@ -63,6 +63,28 @@ jobs:
           path: |
             JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/**
             JamulusPlus/dist/JamulusPlus-Standalone/**
+
+      - name: Package Release Assets
+        if: startsWith(github.ref, 'refs/tags/V')
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path release-assets | Out-Null
+          Compress-Archive -Path "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip" -Force
+          if (Test-Path "JamulusPlus/dist/JamulusPlus-Standalone") {
+            Compress-Archive -Path "JamulusPlus/dist/JamulusPlus-Standalone" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
+          } else {
+            Compress-Archive -Path "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/*" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
+          }
+
+      - name: Publish Release Assets
+        if: startsWith(github.ref, 'refs/tags/V')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip
+            release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip
 
   build-macos:
     name: macOS VST3 + AU + Standalone
@@ -108,3 +130,26 @@ jobs:
           path: |
             JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app
             JamulusPlus/dist/JamulusPlus.app
+
+      - name: Package Release Assets
+        if: startsWith(github.ref, 'refs/tags/V')
+        run: |
+          mkdir -p release-assets
+          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-vst3.zip"
+          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-au.zip"
+          if [ -d "JamulusPlus/dist/JamulusPlus.app" ]; then
+            ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/dist/JamulusPlus.app" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip"
+          else
+            ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip"
+          fi
+
+      - name: Publish Release Assets
+        if: startsWith(github.ref, 'refs/tags/V')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            release-assets/JamulusPlus-${{ github.ref_name }}-macos-vst3.zip
+            release-assets/JamulusPlus-${{ github.ref_name }}-macos-au.zip
+            release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip

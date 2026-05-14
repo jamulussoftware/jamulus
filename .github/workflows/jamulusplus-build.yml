@@ -6,6 +6,8 @@ on:
     branches:
       - JamulusPlus
       - jamulusplus
+    tags:
+      - 'V*'
     paths:
       - '.github/workflows/jamulusplus-build.yml'
       - '.gitmodules'

@@ -25,6 +25,12 @@
 #pragma once
 #include <vector>
 #include <algorithm>
+#include <functional>
+#include <cstdint>
+#include <juce_core/juce_core.h>
+#if defined( JAMULUS_USE_JUCE_NET ) && !defined( HEADLESS )
+#include <juce_gui_basics/juce_gui_basics.h>
+#endif
 #ifdef _WIN32
 #    include <winsock2.h>
 #    include <ws2tcpip.h>
@@ -39,27 +45,32 @@
 // using mach nanosleep for Linux
 #    include <sys/time.h>
 #endif
-#include <QCoreApplication>
-#include <QUdpSocket>
+#if !defined( HEADLESS )
 #include <QHostAddress>
-#include <QHostInfo>
-#include <QFile>
+#endif
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
+#include <QUdpSocket>
+#endif
+#include <fstream>
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
 #include <QDirIterator>
-#include <QRegularExpression>
 #include <QTranslator>
 #include <QLibraryInfo>
-#include <QUrl>
-#include <QLocale>
-#include <QElapsedTimer>
 #include <QTextBoundaryFinder>
-#include <QTimer>
+#endif
+
+#if !defined( JAMULUS_USE_JUCE_NET )
+#include <QLocale>
+using QCOUNTRY_T = QLocale::Country;
+#else
+using QCOUNTRY_T = unsigned short;
+#endif
 #ifndef CLIENT_NO_SRV_CONNECT
-#    include <QDnsLookup>
+#    if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
+#        include <QDnsLookup>
+#    endif
 #endif
-#ifndef _WIN32
-#    include <QThread>
-#endif
-#ifndef HEADLESS
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
 #    include <QMessageBox>
 #    include <QMenu>
 #    include <QWhatsThis>
@@ -68,7 +79,7 @@
 #    include <QCheckBox>
 #    include <QComboBox>
 #    include <QLineEdit>
-#    include <QDateTime>
+#    include <QUrl>
 #    include <QDesktopServices>
 #    include <QKeyEvent>
 #    include <QStackedLayout>
@@ -76,6 +87,11 @@
 #endif
 
 #include "global.h"
+
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+class QCoreApplication;
+#endif
+
 
 #ifndef SERVER_ONLY
 class CClient; // forward declaration of CClient
@@ -114,6 +130,36 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes, c
 QString GetVersionAndNameStr ( const bool bDisplayInGui = true );
 QString MakeClientNameTitle ( QString win, QString client );
 QString TruncateString ( QString str, int position );
+
+class CPreciseTimer
+{
+public:
+    CPreciseTimer() = default;
+
+    void start();
+    int  elapsed() const;
+
+private:
+    std::int64_t startTicks = 0;
+};
+
+inline void CPreciseTimer::start()
+{
+    startTicks = juce::Time::getHighResolutionTicks();
+}
+
+inline int CPreciseTimer::elapsed() const
+{
+    auto now       = juce::Time::getHighResolutionTicks();
+    auto diffTicks = now - startTicks;
+    auto seconds   = juce::Time::highResolutionTicksToSeconds ( diffTicks );
+    if ( seconds <= 0.0 )
+    {
+        return 0;
+    }
+    auto ms = static_cast<int> ( seconds * 1000.0 );
+    return ms;
+}
 
 /******************************************************************************\
 * CVector Base Class                                                           *
@@ -367,7 +413,78 @@ void CMovingAv<TData>::Add ( const TData tNewD )
 /******************************************************************************\
 * GUI Utilities                                                                *
 \******************************************************************************/
-#ifndef HEADLESS
+#if !defined( HEADLESS )
+#if defined( JAMULUS_USE_JUCE_NET )
+class CBaseDlg : public juce::DialogWindow
+{
+public:
+    CBaseDlg ( const juce::String& title, juce::Component* parent = nullptr );
+    int  exec();
+    void closeButtonPressed() override;
+    bool keyPressed ( const juce::KeyPress& key ) override;
+};
+
+class CAboutDlg : public CBaseDlg
+{
+public:
+    CAboutDlg();
+    int exec();
+};
+
+class CLicenceDlg : public CBaseDlg
+{
+public:
+    CLicenceDlg();
+};
+
+class CHelpMenu
+{
+public:
+    CHelpMenu ( const bool bIsClient, juce::Component* parent = nullptr );
+    void show();
+    juce::PopupMenu& getMenu();
+
+private:
+    void OnHelpWhatsThis();
+    void OnHelpAbout();
+    void OnHelpAboutQt();
+    void OnHelpClientGetStarted();
+    void OnHelpServerGetStarted();
+    void OnHelpSoftwareMan();
+
+    juce::Component* parent = nullptr;
+    CAboutDlg        AboutDlg;
+    juce::PopupMenu  menu;
+};
+
+class CLanguageComboBox : public juce::ComboBox
+{
+public:
+    CLanguageComboBox();
+    void Init ( QString& strSelLanguage );
+    void setLanguageChangedCallback ( std::function<void ( QString )> callback );
+
+private:
+    void OnLanguageActivated();
+
+    int iIdxSelectedLanguage = INVALID_INDEX;
+    std::function<void ( QString )> onLanguageChanged;
+    std::vector<QString>           languageCodes;
+};
+
+class CMinimumStackedLayout : public juce::Component
+{
+public:
+    void addComponent ( juce::Component* component );
+    void setCurrentIndex ( int index );
+    juce::Component* getCurrentComponent() const;
+    void resized() override;
+
+private:
+    std::vector<juce::Component*> components;
+    int                           currentIndex = -1;
+};
+#else
 // Dialog base class -----------------------------------------------------------
 class CBaseDlg : public QDialog
 {
@@ -466,6 +583,7 @@ public:
     CMinimumStackedLayout ( QWidget* parent = nullptr ) : QStackedLayout ( parent ) {}
     virtual QSize sizeHint() const override;
 };
+#endif
 #endif
 
 /******************************************************************************\
@@ -581,38 +699,7 @@ enum EDirectoryType
     AT_CUSTOM               = 7 // Must be the last entry!
 };
 
-inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
-{
-    switch ( eAddrType )
-    {
-    case AT_NONE:
-        return QCoreApplication::translate ( "CServerDlg", "None" );
-
-    case AT_ANY_GENRE2:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 2" );
-
-    case AT_ANY_GENRE3:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 3" );
-
-    case AT_GENRE_ROCK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Rock" );
-
-    case AT_GENRE_JAZZ:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
-
-    case AT_GENRE_CLASSICAL_FOLK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk" );
-
-    case AT_GENRE_CHORAL:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Choral/Barbershop" );
-
-    case AT_CUSTOM:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Custom" );
-
-    default: // AT_DEFAULT
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 1" );
-    }
-}
+QString DirectoryTypeToString ( EDirectoryType eAddrType );
 
 // Server registration state ---------------------------------------------
 enum ESvrRegStatus
@@ -628,40 +715,7 @@ enum ESvrRegStatus
     SRS_NOT_FULFILL_REQUIREMENTS
 };
 
-inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
-{
-    switch ( eSvrRegStatus )
-    {
-    case SRS_NOT_REGISTERED:
-        return QCoreApplication::translate ( "CServerDlg", "Not registered" );
-
-    case SRS_BAD_ADDRESS:
-        return QCoreApplication::translate ( "CServerDlg", "Bad address" );
-
-    case SRS_REQUESTED:
-        return QCoreApplication::translate ( "CServerDlg", "Registration requested" );
-
-    case SRS_TIME_OUT:
-        return QCoreApplication::translate ( "CServerDlg", "Registration failed" );
-
-    case SRS_UNKNOWN_RESP:
-        return QCoreApplication::translate ( "CServerDlg", "Check server version" );
-
-    case SRS_REGISTERED:
-        return QCoreApplication::translate ( "CServerDlg", "Registered" );
-
-    case SRS_SERVER_LIST_FULL:
-        return QCoreApplication::translate ( "CServerDlg", "Server list full at directory" );
-
-    case SRS_VERSION_TOO_OLD:
-        return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
-
-    case SRS_NOT_FULFILL_REQUIREMENTS:
-        return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
-    }
-
-    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value %1" ) ).arg ( eSvrRegStatus );
-}
+QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus );
 
 // Directory registration outcome ----------------------------------------------
 enum ESvrRegResult
@@ -746,13 +800,73 @@ public:
         SM_IP_NO_LAST_BYTE_PORT
     };
 
+#if defined( JAMULUS_USE_JUCE_NET )
+    CHostAddress() : address(), iPort ( 0 ) {}
+
+    CHostAddress ( const std::string& addr, const uint16_t iNPort )
+        : address ( addr ),
+          iPort ( iNPort )
+    {}
+
+    CHostAddress ( const char* addr, const uint16_t iNPort )
+        : address ( addr ? addr : "" ),
+          iPort ( iNPort )
+    {}
+
+    CHostAddress ( const CHostAddress& NHAddr )
+        : address ( NHAddr.address ),
+          iPort ( NHAddr.iPort )
+    {}
+
+    CHostAddress& operator= ( const CHostAddress& NHAddr )
+    {
+        address = NHAddr.address;
+        iPort   = NHAddr.iPort;
+        return *this;
+    }
+
+    bool operator== ( const CHostAddress& CompAddr ) const { return ( ( CompAddr.address == address ) && ( CompAddr.iPort == iPort ) ); }
+
+    int         Compare ( const CHostAddress& other ) const;
+    std::string toStringStd ( const EStringMode eStringMode = SM_IP_PORT ) const;
+    QString     toString ( const EStringMode eStringMode = SM_IP_PORT ) const;
+
+    std::string address;
+    uint16_t    iPort;
+#elif defined( HEADLESS )
+    CHostAddress() : address(), iPort ( 0 ) {}
+
+    CHostAddress ( const QString& addr, const quint16 iNPort )
+        : address ( addr.toStdString() ),
+          iPort ( iNPort )
+    {}
+
+    CHostAddress ( const CHostAddress& NHAddr )
+        : address ( NHAddr.address ),
+          iPort ( NHAddr.iPort )
+    {}
+
+    CHostAddress& operator= ( const CHostAddress& NHAddr )
+    {
+        address = NHAddr.address;
+        iPort   = NHAddr.iPort;
+        return *this;
+    }
+
+    bool operator== ( const CHostAddress& CompAddr ) const { return ( ( CompAddr.address == address ) && ( CompAddr.iPort == iPort ) ); }
+
+    int     Compare ( const CHostAddress& other ) const;
+    QString toString ( const EStringMode eStringMode = SM_IP_PORT ) const;
+
+    std::string address;
+    quint16     iPort;
+#else
     CHostAddress() : InetAddr ( static_cast<quint32> ( 0 ) ), iPort ( 0 ) {}
 
     CHostAddress ( const QHostAddress& NInetAddr, const quint16 iNPort ) : InetAddr ( NInetAddr ), iPort ( iNPort ) {}
 
     CHostAddress ( const CHostAddress& NHAddr ) : InetAddr ( NHAddr.InetAddr ), iPort ( NHAddr.iPort ) {}
 
-    // copy operator
     CHostAddress& operator= ( const CHostAddress& NHAddr )
     {
         InetAddr = NHAddr.InetAddr;
@@ -760,7 +874,6 @@ public:
         return *this;
     }
 
-    // compare operator
     bool operator== ( const CHostAddress& CompAddr ) const { return ( ( CompAddr.InetAddr == InetAddr ) && ( CompAddr.iPort == iPort ) ); }
 
     int Compare ( const CHostAddress& other ) const;
@@ -769,6 +882,7 @@ public:
 
     QHostAddress InetAddr;
     quint16      iPort;
+#endif
 };
 
 // Instrument picture data base ------------------------------------------------
@@ -826,14 +940,14 @@ protected:
 class CLocale
 {
 public:
-    static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry /* Always a Qt5 (!) code */ );
+    static QString                 GetCountryFlagIconsResourceReference ( const QCOUNTRY_T eCountry /* Always a Qt5 (!) code */ );
     static QMap<QString, QString>  GetAvailableTranslations();
     static QPair<QString, QString> FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap );
     static void                    LoadTranslation ( const QString strLanguage, QCoreApplication* pApp );
-    static QLocale::Country        WireFormatCountryCodeToQtCountry ( unsigned short iCountryCode );
-    static unsigned short          QtCountryToWireFormatCountryCode ( const QLocale::Country eCountry );
+    static QCOUNTRY_T              WireFormatCountryCodeToQtCountry ( unsigned short iCountryCode );
+    static unsigned short          QtCountryToWireFormatCountryCode ( const QCOUNTRY_T eCountry );
     static bool                    IsCountryCodeSupported ( unsigned short iCountryCode );
-    static QLocale::Country        GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode );
+    static QCOUNTRY_T              GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode );
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
     // ./tools/qt5_to_qt6_country_code_table.py generates these lists:
     constexpr int const static wireFormatToQt6Table[] = {
@@ -870,14 +984,18 @@ class CChannelCoreInfo
 public:
     CChannelCoreInfo() :
         strName ( "" ),
+#if defined( JAMULUS_USE_JUCE_NET )
+        eCountry ( (QCOUNTRY_T) 0 ),
+#else
         eCountry ( QLocale::AnyCountry ),
+#endif
         strCity ( "" ),
         iInstrument ( CInstPictures::GetNotUsedInstrument() ),
         eSkillLevel ( SL_NOT_SET )
     {}
 
     CChannelCoreInfo ( const QString           NsName,
-                       const QLocale::Country& NeCountry,
+                       const QCOUNTRY_T&       NeCountry,
                        const QString&          NsCity,
                        const int               NiInstrument,
                        const ESkillLevel       NeSkillLevel ) :
@@ -909,7 +1027,7 @@ public:
     QString strName;
 
     // country in which the client is located
-    QLocale::Country eCountry;
+    QCOUNTRY_T eCountry;
 
     // city in which the client is located
     QString strCity;
@@ -930,7 +1048,7 @@ public:
 
     CChannelInfo ( const int               NiID,
                    const QString           NsName,
-                   const QLocale::Country& NeCountry,
+                   const QCOUNTRY_T&       NeCountry,
                    const QString&          NsCity,
                    const int               NiInstrument,
                    const ESkillLevel       NeSkillLevel ) :
@@ -946,10 +1064,20 @@ public:
 class CServerCoreInfo
 {
 public:
-    CServerCoreInfo() : strName ( "" ), eCountry ( QLocale::AnyCountry ), strCity ( "" ), iMaxNumClients ( 0 ), bPermanentOnline ( false ) {}
+    CServerCoreInfo() :
+        strName ( "" ),
+#if defined( JAMULUS_USE_JUCE_NET )
+        eCountry ( (QCOUNTRY_T) 0 ),
+#else
+        eCountry ( QLocale::AnyCountry ),
+#endif
+        strCity ( "" ),
+        iMaxNumClients ( 0 ),
+        bPermanentOnline ( false )
+    {}
 
     CServerCoreInfo ( const QString&          NsName,
-                      const QLocale::Country& NeCountry,
+                      const QCOUNTRY_T&       NeCountry,
                       const QString&          NsCity,
                       const int               NiMaxNumClients,
                       const bool              NbPermOnline ) :
@@ -964,7 +1092,7 @@ public:
     QString strName;
 
     // country in which the server is located
-    QLocale::Country eCountry;
+    QCOUNTRY_T eCountry;
 
     // city in which the server is located
     QString strCity;
@@ -985,7 +1113,7 @@ public:
     CServerInfo ( const CHostAddress&     NHAddr,
                   const CHostAddress&     NLAddr,
                   const QString&          NsName,
-                  const QLocale::Country& NeCountry,
+                  const QCOUNTRY_T&       NeCountry,
                   const QString&          NsCity,
                   const int               NiMaxNumClients,
                   const bool              NbPermOnline ) :
@@ -1044,19 +1172,33 @@ public:
 class NetworkUtil
 {
 public:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    static bool ParseNetworkAddressString ( QString strAddress, QString& InetAddr, bool bEnableIPv6 );
+#else
     static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 );
+#endif
 
 #ifndef CLIENT_NO_SRV_CONNECT
     static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
     static bool ParseNetworkAddressWithSrvDiscovery ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 #endif
     static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    static bool ParseNetworkAddressStd ( const std::string& strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+#endif
+    static bool ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
     static CHostAddress GetLocalAddress6();
     static QString      GetDirectoryAddress ( const EDirectoryType eDirectoryType, const QString& strDirectoryAddress );
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    static bool         IsPrivateNetworkIP ( const QString& address );
+    static bool         IsPrivateNetworkIPStd ( const std::string& address );
+#else
     static bool         IsPrivateNetworkIP ( const QHostAddress& qhAddr );
+#endif
+    static bool         IsLiteralIPAddress ( const QString& strAddress, bool bEnableIPv6 );
 };
 
 // Operating system utility functions ------------------------------------------
@@ -1134,7 +1276,8 @@ class MathUtils
 public:
     static int round ( double x )
     {
-        return static_cast<int> ( ( x - floor ( x ) ) >= 0.5 ) ? static_cast<int> ( ceil ( x ) ) : static_cast<int> ( floor ( x ) );
+        // Avoid macro/name conflicts and ensure correct operator precedence.
+        return static_cast<int>( ((x - std::floor(x)) >= 0.5) ? std::ceil(x) : std::floor(x) );
     }
 
     static void UpDownIIR1 ( double& dOldValue, const double& dNewValue, const double& dWeightUp, const double& dWeightDown )
@@ -1165,8 +1308,8 @@ public:
 
     // calculate pan gains: in cross fade mode the pan center is attenuated
     // by 6 dB, otherwise the center equals full gain for both channels
-    static inline float GetLeftPan ( const float fPan, const bool bXFade ) { return bXFade ? 1 - fPan : std::min ( 0.5f, 1 - fPan ) * 2; }
-    static inline float GetRightPan ( const float fPan, const bool bXFade ) { return bXFade ? fPan : std::min ( 0.5f, fPan ) * 2; }
+    static inline float GetLeftPan ( const float fPan, const bool bXFade ) { return bXFade ? 1.0f - fPan : std::min<float> ( 0.5f, 1.0f - fPan ) * 2.0f; }
+    static inline float GetRightPan ( const float fPan, const bool bXFade ) { return bXFade ? fPan : std::min<float> ( 0.5f, fPan ) * 2.0f; }
 
     // calculate linear gain from fader values which are in dB
     static float CalcFaderGain ( const float fValue )
@@ -1209,8 +1352,7 @@ public:
         }
         else
         {
-            // store current measurement
-            vElapsedTimes[iCnt++] = ElapsedTimer.nsecsElapsed();
+            vElapsedTimes[iCnt++] = ElapsedTimer.elapsed();
 
             // reset count if number of measurements are done
             if ( iCnt >= iNumMeas )
@@ -1220,16 +1362,15 @@ public:
                 // store results in a file if file name is given
                 if ( !strFileName.isEmpty() )
                 {
-                    QFile File ( strFileName );
-
-                    if ( File.open ( QIODevice::WriteOnly | QIODevice::Text ) )
+                    std::ofstream out ( strFileName.toStdString(), std::ios::out | std::ios::trunc | std::ios::binary );
+                    if ( out.is_open() )
                     {
-                        QTextStream streamFile ( &File );
                         for ( int i = 0; i < iNumMeas; i++ )
                         {
-                            // convert ns in ms and store the value
-                            streamFile << i << " " << static_cast<double> ( vElapsedTimes[i] ) / 1000000 << "\n";
+                            const double ms = static_cast<double> ( vElapsedTimes[i] );
+                            out << i << " " << ms << "\n";
                         }
+                        out.flush();
                     }
                 }
             }
@@ -1238,70 +1379,33 @@ public:
     }
 
 protected:
-    int           iNumMeas;
-    CVector<int>  vElapsedTimes;
-    QString       strFileName;
-    QElapsedTimer ElapsedTimer;
-    int           iCnt;
+    int          iNumMeas;
+    CVector<int> vElapsedTimes;
+    QString      strFileName;
+    CPreciseTimer ElapsedTimer;
+    int          iCnt;
 };
 
 // High resolution timer
-#if ( defined( WIN32 ) || defined( _WIN32 ) )
-// using QTimer for Windows
-class CHighPrecisionTimer : public QObject
+class CHighPrecisionTimer : private juce::HighResolutionTimer
 {
-    Q_OBJECT
-
 public:
     CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize );
 
     void Start();
     void Stop();
-    bool isActive() const { return Timer.isActive(); }
+    bool isActive() const { return isTimerRunning(); }
+
+    void setCallback ( std::function<void()> cb ) { callback = std::move ( cb ); }
 
 protected:
-    QTimer       Timer;
-    CVector<int> veciTimeOutIntervals;
-    int          iCurPosInVector;
-    int          iIntervalCounter;
-    bool         bUseDoubleSystemFrameSize;
-
-public slots:
-    void OnTimer();
-
-signals:
-    void timeout();
+    void                     hiResTimerCallback() override;
+    CVector<int>             veciTimeOutIntervals;
+    int                      iCurPosInVector;
+    int                      iIntervalCounter;
+    bool                     bUseDoubleSystemFrameSize;
+    std::function<void()>    callback;
 };
-#else
-
-class CHighPrecisionTimer : public QThread
-{
-    Q_OBJECT
-
-public:
-    CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize );
-
-    void Start();
-    void Stop();
-    bool isActive() { return bRun; }
-
-protected:
-    virtual void run();
-
-    bool     bRun;
-
-#    if defined( __APPLE__ ) || defined( __MACOSX )
-    uint64_t Delay;
-    uint64_t NextEnd;
-#    else
-    long     Delay;
-    timespec NextEnd;
-#    endif
-
-signals:
-    void timeout();
-};
-#endif
 
 /******************************************************************************\
 * Statistics                                                                   *

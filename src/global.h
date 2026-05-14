@@ -53,9 +53,45 @@ LED bar:      lbr
 #    define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#include <QString>
-#include <QEvent>
-#include <QDebug>
+#if defined( JAMULUS_USE_JUCE_NET )
+#    include <juce_core/juce_core.h>
+#    include <map>
+#    include <utility>
+using QString = juce::String;
+template<typename T1, typename T2>
+using QPair = std::pair<T1, T2>;
+template<typename K, typename V>
+using QMap = std::map<K, V>;
+
+#    if !defined( QT_VERSION )
+#        define QT_VERSION 0
+#    endif
+#    if !defined( QT_VERSION_CHECK )
+#        define QT_VERSION_CHECK( major, minor, patch ) ( ( major ) * 65536 + ( minor ) * 256 + ( patch ) )
+#    endif
+
+class QCoreApplication
+{
+public:
+    static QString translate ( const char*, const char* text ) { return QString::fromUTF8 ( text != nullptr ? text : "" ); }
+};
+
+class QEvent
+{
+public:
+    enum Type
+    {
+        User = 1000
+    };
+
+    explicit QEvent ( Type ) {}
+    virtual ~QEvent() = default;
+};
+#else
+#    include <QString>
+#    include <QEvent>
+#    include <QDebug>
+#endif
 #include <stdio.h>
 #include <math.h>
 #include <string>

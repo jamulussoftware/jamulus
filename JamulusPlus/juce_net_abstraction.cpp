@@ -4,10 +4,14 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include <windns.h>
+#pragma comment(lib, "dnsapi.lib")
 #else
 #include <netdb.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <resolv.h>
+#include <arpa/nameser.h>
 #endif
 
 JUCE_NetworkSocket::JUCE_NetworkSocket()
@@ -60,11 +64,6 @@ JUCE_Resolver::~JUCE_Resolver()
 {
 }
 
-#ifdef _WIN32
-#include <windns.h>
-#pragma comment(lib, "dnsapi.lib")
-#endif
-
 std::vector<NetEndpoint> JUCE_Resolver::resolveSrv ( const std::string& domain )
 {
     std::vector<NetEndpoint> endpoints;
@@ -94,7 +93,6 @@ std::vector<NetEndpoint> JUCE_Resolver::resolveSrv ( const std::string& domain )
     }
 #else
     // POSIX implementation using res_query
-    #include <resolv.h>
     unsigned char response[4096];
     int len = res_query ( domain.c_str(), C_IN, T_SRV, response, sizeof ( response ) );
     if ( len >= 0 )

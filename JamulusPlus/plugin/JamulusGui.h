@@ -730,21 +730,21 @@ public:
     {
         // 1. Labels
         addAndMakeVisible ( nameLabel );
-        nameLabel.setFont ( juce::Font ( 12.0f, juce::Font::bold ) );
+        nameLabel.setFont ( juce::Font ( juce::FontOptions ( 12.0f, juce::Font::bold ) ) );
         nameLabel.setJustificationType ( juce::Justification::centred );
         nameLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
         nameLabel.setMinimumHorizontalScale ( 0.8f );
 
         // 2. dB Readouts
         addAndMakeVisible ( faderDbLabel );
-        faderDbLabel.setFont ( juce::Font ( 11.0f ) );
+        faderDbLabel.setFont ( juce::Font ( juce::FontOptions ( 11.0f ) ) );
         faderDbLabel.setJustificationType ( juce::Justification::centred );
         faderDbLabel.setColour ( juce::Label::backgroundColourId, juce::Colours::black.withAlpha ( 0.5f ) );
         faderDbLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
         faderDbLabel.setText ( "0.0", juce::dontSendNotification );
 
         addAndMakeVisible ( peakDbLabel );
-        peakDbLabel.setFont ( juce::Font ( 11.0f, juce::Font::bold ) );
+        peakDbLabel.setFont ( juce::Font ( juce::FontOptions ( 11.0f, juce::Font::bold ) ) );
         peakDbLabel.setJustificationType ( juce::Justification::centred );
         peakDbLabel.setColour ( juce::Label::backgroundColourId, juce::Colours::black.withAlpha ( 0.5f ) );
         peakDbLabel.setColour ( juce::Label::textColourId, juce::Colour ( 0xff00cc66 ) );
@@ -1267,7 +1267,7 @@ public:
             g.setColour ( juce::Colour ( 0xff202020 ) );
             g.fillRect ( fBounds );
             g.setColour ( juce::Colours::white );
-            g.setFont ( juce::Font ( 16.0f, juce::Font::bold ) );
+            g.setFont ( juce::Font ( juce::FontOptions ( 16.0f, juce::Font::bold ) ) );
             g.drawText ( countryCodeStr.toUpperCase(), fBounds, juce::Justification::centred );
         }
 
@@ -1587,7 +1587,7 @@ public:
         // Title
         addAndMakeVisible ( titleLabel );
         titleLabel.setText ( "JamulusPlus", juce::dontSendNotification );
-        titleLabel.setFont ( juce::Font ( 24.0f, juce::Font::bold ) );
+        titleLabel.setFont ( juce::Font ( juce::FontOptions ( 24.0f, juce::Font::bold ) ) );
         titleLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
 
         // === Top Toolbar Buttons ===
@@ -1650,13 +1650,13 @@ public:
         mainVolumeDbLabel.setText ( "0.0 dB", juce::dontSendNotification );
         mainVolumeDbLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
         mainVolumeDbLabel.setJustificationType ( juce::Justification::centred );
-        mainVolumeDbLabel.setFont ( juce::Font ( 11.0f ) );
+        mainVolumeDbLabel.setFont ( juce::Font ( juce::FontOptions ( 11.0f ) ) );
 
         addAndMakeVisible ( masterPeakDbLabel );
         masterPeakDbLabel.setText ( "-oo dB", juce::dontSendNotification );
         masterPeakDbLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
         masterPeakDbLabel.setJustificationType ( juce::Justification::centred );
-        masterPeakDbLabel.setFont ( juce::Font ( 11.0f, juce::Font::bold ) );
+        masterPeakDbLabel.setFont ( juce::Font ( juce::FontOptions ( 11.0f, juce::Font::bold ) ) );
 
         addAndMakeVisible ( mainVolumeSlider );
         mainVolumeSlider.setComponentID ( "main_volume" );
@@ -1756,13 +1756,13 @@ public:
         limiterThresholdDbLabel.setText ( "0.0 dB", juce::dontSendNotification );
         limiterThresholdDbLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
         limiterThresholdDbLabel.setJustificationType ( juce::Justification::centred );
-        limiterThresholdDbLabel.setFont ( juce::Font ( 11.0f ) );
+        limiterThresholdDbLabel.setFont ( juce::Font ( juce::FontOptions ( 11.0f ) ) );
 
         addAndMakeVisible ( limiterReleaseLabel );
         limiterReleaseLabel.setText ( "Release", juce::dontSendNotification );
         limiterReleaseLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
         limiterReleaseLabel.setJustificationType ( juce::Justification::centred );
-        limiterReleaseLabel.setFont ( juce::Font ( 11.0f ) );
+        limiterReleaseLabel.setFont ( juce::Font ( juce::FontOptions ( 11.0f ) ) );
 
         addAndMakeVisible ( limiterReleaseSlider );
         limiterReleaseSlider.setComponentID ( "limiter_release" );
@@ -1784,7 +1784,7 @@ public:
         themeHeaderLabel.setText ( "Theme", juce::dontSendNotification );
         themeHeaderLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
         themeHeaderLabel.setJustificationType ( juce::Justification::centred );
-        themeHeaderLabel.setFont ( juce::Font ( 11.0f, juce::Font::plain ) );
+        themeHeaderLabel.setFont ( juce::Font ( juce::FontOptions ( 11.0f, juce::Font::plain ) ) );
 
         addAndMakeVisible ( themeHeaderCombo );
         themeHeaderCombo.setTextWhenNothingSelected ( "Default" );

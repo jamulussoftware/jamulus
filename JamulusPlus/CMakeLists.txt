@@ -23,6 +23,10 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/JUCE/CMakeLists.txt")
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/third_party/JUCE)
 endif()
 
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/clap-juce-extensions/CMakeLists.txt")
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/third_party/clap-juce-extensions EXCLUDE_FROM_ALL)
+endif()
+
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../libs/opus/CMakeLists.txt" AND NOT TARGET opus)
     set(OPUS_BUILD_TESTING OFF CACHE BOOL "" FORCE)
     set(OPUS_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)

@@ -4,3 +4,7 @@
 [submodule "JamulusPlus/third_party/JUCE"]
 	path = JamulusPlus/third_party/JUCE
 	url = https://github.com/juce-framework/JUCE.git
+[submodule "JamulusPlus/third_party/clap-juce-extensions"]
+	path = JamulusPlus/third_party/clap-juce-extensions
+	url = https://github.com/free-audio/clap-juce-extensions.git
+	branch = main

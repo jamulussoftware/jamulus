@@ -26,9 +26,6 @@ endif()
 if (ENABLE_LV2)
     list(APPEND PLUGIN_FORMATS LV2)
 endif()
-if (ENABLE_CLAP)
-    list(APPEND PLUGIN_FORMATS CLAP)
-endif()
 if (ENABLE_AU AND APPLE)
     list(APPEND PLUGIN_FORMATS AU)
 endif()
@@ -115,6 +112,20 @@ endif()
 target_compile_definitions(jamulus_engine PRIVATE JUCE_VST3_CAN_REPLACE_VST2=0 JUCE_DIRECT2D=1)
 if (WIN32)
     target_compile_definitions(jamulus_engine PRIVATE JUCE_ASIO=1 JAMULUS_USE_REAL_ASIO=1)
+endif()
+
+if (ENABLE_CLAP)
+    if (NOT COMMAND clap_juce_extensions_plugin)
+        message(FATAL_ERROR "ENABLE_CLAP=ON requires third_party/clap-juce-extensions to be available.")
+    endif()
+
+    clap_juce_extensions_plugin(
+        TARGET jamulus_engine
+        CLAP_ID "org.jamulussoftware.jamulusplus"
+        CLAP_FEATURES audio-effect utility
+        CLAP_MANUAL_URL "https://github.com/AndyMcProducer/jamulus"
+        CLAP_SUPPORT_URL "https://github.com/AndyMcProducer/jamulus/issues"
+    )
 endif()
 
 # Ensure the platform-specific plugin artefact targets link the wrapper too.

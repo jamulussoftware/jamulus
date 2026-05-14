@@ -825,25 +825,31 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVer
 
 void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType, QString strVersion )
 {
-    // display version in connect dialog
-    ConnectDlg.SetServerVersionResult ( InetAddr, strVersion );
-
-    // update check
-#if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
-    int            mySuffixIndex;
-    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
-
-    int            serverSuffixIndex;
-    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
-
-    // only compare if the server version has no suffix (such as dev or beta)
-    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
+    // if connect dialog showing, pass version to it, and don't do update check
+    if ( bConnectDlgWasShown )
     {
-        // show the label and hide it after one minute again
-        lblUpdateCheck->show();
-        QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
+        // display version in connect dialog
+        ConnectDlg.SetServerVersionResult ( InetAddr, strVersion );
     }
+    else
+    {
+        // update check
+#if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
+        int            mySuffixIndex;
+        QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
+
+        int            serverSuffixIndex;
+        QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
+
+        // only compare if the server version has no suffix (such as dev or beta)
+        if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
+        {
+            // show the label and hide it after one minute again
+            lblUpdateCheck->show();
+            QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
+        }
 #endif
+    }
 }
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )

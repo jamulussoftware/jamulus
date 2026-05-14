@@ -8,6 +8,7 @@ on:
       - jamulusplus
     tags:
       - 'V*'
+      - 'v*'
     paths:
       - '.github/workflows/jamulusplus-build.yml'
       - '.gitmodules'
@@ -89,7 +90,7 @@ jobs:
             JamulusPlus/dist/JamulusPlus-Standalone/**
 
       - name: Package Release Assets
-        if: startsWith(github.ref, 'refs/tags/V')
+        if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path release-assets | Out-Null
@@ -102,7 +103,7 @@ jobs:
           }
 
       - name: Publish Release Assets
-        if: startsWith(github.ref, 'refs/tags/V')
+        if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
@@ -218,7 +219,7 @@ jobs:
             JamulusPlus/dist/JamulusPlus.app
 
       - name: Package Release Assets
-        if: startsWith(github.ref, 'refs/tags/V')
+        if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')
         run: |
           mkdir -p release-assets
           ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-clap.zip"
@@ -231,7 +232,7 @@ jobs:
           fi
 
       - name: Publish Release Assets
-        if: startsWith(github.ref, 'refs/tags/V')
+        if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}

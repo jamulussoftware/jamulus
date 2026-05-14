@@ -1,0 +1,108 @@
+name: JamulusPlus Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - JamulusPlus
+      - jamulusplus
+    paths:
+      - '.github/workflows/jamulusplus-build.yml'
+      - '.gitmodules'
+      - 'JamulusPlus/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/jamulusplus-build.yml'
+      - '.gitmodules'
+      - 'JamulusPlus/**'
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Windows VST3 + Standalone
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure
+        run: >
+          cmake -S JamulusPlus -B JamulusPlus/b -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DENABLE_STANDALONE=ON
+
+      - name: Build
+        run: >
+          cmake --build JamulusPlus/b --config Release
+          --target jamulus_engine_VST3 jamulus_engine_Standalone
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: JamulusPlus-windows-vst3
+          if-no-files-found: error
+          path: JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
+
+      - name: Upload Standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: JamulusPlus-windows-standalone
+          if-no-files-found: error
+          path: |
+            JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/**
+            JamulusPlus/dist/JamulusPlus-Standalone/**
+
+  build-macos:
+    name: macOS VST3 + AU + Standalone
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: >
+          cmake -S JamulusPlus -B JamulusPlus/b -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DENABLE_AU=ON
+          -DENABLE_STANDALONE=ON
+
+      - name: Build
+        run: >
+          cmake --build JamulusPlus/b --config Release
+          --target jamulus_engine_VST3 jamulus_engine_AU jamulus_engine_Standalone
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: JamulusPlus-macos-vst3
+          if-no-files-found: error
+          path: JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
+
+      - name: Upload AU
+        uses: actions/upload-artifact@v4
+        with:
+          name: JamulusPlus-macos-au
+          if-no-files-found: error
+          path: JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component
+
+      - name: Upload Standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: JamulusPlus-macos-standalone
+          if-no-files-found: error
+          path: |
+            JamulusPlus/b/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app
+            JamulusPlus/dist/JamulusPlus.app

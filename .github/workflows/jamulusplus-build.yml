@@ -46,10 +46,17 @@ jobs:
           cmake -S JamulusPlus -B JamulusPlus/build-ci-windows -G "Visual Studio 17 2022" -A x64
           -DENABLE_STANDALONE=ON
 
-      - name: Build
+      - name: Build VST3
         run: >
           cmake --build JamulusPlus/build-ci-windows --config Release
-          --target jamulus_engine_VST3 jamulus_engine_Standalone
+          --target jamulus_engine_VST3
+          --verbose
+
+      - name: Build Standalone
+        run: >
+          cmake --build JamulusPlus/build-ci-windows --config Release
+          --target jamulus_engine_Standalone
+          --verbose
 
       - name: Upload VST3
         uses: actions/upload-artifact@v4
@@ -108,11 +115,27 @@ jobs:
           cmake -S JamulusPlus -B JamulusPlus/build-ci-macos -G Xcode
           -DENABLE_AU=ON
           -DENABLE_STANDALONE=ON
+          -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
+          -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
+          -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=
 
-      - name: Build
+      - name: Build VST3
         run: >
           cmake --build JamulusPlus/build-ci-macos --config Release
-          --target jamulus_engine_VST3 jamulus_engine_AU jamulus_engine_Standalone
+          --target jamulus_engine_VST3
+          --verbose
+
+      - name: Build AU
+        run: >
+          cmake --build JamulusPlus/build-ci-macos --config Release
+          --target jamulus_engine_AU
+          --verbose
+
+      - name: Build Standalone
+        run: >
+          cmake --build JamulusPlus/build-ci-macos --config Release
+          --target jamulus_engine_Standalone
+          --verbose
 
       - name: Upload VST3
         uses: actions/upload-artifact@v4

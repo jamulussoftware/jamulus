@@ -9,12 +9,40 @@
 #include <unordered_map>
 #include <vector>
 
+class ScrollableSettingsViewport : public juce::Viewport
+{
+public:
+    ScrollableSettingsViewport ( juce::Component& contentComponent, int preferredHeightInPx ) :
+        content ( contentComponent ),
+        preferredHeight ( preferredHeightInPx )
+    {
+        setViewedComponent ( &content, false );
+        setScrollBarsShown ( true, false );
+        setScrollOnDragEnabled ( true );
+    }
+
+    void resized() override
+    {
+        juce::Viewport::resized();
+
+        const int scrollBarAllowance = isVerticalScrollBarShown() ? getScrollBarThickness() : 0;
+        const int contentWidth       = juce::jmax ( 1, getWidth() - scrollBarAllowance );
+        content.setSize ( contentWidth, preferredHeight );
+    }
+
+private:
+    juce::Component& content;
+    int              preferredHeight = 0;
+};
+
 //==============================================================================
 // My Profile Tab
 //==============================================================================
 class ProfileTab : public juce::Component
 {
 public:
+    static constexpr int kPreferredContentHeight = 260;
+
     ProfileTab ( jamulus_client_t client ) : jamulusClient ( client )
     {
         // Alias/Name
@@ -164,6 +192,8 @@ public:
         skillLabel.setBounds ( row.removeFromLeft ( labelWidth ) );
         skillCombo.setBounds ( row );
     }
+
+    int getPreferredContentHeight() const { return kPreferredContentHeight; }
 
 private:
     static juce::Image loadFlagByCode ( const juce::String& rawCode )
@@ -453,6 +483,8 @@ private:
 class AudioNetworkTab : public juce::Component, private juce::Timer
 {
 public:
+    static constexpr int kPreferredContentHeight = 760;
+
     AudioNetworkTab ( jamulus_client_t client, JamulusPluginProcessor* proc ) : jamulusClient ( client ), processor ( proc )
     {
         // === Audio Section ===
@@ -467,13 +499,15 @@ public:
         qualityLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
 
         addAndMakeVisible ( qualityCombo );
-        qualityCombo.addItem ( "Low (22 kHz)", 1 );
-        qualityCombo.addItem ( "Normal (44.1 kHz)", 2 );
-        qualityCombo.addItem ( "High (48 kHz OPUS64)", 3 );
-        qualityCombo.setSelectedId ( 2 );
+        qualityCombo.addItem ( "Standard", 1 );
+        qualityCombo.addItem ( "High / Low Latency (OPUS64)", 2 );
+        qualityCombo.setSelectedId ( 1 );
         qualityCombo.onChange = [this]() {
+            const int storedQualityValue = ( qualityCombo.getSelectedId() == 2 ) ? 2 : 1;
             if ( jamulusClient )
-                jamulus_client_set_audio_quality ( jamulusClient, qualityCombo.getSelectedId() - 1 );
+                jamulus_client_set_audio_quality ( jamulusClient, storedQualityValue );
+            if ( processor )
+                processor->setSmallBuffers ( qualityCombo.getSelectedId() == 2 );
         };
 
         // Audio Channels
@@ -627,46 +661,6 @@ public:
         uploadRateLabel.setText ( "Upload Rate: --", juce::dontSendNotification );
         uploadRateLabel.setColour ( juce::Label::textColourId, juce::Colours::grey );
 
-        addAndMakeVisible ( translateSectionLabel );
-        translateSectionLabel.setText ( "Chat Translation", juce::dontSendNotification );
-        translateSectionLabel.setFont ( juce::Font ( 16.0f, juce::Font::bold ) );
-        translateSectionLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
-
-        addAndMakeVisible ( autoTranslateToggle );
-        autoTranslateToggle.setButtonText ( "Auto Translate Incoming Chat" );
-        autoTranslateToggle.setColour ( juce::ToggleButton::textColourId, juce::Colours::white );
-        autoTranslateToggle.onClick = [this]() {
-            if ( processor )
-                processor->setAutoTranslateEnabled ( autoTranslateToggle.getToggleState() );
-        };
-
-        addAndMakeVisible ( translateLanguageLabel );
-        translateLanguageLabel.setText ( "Target Language:", juce::dontSendNotification );
-        translateLanguageLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
-
-        addAndMakeVisible ( translateLanguageCombo );
-        translateLanguageCombo.addItem ( "System Default", 1 );
-        translateLanguageCombo.addItem ( "English", 2 );
-        translateLanguageCombo.addItem ( "French", 3 );
-        translateLanguageCombo.addItem ( "German", 4 );
-        translateLanguageCombo.addItem ( "Spanish", 5 );
-        translateLanguageCombo.addItem ( "Italian", 6 );
-        translateLanguageCombo.addItem ( "Portuguese", 7 );
-        translateLanguageCombo.addItem ( "Dutch", 8 );
-        translateLanguageCombo.addItem ( "Russian", 9 );
-        translateLanguageCombo.addItem ( "Japanese", 10 );
-        translateLanguageCombo.addItem ( "Korean", 11 );
-        translateLanguageCombo.addItem ( "Chinese (Simplified)", 12 );
-        translateLanguageCombo.addItem ( "Chinese (Traditional)", 13 );
-        translateLanguageCombo.onChange = [this]() {
-            if ( !processor )
-                return;
-
-            static const std::array<const char*, 13> codes { "system", "en", "fr", "de", "es", "it", "pt", "nl", "ru", "ja", "ko", "zh-cn", "zh-hant" };
-            const int selected = juce::jlimit ( 1, static_cast<int> ( codes.size() ), translateLanguageCombo.getSelectedId() ) - 1;
-            processor->setTranslateTargetLang ( codes[static_cast<size_t> ( selected )] );
-        };
-
         loadCurrentValues();
         startTimerHz ( 5 );
     }
@@ -736,13 +730,9 @@ public:
         delayLabel.setBounds ( makeRow() );
         uploadRateLabel.setBounds ( makeRow() );
 
-        bounds.removeFromTop ( 10 );
-        translateSectionLabel.setBounds ( makeRow() );
-        autoTranslateToggle.setBounds ( makeRow() );
-        row = makeRow();
-        translateLanguageLabel.setBounds ( row.removeFromLeft ( labelWidth ) );
-        translateLanguageCombo.setBounds ( row );
     }
+
+    int getPreferredContentHeight() const { return kPreferredContentHeight; }
 
 private:
     void timerCallback() override
@@ -782,6 +772,13 @@ private:
             uploadRateLabel.setColour ( juce::Label::textColourId, juce::Colours::grey );
         }
 
+        if ( processor )
+        {
+            const int desiredQualityId = processor->getSmallBuffers() ? 2 : 1;
+            if ( qualityCombo.getSelectedId() != desiredQualityId )
+                qualityCombo.setSelectedId ( desiredQualityId, juce::dontSendNotification );
+        }
+
         bool autoJitter = processor ? processor->getAutoJitter() : true;
 
         if ( autoJitterToggle.getToggleState() != autoJitter )
@@ -812,7 +809,11 @@ private:
     {
         if ( jamulusClient )
         {
-            qualityCombo.setSelectedId ( jamulus_client_get_audio_quality ( jamulusClient ) + 1, juce::dontSendNotification );
+            int qualityId = ( jamulus_client_get_audio_quality ( jamulusClient ) >= 2 ) ? 2 : 1;
+            if ( processor && processor->getSmallBuffers() )
+                qualityId = 2;
+
+            qualityCombo.setSelectedId ( qualityId, juce::dontSendNotification );
             channelsCombo.setSelectedId ( jamulus_client_get_audio_channels ( jamulusClient ) + 1, juce::dontSendNotification );
             inputBoostCombo.setSelectedId ( jamulus_client_get_input_boost ( jamulusClient ), juce::dontSendNotification );
         }
@@ -855,36 +856,6 @@ private:
             smallBuffersEnabled = jamulus_client_get_small_buffers ( jamulusClient );
         smallBuffersToggle.setToggleState ( smallBuffersEnabled, juce::dontSendNotification );
 
-        const bool autoTranslateEnabled = processor ? processor->isAutoTranslateEnabled() : false;
-        autoTranslateToggle.setToggleState ( autoTranslateEnabled, juce::dontSendNotification );
-
-        const juce::String targetCode = processor ? processor->getTranslateTargetLang().trim().toLowerCase() : "system";
-        int targetId                  = 1;
-        if ( targetCode == "en" )
-            targetId = 2;
-        else if ( targetCode == "fr" )
-            targetId = 3;
-        else if ( targetCode == "de" )
-            targetId = 4;
-        else if ( targetCode == "es" )
-            targetId = 5;
-        else if ( targetCode == "it" )
-            targetId = 6;
-        else if ( targetCode == "pt" )
-            targetId = 7;
-        else if ( targetCode == "nl" )
-            targetId = 8;
-        else if ( targetCode == "ru" )
-            targetId = 9;
-        else if ( targetCode == "ja" )
-            targetId = 10;
-        else if ( targetCode == "ko" )
-            targetId = 11;
-        else if ( targetCode == "zh-cn" )
-            targetId = 12;
-        else if ( targetCode == "zh-hant" )
-            targetId = 13;
-        translateLanguageCombo.setSelectedId ( targetId, juce::dontSendNotification );
     }
 
     jamulus_client_t       jamulusClient;
@@ -914,10 +885,6 @@ private:
     juce::Label statusSectionLabel;
     juce::Label delayLabel;
     juce::Label uploadRateLabel;
-    juce::Label        translateSectionLabel;
-    juce::ToggleButton autoTranslateToggle;
-    juce::Label        translateLanguageLabel;
-    juce::ComboBox     translateLanguageCombo;
 
 public:
     std::function<void ( bool )> onTestToneChanged;
@@ -928,10 +895,12 @@ public:
 //==============================================================================
 // Advanced Tab
 //==============================================================================
-class AdvancedTab : public juce::Component
+class AdvancedTab : public juce::Component, private juce::Timer
 {
 public:
-    AdvancedTab ( jamulus_client_t client ) : jamulusClient ( client )
+    static constexpr int kPreferredContentHeight = 420;
+
+    AdvancedTab ( jamulus_client_t client, JamulusPluginProcessor* proc ) : jamulusClient ( client ), processor ( proc )
     {
         addAndMakeVisible ( feedbackToggle );
         feedbackToggle.setButtonText ( "Enable Feedback Detection" );
@@ -1010,11 +979,56 @@ public:
                 onThemeChanged ( themeCombo.getText() );
         };
 
+        addAndMakeVisible ( translateSectionLabel );
+        translateSectionLabel.setText ( "Chat Translation", juce::dontSendNotification );
+        translateSectionLabel.setFont ( juce::Font ( 16.0f, juce::Font::bold ) );
+        translateSectionLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
+
+        addAndMakeVisible ( autoTranslateToggle );
+        autoTranslateToggle.setButtonText ( "Auto Translate Incoming Chat" );
+        autoTranslateToggle.setColour ( juce::ToggleButton::textColourId, juce::Colours::white );
+        autoTranslateToggle.onClick = [this]() {
+            if ( processor )
+                processor->setAutoTranslateEnabled ( autoTranslateToggle.getToggleState() );
+        };
+
+        addAndMakeVisible ( translateLanguageLabel );
+        translateLanguageLabel.setText ( "Target Language:", juce::dontSendNotification );
+        translateLanguageLabel.setColour ( juce::Label::textColourId, juce::Colours::white );
+
+        addAndMakeVisible ( translateLanguageCombo );
+        translateLanguageCombo.addItem ( "System Default", 1 );
+        translateLanguageCombo.addItem ( "English", 2 );
+        translateLanguageCombo.addItem ( "French", 3 );
+        translateLanguageCombo.addItem ( "German", 4 );
+        translateLanguageCombo.addItem ( "Spanish", 5 );
+        translateLanguageCombo.addItem ( "Italian", 6 );
+        translateLanguageCombo.addItem ( "Portuguese", 7 );
+        translateLanguageCombo.addItem ( "Dutch", 8 );
+        translateLanguageCombo.addItem ( "Russian", 9 );
+        translateLanguageCombo.addItem ( "Japanese", 10 );
+        translateLanguageCombo.addItem ( "Korean", 11 );
+        translateLanguageCombo.addItem ( "Chinese (Simplified)", 12 );
+        translateLanguageCombo.addItem ( "Chinese (Traditional)", 13 );
+        translateLanguageCombo.onChange = [this]() {
+            if ( !processor )
+                return;
+
+            static const std::array<const char*, 13> codes { "system", "en", "fr", "de", "es", "it", "pt", "nl", "ru", "ja", "ko", "zh-cn", "zh-hant" };
+            const int selected = juce::jlimit ( 1, static_cast<int> ( codes.size() ), translateLanguageCombo.getSelectedId() ) - 1;
+            processor->setTranslateTargetLang ( codes[static_cast<size_t> ( selected )] );
+        };
+
         addAndMakeVisible ( bufferInfoLabel );
         bufferInfoLabel.setText ( "VST buffer size is determined by your DAW settings.", juce::dontSendNotification );
         bufferInfoLabel.setColour ( juce::Label::textColourId, juce::Colours::grey );
         bufferInfoLabel.setFont ( juce::Font ( 12.0f ) );
+
+        syncTranslationSettingsFromProcessor();
+        startTimerHz ( 2 );
     }
+
+    ~AdvancedTab() override { stopTimer(); }
 
     void resized() override
     {
@@ -1053,8 +1067,20 @@ public:
         themeLabel.setBounds ( row.removeFromLeft ( 120 ) );
         themeCombo.setBounds ( row );
 
+        bounds.removeFromTop ( spacing );
+        translateSectionLabel.setBounds ( bounds.removeFromTop ( rowHeight ) );
+        bounds.removeFromTop ( spacing );
+        autoTranslateToggle.setBounds ( bounds.removeFromTop ( rowHeight ) );
+        bounds.removeFromTop ( spacing );
+        row = bounds.removeFromTop ( rowHeight );
+        bounds.removeFromTop ( spacing * 2 );
+        translateLanguageLabel.setBounds ( row.removeFromLeft ( 120 ) );
+        translateLanguageCombo.setBounds ( row );
+
         bufferInfoLabel.setBounds ( bounds.removeFromTop ( 40 ) );
     }
+
+    int getPreferredContentHeight() const { return kPreferredContentHeight; }
 
     void setMixerRows ( int rows )
     {
@@ -1126,7 +1152,53 @@ public:
     std::function<void ( const juce::String& )> onThemeChanged;
 
 private:
+    void timerCallback() override
+    {
+        syncTranslationSettingsFromProcessor();
+    }
+
+    void syncTranslationSettingsFromProcessor()
+    {
+        if ( !processor )
+            return;
+
+        const bool autoTranslateEnabled = processor->isAutoTranslateEnabled();
+        if ( autoTranslateToggle.getToggleState() != autoTranslateEnabled )
+            autoTranslateToggle.setToggleState ( autoTranslateEnabled, juce::dontSendNotification );
+
+        const juce::String targetCode = processor->getTranslateTargetLang().trim().toLowerCase();
+        int targetId                  = 1;
+        if ( targetCode == "en" )
+            targetId = 2;
+        else if ( targetCode == "fr" )
+            targetId = 3;
+        else if ( targetCode == "de" )
+            targetId = 4;
+        else if ( targetCode == "es" )
+            targetId = 5;
+        else if ( targetCode == "it" )
+            targetId = 6;
+        else if ( targetCode == "pt" )
+            targetId = 7;
+        else if ( targetCode == "nl" )
+            targetId = 8;
+        else if ( targetCode == "ru" )
+            targetId = 9;
+        else if ( targetCode == "ja" )
+            targetId = 10;
+        else if ( targetCode == "ko" )
+            targetId = 11;
+        else if ( targetCode == "zh-cn" )
+            targetId = 12;
+        else if ( targetCode == "zh-hant" )
+            targetId = 13;
+
+        if ( translateLanguageCombo.getSelectedId() != targetId )
+            translateLanguageCombo.setSelectedId ( targetId, juce::dontSendNotification );
+    }
+
     jamulus_client_t jamulusClient;
+    JamulusPluginProcessor* processor = nullptr;
 
     juce::ToggleButton feedbackToggle;
     juce::ToggleButton audioAlertsToggle;
@@ -1140,6 +1212,10 @@ private:
     juce::ComboBox     midiOutputCombo;
     juce::Label        themeLabel;
     juce::ComboBox     themeCombo;
+    juce::Label        translateSectionLabel;
+    juce::ToggleButton autoTranslateToggle;
+    juce::Label        translateLanguageLabel;
+    juce::ComboBox     translateLanguageCombo;
     juce::Label        bufferInfoLabel;
 };
 
@@ -1147,6 +1223,8 @@ private:
 class RecordingTab : public juce::Component
 {
 public:
+    static constexpr int kPreferredContentHeight = 300;
+
     RecordingTab()
     {
         addAndMakeVisible ( modeLabel );
@@ -1235,6 +1313,8 @@ public:
         noteLabel.setBounds ( bounds.removeFromTop ( 44 ) );
     }
 
+    int getPreferredContentHeight() const { return kPreferredContentHeight; }
+
     void setRecordingSettings ( const JamulusPluginProcessor::RecordingSettings& settings )
     {
         modeCombo.setSelectedId ( settings.mode + 1, juce::dontSendNotification );
@@ -1286,7 +1366,11 @@ public:
         jamulusClient ( client ),
         profileTab ( client ),
         audioNetworkTab ( client, proc ),
-        advancedTab ( client )
+        advancedTab ( client, proc ),
+        profileViewport ( profileTab, profileTab.getPreferredContentHeight() ),
+        audioNetworkViewport ( audioNetworkTab, audioNetworkTab.getPreferredContentHeight() ),
+        advancedViewport ( advancedTab, advancedTab.getPreferredContentHeight() ),
+        recordingViewport ( recordingTab, recordingTab.getPreferredContentHeight() )
     {
         addAndMakeVisible ( titleLabel );
         titleLabel.setText ( "Settings", juce::dontSendNotification );
@@ -1299,10 +1383,10 @@ public:
         tabbedComponent.setColour ( juce::TabbedComponent::backgroundColourId, juce::Colour ( 0xff323232 ) );
         tabbedComponent.setColour ( juce::TabbedComponent::outlineColourId, juce::Colour ( 0xff505050 ) );
 
-        tabbedComponent.addTab ( "My Profile", juce::Colour ( 0xff3a3a3a ), &profileTab, false );
-        tabbedComponent.addTab ( "Audio/Network", juce::Colour ( 0xff3a3a3a ), &audioNetworkTab, false );
-        tabbedComponent.addTab ( "Advanced", juce::Colour ( 0xff3a3a3a ), &advancedTab, false );
-        tabbedComponent.addTab ( "Recording", juce::Colour ( 0xff3a3a3a ), &recordingTab, false );
+        tabbedComponent.addTab ( "My Profile", juce::Colour ( 0xff3a3a3a ), &profileViewport, false );
+        tabbedComponent.addTab ( "Audio/Network", juce::Colour ( 0xff3a3a3a ), &audioNetworkViewport, false );
+        tabbedComponent.addTab ( "Advanced", juce::Colour ( 0xff3a3a3a ), &advancedViewport, false );
+        tabbedComponent.addTab ( "Recording", juce::Colour ( 0xff3a3a3a ), &recordingViewport, false );
 
         advancedTab.onMixerRowsChanged = [this] ( int rows ) {
             if ( onMixerRowsChanged )
@@ -1437,5 +1521,9 @@ private:
     AudioNetworkTab       audioNetworkTab;
     AdvancedTab           advancedTab;
     RecordingTab          recordingTab;
+    ScrollableSettingsViewport profileViewport;
+    ScrollableSettingsViewport audioNetworkViewport;
+    ScrollableSettingsViewport advancedViewport;
+    ScrollableSettingsViewport recordingViewport;
     juce::TextButton      closeButton;
 };

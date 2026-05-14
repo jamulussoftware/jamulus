@@ -106,7 +106,11 @@ JamulusPluginEditor::JamulusPluginEditor ( JamulusAudioProcessor& p ) : AudioPro
                                               audioProcessor.getProcessor().requestServerClientList ( address.toStdString() );
                                           },
                                           [this]() { audioProcessor.getProcessor().pingServerList(); } );
-    guiComponent->requestInitialServerList();
+    auto safeGui = juce::Component::SafePointer<JamulusGuiComponent> ( guiComponent.get() );
+    juce::MessageManager::callAsync ( [safeGui]() {
+        if ( safeGui != nullptr )
+            safeGui->requestInitialServerList();
+    } );
     guiComponent->onSidechainChanged = [this] ( bool enabled ) { audioProcessor.setSidechainEnabled ( enabled ); };
     guiComponent->setSidechainAvailable ( audioProcessor.isSidechainAvailable() );
     guiComponent->setTestToneButtonCallback ( [this] ( bool enabled ) { audioProcessor.getProcessor().setTestToneEnabled ( enabled ); } );

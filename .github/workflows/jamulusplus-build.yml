@@ -117,25 +117,46 @@ jobs:
           -DENABLE_STANDALONE=ON
           -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
           -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
+          -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_STYLE=Manual
+          -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=
           -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=
+          -DCMAKE_XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME=NO
 
       - name: Build VST3
         run: >
           cmake --build JamulusPlus/build-ci-macos --config Release
           --target jamulus_engine_VST3
           --verbose
+          --
+          CODE_SIGNING_ALLOWED=NO
+          CODE_SIGNING_REQUIRED=NO
+          CODE_SIGN_STYLE=Manual
+          CODE_SIGN_IDENTITY=
+          DEVELOPMENT_TEAM=
 
       - name: Build AU
         run: >
           cmake --build JamulusPlus/build-ci-macos --config Release
           --target jamulus_engine_AU
           --verbose
+          --
+          CODE_SIGNING_ALLOWED=NO
+          CODE_SIGNING_REQUIRED=NO
+          CODE_SIGN_STYLE=Manual
+          CODE_SIGN_IDENTITY=
+          DEVELOPMENT_TEAM=
 
       - name: Build Standalone
         run: >
           cmake --build JamulusPlus/build-ci-macos --config Release
           --target jamulus_engine_Standalone
           --verbose
+          --
+          CODE_SIGNING_ALLOWED=NO
+          CODE_SIGNING_REQUIRED=NO
+          CODE_SIGN_STYLE=Manual
+          CODE_SIGN_IDENTITY=
+          DEVELOPMENT_TEAM=
 
       - name: Upload VST3
         uses: actions/upload-artifact@v4

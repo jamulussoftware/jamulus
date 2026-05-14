@@ -25,7 +25,7 @@ permissions:
 
 jobs:
   build-windows:
-    name: Windows CLAP + VST3 + Standalone
+    name: Windows VST3 + Standalone
     runs-on: windows-2022
 
     steps:
@@ -44,14 +44,7 @@ jobs:
       - name: Configure
         run: >
           cmake -S JamulusPlus -B JamulusPlus/build-ci-windows -G "Visual Studio 17 2022" -A x64
-          -DENABLE_CLAP=ON
           -DENABLE_STANDALONE=ON
-
-      - name: Build CLAP
-        run: >
-          cmake --build JamulusPlus/build-ci-windows --config Release
-          --target jamulus_engine_CLAP
-          --verbose
 
       - name: Build VST3
         run: >
@@ -64,13 +57,6 @@ jobs:
           cmake --build JamulusPlus/build-ci-windows --config Release
           --target jamulus_engine_Standalone
           --verbose
-
-      - name: Upload CLAP
-        uses: actions/upload-artifact@v4
-        with:
-          name: JamulusPlus-windows-clap
-          if-no-files-found: error
-          path: JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap
 
       - name: Upload VST3
         uses: actions/upload-artifact@v4
@@ -93,7 +79,6 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path release-assets | Out-Null
-          Compress-Archive -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-clap.zip" -Force
           Compress-Archive -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip" -Force
           if (Test-Path "JamulusPlus/dist/JamulusPlus-Standalone") {
             Compress-Archive -Path "JamulusPlus/dist/JamulusPlus-Standalone" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
@@ -108,12 +93,11 @@ jobs:
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
           files: |
-            release-assets/JamulusPlus-${{ github.ref_name }}-windows-clap.zip
             release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip
             release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip
 
   build-macos:
-    name: macOS CLAP + VST3 + AU + Standalone
+    name: macOS VST3 + AU + Standalone
     runs-on: macos-14
 
     steps:
@@ -130,7 +114,6 @@ jobs:
         run: >
           cmake -S JamulusPlus -B JamulusPlus/build-ci-macos -G Xcode
           -DENABLE_AU=ON
-          -DENABLE_CLAP=ON
           -DENABLE_STANDALONE=ON
           -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
           -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
@@ -138,18 +121,6 @@ jobs:
           -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=
           -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=
           -DCMAKE_XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME=NO
-
-      - name: Build CLAP
-        run: >
-          cmake --build JamulusPlus/build-ci-macos --config Release
-          --target jamulus_engine_CLAP
-          --verbose
-          --
-          CODE_SIGNING_ALLOWED=NO
-          CODE_SIGNING_REQUIRED=NO
-          CODE_SIGN_STYLE=Manual
-          CODE_SIGN_IDENTITY=
-          DEVELOPMENT_TEAM=
 
       - name: Build VST3
         run: >
@@ -187,13 +158,6 @@ jobs:
           CODE_SIGN_IDENTITY=
           DEVELOPMENT_TEAM=
 
-      - name: Upload CLAP
-        uses: actions/upload-artifact@v4
-        with:
-          name: JamulusPlus-macos-clap
-          if-no-files-found: error
-          path: JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap
-
       - name: Upload VST3
         uses: actions/upload-artifact@v4
         with:
@@ -221,7 +185,6 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/V')
         run: |
           mkdir -p release-assets
-          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-clap.zip"
           ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-vst3.zip"
           ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-au.zip"
           if [ -d "JamulusPlus/dist/JamulusPlus.app" ]; then
@@ -237,7 +200,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
           files: |
-            release-assets/JamulusPlus-${{ github.ref_name }}-macos-clap.zip
             release-assets/JamulusPlus-${{ github.ref_name }}-macos-vst3.zip
             release-assets/JamulusPlus-${{ github.ref_name }}-macos-au.zip
             release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip

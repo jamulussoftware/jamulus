@@ -457,8 +457,8 @@ void JamulusPluginProcessor::stopRecording()
     recordingRuntime.active = false;
     recordingRuntime.trackedChannelIds.clear();
     recordingRuntime.trackedChannelNames.clear();
-    recordingRuntime.targetFile = {};
-    recordingRuntime.sidecarFile = {};
+    recordingRuntime.targetFile = juce::File();
+    recordingRuntime.sidecarFile = juce::File();
 }
 
 void JamulusPluginProcessor::processBlock ( const float** inputs, float** outputs, int numChannels, int numSamples )

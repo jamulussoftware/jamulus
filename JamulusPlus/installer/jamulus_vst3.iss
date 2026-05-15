@@ -1,35 +1,67 @@
-#define MyAppName "JamulusPlus"
-#define MyAppVersion "0.1.0"
-#define MyAppPublisher "AndyMcProducer"
-#define MyAppURL "https://github.com/AndyMcProducer/jamulus"
-#define MyAppCopyright "Copyright (C) 2026 AndyMcProducer"
-#define MyVst3Dir "{commoncf64}\VST3"
-#define MyStandaloneDir "{autopf64}\JamulusPlus"
+#ifndef MyAppName
+  #define MyAppName "JamulusPlus"
+#endif
+#ifndef MyAppVersion
+  #define MyAppVersion "0.1.0"
+#endif
+#ifndef MyAppDisplayVersion
+  #define MyAppDisplayVersion MyAppVersion
+#endif
+#ifndef MyVersionInfoVersion
+  #define MyVersionInfoVersion MyAppVersion
+#endif
+#ifndef MyAppPublisher
+  #define MyAppPublisher "AndyMcProducer"
+#endif
+#ifndef MyAppURL
+  #define MyAppURL "https://github.com/AndyMcProducer/jamulus"
+#endif
+#ifndef MyAppCopyright
+  #define MyAppCopyright "Copyright (C) 2026 AndyMcProducer"
+#endif
+#ifndef MyVst3Dir
+  #define MyVst3Dir "{commoncf64}\VST3"
+#endif
+#ifndef MyStandaloneDir
+  #define MyStandaloneDir "{autopf64}\JamulusPlus"
+#endif
+#ifndef MyVst3SourceDir
+  #define MyVst3SourceDir "..\dist\JamulusPlus.vst3"
+#endif
+#ifndef MyStandaloneSourceDir
+  #define MyStandaloneSourceDir "..\dist\JamulusPlus-Standalone"
+#endif
+#ifndef MyOutputDir
+  #define MyOutputDir "installer_output"
+#endif
+#ifndef MyOutputBaseFilename
+  #define MyOutputBaseFilename "JamulusPlus_Setup_{#MyAppVersion}"
+#endif
 
 [Setup]
 AppId={{0E0E7283-1D30-4D38-8EEA-6C69490B5B81}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
-AppVerName={#MyAppName} {#MyAppVersion}
+AppVersion={#MyAppDisplayVersion}
+AppVerName={#MyAppName} {#MyAppDisplayVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 AppCopyright={#MyAppCopyright}
-VersionInfoVersion={#MyAppVersion}
+VersionInfoVersion={#MyVersionInfoVersion}
 VersionInfoCompany={#MyAppPublisher}
 VersionInfoDescription={#MyAppName} Installer
 VersionInfoCopyright={#MyAppCopyright}
 VersionInfoProductName={#MyAppName}
-VersionInfoProductVersion={#MyAppVersion}
+VersionInfoProductVersion={#MyVersionInfoVersion}
 DefaultDirName={#MyStandaloneDir}
 DefaultGroupName={#MyAppName}
 PrivilegesRequired=admin
 PrivilegesRequiredOverridesAllowed=dialog
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
-OutputDir=installer_output
-OutputBaseFilename=JamulusPlus_Setup_{#MyAppVersion}
+OutputDir={#MyOutputDir}
+OutputBaseFilename={#MyOutputBaseFilename}
 SetupIconFile=compiler:SetupClassicIcon.ico
 UninstallDisplayIcon={app}\JamulusPlus.exe
 Compression=lzma2/max
@@ -67,8 +99,8 @@ Name: "standalone"; Description: "JamulusPlus standalone app"; Types: full stand
 Name: "desktopicon"; Description: "Create a desktop shortcut for the standalone app"; Components: standalone
 
 [Files]
-Source: "..\dist\JamulusPlus.vst3\*"; DestDir: "{#MyVst3Dir}\JamulusPlus.vst3"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: plugin
-Source: "..\dist\JamulusPlus-Standalone\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: standalone
+Source: "{#MyVst3SourceDir}\*"; DestDir: "{#MyVst3Dir}\JamulusPlus.vst3"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: plugin
+Source: "{#MyStandaloneSourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: standalone
 
 [Icons]
 Name: "{group}\JamulusPlus"; Filename: "{app}\JamulusPlus.exe"; Components: standalone

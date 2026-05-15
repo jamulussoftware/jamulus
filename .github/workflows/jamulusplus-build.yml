@@ -66,6 +66,44 @@ jobs:
           --target jamulus_engine_Standalone
           --verbose
 
+      - name: Prepare Installer Inputs
+        shell: pwsh
+        run: |
+          $installerRoot = "JamulusPlus/build-ci-windows/installer-input"
+          $vst3Stage = Join-Path $installerRoot "JamulusPlus.vst3"
+          $standaloneStage = Join-Path $installerRoot "JamulusPlus-Standalone"
+          Remove-Item -Recurse -Force $installerRoot -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $vst3Stage | Out-Null
+          New-Item -ItemType Directory -Force -Path $standaloneStage | Out-Null
+          Copy-Item -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3/*" -Destination $vst3Stage -Recurse -Force
+          $standaloneSource = if (Test-Path "JamulusPlus/dist/JamulusPlus-Standalone") { "JamulusPlus/dist/JamulusPlus-Standalone" } else { "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone" }
+          Copy-Item -Path "$standaloneSource\\*" -Destination $standaloneStage -Recurse -Force
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+
+      - name: Build Inno Installer
+        shell: pwsh
+        run: |
+          $tagName = "${{ github.ref_name }}"
+          if ([string]::IsNullOrWhiteSpace($tagName)) { $tagName = "dev" }
+          $numericParts = [regex]::Matches($tagName, '\d+') | ForEach-Object { $_.Value }
+          if ($numericParts.Count -eq 0) { $numericParts = @("0") }
+          while ($numericParts.Count -lt 4) { $numericParts += "0" }
+          $versionInfo = ($numericParts | Select-Object -First 4) -join "."
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          & $iscc `
+            "/DMyAppVersion=$versionInfo" `
+            "/DMyAppDisplayVersion=$tagName" `
+            "/DMyVersionInfoVersion=$versionInfo" `
+            "/DMyOutputDir=JamulusPlus/build-ci-windows/installer-output" `
+            "/DMyOutputBaseFilename=JamulusPlus-Setup-$tagName" `
+            "/DMyVst3SourceDir=$(Resolve-Path 'JamulusPlus/build-ci-windows/installer-input/JamulusPlus.vst3')" `
+            "/DMyStandaloneSourceDir=$(Resolve-Path 'JamulusPlus/build-ci-windows/installer-input/JamulusPlus-Standalone')" `
+            "JamulusPlus/installer/jamulus_vst3.iss"
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup compilation failed." }
+
       - name: Upload CLAP
         uses: actions/upload-artifact@v4
         with:
@@ -89,6 +127,13 @@ jobs:
             JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone/**
             JamulusPlus/dist/JamulusPlus-Standalone/**
 
+      - name: Upload Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: JamulusPlus-windows-installer
+          if-no-files-found: error
+          path: JamulusPlus/build-ci-windows/installer-output/*.exe
+
       - name: Package Release Assets
         if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')
         shell: pwsh
@@ -106,6 +151,7 @@ jobs:
             Copy-Item -Path "$standaloneSource\\*" -Destination $standaloneStage -Recurse -Force
           }
           Compress-Archive -Path "$standaloneStage\\*" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
+          Copy-Item -Path "JamulusPlus/build-ci-windows/installer-output/*.exe" -Destination "release-assets/" -Force
 
       - name: Publish Release Assets
         if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')
@@ -117,6 +163,7 @@ jobs:
             release-assets/JamulusPlus-${{ github.ref_name }}-windows-clap.zip
             release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip
             release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip
+            release-assets/JamulusPlus-Setup-${{ github.ref_name }}.exe
 
   build-macos:
     name: macOS CLAP + VST3 + AU + Standalone

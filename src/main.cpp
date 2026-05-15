@@ -87,6 +87,7 @@ int main ( int argc, char** argv )
     bool         bDisconnectAllClientsOnQuit = false;
     bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
     bool         bUseMultithreading          = false;
+    bool         bDisableRaw                 = false;
     bool         bShowAnalyzerConsole        = false;
     bool         bMuteStream                 = false;
     bool         bMuteMeInPersonalMix        = false;
@@ -475,6 +476,19 @@ int main ( int argc, char** argv )
             qInfo() << "- start minimized enabled";
             CommandLineOptions << "--startminimized";
             ServerOnlyOptions << "--startminimized";
+            continue;
+        }
+
+        // Disable raw audio feature -------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--noraw", // no short form
+                               "--noraw" ) )
+        {
+            bDisableRaw = true;
+            qInfo() << "- raw audio is disabled";
+            CommandLineOptions << "--noraw";
+            ServerOnlyOptions << "--noraw";
             continue;
         }
 
@@ -989,6 +1003,7 @@ int main ( int argc, char** argv )
                              strRecordingDirName,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
+                             bDisableRaw,
                              bUseMultithreading,
                              bDisableRecording,
                              bDelayPan,
@@ -1115,6 +1130,7 @@ QString UsageArguments ( char** argv )
            "  -P, --delaypan          start with delay panning enabled\n"
            "  -R, --recording         set server recording directory; server will record when a session is active by default\n"
            "      --norecord          set server not to record by default when recording is configured\n"
+           "      --noraw             disable raw audio\n"
            "  -s, --server            start Server\n"
            "      --serverbindip      IP address the Server will bind to (rather than all)\n"
            "  -T, --multithreading    use multithreading to make better use of\n"

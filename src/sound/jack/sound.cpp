@@ -234,7 +234,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     int     i;
 
     // make sure we are locked during execution
-    QMutexLocker locker ( &pSound->MutexAudioProcessCallback );
+    std::lock_guard<std::mutex> locker ( pSound->MutexAudioProcessCallback );
 
     if ( pSound->IsRunning() && ( nframes == static_cast<jack_nframes_t> ( pSound->iJACKBufferSizeMono ) ) )
     {

@@ -25,9 +25,6 @@
 #pragma once
 
 #include <QObject>
-#include <QDateTime>
-#include <QHostAddress>
-#include <QFileInfo>
 #include <algorithm>
 #ifdef USE_OPUS_SHARED_LIB
 #    include "opus/opus_custom.h"
@@ -36,21 +33,30 @@
 #endif
 #include "global.h"
 #include "buffer.h"
-#include "signalhandler.h"
+#ifndef HEADLESS
+#    include "signalhandler.h"
+#endif
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
 #include "serverlogging.h"
 #include "serverlist.h"
 #include "recorder/jamcontroller.h"
+#include "net_abstraction.h"
 
 #include "threadpool.h"
+
+#if defined( HEADLESS )
+#    include <mutex>
+#endif
 
 /* Definitions ****************************************************************/
 // no valid channel number
 #define INVALID_CHANNEL_ID ( MAX_NUM_CHANNELS + 1 )
 
 /* Classes ********************************************************************/
+
+class CSignalHandler;
 template<unsigned int slotId>
 class CServerSlots : public CServerSlots<slotId - 1>
 {
@@ -80,7 +86,7 @@ template<>
 class CServerSlots<0>
 {};
 
-class CServer : public QObject, public CServerSlots<MAX_NUM_CHANNELS>
+class CServer : public QObject, public CServerSlots<MAX_NUM_CHANNELS>, public IProtocolHandler
 {
     Q_OBJECT
 
@@ -104,7 +110,10 @@ public:
               const bool         bDisableRecording,
               const bool         bNDelayPan,
               const bool         bNEnableIPv6,
-              const ELicenceType eNLicenceType );
+              const ELicenceType eNLicenceType,
+              INetworkSocket*    pNetworkSocketIn  = nullptr,
+              ITimerScheduler*   pTimerSchedulerIn = nullptr,
+              IResolver*         pResolverIn       = nullptr );
 
     virtual ~CServer();
 
@@ -139,8 +148,13 @@ public:
     QString          GetServerName() { return ServerListManager.GetServerName(); }
     void             SetServerCity ( const QString& strNewCity ) { ServerListManager.SetServerCity ( strNewCity ); }
     QString          GetServerCity() { return ServerListManager.GetServerCity(); }
+#if defined( JAMULUS_USE_JUCE_NET )
+    void        SetServerCountry ( const QCOUNTRY_T eNewCountry ) { ServerListManager.SetServerCountry ( eNewCountry ); }
+    QCOUNTRY_T  GetServerCountry() { return ServerListManager.GetServerCountry(); }
+#else
     void             SetServerCountry ( const QLocale::Country eNewCountry ) { ServerListManager.SetServerCountry ( eNewCountry ); }
     QLocale::Country GetServerCountry() { return ServerListManager.GetServerCountry(); }
+#endif
 
     bool    GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     void    SetEnableRecording ( bool bNewEnableRecording );
@@ -229,11 +243,25 @@ protected:
 
     int    iCurNumChannels;
     int    vecChannelOrder[MAX_NUM_CHANNELS];
+#if defined( HEADLESS )
+    std::mutex MutexChanOrder;
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::CriticalSection MutexChanOrder;
+#else
     QMutex MutexChanOrder;
+#endif
 
     CProtocol ConnLessProtocol;
-    QMutex    Mutex;
-    QMutex    MutexWelcomeMessage;
+#if defined( HEADLESS )
+    std::mutex Mutex;
+    std::mutex MutexWelcomeMessage;
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::CriticalSection Mutex;
+    juce::CriticalSection MutexWelcomeMessage;
+#else
+    QMutex Mutex;
+    QMutex MutexWelcomeMessage;
+#endif
     bool      bChannelIsNowDisconnected;
 
     // audio encoder/decoder
@@ -269,7 +297,8 @@ protected:
     CVector<uint16_t> vecChannelLevels;
 
     // actual working objects
-    CHighPrioSocket Socket;
+    CHighPrioSocket      Socket;
+    SocketNetworkAdapter NetworkAdapter;
 
     // logging
     CServerLogging Logging;
@@ -305,6 +334,9 @@ protected:
     bool         bDisconnectAllClientsOnQuit;
 
     CSignalHandler* pSignalHandler;
+    INetworkSocket*  pNetworkSocket;
+    ITimerScheduler* pTimerScheduler;
+    IResolver*       pResolver;
 
     std::unique_ptr<CThreadPool> pThreadPool;
 
@@ -340,14 +372,14 @@ public slots:
 
     void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
 
-    void OnCLPingReceived ( CHostAddress InetAddr, int iMs ) { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
+    void OnCLPingReceived ( CHostAddress InetAddr, int iMs ) override { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
 
-    void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int )
+    void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int ) override
     {
         ConnLessProtocol.CreateCLPingWithNumClientsMes ( InetAddr, iMs, GetNumberOfConnectedClients() );
     }
 
-    void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
+    void OnCLSendEmptyMes ( CHostAddress TargetInetAddr ) override
     {
         // only send empty message if not a directory
         if ( !ServerListManager.IsDirectory() )
@@ -356,13 +388,13 @@ public slots:
         }
     }
 
-    void OnCLReqServerList ( CHostAddress InetAddr ) { ServerListManager.RetrieveAll ( InetAddr ); }
+    void OnCLReqServerList ( CHostAddress InetAddr ) override { ServerListManager.RetrieveAll ( InetAddr ); }
 
-    void OnCLReqVersionAndOS ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
+    void OnCLReqVersionAndOS ( CHostAddress InetAddr ) override { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
 
-    void OnCLReqConnClientsList ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
+    void OnCLReqConnClientsList ( CHostAddress InetAddr ) override { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
 
-    void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo )
+    void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo ) override
     {
         ServerListManager.Append ( InetAddr, LInetAddr, ServerInfo );
     }
@@ -371,16 +403,21 @@ public slots:
                                         CHostAddress    LInetAddr,
                                         CServerCoreInfo ServerInfo,
                                         COSUtil::EOpSystemType,
-                                        QString strVersion )
+                                        QString strVersion ) override
     {
         ServerListManager.Append ( InetAddr, LInetAddr, ServerInfo, strVersion );
     }
 
-    void OnCLRegisterServerResp ( CHostAddress /* unused */, ESvrRegResult eResult ) { ServerListManager.StoreRegistrationResult ( eResult ); }
+    void OnCLRegisterServerResp ( CHostAddress /* unused */, ESvrRegResult eResult ) override
+    {
+        ServerListManager.StoreRegistrationResult ( eResult );
+    }
 
-    void OnCLUnregisterServerReceived ( CHostAddress InetAddr ) { ServerListManager.Remove ( InetAddr ); }
+    void OnCLUnregisterServerReceived ( CHostAddress InetAddr ) override { ServerListManager.Remove ( InetAddr ); }
 
-    void OnCLDisconnection ( CHostAddress InetAddr );
+    void OnCLDisconnection ( CHostAddress InetAddr ) override;
+
+    void OnCLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage ) override;
 
     void OnAboutToQuit();
 

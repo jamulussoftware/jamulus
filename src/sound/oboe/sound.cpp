@@ -272,7 +272,7 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
 
 void CSound::addOutputData ( int channel_count )
 {
-    QMutexLocker      locker ( &MutexAudioProcessCallback );
+    std::lock_guard<std::mutex> locker ( MutexAudioProcessCallback );
     const std::size_t bufsize = (std::size_t) iOboeBufferSizeMono * channel_count;
 
     // Only copy data if we have data to copy, otherwise fill with silence
@@ -295,7 +295,7 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
     mStats.frames_out += numFrames;
     mStats.out_callback_calls++;
 
-    QMutexLocker locker ( &MutexAudioProcessCallback );
+    std::lock_guard<std::mutex> locker ( MutexAudioProcessCallback );
 
     const int32_t    to_write = numFrames * oboeStream->getChannelCount();
     const int32_t    count    = std::min ( mOutBuffer.GetAvailData(), to_write );

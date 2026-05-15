@@ -23,6 +23,8 @@
 \******************************************************************************/
 
 #include "connectdlg.h"
+#include <chrono>
+#include <thread>
 
 /* Implementation *************************************************************/
 
@@ -875,7 +877,7 @@ void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress,
     // measurement (#49). We therefore introduce a short delay for each server
     // (since we are doing this in a separate thread for each server, we do not
     // block the GUI).
-    QThread::msleep ( 11 );
+    std::this_thread::sleep_for ( std::chrono::milliseconds ( 11 ) );
 
     // first request the server version if we have not already received it
     if ( bNeedVersion )

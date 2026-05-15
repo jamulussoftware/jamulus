@@ -24,11 +24,15 @@
 
 #pragma once
 
-#include <QDomDocument>
-#include <QFile>
-#include <QSettings>
-#include <QDir>
-#ifndef HEADLESS
+#if defined(JAMULUS_USE_JUCE_XML)
+#    include "juce-wrapper/libjamulus/include_shims/qdom_juce_shim.h"
+#else
+#    include <QDomDocument>
+#endif
+#if !defined( JAMULUS_USE_JUCE_NET )
+#    include <QSettings>
+#endif
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
 #    include <QApplication>
 #    include <QMessageBox>
 #endif
@@ -40,18 +44,17 @@
 #include "util.h"
 
 /* Classes ********************************************************************/
-class CSettings : public QObject
+class CSettings
 {
-    Q_OBJECT
-
 public:
     CSettings() :
         vecWindowPosMain(), // empty array
         strLanguage ( "" ),
         strFileName ( "" )
     {
-        QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &CSettings::OnAboutToQuit );
-#ifndef HEADLESS
+#if !defined( JAMULUS_USE_JUCE_NET )
+        QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, [this]() { OnAboutToQuit(); } );
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
 
         // The Jamulus App will be created as either a QCoreApplication or QApplication (a subclass of QGuiApplication).
         // State signals are only delivered to QGuiApplications, so we determine here whether we instantiated the GUI.
@@ -63,18 +66,19 @@ public:
             QObject::connect (
                 pGApp,
                 &QGuiApplication::saveStateRequest,
-                this,
+                QCoreApplication::instance(),
                 [=] ( QSessionManager& ) { Save ( false ); },
                 Qt::DirectConnection );
 
 #    endif
-            QObject::connect ( pGApp, &QGuiApplication::applicationStateChanged, this, [=] ( Qt::ApplicationState state ) {
+            QObject::connect ( pGApp, &QGuiApplication::applicationStateChanged, [=] ( Qt::ApplicationState state ) {
                 if ( Qt::ApplicationActive != state )
                 {
                     Save ( false );
                 }
             } );
         }
+#endif
 #endif
     }
 
@@ -130,7 +134,6 @@ protected:
 
     QString strFileName;
 
-public slots:
     void OnAboutToQuit() { Save ( true ); }
 };
 

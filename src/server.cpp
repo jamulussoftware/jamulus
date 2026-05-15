@@ -23,6 +23,9 @@
 \******************************************************************************/
 
 #include "server.h"
+#include <filesystem>
+#include <fstream>
+#include <thread>
 
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,
@@ -44,7 +47,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bDisableRecording,
                    const bool         bNDelayPan,
                    const bool         bNEnableIPv6,
-                   const ELicenceType eNLicenceType ) :
+                   const ELicenceType eNLicenceType,
+                   INetworkSocket*    pNetworkSocketIn,
+                   ITimerScheduler*   pTimerSchedulerIn,
+                   IResolver*         pResolverIn ) :
     bUseDoubleSystemFrameSize ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading ( bNUseMultithreading ),
     iMaxNumChannels ( iNewMaxNumChan ),
@@ -71,8 +77,24 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bEnableIPv6 ( bNEnableIPv6 ),
     eLicenceType ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
-    pSignalHandler ( CSignalHandler::getSingletonP() )
+    pSignalHandler ( 
+#if defined( HEADLESS )
+        nullptr
+#else
+        CSignalHandler::getSingletonP()
+#endif
+        ),
+    NetworkAdapter ( &Socket ),
+    pNetworkSocket ( pNetworkSocketIn ? pNetworkSocketIn : &NetworkAdapter ),
+    pTimerScheduler ( pTimerSchedulerIn ),
+    pResolver ( pResolverIn )
 {
+    ConnLessProtocol.SetHandler ( this );
+
+    if ( pTimerScheduler )
+    {
+        ConnLessProtocol.SetTimerScheduler ( pTimerScheduler );
+    }
     int iOpusError;
     int i;
 
@@ -81,6 +103,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // for each channel
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
+        if ( pTimerScheduler )
+        {
+            vecChannels[i].SetTimerScheduler ( pTimerScheduler );
+        }
+
         // init OPUS -----------------------------------------------------------
         OpusMode[i] = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES, &iOpusError );
 
@@ -203,14 +230,17 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // file, the content of that file is used as the welcome message (#361)
     SetWelcomeMessage ( strNewWelcomeMessage ); // first use given text, may be overwritten
 
-    if ( QFileInfo ( strNewWelcomeMessage ).exists() )
+    if ( !strNewWelcomeMessage.isEmpty() )
     {
-        QFile file ( strNewWelcomeMessage );
-
-        if ( file.open ( QIODevice::ReadOnly | QIODevice::Text ) )
+        std::filesystem::path path ( strNewWelcomeMessage.toStdWString() );
+        if ( std::filesystem::exists ( path ) && std::filesystem::is_regular_file ( path ) )
         {
-            // use entire file content for the welcome message
-            SetWelcomeMessage ( file.readAll() );
+            std::ifstream in ( path, std::ios::in | std::ios::binary );
+            if ( in.is_open() )
+            {
+                std::string content ( ( std::istreambuf_iterator<char> ( in ) ), std::istreambuf_iterator<char>() );
+                SetWelcomeMessage ( QString::fromUtf8 ( content.data(), static_cast<int> ( content.size() ) ) );
+            }
         }
     }
 
@@ -227,7 +257,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
         vecChannelOrder[i] = i;
     }
 
-    int iAvailableCores = QThread::idealThreadCount();
+    unsigned int iAvailableCores = std::thread::hardware_concurrency();
+    if ( iAvailableCores == 0 )
+    {
+        iAvailableCores = 1;
+    }
 
     // setup CThreadPool if multithreading is active and possible
     if ( bUseMultithreading )
@@ -249,34 +283,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     }
 
     // Connections -------------------------------------------------------------
-    // connect timer timeout signal
-    QObject::connect ( &HighPrecisionTimer, &CHighPrecisionTimer::timeout, this, &CServer::OnTimer );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLMessReadyForSending, this, &CServer::OnSendCLProtMessage );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived, this, &CServer::OnCLPingReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingWithNumClientsReceived, this, &CServer::OnCLPingWithNumClientsReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRegisterServerReceived, this, &CServer::OnCLRegisterServerReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRegisterServerExReceived, this, &CServer::OnCLRegisterServerExReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLUnregisterServerReceived, this, &CServer::OnCLUnregisterServerReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqServerList, this, &CServer::OnCLReqServerList );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRegisterServerResp, this, &CServer::OnCLRegisterServerResp );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLSendEmptyMes, this, &CServer::OnCLSendEmptyMes );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLDisconnection, this, &CServer::OnCLDisconnection );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqVersionAndOS, this, &CServer::OnCLReqVersionAndOS );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived, this, &CServer::CLVersionAndOSReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqConnClientsList, this, &CServer::OnCLReqConnClientsList );
+    HighPrecisionTimer.setCallback ( [this]() { OnTimer(); } );
 
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged, this, &CServer::SvrRegStatusChanged );
 
@@ -295,9 +302,16 @@ CServer::CServer ( const int          iNewMaxNumChan,
     qRegisterMetaType<CVector<int16_t>> ( "CVector<int16_t>" );
     QObject::connect ( this, &CServer::AudioFrame, &JamController, &recorder::CJamController::AudioFrame );
 
-    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &CServer::OnAboutToQuit );
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
+    if ( QCoreApplication* app = QCoreApplication::instance() )
+    {
+        QObject::connect ( app, &QCoreApplication::aboutToQuit, this, &CServer::OnAboutToQuit );
+    }
+#endif
 
+#if !defined( HEADLESS )
     QObject::connect ( pSignalHandler, &CSignalHandler::HandledSignal, this, &CServer::OnHandledSignal );
+#endif
 
     connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
 
@@ -370,14 +384,36 @@ CServer::~CServer()
 
 void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 {
-    // the protocol queries me to call the function to send the message
-    // send it through the network
-    Socket.SendPacket ( vecMessage, vecChannels[iChID].GetAddress() );
+    CHostAddress addr = vecChannels[iChID].GetAddress();
+
+    if ( pNetworkSocket )
+    {
+        NetEndpoint ep;
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        ep.address = addr.address;
+#else
+        ep.address = addr.InetAddr.toString().toStdString();
+#endif
+        ep.port    = addr.iPort;
+
+        if ( vecMessage.Size() > 0 )
+            pNetworkSocket->sendTo ( ep, &vecMessage[0], static_cast<std::size_t> ( vecMessage.Size() ) );
+    }
+    else
+    {
+        Socket.SendPacket ( vecMessage, addr );
+    }
 }
 
 void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAddr )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // inform the client about its own ID at the server (note that this
     // must be the first message to be sent for a new connection)
@@ -422,7 +458,13 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
 
     // send welcome message (if enabled)
     {
+#if defined( HEADLESS )
+        std::lock_guard<std::mutex> locker ( MutexWelcomeMessage );
+#elif defined( JAMULUS_USE_JUCE_NET )
+        juce::ScopedLock locker ( MutexWelcomeMessage );
+#else
         QMutexLocker locker ( &MutexWelcomeMessage );
+#endif
         if ( !strWelcomeMessage.isEmpty() )
         {
             // create formatted server welcome message and send it just to
@@ -450,7 +492,7 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
     DoubleFrameSizeConvBufOut[iChID].Reset();
 
     // logging of new connected channel
-    Logging.AddNewConnection ( RecHostAddr.InetAddr, iTotChans );
+    Logging.AddNewConnection ( RecHostAddr, iTotChans );
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )
@@ -466,6 +508,11 @@ void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, InetAddr );
+}
+
+void CServer::OnCLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+{
+    OnSendCLProtMessage ( InetAddr, vecMessage );
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )
@@ -485,7 +532,13 @@ void CServer::OnAboutToQuit()
     // if enabled, disconnect all clients on quit
     if ( bDisconnectAllClientsOnQuit )
     {
+#if defined( HEADLESS )
+        std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+        juce::ScopedLock locker ( Mutex );
+#else
         QMutexLocker locker ( &Mutex );
+#endif
         for ( int i = 0; i < iMaxNumChannels; i++ )
         {
             if ( vecChannels[i].IsConnected() )
@@ -505,14 +558,19 @@ void CServer::OnAboutToQuit()
 
 void CServer::OnHandledSignal ( int sigNum )
 {
-    // show the signal number on the console (note that this may not work for Windows)
-    qDebug() << qUtf8Printable ( QString ( "OnHandledSignal: %1" ).arg ( sigNum ) );
-
 #ifdef _WIN32
-    // Windows does not actually get OnHandledSignal triggered
-    QCoreApplication::instance()->exit();
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
+    if ( QCoreApplication* app = QCoreApplication::instance() )
+    {
+        app->exit();
+    }
+#else
+    Stop();
+#endif
     Q_UNUSED ( sigNum )
 #else
+    qDebug() << qUtf8Printable ( QString ( "OnHandledSignal: %1" ).arg ( sigNum ) );
+
     switch ( sigNum )
     {
     case SIGUSR1:
@@ -525,8 +583,14 @@ void CServer::OnHandledSignal ( int sigNum )
 
     case SIGINT:
     case SIGTERM:
-        // This should trigger OnAboutToQuit
-        QCoreApplication::instance()->exit();
+        #if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
+        if ( QCoreApplication* app = QCoreApplication::instance() )
+        {
+            app->exit();
+        }
+        #else
+        Stop();
+        #endif
         break;
 
     default:
@@ -584,7 +648,13 @@ void CServer::OnTimer()
 
     {
         // Make put and get calls thread safe.
+#ifdef HEADLESS
+        std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+        juce::ScopedLock locker ( Mutex );
+#else
         QMutexLocker locker ( &Mutex );
+#endif
 
         // first, get number and IDs of connected channels
         for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -1241,8 +1311,14 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID, con
     // use different colors
     QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
 
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    const QString strActualMessageText =
+        "<font color=\"" + sCurColor + "\">(" + QString::fromStdString ( juce::Time::getCurrentTime().toString ( true, true, true, true ).toStdString() ) +
+        ") <b>" + ChanName.toHtmlEscaped() + "</b></font> " + strChatText.toHtmlEscaped();
+#else
     const QString strActualMessageText = "<font color=\"" + sCurColor + "\">(" + QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" +
                                          ChanName.toHtmlEscaped() + "</b></font> " + strChatText.toHtmlEscaped();
+#endif
 
     // Send chat text to all connected clients ---------------------------------
     for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -1282,7 +1358,13 @@ void CServer::CreateOtherMuteStateChanged ( const int iCurChanID, const int iOth
 
 int CServer::GetNumberOfConnectedClients()
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexChanOrder );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexChanOrder );
+#else
     QMutexLocker locker ( &MutexChanOrder );
+#endif
 
     return iCurNumChannels;
 }
@@ -1298,7 +1380,13 @@ int CServer::FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew )
 {
     int iNewChanID = INVALID_CHANNEL_ID;
 
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexChanOrder );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexChanOrder );
+#else
     QMutexLocker locker ( &MutexChanOrder );
+#endif
 
     int l = 0, r = iCurNumChannels, i;
 
@@ -1378,7 +1466,13 @@ void CServer::InitChannel ( const int iNewChanID, const CHostAddress& InetAddr )
 
 void CServer::FreeChannel ( const int iCurChanID )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexChanOrder );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexChanOrder );
+#else
     QMutexLocker locker ( &MutexChanOrder );
+#endif
 
     for ( int i = 0; i < iCurNumChannels; i++ )
     {
@@ -1424,7 +1518,13 @@ void CServer::DumpChannels ( const QString& title )
 
 void CServer::OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // connection less messages are always processed
     ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
@@ -1432,7 +1532,13 @@ void CServer::OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMe
 
 void CServer::OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // find the channel with the received address
     const int iCurChanID = FindChannel ( RecHostAddr );
@@ -1446,7 +1552,13 @@ void CServer::OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<u
 
 bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf, const int iNumBytesRead, const CHostAddress& HostAdr, int& iCurChanID )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     bool bNewConnection = false; // init return value
 
@@ -1511,7 +1623,13 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
 void CServer::SetWelcomeMessage ( const QString& strNWelcMess )
 {
     // we need a mutex to secure access
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexWelcomeMessage );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexWelcomeMessage );
+#else
     QMutexLocker locker ( &MutexWelcomeMessage );
+#endif
     strWelcomeMessage = strNWelcMess;
 
     // restrict welcome message to maximum allowed length
@@ -1520,50 +1638,47 @@ void CServer::SetWelcomeMessage ( const QString& strNWelcMess )
 
 void CServer::WriteHTMLChannelList()
 {
-    // prepare file and stream
-    QFile serverFileListFile ( strServerHTMLFileListName );
-
-    if ( serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
+    std::ofstream out ( strServerHTMLFileListName.toStdWString(), std::ios::out | std::ios::trunc | std::ios::binary );
+    if ( out.is_open() )
     {
-        QTextStream streamFileOut ( &serverFileListFile );
+        auto writeLine = [&out] ( const QString& s )
+        {
+            const QByteArray bytes = s.toUtf8();
+            out.write ( bytes.constData(), static_cast<std::streamsize> ( bytes.size() ) );
+            out.put ( '\n' );
+        };
 
         // depending on number of connected clients write list
         if ( GetNumberOfConnectedClients() == 0 )
         {
             // no clients are connected -> empty server
-            streamFileOut << "  No client connected\n";
+            writeLine ( "  No client connected" );
         }
         else
         {
-            streamFileOut << "<ul>\n";
+            writeLine ( "<ul>" );
 
             // write entry for each connected client
             for ( int i = 0; i < iMaxNumChannels; i++ )
             {
                 if ( vecChannels[i].IsConnected() )
                 {
-                    streamFileOut << "  <li>" << vecChannels[i].GetName().toHtmlEscaped() << "</li>\n";
+                    writeLine ( "  <li>" + vecChannels[i].GetName().toHtmlEscaped() + "</li>" );
                 }
             }
 
-            streamFileOut << "</ul>\n";
+            writeLine ( "</ul>" );
         }
     }
 }
 
 void CServer::WriteHTMLServerQuit()
 {
-    // prepare file and stream
-    QFile serverFileListFile ( strServerHTMLFileListName );
-
-    if ( !serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
-    {
-        return;
-    }
-
-    QTextStream streamFileOut ( &serverFileListFile );
-    streamFileOut << "  Server terminated\n";
-    serverFileListFile.close();
+    std::ofstream out ( strServerHTMLFileListName.toStdWString(), std::ios::out | std::ios::trunc | std::ios::binary );
+    if ( !out.is_open() ) { return; }
+    const QByteArray bytes = QString ( "  Server terminated\n" ).toUtf8();
+    out.write ( bytes.constData(), static_cast<std::streamsize> ( bytes.size() ) );
+    out.flush();
 }
 
 void CServer::customEvent ( QEvent* pEvent )

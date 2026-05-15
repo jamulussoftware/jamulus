@@ -65,43 +65,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     qRegisterMetaType<CHostAddress> ( "CHostAddress" );
     //### TODO: END ###//
 
-    QObject::connect ( &Protocol, &CProtocol::MessReadyForSending, this, &CChannel::OnSendProtMessage );
-
-    QObject::connect ( &Protocol, &CProtocol::ChangeJittBufSize, this, &CChannel::OnJittBufSizeChange );
-
-    QObject::connect ( &Protocol, &CProtocol::ReqJittBufSize, this, &CChannel::ReqJittBufSize );
-
-    QObject::connect ( &Protocol, &CProtocol::ReqChanInfo, this, &CChannel::ReqChanInfo );
-
-    QObject::connect ( &Protocol, &CProtocol::ReqConnClientsList, this, &CChannel::ReqConnClientsList );
-
-    QObject::connect ( &Protocol, &CProtocol::ConClientListMesReceived, this, &CChannel::ConClientListMesReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::ChangeChanGain, this, &CChannel::OnChangeChanGain );
-
-    QObject::connect ( &Protocol, &CProtocol::ChangeChanPan, this, &CChannel::OnChangeChanPan );
-
-    QObject::connect ( &Protocol, &CProtocol::ClientIDReceived, this, &CChannel::ClientIDReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::MuteStateHasChangedReceived, this, &CChannel::MuteStateHasChangedReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::ChangeChanInfo, this, &CChannel::OnChangeChanInfo );
-
-    QObject::connect ( &Protocol, &CProtocol::ChatTextReceived, this, &CChannel::ChatTextReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::NetTranspPropsReceived, this, &CChannel::OnNetTranspPropsReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::ReqNetTranspProps, this, &CChannel::OnReqNetTranspProps );
-
-    QObject::connect ( &Protocol, &CProtocol::ReqSplitMessSupport, this, &CChannel::OnReqSplitMessSupport );
-
-    QObject::connect ( &Protocol, &CProtocol::SplitMessSupported, this, &CChannel::OnSplitMessSupported );
-
-    QObject::connect ( &Protocol, &CProtocol::LicenceRequired, this, &CChannel::LicenceRequired );
-
-    QObject::connect ( &Protocol, &CProtocol::VersionAndOSReceived, this, &CChannel::OnVersionAndOSReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::RecorderStateReceived, this, &CChannel::RecorderStateReceived );
+    Protocol.SetHandler ( this );
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -122,7 +86,13 @@ bool CChannel::ProtocolIsEnabled()
 
 void CChannel::SetEnable ( const bool bNEnStat )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // set internal parameter
     bIsEnabled = bNEnStat;
@@ -142,23 +112,6 @@ void CChannel::SetEnable ( const bool bNEnStat )
         iConTimeOut = 0;
         Protocol.Reset();
     }
-}
-
-void CChannel::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion )
-{
-    // check if audio packet counter is supported by the server (minimum version is 3.6.0)
-#if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
-    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 6, 0 ) ) >= 0 )
-    {
-        // activate sequence counter and update the audio stream properties (which
-        // does all the initialization and tells the server about the change)
-        bUseSequenceNumber = true;
-
-        SetAudioStreamProperties ( eAudioCompressionType, iCeltNumCodedBytes, iNetwFrameSizeFact, iNumAudioChannels );
-    }
-#endif
-
-    emit VersionAndOSReceived ( eOSType, strVersion );
 }
 
 void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
@@ -199,20 +152,30 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
             iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
         }
 
-        MutexSocketBuf.lock();
         {
-            // init socket buffer
-            SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
+#ifdef HEADLESS
+            std::lock_guard<std::mutex> socketLocker ( MutexSocketBuf );
+#else
+            MutexSocketBuf.lock();
+#endif
+            SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS );
             SockBuf.Init ( iCeltNumCodedBytes, iCurSockBufNumFrames, bUseSequenceNumber );
+#if !defined( HEADLESS )
+            MutexSocketBuf.unlock();
+#endif
         }
-        MutexSocketBuf.unlock();
 
-        MutexConvBuf.lock();
         {
-            // init conversion buffer
+#ifdef HEADLESS
+            std::lock_guard<std::mutex> convLocker ( MutexConvBuf );
+#else
+            MutexConvBuf.lock();
+#endif
             ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact, bUseSequenceNumber );
+#if !defined( HEADLESS )
+            MutexConvBuf.unlock();
+#endif
         }
-        MutexConvBuf.unlock();
 
         // fill network transport properties struct
         NetworkTransportProps = GetNetworkTransportPropsFromCurrentSettings();
@@ -221,6 +184,76 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
 
     // tell the server about the new network settings
     Protocol.CreateNetwTranspPropsMes ( NetworkTransportProps );
+}
+
+void CChannel::OnReqNetTranspProps()
+{
+    Protocol.CreateNetwTranspPropsMes ( GetNetworkTransportPropsFromCurrentSettings() );
+}
+
+void CChannel::OnReqSplitMessSupport()
+{
+    Protocol.SetSplitMessageSupported ( true );
+    Protocol.CreateSplitMessSupportedMes();
+}
+
+void CChannel::OnSplitMessSupported()
+{
+    Protocol.SetSplitMessageSupported ( true );
+}
+
+void CChannel::OnLicenceRequired ( ELicenceType eLicenceType )
+{
+    emit LicenceRequired ( eLicenceType );
+}
+
+void CChannel::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
+    QString normalizedVersion = strVersion.trimmed();
+    int start = -1;
+    for ( int i = 0; i < normalizedVersion.size(); ++i )
+    {
+        if ( normalizedVersion.at ( i ).isDigit() )
+        {
+            start = i;
+            break;
+        }
+    }
+
+    if ( start >= 0 )
+    {
+        int end = start;
+        while ( end < normalizedVersion.size() )
+        {
+            const QChar ch = normalizedVersion.at ( end );
+            if ( !( ch.isDigit() || ch == '.' ) )
+            {
+                break;
+            }
+            ++end;
+        }
+        normalizedVersion = normalizedVersion.mid ( start, end - start );
+    }
+    else
+    {
+        normalizedVersion.clear();
+    }
+
+    const QVersionNumber receivedVersion = QVersionNumber::fromString ( normalizedVersion );
+    if ( QVersionNumber::compare ( receivedVersion, QVersionNumber ( 3, 6, 0 ) ) >= 0 )
+    {
+        bUseSequenceNumber = true;
+        SetAudioStreamProperties ( eAudioCompressionType, iCeltNumCodedBytes, iNetwFrameSizeFact, iNumAudioChannels );
+    }
+#endif
+
+    emit VersionAndOSReceived ( eOSType, strVersion );
+}
+
+void CChannel::OnRecorderStateReceived ( ERecorderState eRecorderState )
+{
+    emit RecorderStateReceived ( eRecorderState );
 }
 
 bool CChannel::SetSockBufNumFrames ( const int iNewNumFrames, const bool bPreserve )
@@ -234,25 +267,20 @@ bool CChannel::SetSockBufNumFrames ( const int iNewNumFrames, const bool bPreser
         // only apply parameter if new parameter is different from current one
         if ( iCurSockBufNumFrames != iNewNumFrames )
         {
-            MutexSocketBuf.lock();
             {
-                // store new value
+#ifdef HEADLESS
+                std::lock_guard<std::mutex> socketLocker ( MutexSocketBuf );
+#else
+                MutexSocketBuf.lock();
+#endif
                 iCurSockBufNumFrames = iNewNumFrames;
-
-                // the network block size is a multiple of the minimum network
-                // block size
                 SockBuf.Init ( iCeltNumCodedBytes, iNewNumFrames, bUseSequenceNumber, bPreserve );
-
-                // store current auto socket buffer size setting in the mutex
-                // region since if we use the current parameter below in the
-                // if condition, it may have been changed in between the time
-                // when we have left the mutex region and entered the if
-                // condition
                 bCurDoAutoSockBufSize = bDoAutoSockBufSize;
-
-                ReturnValue = false; // -> no error
+                ReturnValue           = false;
+#if !defined( HEADLESS )
+                MutexSocketBuf.unlock();
+#endif
             }
-            MutexSocketBuf.unlock();
         }
     }
 
@@ -272,7 +300,13 @@ bool CChannel::SetSockBufNumFrames ( const int iNewNumFrames, const bool bPreser
 
 void CChannel::SetGain ( const int iChanID, const float fNewGain )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // set value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
@@ -293,7 +327,13 @@ void CChannel::SetGain ( const int iChanID, const float fNewGain )
 
 float CChannel::GetGain ( const int iChanID )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // get value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
@@ -308,7 +348,13 @@ float CChannel::GetGain ( const int iChanID )
 
 void CChannel::SetPan ( const int iChanID, const float fNewPan )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // set value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
@@ -319,7 +365,13 @@ void CChannel::SetPan ( const int iChanID, const float fNewPan )
 
 float CChannel::GetPan ( const int iChanID )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // get value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
@@ -350,7 +402,13 @@ QString CChannel::GetName()
 {
     // make sure the string is not written at the same time when it is
     // read here -> use mutex to secure access
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     return ChannelInfo.strName;
 }
@@ -369,6 +427,11 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
         // delete send message queue
         Protocol.Reset();
     }
+}
+
+void CChannel::OnMessReadyForSending ( CVector<uint8_t> vecMessage )
+{
+    OnSendProtMessage ( vecMessage );
 }
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
@@ -394,11 +457,51 @@ void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
     }
 }
 
+void CChannel::OnChangeJittBufSize ( int iNewJitBufSize )
+{
+    OnJittBufSizeChange ( iNewJitBufSize );
+}
+
+void CChannel::OnReqJittBufSize()
+{
+    emit ReqJittBufSize();
+}
+
 void CChannel::OnChangeChanGain ( int iChanID, float fNewGain ) { SetGain ( iChanID, fNewGain ); }
 
 void CChannel::OnChangeChanPan ( int iChanID, float fNewPan ) { SetPan ( iChanID, fNewPan ); }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo ) { SetChanInfo ( ChanInfo ); }
+
+void CChannel::OnClientIDReceived ( int iChanID )
+{
+    emit ClientIDReceived ( iChanID );
+}
+
+void CChannel::OnMuteStateHasChangedReceived ( int iCurID, bool bIsMuted )
+{
+    emit MuteStateHasChangedReceived ( iCurID, bIsMuted );
+}
+
+void CChannel::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
+{
+    emit ConClientListMesReceived ( vecChanInfo );
+}
+
+void CChannel::OnReqConnClientsList()
+{
+    emit ReqConnClientsList();
+}
+
+void CChannel::OnReqChanInfo()
+{
+    emit ReqChanInfo();
+}
+
+void CChannel::OnChatTextReceived ( QString strChatText )
+{
+    emit ChatTextReceived ( strChatText );
+}
 
 void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps )
 {
@@ -465,19 +568,6 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
         }
         Mutex.unlock();
     }
-}
-
-void CChannel::OnReqNetTranspProps()
-{
-    // fill network transport properties struct from current settings and send it
-    Protocol.CreateNetwTranspPropsMes ( GetNetworkTransportPropsFromCurrentSettings() );
-}
-
-void CChannel::OnReqSplitMessSupport()
-{
-    // activate split messages in our protocol (client) and return answer message to the server
-    Protocol.SetSplitMessageSupported ( true );
-    Protocol.CreateSplitMessSupportedMes();
 }
 
 CNetworkTransportProps CChannel::GetNetworkTransportPropsFromCurrentSettings()
@@ -669,7 +759,13 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket* pSocket, const CVector<uint8
         return;
     }
 
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexConvBuf );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::lock_guard<std::mutex> locker ( MutexConvBuf );
+#else
     QMutexLocker locker ( &MutexConvBuf );
+#endif
 
     // use conversion buffer to convert sound card block size in network
     // block size and take care of optional sequence number (note that

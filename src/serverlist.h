@@ -64,30 +64,56 @@ Note: this mechanism will not work in a private network.
 #pragma once
 
 #include <QObject>
-#include <QLocale>
+#if !defined( JAMULUS_USE_JUCE_NET )
+#    include <QLocale>
+#endif
 #include <QList>
-#include <QElapsedTimer>
-#include <QMutex>
+#include <chrono>
+#if defined( HEADLESS )
+#    include <mutex>
+#elif !defined( JAMULUS_USE_JUCE_NET )
+#    include <QMutex>
+#    include <QTimer>
+#endif
+#if defined( JAMULUS_USE_JUCE_NET )
+#    include <juce_core/juce_core.h>
+#    include <juce_events/juce_events.h>
+#endif
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
 #include "global.h"
 #include "util.h"
 #include "protocol.h"
+#include "net_abstraction.h"
 
 /* Classes ********************************************************************/
 class CServerListEntry : public CServerInfo
 {
 public:
-    CServerListEntry() : CServerInfo ( CHostAddress(), CHostAddress(), "", QLocale::AnyCountry, "", 0, false ) { UpdateRegistration(); }
+    CServerListEntry() :
+        CServerInfo ( CHostAddress(),
+                      CHostAddress(),
+                      "",
+#if defined( JAMULUS_USE_JUCE_NET )
+                      (QCOUNTRY_T) 0,
+#else
+                      QLocale::AnyCountry,
+#endif
+                      "",
+                      0,
+                      false )
+    {
+        UpdateRegistration();
+    }
 
-    CServerListEntry ( const CHostAddress&     NHAddr,
-                       const CHostAddress&     NLHAddr,
-                       const QString&          NsName,
-                       const QLocale::Country& NeCountry,
-                       const QString&          NsCity,
-                       const int               NiMaxNumClients,
-                       const bool              NbPermOnline ) :
+    CServerListEntry ( const CHostAddress& NHAddr,
+                       const CHostAddress& NLHAddr,
+                       const QString&      NsName,
+                       const QCOUNTRY_T&   NeCountry,
+                       const QString&      NsCity,
+                       const int           NiMaxNumClients,
+                       const bool          NbPermOnline ) :
         CServerInfo ( NHAddr, NLHAddr, NsName, NeCountry, NsCity, NiMaxNumClients, NbPermOnline )
     {
         UpdateRegistration();
@@ -105,7 +131,7 @@ public:
         UpdateRegistration();
     }
 
-    void UpdateRegistration() { RegisterTime.start(); }
+    void UpdateRegistration() { RegisterTime = std::chrono::steady_clock::now(); }
 
     static CServerListEntry parse ( QString strHAddr,
                                     QString strLHAddr,
@@ -118,7 +144,7 @@ public:
     QString                 toCSV();
 
     // time on which the entry was registered
-    QElapsedTimer RegisterTime;
+    std::chrono::steady_clock::time_point RegisterTime;
 
 protected:
     // Taken from src/settings.h - the same comment applies
@@ -141,7 +167,8 @@ public:
                          const QString& strServerPublicIP,
                          const int      iNumChannels,
                          const bool     bNEnableIPv6,
-                         CProtocol*     pNConLProt );
+                         CProtocol*     pNConLProt,
+                         ITimerScheduler* pTimerSchedulerIn = nullptr );
 
     void    SetServerName ( const QString& strNewName );
     QString GetServerName() { return ServerList[0].strName; }
@@ -149,8 +176,13 @@ public:
     void    SetServerCity ( const QString& strNewCity );
     QString GetServerCity() { return ServerList[0].strCity; }
 
+#if defined( JAMULUS_USE_JUCE_NET )
+    void        SetServerCountry ( const QCOUNTRY_T eNewCountry );
+    QCOUNTRY_T  GetServerCountry() { return ServerList[0].eCountry; }
+#else
     void             SetServerCountry ( const QLocale::Country eNewCountry );
     QLocale::Country GetServerCountry() { return ServerList[0].eCountry; }
+#endif
 
     void    SetDirectoryAddress ( const QString sNDirectoryAddress );
     QString GetDirectoryAddress() { return strDirectoryAddress; }
@@ -186,7 +218,13 @@ protected:
     void Save();
     void SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus );
 
+#if defined( HEADLESS )
+    std::mutex Mutex;
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::CriticalSection Mutex;
+#else
     QMutex Mutex;
+#endif
 
     CHostAddress   DirectoryAddress;
     EDirectoryType DirectoryType;
@@ -206,28 +244,110 @@ protected:
     // server registration status
     ESvrRegStatus eSvrRegStatus;
 
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    QList<QString> vWhiteList;
+#else
     QList<QHostAddress> vWhiteList;
+#endif
     QString             strMinServerVersion;
 
-    CProtocol* pConnLessProtocol;
+    CProtocol*      pConnLessProtocol;
+    ITimerScheduler* pTimerScheduler;
 
     // count of registration retries
     int iSvrRegRetries;
 
+#ifdef HEADLESS
+    TimerId pollListTimerId;
+    TimerId pingServerInListTimerId;
+    TimerId pingServersTimerId;
+    TimerId refreshRegistrationTimerId;
+    TimerId clRegisterRespTimerId;
+    TimerId isPermanentTimerId;
+#endif
+
+#if defined( JAMULUS_USE_JUCE_NET )
+    struct PollListTimer : public juce::Timer
+    {
+        explicit PollListTimer ( CServerListManager& ownerIn ) : owner ( ownerIn ) {}
+        void timerCallback() override { owner.OnTimerPollList(); }
+        CServerListManager& owner;
+    };
+    struct PingServerInListTimer : public juce::Timer
+    {
+        explicit PingServerInListTimer ( CServerListManager& ownerIn ) : owner ( ownerIn ) {}
+        void timerCallback() override { owner.OnTimerPingServerInList(); }
+        CServerListManager& owner;
+    };
+    struct PingServersTimer : public juce::Timer
+    {
+        explicit PingServersTimer ( CServerListManager& ownerIn ) : owner ( ownerIn ) {}
+        void timerCallback() override { owner.OnTimerPingServers(); }
+        CServerListManager& owner;
+    };
+    struct RefreshRegistrationTimer : public juce::Timer
+    {
+        explicit RefreshRegistrationTimer ( CServerListManager& ownerIn ) : owner ( ownerIn ) {}
+        void timerCallback() override { owner.OnTimerRefreshRegistration(); }
+        CServerListManager& owner;
+    };
+    struct CLRegisterServerRespTimer : public juce::Timer
+    {
+        explicit CLRegisterServerRespTimer ( CServerListManager& ownerIn ) : owner ( ownerIn ) {}
+        void timerCallback() override { owner.OnTimerCLRegisterServerResp(); }
+        CServerListManager& owner;
+    };
+    struct IsPermanentTimer : public juce::Timer
+    {
+        explicit IsPermanentTimer ( CServerListManager& ownerIn ) : owner ( ownerIn ) {}
+        void timerCallback() override { owner.OnTimerIsPermanent(); }
+        CServerListManager& owner;
+    };
+    PollListTimer TimerPollList;
+    PingServerInListTimer TimerPingServerInList;
+    PingServersTimer TimerPingServers;
+    RefreshRegistrationTimer TimerRefreshRegistration;
+    CLRegisterServerRespTimer TimerCLRegisterServerResp;
+    IsPermanentTimer TimerIsPermanent;
+#else
     QTimer TimerPollList;
     QTimer TimerPingServerInList;
     QTimer TimerPingServers;
     QTimer TimerRefreshRegistration;
     QTimer TimerCLRegisterServerResp;
     QTimer TimerIsPermanent;
+#endif
 
 public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();
     void OnTimerPingServers();
-    void OnTimerRefreshRegistration() { SetRegistered ( true ); }
+    void OnTimerRefreshRegistration()
+    {
+        SetRegistered ( true );
+#ifdef HEADLESS
+        if ( pTimerScheduler && !bIsDirectory )
+        {
+            if ( refreshRegistrationTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( refreshRegistrationTimerId );
+                refreshRegistrationTimerId = 0;
+            }
+
+            refreshRegistrationTimerId = pTimerScheduler->startTimerMs (
+                SERVLIST_REGIST_INTERV_MINUTES * 60000,
+                [this]() { OnTimerRefreshRegistration(); } );
+        }
+#endif
+    }
     void OnTimerCLRegisterServerResp();
-    void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
+    void OnTimerIsPermanent()
+    {
+#if defined( JAMULUS_USE_JUCE_NET )
+        TimerIsPermanent.stopTimer();
+#endif
+        ServerList[0].bPermanentOnline = true;
+    }
 
     void OnAboutToQuit();
 

@@ -35,7 +35,9 @@
 /* Classes ********************************************************************/
 class CSound : public CSoundBase, public oboe::AudioStreamCallback
 {
+    #if !defined( JAMULUS_USE_JUCE_NET )
     Q_OBJECT
+    #endif
 
 public:
     static const uint8_t RING_FACTOR;

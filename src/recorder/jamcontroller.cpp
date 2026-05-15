@@ -118,11 +118,13 @@ void CJamController::SetRecordingDir ( QString newRecordingDir, int iServerFrame
         // QT signals
         QObject::connect ( pthJamRecorder, &QThread::finished, pJamRecorder, &QObject::deleteLater );
 
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
         QObject::connect ( QCoreApplication::instance(),
                            &QCoreApplication::aboutToQuit,
                            pJamRecorder,
                            &CJamRecorder::OnAboutToQuit,
                            Qt::ConnectionType::BlockingQueuedConnection );
+#endif
 
         // from the controller to the recorder
         QObject::connect ( this, &CJamController::RestartRecorder, pJamRecorder, &CJamRecorder::OnTriggerSession );

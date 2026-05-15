@@ -24,9 +24,7 @@
 
 #pragma once
 
-#include <QDataStream>
 #include <QString>
-#include <QIODevice>
 
 namespace recorder
 {
@@ -88,26 +86,4 @@ public:
     static const uint32_t chunkSize = 0x7ffff000; // magic for unspecified length
 };
 
-class CWaveStream : public QDataStream
-{
-public:
-    CWaveStream ( const uint16_t numChannels );
-    explicit CWaveStream ( QIODevice* iod, const uint16_t numChannels );
-    CWaveStream ( QByteArray* iod, QIODevice::OpenMode flags, const uint16_t numChannels );
-    CWaveStream ( const QByteArray& ba, const uint16_t numChannels );
-
-    void finalise();
-
-private:
-    void waveStreamHeaders();
-
-    const uint16_t  numChannels;
-    const int64_t   initialPos;
-    const ByteOrder initialByteOrder;
-};
-
 } // namespace recorder
-
-recorder::CWaveStream& operator<< ( recorder::CWaveStream& out, recorder::HdrRiff& hdrRiff );
-recorder::CWaveStream& operator<< ( recorder::CWaveStream& out, recorder::FmtSubChunk& fmtSubChunk );
-recorder::CWaveStream& operator<< ( recorder::CWaveStream& out, recorder::DataSubChunkHdr& dataSubChunkHdr );

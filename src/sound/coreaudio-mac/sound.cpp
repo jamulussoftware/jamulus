@@ -262,7 +262,7 @@ int CSound::CountChannels ( AudioDeviceID devID, bool isInput )
 QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
     // secure lNumDevs/strDriverNames access
-    QMutexLocker locker ( &Mutex );
+    std::lock_guard<std::mutex> locker ( Mutex );
 
     // reload the driver list of available sound devices
     GetAvailableInOutDevices();
@@ -828,7 +828,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID inDevice,
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
     // both, the input and output device use the same callback function
-    QMutexLocker locker ( &pSound->MutexAudioProcessCallback );
+    std::lock_guard<std::mutex> locker ( pSound->MutexAudioProcessCallback );
 
     const int           iCoreAudioBufferSizeMono = pSound->iCoreAudioBufferSizeMono;
     const int           iSelInBufferLeft         = pSound->iSelInBufferLeft;

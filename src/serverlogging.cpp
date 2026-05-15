@@ -23,12 +23,13 @@
 \******************************************************************************/
 
 #include "serverlogging.h"
+#include <juce_core/juce_core.h>
 
 // Server logging --------------------------------------------------------------
 CServerLogging::~CServerLogging()
 {
     // close logging file of open
-    if ( File.isOpen() )
+    if ( File.is_open() )
     {
         File.close();
     }
@@ -36,16 +37,11 @@ CServerLogging::~CServerLogging()
 
 void CServerLogging::Start ( const QString& strLoggingFileName )
 {
-    // open file
-    File.setFileName ( strLoggingFileName );
-
-    if ( File.open ( QIODevice::Append | QIODevice::Text ) )
-    {
-        bDoLogging = true;
-    }
+    File.open ( strLoggingFileName.toStdWString(), std::ios::out | std::ios::app | std::ios::binary );
+    if ( File.is_open() ) { bDoLogging = true; }
 }
 
-void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr, const int iNumberOfConnectedClients )
+void CServerLogging::AddNewConnection ( const CHostAddress& ClientInetAddr, const int iNumberOfConnectedClients )
 {
     // logging of new connected channel
     const QString strLogStr =
@@ -68,18 +64,15 @@ void CServerLogging::operator<< ( const QString& sNewStr )
 {
     if ( bDoLogging )
     {
-        // append new line in logging file
-        QTextStream out ( &File );
-        out << sNewStr << '\n';
-        out.flush();
+        const QByteArray bytes = sNewStr.toUtf8();
+        File.write ( bytes.constData(), static_cast<std::streamsize> ( bytes.size() ) );
+        File.put ( '\n' );
+        File.flush();
     }
 }
 
 QString CServerLogging::CurTimeDatetoLogString()
 {
-    // time and date to string conversion
-    const QDateTime curDateTime = QDateTime::currentDateTime();
-
-    // format date and time output according to "2006-09-30 11:38:08"
-    return curDateTime.toString ( "yyyy-MM-dd HH:mm:ss" );
+    const juce::String formatted = juce::Time::getCurrentTime().formatted ( "%Y-%m-%d %H:%M:%S" );
+    return QString::fromUtf8 ( formatted.toRawUTF8() );
 }

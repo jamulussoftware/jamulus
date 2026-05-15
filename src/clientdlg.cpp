@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "clientdlg.h"
+#include <filesystem>
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
@@ -643,7 +644,21 @@ void CClientDlg::ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept )
         const QString strFileNameWithPath = UrlIterator.next().toLocalFile();
 
         // check all given URLs and if any has the correct suffix
-        if ( !strFileNameWithPath.isEmpty() && ( QFileInfo ( strFileNameWithPath ).suffix() == MIX_SETTINGS_FILE_SUFFIX ) )
+        bool isValidExt = false;
+        if ( !strFileNameWithPath.isEmpty() )
+        {
+            std::filesystem::path p ( strFileNameWithPath.toStdWString() );
+            if ( p.has_extension() )
+            {
+                QString ext = QString::fromStdWString ( p.extension().wstring() );
+                if ( ext.startsWith ( '.' ) )
+                {
+                    ext.remove ( 0, 1 );
+                }
+                isValidExt = ( ext.compare ( MIX_SETTINGS_FILE_SUFFIX, Qt::CaseInsensitive ) == 0 );
+            }
+        }
+        if ( isValidExt )
         {
             if ( bCheckAccept )
             {

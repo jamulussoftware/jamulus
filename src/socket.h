@@ -27,8 +27,10 @@
 #include <QObject>
 #include <QThread>
 #include <QMutex>
+#include <cstring>
 #include <vector>
 #include "global.h"
+#include "net_abstraction.h"
 #include "protocol.h"
 #include "util.h"
 #ifndef _WIN32
@@ -36,18 +38,11 @@
 #    include <sys/socket.h>
 #endif
 
-// The header files channel.h and server.h require to include this header file
-// so we get a cyclic dependency. To solve this issue, a prototype of the
-// channel class and server class is defined here.
-class CServer;  // forward declaration of CServer
-class CChannel; // forward declaration of CChannel
+class CServer;
+class CChannel;
 
-/* Definitions ****************************************************************/
-// number of ports we try to bind until we give up
 #define NUM_SOCKET_PORTS_TO_TRY 100
 
-/* Classes ********************************************************************/
-/* Base socket class -------------------------------------------------------- */
 class CSocket : public QObject
 {
     Q_OBJECT
@@ -79,8 +74,8 @@ protected:
 
     CVector<uint8_t> vecbyRecBuf;
 
-    CChannel* pChannel; // for client
-    CServer*  pServer;  // for server
+    CChannel* pChannel;
+    CServer*  pServer;
 
     bool bIsClient;
 
@@ -92,10 +87,10 @@ public:
     void OnDataReceived();
 
 signals:
-    void NewConnection(); // for the client
+    void NewConnection();
 
     void NewConnection ( int iChID, int iTotChans,
-                         CHostAddress RecHostAddr ); // for the server
+                         CHostAddress RecHostAddr );
 
     void ServerFull ( CHostAddress RecHostAddr );
 
@@ -106,11 +101,6 @@ signals:
     void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
 };
 
-/* Socket which runs in a separate high priority thread --------------------- */
-// The receive socket should be put in a high priority thread to ensure the GUI
-// does not effect the stability of the audio stream (e.g. if the GUI is on
-// high load because of a table update, the incoming network packets must still
-// be put in the jitter buffer with highest priority).
 class CHighPrioSocket : public QObject
 {
     Q_OBJECT
@@ -138,8 +128,6 @@ public:
 
     void Start()
     {
-        // starts the high priority socket receive thread (with using blocking
-        // socket request call)
         NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
     }
 
@@ -158,13 +146,8 @@ protected:
 
         void Stop()
         {
-            // disable run flag so that the thread loop can be exit
             bRun = false;
-
-            // to leave blocking wait for receive
             pSocket->Close();
-
-            // give thread some time to terminate
             wait ( 5000 );
         }
 
@@ -173,14 +156,10 @@ protected:
     protected:
         void run()
         {
-            // make sure the socket pointer is initialized (should be always the
-            // case)
             if ( pSocket != nullptr )
             {
                 while ( bRun )
                 {
-                    // this function is a blocking function (waiting for network
-                    // packets to be received and processed)
                     pSocket->OnDataReceived();
                 }
             }
@@ -192,16 +171,10 @@ protected:
 
     void Init()
     {
-        // Creation of the new socket thread which has to have the highest
-        // possible thread priority to make sure the jitter buffer is reliably
-        // filled with the network audio packets and does not get interrupted
-        // by other GUI threads. The following code is based on:
-        // http://qt-project.org/wiki/Threads_Events_QObjects
         Socket.moveToThread ( &NetworkWorkerThread );
 
         NetworkWorkerThread.SetSocket ( &Socket );
 
-        // connect the "InvalidPacketReceived" signal
         QObject::connect ( &Socket, &CSocket::InvalidPacketReceived, this, &CHighPrioSocket::InvalidPacketReceived );
     }
 
@@ -212,7 +185,41 @@ signals:
     void InvalidPacketReceived ( CHostAddress RecHostAddr );
 };
 
-// overlay generic, IPv4 and IPv6 sockaddr structures
+class SocketNetworkAdapter : public INetworkSocket
+{
+public:
+    explicit SocketNetworkAdapter ( CHighPrioSocket* s ) : socket ( s ) {}
+
+    bool bind ( const NetEndpoint& ) override { return true; }
+
+    bool joinMulticast ( const NetEndpoint& ) override { return false; }
+
+    bool sendTo ( const NetEndpoint& remote, const void* data, std::size_t size ) override
+    {
+        if ( socket == nullptr || data == nullptr || size == 0 )
+            return false;
+
+        CVector<uint8_t> buf;
+        buf.Init ( static_cast<int> ( size ) );
+        std::memcpy ( &buf[0], data, size );
+
+#if defined( JAMULUS_USE_JUCE_NET )
+        CHostAddress hostAddr ( remote.address, static_cast<uint16_t> ( remote.port ) );
+#else
+        QString      addrStr = QString::fromStdString ( remote.address );
+        CHostAddress hostAddr ( QHostAddress ( addrStr ), static_cast<quint16> ( remote.port ) );
+#endif
+
+        socket->SendPacket ( buf, hostAddr );
+        return true;
+    }
+
+    int recvFrom ( NetEndpoint&, void*, std::size_t ) override { return 0; }
+
+private:
+    CHighPrioSocket* socket;
+};
+
 typedef union
 {
     struct sockaddr     sa;

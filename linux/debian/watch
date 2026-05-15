@@ -1,5 +1,0 @@
-version=4
-# GitHub hosted projects
-opts=uversionmangle=s%_%.%g,filenamemangle=s%(?:.*?)?(r\d[\d_]*)\.tar\.gz%@PACKAGE@-$1.tar.gz% \
-   https://github.com/jamulussoftware/jamulus/tags \
-   (?:.*?/)?r(\d[\d_]*)\.tar\.gz debian uupdate

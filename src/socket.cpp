@@ -47,13 +47,11 @@ CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint
     bEnableIPv6 ( bEnableIPv6 )
 {
     Init ( iPortNumber, iQosNumber, strServerBindIP );
-
-    // client connections:
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pChannel, &CChannel::OnProtocolMessageReceived );
-
     QObject::connect ( this, &CSocket::ProtocolCLMessageReceived, pChannel, &CChannel::OnProtocolCLMessageReceived );
-
     QObject::connect ( this, static_cast<void ( CSocket::* )()> ( &CSocket::NewConnection ), pChannel, &CChannel::OnNewConnection );
+#endif
 }
 
 CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
@@ -63,18 +61,15 @@ CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQ
     bEnableIPv6 ( bEnableIPv6 )
 {
     Init ( iPortNumber, iQosNumber, strServerBindIP );
-
-    // server connections:
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pServer, &CServer::OnProtocolMessageReceived );
-
     QObject::connect ( this, &CSocket::ProtocolCLMessageReceived, pServer, &CServer::OnProtocolCLMessageReceived );
-
     QObject::connect ( this,
                        static_cast<void ( CSocket::* ) ( int, int, CHostAddress )> ( &CSocket::NewConnection ),
                        pServer,
                        &CServer::OnNewConnection );
-
     QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
+#endif
 }
 
 void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, const QString& strNewServerBindIP )
@@ -159,7 +154,16 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
         if ( !strServerBindIP.isEmpty() )
         {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            QByteArray addrBytes = strServerBindIP.toLocal8Bit();
+            struct in_addr v4addr;
+            if ( inet_pton ( AF_INET, addrBytes.constData(), &v4addr ) == 1 )
+            {
+                UdpSocketAddr.sa4.sin_addr.s_addr = v4addr.s_addr;
+            }
+#else
             UdpSocketAddr.sa4.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP ).toIPv4Address() );
+#endif
         }
     }
 
@@ -259,27 +263,76 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
     memset ( &UdpSocketAddr, 0, sizeof ( UdpSocketAddr ) );
 
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     const int iVecSizeOut = vecbySendBuf.Size();
 
     if ( iVecSizeOut > 0 )
     {
-        // send packet through network (we have to convert the constant unsigned
-        // char vector in "const char*", for this we first convert the const
-        // uint8_t vector in a read/write uint8_t vector and then do the cast to
-        // const char *)
-
-        for ( int tries = 0; tries < 2; tries++ ) // retry loop in case send fails on iOS
+        for ( int tries = 0; tries < 2; tries++ )
         {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            std::string addrStr  = HostAddr.address;
+            const char* addrBytes = addrStr.c_str();
+
+            if ( bEnableIPv6 )
+            {
+                UdpSocketAddr.sa6.sin6_family = AF_INET6;
+                UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
+
+                if ( inet_pton ( AF_INET6, addrBytes, &UdpSocketAddr.sa6.sin6_addr ) <= 0 )
+                {
+                    struct in_addr v4addr;
+                    if ( inet_pton ( AF_INET, addrBytes, &v4addr ) <= 0 )
+                    {
+                        return;
+                    }
+
+                    uint32_t* addr = (uint32_t*) &UdpSocketAddr.sa6.sin6_addr;
+                    addr[0]        = 0;
+                    addr[1]        = 0;
+                    addr[2]        = htonl ( 0xFFFF );
+                    addr[3]        = v4addr.s_addr;
+                }
+
+                status = sendto ( UdpSocket,
+                                  (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                                  iVecSizeOut,
+                                  0,
+                                  &UdpSocketAddr.sa,
+                                  sizeof ( UdpSocketAddr.sa6 ) );
+            }
+            else
+            {
+                UdpSocketAddr.sa4.sin_family = AF_INET;
+                UdpSocketAddr.sa4.sin_port   = htons ( HostAddr.iPort );
+
+                struct in_addr v4addr;
+                if ( inet_pton ( AF_INET, addrBytes, &v4addr ) <= 0 )
+                {
+                    return;
+                }
+
+                UdpSocketAddr.sa4.sin_addr.s_addr = v4addr.s_addr;
+
+                status = sendto ( UdpSocket,
+                                  (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                                  iVecSizeOut,
+                                  0,
+                                  &UdpSocketAddr.sa,
+                                  sizeof ( UdpSocketAddr.sa4 ) );
+            }
+#else
             if ( HostAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
             {
                 if ( bEnableIPv6 )
                 {
-                    // Linux and Mac allow to pass an AF_INET address to a dual-stack socket,
-                    // but Windows does not. So use a V4MAPPED address in an AF_INET6 sockaddr,
-                    // which works on all platforms.
-
                     UdpSocketAddr.sa6.sin6_family = AF_INET6;
                     UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
 
@@ -324,17 +377,15 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
                                   &UdpSocketAddr.sa,
                                   sizeof ( UdpSocketAddr.sa6 ) );
             }
+#endif
 
             if ( status >= 0 )
             {
-                break; // do not retry if success
+                break;
             }
 
 #ifdef Q_OS_IOS
-            // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
-            Init ( iPortNumber, iQosNumber, strServerBindIP ); // reinit
-
-            // loop back to retry
+            Init ( iPortNumber, iQosNumber, strServerBindIP );
 #endif
         }
     }
@@ -384,6 +435,35 @@ void CSocket::OnDataReceived()
     }
 
     // convert address of client
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    char addrBuf[INET6_ADDRSTRLEN] = {};
+
+    if ( UdpSocketAddr.sa.sa_family == AF_INET6 )
+    {
+        if ( IN6_IS_ADDR_V4MAPPED ( &( UdpSocketAddr.sa6.sin6_addr ) ) )
+        {
+            struct in_addr v4addr;
+            std::memcpy ( &v4addr, &UdpSocketAddr.sa6.sin6_addr.s6_addr[12], sizeof ( v4addr ) );
+            inet_ntop ( AF_INET, &v4addr, addrBuf, sizeof ( addrBuf ) );
+        }
+        else
+        {
+            inet_ntop ( AF_INET6, &UdpSocketAddr.sa6.sin6_addr, addrBuf, sizeof ( addrBuf ) );
+        }
+
+        RecHostAddr.address = std::string ( addrBuf );
+        RecHostAddr.iPort   = ntohs ( UdpSocketAddr.sa6.sin6_port );
+    }
+    else
+    {
+        struct in_addr v4addr;
+        v4addr.s_addr = UdpSocketAddr.sa4.sin_addr.s_addr;
+        inet_ntop ( AF_INET, &v4addr, addrBuf, sizeof ( addrBuf ) );
+
+        RecHostAddr.address = std::string ( addrBuf );
+        RecHostAddr.iPort   = ntohs ( UdpSocketAddr.sa4.sin_port );
+    }
+#else
     if ( UdpSocketAddr.sa.sa_family == AF_INET6 )
     {
         if ( IN6_IS_ADDR_V4MAPPED ( &( UdpSocketAddr.sa6.sin6_addr ) ) )
@@ -402,6 +482,7 @@ void CSocket::OnDataReceived()
         RecHostAddr.InetAddr.setAddress ( ntohl ( UdpSocketAddr.sa4.sin_addr.s_addr ) );
         RecHostAddr.iPort = ntohs ( UdpSocketAddr.sa4.sin_port );
     }
+#endif
 
     // check if this is a protocol message
     int              iRecCounter;
@@ -413,17 +494,27 @@ void CSocket::OnDataReceived()
         // this is a protocol message, check the type of the message
         if ( CProtocol::IsConnectionLessMessageID ( iRecID ) )
         {
-            //### TODO: BEGIN ###//
-            // a copy of the vector is used -> avoid malloc in real-time routine
+            // In headless builds, call directly to avoid Qt signals
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            if ( bIsClient && pChannel )
+                pChannel->OnProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
+            else if ( pServer )
+                pServer->OnProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
+#else
             emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
-            //### TODO: END ###//
+#endif
         }
         else
         {
-            //### TODO: BEGIN ###//
-            // a copy of the vector is used -> avoid malloc in real-time routine
+            // In headless builds, call directly to avoid Qt signals
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            if ( bIsClient && pChannel )
+                pChannel->OnProtocolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
+            else if ( pServer )
+                pServer->OnProtocolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
+#else
             emit ProtocolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
-            //### TODO: END ###//
+#endif
         }
     }
     else
@@ -441,13 +532,19 @@ void CSocket::OnDataReceived()
                 break;
 
             case PS_NEW_CONNECTION:
-                // inform other objects that new connection was established
+                // inform other objects about new connection
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                if ( pChannel )
+                    pChannel->OnNewConnection();
+#else
                 emit NewConnection();
+#endif
                 break;
 
             case PS_AUDIO_INVALID:
-                // inform about received invalid packet by fireing an event
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
                 emit InvalidPacketReceived ( RecHostAddr );
+#endif
                 break;
 
             default:
@@ -463,22 +560,31 @@ void CSocket::OnDataReceived()
 
             if ( pServer->PutAudioData ( vecbyRecBuf, iNumBytesRead, RecHostAddr, iCurChanID ) )
             {
-                // we have a new connection, emit a signal
+                // we have a new connection
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                pServer->OnNewConnection ( iCurChanID, pServer->GetNumberOfConnectedClients(), RecHostAddr );
+#else
                 emit NewConnection ( iCurChanID, pServer->GetNumberOfConnectedClients(), RecHostAddr );
+#endif
 
                 // this was an audio packet, start server if it is in sleep mode
                 if ( !pServer->IsRunning() )
                 {
-                    // (note that Qt will delete the event object when done)
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
                     QCoreApplication::postEvent ( pServer, new CCustomEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+#endif
                 }
             }
 
             // check if no channel is available
             if ( iCurChanID == INVALID_CHANNEL_ID )
             {
-                // fire message for the state that no free channel is available
+                // notify about no free channel
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                pServer->OnServerFull ( RecHostAddr );
+#else
                 emit ServerFull ( RecHostAddr );
+#endif
             }
         }
     }

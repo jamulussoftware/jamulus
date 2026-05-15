@@ -25,8 +25,6 @@
 #pragma once
 
 #include <QThread>
-#include <QDateTime>
-#include <QFile>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
@@ -59,7 +57,7 @@ enum EPutDataStat
 };
 
 /* Classes ********************************************************************/
-class CChannel : public QObject
+class CChannel : public QObject, public IProtocolHandler
 {
     Q_OBJECT
 
@@ -225,25 +223,48 @@ protected:
     EAudComprType eAudioCompressionType;
     int           iNumAudioChannels;
 
+#if defined( HEADLESS )
+    std::mutex Mutex;
+    std::mutex MutexSocketBuf;
+    std::mutex MutexConvBuf;
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::mutex Mutex;
+    std::mutex MutexSocketBuf;
+    std::mutex MutexConvBuf;
+#else
     QMutex Mutex;
     QMutex MutexSocketBuf;
     QMutex MutexConvBuf;
+#endif
 
     CStereoSignalLevelMeter SignalLevelMeter;
+
+public:
+    void SetTimerScheduler ( ITimerScheduler* scheduler ) { Protocol.SetTimerScheduler ( scheduler ); }
+
+    void OnMessReadyForSending ( CVector<uint8_t> vecMessage ) override;
+    void OnChangeJittBufSize ( int iNewJitBufSize ) override;
+    void OnReqJittBufSize() override;
+    void OnClientIDReceived ( int iChanID ) override;
+    void OnChangeChanGain ( int iChanID, float fNewGain ) override;
+    void OnChangeChanPan ( int iChanID, float fNewPan ) override;
+    void OnMuteStateHasChangedReceived ( int iCurID, bool bIsMuted ) override;
+    void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo ) override;
+    void OnReqConnClientsList() override;
+    void OnChangeChanInfo ( CChannelCoreInfo ChanInfo ) override;
+    void OnReqChanInfo() override;
+    void OnChatTextReceived ( QString strChatText ) override;
+    void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps ) override;
+    void OnReqNetTranspProps() override;
+    void OnReqSplitMessSupport() override;
+    void OnSplitMessSupported() override;
+    void OnLicenceRequired ( ELicenceType eLicenceType ) override;
+    void OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion ) override;
+    void OnRecorderStateReceived ( ERecorderState eRecorderState ) override;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
-    void OnChangeChanGain ( int iChanID, float fNewGain );
-    void OnChangeChanPan ( int iChanID, float fNewPan );
-    void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
-    void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
-    void OnReqNetTranspProps();
-    void OnReqSplitMessSupport();
-    void OnSplitMessSupported() { Protocol.SetSplitMessageSupported ( true ); }
-
-    void OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
-
     void OnParseMessageBody ( CVector<uint8_t> vecbyMesBodyData, int iRecCounter, int iRecID )
     {
         // note that the return value is ignored here

@@ -23,6 +23,24 @@
 \******************************************************************************/
 
 #include "util.h"
+#if defined( JAMULUS_USE_JUCE_NET )
+#include "juce_net_abstraction.h"
+#endif
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
+#include <QCoreApplication>
+#endif
+#include <QFile>
+#ifdef _WIN32
+#    include <winsock2.h>
+#    include <ws2tcpip.h>
+#else
+#    include <arpa/inet.h>
+#    include <sys/socket.h>
+#    include <netinet/in.h>
+#    include <unistd.h>
+#    include <netdb.h>
+#endif
+#include <juce_core/juce_core.h>
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
@@ -170,11 +188,12 @@ uint32_t CCRC::GetCRC()
 }
 
 // CHighPrecisionTimer implementation ******************************************
-#ifdef _WIN32
-CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize ) : bUseDoubleSystemFrameSize ( bNewUseDoubleSystemFrameSize )
+CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize ) :
+    veciTimeOutIntervals(),
+    iCurPosInVector ( 0 ),
+    iIntervalCounter ( 0 ),
+    bUseDoubleSystemFrameSize ( bNewUseDoubleSystemFrameSize )
 {
-    // add some error checking, the high precision timer implementation only
-    // supports 64 and 128 samples frame size at 48 kHz sampling rate
 #    if ( SYSTEM_FRAME_SIZE_SAMPLES != 64 ) && ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES != 128 )
 #        error "Only system frame size of 64 and 128 samples is supported by this module"
 #    endif
@@ -182,184 +201,388 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSi
 #        error "Only a system sample rate of 48 kHz is supported by this module"
 #    endif
 
-    // Since QT only supports a minimum timer resolution of 1 ms but for our
-    // server we require a timer interval of 2.333 ms for 128 samples
-    // frame size at 48 kHz sampling rate.
-    // To support this interval, we use a timer with 2 ms resolution for 128
-    // samples frame size and 1 ms resolution for 64 samples frame size.
-    // Then we fire the actual frame timer if the error to the actual
-    // required interval is minimum.
     veciTimeOutIntervals.Init ( 3 );
-
-    // for 128 sample frame size at 48 kHz sampling rate with 2 ms timer resolution:
-    // actual intervals:  0.0  2.666  5.333  8.0
-    // quantized to 2 ms: 0    2      6      8 (0)
-    // for 64 sample frame size at 48 kHz sampling rate with 1 ms timer resolution:
-    // actual intervals:  0.0  1.333  2.666  4.0
-    // quantized to 2 ms: 0    1      3      4 (0)
     veciTimeOutIntervals[0] = 0;
     veciTimeOutIntervals[1] = 1;
     veciTimeOutIntervals[2] = 0;
-
-    Timer.setTimerType ( Qt::PreciseTimer );
-
-    // connect timer timeout signal
-    QObject::connect ( &Timer, &QTimer::timeout, this, &CHighPrecisionTimer::OnTimer );
 }
 
 void CHighPrecisionTimer::Start()
 {
-    // reset position pointer and counter
     iCurPosInVector  = 0;
     iIntervalCounter = 0;
 
     if ( bUseDoubleSystemFrameSize )
     {
-        // start internal timer with 2 ms resolution for 128 samples frame size
-        Timer.start ( 2 );
+        juce::HighResolutionTimer::startTimer ( 2 );
     }
     else
     {
-        // start internal timer with 1 ms resolution for 64 samples frame size
-        Timer.start ( 1 );
+        juce::HighResolutionTimer::startTimer ( 1 );
     }
 }
 
 void CHighPrecisionTimer::Stop()
 {
-    // stop timer
-    Timer.stop();
+    juce::HighResolutionTimer::stopTimer();
 }
 
-void CHighPrecisionTimer::OnTimer()
+void CHighPrecisionTimer::hiResTimerCallback()
 {
-    // check if maximum number of high precision timer intervals are
-    // finished
     if ( veciTimeOutIntervals[iCurPosInVector] == iIntervalCounter )
     {
-        // reset interval counter
         iIntervalCounter = 0;
 
-        // go to next position in vector, take care of wrap around
         iCurPosInVector++;
         if ( iCurPosInVector == veciTimeOutIntervals.Size() )
         {
             iCurPosInVector = 0;
         }
 
-        // minimum time error to actual required timer interval is reached,
-        // emit signal for server
-        emit timeout();
+        if ( callback )
+        {
+            callback();
+        }
     }
     else
     {
-        // next high precision timer interval
         iIntervalCounter++;
     }
 }
-#else // Mac and Linux
-CHighPrecisionTimer::CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize ) : bRun ( false )
-{
-    // calculate delay in ns
-    uint64_t iNsDelay;
-
-    if ( bUseDoubleSystemFrameSize )
-    {
-        iNsDelay = ( (uint64_t) DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) / (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
-    }
-    else
-    {
-        iNsDelay = ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) / (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
-    }
-
-#    if defined( __APPLE__ ) || defined( __MACOSX )
-    // calculate delay in mach absolute time
-    struct mach_timebase_info timeBaseInfo;
-    mach_timebase_info ( &timeBaseInfo );
-
-    Delay = ( iNsDelay * (uint64_t) timeBaseInfo.denom ) / (uint64_t) timeBaseInfo.numer;
-#    else
-    // set delay
-    Delay = iNsDelay;
-#    endif
-}
-
-void CHighPrecisionTimer::Start()
-{
-    // only start if not already running
-    if ( !bRun )
-    {
-        // set run flag
-        bRun = true;
-
-        // set initial end time
-#    if defined( __APPLE__ ) || defined( __MACOSX )
-        NextEnd = mach_absolute_time() + Delay;
-#    else
-        clock_gettime ( CLOCK_MONOTONIC, &NextEnd );
-
-        NextEnd.tv_nsec += Delay;
-        if ( NextEnd.tv_nsec >= 1000000000L )
-        {
-            NextEnd.tv_sec++;
-            NextEnd.tv_nsec -= 1000000000L;
-        }
-#    endif
-
-        // start thread
-        QThread::start ( QThread::TimeCriticalPriority );
-    }
-}
-
-void CHighPrecisionTimer::Stop()
-{
-    // set flag so that thread can leave the main loop
-    bRun = false;
-
-    // give thread some time to terminate
-    wait ( 5000 );
-}
-
-void CHighPrecisionTimer::run()
-{
-    // loop until the thread shall be terminated
-    while ( bRun )
-    {
-        // call processing routine by fireing signal
-
-        //### TODO: BEGIN ###//
-        // by emit a signal we leave the high priority thread -> maybe use some
-        // other connection type to have something like a true callback, e.g.
-        //     "Qt::DirectConnection" -> Can this work?
-        emit timeout();
-        //### TODO: END ###//
-
-        // now wait until the next buffer shall be processed (we
-        // use the "increment method" to make sure we do not introduce
-        // a timing drift)
-#    if defined( __APPLE__ ) || defined( __MACOSX )
-        mach_wait_until ( NextEnd );
-
-        NextEnd += Delay;
-#    else
-        clock_nanosleep ( CLOCK_MONOTONIC, TIMER_ABSTIME, &NextEnd, NULL );
-
-        NextEnd.tv_nsec += Delay;
-        if ( NextEnd.tv_nsec >= 1000000000L )
-        {
-            NextEnd.tv_sec++;
-            NextEnd.tv_nsec -= 1000000000L;
-        }
-#    endif
-    }
-}
-#endif
 
 /******************************************************************************\
 * GUI Utilities                                                                *
 \******************************************************************************/
+#if !defined( HEADLESS )
+#if defined( JAMULUS_USE_JUCE_NET )
+CBaseDlg::CBaseDlg ( const juce::String& title, juce::Component* parent ) : juce::DialogWindow ( title, juce::Colours::darkgrey, true, true )
+{
+    setUsingNativeTitleBar ( true );
+    setResizable ( false, false );
+
+    if ( parent != nullptr )
+    {
+        centreAroundComponent ( parent, getWidth() > 0 ? getWidth() : 420, getHeight() > 0 ? getHeight() : 240 );
+    }
+}
+
+int CBaseDlg::exec()
+{
+    if ( getWidth() <= 0 || getHeight() <= 0 )
+    {
+        centreWithSize ( 420, 240 );
+    }
+    else
+    {
+        centreWithSize ( getWidth(), getHeight() );
+    }
+    setVisible ( true );
+    return 0;
+}
+
+void CBaseDlg::closeButtonPressed()
+{
+    exitModalState ( 0 );
+    setVisible ( false );
+}
+
+bool CBaseDlg::keyPressed ( const juce::KeyPress& key )
+{
+    if ( key == juce::KeyPress::escapeKey )
+    {
+        return true;
+    }
+    return juce::DialogWindow::keyPressed ( key );
+}
+
+CAboutDlg::CAboutDlg() : CBaseDlg ( juce::String ( "About " ) + juce::String ( APP_NAME ) )
+{
+}
+
+int CAboutDlg::exec()
+{
+    const juce::String title   = juce::String ( "About " ) + juce::String ( APP_NAME );
+    const juce::String message = juce::String ( GetVersionAndNameStr().toStdString() );
+    juce::AlertWindow::showMessageBoxAsync ( juce::AlertWindow::InfoIcon, title, message );
+    return 0;
+}
+
+namespace
+{
+class LicenceContent : public juce::Component
+{
+public:
+    LicenceContent ( std::function<void()> onAcceptIn, std::function<void()> onDeclineIn ) :
+        onAccept ( std::move ( onAcceptIn ) ),
+        onDecline ( std::move ( onDeclineIn ) )
+    {
+        addAndMakeVisible ( lblLicence );
+        lblLicence.setText ( "This server requires you accept conditions before you can join. Please read these in the chat window.",
+                             juce::dontSendNotification );
+        lblLicence.setJustificationType ( juce::Justification::topLeft );
+
+        addAndMakeVisible ( chbAgree );
+        chbAgree.setButtonText ( "I have read the conditions and agree." );
+
+        addAndMakeVisible ( butAccept );
+        butAccept.setButtonText ( "Accept" );
+        butAccept.setEnabled ( false );
+
+        addAndMakeVisible ( butDecline );
+        butDecline.setButtonText ( "Decline" );
+
+        chbAgree.onClick = [this] { butAccept.setEnabled ( chbAgree.getToggleState() ); };
+        butAccept.onClick = [this]
+        {
+            if ( onAccept )
+            {
+                onAccept();
+            }
+        };
+        butDecline.onClick = [this]
+        {
+            if ( onDecline )
+            {
+                onDecline();
+            }
+        };
+    }
+
+    void resized() override
+    {
+        auto area = getLocalBounds().reduced ( 12 );
+        lblLicence.setBounds ( area.removeFromTop ( 48 ) );
+        area.removeFromTop ( 8 );
+        chbAgree.setBounds ( area.removeFromTop ( 24 ) );
+        area.removeFromTop ( 8 );
+        auto buttons = area.removeFromTop ( 28 );
+        auto declineWidth = 90;
+        auto acceptWidth  = 90;
+        butDecline.setBounds ( buttons.removeFromRight ( declineWidth ) );
+        buttons.removeFromRight ( 8 );
+        butAccept.setBounds ( buttons.removeFromRight ( acceptWidth ) );
+    }
+
+private:
+    juce::Label           lblLicence;
+    juce::ToggleButton    chbAgree;
+    juce::TextButton      butAccept;
+    juce::TextButton      butDecline;
+    std::function<void()> onAccept;
+    std::function<void()> onDecline;
+};
+}
+
+CLicenceDlg::CLicenceDlg() : CBaseDlg ( juce::String ( APP_NAME ) )
+{
+    auto onAccept = [this]
+    {
+        exitModalState ( 1 );
+        setVisible ( false );
+    };
+    auto onDecline = [this]
+    {
+        exitModalState ( 0 );
+        setVisible ( false );
+    };
+    setContentOwned ( new LicenceContent ( onAccept, onDecline ), true );
+    setSize ( 520, 180 );
+}
+
+CHelpMenu::CHelpMenu ( const bool bIsClient, juce::Component* parentIn ) :
+    parent ( parentIn ),
+    AboutDlg()
+{
+    if ( bIsClient )
+    {
+        menu.addItem ( "Getting Started...", [this] { OnHelpClientGetStarted(); } );
+        menu.addItem ( "Software Manual...", [this] { OnHelpSoftwareMan(); } );
+    }
+    else
+    {
+        menu.addItem ( "Getting Started...", [this] { OnHelpServerGetStarted(); } );
+    }
+    menu.addSeparator();
+    menu.addItem ( "What's This", [this] { OnHelpWhatsThis(); } );
+    menu.addSeparator();
+    menu.addItem ( "About Jamulus...", [this] { OnHelpAbout(); } );
+    menu.addItem ( "About Qt...", [this] { OnHelpAboutQt(); } );
+}
+
+void CHelpMenu::show()
+{
+    juce::PopupMenu::Options options;
+    if ( parent != nullptr )
+    {
+        options = options.withTargetComponent ( parent );
+    }
+    menu.showMenuAsync ( options );
+}
+
+juce::PopupMenu& CHelpMenu::getMenu()
+{
+    return menu;
+}
+
+void CHelpMenu::OnHelpWhatsThis()
+{
+    juce::AlertWindow::showMessageBoxAsync ( juce::AlertWindow::InfoIcon, "Help", "What's This mode is not available." );
+}
+
+void CHelpMenu::OnHelpAbout()
+{
+    AboutDlg.exec();
+}
+
+void CHelpMenu::OnHelpAboutQt()
+{
+    juce::AlertWindow::showMessageBoxAsync ( juce::AlertWindow::InfoIcon, "About Qt", "Qt information is not available." );
+}
+
+void CHelpMenu::OnHelpClientGetStarted()
+{
+    juce::URL ( CLIENT_GETTING_STARTED_URL ).launchInDefaultBrowser();
+}
+
+void CHelpMenu::OnHelpServerGetStarted()
+{
+    juce::URL ( SERVER_GETTING_STARTED_URL ).launchInDefaultBrowser();
+}
+
+void CHelpMenu::OnHelpSoftwareMan()
+{
+    juce::URL ( SOFTWARE_MANUAL_URL ).launchInDefaultBrowser();
+}
+
+CLanguageComboBox::CLanguageComboBox()
+{
+    onChange = [this] { OnLanguageActivated(); };
+}
+
+void CLanguageComboBox::setLanguageChangedCallback ( std::function<void ( QString )> callback )
+{
+    onLanguageChanged = std::move ( callback );
+}
+
+void CLanguageComboBox::Init ( QString& strSelLanguage )
+{
+    const QMap<QString, QString> TranslMap = CLocale::GetAvailableTranslations();
+    clear ( juce::dontSendNotification );
+    languageCodes.clear();
+
+    int iCnt                  = 0;
+    int iIdxOfEnglishLanguage = 0;
+    iIdxSelectedLanguage      = INVALID_INDEX;
+
+    for ( auto it = TranslMap.constBegin(); it != TranslMap.constEnd(); ++it )
+    {
+        const QString langCode = it.key();
+        const QString label    = langCode; // avoid QLocale in JUCE build
+
+        addItem ( label.toStdString(), iCnt + 1 );
+        languageCodes.push_back ( langCode );
+
+        if ( langCode.compare ( "en" ) == 0 )
+        {
+            iIdxOfEnglishLanguage = iCnt;
+        }
+
+        if ( langCode.compare ( strSelLanguage ) == 0 )
+        {
+            iIdxSelectedLanguage = iCnt;
+        }
+
+        iCnt++;
+    }
+
+    if ( iIdxSelectedLanguage == INVALID_INDEX )
+    {
+        strSelLanguage       = "en";
+        iIdxSelectedLanguage = iIdxOfEnglishLanguage;
+    }
+
+    setSelectedItemIndex ( iIdxSelectedLanguage, juce::dontSendNotification );
+}
+
+void CLanguageComboBox::OnLanguageActivated()
+{
+    const int iLanguageIdx = getSelectedItemIndex();
+    if ( iLanguageIdx < 0 || iLanguageIdx >= static_cast<int> ( languageCodes.size() ) )
+    {
+        return;
+    }
+
+    if ( iIdxSelectedLanguage != iLanguageIdx )
+    {
+        juce::AlertWindow::showMessageBoxAsync ( juce::AlertWindow::InfoIcon,
+                                                 "Restart Required",
+                                                 "Please restart the application for the language change to take effect." );
+
+        if ( onLanguageChanged )
+        {
+            onLanguageChanged ( languageCodes[iLanguageIdx] );
+        }
+    }
+}
+
+void CMinimumStackedLayout::addComponent ( juce::Component* component )
+{
+    if ( component == nullptr )
+    {
+        return;
+    }
+
+    components.push_back ( component );
+    addAndMakeVisible ( component );
+    component->setVisible ( false );
+
+    if ( currentIndex == -1 )
+    {
+        setCurrentIndex ( 0 );
+    }
+}
+
+void CMinimumStackedLayout::setCurrentIndex ( int index )
+{
+    if ( index < 0 || index >= static_cast<int> ( components.size() ) )
+    {
+        return;
+    }
+
+    if ( currentIndex >= 0 && currentIndex < static_cast<int> ( components.size() ) )
+    {
+        components[currentIndex]->setVisible ( false );
+    }
+
+    currentIndex = index;
+
+    if ( auto* current = getCurrentComponent() )
+    {
+        current->setVisible ( true );
+    }
+
+    resized();
+}
+
+juce::Component* CMinimumStackedLayout::getCurrentComponent() const
+{
+    if ( currentIndex < 0 || currentIndex >= static_cast<int> ( components.size() ) )
+    {
+        return nullptr;
+    }
+
+    return components[currentIndex];
+}
+
+void CMinimumStackedLayout::resized()
+{
+    if ( auto* current = getCurrentComponent() )
+    {
+        current->setBounds ( getLocalBounds() );
+    }
+}
+#else
 // About dialog ----------------------------------------------------------------
-#ifndef HEADLESS
 CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 {
     setupUi ( this );
@@ -714,57 +937,183 @@ QSize CMinimumStackedLayout::sizeHint() const
 }
 #endif
 
+#endif
+
+
 /******************************************************************************\
 * Other Classes                                                                *
 \******************************************************************************/
 // Network utility functions ---------------------------------------------------
-bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddressString ( QString strAddress,
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                                               QString& InetAddr,
+#else
+                                               QHostAddress& InetAddr,
+#endif
+                                               bool bEnableIPv6 )
 {
-    // try to get host by name, assuming
-    // that the string contains a valid host name string or IP address
-    const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
-
-    if ( HostInfo.error() != QHostInfo::NoError )
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    if ( strAddress.isEmpty() )
     {
-        // qInfo() << qUtf8Printable ( QString ( "Invalid hostname" ) );
-        return false; // invalid address
+        return false;
     }
 
-    foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
+    struct addrinfo hints;
+    memset ( &hints, 0, sizeof ( hints ) );
+    hints.ai_family   = bEnableIPv6 ? AF_UNSPEC : AF_INET;
+    hints.ai_socktype = SOCK_DGRAM;
+    struct addrinfo* res = nullptr;
+
+    if ( getaddrinfo ( strAddress.toStdString().c_str(), nullptr, &hints, &res ) == 0 && res != nullptr )
     {
-        // qInfo() << qUtf8Printable ( QString ( "Resolved network address to %1 for proto %2" ) .arg ( HostAddr.toString() ) .arg (
-        // HostAddr.protocol() ) );
-        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bEnableIPv6 && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
+        for ( struct addrinfo* p = res; p != nullptr; p = p->ai_next )
         {
-            InetAddr = HostAddr;
-            return true;
+            if ( p->ai_family == AF_INET )
+            {
+                char addrBuf[INET_ADDRSTRLEN];
+                const struct sockaddr_in* ipv4 = (const struct sockaddr_in*)p->ai_addr;
+                if ( inet_ntop ( AF_INET, &ipv4->sin_addr, addrBuf, sizeof ( addrBuf ) ) != nullptr )
+                {
+                    InetAddr = QString::fromUtf8 ( addrBuf );
+                    freeaddrinfo ( res );
+                    return true;
+                }
+            }
         }
+
+        if ( bEnableIPv6 )
+        {
+            for ( struct addrinfo* p = res; p != nullptr; p = p->ai_next )
+            {
+                if ( p->ai_family == AF_INET6 )
+                {
+                    char addrBuf[INET6_ADDRSTRLEN];
+                    const struct sockaddr_in6* ipv6 = (const struct sockaddr_in6*)p->ai_addr;
+                    if ( inet_ntop ( AF_INET6, &ipv6->sin6_addr, addrBuf, sizeof ( addrBuf ) ) != nullptr )
+                    {
+                        InetAddr = QString::fromUtf8 ( addrBuf );
+                        freeaddrinfo ( res );
+                        return true;
+                    }
+                }
+            }
+        }
+        freeaddrinfo ( res );
     }
     return false;
+#else
+    if ( strAddress.isEmpty() )
+    {
+        return false;
+    }
+
+    struct addrinfo hints;
+    memset ( &hints, 0, sizeof ( hints ) );
+    hints.ai_family   = bEnableIPv6 ? AF_UNSPEC : AF_INET;
+    hints.ai_socktype = SOCK_DGRAM;
+    struct addrinfo* res = nullptr;
+
+    if ( getaddrinfo ( strAddress.toStdString().c_str(), nullptr, &hints, &res ) == 0 && res != nullptr )
+    {
+        for ( struct addrinfo* p = res; p != nullptr; p = p->ai_next )
+        {
+            if ( p->ai_family == AF_INET )
+            {
+                char addrBuf[INET_ADDRSTRLEN];
+                const struct sockaddr_in* ipv4 = (const struct sockaddr_in*)p->ai_addr;
+                if ( inet_ntop ( AF_INET, &ipv4->sin_addr, addrBuf, sizeof ( addrBuf ) ) != nullptr )
+                {
+                    QHostAddress hostAddr;
+                    if ( hostAddr.setAddress ( QString::fromUtf8 ( addrBuf ) ) )
+                    {
+                        InetAddr = hostAddr;
+                        freeaddrinfo ( res );
+                        return true;
+                    }
+                }
+            }
+        }
+
+        if ( bEnableIPv6 )
+        {
+            for ( struct addrinfo* p = res; p != nullptr; p = p->ai_next )
+            {
+                if ( p->ai_family == AF_INET6 )
+                {
+                    char addrBuf[INET6_ADDRSTRLEN];
+                    const struct sockaddr_in6* ipv6 = (const struct sockaddr_in6*)p->ai_addr;
+                    if ( inet_ntop ( AF_INET6, &ipv6->sin6_addr, addrBuf, sizeof ( addrBuf ) ) != nullptr )
+                    {
+                        QHostAddress hostAddr;
+                        if ( hostAddr.setAddress ( QString::fromUtf8 ( addrBuf ) ) )
+                        {
+                            InetAddr = hostAddr;
+                            freeaddrinfo ( res );
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        freeaddrinfo ( res );
+    }
+    return false;
+#endif
 }
+
 
 #ifndef CLIENT_NO_SRV_CONNECT
 bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
 {
-    // init requested host address with invalid address first
     HostAddress = CHostAddress();
-
-    QRegularExpression plainHostRegex ( "^([^\\[:0-9.][^:]*)$" );
-    if ( plainHostRegex.match ( strAddress ).capturedStart() != 0 )
+    if ( strAddress.isEmpty() )
     {
-        // not a plain hostname? then don't attempt SRV lookup and fail
-        // immediately.
         return false;
     }
 
+    const QChar firstChar = strAddress.at ( 0 );
+    if ( firstChar == '[' || firstChar == ':' || firstChar.isDigit() || firstChar == '.' )
+    {
+        return false;
+    }
+
+    if ( strAddress.contains ( ":" ) )
+    {
+        return false;
+    }
+
+#if defined( JAMULUS_USE_JUCE_NET )
+    JUCE_Resolver resolver;
+    const auto queryName = QStringLiteral( "_jamulus._udp." ) + strAddress;
+    const auto endpoints = resolver.resolveSrv ( queryName.toStdString() );
+    if ( endpoints.empty() )
+    {
+        return false;
+    }
+
+    const auto& endpoint = endpoints.front();
+    if ( endpoint.address.empty() )
+    {
+        HostAddress = CHostAddress ( std::string ( "." ), 0 );
+        return true;
+    }
+
+    QString inetAddr = QString::fromUtf8 ( endpoint.address.c_str() );
+    QString parsedAddr;
+    if ( ParseNetworkAddressString ( inetAddr, parsedAddr, bEnableIPv6 ) )
+    {
+        HostAddress = CHostAddress ( parsedAddr.toStdString(), static_cast<uint16_t> ( endpoint.port ) );
+        return true;
+    }
+    return false;
+#elif defined( HEADLESS )
+    Q_UNUSED ( bEnableIPv6 );
+    return false;
+#else
     QDnsLookup* dns = new QDnsLookup();
     dns->setType ( QDnsLookup::SRV );
     dns->setName ( QString ( "_jamulus._udp.%1" ).arg ( strAddress ) );
     dns->lookup();
-    // QDnsLookup::lookup() works asynchronously. Therefore, wait for
-    // it to complete here by resuming the main loop here.
-    // This is not nice and blocks the UI, but is similar to what
-    // the regular resolve function does as well.
     QTime dieTime = QTime::currentTime().addMSecs ( DNS_SRV_RESOLVE_TIMEOUT_MS );
     while ( QTime::currentTime() < dieTime && !dns->isFinished() )
     {
@@ -779,17 +1128,9 @@ bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& Hos
     QDnsServiceRecord record = records.first();
     if ( record.target() == "." || record.target() == "" )
     {
-        // RFC2782 says that "." indicates that the service is not available.
-        // Qt strips the trailing dot, which is why we check for empty string
-        // as well. Therefore, the "." part might be redundant, but this would
-        // need further testing to confirm.
-        // End processing here (= return true), but pass back an
-        // invalid HostAddress to let the connect logic fail properly.
         HostAddress = CHostAddress ( QHostAddress ( "." ), 0 );
         return true;
     }
-    qDebug() << qUtf8Printable (
-        QString ( "resolved %1 to a single SRV record: %2:%3" ).arg ( strAddress ).arg ( record.target() ).arg ( record.port() ) );
 
     QHostAddress InetAddr;
     if ( ParseNetworkAddressString ( record.target(), InetAddr, bEnableIPv6 ) )
@@ -798,6 +1139,7 @@ bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& Hos
         return true;
     }
     return false;
+#endif
 }
 
 bool NetworkUtil::ParseNetworkAddressWithSrvDiscovery ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
@@ -808,18 +1150,21 @@ bool NetworkUtil::ParseNetworkAddressWithSrvDiscovery ( QString strAddress, CHos
         return true;
     }
     // Try regular connect via plain IP or host name lookup (A/AAAA):
-    return ParseNetworkAddress ( strAddress, HostAddress, bEnableIPv6 );
+    return ParseNetworkAddressBare ( strAddress, HostAddress, bEnableIPv6 );
 }
 #endif
 
-bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
 {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    QString InetAddr;
+#else
     QHostAddress InetAddr;
+#endif
     unsigned int iNetPort = DEFAULT_PORT_NUMBER;
 
     // qInfo() << qUtf8Printable ( QString ( "Parsing network address %1" ).arg ( strAddress ) );
 
-    // init requested host address with invalid address first
     HostAddress = CHostAddress();
 
     // Allow the following address formats:
@@ -831,40 +1176,64 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
     // hostname:port
     // (where addr4or6 is a literal IPv4 or IPv6 address, and addr4 is a literal IPv4 address
 
-    bool               bLiteralAddr = false;
-    QRegularExpression rx1 ( "^\\[([^]]*)\\](?::(\\d+))?$" ); // [addr4or6] or [addr4or6]:port
-    QRegularExpression rx2 ( "^([^:]*)(?::(\\d+))?$" );       // addr4 or addr4:port or host or host:port
-
+    bool    bLiteralAddr = false;
     QString strPort;
 
-    QRegularExpressionMatch rx1match = rx1.match ( strAddress );
-    QRegularExpressionMatch rx2match = rx2.match ( strAddress );
+    if ( strAddress.startsWith ( "[" ) )
+    {
+        const int closingIdx = strAddress.indexOf ( "]" );
+        if ( closingIdx < 0 )
+        {
+            return false;
+        }
 
-    // parse input address with rx1 and rx2 in turn, capturing address/host and port
-    if ( rx1match.capturedStart() == 0 )
-    {
-        // literal address within []
-        strAddress   = rx1match.captured ( 1 );
-        strPort      = rx1match.captured ( 2 );
-        bLiteralAddr = true; // don't allow hostname within []
-    }
-    else if ( rx2match.capturedStart() == 0 )
-    {
-        // hostname or IPv4 address
-        strAddress = rx2match.captured ( 1 );
-        strPort    = rx2match.captured ( 2 );
+        if ( closingIdx + 1 < strAddress.length() )
+        {
+            if ( strAddress.at ( closingIdx + 1 ) != ':' )
+            {
+                return false;
+            }
+
+            strPort = strAddress.mid ( closingIdx + 2 );
+            if ( strPort.isEmpty() )
+            {
+                return false;
+            }
+        }
+
+        strAddress   = strAddress.mid ( 1, closingIdx - 1 );
+        bLiteralAddr = true;
     }
     else
     {
-        // invalid format
-        // qInfo() << qUtf8Printable ( QString ( "Invalid address format" ) );
-        return false;
+        const int firstColon = strAddress.indexOf ( ":" );
+        if ( firstColon >= 0 )
+        {
+            if ( strAddress.indexOf ( ":", firstColon + 1 ) != -1 )
+            {
+                return false;
+            }
+
+            strPort = strAddress.mid ( firstColon + 1 );
+            if ( strPort.isEmpty() )
+            {
+                return false;
+            }
+
+            strAddress = strAddress.left ( firstColon );
+        }
     }
 
     if ( !strPort.isEmpty() )
     {
         // a port number was given: extract port number
-        iNetPort = strPort.toInt();
+        bool ok  = false;
+        iNetPort = strPort.toInt ( &ok );
+
+        if ( !ok )
+        {
+            return false;
+        }
 
         if ( iNetPort >= 65536 )
         {
@@ -874,7 +1243,51 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
         }
     }
 
-    // first try if this is an IP number an can directly applied to QHostAddress
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    bool isIPv6Literal = false;
+    std::string addrStr = strAddress.toStdString();
+    const char* addrBytes = addrStr.c_str();
+    struct in_addr addr4;
+    struct in6_addr addr6;
+    if ( inet_pton ( AF_INET, addrBytes, &addr4 ) == 1 )
+    {
+        InetAddr = strAddress;
+    }
+    else if ( bEnableIPv6 && inet_pton ( AF_INET6, addrBytes, &addr6 ) == 1 )
+    {
+        InetAddr = strAddress;
+        isIPv6Literal = true;
+    }
+
+    if ( !InetAddr.isEmpty() )
+    {
+        if ( !bEnableIPv6 && isIPv6Literal )
+        {
+            return false;
+        }
+    }
+    else
+    {
+        if ( bLiteralAddr )
+        {
+            return false;
+        }
+
+        if ( !ParseNetworkAddressString ( strAddress, InetAddr, bEnableIPv6 ) )
+        {
+            return false;
+        }
+    }
+
+    HostAddress = CHostAddress (
+#if defined( JAMULUS_USE_JUCE_NET )
+        InetAddr.toStdString(),
+#else
+        InetAddr,
+#endif
+        static_cast<uint16_t> ( iNetPort ) );
+    return true;
+#else
     if ( InetAddr.setAddress ( strAddress ) )
     {
         if ( !bEnableIPv6 && InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
@@ -901,51 +1314,83 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
         }
     }
 
-    // qInfo() << qUtf8Printable ( QString ( "Parsed network address %1" ).arg ( InetAddr.toString() ) );
-
-    HostAddress = CHostAddress ( InetAddr, iNetPort );
-
+    HostAddress = CHostAddress (
+#if defined( JAMULUS_USE_JUCE_NET )
+        InetAddr.toStdString(),
+#else
+        InetAddr,
+#endif
+        static_cast<uint16_t> ( iNetPort ) );
     return true;
+#endif
 }
+
+bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+{
+#ifndef CLIENT_NO_SRV_CONNECT
+    if ( ParseNetworkAddressSrv ( strAddress, HostAddress, bEnableIPv6 ) )
+    {
+        return true;
+    }
+#endif
+    return ParseNetworkAddressBare ( strAddress, HostAddress, bEnableIPv6 );
+}
+
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+bool NetworkUtil::ParseNetworkAddressStd ( const std::string& strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+{
+    return ParseNetworkAddress ( QString::fromStdString ( strAddress ), HostAddress, bEnableIPv6 );
+}
+#endif
 
 CHostAddress NetworkUtil::GetLocalAddress()
 {
-    QUdpSocket socket;
-    // As we are using UDP, the connectToHost() does not generate any traffic at all.
-    // We just require a socket which is pointed towards the Internet in
-    // order to find out the IP of our own external interface:
-    socket.connectToHost ( WELL_KNOWN_HOST, WELL_KNOWN_PORT );
-
-    if ( socket.waitForConnected ( IP_LOOKUP_TIMEOUT ) )
+    auto addrs    = juce::IPAddress::getAllAddresses();
+    const auto localV4 = juce::IPAddress::local ( false );
+    for ( auto& ip : addrs )
     {
-        return CHostAddress ( socket.localAddress(), 0 );
+        if ( !ip.isIPv6 && ip != localV4 )
+        {
+#if defined( JAMULUS_USE_JUCE_NET )
+            auto ipString = ip.toString();
+            return CHostAddress ( std::string ( ipString.toRawUTF8() ), 0 );
+#else
+            auto ipString = QString::fromUtf8 ( ip.toString().toRawUTF8() );
+            return CHostAddress ( QHostAddress ( ipString ), 0 );
+#endif
+        }
     }
-    else
-    {
-        qWarning() << "could not determine local IPv4 address:" << socket.errorString() << "- using localhost";
 
-        return CHostAddress ( QHostAddress::LocalHost, 0 );
-    }
+#if defined( JAMULUS_USE_JUCE_NET )
+    return CHostAddress ( std::string ( "127.0.0.1" ), 0 );
+#else
+    return CHostAddress ( QHostAddress::LocalHost, 0 );
+#endif
 }
 
 CHostAddress NetworkUtil::GetLocalAddress6()
 {
-    QUdpSocket socket;
-    // As we are using UDP, the connectToHost() does not generate any traffic at all.
-    // We just require a socket which is pointed towards the Internet in
-    // order to find out the IP of our own external interface:
-    socket.connectToHost ( WELL_KNOWN_HOST6, WELL_KNOWN_PORT );
-
-    if ( socket.waitForConnected ( IP_LOOKUP_TIMEOUT ) )
+    auto addrs    = juce::IPAddress::getAllAddresses();
+    const auto localV6 = juce::IPAddress::local ( true );
+    for ( auto& ip : addrs )
     {
-        return CHostAddress ( socket.localAddress(), 0 );
+        if ( ip.isIPv6 && ip != localV6 )
+        {
+#if defined( JAMULUS_USE_JUCE_NET )
+            auto ipString = ip.toString();
+            return CHostAddress ( std::string ( ipString.toRawUTF8() ), 0 );
+#else
+            auto ipString = QString::fromUtf8 ( ip.toString().toRawUTF8() );
+            return CHostAddress ( QHostAddress ( ipString ), 0 );
+#endif
+        }
     }
-    else
-    {
-        qWarning() << "could not determine local IPv6 address:" << socket.errorString() << "- using localhost";
 
-        return CHostAddress ( QHostAddress::LocalHostIPv6, 0 );
-    }
+#if defined( JAMULUS_USE_JUCE_NET )
+    return CHostAddress ( std::string ( "::1" ), 0 );
+#else
+    return CHostAddress ( QHostAddress::LocalHostIPv6, 0 );
+#endif
 }
 
 QString NetworkUtil::GetDirectoryAddress ( const EDirectoryType eDirectoryType, const QString& strDirectoryAddress )
@@ -979,6 +1424,139 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
 
 // Return whether the given HostAdress is within a private IP range
 // as per RFC 1918 & RFC 5735.
+bool NetworkUtil::IsLiteralIPAddress ( const QString& strAddress, bool bEnableIPv6 )
+{
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    if ( strAddress.isEmpty() )
+    {
+        return false;
+    }
+
+    std::string addrStr = strAddress.toStdString();
+    const char* addrBytes = addrStr.c_str();
+    struct in_addr addr4;
+    if ( inet_pton ( AF_INET, addrBytes, &addr4 ) == 1 )
+    {
+        return true;
+    }
+    if ( bEnableIPv6 )
+    {
+        struct in6_addr addr6;
+        if ( inet_pton ( AF_INET6, addrBytes, &addr6 ) == 1 )
+        {
+            return true;
+        }
+    }
+    return false;
+#else
+    QHostAddress InetAddr;
+    if ( !InetAddr.setAddress ( strAddress ) )
+    {
+        return false;
+    }
+    if ( !bEnableIPv6 && InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
+    {
+        return false;
+    }
+    return true;
+#endif
+}
+
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+bool NetworkUtil::IsPrivateNetworkIP ( const QString& address )
+{
+    if ( address.isEmpty() )
+    {
+        return false;
+    }
+
+    struct in_addr addr4;
+    if ( inet_pton ( AF_INET, address.toUtf8().constData(), &addr4 ) != 1 )
+    {
+        return false;
+    }
+
+    const quint32 addr = ntohl ( addr4.s_addr );
+
+    auto inSubnet = [addr] ( quint32 base, int prefixLen ) {
+        if ( prefixLen <= 0 )
+        {
+            return false;
+        }
+        const quint32 mask = prefixLen == 32 ? 0xFFFFFFFFu : ( 0xFFFFFFFFu << ( 32 - prefixLen ) );
+        return ( addr & mask ) == ( base & mask );
+    };
+
+    if ( inSubnet ( 0x0A000000u, 8 ) )
+    {
+        return true;
+    }
+
+    if ( inSubnet ( 0x7F000000u, 8 ) )
+    {
+        return true;
+    }
+
+    if ( inSubnet ( 0xAC100000u, 12 ) )
+    {
+        return true;
+    }
+
+    if ( inSubnet ( 0xC0A80000u, 16 ) )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool NetworkUtil::IsPrivateNetworkIPStd ( const std::string& address )
+{
+    if ( address.empty() )
+    {
+        return false;
+    }
+
+    struct in_addr addr4;
+    if ( inet_pton ( AF_INET, address.c_str(), &addr4 ) != 1 )
+    {
+        return false;
+    }
+
+    const quint32 addr = ntohl ( addr4.s_addr );
+
+    auto inSubnet = [addr] ( quint32 base, int prefixLen ) {
+        if ( prefixLen <= 0 )
+        {
+            return false;
+        }
+        const quint32 mask = prefixLen == 32 ? 0xFFFFFFFFu : ( 0xFFFFFFFFu << ( 32 - prefixLen ) );
+        return ( addr & mask ) == ( base & mask );
+    };
+
+    if ( inSubnet ( 0x0A000000u, 8 ) )
+    {
+        return true;
+    }
+
+    if ( inSubnet ( 0x7F000000u, 8 ) )
+    {
+        return true;
+    }
+
+    if ( inSubnet ( 0xAC100000u, 12 ) )
+    {
+        return true;
+    }
+
+    if ( inSubnet ( 0xC0A80000u, 16 ) )
+    {
+        return true;
+    }
+
+    return false;
+}
+#else
 bool NetworkUtil::IsPrivateNetworkIP ( const QHostAddress& qhAddr )
 {
     // https://www.rfc-editor.org/rfc/rfc1918
@@ -999,24 +1577,115 @@ bool NetworkUtil::IsPrivateNetworkIP ( const QHostAddress& qhAddr )
     }
     return false;
 }
+#endif
 
-// CHostAddress methods
-// Compare() - compare two CHostAddress objects, and return an ordering between them:
-// 0 - they are equal
-// <0 - this comes before other
-// >0 - this comes after other
-// The order is not important, so long as it is consistent, for use in a binary search.
-
+#if defined( JAMULUS_USE_JUCE_NET )
 int CHostAddress::Compare ( const CHostAddress& other ) const
 {
-    // compare port first, as it is cheap, and clients will often use random ports
-
     if ( iPort != other.iPort )
     {
         return (int) iPort - (int) other.iPort;
     }
 
-    // compare protocols before addresses
+    if ( address == other.address )
+    {
+        return 0;
+    }
+
+    return address < other.address ? -1 : 1;
+}
+
+std::string CHostAddress::toStringStd ( const EStringMode eStringMode ) const
+{
+    std::string strReturn = address;
+
+    if ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+    {
+        const auto dotPos   = strReturn.find_last_of ( '.' );
+        const auto colonPos = strReturn.find_last_of ( ':' );
+
+        if ( dotPos != std::string::npos && ( colonPos == std::string::npos || dotPos > colonPos ) )
+        {
+            strReturn = strReturn.substr ( 0, dotPos ) + ".x";
+        }
+        else if ( colonPos != std::string::npos )
+        {
+            strReturn = strReturn.substr ( 0, colonPos ) + ":x";
+        }
+    }
+
+    if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+    {
+        if ( strReturn.find ( '.' ) != std::string::npos )
+        {
+            strReturn += ":" + std::to_string ( iPort );
+        }
+        else
+        {
+            strReturn = "[" + strReturn + "]:" + std::to_string ( iPort );
+        }
+    }
+
+    return strReturn;
+}
+
+QString CHostAddress::toString ( const EStringMode eStringMode ) const
+{
+    return QString::fromStdString ( toStringStd ( eStringMode ) );
+}
+#elif defined( HEADLESS )
+int CHostAddress::Compare ( const CHostAddress& other ) const
+{
+    if ( iPort != other.iPort )
+    {
+        return (int) iPort - (int) other.iPort;
+    }
+
+    if ( address == other.address )
+    {
+        return 0;
+    }
+
+    return address < other.address ? -1 : 1;
+}
+
+QString CHostAddress::toString ( const EStringMode eStringMode ) const
+{
+    QString strReturn = QString::fromStdString ( address );
+
+    if ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+    {
+        if ( strReturn.contains ( "." ) )
+        {
+            strReturn = strReturn.section ( ".", 0, -2 ) + ".x";
+        }
+        else if ( strReturn.contains ( ":" ) )
+        {
+            strReturn = strReturn.section ( ":", 0, -2 ) + ":x";
+        }
+    }
+
+    if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+    {
+        if ( strReturn.contains ( "." ) )
+        {
+            strReturn += ":" + QString().setNum ( iPort );
+        }
+        else
+        {
+            strReturn = "[" + strReturn + "]:" + QString().setNum ( iPort );
+        }
+    }
+
+    return strReturn;
+}
+#else
+int CHostAddress::Compare ( const CHostAddress& other ) const
+{
+    if ( iPort != other.iPort )
+    {
+        return (int) iPort - (int) other.iPort;
+    }
 
     QAbstractSocket::NetworkLayerProtocol thisProto  = InetAddr.protocol();
     QAbstractSocket::NetworkLayerProtocol otherProto = other.InetAddr.protocol();
@@ -1026,18 +1695,14 @@ int CHostAddress::Compare ( const CHostAddress& other ) const
         return (int) thisProto - (int) otherProto;
     }
 
-    // now we know both addresses are the same protocol
-
     if ( thisProto == QAbstractSocket::IPv6Protocol )
     {
-        // compare IPv6 addresses
         Q_IPV6ADDR thisAddr  = InetAddr.toIPv6Address();
         Q_IPV6ADDR otherAddr = other.InetAddr.toIPv6Address();
 
         return memcmp ( &thisAddr, &otherAddr, sizeof ( Q_IPV6ADDR ) );
     }
 
-    // compare IPv4 addresses
     quint32 thisAddr  = InetAddr.toIPv4Address();
     quint32 otherAddr = other.InetAddr.toIPv4Address();
 
@@ -1048,39 +1713,34 @@ QString CHostAddress::toString ( const EStringMode eStringMode ) const
 {
     QString strReturn = InetAddr.toString();
 
-    // special case: for local host address, we do not replace the last byte
     if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
          ( InetAddr != QHostAddress ( QHostAddress::LocalHost ) ) && ( InetAddr != QHostAddress ( QHostAddress::LocalHostIPv6 ) ) )
     {
-        // replace last part by an "x"
         if ( strReturn.contains ( "." ) )
         {
-            // IPv4 or IPv4-mapped:
             strReturn = strReturn.section ( ".", 0, -2 ) + ".x";
         }
         else
         {
-            // IPv6
             strReturn = strReturn.section ( ":", 0, -2 ) + ":x";
         }
     }
 
     if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
     {
-        // add port number after a colon
         if ( strReturn.contains ( "." ) )
         {
             strReturn += ":" + QString().setNum ( iPort );
         }
         else
         {
-            // enclose pure IPv6 address in [ ] before adding port, to avoid ambiguity
             strReturn = "[" + strReturn + "]:" + QString().setNum ( iPort );
         }
     }
 
     return strReturn;
 }
+#endif
 
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )
@@ -1092,158 +1752,163 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bRe
 
     if ( !TableIsInitialized || bReGenerateTable )
     {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        auto trCS = [] ( const char* s ) { return QString::fromUtf8 ( s ); };
+#else
+        auto trCS = [] ( const char* s ) { return QCoreApplication::translate ( "CClientSettingsDlg", s ); };
+#endif
         // instrument picture data base initialization
         // NOTE: Do not change the order of any instrument in the future!
         // NOTE: The very first entry is the "not used" element per definition.
         vecDataBase.Init ( 0 ); // first clear all existing data since we create the list be adding entries
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "None" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "None" ),
                                            ":/png/instr/res/instruments/none.png",
                                            IC_OTHER_INSTRUMENT ) ); // special first element
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Drum Set" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Drum Set" ),
                                            ":/png/instr/res/instruments/drumset.png",
                                            IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Djembe" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Djembe" ),
                                            ":/png/instr/res/instruments/djembe.png",
                                            IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Electric Guitar" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Electric Guitar" ),
                                            ":/png/instr/res/instruments/eguitar.png",
                                            IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Acoustic Guitar" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Acoustic Guitar" ),
                                            ":/png/instr/res/instruments/aguitar.png",
                                            IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Guitar" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Bass Guitar" ),
                                            ":/png/instr/res/instruments/bassguitar.png",
                                            IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Keyboard" ),
                                            ":/png/instr/res/instruments/keyboard.png",
                                            IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Synthesizer" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Synthesizer" ),
                                            ":/png/instr/res/instruments/synthesizer.png",
                                            IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Grand Piano" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Grand Piano" ),
                                            ":/png/instr/res/instruments/grandpiano.png",
                                            IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Accordion" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Accordion" ),
                                            ":/png/instr/res/instruments/accordeon.png",
                                            IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Vocal" ),
                                            ":/png/instr/res/instruments/vocal.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Microphone" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Microphone" ),
                                            ":/png/instr/res/instruments/microphone.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harmonica" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Harmonica" ),
                                            ":/png/instr/res/instruments/harmonica.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trumpet" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Trumpet" ),
                                            ":/png/instr/res/instruments/trumpet.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trombone" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Trombone" ),
                                            ":/png/instr/res/instruments/trombone.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "French Horn" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "French Horn" ),
                                            ":/png/instr/res/instruments/frenchhorn.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Tuba" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Tuba" ),
                                            ":/png/instr/res/instruments/tuba.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Saxophone" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Saxophone" ),
                                            ":/png/instr/res/instruments/saxophone.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Clarinet" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Clarinet" ),
                                            ":/png/instr/res/instruments/clarinet.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Flute" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Flute" ),
                                            ":/png/instr/res/instruments/flute.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Violin" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Violin" ),
                                            ":/png/instr/res/instruments/violin.png",
                                            IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Cello" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Cello" ),
                                            ":/png/instr/res/instruments/cello.png",
                                            IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Double Bass" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Double Bass" ),
                                            ":/png/instr/res/instruments/doublebass.png",
                                            IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Recorder" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Recorder" ),
                                            ":/png/instr/res/instruments/recorder.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Streamer" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Streamer" ),
                                            ":/png/instr/res/instruments/streamer.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Listener" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Listener" ),
                                            ":/png/instr/res/instruments/listener.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Guitar+Vocal" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Guitar+Vocal" ),
                                            ":/png/instr/res/instruments/guitarvocal.png",
                                            IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard+Vocal" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Keyboard+Vocal" ),
                                            ":/png/instr/res/instruments/keyboardvocal.png",
                                            IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bodhran" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Bodhran" ),
                                            ":/png/instr/res/instruments/bodhran.png",
                                            IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bassoon" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Bassoon" ),
                                            ":/png/instr/res/instruments/bassoon.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Oboe" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Oboe" ),
                                            ":/png/instr/res/instruments/oboe.png",
                                            IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harp" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Harp" ),
                                            ":/png/instr/res/instruments/harp.png",
                                            IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Viola" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Viola" ),
                                            ":/png/instr/res/instruments/viola.png",
                                            IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Congas" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Congas" ),
                                            ":/png/instr/res/instruments/congas.png",
                                            IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bongo" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Bongo" ),
                                            ":/png/instr/res/instruments/bongo.png",
                                            IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Bass" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Vocal Bass" ),
                                            ":/png/instr/res/instruments/vocalbass.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Tenor" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Vocal Tenor" ),
                                            ":/png/instr/res/instruments/vocaltenor.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Alto" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Vocal Alto" ),
                                            ":/png/instr/res/instruments/vocalalto.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Soprano" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Vocal Soprano" ),
                                            ":/png/instr/res/instruments/vocalsoprano.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Banjo" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Banjo" ),
                                            ":/png/instr/res/instruments/banjo.png",
                                            IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mandolin" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Mandolin" ),
                                            ":/png/instr/res/instruments/mandolin.png",
                                            IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Ukulele" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Ukulele" ),
                                            ":/png/instr/res/instruments/ukulele.png",
                                            IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Ukulele" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Bass Ukulele" ),
                                            ":/png/instr/res/instruments/bassukulele.png",
                                            IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Baritone" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Vocal Baritone" ),
                                            ":/png/instr/res/instruments/vocalbaritone.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Lead" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Vocal Lead" ),
                                            ":/png/instr/res/instruments/vocallead.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mountain Dulcimer" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Mountain Dulcimer" ),
                                            ":/png/instr/res/instruments/mountaindulcimer.png",
                                            IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Scratching" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Scratching" ),
                                            ":/png/instr/res/instruments/scratching.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Rapping" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Rapping" ),
                                            ":/png/instr/res/instruments/rapping.png",
                                            IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vibraphone" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Vibraphone" ),
                                            ":/png/instr/res/instruments/vibraphone.png",
                                            IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Conductor" ),
+        vecDataBase.Add ( CInstPictProps ( trCS ( "Conductor" ),
                                            ":/png/instr/res/instruments/conductor.png",
                                            IC_OTHER_INSTRUMENT ) );
 
@@ -1303,18 +1968,23 @@ CInstPictures::EInstCategory CInstPictures::GetCategory ( const int iInstrument 
 }
 
 // Locale management class -----------------------------------------------------
-QLocale::Country CLocale::WireFormatCountryCodeToQtCountry ( unsigned short iCountryCode )
+QCOUNTRY_T CLocale::WireFormatCountryCodeToQtCountry ( unsigned short iCountryCode )
 {
+#if !defined( JAMULUS_USE_JUCE_NET )
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
     // The Jamulus protocol wire format gives us Qt5 country IDs.
     // Qt6 changed those IDs, so we have to convert back:
-    return (QLocale::Country) wireFormatToQt6Table[iCountryCode];
+    return (QCOUNTRY_T) wireFormatToQt6Table[iCountryCode];
 #else
-    return (QLocale::Country) iCountryCode;
+    return (QCOUNTRY_T) iCountryCode;
+#endif
+#else
+    // In JUCE net builds, QCOUNTRY_T is already the wire-format value.
+    return (QCOUNTRY_T) iCountryCode;
 #endif
 }
 
-unsigned short CLocale::QtCountryToWireFormatCountryCode ( const QLocale::Country eCountry )
+unsigned short CLocale::QtCountryToWireFormatCountryCode ( const QCOUNTRY_T eCountry )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
     // The Jamulus protocol wire format expects Qt5 country IDs.
@@ -1339,14 +2009,15 @@ bool CLocale::IsCountryCodeSupported ( unsigned short iCountryCode )
     return qt6CountryToWireFormat[iCountryCode] != -1;
 #else
     // All Qt5 codes are supported.
-    return iCountryCode <= QLocale::LastCountry;
+    return true;
 #endif
 }
 
-QLocale::Country CLocale::GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode )
+QCOUNTRY_T CLocale::GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode )
 {
+#if !defined( JAMULUS_USE_JUCE_NET )
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 2, 0 )
-    return QLocale::codeToTerritory ( sTwoLetterCode );
+    return (QCOUNTRY_T) QLocale::codeToTerritory ( sTwoLetterCode );
 #else
     QList<QLocale> vLocaleList = QLocale::matchingLocales ( QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry );
     QStringList    vstrLocParts;
@@ -1364,11 +2035,17 @@ QLocale::Country CLocale::GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode
             return qLocale.country();
         }
     }
-    return QLocale::AnyCountry;
+    return (QCOUNTRY_T) QLocale::AnyCountry;
+#endif
+#else
+    // In JUCE net builds we don't depend on QLocale; use 0 ("no country").
+    Q_UNUSED ( sTwoLetterCode );
+    return (QCOUNTRY_T) 0;
 #endif
 }
 
-QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry /* Qt-native value */ )
+#if !defined( JAMULUS_USE_JUCE_NET )
+QString CLocale::GetCountryFlagIconsResourceReference ( const QCOUNTRY_T eCountry /* Qt-native value */ )
 {
     QString strReturn = "";
 
@@ -1381,7 +2058,7 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     // There is no direct query of the country code in Qt, therefore we use a
     // workaround: Get the matching locales properties and split the name of
     // that since the second part is the country code
-    QList<QLocale> vCurLocaleList = QLocale::matchingLocales ( QLocale::AnyLanguage, QLocale::AnyScript, eCountry );
+    QList<QLocale> vCurLocaleList = QLocale::matchingLocales ( QLocale::AnyLanguage, QLocale::AnyScript, (QLocale::Country) eCountry );
 
     // check if the matching locales query was successful
     if ( vCurLocaleList.size() < 1 )
@@ -1407,25 +2084,30 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
 
     return strReturn;
 }
+#else
+QString CLocale::GetCountryFlagIconsResourceReference ( const QCOUNTRY_T )
+{
+    return "";
+}
+#endif
 
 QMap<QString, QString> CLocale::GetAvailableTranslations()
 {
+#if defined( HEADLESS ) || defined( JAMULUS_NO_QT_TRANSLATIONS ) || defined( JAMULUS_USE_JUCE_NET )
+    QMap<QString, QString> TranslMap;
+    TranslMap["en"] = "";
+    return TranslMap;
+#else
     QMap<QString, QString> TranslMap;
 
-    // Since we use "embed_translations" in Jamulus.pro, this resource prefix must
-    // match the default prefix used by qmake when generating the resource file.
-    // That prefix is "i18n" (standard abbreviation for internationalisation).
     QDirIterator DirIter ( ":/i18n" );
 
-    // add english language (default which is in the actual source code)
-    TranslMap["en"] = ""; // empty file name means that the translation load fails and we get the default english language
+    TranslMap["en"] = "";
 
     while ( DirIter.hasNext() )
     {
-        // get alias of translation file
         const QString strCurFileName = DirIter.next();
 
-        // extract only language code "xx_XX" from "translation_xx_XX.qm"
         const int     lang   = strCurFileName.indexOf ( "_" ) + 1;
         const QString strLoc = strCurFileName.mid ( lang, strCurFileName.indexOf ( "." ) - lang );
 
@@ -1433,10 +2115,14 @@ QMap<QString, QString> CLocale::GetAvailableTranslations()
     }
 
     return TranslMap;
+#endif
 }
 
 QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap )
 {
+#if defined( HEADLESS ) || defined( JAMULUS_NO_QT_TRANSLATIONS ) || defined( JAMULUS_USE_JUCE_NET )
+    return QPair<QString, QString> ( "en", "" );
+#else
     QPair<QString, QString> PairSysLang ( "", "" );
     QStringList             slUiLang = QLocale().uiLanguages();
 
@@ -1445,7 +2131,6 @@ QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, 
         QString strUiLang = QLocale().uiLanguages().at ( 0 );
         strUiLang.replace ( "-", "_" );
 
-        // first try to find the complete language string
         if ( TranslMap.constFind ( strUiLang ) != TranslMap.constEnd() )
         {
             PairSysLang.first  = strUiLang;
@@ -1453,9 +2138,6 @@ QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, 
         }
         else
         {
-            // only extract two first characters to identify language (ignoring
-            // location for getting a simpler implementation -> if the language
-            // is not correct, the user can change it in the GUI anyway)
             if ( strUiLang.length() >= 2 )
             {
                 PairSysLang.first  = strUiLang.left ( 2 );
@@ -1465,11 +2147,16 @@ QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, 
     }
 
     return PairSysLang;
+#endif
 }
 
 void CLocale::LoadTranslation ( const QString strLanguage, QCoreApplication* pApp )
 {
-    // The translator objects must be static!
+#if defined( HEADLESS ) || defined( JAMULUS_NO_QT_TRANSLATIONS ) || defined( JAMULUS_USE_JUCE_NET )
+    (void) strLanguage;
+    (void) pApp;
+    return;
+#else
     static QTranslator myappTranslator;
     static QTranslator myqtTranslator;
 
@@ -1481,31 +2168,233 @@ void CLocale::LoadTranslation ( const QString strLanguage, QCoreApplication* pAp
         pApp->installTranslator ( &myappTranslator );
     }
 
-    // allows the Qt messages to be translated in the application
     if ( myqtTranslator.load ( QLocale ( strLanguage ), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
     {
         pApp->installTranslator ( &myqtTranslator );
     }
+#endif
 }
 
 /******************************************************************************\
 * Global Functions Implementation                                              *
 \******************************************************************************/
+QString DirectoryTypeToString ( EDirectoryType eAddrType )
+{
+    switch ( eAddrType )
+    {
+    case AT_NONE:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "None" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "None" );
+#endif
+
+    case AT_ANY_GENRE2:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Any Genre 2" );
+#else
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 2" );
+#endif
+
+    case AT_ANY_GENRE3:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Any Genre 3" );
+#else
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 3" );
+#endif
+
+    case AT_GENRE_ROCK:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Genre Rock" );
+#else
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Rock" );
+#endif
+
+    case AT_GENRE_JAZZ:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Genre Jazz" );
+#else
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
+#endif
+
+    case AT_GENRE_CLASSICAL_FOLK:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Genre Classical/Folk" );
+#else
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk" );
+#endif
+
+    case AT_GENRE_CHORAL:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Genre Choral/Barbershop" );
+#else
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Choral/Barbershop" );
+#endif
+
+    case AT_CUSTOM:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Custom" );
+#else
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Custom" );
+#endif
+
+    default: // AT_DEFAULT
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Any Genre 1" );
+#else
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 1" );
+#endif
+    }
+}
+
+QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
+{
+    switch ( eSvrRegStatus )
+    {
+    case SRS_NOT_REGISTERED:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Not registered" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "Not registered" );
+#endif
+
+    case SRS_BAD_ADDRESS:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Bad address" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "Bad address" );
+#endif
+
+    case SRS_REQUESTED:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Registration requested" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "Registration requested" );
+#endif
+
+    case SRS_TIME_OUT:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Registration failed" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "Registration failed" );
+#endif
+
+    case SRS_UNKNOWN_RESP:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Check server version" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "Check server version" );
+#endif
+
+    case SRS_REGISTERED:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Registered" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "Registered" );
+#endif
+
+    case SRS_SERVER_LIST_FULL:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Server list full at directory" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "Server list full at directory" );
+#endif
+
+    case SRS_VERSION_TOO_OLD:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Your server version is too old" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
+#endif
+
+    case SRS_NOT_FULFILL_REQUIREMENTS:
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        return QStringLiteral ( "Requirements not fulfilled" );
+#else
+        return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
+#endif
+    }
+
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    return QStringLiteral ( "Unknown value %1" ).arg ( eSvrRegStatus );
+#else
+    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value %1" ) ).arg ( eSvrRegStatus );
+#endif
+}
+
 QString GetVersionAndNameStr ( const bool bDisplayInGui )
 {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    juce::String versionText;
+
+    if ( bDisplayInGui )
+    {
+        versionText += "<b>";
+    }
+    else
+    {
+#    ifdef _WIN32
+        versionText += "\n";
+#    endif
+        versionText += " *** ";
+    }
+
+    versionText += juce::String ( APP_NAME ) + ", Version " + juce::String ( VERSION );
+
+    if ( bDisplayInGui )
+    {
+        versionText += "</b><br>";
+    }
+    else
+    {
+        versionText += "\n *** ";
+    }
+
+    if ( !bDisplayInGui )
+    {
+        versionText += "Internet Jam Session Software";
+        versionText += "\n *** ";
+        versionText += "Released under the GNU General Public License version 2 or later (GPLv2)";
+        versionText += "\n *** <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>";
+        versionText += "\n *** ";
+        versionText += "\n *** This program is free software; you can redistribute it and/or modify it under";
+        versionText += "\n *** the terms of the GNU General Public License as published by the Free Software";
+        versionText += "\n *** Foundation; either version 2 of the License, or (at your option) any later version.";
+        versionText += "\n *** There is NO WARRANTY, to the extent permitted by law.";
+        versionText += "\n *** ";
+        versionText += "\n *** This app uses the following libraries, resources or code snippets:";
+        versionText += "\n *** ";
+        versionText += "\n *** Qt cross-platform application framework";
+        versionText += "\n *** <https://www.qt.io>";
+        versionText += "\n *** ";
+        versionText += "\n *** Opus Interactive Audio Codec";
+        versionText += "\n *** <https://www.opus-codec.org>";
+        versionText += "\n *** ";
+#    ifndef SERVER_ONLY
+#        if defined( _WIN32 ) && !defined( WITH_JACK )
+        versionText += "\n *** ASIO (Audio Stream I/O) SDK";
+        versionText += "\n *** <https://www.steinberg.net/developers>";
+        versionText += "\n *** ASIO is a trademark and software of Steinberg Media Technologies GmbH";
+        versionText += "\n *** ";
+#        endif
+#    endif
+        versionText += "\n *** Copyright © 2005-2025 The Jamulus Development Team";
+        versionText += "\n";
+    }
+
+    return QString::fromUtf8 ( versionText.toRawUTF8() );
+#else
     QString strVersionText = "";
 
-    // name, short description and GPL hint
     if ( bDisplayInGui )
     {
         strVersionText += "<b>";
     }
     else
     {
-#ifdef _WIN32
-        // start with newline to print nice in windows command prompt
+#    ifdef _WIN32
         strVersionText += "\n";
-#endif
+#    endif
         strVersionText += " *** ";
     }
 
@@ -1530,7 +2419,6 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
 
     if ( !bDisplayInGui )
     {
-        // additional non-translated text to show in console output
         strVersionText += "\n *** <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>";
         strVersionText += "\n *** ";
         strVersionText += "\n *** This program is free software; you can redistribute it and/or modify it under";
@@ -1548,14 +2436,14 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** Opus Interactive Audio Codec";
         strVersionText += "\n *** <https://www.opus-codec.org>";
         strVersionText += "\n *** ";
-#ifndef SERVER_ONLY
-#    if defined( _WIN32 ) && !defined( WITH_JACK )
+#    ifndef SERVER_ONLY
+#        if defined( _WIN32 ) && !defined( WITH_JACK )
         strVersionText += "\n *** ASIO (Audio Stream I/O) SDK";
         strVersionText += "\n *** <https://www.steinberg.net/developers>";
         strVersionText += "\n *** ASIO is a trademark and software of Steinberg Media Technologies GmbH";
         strVersionText += "\n *** ";
-#    endif
-#    ifndef HEADLESS
+#        endif
+#        ifndef HEADLESS
         strVersionText += "\n *** " + QCoreApplication::tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
                           ", 1995 - 2021, The Synthesis ToolKit in C++ (STK)";
         strVersionText += "\n *** <https://ccrma.stanford.edu/software/stk>";
@@ -1569,13 +2457,14 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** " + QString ( QCoreApplication::tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" );
         strVersionText += "\n *** <https://freesound.org>";
         strVersionText += "\n *** ";
+#        endif
 #    endif
-#endif
         strVersionText += "\n *** Copyright © 2005-2025 The Jamulus Development Team";
         strVersionText += "\n";
     }
 
     return strVersionText;
+#endif
 }
 
 QString MakeClientNameTitle ( QString win, QString client )
@@ -1590,6 +2479,17 @@ QString MakeClientNameTitle ( QString win, QString client )
 
 QString TruncateString ( QString str, int position )
 {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    if ( position <= 0 )
+    {
+        return "";
+    }
+    if ( position >= str.length() )
+    {
+        return str;
+    }
+    return str.left ( position );
+#else
     QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
 
     tbfString.setPosition ( position );
@@ -1599,4 +2499,5 @@ QString TruncateString ( QString str, int position )
         position = tbfString.position();
     }
     return str.left ( position );
+#endif
 }

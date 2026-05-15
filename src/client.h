@@ -24,11 +24,22 @@
 
 #pragma once
 
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
 #include <QHostAddress>
 #include <QHostInfo>
+#endif
 #include <QString>
-#include <QDateTime>
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
 #include <QMutex>
+#include <QTimer>
+#endif
+#if defined( HEADLESS )
+#    include <mutex>
+#endif
+#if defined( JAMULUS_USE_JUCE_NET )
+#    include <juce_core/juce_core.h>
+#    include <juce_events/juce_events.h>
+#endif
 #ifdef USE_OPUS_SHARED_LIB
 #    include "opus/opus_custom.h"
 #else
@@ -40,7 +51,10 @@
 #include "util.h"
 #include "plugins/audioreverb.h"
 #include "buffer.h"
-#include "signalhandler.h"
+#ifndef HEADLESS
+#    include "signalhandler.h"
+#endif
+#include "net_abstraction.h"
 
 #if defined( _WIN32 ) && !defined( JACK_ON_WINDOWS )
 #    include "sound/asio/sound.h"
@@ -65,7 +79,7 @@
 #    endif
 #endif
 
-/* Definitions ****************************************************************/
+/* Classes ********************************************************************/
 // audio in fader range
 #define AUD_FADER_IN_MIN    0
 #define AUD_FADER_IN_MAX    100
@@ -105,6 +119,20 @@
 
 /* Classes ********************************************************************/
 
+class CSignalHandler;
+
+class IClientEventSink
+{
+public:
+    virtual ~IClientEventSink() = default;
+    virtual void OnPingTime ( int iPingTime ) {}
+    virtual void OnPingTimeWithNumClients ( const CHostAddress& InetAddr, int iPingTime, int iNumClients ) {}
+    virtual void OnDisconnected() {}
+    virtual void OnClientIDReceived ( int iChanID ) {}
+    virtual void OnChannelLevelListReceived ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList ) {}
+    virtual void OnConClientListMesReceived ( const CVector<CChannelInfo>& vecChanInfo ) {}
+};
+
 class CClientChannel
 {
 public:
@@ -119,7 +147,7 @@ public:
     // can store here other information about an active channel
 };
 
-class CClient : public QObject
+class CClient : public QObject, public IProtocolHandler
 {
     Q_OBJECT
 
@@ -131,7 +159,10 @@ public:
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
               const bool     bNEnableIPv6,
-              const bool     bNMuteMeInPersonalMix );
+              const bool     bNMuteMeInPersonalMix,
+              INetworkSocket*  pNetworkSocketIn  = nullptr,
+              ITimerScheduler* pTimerSchedulerIn = nullptr,
+              IResolver*       pResolverIn       = nullptr );
 
     virtual ~CClient();
 
@@ -140,6 +171,9 @@ public:
     virtual bool IsRunning() { return Sound.IsRunning(); }
     virtual bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
     bool SetServerAddr ( QString strNAddr );
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    bool SetServerAddrStd ( const std::string& addr );
+#endif
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
@@ -265,6 +299,9 @@ public:
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
     void CreateChatTextMes ( const QString& strChatText ) { Channel.CreateChatTextMes ( strChatText ); }
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    void CreateChatTextMesStd ( const std::string& text ) { Channel.CreateChatTextMes ( QString::fromUtf8 ( text.c_str() ) ); }
+#endif
 
     void CreateCLPingMes() { ConnLessProtocol.CreateCLPingMes ( Channel.GetAddress(), PreparePingMessage() ); }
 
@@ -324,9 +361,15 @@ protected:
     // unused channels will contain INVALID_INDEX
     int clientChannelIDs[MAX_NUM_CHANNELS];
 
-    int    iActiveChannels; // number of active channels
-    int    iJoinSequence;   // order of joining of session participants
+    int iActiveChannels; // number of active channels
+    int iJoinSequence;   // order of joining of session participants
+#if defined( HEADLESS )
+    std::mutex MutexChannels;
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::CriticalSection MutexChannels;
+#else
     QMutex MutexChannels;
+#endif
 
     // audio encoder/decoder
     OpusCustomMode*        Opus64Mode;
@@ -353,6 +396,7 @@ protected:
     CVector<unsigned char> vecCeltData;
 
     CHighPrioSocket         Socket;
+    SocketNetworkAdapter    NetworkAdapter;
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
 
@@ -387,27 +431,49 @@ protected:
     bool        bEnableAudioAlerts;
     bool        bEnableOPUS64;
 
-    bool   bJitterBufferOK;
-    bool   bEnableIPv6;
-    bool   bMuteMeInPersonalMix;
+    bool bJitterBufferOK;
+    bool bEnableIPv6;
+    bool bMuteMeInPersonalMix;
+#if defined( HEADLESS )
+    std::mutex MutexDriverReinit;
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::CriticalSection MutexDriverReinit;
+#else
     QMutex MutexDriverReinit;
+#endif
 
     // server settings
     int iServerSockBufNumFrames;
 
-    // for ping measurement
-    QElapsedTimer PreciseTime;
+    CPreciseTimer PreciseTime;
 
-    // for gain or pan rate limiting
+#if defined( HEADLESS )
+    std::mutex MutexGainOrPan;
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::CriticalSection MutexGainOrPan;
+    struct GainOrPanTimer : public juce::Timer
+    {
+        explicit GainOrPanTimer ( CClient& ownerIn ) : owner ( ownerIn ) {}
+        void timerCallback() override { owner.OnTimerRemoteChanGainOrPan(); }
+        CClient& owner;
+    };
+    GainOrPanTimer TimerGainOrPan;
+#else
     QMutex MutexGainOrPan;
     QTimer TimerGainOrPan;
+#endif
     int    minGainOrPanId;
     int    maxGainOrPanId;
     int    iCurPingTime;
+    TimerId gainOrPanTimerId;
 
-    CSignalHandler* pSignalHandler;
+    CSignalHandler*   pSignalHandler;
+    INetworkSocket*   pNetworkSocket;
+    ITimerScheduler*  pTimerScheduler;
+    IResolver*        pResolver;
+    IClientEventSink* pEventSink{ nullptr };
 
-protected slots:
+protected:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
@@ -418,18 +484,23 @@ protected slots:
     void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
     void OnNewConnection();
-    void OnCLDisconnection ( CHostAddress InetAddr )
+    void OnCLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage ) override;
+    virtual void OnCLDisconnection ( CHostAddress InetAddr ) override
     {
         if ( InetAddr == Channel.GetAddress() )
         {
+            if ( pEventSink )
+            {
+                pEventSink->OnDisconnected();
+            }
             emit Disconnected();
         }
     }
-    void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
+    virtual void OnCLPingReceived ( CHostAddress InetAddr, int iMs ) override;
 
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
 
-    void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
+    virtual void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients ) override;
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
     void OnControllerInFaderLevel ( int iChannelIdx, int iValue );
@@ -437,10 +508,17 @@ protected slots:
     void OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void OnControllerInMuteMyself ( bool bMute );
-    virtual void OnClientIDReceived ( int iServerChanID );
-    virtual void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
-    virtual void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
-    virtual void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    virtual void OnClientIDReceived ( int iServerChanID ) override;
+    virtual void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted ) override;
+    virtual void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList ) override;
+    virtual void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo ) override;
+    virtual void OnChatTextReceived ( QString strChatText ) override;
+    virtual void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo ) override;
+    virtual void OnCLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo ) override;
+    virtual void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo ) override;
+
+public:
+    void SetEventSink ( IClientEventSink* sink ) { pEventSink = sink; }
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

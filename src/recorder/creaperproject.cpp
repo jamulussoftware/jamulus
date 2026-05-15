@@ -23,22 +23,24 @@
 \******************************************************************************/
 
 #include "creaperproject.h"
+#include "cwavestream.h"
+#include <ostream>
 
 /**
- * @brief operator << Write details of the STrackItem to the QTextStream
- * @param os the QTextStream
+ * @brief operator << Write details of the STrackItem to a standard stream
+ * @param os the output stream
  * @param trackItem the STrackItem
- * @return the QTextStream
+ * @return the output stream
  *
  * Note: unused?
  */
-QTextStream& operator<< ( QTextStream& os, const recorder::STrackItem& trackItem )
+std::ostream& operator<< ( std::ostream& os, const recorder::STrackItem& trackItem )
 {
     os << "_track( "
        << "numAudioChannels(" << trackItem.numAudioChannels << ")"
        << ", startFrame(" << trackItem.startFrame << ")"
        << ", frameCount(" << trackItem.frameCount << ")"
-       << ", fileName(" << trackItem.fileName << ")"
+       << ", fileName(" << std::string ( trackItem.fileName.toUtf8().constData() ) << ")"
        << " );";
     return os;
 }
@@ -60,25 +62,22 @@ CReaperItem::CReaperItem ( const QString& name, const STrackItem& trackItem, con
 {
     QString wavName = trackItem.fileName; // assume RPP in same location...
 
-    QTextStream sOut ( &out );
-
-    sOut << "    <ITEM " << '\n'
-         << "      FADEIN 0 0 0 0 0 0" << '\n'
-         << "      FADEOUT 0 0 0 0 0 0" << '\n'
-         << "      POSITION " << secondsAt48K ( trackItem.startFrame, frameSize ) << '\n'
-         << "      LENGTH " << secondsAt48K ( trackItem.frameCount, frameSize ) << '\n'
-         << "      IGUID " << iguid.toString() << '\n'
-         << "      IID " << iid << '\n'
-         << "      NAME " << name << '\n'
-         << "      GUID " << guid.toString() << '\n'
-
-         << "      <SOURCE WAVE" << '\n'
-         << "        FILE " << '"' << wavName << '"' << '\n'
-         << "      >" << '\n'
-
-         << "    >";
-
-    sOut.flush();
+    out.clear();
+    out += "    <ITEM \n";
+    out += "      FADEIN 0 0 0 0 0 0\n";
+    out += "      FADEOUT 0 0 0 0 0 0\n";
+    out += "      POSITION " + secondsAt48K ( trackItem.startFrame, frameSize ) + "\n";
+    out += "      LENGTH " + secondsAt48K ( trackItem.frameCount, frameSize ) + "\n";
+    out += "      IGUID " + iguid.toString() + "\n";
+    out += "      IID " + QString::number ( iid ) + "\n";
+    out += "      NAME " + name + "\n";
+    out += "      GUID " + guid.toString() + "\n";
+    out += "\n";
+    out += "      <SOURCE WAVE\n";
+    out += "        FILE \"" + wavName + "\"\n";
+    out += "      >\n";
+    out += "\n";
+    out += "    >";
 }
 
 /**
@@ -89,22 +88,20 @@ CReaperItem::CReaperItem ( const QString& name, const STrackItem& trackItem, con
  */
 CReaperTrack::CReaperTrack ( QString name, qint32& iid, QList<STrackItem> items, int frameSize )
 {
-    QTextStream sOut ( &out );
-
-    sOut << "  <TRACK " << trackId.toString() << '\n';
-    sOut << "    NAME " << name << '\n';
-    sOut << "    TRACKID " << trackId.toString() << '\n';
+    out.clear();
+    out += "  <TRACK " + trackId.toString() + "\n";
+    out += "    NAME " + name + "\n";
+    out += "    TRACKID " + trackId.toString() + "\n";
 
     int ino = 1;
     foreach ( auto item, items )
     {
-        sOut << CReaperItem ( name + " (" + QString::number ( ino ) + ")", item, iid, frameSize ).toString() << '\n';
+        out += CReaperItem ( name + " (" + QString::number ( ino ) + ")", item, iid, frameSize ).toString();
+        out += "\n";
         ino++;
         iid++;
     }
-    sOut << "  >";
-
-    sOut.flush();
+    out += "  >";
 }
 
 /**
@@ -113,20 +110,18 @@ CReaperTrack::CReaperTrack ( QString name, qint32& iid, QList<STrackItem> items,
  */
 CReaperProject::CReaperProject ( QMap<QString, QList<STrackItem>> tracks, int frameSize )
 {
-    QTextStream sOut ( &out );
-
-    sOut << "<REAPER_PROJECT 0.1 \"5.0\" 1551567848" << '\n'
-         << "  RECORD_PATH \"\" \"\"" << '\n'
-         << "  SAMPLERATE 48000 0 0" << '\n'
-         << "  TEMPO 120 4 4" << '\n';
+    out.clear();
+    out += "<REAPER_PROJECT 0.1 \"5.0\" 1551567848\n";
+    out += "  RECORD_PATH \"\" \"\"\n";
+    out += "  SAMPLERATE 48000 0 0\n";
+    out += "  TEMPO 120 4 4\n";
 
     qint32 iid = 0;
     foreach ( auto trackName, tracks.keys() )
     {
-        sOut << CReaperTrack ( trackName, iid, tracks[trackName], frameSize ).toString() << '\n';
+        out += CReaperTrack ( trackName, iid, tracks[trackName], frameSize ).toString();
+        out += "\n";
     }
 
-    sOut << ">";
-
-    sOut.flush();
+    out += ">";
 }

@@ -9,17 +9,9 @@ on:
     tags:
       - 'V*'
       - 'v*'
-    paths:
-      - '.github/workflows/jamulusplus-build.yml'
-      - '.gitmodules'
-      - 'JamulusPlus/**'
   pull_request:
     branches:
       - main
-    paths:
-      - '.github/workflows/jamulusplus-build.yml'
-      - '.gitmodules'
-      - 'JamulusPlus/**'
 
 permissions:
   contents: write
@@ -37,46 +29,46 @@ jobs:
 
       - name: Checkout JamulusPlus submodules
         run: |
-          git submodule update --init --depth 1 --recursive -- JamulusPlus/third_party/JUCE JamulusPlus/third_party/clap-juce-extensions
+          git submodule update --init --depth 1 --recursive -- third_party/JUCE third_party/clap-juce-extensions
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
       - name: Configure
         run: >
-          cmake -S JamulusPlus -B JamulusPlus/build-ci-windows -G "Visual Studio 17 2022" -A x64
+          cmake -S . -B build-ci-windows -G "Visual Studio 17 2022" -A x64
           -DENABLE_CLAP=ON
           -DENABLE_STANDALONE=ON
 
       - name: Build CLAP
         run: >
-          cmake --build JamulusPlus/build-ci-windows --config Release
+          cmake --build build-ci-windows --config Release
           --target jamulus_engine_CLAP
           --verbose
 
       - name: Build VST3
         run: >
-          cmake --build JamulusPlus/build-ci-windows --config Release
+          cmake --build build-ci-windows --config Release
           --target jamulus_engine_VST3
           --verbose
 
       - name: Build Standalone
         run: >
-          cmake --build JamulusPlus/build-ci-windows --config Release
+          cmake --build build-ci-windows --config Release
           --target jamulus_engine_Standalone
           --verbose
 
       - name: Prepare Installer Inputs
         shell: pwsh
         run: |
-          $installerRoot = "JamulusPlus/build-ci-windows/installer-input"
+          $installerRoot = "build-ci-windows/installer-input"
           $vst3Stage = Join-Path $installerRoot "JamulusPlus.vst3"
           $standaloneStage = Join-Path $installerRoot "JamulusPlus-Standalone"
           Remove-Item -Recurse -Force $installerRoot -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path $vst3Stage | Out-Null
           New-Item -ItemType Directory -Force -Path $standaloneStage | Out-Null
-          Copy-Item -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3/*" -Destination $vst3Stage -Recurse -Force
-          $standaloneSource = if (Test-Path "JamulusPlus/dist/JamulusPlus-Standalone") { "JamulusPlus/dist/JamulusPlus-Standalone" } else { "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone" }
+          Copy-Item -Path "build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3/*" -Destination $vst3Stage -Recurse -Force
+          $standaloneSource = if (Test-Path "dist/JamulusPlus-Standalone") { "dist/JamulusPlus-Standalone" } else { "build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone" }
           Copy-Item -Path "$standaloneSource\\*" -Destination $standaloneStage -Recurse -Force
 
       - name: Install Inno Setup
@@ -97,11 +89,11 @@ jobs:
             "/DMyAppVersion=$versionInfo" `
             "/DMyAppDisplayVersion=$tagName" `
             "/DMyVersionInfoVersion=$versionInfo" `
-            "/DMyOutputDir=JamulusPlus/build-ci-windows/installer-output" `
+            "/DMyOutputDir=build-ci-windows/installer-output" `
             "/DMyOutputBaseFilename=JamulusPlus-Setup-$tagName" `
-            "/DMyVst3SourceDir=$(Resolve-Path 'JamulusPlus/build-ci-windows/installer-input/JamulusPlus.vst3')" `
-            "/DMyStandaloneSourceDir=$(Resolve-Path 'JamulusPlus/build-ci-windows/installer-input/JamulusPlus-Standalone')" `
-            "JamulusPlus/installer/jamulus_vst3.iss"
+            "/DMyVst3SourceDir=$(Resolve-Path 'build-ci-windows/installer-input/JamulusPlus.vst3')" `
+            "/DMyStandaloneSourceDir=$(Resolve-Path 'build-ci-windows/installer-input/JamulusPlus-Standalone')" `
+            "installer/jamulus_vst3.iss"
           if ($LASTEXITCODE -ne 0) { throw "Inno Setup compilation failed." }
 
       - name: Upload CLAP
@@ -109,14 +101,14 @@ jobs:
         with:
           name: JamulusPlus-windows-clap
           if-no-files-found: error
-          path: JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap
+          path: build-ci-windows/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap
 
       - name: Upload VST3
         uses: actions/upload-artifact@v4
         with:
           name: JamulusPlus-windows-vst3
           if-no-files-found: error
-          path: JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
+          path: build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
 
       - name: Upload Standalone
         uses: actions/upload-artifact@v4
@@ -124,34 +116,34 @@ jobs:
           name: JamulusPlus-windows-standalone
           if-no-files-found: error
           path: |
-            JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone/**
-            JamulusPlus/dist/JamulusPlus-Standalone/**
+            build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone/**
+            dist/JamulusPlus-Standalone/**
 
       - name: Upload Installer
         uses: actions/upload-artifact@v4
         with:
           name: JamulusPlus-windows-installer
           if-no-files-found: error
-          path: JamulusPlus/build-ci-windows/installer-output/*.exe
+          path: build-ci-windows/installer-output/*.exe
 
       - name: Package Release Assets
         if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path release-assets | Out-Null
-          Compress-Archive -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-clap.zip" -Force
-          Compress-Archive -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip" -Force
-          $standaloneSource = if (Test-Path "JamulusPlus/dist/JamulusPlus-Standalone") { "JamulusPlus/dist/JamulusPlus-Standalone" } else { "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone" }
+          Compress-Archive -Path "build-ci-windows/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-clap.zip" -Force
+          Compress-Archive -Path "build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip" -Force
+          $standaloneSource = if (Test-Path "dist/JamulusPlus-Standalone") { "dist/JamulusPlus-Standalone" } else { "build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone" }
           $standaloneStage = "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone"
           Remove-Item -Recurse -Force $standaloneStage -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path $standaloneStage | Out-Null
-          if (Test-Path "JamulusPlus/dist/JamulusPlus-Standalone") {
+          if (Test-Path "dist/JamulusPlus-Standalone") {
             Copy-Item -Path "$standaloneSource\\*" -Destination $standaloneStage -Recurse -Force
           } else {
             Copy-Item -Path "$standaloneSource\\*" -Destination $standaloneStage -Recurse -Force
           }
           Compress-Archive -Path "$standaloneStage\\*" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
-          Copy-Item -Path "JamulusPlus/build-ci-windows/installer-output/*.exe" -Destination "release-assets/" -Force
+          Copy-Item -Path "build-ci-windows/installer-output/*.exe" -Destination "release-assets/" -Force
 
       - name: Publish Release Assets
         if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')
@@ -177,11 +169,11 @@ jobs:
 
       - name: Checkout JamulusPlus submodules
         run: |
-          git submodule update --init --depth 1 --recursive -- JamulusPlus/third_party/JUCE JamulusPlus/third_party/clap-juce-extensions
+          git submodule update --init --depth 1 --recursive -- third_party/JUCE third_party/clap-juce-extensions
 
       - name: Configure
         run: >
-          cmake -S JamulusPlus -B JamulusPlus/build-ci-macos -G Xcode
+          cmake -S . -B build-ci-macos -G Xcode
           -DENABLE_AU=ON
           -DENABLE_CLAP=ON
           -DENABLE_STANDALONE=ON
@@ -194,7 +186,7 @@ jobs:
 
       - name: Build CLAP
         run: >
-          cmake --build JamulusPlus/build-ci-macos --config Release
+          cmake --build build-ci-macos --config Release
           --target jamulus_engine_CLAP
           --verbose
           --
@@ -206,7 +198,7 @@ jobs:
 
       - name: Build VST3
         run: >
-          cmake --build JamulusPlus/build-ci-macos --config Release
+          cmake --build build-ci-macos --config Release
           --target jamulus_engine_VST3
           --verbose
           --
@@ -218,7 +210,7 @@ jobs:
 
       - name: Build AU
         run: >
-          cmake --build JamulusPlus/build-ci-macos --config Release
+          cmake --build build-ci-macos --config Release
           --target jamulus_engine_AU
           --verbose
           --
@@ -230,7 +222,7 @@ jobs:
 
       - name: Build Standalone
         run: >
-          cmake --build JamulusPlus/build-ci-macos --config Release
+          cmake --build build-ci-macos --config Release
           --target jamulus_engine_Standalone
           --verbose
           --
@@ -245,21 +237,21 @@ jobs:
         with:
           name: JamulusPlus-macos-clap
           if-no-files-found: error
-          path: JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap
+          path: build-ci-macos/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap
 
       - name: Upload VST3
         uses: actions/upload-artifact@v4
         with:
           name: JamulusPlus-macos-vst3
           if-no-files-found: error
-          path: JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
+          path: build-ci-macos/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3
 
       - name: Upload AU
         uses: actions/upload-artifact@v4
         with:
           name: JamulusPlus-macos-au
           if-no-files-found: error
-          path: JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component
+          path: build-ci-macos/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component
 
       - name: Upload Standalone
         uses: actions/upload-artifact@v4
@@ -267,20 +259,20 @@ jobs:
           name: JamulusPlus-macos-standalone
           if-no-files-found: error
           path: |
-            JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app
-            JamulusPlus/dist/JamulusPlus.app
+            build-ci-macos/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app
+            dist/JamulusPlus.app
 
       - name: Package Release Assets
         if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')
         run: |
           mkdir -p release-assets
-          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-clap.zip"
-          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-vst3.zip"
-          ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-au.zip"
-          if [ -d "JamulusPlus/dist/JamulusPlus.app" ]; then
-            ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/dist/JamulusPlus.app" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip"
+          ditto -c -k --sequesterRsrc --keepParent "build-ci-macos/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-clap.zip"
+          ditto -c -k --sequesterRsrc --keepParent "build-ci-macos/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-vst3.zip"
+          ditto -c -k --sequesterRsrc --keepParent "build-ci-macos/plugin/jamulus_engine_artefacts/Release/AU/JamulusPlus.component" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-au.zip"
+          if [ -d "dist/JamulusPlus.app" ]; then
+            ditto -c -k --sequesterRsrc --keepParent "dist/JamulusPlus.app" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip"
           else
-            ditto -c -k --sequesterRsrc --keepParent "JamulusPlus/build-ci-macos/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip"
+            ditto -c -k --sequesterRsrc --keepParent "build-ci-macos/plugin/jamulus_engine_artefacts/Release/Standalone/JamulusPlus.app" "release-assets/JamulusPlus-${{ github.ref_name }}-macos-standalone.zip"
           fi
 
       - name: Publish Release Assets

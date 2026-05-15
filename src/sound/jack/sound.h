@@ -57,7 +57,9 @@
 #if WITH_JACK
 class CSound : public CSoundBase
 {
+    #if !defined( JAMULUS_USE_JUCE_NET )
     Q_OBJECT
+    #endif
 
 public:
     CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
@@ -118,7 +120,9 @@ protected:
 // no sound -> dummy class definition
 class CSound : public CSoundBase
 {
+    #if !defined( JAMULUS_USE_JUCE_NET )
     Q_OBJECT
+    #endif
 
 public:
     CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* pParg ),
@@ -130,7 +134,7 @@ public:
         HighPrecisionTimer ( true )
     {
         HighPrecisionTimer.Start();
-        QObject::connect ( &HighPrecisionTimer, &CHighPrecisionTimer::timeout, this, &CSound::OnTimer );
+        HighPrecisionTimer.setCallback ( [this]() { OnTimer(); } );
     }
     virtual ~CSound() {}
     virtual int Init ( const int iNewPrefMonoBufferSize )

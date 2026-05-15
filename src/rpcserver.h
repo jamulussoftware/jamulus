@@ -29,9 +29,13 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QTimer>
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+#    include <juce_core/juce_core.h>
+#    include <juce_events/juce_events.h>
+#else
+#    include <QTcpServer>
+#    include <QTcpSocket>
+#endif
 #include <QMap>
 #include <QVector>
 #include <memory>
@@ -67,16 +71,48 @@ private:
     QString     strBindIP;
     int         iPort;
     QString     strSecret;
+
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    class JUCE_RpcServer : public juce::Thread
+    {
+    public:
+        JUCE_RpcServer ( CRpcServer* pOwner ) : Thread ( "RPC Server" ), pOwner ( pOwner ) {}
+        ~JUCE_RpcServer() { stopThread ( 2000 ); }
+        void run() override;
+        juce::StreamingSocket serverSocket;
+    private:
+        CRpcServer* pOwner;
+    };
+    class JUCE_PollTimer : public juce::Timer
+    {
+    public:
+        JUCE_PollTimer ( CRpcServer* pOwnerIn, juce::StreamingSocket* pSocketIn );
+        void timerCallback() override;
+    private:
+        CRpcServer*          pOwner;
+        juce::StreamingSocket* pSocket;
+    };
+    std::unique_ptr<JUCE_RpcServer> pJuceServer;
+    QMap<void*, bool>               isAuthenticated;
+    QVector<void*>                  vecClients;
+#else
     QTcpServer* pTransportServer;
+    QMap<QTcpSocket*, bool>    isAuthenticated;
+    QVector<QTcpSocket*>       vecClients;
+#endif
 
     // A map from method name to handler functions
     QMap<QString, CRpcHandler> mapMethodHandlers;
-    QMap<QTcpSocket*, bool>    isAuthenticated;
-    QVector<QTcpSocket*>       vecClients;
 
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    void HandleApiAuth ( void* pSocket, const QJsonObject& params, QJsonObject& response );
+    void ProcessMessage ( void* pSocket, QJsonObject message, QJsonObject& response );
+    void Send ( void* pSocket, const QJsonDocument& aMessage );
+#else
     void HandleApiAuth ( QTcpSocket* pSocket, const QJsonObject& params, QJsonObject& response );
     void ProcessMessage ( QTcpSocket* pSocket, QJsonObject message, QJsonObject& response );
     void Send ( QTcpSocket* pSocket, const QJsonDocument& aMessage );
+#endif
 
     static QJsonObject CreateJsonRpcErrorReply ( int code, QString message );
 

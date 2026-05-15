@@ -27,7 +27,7 @@
 #include <CoreAudio/CoreAudio.h>
 #include <AudioToolbox/AudioToolbox.h>
 #include <CoreMIDI/CoreMIDI.h>
-#include <QMutex>
+#include <mutex>
 #include <QMessageBox>
 #include "../soundbase.h"
 #include "../../global.h"
@@ -35,7 +35,9 @@
 /* Classes ********************************************************************/
 class CSound : public CSoundBase
 {
+    #if !defined( JAMULUS_USE_JUCE_NET )
     Q_OBJECT
+    #endif
 
 public:
     CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
@@ -131,5 +133,5 @@ protected:
     QString sChannelNamesInput[MAX_NUM_IN_OUT_CHANNELS];
     QString sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];
 
-    QMutex Mutex;
+    std::mutex Mutex;
 };

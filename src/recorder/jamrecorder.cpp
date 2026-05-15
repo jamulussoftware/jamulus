@@ -23,6 +23,12 @@
 \******************************************************************************/
 
 #include "jamrecorder.h"
+#include "cwavestream.h"
+#include <chrono>
+#include <filesystem>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
 
 using namespace recorder;
 
@@ -38,33 +44,87 @@ using namespace recorder;
  * @param address IP and Port
  * @param recordBaseDir Session recording directory
  *
- * Creates a file for the raw PCM data and sets up a QDataStream to which to write received frames.
- * The data is stored Little Endian.
+ *
  */
-CJamClient::CJamClient ( const qint64 frame, const int _numChannels, const QString name, const CHostAddress& address, const QDir recordBaseDir ) :
+namespace
+{
+static inline void writeLE16 ( std::ofstream& out, uint16_t v )
+{
+    char b[2] = { static_cast<char> ( v & 0xFF ), static_cast<char> ( ( v >> 8 ) & 0xFF ) };
+    out.write ( b, 2 );
+}
+static inline void writeLE32 ( std::ofstream& out, uint32_t v )
+{
+    char b[4] = { static_cast<char> ( v & 0xFF ),
+                  static_cast<char> ( ( v >> 8 ) & 0xFF ),
+                  static_cast<char> ( ( v >> 16 ) & 0xFF ),
+                  static_cast<char> ( ( v >> 24 ) & 0xFF ) };
+    out.write ( b, 4 );
+}
+static void writeWavHeader ( std::ofstream& out, uint16_t numChannels )
+{
+    const uint32_t sampleRate   = 48000;
+    const uint16_t bitsPerSample = 16;
+    const uint16_t blockAlign   = static_cast<uint16_t> ( numChannels * bitsPerSample / 8 );
+    const uint32_t byteRate     = sampleRate * blockAlign;
+    out.write ( "RIFF", 4 );
+    writeLE32 ( out, 0 ); // placeholder for RIFF chunk size
+    out.write ( "WAVE", 4 );
+    out.write ( "fmt ", 4 );
+    writeLE32 ( out, 16 );            // PCM fmt chunk size
+    writeLE16 ( out, 1 );             // audio format PCM
+    writeLE16 ( out, numChannels );   // channels
+    writeLE32 ( out, sampleRate );    // sample rate
+    writeLE32 ( out, byteRate );      // byte rate
+    writeLE16 ( out, blockAlign );    // block align
+    writeLE16 ( out, bitsPerSample ); // bits per sample
+    out.write ( "data", 4 );
+    writeLE32 ( out, 0 ); // placeholder for data chunk size
+}
+static void finalizeWav ( std::ofstream& out )
+{
+    const std::streamoff riffChunkSizeOffset = 4;
+    const std::streamoff dataChunkSizeOffset = 40;
+    const std::streamoff currentPos          = out.tellp();
+    if ( currentPos <= 0 )
+        return;
+    const uint32_t riffSize = static_cast<uint32_t> ( currentPos - ( riffChunkSizeOffset + 4 ) );
+    const uint32_t dataSize = static_cast<uint32_t> ( currentPos - ( dataChunkSizeOffset + 4 ) );
+    out.seekp ( riffChunkSizeOffset, std::ios::beg );
+    writeLE32 ( out, riffSize );
+    out.seekp ( dataChunkSizeOffset, std::ios::beg );
+    writeLE32 ( out, dataSize );
+    out.seekp ( currentPos, std::ios::beg );
+}
+} // namespace
+
+CJamClient::CJamClient ( const qint64 frame,
+                         const int    _numChannels,
+                         const QString name,
+                         const CHostAddress& address,
+                         const QString        recordBaseDirPath ) :
     startFrame ( frame ),
     numChannels ( static_cast<uint16_t> ( _numChannels ) ),
     name ( name ),
-    address ( address ),
-    out ( nullptr )
+    address ( address )
 {
-    // At this point we may not have much of a name
     QString fileName = ClientName() + "-" + QString::number ( frame ) + "-" + QString::number ( _numChannels );
     QString affix    = "";
-    while ( recordBaseDir.exists ( fileName + affix + ".wav" ) )
+    std::filesystem::path baseDir ( recordBaseDirPath.toStdWString() );
+    while ( std::filesystem::exists ( baseDir / std::filesystem::path ( ( fileName + affix + ".wav" ).toStdWString() ) ) )
     {
-        affix = affix.length() == 0 ? "_1" : "_" + QString::number ( affix.remove ( 0, 1 ).toInt() + 1 );
+        affix = affix.isEmpty() ? "_1" : "_" + QString::number ( affix.mid ( 1 ).toInt() + 1 );
     }
     fileName = fileName + affix + ".wav";
 
-    wavFile = new QFile ( recordBaseDir.absoluteFilePath ( fileName ) );
-    if ( !wavFile->open ( QFile::OpenMode ( QIODevice::OpenModeFlag::ReadWrite ) ) ) // need to allow rewriting headers
+    const QString absPath = QString::fromStdWString ( ( baseDir / std::filesystem::path ( fileName.toStdWString() ) ).wstring() );
+    wavFile.open ( absPath.toStdWString(), std::ios::binary | std::ios::trunc | std::ios::out );
+    if ( !wavFile.is_open() )
     {
-        throw CGenErr ( "Could not write to WAV file " + wavFile->fileName() );
+        throw CGenErr ( "Could not write to WAV file " + absPath );
     }
-    out = new CWaveStream ( wavFile, numChannels );
-
-    filename = wavFile->fileName();
+    writeWavHeader ( wavFile, numChannels );
+    filename = absPath;
 }
 
 /**
@@ -78,7 +138,8 @@ void CJamClient::Frame ( const QString _name, const CVector<int16_t>& pcm, int i
 
     for ( int i = 0; i < numChannels * iServerFrameSizeSamples; i++ )
     {
-        *out << pcm[i];
+        const int16_t sample = pcm[i];
+        wavFile.write ( reinterpret_cast<const char*> ( &sample ), sizeof ( int16_t ) );
     }
 
     frameCount++;
@@ -89,17 +150,12 @@ void CJamClient::Frame ( const QString _name, const CVector<int16_t>& pcm, int i
  */
 void CJamClient::Disconnect()
 {
-    if ( out )
+    if ( wavFile.is_open() )
     {
-        static_cast<CWaveStream*> ( out )->finalise();
-        delete out;
-        out = nullptr;
+        finalizeWav ( wavFile );
+        wavFile.flush();
+        wavFile.close();
     }
-
-    wavFile->close();
-
-    delete wavFile;
-    wavFile = nullptr;
 }
 
 /**
@@ -150,27 +206,59 @@ QString CJamClient::TranslateChars ( const QString& input ) const
  *
  * Each session is stored into its own subdirectory of the recording base directory.
  */
-CJamSession::CJamSession ( QDir recordBaseDir ) :
-    sessionDir ( QDir ( recordBaseDir.absoluteFilePath ( "Jam-" + QDateTime().currentDateTimeUtc().toString ( "yyyyMMdd-HHmmsszzz" ) ) ) ),
+namespace
+{
+QString MakeUtcTimestampForSession()
+{
+    const auto now         = std::chrono::system_clock::now();
+    const auto nowTimeT    = std::chrono::system_clock::to_time_t ( now );
+    const auto msPart      = std::chrono::duration_cast<std::chrono::milliseconds> ( now.time_since_epoch() ) % 1000;
+    std::tm     utcTime    = {};
+#ifdef _WIN32
+    gmtime_s ( &utcTime, &nowTimeT );
+#else
+    gmtime_r ( &nowTimeT, &utcTime );
+#endif
+
+    std::ostringstream oss;
+    oss << std::put_time ( &utcTime, "%Y%m%d-%H%M%S" ) << std::setw ( 3 ) << std::setfill ( '0' ) << msPart.count();
+    return QString::fromStdString ( oss.str() );
+}
+}
+
+CJamSession::CJamSession ( QString recordBaseDirPath ) :
+    sessionDirPath ( QString::fromStdWString ( ( std::filesystem::path ( recordBaseDirPath.toStdWString() ) /
+                                                 std::filesystem::path (
+                                                     QString ( "Jam-" + MakeUtcTimestampForSession() ).toStdWString() ) )
+                                                   .wstring() ) ),
     currentFrame ( 0 ),
     chIdDisconnected ( -1 ),
     vecptrJamClients ( MAX_NUM_CHANNELS ),
     jamClientConnections()
 {
-    QFileInfo fi ( sessionDir.absolutePath() );
-    fi.setCaching ( false );
-
-    if ( !fi.exists() && !QDir().mkpath ( sessionDir.absolutePath() ) )
+    std::filesystem::path dirPath ( sessionDirPath.toStdWString() );
+    std::error_code       ec;
+    if ( !std::filesystem::exists ( dirPath ) )
     {
-        throw CGenErr ( sessionDir.absolutePath() + " does not exist and could not be created" );
+        std::filesystem::create_directories ( dirPath, ec );
+        if ( ec )
+        {
+            throw CGenErr ( sessionDirPath + " does not exist and could not be created" );
+        }
     }
-    if ( !fi.isDir() )
+    if ( !std::filesystem::is_directory ( dirPath ) )
     {
-        throw CGenErr ( sessionDir.absolutePath() + " exists but is not a directory" );
+        throw CGenErr ( sessionDirPath + " exists but is not a directory" );
     }
-    if ( !fi.isWritable() )
     {
-        throw CGenErr ( sessionDir.absolutePath() + " is a directory but cannot be written to" );
+        const std::filesystem::path tmp = dirPath / L".write_test.tmp";
+        std::ofstream               test ( tmp, std::ios::out | std::ios::binary | std::ios::trunc );
+        if ( !test.is_open() )
+        {
+            throw CGenErr ( sessionDirPath + " is a directory but cannot be written to" );
+        }
+        test.close();
+        std::filesystem::remove ( tmp, ec );
     }
 
     // Explicitly set all the pointers to "empty"
@@ -242,11 +330,10 @@ void CJamSession::Frame ( const int              iChID,
     if ( vecptrJamClients[iChID] == nullptr )
     {
         // then we have not seen this client this session
-        vecptrJamClients[iChID] = new CJamClient ( currentFrame, numAudioChannels, name, address, sessionDir );
+        vecptrJamClients[iChID] = new CJamClient ( currentFrame, numAudioChannels, name, address, sessionDirPath );
     }
     else if ( numAudioChannels != vecptrJamClients[iChID]->NumAudioChannels() ||
-              address.InetAddr != vecptrJamClients[iChID]->ClientAddress().InetAddr ||
-              address.iPort != vecptrJamClients[iChID]->ClientAddress().iPort )
+              address.toString() != vecptrJamClients[iChID]->ClientAddress().toString() )
     {
         DisconnectClient ( iChID );
         if ( numAudioChannels == 0 )
@@ -255,7 +342,7 @@ void CJamSession::Frame ( const int              iChID,
         }
         else
         {
-            vecptrJamClients[iChID] = new CJamClient ( currentFrame, numAudioChannels, name, address, sessionDir );
+            vecptrJamClients[iChID] = new CJamClient ( currentFrame, numAudioChannels, name, address, sessionDirPath );
         }
     }
 
@@ -324,29 +411,33 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir ( const QStri
 {
     QMap<QString, QList<STrackItem>> tracks;
 
-    const QDir sessionDir ( sessionDirName );
-    foreach ( auto entry, sessionDir.entryList ( { "*.pcm" } ) )
+    std::filesystem::path dir ( sessionDirName.toStdWString() );
+    if ( std::filesystem::exists ( dir ) && std::filesystem::is_directory ( dir ) )
     {
-
-        auto    split       = entry.split ( "." )[0].split ( "-" );
-        QString name        = split[0];
-        QString hostPort    = split[1];
-        QString frame       = split[2];
-        QString tail        = split[3]; // numChannels may have _nnn
-        QString numChannels = tail.count ( "_" ) > 0 ? tail.split ( "_" )[0] : tail;
-
-        QString trackName = name + "-" + hostPort;
-        if ( !tracks.contains ( trackName ) )
+        for ( const auto& de : std::filesystem::directory_iterator ( dir ) )
         {
-            tracks.insert ( trackName, {} );
+            if ( de.is_regular_file() && de.path().extension() == L".pcm" )
+            {
+                const QString entry = QString::fromStdWString ( de.path().filename().wstring() );
+
+                auto    split       = entry.split ( "." )[0].split ( "-" );
+                QString name        = split[0];
+                QString hostPort    = split[1];
+                QString frame       = split[2];
+                QString tail        = split[3]; // numChannels may have _nnn
+                QString numChannels = tail.count ( "_" ) > 0 ? tail.split ( "_" )[0] : tail;
+
+                QString trackName = name + "-" + hostPort;
+                if ( !tracks.contains ( trackName ) )
+                {
+                    tracks.insert ( trackName, {} );
+                }
+
+                const qint64 length = static_cast<qint64> ( std::filesystem::file_size ( de.path() ) ) / numChannels.toInt() / iServerFrameSizeSamples;
+                STrackItem    track ( numChannels.toInt(), frame.toLongLong(), length, QString::fromStdWString ( de.path().wstring() ) );
+                tracks[trackName].append ( track );
+            }
         }
-
-        QFileInfo fiEntry ( sessionDir.absoluteFilePath ( entry ) );
-        qint64    length = fiEntry.size() / numChannels.toInt() / iServerFrameSizeSamples;
-
-        STrackItem track ( numChannels.toInt(), frame.toLongLong(), length, sessionDir.absoluteFilePath ( entry ) );
-
-        tracks[trackName].append ( track );
     }
 
     return tracks;
@@ -364,26 +455,35 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir ( const QStri
 QString CJamRecorder::Init()
 {
     QString   errmsg = QString();
-    QFileInfo fi ( recordBaseDir.absolutePath() );
-    fi.setCaching ( false );
-
-    if ( !fi.exists() && !QDir().mkpath ( recordBaseDir.absolutePath() ) )
+    std::filesystem::path dirPath ( recordBaseDirPath.toStdWString() );
+    std::error_code       ec;
+    if ( !std::filesystem::exists ( dirPath ) )
     {
-        errmsg = QString ( "'%1' does not exist but could not be created." ).arg ( recordBaseDir.absolutePath() );
+        std::filesystem::create_directories ( dirPath, ec );
+        if ( ec )
+        {
+            errmsg = QString ( "'%1' does not exist but could not be created." ).arg ( recordBaseDirPath );
+            qCritical() << qUtf8Printable ( errmsg );
+            return errmsg;
+        }
+    }
+    if ( !std::filesystem::is_directory ( dirPath ) )
+    {
+        errmsg = QString ( "'%1' exists but is not a directory" ).arg ( recordBaseDirPath );
         qCritical() << qUtf8Printable ( errmsg );
         return errmsg;
     }
-    if ( !fi.isDir() )
     {
-        errmsg = QString ( "'%1' exists but is not a directory" ).arg ( recordBaseDir.absolutePath() );
-        qCritical() << qUtf8Printable ( errmsg );
-        return errmsg;
-    }
-    if ( !fi.isWritable() )
-    {
-        errmsg = QString ( "'%1' is a directory but cannot be written to" ).arg ( recordBaseDir.absolutePath() );
-        qCritical() << qUtf8Printable ( errmsg );
-        return errmsg;
+        const std::filesystem::path tmp = dirPath / L".write_test.tmp";
+        std::ofstream               test ( tmp, std::ios::out | std::ios::binary | std::ios::trunc );
+        if ( !test.is_open() )
+        {
+            errmsg = QString ( "'%1' is a directory but cannot be written to" ).arg ( recordBaseDirPath );
+            qCritical() << qUtf8Printable ( errmsg );
+            return errmsg;
+        }
+        test.close();
+        std::filesystem::remove ( tmp, ec );
     }
 
     return errmsg;
@@ -401,10 +501,16 @@ void CJamRecorder::Start()
 
     {
         // needs to be after OnEnd() as that also locks
+#if defined( HEADLESS )
+        std::lock_guard<std::mutex> mutexLocker ( ChIdMutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+        juce::ScopedLock mutexLocker ( ChIdMutex );
+#else
         QMutexLocker mutexLocker ( &ChIdMutex );
+#endif
         try
         {
-            currentSession = new CJamSession ( recordBaseDir );
+            currentSession = new CJamSession ( recordBaseDirPath );
             isRecording    = true;
         }
         catch ( const CGenErr& err )
@@ -420,7 +526,7 @@ void CJamRecorder::Start()
         return;
     }
 
-    emit RecordingSessionStarted ( currentSession->SessionDir().path() );
+    emit RecordingSessionStarted ( currentSession->SessionDirPath() );
 }
 
 /**
@@ -428,7 +534,13 @@ void CJamRecorder::Start()
  */
 void CJamRecorder::OnEnd()
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> mutexLocker ( ChIdMutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock mutexLocker ( ChIdMutex );
+#else
     QMutexLocker mutexLocker ( &ChIdMutex );
+#endif
     if ( isRecording )
     {
         isRecording = false;
@@ -466,61 +578,72 @@ void CJamRecorder::OnAboutToQuit()
 
 void CJamRecorder::ReaperProjectFromCurrentSession()
 {
-    QString         reaperProjectFileName = currentSession->SessionDir().filePath ( currentSession->Name().append ( ".rpp" ) );
-    const QFileInfo fi ( reaperProjectFileName );
-
-    if ( fi.exists() )
+    std::filesystem::path rppPath ( std::filesystem::path ( currentSession->SessionDirPath().toStdWString() ) /
+                                    std::filesystem::path ( QString ( currentSession->Name() ).append ( ".rpp" ).toStdWString() ) );
+    QString reaperProjectFileName = QString::fromStdWString ( rppPath.wstring() );
+    if ( std::filesystem::exists ( rppPath ) )
     {
-        qWarning() << "CJamRecorder::ReaperProjectFromCurrentSession():" << fi.absolutePath() << "exists and will not be overwritten.";
+        qWarning() << "CJamRecorder::ReaperProjectFromCurrentSession():" << QString::fromStdWString ( rppPath.parent_path().wstring() )
+                   << "exists and will not be overwritten.";
     }
     else
     {
-        QFile outf ( reaperProjectFileName );
-        if ( outf.open ( QFile::WriteOnly ) )
+        std::ofstream outf ( rppPath, std::ios::out | std::ios::binary | std::ios::trunc );
+        if ( outf.is_open() )
         {
-            QTextStream out ( &outf );
-            out << CReaperProject ( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << '\n';
+            const QByteArray bytes = CReaperProject ( currentSession->Tracks(), iServerFrameSizeSamples ).toString().toUtf8();
+            outf.write ( bytes.constData(), static_cast<std::streamsize> ( bytes.size() ) );
+            outf.put ( '\n' );
             qDebug() << "Session RPP:" << reaperProjectFileName;
         }
         else
         {
-            qWarning() << "CJamRecorder::ReaperProjectFromCurrentSession():" << fi.absolutePath() << "could not be created, no RPP written.";
+            qWarning() << "CJamRecorder::ReaperProjectFromCurrentSession():" << QString::fromStdWString ( rppPath.parent_path().wstring() )
+                       << "could not be created, no RPP written.";
         }
     }
 }
 
 void CJamRecorder::AudacityLofFromCurrentSession()
 {
-    QString         audacityLofFileName = currentSession->SessionDir().filePath ( currentSession->Name().append ( ".lof" ) );
-    const QFileInfo fi ( audacityLofFileName );
-
-    if ( fi.exists() )
+    std::filesystem::path lofPath ( std::filesystem::path ( currentSession->SessionDirPath().toStdWString() ) /
+                                    std::filesystem::path ( QString ( currentSession->Name() ).append ( ".lof" ).toStdWString() ) );
+    QString audacityLofFileName = QString::fromStdWString ( lofPath.wstring() );
+    if ( std::filesystem::exists ( lofPath ) )
     {
-        qWarning() << "CJamRecorder::AudacityLofFromCurrentSession():" << fi.absolutePath() << "exists and will not be overwritten.";
+        qWarning() << "CJamRecorder::AudacityLofFromCurrentSession():" << QString::fromStdWString ( lofPath.parent_path().wstring() )
+                   << "exists and will not be overwritten.";
     }
     else
     {
-        QFile outf ( audacityLofFileName );
-        if ( outf.open ( QFile::WriteOnly ) )
+        std::ofstream outf ( lofPath, std::ios::out | std::ios::binary | std::ios::trunc );
+        if ( outf.is_open() )
         {
-            QTextStream sOut ( &outf );
+            auto writeLine = [&outf] ( const QString& s )
+            {
+                const QByteArray bytes = s.toUtf8();
+                outf.write ( bytes.constData(), static_cast<std::streamsize> ( bytes.size() ) );
+            };
 
             foreach ( auto trackName, currentSession->Tracks().keys() )
             {
                 foreach ( auto item, currentSession->Tracks()[trackName] )
                 {
-                    QFileInfo fi ( item.fileName );
-                    sOut << "file " << '"' << fi.fileName() << '"';
-                    sOut << " offset " << secondsAt48K ( item.startFrame, iServerFrameSizeSamples ) << '\n';
+                    std::filesystem::path itemPath ( item.fileName.toStdWString() );
+                    const QString         baseName = QString::fromStdWString ( itemPath.filename().wstring() );
+                    writeLine ( QStringLiteral ( "file " ) );
+                    writeLine ( QStringLiteral ( "\"" ) + baseName + QStringLiteral ( "\"" ) );
+                    writeLine ( QStringLiteral ( " offset " ) + secondsAt48K ( item.startFrame, iServerFrameSizeSamples ) +
+                                QStringLiteral ( "\n" ) );
                 }
             }
 
-            sOut.flush();
             qDebug() << "Session LOF:" << audacityLofFileName;
         }
         else
         {
-            qWarning() << "CJamRecorder::AudacityLofFromCurrentSession():" << fi.absolutePath() << "could not be created, no LOF written.";
+            qWarning() << "CJamRecorder::AudacityLofFromCurrentSession():" << QString::fromStdWString ( lofPath.parent_path().wstring() )
+                       << "could not be created, no LOF written.";
         }
     }
 }
@@ -533,32 +656,38 @@ void CJamRecorder::AudacityLofFromCurrentSession()
  */
 void CJamRecorder::SessionDirToReaper ( QString& strSessionDirName, int serverFrameSizeSamples )
 {
-    const QFileInfo fiSessionDir ( QDir::cleanPath ( strSessionDirName ) );
-    if ( !fiSessionDir.exists() || !fiSessionDir.isDir() )
+    std::filesystem::path dirPath ( strSessionDirName.toStdWString() );
+    if ( !std::filesystem::exists ( dirPath ) || !std::filesystem::is_directory ( dirPath ) )
     {
-        throw CGenErr ( fiSessionDir.absoluteFilePath() + " does not exist or is not a directory.  Aborting." );
+        throw CGenErr ( QString::fromStdWString ( std::filesystem::absolute ( dirPath ).wstring() ) +
+                        " does not exist or is not a directory.  Aborting." );
     }
 
-    const QDir      dSessionDir ( fiSessionDir.absoluteFilePath() );
-    const QString   reaperProjectFileName = dSessionDir.absoluteFilePath ( fiSessionDir.baseName().append ( ".rpp" ) );
-    const QFileInfo fiRPP ( reaperProjectFileName );
-    if ( fiRPP.exists() )
+    const std::filesystem::path dirAbs = std::filesystem::absolute ( dirPath );
+    QString                     base   = QString::fromStdWString ( dirAbs.filename().wstring() );
+    const std::filesystem::path rpp    = dirAbs / std::filesystem::path ( base.append ( ".rpp" ).toStdWString() );
+    if ( std::filesystem::exists ( rpp ) )
     {
-        throw CGenErr ( fiRPP.absoluteFilePath() + " exists and will not be overwritten.  Aborting." );
+        throw CGenErr ( QString::fromStdWString ( rpp.wstring() ) + " exists and will not be overwritten.  Aborting." );
     }
 
-    QFile outf ( fiRPP.absoluteFilePath() );
-    if ( !outf.open ( QFile::WriteOnly ) )
+    std::ofstream outf ( rpp, std::ios::out | std::ios::binary | std::ios::trunc );
+    if ( !outf.is_open() )
     {
-        throw CGenErr ( fiRPP.absoluteFilePath() + " could not be written.  Aborting." );
+        throw CGenErr ( QString::fromStdWString ( rpp.wstring() ) + " could not be written.  Aborting." );
     }
-    QTextStream out ( &outf );
 
-    out << CReaperProject ( CJamSession::TracksFromSessionDir ( fiSessionDir.absoluteFilePath(), serverFrameSizeSamples ), serverFrameSizeSamples )
-               .toString()
-        << '\n';
+    {
+        const QByteArray bytes =
+            CReaperProject ( CJamSession::TracksFromSessionDir ( QString::fromStdWString ( dirAbs.wstring() ), serverFrameSizeSamples ),
+                             serverFrameSizeSamples )
+                .toString()
+                .toUtf8();
+        outf.write ( bytes.constData(), static_cast<std::streamsize> ( bytes.size() ) );
+        outf.put ( '\n' );
+    }
 
-    qDebug() << "Session RPP:" << reaperProjectFileName;
+    qDebug() << "Session RPP:" << QString::fromStdWString ( rpp.wstring() );
 }
 
 /**
@@ -567,7 +696,13 @@ void CJamRecorder::SessionDirToReaper ( QString& strSessionDirName, int serverFr
  */
 void CJamRecorder::OnDisconnected ( int iChID )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> mutexLocker ( ChIdMutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock mutexLocker ( ChIdMutex );
+#else
     QMutexLocker mutexLocker ( &ChIdMutex );
+#endif
     if ( !isRecording )
     {
         qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but not recording";
@@ -611,7 +746,13 @@ void CJamRecorder::OnFrame ( const int              iChID,
 
     // needs to be after Start() as that also locks
     {
+#if defined( HEADLESS )
+        std::lock_guard<std::mutex> mutexLocker ( ChIdMutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+        juce::ScopedLock mutexLocker ( ChIdMutex );
+#else
         QMutexLocker mutexLocker ( &ChIdMutex );
+#endif
         currentSession->Frame ( iChID, name, address, numAudioChannels, data, iServerFrameSizeSamples );
     }
 }

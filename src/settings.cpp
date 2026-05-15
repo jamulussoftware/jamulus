@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "settings.h"
+#include <juce_core/juce_core.h>
 
 /* Implementation *************************************************************/
 void CSettings::Load ( const QList<QString>& CommandLineOptions )
@@ -51,24 +52,18 @@ void CSettings::Save ( bool isAboutToQuit )
 
 void CSettings::ReadFromFile ( const QString& strCurFileName, QDomDocument& XMLDocument )
 {
-    QFile file ( strCurFileName );
-
-    if ( file.open ( QIODevice::ReadOnly ) )
-    {
-        XMLDocument.setContent ( QTextStream ( &file ).readAll(), false );
-        file.close();
-    }
+    juce::File f ( juce::String ( strCurFileName.toUtf8().constData() ) );
+    if ( f.existsAsFile() )
+        XMLDocument.setContent ( QString::fromUtf8 ( f.loadFileAsString().toRawUTF8() ), false );
 }
 
 void CSettings::WriteToFile ( const QString& strCurFileName, const QDomDocument& XMLDocument )
 {
-    QFile file ( strCurFileName );
-
-    if ( file.open ( QIODevice::WriteOnly ) )
-    {
-        QTextStream ( &file ) << XMLDocument.toString();
-        file.close();
-    }
+    juce::File f ( juce::String ( strCurFileName.toUtf8().constData() ) );
+    auto       dir = f.getParentDirectory();
+    if ( !dir.exists() )
+        dir.createDirectory();
+    f.replaceWithText ( juce::String ( XMLDocument.toString().toUtf8().constData() ) );
 }
 
 void CSettings::SetFileName ( const QString& sNFiName, const QString& sDefaultFileName )
@@ -78,19 +73,12 @@ void CSettings::SetFileName ( const QString& sNFiName, const QString& sDefaultFi
 
     if ( strFileName.isEmpty() )
     {
-        // we use the Qt default setting file paths for the different OSs by
-        // utilizing the QSettings class
-        const QString sConfigDir =
-            QFileInfo ( QSettings ( QSettings::IniFormat, QSettings::UserScope, APP_NAME, APP_NAME ).fileName() ).absolutePath();
-
-        // make sure the directory exists
-        if ( !QFile::exists ( sConfigDir ) )
-        {
-            QDir().mkpath ( sConfigDir );
-        }
-
-        // append the actual file name
-        strFileName = sConfigDir + "/" + sDefaultFileName;
+        juce::File configRoot = juce::File::getSpecialLocation ( juce::File::userApplicationDataDirectory ).getChildFile ( APP_NAME );
+        if ( !configRoot.exists() )
+            configRoot.createDirectory();
+        strFileName = QString::fromUtf8 ( configRoot.getChildFile ( juce::String ( sDefaultFileName.toUtf8().constData() ) )
+                                               .getFullPathName()
+                                               .toRawUTF8() );
     }
 }
 
@@ -290,8 +278,13 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // name
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    pClient->ChannelInfo.strName =
+        FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( QStringLiteral ( "No Name" ) ) ) );
+#else
     pClient->ChannelInfo.strName = FromBase64ToString (
         GetIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( QCoreApplication::translate ( "CMusProfDlg", "No Name" ) ) ) );
+#endif
 
     // instrument
     if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument", 0, CInstPictures::GetNumAvailableInst() - 1, iValue ) )
@@ -300,6 +293,20 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // country
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "country", 0, 65535, iValue ) )
+    {
+        pClient->ChannelInfo.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iValue );
+    }
+    else
+    {
+#if defined( JAMULUS_USE_JUCE_NET )
+        pClient->ChannelInfo.eCountry = (QCOUNTRY_T) 0;
+#else
+        pClient->ChannelInfo.eCountry = QLocale::AnyCountry;
+#endif
+    }
+#else
     if ( GetNumericIniSet ( IniXMLDocument, "client", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
     {
         pClient->ChannelInfo.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iValue );
@@ -309,6 +316,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         // if no country is given, use the one from the operating system
         pClient->ChannelInfo.eCountry = QLocale::system().country();
     }
+#endif
 
     // city
     pClient->ChannelInfo.strCity = FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "city_base64" ) );
@@ -805,10 +813,17 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "city" ) );
 
         // country
+#if !defined( JAMULUS_USE_JUCE_NET )
         if ( GetNumericIniSet ( IniXMLDocument, "server", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
         {
             pServer->SetServerCountry ( CLocale::WireFormatCountryCodeToQtCountry ( iValue ) );
         }
+#else
+        if ( GetNumericIniSet ( IniXMLDocument, "server", "country", 0, 65535, iValue ) )
+        {
+            pServer->SetServerCountry ( CLocale::WireFormatCountryCodeToQtCountry ( iValue ) );
+        }
+#endif
     }
 
     // norecord flag

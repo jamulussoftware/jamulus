@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "serverlist.h"
+#include <fstream>
 /* *\
 
 --port           sets the port the server listens to locally
@@ -82,11 +83,18 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
     // Capture parsing success of integers
     bool ok;
 
-    QLocale::Country lcCountry = QLocale::AnyCountry;
-    int              iCountry  = strCountry.trimmed().toInt ( &ok );
-    if ( ok && iCountry >= 0 && iCountry <= QLocale::LastCountry )
+    QCOUNTRY_T lcCountry = (QCOUNTRY_T) 0;
+    int        iCountry  = strCountry.trimmed().toInt ( &ok );
+    if ( ok && iCountry >= 0 )
     {
-        lcCountry = static_cast<QLocale::Country> ( iCountry );
+#if !defined( JAMULUS_USE_JUCE_NET )
+        if ( iCountry <= QLocale::LastCountry )
+        {
+            lcCountry = (QCOUNTRY_T) iCountry;
+        }
+#else
+        lcCountry = (QCOUNTRY_T) iCountry;
+#endif
     }
 
     int iNumClients = strNumClients.trimmed().toInt ( &ok );
@@ -128,7 +136,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& strServerPublicIP,
                                          const int      iNumChannels,
                                          const bool     bNEnableIPv6,
-                                         CProtocol*     pNConLProt ) :
+                                         CProtocol*     pNConLProt,
+                                         ITimerScheduler* pTimerSchedulerIn ) :
     DirectoryType ( AT_NONE ),
     bEnableIPv6 ( bNEnableIPv6 ),
     ServerListFileName ( strServerListFileName ),
@@ -137,36 +146,102 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     eSvrRegStatus ( SRS_NOT_REGISTERED ),
     strMinServerVersion ( "" ), // disable version check with empty version
     pConnLessProtocol ( pNConLProt ),
+    pTimerScheduler ( pTimerSchedulerIn ),
     iSvrRegRetries ( 0 )
+#if defined( JAMULUS_USE_JUCE_NET )
+    ,
+    TimerPollList ( *this ),
+    TimerPingServerInList ( *this ),
+    TimerPingServers ( *this ),
+    TimerRefreshRegistration ( *this ),
+    TimerCLRegisterServerResp ( *this ),
+    TimerIsPermanent ( *this )
+#endif
 {
+    Q_ASSERT ( pConnLessProtocol );
 
-    CHostAddress haServerAddr ( NetworkUtil::GetLocalAddress().InetAddr, iNPortNum );
+    Q_ASSERT ( iNumChannels > 0 );
 
-    // set the server internal address, including internal port number
+    if ( !bEnableIPv6 && !strServerPublicIP.isEmpty() )
+    {
+        qWarning() << "IPv6 is disabled, ignoring server public IPv6 address";
+    }
+
+    Q_ASSERT ( iNumChannels <= MAX_NUM_CHANNELS );
+
+    CHostAddress haServerAddr(
+#if defined( JAMULUS_USE_JUCE_NET )
+        NetworkUtil::GetLocalAddress().address,
+#elif defined( HEADLESS )
+        QString::fromStdString ( NetworkUtil::GetLocalAddress().address ),
+#else
+        NetworkUtil::GetLocalAddress().InetAddr,
+#endif
+        static_cast<uint16_t> ( iNPortNum ) );
+
+#if defined( JAMULUS_USE_JUCE_NET )
+    std::string serverPublicIP;
+
+    if ( strServerPublicIP.isEmpty() )
+    {
+        serverPublicIP = haServerAddr.address;
+    }
+    else
+    {
+        serverPublicIP = strServerPublicIP.toStdString();
+    }
+
+    ServerPublicIP = CHostAddress ( serverPublicIP, static_cast<uint16_t> ( iNPortNum ) );
+
+    if ( bEnableIPv6 )
+    {
+        std::string serverPublicIP6 = NetworkUtil::GetLocalAddress6().address;
+        ServerPublicIP6             = CHostAddress ( serverPublicIP6, static_cast<uint16_t> ( iNPortNum ) );
+    }
+#elif defined( HEADLESS )
+    QString qhaServerPublicIP;
+
+    if ( strServerPublicIP.isEmpty() )
+    {
+        qhaServerPublicIP = QString::fromStdString ( haServerAddr.address );
+    }
+    else
+    {
+        qhaServerPublicIP = strServerPublicIP;
+    }
+
+    qDebug() << "Using" << qhaServerPublicIP << "as external IP.";
+    ServerPublicIP = CHostAddress ( qhaServerPublicIP, iNPortNum );
+
+    if ( bEnableIPv6 )
+    {
+        QString qhaServerPublicIP6 = QString::fromStdString ( NetworkUtil::GetLocalAddress6().address );
+        qDebug() << "Using" << qhaServerPublicIP6 << "as external IPv6.";
+        ServerPublicIP6 = CHostAddress ( qhaServerPublicIP6, iNPortNum );
+    }
+#else
     QHostAddress qhaServerPublicIP;
 
-    if ( strServerPublicIP == "" )
+    if ( strServerPublicIP.isEmpty() )
     {
-        // No user-supplied override via --serverpublicip -> use auto-detection
         qhaServerPublicIP = haServerAddr.InetAddr;
     }
     else
     {
-        // User-supplied --serverpublicip
         qhaServerPublicIP = QHostAddress ( strServerPublicIP );
     }
+
     qDebug() << "Using" << qhaServerPublicIP.toString() << "as external IP.";
     ServerPublicIP = CHostAddress ( qhaServerPublicIP, iNPortNum );
 
     if ( bEnableIPv6 )
     {
-        // set the server internal address, including internal port number
         QHostAddress qhaServerPublicIP6;
-
         qhaServerPublicIP6 = NetworkUtil::GetLocalAddress6().InetAddr;
         qDebug() << "Using" << qhaServerPublicIP6.toString() << "as external IPv6.";
         ServerPublicIP6 = CHostAddress ( qhaServerPublicIP6, iNPortNum );
     }
+#endif
 
     // prepare the server info information
     QStringList slServInfoSeparateParams;
@@ -190,7 +265,23 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
      *
      * If we are a directory, we assume that we are a permanent server.
      */
-    CServerListEntry ThisServerListEntry ( haServerAddr, ServerPublicIP, "", QLocale::system().country(), "", iNumChannels, bIsDirectory );
+#if defined( JAMULUS_USE_JUCE_NET )
+    CServerListEntry ThisServerListEntry ( haServerAddr,
+                                           ServerPublicIP,
+                                           "",
+                                           (QCOUNTRY_T) 0,
+                                           "",
+                                           iNumChannels,
+                                           bIsDirectory );
+#else
+    CServerListEntry ThisServerListEntry ( haServerAddr,
+                                           ServerPublicIP,
+                                           "",
+                                           QLocale::system().country(),
+                                           "",
+                                           iNumChannels,
+                                           bIsDirectory );
+#endif
 
     // parse the server info string according to definition:
     // [this server name];[this server city];[this server country as QLocale ID] (; ... ignored)
@@ -221,17 +312,33 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         }
         else
         {
+#if defined( JAMULUS_USE_JUCE_NET )
+            QCOUNTRY_T qlCountry = CLocale::GetCountryCodeByTwoLetterCode ( slServInfoSeparateParams[2] );
+            if ( qlCountry != (QCOUNTRY_T) 0 )
+            {
+                ThisServerListEntry.eCountry = qlCountry;
+            }
+#else
             QLocale::Country qlCountry = CLocale::GetCountryCodeByTwoLetterCode ( slServInfoSeparateParams[2] );
             if ( qlCountry != QLocale::AnyCountry )
             {
                 ThisServerListEntry.eCountry = qlCountry;
             }
+#endif
         }
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        qInfo() << qUtf8Printable ( QString ( "Using server info: name = \"%1\", city = \"%2\", country/region = \"%3\" (%4)" )
+                                        .arg ( ThisServerListEntry.strName )
+                                        .arg ( ThisServerListEntry.strCity )
+                                        .arg ( slServInfoSeparateParams[2] )
+                                        .arg ( QString::number ( ThisServerListEntry.eCountry ) ) );
+#else
         qInfo() << qUtf8Printable ( QString ( "Using server info: name = \"%1\", city = \"%2\", country/region = \"%3\" (%4)" )
                                         .arg ( ThisServerListEntry.strName )
                                         .arg ( ThisServerListEntry.strCity )
                                         .arg ( slServInfoSeparateParams[2] )
                                         .arg ( QLocale::countryToString ( ThisServerListEntry.eCountry ) ) );
+#endif
     }
 
     // per definition, the very first entry is this server and this entry will
@@ -249,7 +356,9 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     {
         // split the different parameter strings
         QStringList  slWhitelistAddresses = strServerListFilter.split ( ";" );
+#if !defined( HEADLESS )
         QHostAddress CurWhiteListAddress;
+#endif
 
         for ( int iIdx = 0; iIdx < slWhitelistAddresses.size(); iIdx++ )
         {
@@ -259,9 +368,14 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
             {
                 strMinServerVersion = slWhitelistAddresses.at ( iIdx ).mid ( 1, slWhitelistAddresses.at ( iIdx ).length() - 2 );
             }
-            else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
+            else if ( NetworkUtil::IsLiteralIPAddress ( slWhitelistAddresses.at ( iIdx ), bEnableIPv6 ) )
             {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                vWhiteList << slWhitelistAddresses.at ( iIdx );
+#else
+                CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) );
                 vWhiteList << CurWhiteListAddress;
+#endif
             }
         }
     }
@@ -276,13 +390,21 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         if ( !vWhiteList.isEmpty() )
         {
             qInfo() << "Directory registration white list active.  Only the following addresses can register:";
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            foreach ( QString hostAddress, vWhiteList )
+            {
+                qInfo() << "  -" << hostAddress;
+            }
+#else
             foreach ( QHostAddress hostAddress, vWhiteList )
             {
                 qInfo() << "  -" << hostAddress.toString();
             }
+#endif
         }
     }
 
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
     // prepare the one shot timer for determining if this is a
     // permanent registered server
     TimerIsPermanent.setSingleShot ( true );
@@ -292,20 +414,12 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     TimerCLRegisterServerResp.setSingleShot ( true );
     TimerCLRegisterServerResp.setInterval ( REGISTER_SERVER_TIME_OUT_MS );
 
-    // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerPollList, &QTimer::timeout, this, &CServerListManager::OnTimerPollList );
-
-    QObject::connect ( &TimerPingServerInList, &QTimer::timeout, this, &CServerListManager::OnTimerPingServerInList );
-
-    QObject::connect ( &TimerPingServers, &QTimer::timeout, this, &CServerListManager::OnTimerPingServers );
-
-    QObject::connect ( &TimerRefreshRegistration, &QTimer::timeout, this, &CServerListManager::OnTimerRefreshRegistration );
-
     QObject::connect ( &TimerCLRegisterServerResp, &QTimer::timeout, this, &CServerListManager::OnTimerCLRegisterServerResp );
 
     QObject::connect ( &TimerIsPermanent, &QTimer::timeout, this, &CServerListManager::OnTimerIsPermanent );
 
     QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &CServerListManager::OnAboutToQuit );
+#endif
 }
 
 // set server infos -> per definition the server info of this server is
@@ -330,7 +444,11 @@ void CServerListManager::SetServerCity ( const QString& strNewCity )
     }
 }
 
+#if defined( JAMULUS_USE_JUCE_NET )
+void CServerListManager::SetServerCountry ( const QCOUNTRY_T eNewCountry )
+#else
 void CServerListManager::SetServerCountry ( const QLocale::Country eNewCountry )
+#endif
 {
     if ( ServerList[0].eCountry != eNewCountry )
     {
@@ -357,14 +475,28 @@ void CServerListManager::SetDirectoryAddress ( const QString sNDirectoryAddress 
     // sets the lock
     Unregister();
 
-    QMutexLocker locker ( &Mutex );
+#if defined( HEADLESS )
+    {
+        std::lock_guard<std::mutex> locker ( Mutex );
 
-    // now save the new name
-    strDirectoryAddress = sNDirectoryAddress;
+        strDirectoryAddress = sNDirectoryAddress;
+        SetIsDirectory();
+    }
+#elif defined( JAMULUS_USE_JUCE_NET )
+    {
+        juce::ScopedLock locker ( Mutex );
 
-    SetIsDirectory();
+        strDirectoryAddress = sNDirectoryAddress;
+        SetIsDirectory();
+    }
+#else
+    {
+        QMutexLocker locker ( &Mutex );
 
-    locker.unlock();
+        strDirectoryAddress = sNDirectoryAddress;
+        SetIsDirectory();
+    }
+#endif
 
     // sets the lock
     Register();
@@ -381,14 +513,28 @@ void CServerListManager::SetDirectoryType ( const EDirectoryType eNCSAT )
     // sets the lock
     Unregister();
 
-    QMutexLocker locker ( &Mutex );
+#if defined( HEADLESS )
+    {
+        std::lock_guard<std::mutex> locker ( Mutex );
 
-    // now update the server type
-    DirectoryType = eNCSAT;
+        DirectoryType = eNCSAT;
+        SetIsDirectory();
+    }
+#elif defined( JAMULUS_USE_JUCE_NET )
+    {
+        juce::ScopedLock locker ( Mutex );
 
-    SetIsDirectory();
+        DirectoryType = eNCSAT;
+        SetIsDirectory();
+    }
+#else
+    {
+        QMutexLocker locker ( &Mutex );
 
-    locker.unlock();
+        DirectoryType = eNCSAT;
+        SetIsDirectory();
+    }
+#endif
 
     // sets the lock
     Register();
@@ -435,20 +581,84 @@ void CServerListManager::Unregister()
     SetRegistered ( false );
 
     // this is called without the lock set
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
-    // disable service -> stop timer
+    // disable service -> stop timers
     if ( bIsDirectory )
     {
-        TimerPollList.stop();
-        TimerPingServerInList.stop();
+#ifdef HEADLESS
+        if ( pTimerScheduler )
+        {
+            if ( pollListTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( pollListTimerId );
+                pollListTimerId = 0;
+            }
+            if ( pingServerInListTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( pingServerInListTimerId );
+                pingServerInListTimerId = 0;
+            }
+        }
+        else
+#endif
+        {
+#if defined( JAMULUS_USE_JUCE_NET )
+            TimerPollList.stopTimer();
+            TimerPingServerInList.stopTimer();
+#else
+            TimerPollList.stop();
+            TimerPingServerInList.stop();
+#endif
+        }
     }
     else
     {
-        TimerCLRegisterServerResp.stop();
-        TimerRefreshRegistration.stop();
-        TimerPingServers.stop();
-        TimerIsPermanent.stop();
+#ifdef HEADLESS
+        if ( pTimerScheduler )
+        {
+            if ( clRegisterRespTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( clRegisterRespTimerId );
+                clRegisterRespTimerId = 0;
+            }
+            if ( refreshRegistrationTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( refreshRegistrationTimerId );
+                refreshRegistrationTimerId = 0;
+            }
+            if ( pingServersTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( pingServersTimerId );
+                pingServersTimerId = 0;
+            }
+            if ( isPermanentTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( isPermanentTimerId );
+                isPermanentTimerId = 0;
+            }
+        }
+        else
+#endif
+        {
+#if defined( JAMULUS_USE_JUCE_NET )
+            TimerCLRegisterServerResp.stopTimer();
+            TimerRefreshRegistration.stopTimer();
+            TimerPingServers.stopTimer();
+            TimerIsPermanent.stopTimer();
+#else
+            TimerCLRegisterServerResp.stop();
+            TimerRefreshRegistration.stop();
+            TimerPingServers.stop();
+            TimerIsPermanent.stop();
+#endif
+        }
     }
     ServerList[0].bPermanentOnline = false;
 }
@@ -468,16 +678,54 @@ void CServerListManager::Register()
     SetRegistered ( true );
 
     // this is called without the lock set
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     if ( bIsDirectory )
     {
         // start timer for polling the server list if enabled
         // 1 minute = 60 * 1000 ms
-        TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
+#ifdef HEADLESS
+        if ( pTimerScheduler )
+        {
+            if ( pollListTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( pollListTimerId );
+                pollListTimerId = 0;
+            }
+            pollListTimerId = pTimerScheduler->startTimerMs (
+                SERVLIST_POLL_TIME_MINUTES * 60000,
+                [this]() { OnTimerPollList(); } );
 
-        // start timer for sending ping messages to servers in the list
-        TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
+            if ( pingServerInListTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( pingServerInListTimerId );
+                pingServerInListTimerId = 0;
+            }
+            pingServerInListTimerId = pTimerScheduler->startTimerMs (
+                SERVLIST_UPDATE_PING_SERVERS_MS,
+                [this]() { OnTimerPingServerInList(); } );
+        }
+        else
+#endif
+        {
+#if defined( JAMULUS_USE_JUCE_NET )
+            TimerPollList.startTimer ( SERVLIST_POLL_TIME_MINUTES * 60000 );
+
+            // start timer for sending ping messages to servers in the list
+            TimerPingServerInList.startTimer ( SERVLIST_UPDATE_PING_SERVERS_MS );
+#else
+            TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
+
+            // start timer for sending ping messages to servers in the list
+            TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
+#endif
+        }
 
         // directory is permanent
         ServerList[0].bPermanentOnline = true;
@@ -489,30 +737,95 @@ void CServerListManager::Register()
 
         // start timer for registration timeout - this gets restarted
         // in OnTimerCLRegisterServerResp on failure
-        TimerCLRegisterServerResp.start();
+#ifdef HEADLESS
+        if ( pTimerScheduler )
+        {
+            if ( clRegisterRespTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( clRegisterRespTimerId );
+                clRegisterRespTimerId = 0;
+            }
+            clRegisterRespTimerId = pTimerScheduler->startTimerMs (
+                REGISTER_SERVER_TIME_OUT_MS,
+                [this]() { OnTimerCLRegisterServerResp(); } );
 
-        // start timer for registering this server at the directory
-        // 1 minute = 60 * 1000 ms
-        TimerRefreshRegistration.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
+            if ( refreshRegistrationTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( refreshRegistrationTimerId );
+                refreshRegistrationTimerId = 0;
+            }
+            refreshRegistrationTimerId = pTimerScheduler->startTimerMs (
+                SERVLIST_REGIST_INTERV_MINUTES * 60000,
+                [this]() { OnTimerRefreshRegistration(); } );
 
-        // Start timer for ping the directory in short intervals to
-        // keep the port open at the NAT router.
-        // If no NAT is used, we send the messages anyway since they do
-        // not hurt (very low traffic). We also reuse the same update
-        // time as used in the directory for pinging the registered
-        // servers.
-        TimerPingServers.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
+            if ( pingServersTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( pingServersTimerId );
+                pingServersTimerId = 0;
+            }
+            pingServersTimerId = pTimerScheduler->startTimerMs (
+                SERVLIST_UPDATE_PING_SERVERS_MS,
+                [this]() { OnTimerPingServers(); } );
 
-        // start the one shot timer for determining if this is a
-        // permanent registered server
-        TimerIsPermanent.start();
+            if ( isPermanentTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( isPermanentTimerId );
+                isPermanentTimerId = 0;
+            }
+            isPermanentTimerId = pTimerScheduler->startTimerMs (
+                SERVLIST_TIME_PERMSERV_MINUTES * 60000,
+                [this]() { OnTimerIsPermanent(); } );
+        }
+        else
+#endif
+        {
+#if defined( JAMULUS_USE_JUCE_NET )
+            TimerCLRegisterServerResp.startTimer ( REGISTER_SERVER_TIME_OUT_MS );
+#else
+            TimerCLRegisterServerResp.start();
+#endif
+
+            // start timer for registering this server at the directory
+            // 1 minute = 60 * 1000 ms
+#if defined( JAMULUS_USE_JUCE_NET )
+            TimerRefreshRegistration.startTimer ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
+#else
+            TimerRefreshRegistration.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
+#endif
+
+            // Start timer for ping the directory in short intervals to
+            // keep the port open at the NAT router.
+            // If no NAT is used, we send the messages anyway since they do
+            // not hurt (very low traffic). We also reuse the same update
+            // time as used in the directory for pinging the registered
+            // servers.
+#if defined( JAMULUS_USE_JUCE_NET )
+            TimerPingServers.startTimer ( SERVLIST_UPDATE_PING_SERVERS_MS );
+#else
+            TimerPingServers.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
+#endif
+
+            // start the one shot timer for determining if this is a
+            // permanent registered server
+#if defined( JAMULUS_USE_JUCE_NET )
+            TimerIsPermanent.startTimer ( SERVLIST_TIME_PERMSERV_MINUTES * 60000 );
+#else
+            TimerIsPermanent.start();
+#endif
+        }
     }
 }
 
 /* Server list functionality **************************************************/
 void CServerListManager::OnTimerPingServerInList()
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     const int iCurServerListSize = ServerList.size();
 
@@ -529,13 +842,22 @@ void CServerListManager::OnTimerPollList()
 {
     CVector<CHostAddress> vecRemovedHostAddr;
 
+#if defined( HEADLESS )
+    std::unique_lock<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // Check all list entries are still valid (omitting the directory itself)
     for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
     {
         // 1 minute = 60 * 1000 ms
-        if ( ServerList[iIdx].RegisterTime.elapsed() > ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
+        auto msElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                             std::chrono::steady_clock::now() - ServerList[iIdx].RegisterTime )
+                             .count();
+        if ( msElapsed > ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
         {
             // remove this list entry
             vecRemovedHostAddr.Add ( ServerList[iIdx].HostAddr );
@@ -543,12 +865,29 @@ void CServerListManager::OnTimerPollList()
         }
     }
 
+#if defined( HEADLESS )
     locker.unlock();
 
     foreach ( const CHostAddress HostAddr, vecRemovedHostAddr )
     {
         qInfo() << qUtf8Printable ( QString ( "Expired entry for %1" ).arg ( HostAddr.toString() ) );
     }
+#elif defined( JAMULUS_USE_JUCE_NET )
+    {
+        juce::ScopedUnlock unlocker ( Mutex );
+        foreach ( const CHostAddress HostAddr, vecRemovedHostAddr )
+        {
+            qInfo() << qUtf8Printable ( QString ( "Expired entry for %1" ).arg ( HostAddr.toString() ) );
+        }
+    }
+#else
+    locker.unlock();
+
+    foreach ( const CHostAddress HostAddr, vecRemovedHostAddr )
+    {
+        qInfo() << qUtf8Printable ( QString ( "Expired entry for %1" ).arg ( HostAddr.toString() ) );
+    }
+#endif
 }
 
 void CServerListManager::Append ( const CHostAddress&    InetAddr,
@@ -559,7 +898,11 @@ void CServerListManager::Append ( const CHostAddress&    InetAddr,
     if ( bIsDirectory )
     {
         // if the client IP address is a private one, it's on the same LAN as the directory
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        bool serverIsExternal = !NetworkUtil::IsPrivateNetworkIPStd ( InetAddr.address );
+#else
         bool serverIsExternal = !NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr );
+#endif
 
         qInfo() << qUtf8Printable ( QString ( "Requested to register entry for %1 (%2): %3 (%4)" )
                                         .arg ( InetAddr.toString() )
@@ -584,15 +927,25 @@ void CServerListManager::Append ( const CHostAddress&    InetAddr,
         if ( !vWhiteList.empty() )
         {
             // if the server is not listed, refuse registration and send registration response
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            if ( !vWhiteList.contains ( QString::fromStdString ( InetAddr.address ) ) )
+#else
             if ( !vWhiteList.contains ( InetAddr.InetAddr ) )
+#endif
             {
                 pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQIREMENTS );
-                return; // leave function early, i.e., we do not register this server
+                return;
             }
         }
 
         // access/modifications to the server list needs to be mutexed
+#if defined( HEADLESS )
+        std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+        juce::ScopedLock locker ( Mutex );
+#else
         QMutexLocker locker ( &Mutex );
+#endif
 
         const int iCurServerListSize = ServerList.size();
 
@@ -637,7 +990,13 @@ void CServerListManager::Remove ( const CHostAddress& InetAddr )
     {
         qInfo() << qUtf8Printable ( QString ( "Requested to unregister entry for %1" ).arg ( InetAddr.toString() ) );
 
+#if defined( HEADLESS )
+        std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+        juce::ScopedLock locker ( Mutex );
+#else
         QMutexLocker locker ( &Mutex );
+#endif
 
         // Find the server to unregister in the list. The very first list entry
         // must not be removed since this is per definition the directory
@@ -665,13 +1024,32 @@ void CServerListManager::Remove ( const CHostAddress& InetAddr )
  */
 void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     if ( bIsDirectory )
     {
         // if the client IP address is a private one, it's on the same LAN as the directory
-        bool clientIsInternal = NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr );
-
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        bool         clientIsInternal = NetworkUtil::IsPrivateNetworkIPStd ( InetAddr.address );
+        CHostAddress clientPublicAddr = InetAddr;
+        {
+            std::string clientAddr = InetAddr.address;
+            std::string dirLocal   = ServerList[0].LHostAddr.address;
+            if ( clientIsInternal && !dirLocal.empty() &&
+                 clientAddr != dirLocal &&
+                 !NetworkUtil::IsPrivateNetworkIPStd ( dirLocal ) )
+            {
+                clientPublicAddr.address = dirLocal;
+            }
+        }
+#else
+        bool         clientIsInternal = NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr );
         CHostAddress clientPublicAddr = InetAddr;
         if ( clientIsInternal && CHostAddress().InetAddr != ServerList[0].LHostAddr.InetAddr &&
              !NetworkUtil::IsPrivateNetworkIP ( ServerList[0].LHostAddr.InetAddr ) )
@@ -680,6 +1058,7 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
             // client, too (i.e. same router with same public IP will be used for both), so use it for client public IP
             clientPublicAddr.InetAddr = ServerList[0].LHostAddr.InetAddr;
         }
+#endif
 
         const ushort iCurServerListSize = static_cast<ushort> ( ServerList.size() );
 
@@ -697,11 +1076,21 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
             // copy list item
             CServerInfo& siCurListEntry = vecServerInfo[iIdx] = ServerList[iIdx];
 
-            bool serverIsInternal = NetworkUtil::IsPrivateNetworkIP ( siCurListEntry.HostAddr.InetAddr );
+            bool serverIsInternal =
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                NetworkUtil::IsPrivateNetworkIPStd ( siCurListEntry.HostAddr.address );
+#else
+                NetworkUtil::IsPrivateNetworkIP ( siCurListEntry.HostAddr.InetAddr );
+#endif
 
             bool wantHostAddr = clientIsInternal /* HostAddr is local IP if local server else external IP, so do not replace */ ||
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                                ( !serverIsInternal &&
+                                  InetAddr.address != siCurListEntry.HostAddr.address );
+#else
                                 ( !serverIsInternal &&
                                   InetAddr.InetAddr != siCurListEntry.HostAddr.InetAddr /* external server and client have different public IPs */ );
+#endif
 
             if ( !wantHostAddr )
             {
@@ -746,7 +1135,13 @@ int CServerListManager::IndexOf ( const CHostAddress& haSearchTerm )
 
 bool CServerListManager::SetServerListFileName ( QString strFilename )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     if ( ServerListFileName == strFilename )
     {
@@ -773,16 +1168,21 @@ bool CServerListManager::Load()
         return true;
     }
 
-    QFile file ( ServerListFileName );
-
-    if ( !file.open ( QIODevice::ReadWrite | QIODevice::Text ) )
+    std::ifstream file ( ServerListFileName.toStdString(), std::ios::in );
+    if ( !file.is_open() )
     {
-        qWarning() << qUtf8Printable ( QString ( tr ( "Could not open '%1' for read/write. "
-                                                      "Please check that %2 has permission (and that there is free space)." ) )
-                                           .arg ( ServerListFileName )
-                                           .arg ( APP_NAME ) );
-        ServerListFileName.clear();
-        return false;
+        std::ofstream create ( ServerListFileName.toStdString(), std::ios::out | std::ios::app );
+        if ( !create.is_open() )
+        {
+            qWarning() << qUtf8Printable ( QString ( tr ( "Could not open '%1' for read/write. "
+                                                          "Please check that %2 has permission (and that there is free space)." ) )
+                                               .arg ( ServerListFileName )
+                                               .arg ( APP_NAME ) );
+            ServerListFileName.clear();
+            return false;
+        }
+        create.close();
+        file.open ( ServerListFileName.toStdString(), std::ios::in );
     }
     qInfo() << qUtf8Printable ( QString ( tr ( "Loading persistent server list file: %1" ) ).arg ( ServerListFileName ) );
 
@@ -794,10 +1194,10 @@ bool CServerListManager::Load()
     // use entire file content for the persistent server list
     CHostAddress haServerHostAddr;
 
-    QTextStream in ( &file );
-    while ( !in.atEnd() )
+    std::string sline;
+    while ( std::getline ( file, sline ) )
     {
-        QString     line   = in.readLine();
+        QString     line   = QString::fromStdString ( sline );
         QStringList slLine = line.split ( ";" );
         if ( slLine.count() != 7 )
         {
@@ -842,18 +1242,13 @@ void CServerListManager::Save()
         return;
     }
 
-    QFile file ( ServerListFileName );
-
-    if ( !file.open ( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
+    std::ofstream out ( ServerListFileName.toStdString(), std::ios::out | std::ios::trunc );
+    if ( !out.is_open() )
     {
-        // Not a useable file
         qWarning() << qUtf8Printable ( QString ( tr ( "Could not write to '%1'" ) ).arg ( ServerListFileName ) );
         ServerListFileName.clear();
-
         return;
     }
-
-    QTextStream out ( &file );
     // This loop *deliberately* omits the first element in the list
     // (that's this server, which is added automatically on start up, not read)
     for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
@@ -862,7 +1257,7 @@ void CServerListManager::Save()
                                         .arg ( ServerList[iIdx].HostAddr.toString() )
                                         .arg ( ServerList[iIdx].LHostAddr.toString() )
                                         .arg ( ServerList[iIdx].strName ) );
-        out << ServerList[iIdx].toCSV() << '\n';
+        out << ServerList[iIdx].toCSV().toStdString() << '\n';
     }
 }
 
@@ -871,10 +1266,28 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
 {
     // we need the lock since the user might change the server properties at
     // any time so another response could arrive
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+    if ( pTimerScheduler && clRegisterRespTimerId != 0 )
+    {
+        pTimerScheduler->cancelTimer ( clRegisterRespTimerId );
+        clRegisterRespTimerId = 0;
+    }
+    else
+    {
+        #if defined( JAMULUS_USE_JUCE_NET )
+        TimerCLRegisterServerResp.stopTimer();
+        #else
+        TimerCLRegisterServerResp.stop();
+        #endif
+    }
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+    TimerCLRegisterServerResp.stopTimer();
+#else
     QMutexLocker locker ( &Mutex );
-
-    // we got some response, so stop the retry timer
     TimerCLRegisterServerResp.stop();
+#endif
 
     switch ( eResult )
     {
@@ -902,7 +1315,13 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
 
 void CServerListManager::OnTimerPingServers()
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // first check if directory address is valid
     if ( !( DirectoryAddress == CHostAddress() ) )
@@ -915,7 +1334,16 @@ void CServerListManager::OnTimerPingServers()
 
 void CServerListManager::OnTimerCLRegisterServerResp()
 {
+#if defined( JAMULUS_USE_JUCE_NET )
+    TimerCLRegisterServerResp.stopTimer();
+#endif
+#if defined( HEADLESS )
+    std::unique_lock<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     if ( eSvrRegStatus == SRS_REQUESTED )
     {
@@ -927,14 +1355,38 @@ void CServerListManager::OnTimerCLRegisterServerResp()
         }
         else
         {
+#if defined( HEADLESS )
+            locker.unlock();
+            {
+                OnTimerRefreshRegistration();
+            }
+            locker.lock();
+
+            if ( pTimerScheduler )
+            {
+                if ( clRegisterRespTimerId != 0 )
+                {
+                    pTimerScheduler->cancelTimer ( clRegisterRespTimerId );
+                    clRegisterRespTimerId = 0;
+                }
+                clRegisterRespTimerId =
+                    pTimerScheduler->startTimerMs ( REGISTER_SERVER_TIME_OUT_MS, [this]() { OnTimerCLRegisterServerResp(); } );
+            }
+            // no local QTimer available in HEADLESS; if no scheduler, skip re-arming
+#elif defined( JAMULUS_USE_JUCE_NET )
+            {
+                juce::ScopedUnlock unlocker ( Mutex );
+                OnTimerRefreshRegistration();
+            }
+            TimerCLRegisterServerResp.startTimer ( REGISTER_SERVER_TIME_OUT_MS );
+#else
             locker.unlock();
             {
                 OnTimerRefreshRegistration();
             }
             locker.relock();
-
-            // re-start timer for registration timeout
             TimerCLRegisterServerResp.start();
+#endif
         }
     }
 }
@@ -942,7 +1394,13 @@ void CServerListManager::OnTimerCLRegisterServerResp()
 void CServerListManager::OnAboutToQuit()
 {
     {
+#if defined( HEADLESS )
+        std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+        juce::ScopedLock locker ( Mutex );
+#else
         QMutexLocker locker ( &Mutex );
+#endif
         Save();
     }
 
@@ -954,7 +1412,13 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
 {
     // we need the lock since the user might change the server properties at
     // any time
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     if ( !bIsRegister && eSvrRegStatus == SRS_NOT_REGISTERED )
     {

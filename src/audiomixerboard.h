@@ -38,7 +38,6 @@
 #include <QListWidget>
 #include <QMenu>
 #include <QMutex>
-#include <QTextBoundaryFinder>
 #include "global.h"
 #include "util.h"
 #include "levelmeter.h"

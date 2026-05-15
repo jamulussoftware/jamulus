@@ -26,7 +26,7 @@
 
 #include <QThread>
 #include <QString>
-#include <QMutex>
+#include <mutex>
 #ifndef HEADLESS
 #    include <QMessageBox>
 #endif
@@ -62,10 +62,14 @@ public:
 };
 
 /* Classes ********************************************************************/
-class CSoundBase : public QThread
+class CSoundBase
+#if !defined( JAMULUS_USE_JUCE_NET )
+    : public QThread
+#endif
 {
+#if !defined( JAMULUS_USE_JUCE_NET )
     Q_OBJECT
-
+#endif
 public:
     CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                  void ( *fpNewProcessCallback ) ( CVector<int16_t>& psData, void* pParg ),
@@ -85,7 +89,7 @@ public:
     QString     SetDev ( const QString strDevName );
     QString     GetDev()
     {
-        QMutexLocker locker ( &MutexDevProperties );
+        std::lock_guard<std::mutex> locker ( MutexDevProperties );
         return strCurDevName;
     }
 
@@ -112,9 +116,14 @@ public:
     bool IsRunning() const { return bRun; }
     bool IsCallbackEntered() const { return bCallbackEntered; }
 
-    // TODO this should be protected but since it is used
-    // in a callback function it has to be public -> better solution
-    void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType ) { emit ReinitRequest ( eSndCrdResetType ); }
+    void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType )
+    {
+#if !defined( JAMULUS_USE_JUCE_NET )
+        emit ReinitRequest ( eSndCrdResetType );
+#else
+        Q_UNUSED ( eSndCrdResetType );
+#endif
+    }
 
     // this needs to be public so that it can be called from CMidi
     void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
@@ -159,8 +168,8 @@ protected:
 
     bool   bRun;
     bool   bCallbackEntered;
-    QMutex MutexAudioProcessCallback;
-    QMutex MutexDevProperties;
+    std::mutex MutexAudioProcessCallback;
+    std::mutex MutexDevProperties;
 
     QString                strSystemDriverTechniqueName;
     int                    iCtrlMIDIChannel;
@@ -172,6 +181,7 @@ protected:
 
     QString strMIDIDevice;
 
+#if !defined( JAMULUS_USE_JUCE_NET )
 signals:
     void ReinitRequest ( int iSndCrdResetType );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
@@ -179,4 +189,5 @@ signals:
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void ControllerInMuteMyself ( bool bMute );
+#endif
 };

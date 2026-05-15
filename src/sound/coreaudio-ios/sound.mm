@@ -108,7 +108,7 @@ OSStatus CSound::recordingCallback ( void*                       inRefCon,
 
 void CSound::processBufferList ( AudioBufferList* inInputData, CSound* pSound ) // got stereo input data
 {
-    QMutexLocker locker ( &pSound->MutexAudioProcessCallback );
+    std::lock_guard<std::mutex> locker ( pSound->MutexAudioProcessCallback );
     Float32*     pData = static_cast<Float32*> ( inInputData->mBuffers[0].mData );
 
     // copy input data
@@ -291,7 +291,7 @@ void CSound::checkStatus ( int status )
 QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
     // secure lNumDevs/strDriverNames access
-    QMutexLocker locker ( &Mutex );
+    std::lock_guard<std::mutex> locker ( Mutex );
 
     // reload the driver list of available sound devices
     GetAvailableInOutDevices();

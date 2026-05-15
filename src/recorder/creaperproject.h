@@ -25,18 +25,15 @@
 #pragma once
 
 #include <QUuid>
-#include <QFileInfo>
-#include <QDir>
 #include "util.h"
-
-#include "cwavestream.h"
 
 namespace recorder
 {
 
-class CReaperItem : public QObject
+struct STrackItem;
+
+class CReaperItem
 {
-    Q_OBJECT
 
 public:
     CReaperItem ( const QString& name, const STrackItem& trackItem, const qint32& iid, int frameSize );
@@ -48,9 +45,8 @@ private:
     QString     out;
 };
 
-class CReaperTrack : public QObject
+class CReaperTrack
 {
-    Q_OBJECT
 
 public:
     CReaperTrack ( QString name, qint32& iid, QList<STrackItem> items, int frameSize );
@@ -61,9 +57,8 @@ private:
     QString out;
 };
 
-class CReaperProject : public QObject
+class CReaperProject
 {
-    Q_OBJECT
 
 public:
     CReaperProject ( QMap<QString, QList<STrackItem>> tracks, int frameSize );

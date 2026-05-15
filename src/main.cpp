@@ -24,9 +24,12 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
 #include <iostream>
 #include "global.h"
-#ifndef HEADLESS
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
 #    include <QApplication>
 #    include <QMessageBox>
 #    include "serverdlg.h"
@@ -39,9 +42,10 @@
 #    include "testbench.h"
 #endif
 #include "util.h"
-#ifdef ANDROID
+#if defined( ANDROID ) && !defined( JAMULUS_USE_JUCE_NET )
 #    include <QtAndroidExtras/QtAndroid>
 #endif
+#include <juce_core/juce_core.h>
 #if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
@@ -690,12 +694,19 @@ int main ( int argc, char** argv )
                     QFileInfo serverListFileInfo ( strServerListFileName );
                     if ( !serverListFileInfo.exists() )
                     {
-                        QFile strServerListFile ( strServerListFileName );
-                        if ( !strServerListFile.open ( QFile::OpenModeFlag::ReadWrite ) )
+                        const QDir parentDir = serverListFileInfo.absoluteDir();
+                        if ( !parentDir.exists() )
+                            QDir().mkpath ( parentDir.absolutePath() );
+                        QFile serverListFile ( strServerListFileName );
+                        if ( !serverListFile.open ( QIODevice::ReadWrite ) )
                         {
                             qWarning() << qUtf8Printable (
                                 QString ( "Cannot create %1 for reading and writing.  Please check permissions." ).arg ( strServerListFileName ) );
                             strServerListFileName = "";
+                        }
+                        else
+                        {
+                            serverListFile.close();
                         }
                     }
                     else if ( !serverListFileInfo.isFile() )
@@ -704,12 +715,20 @@ int main ( int argc, char** argv )
                             QString ( "Server list file %1 must be a plain file.  Please check the name." ).arg ( strServerListFileName ) );
                         strServerListFileName = "";
                     }
-                    else if ( !serverListFileInfo.isReadable() || !serverListFileInfo.isWritable() )
+                    else
                     {
-                        qWarning() << qUtf8Printable (
-                            QString ( "Server list file %1 must be readable and writeable.  Please check the permissions." )
-                                .arg ( strServerListFileName ) );
-                        strServerListFileName = "";
+                        QFile serverListFile ( strServerListFileName );
+                        if ( !serverListFile.open ( QIODevice::ReadWrite ) )
+                        {
+                            qWarning() << qUtf8Printable (
+                                QString ( "Server list file %1 must be readable and writeable.  Please check the permissions." )
+                                    .arg ( strServerListFileName ) );
+                            strServerListFileName = "";
+                        }
+                        else
+                        {
+                            serverListFile.close();
+                        }
                     }
                 }
 
@@ -730,8 +749,12 @@ int main ( int argc, char** argv )
                         }
                         else
                         {
+#if defined( HEADLESS )
+                            if ( !NetworkUtil::IsLiteralIPAddress ( slWhitelistAddresses.at ( iIdx ), bEnableIPv6 ) )
+#else
                             QHostAddress InetAddr;
                             if ( !InetAddr.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
+#endif
                             {
                                 qWarning() << qUtf8Printable (
                                     QString ( "%1 is not a valid server list filter entry. Only plain IP addresses are supported" )
@@ -768,8 +791,12 @@ int main ( int argc, char** argv )
             {
                 if ( !strServerPublicIP.isEmpty() )
                 {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                    if ( !NetworkUtil::IsLiteralIPAddress ( strServerPublicIP, bEnableIPv6 ) )
+#else
                     QHostAddress InetAddr;
                     if ( !InetAddr.setAddress ( strServerPublicIP ) )
+#endif
                     {
                         qWarning() << "Server Public IP is invalid. Only plain IP addresses are supported.";
                         strServerPublicIP = "";
@@ -780,8 +807,12 @@ int main ( int argc, char** argv )
 
         if ( !strServerBindIP.isEmpty() )
         {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            if ( !NetworkUtil::IsLiteralIPAddress ( strServerBindIP, bEnableIPv6 ) )
+#else
             QHostAddress InetAddr;
             if ( !InetAddr.setAddress ( strServerBindIP ) )
+#endif
             {
                 qWarning() << "Server Bind IP is invalid. Only plain IP addresses are supported.";
                 strServerBindIP = "";
@@ -801,8 +832,12 @@ int main ( int argc, char** argv )
         // we do it here as an upfront check.  The downstream network calls will error
         // out on malformed addresses not caught here.
         {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            if ( !NetworkUtil::IsLiteralIPAddress ( strJsonRpcBindIP, bEnableIPv6 ) )
+#else
             QHostAddress InetAddr;
             if ( !InetAddr.setAddress ( strJsonRpcBindIP ) )
+#endif
             {
                 qCritical() << qUtf8Printable ( QString ( "The JSON-RPC address specified is not valid, exiting. " ) );
                 exit ( 1 );
@@ -813,7 +848,7 @@ int main ( int argc, char** argv )
 
     // Application/GUI setup ---------------------------------------------------
     // Application object
-#ifdef HEADLESS
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
 #    if defined( Q_OS_IOS )
@@ -827,7 +862,7 @@ int main ( int argc, char** argv )
 #    endif
 #endif
 
-#ifdef ANDROID
+#if defined( ANDROID ) && !defined( JAMULUS_USE_JUCE_NET )
     // special Android coded needed for record audio permission handling
     auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
 
@@ -842,15 +877,14 @@ int main ( int argc, char** argv )
     }
 #endif
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( JAMULUS_USE_JUCE_NET )
     // set application priority class -> high priority
     SetPriorityClass ( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
 
     // For accessible support we need to add a plugin to qt. The plugin has to
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.
-    QDir ApplDir ( QApplication::applicationDirPath() );
-    pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+    pApp->addLibraryPath ( QApplication::applicationDirPath() );
 #endif
 
 #if defined( Q_OS_MACOS )
@@ -862,9 +896,11 @@ int main ( int argc, char** argv )
 #endif
 
     // init resources
+#if !defined( JAMULUS_USE_JUCE_NET )
     Q_INIT_RESOURCE ( resources );
+#endif
 
-#ifndef SERVER_ONLY
+#if !defined( SERVER_ONLY ) && !defined( JAMULUS_USE_JUCE_NET )
     //### TEST: BEGIN ###//
     // activate the following line to activate the test bench,
     // CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
@@ -887,14 +923,20 @@ int main ( int argc, char** argv )
             exit ( 1 );
         }
 
-        QFile qfJsonRpcSecretFile ( strJsonRpcSecretFileName );
-        if ( !qfJsonRpcSecretFile.open ( QFile::OpenModeFlag::ReadOnly ) )
+        QFile SecretFile ( strJsonRpcSecretFileName );
+        QFileInfo SecretFileInfo ( strJsonRpcSecretFileName );
+        if ( !SecretFileInfo.exists() || !SecretFileInfo.isFile() )
         {
             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Unable to open secret file %1. Exiting." ).arg ( strJsonRpcSecretFileName ) );
             exit ( 1 );
         }
-        QTextStream qtsJsonRpcSecretStream ( &qfJsonRpcSecretFile );
-        QString     strJsonRpcSecret = qtsJsonRpcSecretStream.readLine();
+        if ( !SecretFile.open ( QIODevice::ReadOnly | QIODevice::Text ) )
+        {
+            qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Unable to open secret file %1. Exiting." ).arg ( strJsonRpcSecretFileName ) );
+            exit ( 1 );
+        }
+        QTextStream SecretStream ( &SecretFile );
+        QString     strJsonRpcSecret = SecretStream.readLine();
         if ( strJsonRpcSecret.length() < JSON_RPC_MINIMUM_SECRET_LENGTH )
         {
             qCritical() << qUtf8Printable ( QString ( "JSON-RPC: Refusing to run with secret of length %1 (required: %2). Exiting." )
@@ -1055,7 +1097,7 @@ int main ( int argc, char** argv )
     catch ( const CGenErr& generr )
     {
         // show generic error
-#ifndef HEADLESS
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
         if ( bUseGUI )
         {
             QMessageBox::critical ( nullptr, APP_NAME, generr.GetErrorText(), "Quit", nullptr );

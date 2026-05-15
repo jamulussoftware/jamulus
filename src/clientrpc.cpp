@@ -106,8 +106,8 @@ CClientRpc::CClientRpc ( CClient* pClient, CRpcServer* pRpcServer, QObject* pare
     /// @param {number} params.servers[*].countryId - Server country ID (see QLocale::Country).
     /// @param {string} params.servers[*].country - Server country.
     /// @param {string} params.servers[*].city - Server city.
-    connect ( pClient->getConnLessProtocol(),
-              &CProtocol::CLServerListReceived,
+    connect ( pClient,
+              &CClient::CLServerListReceived,
               [=] ( CHostAddress /* unused */, CVector<CServerInfo> vecServerInfo ) {
                   QJsonArray arrServerInfo;
                   for ( const auto& serverInfo : vecServerInfo )

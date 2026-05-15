@@ -438,19 +438,30 @@ CONNECTION LESS MESSAGES
 
 /* Implementation *************************************************************/
 CProtocol::CProtocol()
+#if defined( JAMULUS_USE_JUCE_NET ) && !defined( HEADLESS )
+    : TimerSendMess ( *this )
+#endif
 {
+    pHandler = nullptr;
     // allocate worst case memory for split part messages
     vecbySplitMessageStorage.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
     Reset();
 
-    // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerSendMess, &QTimer::timeout, this, &CProtocol::OnTimerSendMess );
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
+    QObject::connect ( &TimerSendMess, &QTimer::timeout, [this]() { OnTimerSendMess(); } );
+#endif
 }
 
 void CProtocol::Reset()
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::lock_guard<std::mutex> locker ( Mutex );
+#else
     QMutexLocker locker ( &Mutex );
+#endif
 
     // prepare internal variables for initial protocol transfer
     iCounter               = 0;
@@ -460,6 +471,9 @@ void CProtocol::Reset()
     iSplitMessageDataIndex = 0;
     bSplitMessageSupported = false; // compatilibity to old versions
 
+    pTimerScheduler  = nullptr;
+    sendTimeoutTimerId = 0;
+
     // delete complete "send message queue"
     SendMessQueue.clear();
 }
@@ -468,18 +482,33 @@ void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage, const int iCnt, c
 {
     bool bListWasEmpty;
 
-    Mutex.lock();
+#if defined( HEADLESS )
     {
-        // check if list is empty so that we have to initiate a send process
+        std::lock_guard<std::mutex> locker ( Mutex );
+
         bListWasEmpty = SendMessQueue.empty();
 
-        // create send message object for the queue
         CSendMessage SendMessageObj ( vecMessage, iCnt, iID );
+        SendMessQueue.push_back ( SendMessageObj );
+    }
+#elif defined( JAMULUS_USE_JUCE_NET )
+    {
+        std::lock_guard<std::mutex> locker ( Mutex );
+        bListWasEmpty = SendMessQueue.empty();
 
-        // we want to have a FIFO: we add at the end and take from the beginning
+        CSendMessage SendMessageObj ( vecMessage, iCnt, iID );
+        SendMessQueue.push_back ( SendMessageObj );
+    }
+#else
+    Mutex.lock();
+    {
+        bListWasEmpty = SendMessQueue.empty();
+
+        CSendMessage SendMessageObj ( vecMessage, iCnt, iID );
         SendMessQueue.push_back ( SendMessageObj );
     }
     Mutex.unlock();
+#endif
 
     // if list was empty, initiate send process
     if ( bListWasEmpty )
@@ -493,32 +522,79 @@ void CProtocol::SendMessage()
     CVector<uint8_t> vecMessage;
     bool             bSendMess = false;
 
-    Mutex.lock();
+#if defined( HEADLESS )
     {
-        // we have to check that list is not empty, since in another thread the
-        // last element of the list might have been erased
+        std::lock_guard<std::mutex> locker ( Mutex );
+
         if ( !SendMessQueue.empty() )
         {
             vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
             vecMessage = SendMessQueue.front().vecMessage;
 
-            // start or restart the ack timeout
+            if ( pTimerScheduler )
+            {
+                if ( sendTimeoutTimerId != 0 )
+                {
+                    pTimerScheduler->cancelTimer ( sendTimeoutTimerId );
+                    sendTimeoutTimerId = 0;
+                }
+
+                sendTimeoutTimerId =
+                    pTimerScheduler->startTimerMs ( SEND_MESS_TIMEOUT_MS, [this]() { OnTimerSendMess(); } );
+            }
+
+            bSendMess = true;
+        }
+        else
+        {
+            if ( pTimerScheduler && sendTimeoutTimerId != 0 )
+            {
+                pTimerScheduler->cancelTimer ( sendTimeoutTimerId );
+                sendTimeoutTimerId = 0;
+            }
+        }
+    }
+#elif defined( JAMULUS_USE_JUCE_NET )
+    {
+        std::lock_guard<std::mutex> locker ( Mutex );
+
+        if ( !SendMessQueue.empty() )
+        {
+            vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
+            vecMessage = SendMessQueue.front().vecMessage;
+
+            TimerSendMess.startTimer ( SEND_MESS_TIMEOUT_MS );
+
+            bSendMess = true;
+        }
+        else
+        {
+            TimerSendMess.stopTimer();
+        }
+    }
+#else
+    Mutex.lock();
+    {
+        if ( !SendMessQueue.empty() )
+        {
+            vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
+            vecMessage = SendMessQueue.front().vecMessage;
+
             TimerSendMess.start ( SEND_MESS_TIMEOUT_MS );
 
             bSendMess = true;
         }
         else
         {
-            // no message to send, stop timer
             TimerSendMess.stop();
         }
     }
     Mutex.unlock();
+#endif
 
-    if ( bSendMess )
+    if ( bSendMess && ( pHandler != nullptr ) )
     {
-        // send message
-        emit MessReadyForSending ( vecMessage );
+        pHandler->OnMessReadyForSending ( vecMessage );
     }
 }
 
@@ -552,15 +628,27 @@ void CProtocol::CreateAndSendMessage ( const int iID, const CVector<uint8_t>& ve
             // increment the start index of the source data by the last part size
             iStartIndexInData += iCurPartSize;
 
+#if defined( HEADLESS )
+            {
+                std::lock_guard<std::mutex> locker ( Mutex );
+
+                iCurCounter = iCounter;
+                iCounter++;
+            }
+#elif defined( JAMULUS_USE_JUCE_NET )
+            {
+                std::lock_guard<std::mutex> locker ( Mutex );
+                iCurCounter = iCounter;
+                iCounter++;
+            }
+#else
             Mutex.lock();
             {
-                // store current counter value
                 iCurCounter = iCounter;
-
-                // increase counter (wraps around automatically)
                 iCounter++;
             }
             Mutex.unlock();
+#endif
 
             // build complete message
             GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_SPECIAL_SPLIT_MESSAGE, vecNewSplitMessage );
@@ -602,7 +690,10 @@ void CProtocol::CreateAndImmSendAcknMess ( const int& iID, const int& iCnt )
     GenMessageFrame ( vecAcknMessage, iCnt, PROTMESSID_ACKN, vecData );
 
     // immediately send acknowledge message
-    emit MessReadyForSending ( vecAcknMessage );
+    if ( pHandler != nullptr )
+    {
+        pHandler->OnMessReadyForSending ( vecAcknMessage );
+    }
 }
 
 void CProtocol::CreateAndImmSendConLessMessage ( const int iID, const CVector<uint8_t>& vecData, const CHostAddress& InetAddr )
@@ -614,7 +705,10 @@ void CProtocol::CreateAndImmSendConLessMessage ( const int iID, const CVector<ui
     GenMessageFrame ( vecNewMessage, 0, iID, vecData );
 
     // immediately send message
-    emit CLMessReadyForSending ( InetAddr, vecNewMessage );
+    if ( pHandler != nullptr )
+    {
+        pHandler->OnCLMessReadyForSending ( InetAddr, vecNewMessage );
+    }
 }
 
 void CProtocol::ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData, const int iRecCounter, const int iRecID )
@@ -952,7 +1046,10 @@ bool CProtocol::EvaluateJitBufMes ( const CVector<uint8_t>& vecData )
     }
 
     // invoke message action
-    emit ChangeJittBufSize ( iData );
+    if ( pHandler )
+    {
+        pHandler->OnChangeJittBufSize ( iData );
+    }
 
     return false; // no error
 }
@@ -962,7 +1059,10 @@ void CProtocol::CreateReqJitBufMes() { CreateAndSendMessage ( PROTMESSID_REQ_JIT
 bool CProtocol::EvaluateReqJitBufMes()
 {
     // invoke message action
-    emit ReqJittBufSize();
+    if ( pHandler )
+    {
+        pHandler->OnReqJittBufSize();
+    }
 
     return false; // no error
 }
@@ -993,7 +1093,10 @@ bool CProtocol::EvaluateClientIDMes ( const CVector<uint8_t>& vecData )
     const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // invoke message action
-    emit ClientIDReceived ( iCurID );
+    if ( pHandler )
+    {
+        pHandler->OnClientIDReceived ( iCurID );
+    }
 
     return false; // no error
 }
@@ -1035,7 +1138,10 @@ bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
     const float fNewGain = static_cast<float> ( iData ) / ( 1 << 15 );
 
     // invoke message action
-    emit ChangeChanGain ( iCurID, fNewGain );
+    if ( pHandler )
+    {
+        pHandler->OnChangeChanGain ( iCurID, fNewGain );
+    }
 
     return false; // no error
 }
@@ -1077,7 +1183,10 @@ bool CProtocol::EvaluateChanPanMes ( const CVector<uint8_t>& vecData )
     const float fNewPan = static_cast<float> ( iData ) / ( 1 << 15 );
 
     // invoke message action
-    emit ChangeChanPan ( iCurID, fNewPan );
+    if ( pHandler )
+    {
+        pHandler->OnChangeChanPan ( iCurID, fNewPan );
+    }
 
     return false; // no error
 }
@@ -1114,7 +1223,10 @@ bool CProtocol::EvaluateMuteStateHasChangedMes ( const CVector<uint8_t>& vecData
     const bool bIsMuted = static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // invoke message action
-    emit MuteStateHasChangedReceived ( iCurID, bIsMuted );
+    if ( pHandler )
+    {
+        pHandler->OnMuteStateHasChangedReceived ( iCurID, bIsMuted );
+    }
 
     return false; // no error
 }
@@ -1188,7 +1300,11 @@ bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
         const int iChanID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // country (2 bytes)
+#if defined( JAMULUS_USE_JUCE_NET )
+        const QCOUNTRY_T eCountry = GetCountryFromStream ( vecData, iPos );
+#else
         const QLocale::Country eCountry = GetCountryFromStream ( vecData, iPos );
+#endif
 
         // instrument (4 bytes)
         const int iInstrument = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
@@ -1224,7 +1340,10 @@ bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
     }
 
     // invoke message action
-    emit ConClientListMesReceived ( vecChanInfo );
+    if ( pHandler )
+    {
+        pHandler->OnConClientListMesReceived ( vecChanInfo );
+    }
 
     return false; // no error
 }
@@ -1234,7 +1353,10 @@ void CProtocol::CreateReqConnClientsList() { CreateAndSendMessage ( PROTMESSID_R
 bool CProtocol::EvaluateReqConnClientsList()
 {
     // invoke message action
-    emit ReqConnClientsList();
+    if ( pHandler )
+    {
+        pHandler->OnReqConnClientsList();
+    }
 
     return false; // no error
 }
@@ -1315,7 +1437,10 @@ bool CProtocol::EvaluateChanInfoMes ( const CVector<uint8_t>& vecData )
     }
 
     // invoke message action
-    emit ChangeChanInfo ( ChanInfo );
+    if ( pHandler )
+    {
+        pHandler->OnChangeChanInfo ( ChanInfo );
+    }
 
     return false; // no error
 }
@@ -1325,7 +1450,10 @@ void CProtocol::CreateReqChanInfoMes() { CreateAndSendMessage ( PROTMESSID_REQ_C
 bool CProtocol::EvaluateReqChanInfoMes()
 {
     // invoke message action
-    emit ReqChanInfo();
+    if ( pHandler )
+    {
+        pHandler->OnReqChanInfo();
+    }
 
     return false; // no error
 }
@@ -1369,7 +1497,10 @@ bool CProtocol::EvaluateChatTextMes ( const CVector<uint8_t>& vecData )
     }
 
     // invoke message action
-    emit ChatTextReceived ( strChatText );
+    if ( pHandler )
+    {
+        pHandler->OnChatTextReceived ( strChatText );
+    }
 
     return false; // no error
 }
@@ -1485,7 +1616,10 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     ReceivedNetwTranspProps.iAudioCodingArg = static_cast<int32_t> ( GetValFromStream ( vecData, iPos, 4 ) );
 
     // invoke message action
-    emit NetTranspPropsReceived ( ReceivedNetwTranspProps );
+    if ( pHandler )
+    {
+        pHandler->OnNetTranspPropsReceived ( ReceivedNetwTranspProps );
+    }
 
     return false; // no error
 }
@@ -1495,7 +1629,10 @@ void CProtocol::CreateReqNetwTranspPropsMes() { CreateAndSendMessage ( PROTMESSI
 bool CProtocol::EvaluateReqNetwTranspPropsMes()
 {
     // invoke message action
-    emit ReqNetTranspProps();
+    if ( pHandler )
+    {
+        pHandler->OnReqNetTranspProps();
+    }
 
     return false; // no error
 }
@@ -1505,7 +1642,10 @@ void CProtocol::CreateReqSplitMessSupportMes() { CreateAndSendMessage ( PROTMESS
 bool CProtocol::EvaluateReqSplitMessSupportMes()
 {
     // invoke message action
-    emit ReqSplitMessSupport();
+    if ( pHandler )
+    {
+        pHandler->OnReqSplitMessSupport();
+    }
 
     return false; // no error
 }
@@ -1515,7 +1655,10 @@ void CProtocol::CreateSplitMessSupportedMes() { CreateAndSendMessage ( PROTMESSI
 bool CProtocol::EvaluateSplitMessSupportedMes()
 {
     // invoke message action
-    emit SplitMessSupported();
+    if ( pHandler )
+    {
+        pHandler->OnSplitMessSupported();
+    }
 
     return false; // no error
 }
@@ -1550,7 +1693,10 @@ bool CProtocol::EvaluateLicenceRequiredMes ( const CVector<uint8_t>& vecData )
     }
 
     // invoke message action
-    emit LicenceRequired ( eLicenceType );
+    if ( pHandler )
+    {
+        pHandler->OnLicenceRequired ( eLicenceType );
+    }
 
     return false; // no error
 }
@@ -1622,7 +1768,10 @@ bool CProtocol::EvaluateVersionAndOSMes ( const CVector<uint8_t>& vecData )
     }
 
     // invoke message action
-    emit VersionAndOSReceived ( eOSType, strVersion );
+    if ( pHandler )
+    {
+        pHandler->OnVersionAndOSReceived ( eOSType, strVersion );
+    }
 
     return false; // no error
 }
@@ -1659,7 +1808,10 @@ bool CProtocol::EvaluateRecorderStateMes ( const CVector<uint8_t>& vecData )
     }
 
     // invoke message action
-    emit RecorderStateReceived ( static_cast<ERecorderState> ( iRecorderState ) );
+    if ( pHandler )
+    {
+        pHandler->OnRecorderStateReceived ( static_cast<ERecorderState> ( iRecorderState ) );
+    }
 
     return false; // no error
 }
@@ -1689,7 +1841,10 @@ bool CProtocol::EvaluateCLPingMes ( const CHostAddress& InetAddr, const CVector<
     }
 
     // invoke message action
-    emit CLPingReceived ( InetAddr, static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) );
+    if ( pHandler )
+    {
+        pHandler->OnCLPingReceived ( InetAddr, static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) );
+    }
 
     return false; // no error
 }
@@ -1727,7 +1882,10 @@ bool CProtocol::EvaluateCLPingWithNumClientsMes ( const CHostAddress& InetAddr, 
     const int iCurNumClients = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // invoke message action
-    emit CLPingWithNumClientsReceived ( InetAddr, iCurMs, iCurNumClients );
+    if ( pHandler )
+    {
+        pHandler->OnCLPingWithNumClientsReceived ( InetAddr, iCurMs, iCurNumClients );
+    }
 
     return false; // no error
 }
@@ -1740,7 +1898,10 @@ void CProtocol::CreateCLServerFullMes ( const CHostAddress& InetAddr )
 bool CProtocol::EvaluateCLServerFullMes()
 {
     // invoke message action
-    emit ServerFullMesReceived();
+    if ( pHandler )
+    {
+        pHandler->OnServerFullMesReceived();
+    }
 
     return false; // no error
 }
@@ -1750,7 +1911,12 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr, const 
     int iPos = 0; // init position pointer
 
     // convert server info strings to utf-8
-    const QByteArray strUTF8LInetAddr = LInetAddr.InetAddr.toString().toUtf8();
+    const QByteArray strUTF8LInetAddr =
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        QString( QString::fromStdString ( LInetAddr.address ) ).toUtf8();
+#else
+        LInetAddr.InetAddr.toString().toUtf8();
+#endif
     const QByteArray strUTF8Name      = ServerInfo.strName.toUtf8();
     const QByteArray strUTF8City      = ServerInfo.strCity.toUtf8();
 
@@ -1831,11 +1997,22 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr, cons
     if ( sLocHost.isEmpty() )
     {
         // old server, empty "topic", register as local host
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        LInetAddr.address = std::string ( "127.0.0.1" );
+#else
         LInetAddr.InetAddr.setAddress ( QHostAddress::LocalHost );
+#endif
     }
-    else if ( !LInetAddr.InetAddr.setAddress ( sLocHost ) )
+    else
     {
-        return true; // return error code
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        LInetAddr.address = sLocHost.toStdString();
+#else
+        if ( !LInetAddr.InetAddr.setAddress ( sLocHost ) )
+        {
+            return true; // return error code
+        }
+#endif
     }
 
     // server city
@@ -1851,7 +2028,10 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr, cons
     }
 
     // invoke message action
-    emit CLRegisterServerReceived ( InetAddr, LInetAddr, RecServerInfo );
+    if ( pHandler )
+    {
+        pHandler->OnCLRegisterServerReceived ( InetAddr, LInetAddr, RecServerInfo );
+    }
 
     return false; // no error
 }
@@ -1861,7 +2041,12 @@ void CProtocol::CreateCLRegisterServerExMes ( const CHostAddress& InetAddr, cons
     int iPos = 0; // init position pointer
 
     // convert server info strings to utf-8
-    const QByteArray strUTF8LInetAddr = LInetAddr.InetAddr.toString().toUtf8();
+    const QByteArray strUTF8LInetAddr =
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        QString( QString::fromStdString ( LInetAddr.address ) ).toUtf8();
+#else
+        LInetAddr.InetAddr.toString().toUtf8();
+#endif
     const QByteArray strUTF8Name      = ServerInfo.strName.toUtf8();
     const QByteArray strUTF8City      = ServerInfo.strCity.toUtf8();
     const QByteArray strUTF8Version   = QString ( VERSION ).toUtf8();
@@ -1951,11 +2136,22 @@ bool CProtocol::EvaluateCLRegisterServerExMes ( const CHostAddress& InetAddr, co
     if ( sLocHost.isEmpty() )
     {
         // old server, empty "topic", register as local host
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        LInetAddr.address = std::string ( "127.0.0.1" );
+#else
         LInetAddr.InetAddr.setAddress ( QHostAddress::LocalHost );
+#endif
     }
-    else if ( !LInetAddr.InetAddr.setAddress ( sLocHost ) )
+    else
     {
-        return true; // return error code
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        LInetAddr.address = sLocHost.toStdString();
+#else
+        if ( !LInetAddr.InetAddr.setAddress ( sLocHost ) )
+        {
+            return true; // return error code
+        }
+#endif
     }
 
     // server city
@@ -1987,7 +2183,10 @@ bool CProtocol::EvaluateCLRegisterServerExMes ( const CHostAddress& InetAddr, co
     }
 
     // invoke message action
-    emit CLRegisterServerExReceived ( InetAddr, LInetAddr, RecServerInfo, eOSType, strVersion );
+    if ( pHandler )
+    {
+        pHandler->OnCLRegisterServerExReceived ( InetAddr, LInetAddr, RecServerInfo, eOSType, strVersion );
+    }
 
     return false; // no error
 }
@@ -2000,7 +2199,10 @@ void CProtocol::CreateCLUnregisterServerMes ( const CHostAddress& InetAddr )
 bool CProtocol::EvaluateCLUnregisterServerMes ( const CHostAddress& InetAddr )
 {
     // invoke message action
-    emit CLUnregisterServerReceived ( InetAddr );
+    if ( pHandler )
+    {
+        pHandler->OnCLUnregisterServerReceived ( InetAddr );
+    }
 
     return false; // no error
 }
@@ -2035,7 +2237,18 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress& InetAddr, const CVec
 
         // IP address (4 bytes)
         // note the Server List manager has put the internal details in HostAddr where required
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        quint32      addrValue = 0;
+        std::string  addrStr   = vecServerInfo[i].HostAddr.address;
+        struct in_addr v4addr;
+        if ( inet_pton ( AF_INET, addrStr.c_str(), &v4addr ) == 1 )
+        {
+            addrValue = ntohl ( v4addr.s_addr );
+        }
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( addrValue ), 4 );
+#else
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr.InetAddr.toIPv4Address() ), 4 );
+#endif
 
         // port number (2 bytes)
         // note the Server List manager has put the internal details in HostAddr where required
@@ -2084,7 +2297,11 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress& InetAddr, const CV
         const quint16 iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
 
         // country (2 bytes)
+#if defined( JAMULUS_USE_JUCE_NET )
+        const QCOUNTRY_T eCountry = GetCountryFromStream ( vecData, iPos );
+#else
         const QLocale::Country eCountry = GetCountryFromStream ( vecData, iPos );
+#endif
 
         // maximum number of connected clients (1 byte)
         const int iMaxNumClients = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
@@ -2114,6 +2331,39 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress& InetAddr, const CV
         }
 
         // add server information to vector
+#if defined( JAMULUS_USE_JUCE_NET )
+        struct in_addr v4addr;
+        v4addr.s_addr = htonl ( iIpAddr );
+
+        char addrBuf[INET_ADDRSTRLEN] = {};
+        inet_ntop ( AF_INET, &v4addr, addrBuf, sizeof ( addrBuf ) );
+
+        const std::string ipStr ( addrBuf );
+
+        vecServerInfo.Add ( CServerInfo ( CHostAddress ( ipStr, iPort ),
+                                          CHostAddress ( ipStr, iPort ),
+                                          strName,
+                                          eCountry,
+                                          strCity,
+                                          iMaxNumClients,
+                                          bPermanentOnline ) );
+#elif defined( HEADLESS )
+        struct in_addr v4addr;
+        v4addr.s_addr = htonl ( iIpAddr );
+
+        char addrBuf[INET_ADDRSTRLEN] = {};
+        inet_ntop ( AF_INET, &v4addr, addrBuf, sizeof ( addrBuf ) );
+
+        QString ipStr = QString::fromLatin1 ( addrBuf );
+
+        vecServerInfo.Add ( CServerInfo ( CHostAddress ( ipStr, iPort ),
+                                          CHostAddress ( ipStr, iPort ),
+                                          strName,
+                                          eCountry,
+                                          strCity,
+                                          iMaxNumClients,
+                                          bPermanentOnline ) );
+#else
         vecServerInfo.Add ( CServerInfo ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
                                           CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
                                           strName,
@@ -2121,6 +2371,7 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress& InetAddr, const CV
                                           strCity,
                                           iMaxNumClients,
                                           bPermanentOnline ) );
+#endif
     }
 
     // check size: all data is read, the position must now be at the end
@@ -2130,7 +2381,10 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress& InetAddr, const CV
     }
 
     // invoke message action
-    emit CLServerListReceived ( InetAddr, vecServerInfo );
+    if ( pHandler )
+    {
+        pHandler->OnCLServerListReceived ( InetAddr, vecServerInfo );
+    }
 
     return false; // no error
 }
@@ -2158,7 +2412,18 @@ void CProtocol::CreateCLRedServerListMes ( const CHostAddress& InetAddr, const C
 
         // IP address (4 bytes)
         // note the Server List manager has put the internal details in HostAddr where required
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        quint32      addrValue = 0;
+        std::string  addrStr   = vecServerInfo[i].HostAddr.address;
+        struct in_addr v4addr;
+        if ( inet_pton ( AF_INET, addrStr.c_str(), &v4addr ) == 1 )
+        {
+            addrValue = ntohl ( v4addr.s_addr );
+        }
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( addrValue ), 4 );
+#else
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr.InetAddr.toIPv4Address() ), 4 );
+#endif
 
         // port number (2 bytes)
         // note the Server List manager has put the internal details in HostAddr where required
@@ -2199,6 +2464,39 @@ bool CProtocol::EvaluateCLRedServerListMes ( const CHostAddress& InetAddr, const
         }
 
         // add server information to vector
+#if defined( JAMULUS_USE_JUCE_NET )
+        struct in_addr v4addr;
+        v4addr.s_addr = htonl ( iIpAddr );
+
+        char addrBuf[INET_ADDRSTRLEN] = {};
+        inet_ntop ( AF_INET, &v4addr, addrBuf, sizeof ( addrBuf ) );
+
+        const std::string ipStr ( addrBuf );
+
+        vecServerInfo.Add ( CServerInfo ( CHostAddress ( ipStr, iPort ),
+                                          CHostAddress ( ipStr, iPort ),
+                                          strName,
+                                          (QCOUNTRY_T) 0,
+                                          "",
+                                          0,
+                                          false ) );
+#elif defined( HEADLESS )
+        struct in_addr v4addr;
+        v4addr.s_addr = htonl ( iIpAddr );
+
+        char addrBuf[INET_ADDRSTRLEN] = {};
+        inet_ntop ( AF_INET, &v4addr, addrBuf, sizeof ( addrBuf ) );
+
+        QString ipStr = QString::fromLatin1 ( addrBuf );
+
+        vecServerInfo.Add ( CServerInfo ( CHostAddress ( ipStr, iPort ),
+                                          CHostAddress ( ipStr, iPort ),
+                                          strName,
+                                          (QCOUNTRY_T) 0,
+                                          "",
+                                          0,
+                                          false ) );
+#else
         vecServerInfo.Add ( CServerInfo ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
                                           CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
                                           strName,
@@ -2206,6 +2504,7 @@ bool CProtocol::EvaluateCLRedServerListMes ( const CHostAddress& InetAddr, const
                                           "",                  // empty city name since the information is not transmitted
                                           0,                   // per definition: if max. num. client is zero, we ignore the value in the server list
                                           false ) );           // assume not permanent since the information is not transmitted
+#endif
     }
 
     // check size: all data is read, the position must now be at the end
@@ -2215,7 +2514,10 @@ bool CProtocol::EvaluateCLRedServerListMes ( const CHostAddress& InetAddr, const
     }
 
     // invoke message action
-    emit CLRedServerListReceived ( InetAddr, vecServerInfo );
+    if ( pHandler )
+    {
+        pHandler->OnCLRedServerListReceived ( InetAddr, vecServerInfo );
+    }
 
     return false; // no error
 }
@@ -2228,7 +2530,10 @@ void CProtocol::CreateCLReqServerListMes ( const CHostAddress& InetAddr )
 bool CProtocol::EvaluateCLReqServerListMes ( const CHostAddress& InetAddr )
 {
     // invoke message action
-    emit CLReqServerList ( InetAddr );
+    if ( pHandler )
+    {
+        pHandler->OnCLReqServerList ( InetAddr );
+    }
 
     return false; // no error
 }
@@ -2241,7 +2546,20 @@ void CProtocol::CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr, const CH
     CVector<uint8_t> vecData ( 6 );
 
     // IP address (4 bytes)
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    uint32_t ipValue = 0;
+    struct in_addr addr4;
+    {
+        std::string addrStr = TargetInetAddr.address;
+        if ( inet_pton ( AF_INET, addrStr.c_str(), &addr4 ) == 1 )
+        {
+            ipValue = ntohl ( addr4.s_addr );
+        }
+    }
+    PutValOnStream ( vecData, iPos, ipValue, 4 );
+#else
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( TargetInetAddr.InetAddr.toIPv4Address() ), 4 );
+#endif
 
     // port number (2 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( TargetInetAddr.iPort ), 2 );
@@ -2266,7 +2584,32 @@ bool CProtocol::EvaluateCLSendEmptyMesMes ( const CVector<uint8_t>& vecData )
     const quint16 iPort = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // invoke message action
-    emit CLSendEmptyMes ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ) );
+#if defined( JAMULUS_USE_JUCE_NET )
+    if ( pHandler )
+    {
+        struct in_addr addr4;
+        addr4.s_addr = htonl ( iIpAddr );
+        char addrBuf[INET_ADDRSTRLEN];
+        const char* addrText = inet_ntop ( AF_INET, &addr4, addrBuf, sizeof ( addrBuf ) );
+        const std::string addrString = addrText != nullptr ? std::string ( addrText ) : std::string();
+        pHandler->OnCLSendEmptyMes ( CHostAddress ( addrString, iPort ) );
+    }
+#elif defined( HEADLESS )
+    if ( pHandler )
+    {
+        struct in_addr addr4;
+        addr4.s_addr = htonl ( iIpAddr );
+        char addrBuf[INET_ADDRSTRLEN];
+        const char* addrText = inet_ntop ( AF_INET, &addr4, addrBuf, sizeof ( addrBuf ) );
+        const QString addrString = addrText != nullptr ? QString::fromUtf8 ( addrText ) : QString();
+        pHandler->OnCLSendEmptyMes ( CHostAddress ( addrString, iPort ) );
+    }
+#else
+    if ( pHandler )
+    {
+        pHandler->OnCLSendEmptyMes ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ) );
+    }
+#endif
 
     return false; // no error
 }
@@ -2286,7 +2629,10 @@ void CProtocol::CreateCLDisconnection ( const CHostAddress& InetAddr )
 bool CProtocol::EvaluateCLDisconnectionMes ( const CHostAddress& InetAddr )
 {
     // invoke message action
-    emit CLDisconnection ( InetAddr );
+    if ( pHandler )
+    {
+        pHandler->OnCLDisconnection ( InetAddr );
+    }
 
     return false; // no error
 }
@@ -2345,7 +2691,10 @@ bool CProtocol::EvaluateCLVersionAndOSMes ( const CHostAddress& InetAddr, const 
     }
 
     // invoke message action
-    emit CLVersionAndOSReceived ( InetAddr, eOSType, strVersion );
+    if ( pHandler )
+    {
+        pHandler->OnCLVersionAndOSReceived ( InetAddr, eOSType, strVersion );
+    }
 
     return false; // no error
 }
@@ -2358,7 +2707,10 @@ void CProtocol::CreateCLReqVersionAndOSMes ( const CHostAddress& InetAddr )
 bool CProtocol::EvaluateCLReqVersionAndOSMes ( const CHostAddress& InetAddr )
 {
     // invoke message action
-    emit CLReqVersionAndOS ( InetAddr );
+    if ( pHandler )
+    {
+        pHandler->OnCLReqVersionAndOS ( InetAddr );
+    }
 
     return false; // no error
 }
@@ -2432,7 +2784,11 @@ bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, con
         const int iChanID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // country (2 bytes)
+#if defined( JAMULUS_USE_JUCE_NET )
+        const QCOUNTRY_T eCountry = GetCountryFromStream ( vecData, iPos );
+#else
         const QLocale::Country eCountry = GetCountryFromStream ( vecData, iPos );
+#endif
 
         // instrument (4 bytes)
         const int iInstrument = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
@@ -2468,7 +2824,10 @@ bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, con
     }
 
     // invoke message action
-    emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo );
+    if ( pHandler )
+    {
+        pHandler->OnCLConnClientsListMesReceived ( InetAddr, vecChanInfo );
+    }
 
     return false; // no error
 }
@@ -2481,7 +2840,10 @@ void CProtocol::CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
 bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
 {
     // invoke message action
-    emit CLReqConnClientsList ( InetAddr );
+    if ( pHandler )
+    {
+        pHandler->OnCLReqConnClientsList ( InetAddr );
+    }
 
     return false; // no error
 }
@@ -2539,7 +2901,10 @@ bool CProtocol::EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, co
     }
 
     // invoke message action
-    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
+    if ( pHandler )
+    {
+        pHandler->OnCLChannelLevelListReceived ( InetAddr, vecLevelList );
+    }
 
     return false; // no error
 }
@@ -2574,7 +2939,10 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, con
     }
 
     // invoke message action
-    emit CLRegisterServerResp ( InetAddr, static_cast<ESvrRegResult> ( iSvrRegResult ) );
+    if ( pHandler )
+    {
+        pHandler->OnCLRegisterServerResp ( InetAddr, static_cast<ESvrRegResult> ( iSvrRegResult ) );
+    }
 
     return false; // no error
 }
@@ -2765,10 +3133,14 @@ bool CProtocol::GetStringFromStream ( const CVector<uint8_t>& vecIn, int& iPos, 
     return false; // no error
 }
 
+#if defined( JAMULUS_USE_JUCE_NET )
+QCOUNTRY_T CProtocol::GetCountryFromStream ( const CVector<uint8_t>& vecIn, int& iPos )
+#else
 QLocale::Country CProtocol::GetCountryFromStream ( const CVector<uint8_t>& vecIn, int& iPos )
+#endif
 {
     unsigned short iCountryCode = GetValFromStream ( vecIn, iPos, 2 );
-    return CLocale::WireFormatCountryCodeToQtCountry ( iCountryCode );
+    return (QCOUNTRY_T) CLocale::WireFormatCountryCodeToQtCountry ( iCountryCode );
 }
 
 void CProtocol::GenMessageFrame ( CVector<uint8_t>& vecOut, const int iCnt, const int iID, const CVector<uint8_t>& vecData )
@@ -2884,7 +3256,11 @@ void CProtocol::PutStringUTF8OnStream ( CVector<uint8_t>& vecIn, int& iPos, cons
     }
 }
 
+#if defined( JAMULUS_USE_JUCE_NET )
+void CProtocol::PutCountryOnStream ( CVector<uint8_t>& vecIn, int& iPos, QCOUNTRY_T eCountry )
+#else
 void CProtocol::PutCountryOnStream ( CVector<uint8_t>& vecIn, int& iPos, QLocale::Country eCountry )
+#endif
 {
     unsigned short iCountryCode = CLocale::QtCountryToWireFormatCountryCode ( eCountry );
     PutValOnStream ( vecIn, iPos, iCountryCode, 2 );

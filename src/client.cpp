@@ -32,7 +32,10 @@ CClient::CClient ( const quint16  iPortNumber,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
                    const bool     bNEnableIPv6,
-                   const bool     bNMuteMeInPersonalMix ) :
+                   const bool     bNMuteMeInPersonalMix,
+                   INetworkSocket*  pNetworkSocketIn,
+                   ITimerScheduler* pTimerSchedulerIn,
+                   IResolver*       pResolverIn ) :
     ChannelInfo(),
     strClientName ( strNClientName ),
     Channel ( false ), /* we need a client channel -> "false" */
@@ -68,8 +71,27 @@ CClient::CClient ( const quint16  iPortNumber,
     bEnableIPv6 ( bNEnableIPv6 ),
     bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
     iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
-    pSignalHandler ( CSignalHandler::getSingletonP() )
+#if defined( JAMULUS_USE_JUCE_NET ) && !defined( HEADLESS )
+    TimerGainOrPan ( *this ),
+#endif
+#if defined( HEADLESS )
+    pSignalHandler ( nullptr ),
+#else
+    pSignalHandler ( CSignalHandler::getSingletonP() ),
+#endif
+    NetworkAdapter ( &Socket ),
+    pNetworkSocket ( pNetworkSocketIn ? pNetworkSocketIn : &NetworkAdapter ),
+    pTimerScheduler ( pTimerSchedulerIn ),
+    pResolver ( pResolverIn ),
+    gainOrPanTimerId ( 0 )
 {
+    ConnLessProtocol.SetHandler ( this );
+
+    if ( pTimerScheduler )
+    {
+        Channel.SetTimerScheduler ( pTimerScheduler );
+        ConnLessProtocol.SetTimerScheduler ( pTimerScheduler );
+    }
     int iOpusError;
 
     OpusMode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES, &iOpusError );
@@ -84,7 +106,7 @@ CClient::CClient ( const quint16  iPortNumber,
     Opus64EncoderMono   = opus_custom_encoder_create ( Opus64Mode, 1, &iOpusError ); // mono encoder OPUS64
     Opus64DecoderMono   = opus_custom_decoder_create ( Opus64Mode, 1, &iOpusError ); // mono decoder OPUS64
     Opus64EncoderStereo = opus_custom_encoder_create ( Opus64Mode, 2, &iOpusError ); // stereo encoder OPUS64
-    Opus64DecoderStereo = opus_custom_decoder_create ( Opus64Mode, 2, &iOpusError ); // stereo decoder OPUS64
+    Opus64DecoderStereo   = opus_custom_decoder_create ( Opus64Mode, 2, &iOpusError ); // stereo decoder OPUS64
 
     // we require a constant bit rate
     opus_custom_encoder_ctl ( OpusEncoderMono, OPUS_SET_VBR ( 0 ) );
@@ -125,7 +147,7 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &Channel, &CChannel::NewConnection, this, &CClient::OnNewConnection );
 
-    QObject::connect ( &Channel, &CChannel::ChatTextReceived, this, &CClient::ChatTextReceived );
+    QObject::connect ( &Channel, &CChannel::ChatTextReceived, this, &CClient::OnChatTextReceived );
 
     QObject::connect ( &Channel, &CChannel::ClientIDReceived, this, &CClient::OnClientIDReceived );
 
@@ -137,25 +159,10 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &Channel, &CChannel::RecorderStateReceived, this, &CClient::RecorderStateReceived );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLMessReadyForSending, this, &CClient::OnSendCLProtMessage );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLServerListReceived, this, &CClient::CLServerListReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRedServerListReceived, this, &CClient::CLRedServerListReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::CLConnClientsListMesReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived, this, &CClient::OnCLPingReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingWithNumClientsReceived, this, &CClient::OnCLPingWithNumClientsReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLDisconnection, this, &CClient::OnCLDisconnection );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived, this, &CClient::CLVersionAndOSReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived, this, &CClient::OnCLChannelLevelListReceived );
+    // connectionless protocol callbacks are handled via IProtocolHandler
 
     // other
+#if !defined( JAMULUS_USE_JUCE_NET )
     QObject::connect ( &Sound, &CSound::ReinitRequest, this, &CClient::OnSndCrdReinitRequest );
 
     QObject::connect ( &Sound, &CSound::ControllerInFaderLevel, this, &CClient::OnControllerInFaderLevel );
@@ -167,18 +174,25 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &Sound, &CSound::ControllerInFaderIsMute, this, &CClient::OnControllerInFaderIsMute );
 
     QObject::connect ( &Sound, &CSound::ControllerInMuteMyself, this, &CClient::OnControllerInMuteMyself );
+#endif
 
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
     QObject::connect ( &Socket, &CHighPrioSocket::InvalidPacketReceived, this, &CClient::OnInvalidPacketReceived );
+#endif
 
+#if !defined( HEADLESS )
     QObject::connect ( pSignalHandler, &CSignalHandler::HandledSignal, this, &CClient::OnHandledSignal );
+#endif
 
     // start timer so that elapsed time works
     PreciseTime.start();
 
     // set gain delay timer to single-shot and connect handler function
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
     TimerGainOrPan.setSingleShot ( true );
 
     QObject::connect ( &TimerGainOrPan, &QTimer::timeout, this, &CClient::OnTimerRemoteChanGainOrPan );
+#endif
 
     // start the socket (it is important to start the socket after all
     // initializations and connections)
@@ -194,6 +208,18 @@ CClient::CClient ( const quint16  iPortNumber,
 
 CClient::~CClient()
 {
+    if ( pTimerScheduler && gainOrPanTimerId != 0 )
+    {
+        pTimerScheduler->cancelTimer ( gainOrPanTimerId );
+        gainOrPanTimerId = 0;
+    }
+#if defined( JAMULUS_USE_JUCE_NET ) && !defined( HEADLESS )
+    if ( TimerGainOrPan.isTimerRunning() )
+    {
+        TimerGainOrPan.stopTimer();
+    }
+#endif
+
     // if we were running, stop sound device
     if ( Sound.IsRunning() )
     {
@@ -217,16 +243,54 @@ CClient::~CClient()
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 {
-    // the protocol queries me to call the function to send the message
-    // send it through the network
-    Socket.SendPacket ( vecMessage, Channel.GetAddress() );
+    if ( pNetworkSocket )
+    {
+        NetEndpoint ep;
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        ep.address = Channel.GetAddress().address;
+#else
+        ep.address = Channel.GetAddress().InetAddr.toString().toStdString();
+#endif
+        ep.port    = Channel.GetAddress().iPort;
+
+        if ( vecMessage.Size() > 0 )
+            pNetworkSocket->sendTo ( ep, &vecMessage[0], static_cast<std::size_t> ( vecMessage.Size() ) );
+    }
+    else
+    {
+        Socket.SendPacket ( vecMessage, Channel.GetAddress() );
+    }
 }
 
 void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
 {
-    // the protocol queries me to call the function to send the message
-    // send it through the network
-    Socket.SendPacket ( vecMessage, InetAddr );
+    if ( pNetworkSocket )
+    {
+        NetEndpoint ep;
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        ep.address = InetAddr.address;
+#else
+        ep.address = InetAddr.InetAddr.toString().toStdString();
+#endif
+        ep.port    = InetAddr.iPort;
+
+        if ( vecMessage.Size() > 0 )
+            pNetworkSocket->sendTo ( ep, &vecMessage[0], static_cast<std::size_t> ( vecMessage.Size() ) );
+    }
+    else
+    {
+        Socket.SendPacket ( vecMessage, InetAddr );
+    }
+}
+
+void CClient::OnCLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+{
+    OnSendCLProtMessage ( InetAddr, vecMessage );
+}
+
+void CClient::OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo )
+{
+    emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo );
 }
 
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
@@ -265,6 +329,7 @@ void CClient::OnNewConnection()
     // a new connection was successfully initiated, send infos and request
     // connected clients list
     Channel.SetRemoteInfo ( ChannelInfo );
+    Channel.CreateVersionAndOSMes();
 
     // We have to send a connected clients list request since it can happen
     // that we just had connected to the server and then disconnected but
@@ -275,10 +340,10 @@ void CClient::OnNewConnection()
     Channel.CreateReqConnClientsList();
     CreateServerJitterBufferMessage();
 
-    //### TODO: BEGIN ###//
-    // needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+    // ### TODO: BEGIN ###//
+    //  needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
     Channel.CreateReqChannelLevelListMes();
-    //### TODO: END ###//
+    // ### TODO: END ###//
 }
 
 void CClient::OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted )
@@ -298,10 +363,28 @@ void CClient::OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint
 
     if ( ReorderLevelList ( vecLevelList ) )
     {
+        if ( pEventSink )
+        {
+            pEventSink->OnChannelLevelListReceived ( InetAddr, vecLevelList );
+        }
         emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
     }
 }
 
+void CClient::OnChatTextReceived ( QString strChatText )
+{
+    emit ChatTextReceived ( strChatText );
+}
+
+void CClient::OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
+{
+    emit CLServerListReceived ( InetAddr, vecServerInfo );
+}
+
+void CClient::OnCLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo )
+{
+    emit CLRedServerListReceived ( InetAddr, vecServerInfo );
+}
 void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
     // translate from server channel IDs to client channel IDs
@@ -365,6 +448,10 @@ void CClient::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 
     // pass the received list onwards, now containing client channel IDs
 
+    if ( pEventSink )
+    {
+        pEventSink->OnConClientListMesReceived ( vecChanInfo );
+    }
     emit ConClientListMesReceived ( vecChanInfo );
 }
 
@@ -393,8 +480,11 @@ void CClient::OnCLPingReceived ( CHostAddress InetAddr, int iMs )
         const int iCurDiff = EvaluatePingMessage ( iMs );
         if ( iCurDiff >= 0 )
         {
-            iCurPingTime = iCurDiff; // store for use by gain message sending
-
+            iCurPingTime = iCurDiff;
+            if ( pEventSink )
+            {
+                pEventSink->OnPingTime ( iCurDiff );
+            }
             emit PingTimeReceived ( iCurDiff );
         }
     }
@@ -406,6 +496,10 @@ void CClient::OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, i
     const int iCurDiff = EvaluatePingMessage ( iMs );
     if ( iCurDiff >= 0 )
     {
+        if ( pEventSink )
+        {
+            pEventSink->OnPingTimeWithNumClients ( InetAddr, iCurDiff, iNumClients );
+        }
         emit CLPingTimeWithNumClientsReceived ( InetAddr, iCurDiff, iNumClients );
     }
 }
@@ -452,7 +546,13 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 
 void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexGainOrPan );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexGainOrPan );
+#else
     QMutexLocker locker ( &MutexGainOrPan );
+#endif
 
     CClientChannel* clientChan = &clientChannels[iId];
 
@@ -462,33 +562,59 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
         fMuteOutStreamGain = fGain;
     }
 
-    if ( TimerGainOrPan.isActive() )
+#if defined( HEADLESS )
+    clientChan->oldGain = clientChan->newGain = fGain;
+    Channel.SetRemoteChanGain ( clientChan->iServerChannelID, fGain );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    if ( TimerGainOrPan.isTimerRunning() )
     {
-        // just update the new value for sending later;
-        // will compare with oldGain when the timer fires
         clientChan->newGain = fGain;
 
-        // update range of channel IDs to check in the timer
         if ( iId < minGainOrPanId )
-            minGainOrPanId = iId; // first value to check
+            minGainOrPanId = iId;
         if ( iId >= maxGainOrPanId )
-            maxGainOrPanId = iId + 1; // first value NOT to check
+            maxGainOrPanId = iId + 1;
 
         return;
     }
 
-    // here the timer was not active:
-    // send the actual gain and reset the range of channel IDs to empty
     clientChan->oldGain = clientChan->newGain = fGain;
-    Channel.SetRemoteChanGain ( clientChan->iServerChannelID, fGain ); // translate client channel to server channel ID
+    Channel.SetRemoteChanGain ( clientChan->iServerChannelID, fGain );
 
     StartTimerGainOrPan();
+#else
+    if ( TimerGainOrPan.isActive() )
+    {
+        clientChan->newGain = fGain;
+
+        if ( iId < minGainOrPanId )
+            minGainOrPanId = iId;
+        if ( iId >= maxGainOrPanId )
+            maxGainOrPanId = iId + 1;
+
+        return;
+    }
+
+    clientChan->oldGain = clientChan->newGain = fGain;
+    Channel.SetRemoteChanGain ( clientChan->iServerChannelID, fGain );
+
+    StartTimerGainOrPan();
+#endif
 }
 
 void CClient::OnTimerRemoteChanGainOrPan()
 {
+#if defined( JAMULUS_USE_JUCE_NET ) && !defined( HEADLESS )
+    TimerGainOrPan.stopTimer();
+#endif
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexGainOrPan );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexGainOrPan );
+#else
     QMutexLocker locker ( &MutexGainOrPan );
-    bool         bSent = false;
+#endif
+    bool bSent = false;
 
     for ( int iId = minGainOrPanId; iId < maxGainOrPanId; iId++ )
     {
@@ -524,50 +650,108 @@ void CClient::StartTimerGainOrPan()
     maxGainOrPanId = 0;
     minGainOrPanId = MAX_NUM_CHANNELS;
 
-    // start timer to delay sending further updates
-    // use longer delay when connected to server with higher ping time,
-    // double the ping time in order to allow a bit of overhead for other messages
+    int delayMs;
+
     if ( iCurPingTime < DEFAULT_GAIN_DELAY_PERIOD_MS / 2 )
     {
-        TimerGainOrPan.start ( DEFAULT_GAIN_DELAY_PERIOD_MS );
+        delayMs = DEFAULT_GAIN_DELAY_PERIOD_MS;
     }
     else
     {
-        TimerGainOrPan.start ( iCurPingTime * 2 );
+        delayMs = iCurPingTime * 2;
     }
+
+#if defined( HEADLESS )
+    if ( pTimerScheduler )
+    {
+        if ( gainOrPanTimerId != 0 )
+        {
+            pTimerScheduler->cancelTimer ( gainOrPanTimerId );
+            gainOrPanTimerId = 0;
+        }
+
+        gainOrPanTimerId = pTimerScheduler->startTimerMs ( delayMs, [this]() { OnTimerRemoteChanGainOrPan(); } );
+    }
+#elif defined( JAMULUS_USE_JUCE_NET )
+    if ( TimerGainOrPan.isTimerRunning() )
+    {
+        TimerGainOrPan.stopTimer();
+    }
+
+    TimerGainOrPan.startTimer ( delayMs );
+#else
+    if ( TimerGainOrPan.isActive() )
+    {
+        TimerGainOrPan.stop();
+    }
+
+    TimerGainOrPan.start ( delayMs );
+#endif
 }
 
 void CClient::SetRemoteChanPan ( const int iId, const float fPan )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexGainOrPan );
+
+    CClientChannel* clientChan = &clientChannels[iId];
+
+    clientChan->oldPan = clientChan->newPan = fPan;
+    Channel.SetRemoteChanPan ( clientChan->iServerChannelID, fPan );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexGainOrPan );
+
+    CClientChannel* clientChan = &clientChannels[iId];
+
+    if ( TimerGainOrPan.isTimerRunning() )
+    {
+        clientChan->newPan = fPan;
+
+        if ( iId < minGainOrPanId )
+            minGainOrPanId = iId;
+        if ( iId >= maxGainOrPanId )
+            maxGainOrPanId = iId + 1;
+
+        return;
+    }
+
+    clientChan->oldPan = clientChan->newPan = fPan;
+    Channel.SetRemoteChanPan ( clientChan->iServerChannelID, fPan );
+
+    StartTimerGainOrPan();
+#else
     QMutexLocker locker ( &MutexGainOrPan );
 
     CClientChannel* clientChan = &clientChannels[iId];
 
     if ( TimerGainOrPan.isActive() )
     {
-        // just update the new value for sending later;
-        // will compare with oldPan when the timer fires
         clientChan->newPan = fPan;
 
-        // update range of channel IDs to check in the timer
         if ( iId < minGainOrPanId )
-            minGainOrPanId = iId; // first value to check
+            minGainOrPanId = iId;
         if ( iId >= maxGainOrPanId )
-            maxGainOrPanId = iId + 1; // first value NOT to check
+            maxGainOrPanId = iId + 1;
 
         return;
     }
 
-    // here the timer was not active:
-    // send the actual gain and reset the range of channel IDs to empty
     clientChan->oldPan = clientChan->newPan = fPan;
-    Channel.SetRemoteChanPan ( clientChan->iServerChannelID, fPan ); // translate client channel to server channel ID
+    Channel.SetRemoteChanPan ( clientChan->iServerChannelID, fPan );
 
     StartTimerGainOrPan();
+#endif
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )
 {
+    // if the address is empty, clear the channel address and return success
+    if ( strNAddr.isEmpty() )
+    {
+        Channel.SetAddress ( CHostAddress() );
+        return true;
+    }
+
     CHostAddress HostAddress;
 #ifdef CLIENT_NO_SRV_CONNECT
     if ( NetworkUtil().ParseNetworkAddress ( strNAddr, HostAddress, bEnableIPv6 ) )
@@ -585,6 +769,13 @@ bool CClient::SetServerAddr ( QString strNAddr )
         return false; // invalid address
     }
 }
+
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+bool CClient::SetServerAddrStd ( const std::string& addr )
+{
+    return SetServerAddr ( QString::fromUtf8 ( addr.c_str() ) );
+}
+#endif
 
 bool CClient::GetAndResetbJitterBufferOKFlag()
 {
@@ -813,7 +1004,13 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
 
     // audio device notifications can come at any time and they are in a
     // different thread, therefore we need a mutex here
+#if defined( HEADLESS )
     MutexDriverReinit.lock();
+#elif defined( JAMULUS_USE_JUCE_NET )
+    MutexDriverReinit.enter();
+#else
+    MutexDriverReinit.lock();
+#endif
     {
         // in older QT versions, enums cannot easily be used in signals without
         // registering them -> workaroud: we use the int type and cast to the enum
@@ -848,7 +1045,13 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
             Sound.Start();
         }
     }
+#if defined( HEADLESS )
     MutexDriverReinit.unlock();
+#elif defined( JAMULUS_USE_JUCE_NET )
+    MutexDriverReinit.exit();
+#else
+    MutexDriverReinit.unlock();
+#endif
 
     // inform GUI about the sound card device change
     emit SoundDeviceChanged ( strError );
@@ -857,8 +1060,13 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
 void CClient::OnHandledSignal ( int sigNum )
 {
 #ifdef _WIN32
-    // Windows does not actually get OnHandledSignal triggered
-    QCoreApplication::instance()->exit();
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
+    QCoreApplication* app = QCoreApplication::instance();
+    if ( app )
+    {
+        app->exit();
+    }
+#endif
     Q_UNUSED ( sigNum )
 #else
     switch ( sigNum )
@@ -870,9 +1078,12 @@ void CClient::OnHandledSignal ( int sigNum )
         {
             Stop();
         }
-
-        // this should trigger OnAboutToQuit
-        QCoreApplication::instance()->exit();
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
+        if ( QCoreApplication* app = QCoreApplication::instance() )
+        {
+            app->exit();
+        }
+#endif
         break;
 
     default:
@@ -963,6 +1174,10 @@ void CClient::OnClientIDReceived ( int iServerChanID )
         SetRemoteChanGain ( iChanID, 0, false );
     }
 
+    if ( pEventSink )
+    {
+        pEventSink->OnClientIDReceived ( iChanID );
+    }
     emit ClientIDReceived ( iChanID );
 }
 
@@ -994,26 +1209,28 @@ void CClient::Stop()
     // disable channel
     Channel.SetEnable ( false );
 
-    // wait for approx. 100 ms to make sure no audio packet is still in the
-    // network queue causing the channel to be reconnected right after having
-    // received the disconnect message (seems not to gain much, disconnect is
-    // still not working reliably)
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
     QTime DieTime = QTime::currentTime().addMSecs ( 100 );
     while ( QTime::currentTime() < DieTime )
     {
-        // exclude user input events because if we use AllEvents, it happens
-        // that if the user initiates a connection and disconnection quickly
-        // (e.g. quickly pressing enter five times), the software can get into
-        // an unknown state
         QCoreApplication::processEvents ( QEventLoop::ExcludeUserInputEvents, 100 );
     }
+#endif
 
-    // Send disconnect message to server (Since we disable our protocol
-    // receive mechanism with the next command, we do not evaluate any
-    // respond from the server, therefore we just hope that the message
-    // gets its way to the server, if not, the old behaviour time-out
-    // disconnects the connection anyway).
+    // Send disconnect message(s) to server
+    // Single-shot in GUI builds, small burst in headless/wrapper builds for robustness
+#if defined(HEADLESS)
+    CHostAddress addr = Channel.GetAddress();
+    if ( addr.iPort != 0 )
+    {
+        for ( int i = 0; i < 3; ++i )
+        {
+            ConnLessProtocol.CreateCLDisconnection ( addr );
+        }
+    }
+#else
     ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
+#endif
 
     // reset current signal level and LEDs
     bJitterBufferOK = true;
@@ -1248,13 +1465,13 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
     // process audio data
     pMyClientObj->ProcessSndCrdAudioData ( psData );
 
-    //### TEST: BEGIN ###//
-    // do a soundcard jitter measurement
+    // ### TEST: BEGIN ###//
+    //  do a soundcard jitter measurement
     /*
     static CTimingMeas JitterMeas ( 1000, "test2.dat" );
     JitterMeas.Measure();
     */
-    //### TEST: END ###//
+    // ### TEST: END ###//
 }
 
 void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )
@@ -1508,7 +1725,13 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 
 void CClient::ClearClientChannels()
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexChannels );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexChannels );
+#else
     QMutexLocker locker ( &MutexChannels );
+#endif
 
     iActiveChannels = 0;
     iJoinSequence   = 0;
@@ -1526,7 +1749,13 @@ void CClient::ClearClientChannels()
 
 void CClient::FreeClientChannel ( const int iServerChannelID )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexChannels );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexChannels );
+#else
     QMutexLocker locker ( &MutexChannels );
+#endif
 
     if ( iServerChannelID == INVALID_INDEX || iServerChannelID >= MAX_NUM_CHANNELS )
     {
@@ -1554,7 +1783,13 @@ void CClient::FreeClientChannel ( const int iServerChannelID )
 // returns a client channel ID or INVALID_INDEX
 int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateIfNew )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexChannels );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexChannels );
+#else
     QMutexLocker locker ( &MutexChannels );
+#endif
 
     if ( iServerChannelID == INVALID_INDEX || iServerChannelID >= MAX_NUM_CHANNELS )
     {
@@ -1630,7 +1865,13 @@ int CClient::FindClientChannel ( const int iServerChannelID, const bool bCreateI
 
 bool CClient::ReorderLevelList ( CVector<uint16_t>& vecLevelList )
 {
+#if defined( HEADLESS )
+    std::lock_guard<std::mutex> locker ( MutexChannels );
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::ScopedLock locker ( MutexChannels );
+#else
     QMutexLocker locker ( &MutexChannels );
+#endif
 
     // vecLevelList is sent from server ordered by server channel ID
     // re-order it by client channel ID before passing up to the GUI

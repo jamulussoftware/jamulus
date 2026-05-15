@@ -66,7 +66,7 @@ void CSoundBase::Stop()
     bRun = false;
 
     // wait for draining the audio process callback
-    QMutexLocker locker ( &MutexAudioProcessCallback );
+    std::lock_guard<std::mutex> locker ( MutexAudioProcessCallback );
 }
 
 /******************************************************************************\
@@ -74,7 +74,7 @@ void CSoundBase::Stop()
 \******************************************************************************/
 QStringList CSoundBase::GetDevNames()
 {
-    QMutexLocker locker ( &MutexDevProperties );
+    std::lock_guard<std::mutex> locker ( MutexDevProperties );
 
     QStringList slDevNames;
 
@@ -89,7 +89,7 @@ QStringList CSoundBase::GetDevNames()
 
 QString CSoundBase::SetDev ( const QString strDevName )
 {
-    QMutexLocker locker ( &MutexDevProperties );
+    std::lock_guard<std::mutex> locker ( MutexDevProperties );
 
     // init return parameter with "no error"
     QString strReturn = "";
@@ -110,15 +110,21 @@ QString CSoundBase::SetDev ( const QString strDevName )
         {
             if ( strDevName != strCurDevName )
             {
-                // loading and initializing the new driver failed, go back to
-                // original driver and create error message
                 LoadAndInitializeDriver ( strCurDevName, false );
 
-                // store error return message
-                strReturn = QString ( tr ( "Can't use the selected audio device "
-                                           "because of the following error: %1 "
-                                           "The previous driver will be selected." )
-                                          .arg ( strErrorMessage ) );
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                strReturn = QStringLiteral(
+                    "Can't use the selected audio device "
+                    "because of the following error: %1 "
+                    "The previous driver will be selected." )
+                                .arg ( strErrorMessage );
+#else
+                strReturn = QString(
+                    tr ( "Can't use the selected audio device "
+                         "because of the following error: %1 "
+                         "The previous driver will be selected." ) )
+                                .arg ( strErrorMessage );
+#endif
             }
             else
             {
@@ -156,10 +162,18 @@ QString CSoundBase::SetDev ( const QString strDevName )
         // if a driver was previously selected, show a warning message
         if ( !strDevName.isEmpty() )
         {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            strReturn = QStringLiteral(
+                "The previously selected audio device "
+                "is no longer available or the driver has changed to an incompatible state. "
+                "We'll attempt to find a valid audio device, but this new audio device may cause feedback. "
+                "Before connecting to a server, please check your audio device settings." );
+#else
             strReturn = tr ( "The previously selected audio device "
                              "is no longer available or the driver has changed to an incompatible state. "
                              "We'll attempt to find a valid audio device, but this new audio device may cause feedback. "
                              "Before connecting to a server, please check your audio device settings." );
+#endif
         }
 
         // try to load and initialize any valid driver
@@ -167,9 +181,16 @@ QString CSoundBase::SetDev ( const QString strDevName )
 
         if ( !vsErrorList.isEmpty() )
         {
-            // create error message with all details
-            QString sErrorMessage =
-                tr ( "<b>%1 couldn't find a usable %2 audio device.</b><br><br>" ).arg ( APP_NAME ).arg ( strSystemDriverTechniqueName );
+            QString sErrorMessage;
+
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            sErrorMessage = QStringLiteral ( "<b>%1 couldn't find a usable %2 audio device.</b><br><br>" )
+                                .arg ( APP_NAME )
+                                .arg ( strSystemDriverTechniqueName );
+#else
+            sErrorMessage = tr ( "<b>%1 couldn't find a usable %2 audio device.</b><br><br>" ).arg ( APP_NAME ).arg (
+                strSystemDriverTechniqueName );
+#endif
 
             for ( int i = 0; i < lNumDevs; i++ )
             {
@@ -180,14 +201,30 @@ QString CSoundBase::SetDev ( const QString strDevName )
             // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
             // offer the user under Windows that we open the driver setups of all registered
             // ASIO drivers
-            sErrorMessage += "<br>" + tr ( "You may be able to fix errors in the driver settings. Do you want to open these settings now?" );
+            sErrorMessage +=
+#    if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                QStringLiteral(
+                    "<br>You may be able to fix errors in the driver settings. Do you want to open these settings now?" );
+#    else
+                "<br>" +
+                tr ( "You may be able to fix errors in the driver settings. Do you want to open these settings now?" );
+#    endif
 
+#    if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
             if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes | QMessageBox::No ) )
             {
                 LoadAndInitializeFirstValidDriver ( true );
             }
+#    endif
 
-            sErrorMessage = QString ( tr ( "Can't start %1. Please restart %1 and check/reconfigure your audio settings." ) ).arg ( APP_NAME );
+            sErrorMessage =
+#    if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+                QStringLiteral ( "Can't start %1. Please restart %1 and check/reconfigure your audio settings." )
+                    .arg ( APP_NAME );
+#    else
+                QString ( tr ( "Can't start %1. Please restart %1 and check/reconfigure your audio settings." ) ).arg (
+                    APP_NAME );
+#    endif
 #endif
 
             throw CGenErr ( sErrorMessage );
@@ -372,39 +409,41 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
                         {
                         case Fader:
                         {
-                            // we are assuming that the controller number is the same
-                            // as the audio fader index and the range is 0-127
                             const int iFaderLevel = static_cast<int> ( static_cast<double> ( iValue ) / 127 * AUD_MIX_FADER_MAX );
 
-                            // consider offset for the faders
-
+#if !defined( JAMULUS_USE_JUCE_NET )
                             emit ControllerInFaderLevel ( cCtrl.iChannel, iFaderLevel );
+#endif
                         }
                         break;
                         case Pan:
                         {
-                            // Pan levels need to be symmetric between 1 and 127
                             const int iPanValue = static_cast<int> ( static_cast<double> ( qMax ( iValue, 1 ) - 1 ) / 126 * AUD_MIX_PAN_MAX );
 
+#if !defined( JAMULUS_USE_JUCE_NET )
                             emit ControllerInPanValue ( cCtrl.iChannel, iPanValue );
+#endif
                         }
                         break;
                         case Solo:
                         {
-                            // We depend on toggles reflecting the desired state
+#if !defined( JAMULUS_USE_JUCE_NET )
                             emit ControllerInFaderIsSolo ( cCtrl.iChannel, iValue >= 0x40 );
+#endif
                         }
                         break;
                         case Mute:
                         {
-                            // We depend on toggles reflecting the desired state
+#if !defined( JAMULUS_USE_JUCE_NET )
                             emit ControllerInFaderIsMute ( cCtrl.iChannel, iValue >= 0x40 );
+#endif
                         }
                         break;
                         case MuteMyself:
                         {
-                            // We depend on toggles reflecting the desired state to Mute Myself
+#if !defined( JAMULUS_USE_JUCE_NET )
                             emit ControllerInMuteMyself ( iValue >= 0x40 );
+#endif
                         }
                         break;
                         default:

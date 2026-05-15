@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #pragma once
+#include <mutex>
 #include "../soundbase.h"
 #include "../../global.h"
 
@@ -69,5 +70,5 @@ protected:
                                         UInt32                      inNumberFrames,
                                         AudioBufferList*            ioData );
 
-    QMutex Mutex;
+    std::mutex Mutex;
 };

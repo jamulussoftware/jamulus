@@ -55,12 +55,17 @@ jamulus_plugin_import.cpp
 .github_release_changelog.md
 /debian/
 
-JamulusPlus/b*/
-JamulusPlus/build-ci-*/
-JamulusPlus/dist/
-JamulusPlus/installer/installer_output/
-juce-wrapper/dist/
-juce-wrapper/installer/installer_output/
-
-#Ignore vscode AI rules
-.github\instructions\codacy.instructions.md
+b*/
+build-ci-*/
+dist/
+installer/installer_output/
+*.log
+build_*.txt
+build*.txt
+probe_output*.log
+deploy_*.txt
+cmake_*.txt
+rebuild_log.txt
+artifacts.txt
+dependencies.txt
+*.zip

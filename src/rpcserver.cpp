@@ -30,10 +30,16 @@ CRpcServer::CRpcServer ( QObject* parent, QString strBindIP, int iPort, QString 
     QObject ( parent ),
     strBindIP ( strBindIP ),
     iPort ( iPort ),
-    strSecret ( strSecret ),
-    pTransportServer ( new QTcpServer ( this ) )
+    strSecret ( strSecret )
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    , pJuceServer ( new JUCE_RpcServer ( this ) )
+#else
+    , pTransportServer ( new QTcpServer ( this ) )
+#endif
 {
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
     connect ( pTransportServer, &QTcpServer::newConnection, this, &CRpcServer::OnNewConnection );
+#endif
 
     /// @rpc_method jamulus/getVersion
     /// @brief Returns Jamulus version.
@@ -48,11 +54,16 @@ CRpcServer::CRpcServer ( QObject* parent, QString strBindIP, int iPort, QString 
 
 CRpcServer::~CRpcServer()
 {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    pJuceServer->serverSocket.close();
+    pJuceServer->stopThread ( 2000 );
+#else
     if ( pTransportServer->isListening() )
     {
         qInfo() << "- stopping RPC server";
         pTransportServer->close();
     }
+#endif
 }
 
 bool CRpcServer::Start()
@@ -61,6 +72,16 @@ bool CRpcServer::Start()
     {
         return false;
     }
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    if ( pJuceServer->serverSocket.createListener ( iPort, strBindIP.toStdString() ) )
+    {
+        qInfo() << qUtf8Printable ( QString ( "- JSON-RPC (JUCE): Server started on %1:%2" )
+                                        .arg ( strBindIP )
+                                        .arg ( iPort ) );
+        pJuceServer->startThread();
+        return true;
+    }
+#else
     if ( pTransportServer->listen ( QHostAddress ( strBindIP ), iPort ) )
     {
         qInfo() << qUtf8Printable ( QString ( "- JSON-RPC: Server started on %1:%2" )
@@ -68,7 +89,8 @@ bool CRpcServer::Start()
                                         .arg ( pTransportServer->serverPort() ) );
         return true;
     }
-    qInfo() << "- JSON-RPC: Unable to start server:" << pTransportServer->errorString();
+#endif
+    qInfo() << "- JSON-RPC: Unable to start server";
     return false;
 }
 
@@ -88,7 +110,172 @@ QJsonObject CRpcServer::CreateJsonRpcErrorReply ( int code, QString message )
     return object;
 }
 
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+namespace
+{
+    static QJsonValue VarToQJsonValue ( const juce::var& v )
+    {
+        if ( v.isVoid() || v.isUndefined() )
+        {
+            return QJsonValue();
+        }
+        if ( v.isBool() )
+        {
+            return QJsonValue ( static_cast<bool> ( v ) );
+        }
+        if ( v.isInt() || v.isInt64() || v.isDouble() )
+        {
+            return QJsonValue ( static_cast<double> ( v ) );
+        }
+        if ( v.isString() )
+        {
+            juce::String s = v.toString();
+            return QJsonValue ( QString::fromUtf8 ( s.toRawUTF8() ) );
+        }
+        if ( auto* arr = v.getArray() )
+        {
+            QJsonArray qArr;
+            for ( auto& item : *arr )
+            {
+                qArr.append ( VarToQJsonValue ( item ) );
+            }
+            return qArr;
+        }
+        if ( auto* obj = v.getDynamicObject() )
+        {
+            QJsonObject qObj;
+            const juce::NamedValueSet& props = obj->getProperties();
+            for ( int i = 0; i < props.size(); ++i )
+            {
+                const juce::Identifier& name = props.getName ( i );
+                const juce::var&        val  = props.getValueAt ( i );
+                qObj.insert ( QString::fromUtf8 ( name.toString().toRawUTF8() ), VarToQJsonValue ( val ) );
+            }
+            return qObj;
+        }
+        return QJsonValue();
+    }
+
+    static juce::var QJsonValueToVar ( const QJsonValue& v )
+    {
+        switch ( v.type() )
+        {
+        case QJsonValue::Null:
+        case QJsonValue::Undefined:
+            return juce::var();
+        case QJsonValue::Bool:
+            return juce::var ( v.toBool() );
+        case QJsonValue::Double:
+            return juce::var ( v.toDouble() );
+        case QJsonValue::String:
+        {
+            QByteArray utf8 = v.toString().toUtf8();
+            return juce::var ( juce::String::fromUTF8 ( utf8.constData(), utf8.size() ) );
+        }
+        case QJsonValue::Array:
+        {
+            juce::Array<juce::var> arr;
+            const QJsonArray       qArr = v.toArray();
+            for ( const auto& item : qArr )
+            {
+                arr.add ( QJsonValueToVar ( item ) );
+            }
+            return juce::var ( arr );
+        }
+        case QJsonValue::Object:
+        {
+            auto*                    dyn  = new juce::DynamicObject();
+            const QJsonObject        qObj = v.toObject();
+            const auto               keys = qObj.keys();
+            for ( const auto& key : keys )
+            {
+                QByteArray      utf8Key = key.toUtf8();
+                juce::Identifier id ( juce::String::fromUTF8 ( utf8Key.constData(), utf8Key.size() ) );
+                dyn->setProperty ( id, QJsonValueToVar ( qObj.value ( key ) ) );
+            }
+            return juce::var ( dyn );
+        }
+        }
+        return juce::var();
+    }
+}
+
+void CRpcServer::JUCE_RpcServer::run()
+{
+    while ( !threadShouldExit() )
+    {
+        auto* clientSocket = serverSocket.waitForNextConnection();
+        if ( clientSocket != nullptr )
+        {
+            juce::MessageManager::callAsync ( [this, clientSocket]() {
+                CRpcServer* pOwnerLocal = this->pOwner;
+                void*       pSocket     = (void*) clientSocket;
+                pOwnerLocal->vecClients.append ( pSocket );
+                pOwnerLocal->isAuthenticated[pSocket] = false;
+
+                auto* poller = new JUCE_PollTimer ( pOwnerLocal, clientSocket );
+                poller->startTimer ( 10 );
+            } );
+        }
+    }
+}
+
+CRpcServer::JUCE_PollTimer::JUCE_PollTimer ( CRpcServer* pOwnerIn, juce::StreamingSocket* pSocketIn ) :
+    pOwner ( pOwnerIn ),
+    pSocket ( pSocketIn )
+{
+}
+
+void CRpcServer::JUCE_PollTimer::timerCallback()
+{
+    if ( !pSocket->isConnected() )
+    {
+        pOwner->vecClients.removeAll ( (void*) pSocket );
+        pOwner->isAuthenticated.remove ( (void*) pSocket );
+        delete pSocket;
+        stopTimer();
+        delete this;
+        return;
+    }
+
+    if ( pSocket->waitUntilReady ( true, 0 ) > 0 )
+    {
+        char buffer[4096];
+        int  bytesRead = pSocket->read ( buffer, sizeof ( buffer ) - 1, false );
+        if ( bytesRead > 0 )
+        {
+            buffer[bytesRead] = '\0';
+            juce::String dataStr = juce::String::fromUTF8 ( buffer, bytesRead );
+            juce::StringArray lines;
+            lines.addLines ( dataStr );
+            for ( const auto& line : lines )
+            {
+                if ( line.isEmpty() )
+                {
+                    continue;
+                }
+
+                juce::var parsed = juce::JSON::parse ( line );
+                if ( parsed.isObject() )
+                {
+                    QJsonObject request = VarToQJsonValue ( parsed ).toObject();
+                    QJsonObject response;
+                    response["jsonrpc"] = "2.0";
+                    response["id"]      = request["id"];
+                    pOwner->ProcessMessage ( (void*) pSocket, request, response );
+                    QJsonDocument responseDoc ( response );
+                    pOwner->Send ( (void*) pSocket, responseDoc );
+                }
+            }
+        }
+    }
+}
+#endif
+
 void CRpcServer::OnNewConnection()
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+{}
+#else
 {
     QTcpSocket* pSocket = pTransportServer->nextPendingConnection();
     if ( !pSocket )
@@ -177,10 +364,35 @@ void CRpcServer::OnNewConnection()
         }
     } );
 }
+#endif
 
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+void CRpcServer::Send ( void* pSocket, const QJsonDocument& aMessage )
+{
+    juce::var root;
+    if ( aMessage.isObject() )
+    {
+        root = QJsonValueToVar ( QJsonValue ( aMessage.object() ) );
+    }
+    else if ( aMessage.isArray() )
+    {
+        root = QJsonValueToVar ( QJsonValue ( aMessage.array() ) );
+    }
+
+    juce::String jsonText = juce::JSON::toString ( root, true );
+    juce::String withNewline = jsonText + "\n";
+    std::string  utf8 = withNewline.toStdString();
+    ((juce::StreamingSocket*) pSocket)->write ( utf8.c_str(), (int) utf8.size() );
+}
+#else
 void CRpcServer::Send ( QTcpSocket* pSocket, const QJsonDocument& aMessage ) { pSocket->write ( aMessage.toJson ( QJsonDocument::Compact ) + "\n" ); }
+#endif
 
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+void CRpcServer::HandleApiAuth ( void* pSocket, const QJsonObject& params, QJsonObject& response )
+#else
 void CRpcServer::HandleApiAuth ( QTcpSocket* pSocket, const QJsonObject& params, QJsonObject& response )
+#endif
 {
     auto userSecret = params["secret"];
     if ( !userSecret.isString() )
@@ -193,16 +405,28 @@ void CRpcServer::HandleApiAuth ( QTcpSocket* pSocket, const QJsonObject& params,
     {
         isAuthenticated[pSocket] = true;
         response["result"]       = "ok";
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+        qInfo() << "- JSON-RPC: accepted valid authentication secret";
+#else
         qInfo() << "- JSON-RPC: accepted valid authentication secret from" << pSocket->peerAddress().toString();
+#endif
         return;
     }
     response["error"] = CreateJsonRpcError ( CRpcServer::iErrAuthenticationFailed, "Authentication failed." );
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+    qWarning() << "- JSON-RPC: rejected invalid authentication secret";
+#else
     qWarning() << "- JSON-RPC: rejected invalid authentication secret from" << pSocket->peerAddress().toString();
+#endif
 }
 
 void CRpcServer::HandleMethod ( const QString& strMethod, CRpcHandler pHandler ) { mapMethodHandlers[strMethod] = pHandler; }
 
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+void CRpcServer::ProcessMessage ( void* pSocket, QJsonObject message, QJsonObject& response )
+#else
 void CRpcServer::ProcessMessage ( QTcpSocket* pSocket, QJsonObject message, QJsonObject& response )
+#endif
 {
     if ( !message["method"].isString() )
     {
@@ -237,7 +461,9 @@ void CRpcServer::ProcessMessage ( QTcpSocket* pSocket, QJsonObject message, QJso
     if ( !isAuthenticated[pSocket] )
     {
         response["error"] = CreateJsonRpcError ( iErrUnauthenticated, "Unauthenticated: Please authenticate using jamulus/apiAuth first" );
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
         qInfo() << "- JSON-RPC: rejected unauthenticated request from" << pSocket->peerAddress().toString();
+#endif
         return;
     }
 

@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "audiomixerboard.h"
+#include <juce_core/juce_core.h>
 
 /******************************************************************************\
 * CChanneFader                                                                 *
@@ -685,8 +686,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         strModText.prepend ( QString().setNum ( cChanInfo.iChanID ) + ":" );
     }
 
-    QTextBoundaryFinder tbfName ( QTextBoundaryFinder::Grapheme, cChanInfo.strName );
-    int                 iBreakPos;
+    int iBreakPos;
 
     // apply break position and font size depending on the selected design
     if ( eDesign == GD_SLIMFADER )
@@ -706,19 +706,18 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         iBreakPos = MAX_LEN_FADER_TAG / 2;
     }
 
-    int iInsPos     = iBreakPos;
-    int iCount      = 0;
-    int iLineNumber = 0;
-    while ( tbfName.toNextBoundary() != -1 )
+    QString wrapped;
+    int     iInsPos = iBreakPos;
+    for ( int i = 0; i < strModText.size(); ++i )
     {
-        ++iCount;
-        if ( iCount == iInsPos && tbfName.position() + iLineNumber < strModText.length() )
+        wrapped += strModText.at ( i );
+        if ( ( i + 1 ) == iInsPos && ( i + 1 ) < strModText.size() )
         {
-            strModText.insert ( tbfName.position() + iLineNumber, QString ( "\n" ) );
-            iLineNumber++;
+            wrapped += '\n';
             iInsPos += iBreakPos;
         }
     }
+    strModText = wrapped;
 
     plblLabel->setText ( strModText );
 

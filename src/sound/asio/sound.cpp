@@ -101,10 +101,12 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
         if ( bOpenDriverSetup )
         {
             OpenDriverSetup();
+#if !defined( HEADLESS ) && !defined( JAMULUS_USE_JUCE_NET )
             QMessageBox::question ( nullptr,
                                     APP_NAME,
                                     "Are you done with your ASIO driver settings of " + GetDeviceName ( iDriverIdx ) + "?",
                                     QMessageBox::Yes );
+#endif
         }
 
         // driver cannot be used, clean up
@@ -509,7 +511,7 @@ void CSound::Stop()
 
     // make sure the working thread is actually done
     // (by checking the locked state)
-    if ( ASIOMutex.tryLock ( 5000 ) )
+    if ( ASIOMutex.try_lock_for ( std::chrono::milliseconds ( 5000 ) ) )
     {
         ASIOMutex.unlock();
     }

@@ -24,13 +24,72 @@
 
 #pragma once
 
-#include <QMutex>
-#include <QTimer>
-#include <QDateTime>
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+#    include <mutex>
+#else
+#    include <QMutex>
+#    include <QTimer>
+#endif
+#if defined( JAMULUS_USE_JUCE_NET )
+#    include <juce_core/juce_core.h>
+#    include <juce_events/juce_events.h>
+#endif
 #include <list>
 #include <cmath>
 #include "global.h"
 #include "util.h"
+#include "net_abstraction.h"
+
+class IProtocolHandler
+{
+public:
+    virtual ~IProtocolHandler() = default;
+
+    virtual void OnMessReadyForSending ( CVector<uint8_t> vecMessage ) {}
+    virtual void OnCLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage ) {}
+
+    virtual void OnChangeJittBufSize ( int iNewJitBufSize ) {}
+    virtual void OnReqJittBufSize() {}
+    virtual void OnChangeNetwBlSiFact ( int iNewNetwBlSiFact ) {}
+    virtual void OnClientIDReceived ( int iChanID ) {}
+    virtual void OnChangeChanGain ( int iChanID, float fNewGain ) {}
+    virtual void OnChangeChanPan ( int iChanID, float fNewPan ) {}
+    virtual void OnMuteStateHasChangedReceived ( int iCurID, bool bIsMuted ) {}
+    virtual void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo ) {}
+    virtual void OnServerFullMesReceived() {}
+    virtual void OnReqConnClientsList() {}
+    virtual void OnChangeChanInfo ( CChannelCoreInfo ChanInfo ) {}
+    virtual void OnReqChanInfo() {}
+    virtual void OnChatTextReceived ( QString strChatText ) {}
+    virtual void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps ) {}
+    virtual void OnReqNetTranspProps() {}
+    virtual void OnReqSplitMessSupport() {}
+    virtual void OnSplitMessSupported() {}
+    virtual void OnLicenceRequired ( ELicenceType eLicenceType ) {}
+    virtual void OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion ) {}
+    virtual void OnRecorderStateReceived ( ERecorderState eRecorderState ) {}
+
+    virtual void OnCLPingReceived ( CHostAddress InetAddr, int iMs ) {}
+    virtual void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients ) {}
+    virtual void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo ) {}
+    virtual void OnCLRegisterServerExReceived ( CHostAddress           InetAddr,
+                                                CHostAddress           LInetAddr,
+                                                CServerCoreInfo        ServerInfo,
+                                                COSUtil::EOpSystemType eOSType,
+                                                QString                strVersion ) {}
+    virtual void OnCLUnregisterServerReceived ( CHostAddress InetAddr ) {}
+    virtual void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo ) {}
+    virtual void OnCLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo ) {}
+    virtual void OnCLReqServerList ( CHostAddress InetAddr ) {}
+    virtual void OnCLSendEmptyMes ( CHostAddress TargetInetAddr ) {}
+    virtual void OnCLDisconnection ( CHostAddress InetAddr ) {}
+    virtual void OnCLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion ) {}
+    virtual void OnCLReqVersionAndOS ( CHostAddress InetAddr ) {}
+    virtual void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo ) {}
+    virtual void OnCLReqConnClientsList ( CHostAddress InetAddr ) {}
+    virtual void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList ) {}
+    virtual void OnCLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus ) {}
+};
 
 /* Definitions ****************************************************************/
 // protocol message IDs
@@ -99,12 +158,12 @@
 #define MAX_NUM_MESS_SPLIT_PARTS   ( MAX_SIZE_BYTES_NETW_BUF / MESS_SPLIT_PART_SIZE_BYTES )
 
 /* Classes ********************************************************************/
-class CProtocol : public QObject
+class CProtocol
 {
-    Q_OBJECT
-
 public:
     CProtocol();
+    void SetTimerScheduler ( ITimerScheduler* scheduler ) { pTimerScheduler = scheduler; }
+    void SetHandler ( IProtocolHandler* handler ) { pHandler = handler; }
 
     void Reset();
     void SetSplitMessageSupported ( const bool bIn ) { bSplitMessageSupported = bIn; }
@@ -169,6 +228,8 @@ public:
     // this function is public because we need it in the test bench
     void CreateAndImmSendAcknMess ( const int& iID, const int& iCnt );
 
+    void OnTimerSendMess() { SendMessage(); }
+
 protected:
     class CSendMessage
     {
@@ -225,7 +286,11 @@ protected:
                                  const QByteArray& sStringUTF8,
                                  const int         iNumberOfBytsLen = 2 ); // default is 2 bytes length indicator
 
+#if defined( JAMULUS_USE_JUCE_NET )
+    void PutCountryOnStream ( CVector<uint8_t>& vecIn, int& iPos, QCOUNTRY_T eCountry );
+#else
     void PutCountryOnStream ( CVector<uint8_t>& vecIn, int& iPos, QLocale::Country eCountry );
+#endif
 
     static uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn, int& iPos, const int iNumOfBytes );
 
@@ -235,7 +300,11 @@ protected:
                                QString&                strOut,
                                const int               iNumberOfBytsLen = 2 ); // default is 2 bytes length indicator
 
+#if defined( JAMULUS_USE_JUCE_NET )
+    static QCOUNTRY_T GetCountryFromStream ( const CVector<uint8_t>& vecIn, int& iPos );
+#else
     static QLocale::Country GetCountryFromStream ( const CVector<uint8_t>& vecIn, int& iPos );
+#endif
 
     void SendMessage();
 
@@ -283,66 +352,31 @@ protected:
     int iOldRecID;
     int iOldRecCnt;
 
-    // these two objects must be sequred by a mutex
+    // these two objects must be secured by a mutex
     uint8_t                 iCounter;
     std::list<CSendMessage> SendMessQueue;
 
+#if defined( HEADLESS )
+    std::mutex Mutex;
+#elif defined( JAMULUS_USE_JUCE_NET )
+    std::mutex Mutex;
+    struct SendMessageTimer : public juce::Timer
+    {
+        explicit SendMessageTimer ( CProtocol& ownerIn ) : owner ( ownerIn ) {}
+        void timerCallback() override { owner.OnTimerSendMess(); }
+        CProtocol& owner;
+    };
+    SendMessageTimer TimerSendMess;
+#else
     QTimer TimerSendMess;
     QMutex Mutex;
+#endif
+    ITimerScheduler* pTimerScheduler;
+    TimerId          sendTimeoutTimerId;
 
     CVector<uint8_t> vecbySplitMessageStorage;
     int              iSplitMessageCnt;
     int              iSplitMessageDataIndex;
     bool             bSplitMessageSupported;
-
-public slots:
-    void OnTimerSendMess() { SendMessage(); }
-
-signals:
-    // transmitting
-    void MessReadyForSending ( CVector<uint8_t> vecMessage );
-    void CLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
-
-    // receiving
-    void ChangeJittBufSize ( int iNewJitBufSize );
-    void ReqJittBufSize();
-    void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
-    void ClientIDReceived ( int iChanID );
-    void ChangeChanGain ( int iChanID, float fNewGain );
-    void ChangeChanPan ( int iChanID, float fNewPan );
-    void MuteStateHasChangedReceived ( int iCurID, bool bIsMuted );
-    void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
-    void ServerFullMesReceived();
-    void ReqConnClientsList();
-    void ChangeChanInfo ( CChannelCoreInfo ChanInfo );
-    void ReqChanInfo();
-    void ChatTextReceived ( QString strChatText );
-    void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
-    void ReqNetTranspProps();
-    void ReqSplitMessSupport();
-    void SplitMessSupported();
-    void LicenceRequired ( ELicenceType eLicenceType );
-    void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
-    void RecorderStateReceived ( ERecorderState eRecorderState );
-
-    void CLPingReceived ( CHostAddress InetAddr, int iMs );
-    void CLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
-    void CLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo );
-    void CLRegisterServerExReceived ( CHostAddress           InetAddr,
-                                      CHostAddress           LInetAddr,
-                                      CServerCoreInfo        ServerInfo,
-                                      COSUtil::EOpSystemType eOSType,
-                                      QString                strVersion );
-    void CLUnregisterServerReceived ( CHostAddress InetAddr );
-    void CLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
-    void CLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
-    void CLReqServerList ( CHostAddress InetAddr );
-    void CLSendEmptyMes ( CHostAddress TargetInetAddr );
-    void CLDisconnection ( CHostAddress InetAddr );
-    void CLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
-    void CLReqVersionAndOS ( CHostAddress InetAddr );
-    void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
-    void CLReqConnClientsList ( CHostAddress InetAddr );
-    void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
-    void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
+    IProtocolHandler* pHandler;
 };

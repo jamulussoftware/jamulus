@@ -24,16 +24,20 @@
 
 #pragma once
 
-#include <QDir>
-#include <QFile>
-#include <QDateTime>
-#include <QMutex>
+#include <fstream>
+#if defined( HEADLESS )
+#    include <mutex>
+#elif defined( JAMULUS_USE_JUCE_NET )
+#    include <juce_core/juce_core.h>
+#else
+#    include <QMutex>
+#endif
 
 #include "../util.h"
 #include "../channel.h"
 
-#include "creaperproject.h"
 #include "cwavestream.h"
+#include "creaperproject.h"
 
 namespace recorder
 {
@@ -74,7 +78,11 @@ class CJamClient : public QObject
     Q_OBJECT
 
 public:
-    CJamClient ( const qint64 frame, const int numChannels, const QString name, const CHostAddress& address, const QDir recordBaseDir );
+    CJamClient ( const qint64 frame,
+                 const int    numChannels,
+                 const QString name,
+                 const CHostAddress& address,
+                 const QString        recordBaseDirPath );
 
     void Frame ( const QString name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples );
 
@@ -103,8 +111,7 @@ private:
     const CHostAddress address;
 
     QString      filename;
-    QFile*       wavFile;
-    QDataStream* out;
+    std::ofstream wavFile;
     qint64       frameCount = 0;
 };
 
@@ -113,7 +120,7 @@ class CJamSession : public QObject
     Q_OBJECT
 
 public:
-    CJamSession ( QDir recordBaseDir );
+    CJamSession ( QString recordBaseDirPath );
 
     virtual ~CJamSession();
 
@@ -130,9 +137,13 @@ public:
 
     QMap<QString, QList<STrackItem>> Tracks();
 
-    QString Name() { return sessionDir.dirName(); }
+    QString Name()
+    {
+        const int slash = std::max ( sessionDirPath.lastIndexOf ( '/' ), sessionDirPath.lastIndexOf ( '\\' ) );
+        return ( slash >= 0 ) ? sessionDirPath.mid ( slash + 1 ) : sessionDirPath;
+    }
 
-    const QDir SessionDir() { return sessionDir; }
+    QString SessionDirPath() { return sessionDirPath; }
 
     void DisconnectClient ( int iChID );
 
@@ -141,7 +152,7 @@ public:
 private:
     CJamSession();
 
-    const QDir sessionDir;
+    const QString sessionDirPath;
 
     qint64                       currentFrame;
     int                          chIdDisconnected;
@@ -155,7 +166,7 @@ class CJamRecorder : public QObject
 
 public:
     CJamRecorder ( const QString strRecordingBaseDir, const int iServerFrameSizeSamples ) :
-        recordBaseDir ( strRecordingBaseDir ),
+        recordBaseDirPath ( strRecordingBaseDir ),
         iServerFrameSizeSamples ( iServerFrameSizeSamples ),
         isRecording ( false ),
         currentSession ( nullptr )
@@ -179,11 +190,17 @@ private:
     void ReaperProjectFromCurrentSession();
     void AudacityLofFromCurrentSession();
 
-    QDir         recordBaseDir;
+    QString      recordBaseDirPath;
     int          iServerFrameSizeSamples;
     bool         isRecording;
     CJamSession* currentSession;
+#if defined( HEADLESS )
+    std::mutex       ChIdMutex;
+#elif defined( JAMULUS_USE_JUCE_NET )
+    juce::CriticalSection ChIdMutex;
+#else
     QMutex       ChIdMutex;
+#endif
 
 signals:
     void RecordingSessionStarted ( QString sessionDir );

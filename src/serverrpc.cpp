@@ -85,14 +85,28 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
         // fill list with connected clients
         for ( int i = 0; i < iNumChannels; i++ )
         {
+#if defined( HEADLESS ) || defined( JAMULUS_USE_JUCE_NET )
+            const QString addr = QString::fromStdString ( vecHostAddresses[i].address );
+            if ( addr.isEmpty() || addr == QStringLiteral( "0.0.0.0" ) )
+            {
+                continue;
+            }
+#else
             if ( vecHostAddresses[i].InetAddr == QHostAddress ( static_cast<quint32> ( 0 ) ) )
             {
                 continue;
             }
+#endif
 
             QJsonObject client{
                 { "id", i },
-                { "address", vecHostAddresses[i].toString ( CHostAddress::SM_IP_PORT ) },
+                { "address",
+#if defined( JAMULUS_USE_JUCE_NET )
+                    QString::fromStdString ( vecHostAddresses[i].toStringStd ( CHostAddress::SM_IP_PORT ) )
+#else
+                    vecHostAddresses[i].toString ( CHostAddress::SM_IP_PORT )
+#endif
+                },
                 { "name", vecsName[i] },
                 { "jitterBufferSize", veciJitBufNumFrames[i] },
                 { "channels", pServer->GetClientNumAudioChannels ( i ) },

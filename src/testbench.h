@@ -26,7 +26,6 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QDateTime>
 #include <QUdpSocket>
 #include <QHostAddress>
 #include "global.h"
@@ -35,7 +34,7 @@
 #include "util.h"
 
 /* Classes ********************************************************************/
-class CTestbench : public QObject
+class CTestbench : public QObject, public IProtocolHandler
 {
     Q_OBJECT
 
@@ -56,10 +55,7 @@ public:
             iPortIncrement++;
         }
 
-        // connect protocol signals
-        QObject::connect ( &Protocol, &CProtocol::MessReadyForSending, this, &CTestbench::OnSendProtMessage );
-
-        QObject::connect ( &Protocol, &CProtocol::CLMessReadyForSending, this, &CTestbench::OnSendCLMessage );
+        Protocol.SetHandler ( this );
 
         // connect and start the timer (testbench heartbeat)
         QObject::connect ( &Timer, &QTimer::timeout, this, &CTestbench::OnTimer );
@@ -304,4 +300,11 @@ public slots:
     }
 
     void OnSendCLMessage ( CHostAddress, CVector<uint8_t> vecMessage ) { OnSendProtMessage ( vecMessage ); }
+
+    void OnMessReadyForSending ( CVector<uint8_t> vecMessage ) override { OnSendProtMessage ( vecMessage ); }
+
+    void OnCLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage ) override
+    {
+        OnSendCLMessage ( InetAddr, vecMessage );
+    }
 };

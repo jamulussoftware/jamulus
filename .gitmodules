@@ -1,10 +1,7 @@
-[submodule "libs/oboe"]
-	path = libs/oboe
-	url = ../../google/oboe.git
-[submodule "JamulusPlus/third_party/JUCE"]
-	path = JamulusPlus/third_party/JUCE
+[submodule "third_party/JUCE"]
+	path = third_party/JUCE
 	url = https://github.com/juce-framework/JUCE.git
-[submodule "JamulusPlus/third_party/clap-juce-extensions"]
-	path = JamulusPlus/third_party/clap-juce-extensions
+[submodule "third_party/clap-juce-extensions"]
+	path = third_party/clap-juce-extensions
 	url = https://github.com/free-audio/clap-juce-extensions.git
 	branch = main

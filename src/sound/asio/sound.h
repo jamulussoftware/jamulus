@@ -24,8 +24,11 @@
 
 #pragma once
 
-#include <QMutex>
-#include <QMessageBox>
+#include <mutex>
+#include <chrono>
+#ifndef HEADLESS
+#    include <QMessageBox>
+#endif
 #include "../../util.h"
 #include "../../global.h"
 #include "../soundbase.h"
@@ -52,8 +55,6 @@
 /* Classes ********************************************************************/
 class CSound : public CSoundBase
 {
-    Q_OBJECT
-
 public:
     CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg, const QString& strMIDISetup, const bool, const QString& );
 
@@ -103,7 +104,7 @@ protected:
 
     CVector<int16_t> vecsMultChanAudioSndCrd;
 
-    QMutex ASIOMutex;
+    std::timed_mutex ASIOMutex;
 
     // utility functions
     static int16_t Flip16Bits ( const int16_t iIn );

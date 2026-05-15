@@ -96,11 +96,16 @@ jobs:
           New-Item -ItemType Directory -Force -Path release-assets | Out-Null
           Compress-Archive -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/CLAP/JamulusPlus.clap" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-clap.zip" -Force
           Compress-Archive -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/VST3/JamulusPlus.vst3" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-vst3.zip" -Force
+          $standaloneSource = if (Test-Path "JamulusPlus/dist/JamulusPlus-Standalone") { "JamulusPlus/dist/JamulusPlus-Standalone" } else { "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone" }
+          $standaloneStage = "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone"
+          Remove-Item -Recurse -Force $standaloneStage -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $standaloneStage | Out-Null
           if (Test-Path "JamulusPlus/dist/JamulusPlus-Standalone") {
-            Compress-Archive -Path "JamulusPlus/dist/JamulusPlus-Standalone" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
+            Copy-Item -Path "$standaloneSource\\*" -Destination $standaloneStage -Recurse -Force
           } else {
-            Compress-Archive -Path "JamulusPlus/build-ci-windows/plugin/jamulus_engine_artefacts/Release/Standalone/*" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
+            Copy-Item -Path "$standaloneSource\\*" -Destination $standaloneStage -Recurse -Force
           }
+          Compress-Archive -Path "$standaloneStage\\*" -DestinationPath "release-assets/JamulusPlus-${{ github.ref_name }}-windows-standalone.zip" -Force
 
       - name: Publish Release Assets
         if: startsWith(github.ref, 'refs/tags/V') || startsWith(github.ref, 'refs/tags/v')

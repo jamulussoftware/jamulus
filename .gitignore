@@ -27,9 +27,7 @@ qrc_resources.cpp
 libs/ASIOSDK2
 windows/VC_redist.x64.exe
 windows/vc_redist.x86.exe
-libs/NSIS/nsProcess.dll
 windows/NSIS
-libs/NSIS/nsProcess/Release/
 debug/
 debug-*/
 release/
@@ -57,6 +55,12 @@ jamulus_plugin_import.cpp
 .github_release_changelog.md
 /debian/
 
+JamulusPlus/b*/
+JamulusPlus/build-ci-*/
+JamulusPlus/dist/
+JamulusPlus/installer/installer_output/
+juce-wrapper/dist/
+juce-wrapper/installer/installer_output/
 
 #Ignore vscode AI rules
 .github\instructions\codacy.instructions.md

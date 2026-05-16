@@ -396,6 +396,8 @@ public slots:
 
     void OnCLUnregisterServerReceived ( CHostAddress InetAddr ) { ServerListManager.Remove ( InetAddr ); }
 
+    void OnCLReqServerFeatures ( CHostAddress InetAddr );
+
     void OnCLDisconnection ( CHostAddress InetAddr );
 
     void OnAboutToQuit();

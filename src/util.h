@@ -617,6 +617,25 @@ enum EDirectoryType
     AT_CUSTOM               = 7 // Must be the last entry!
 };
 
+// Server feature set ----------------------------------------------------------
+enum EFeatureSet
+{
+    // used for protocol -> enum values must be fixed
+    FS_FAST_UPDATE         = 0,
+    FS_MULTITHREADING      = 1,
+    FS_RECORDER_ENABLED    = 2,
+    FS_IS_RECORDING        = 3,
+    FS_DELAY_PAN           = 4,
+    FS_IPV6_AVAILABLE      = 5,
+    FS_RAW_AUDIO           = 6,
+    FS_DISCONONQUIT        = 7,
+    FS_HAS_WELCOME_MESSAGE = 8,
+    FS_IS_LOGGING          = 9,
+    FS_HAS_LICENCE         = 10,
+    FS_HAS_GUI             = 11,
+    FS_RPC_ENABLED         = 12
+};
+
 inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
 {
     switch ( eAddrType )

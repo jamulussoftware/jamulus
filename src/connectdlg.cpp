@@ -736,6 +736,12 @@ void CConnectDlg::UpdateListFilter()
                     bFilterFound = true;
                 }
 
+                // search version
+                if ( pCurListViewItem->text ( LVC_VERSION ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                {
+                    bFilterFound = true;
+                }
+
                 // search children
                 for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
                 {

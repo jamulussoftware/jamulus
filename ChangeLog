@@ -1,4 +1,4 @@
-### 3.12.1 (2026-05-17) ###
+### 3.12.1dev <- NOTE: the release version number will be 4.0.0 ###
 
 - Client: Fix occasional spurious version updated message display (#3691).
   (contributed by @softins)

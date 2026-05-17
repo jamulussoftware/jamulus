@@ -85,16 +85,20 @@ jobs:
           while ($numericParts.Count -lt 4) { $numericParts += "0" }
           $versionInfo = ($numericParts | Select-Object -First 4) -join "."
           $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          $installerOutputDir = Join-Path (Get-Location) "build-ci-windows/installer-output"
+          New-Item -ItemType Directory -Force -Path $installerOutputDir | Out-Null
           & $iscc `
             "/DMyAppVersion=$versionInfo" `
             "/DMyAppDisplayVersion=$tagName" `
             "/DMyVersionInfoVersion=$versionInfo" `
-            "/DMyOutputDir=build-ci-windows/installer-output" `
+            "/DMyOutputDir=$installerOutputDir" `
             "/DMyOutputBaseFilename=JamulusPlus-Setup-$tagName" `
             "/DMyVst3SourceDir=$(Resolve-Path 'build-ci-windows/installer-input/JamulusPlus.vst3')" `
             "/DMyStandaloneSourceDir=$(Resolve-Path 'build-ci-windows/installer-input/JamulusPlus-Standalone')" `
             "installer/jamulus_vst3.iss"
           if ($LASTEXITCODE -ne 0) { throw "Inno Setup compilation failed." }
+          $installerExe = Get-ChildItem -Path $installerOutputDir -Filter *.exe -File -ErrorAction Stop
+          if (-not $installerExe) { throw "Installer output executable was not created." }
 
       - name: Upload CLAP
         uses: actions/upload-artifact@v4

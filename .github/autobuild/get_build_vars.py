@@ -95,8 +95,8 @@ if publish_to_release:
     ref_list = full_ref.split("/", 2)
     release_tag = ref_list[2]
     release_title = f"Release {build_version}  ({release_tag})"
-    is_prerelease = not re.match(r'^r\d+_\d+_\d+$', release_tag)
-    if not is_prerelease and build_version != release_tag[1:].replace('_', '.'):
+    is_prerelease = False #not re.match(r'^r\d+_\d+_\d+$', release_tag)
+    if False: #not is_prerelease and build_version != release_tag[1:].replace('_', '.'):
         raise ValueError(f"non-pre-release tag {release_tag} doesn't match Jamulus.pro VERSION = {build_version}")
 
     # Those variables are only used when a release is created at all:

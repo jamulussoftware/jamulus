@@ -965,8 +965,8 @@ QString NetworkUtil::GetDirectoryAddress ( const EDirectoryType eDirectoryType, 
         return strDirectoryAddress;
     case AT_ANY_GENRE2:
         return CENTSERV_ANY_GENRE2;
-    case AT_ANY_GENRE3:
-        return CENTSERV_ANY_GENRE3;
+    case AT_ANY_GENRE_ASIA:
+        return CENTSERV_ANY_GENRE_ASIA;
     case AT_GENRE_ROCK:
         return CENTSERV_GENRE_ROCK;
     case AT_GENRE_JAZZ:

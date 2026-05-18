@@ -1112,7 +1112,7 @@ void CConnectDlg::UpdateDirectoryComboBox()
     cbxDirectory->clear();
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_DEFAULT ) );
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_ANY_GENRE2 ) );
-    cbxDirectory->addItem ( DirectoryTypeToString ( AT_ANY_GENRE3 ) );
+    cbxDirectory->addItem ( DirectoryTypeToString ( AT_ANY_GENRE_ASIA ) );
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_GENRE_ROCK ) );
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_GENRE_JAZZ ) );
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );

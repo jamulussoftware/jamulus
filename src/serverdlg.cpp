@@ -295,7 +295,7 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_NONE ) );
     cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_DEFAULT ) );
     cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_ANY_GENRE2 ) );
-    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_ANY_GENRE3 ) );
+    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_ANY_GENRE_ASIA ) );
     cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_GENRE_ROCK ) );
     cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_GENRE_JAZZ ) );
     cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );

@@ -100,7 +100,7 @@ LED bar:      lbr
 #define DEFAULT_SERVER_ADDRESS        "anygenre1.jamulus.io:22124" // default port explicit to avoid unneeded SRV lookup
 #define DEFAULT_PORT_NUMBER           22124
 #define CENTSERV_ANY_GENRE2           "anygenre2.jamulus.io:22224"
-#define CENTSERV_ANY_GENRE3           "anygenre3.jamulus.io:22624"
+#define CENTSERV_ANY_GENRE_ASIA       "asia.jamulus.io:22624"
 #define CENTSERV_GENRE_ROCK           "rock.jamulus.io:22424"
 #define CENTSERV_GENRE_JAZZ           "jazz.jamulus.io:22324"
 #define CENTSERV_GENRE_CLASSICAL_FOLK "classical.jamulus.io:22524"

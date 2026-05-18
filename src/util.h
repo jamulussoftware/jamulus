@@ -582,7 +582,7 @@ enum EDirectoryType
     AT_NONE                 = -1, // means not registered, "invalid value"
     AT_DEFAULT              = 0,
     AT_ANY_GENRE2           = 1,
-    AT_ANY_GENRE3           = 2,
+    AT_ANY_GENRE_ASIA       = 2,
     AT_GENRE_ROCK           = 3,
     AT_GENRE_JAZZ           = 4,
     AT_GENRE_CLASSICAL_FOLK = 5,
@@ -600,8 +600,8 @@ inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
     case AT_ANY_GENRE2:
         return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 2" );
 
-    case AT_ANY_GENRE3:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 3" );
+    case AT_ANY_GENRE_ASIA:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre Asia" );
 
     case AT_GENRE_ROCK:
         return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Rock" );

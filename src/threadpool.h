@@ -49,7 +49,6 @@ using threadpool_result_t = typename std::result_of<F ( Args... )>::type;
 class CThreadPool
 {
 public:
-    CThreadPool() = default;
     CThreadPool ( size_t );
     template<class F, class... Args>
     auto enqueue ( F&& f, Args&&... args ) -> std::future<threadpool_result_t<F, Args...>>;

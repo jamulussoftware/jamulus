@@ -5,16 +5,16 @@ on:
   pull_request:
     paths:
       - "src/translation/wininstaller/**"
-      - "src/translation/*.ts"                     # <-- ADD THIS
+      - "src/translation/*.ts"
       - "tools/check-wininstaller-translations.sh"
-      - "tools/check-translations.py"              # <-- ADD THIS (Match your script name)
+      - "tools/check-translations.py"
       - ".github/workflows/translation-check.yml"
   push:
     paths:
       - 'src/translation/wininstaller/**'
       - 'src/translation/*.ts'
       - 'tools/check-wininstaller-translations.sh'
-      - 'tools/check-translations.py'              # <-- ADD THIS HERE TOO
+      - 'tools/check-translations.py'
       - '.github/workflows/translation-check.yml'
 
 jobs:

@@ -215,7 +215,7 @@ def detect_warnings(ts_file: Path, file_lang: str):
 
 # CLI
 def main():
-    parser = argparse.ArgumentParser(description="Qt TS translation checker with extended rules")
+    parser = argparse.ArgumentParser(description="Qt TS translation checker")
     parser.add_argument("--ts-dir", type=Path, default=Path("../src/translation"),
                         help="Directory containing translation_*.ts files")
     parser.add_argument("--strict", action="store_true",

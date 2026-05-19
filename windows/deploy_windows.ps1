@@ -15,9 +15,7 @@ param (
     [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.12/nsis-3.12.zip",
     [string] $BuildOption = "",
     # Toggles for debugging and targeted builds
-    [switch] $DebugMode,
-    [switch] $Skip64Bit,
-    [switch] $Skip32Bit
+    [switch] $DebugMode
 )
 
 # Fail early on all errors
@@ -114,8 +112,8 @@ Function Clean-Build-Environment
     if (Test-Path -Path $BuildPath) { Remove-Item -Path $BuildPath -Recurse -Force }
     if (Test-Path -Path $DeployPath) { Remove-Item -Path $DeployPath -Recurse -Force }
 
-    New-Item -Path $BuildPath -ItemType Directory | Out-Null
-    New-Item -Path $DeployPath -ItemType Directory | Out-Null
+    New-Item -Path $BuildPath -ItemType Directory
+    New-Item -Path $DeployPath -ItemType Directory
 }
 
 # For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
@@ -200,7 +198,7 @@ Function Install-Dependency
     $TempGuid = [System.Guid]::NewGuid()
     # Create a unique empty directory to unpack into
     $TempDir = (Join-Path $TempPath $TempGuid)
-    New-Item -ItemType Directory -Path $TempDir | Out-Null
+    New-Item -ItemType Directory -Path $TempDir
 
     if ($Uri -Match "downloads.sourceforge.net")
     {
@@ -341,6 +339,8 @@ Function Initialize-Qt-Build-Environment
     Set-Item Env:QtQmakePath "$QtMsvcSpecPath\qmake.exe"
     Set-Item Env:QtWinDeployPath "$QtMsvcSpecPath\windeployqt.exe"
 
+    # Check if jom.exe (Qt's clone of nmake that supports parallel execution) is
+    # available in the system PATH. This speeds up the build process significantly.
     if (Get-Command "jom.exe" -ErrorAction SilentlyContinue)
     {
         Set-Item Env:QtJomPath "jom.exe"
@@ -389,10 +389,6 @@ Function Build-App
     )
 
     $QmkCfg = "CONFIG+=$BuildConfig $BuildArch $BuildOption"
-    if (-not $DebugMode)
-    {
-        $QmkCfg += " silent"
-    }
 
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
         -Arguments ("$RootPath\$AppName.pro", $QmkCfg, "-o", "$BuildPath\Makefile")
@@ -400,10 +396,6 @@ Function Build-App
     Set-Location -Path $BuildPath
 
     $MkArgs = @("/NOLOGO", $BuildConfig)
-    if (-not $DebugMode)
-    {
-        $MkArgs += "/S"
-    }
 
     if ($Env:QtJomPath)
     {
@@ -424,10 +416,6 @@ Function Build-App
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
 
     $CleanArgs = @("clean", "/NOLOGO")
-    if (-not $DebugMode)
-    {
-        $CleanArgs += "/S"
-    }
     Invoke-Native-Command -Command "nmake" -Arguments $CleanArgs -SuppressStdErr
 
     Set-Location -Path $RootPath
@@ -438,8 +426,6 @@ function Build-App-Variants
 {
     foreach ($_ in ("x86_64", "x86"))
     {
-        if (($_ -eq "x86_64" -and $Skip64Bit) -or ($_ -eq "x86" -and $Skip32Bit)) { continue }
-
         $OriginalEnv = Get-ChildItem Env:
         if ($_ -eq "x86")
         {

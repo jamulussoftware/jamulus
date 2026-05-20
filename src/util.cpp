@@ -964,17 +964,17 @@ QString NetworkUtil::GetDirectoryAddress ( const EDirectoryType eDirectoryType, 
     case AT_CUSTOM:
         return strDirectoryAddress;
     case AT_ANY_GENRE2:
-        return CENTSERV_ANY_GENRE2;
+        return DIR_ADDR_ANY_GENRE2;
     case AT_ANY_GENRE_ASIA:
-        return CENTSERV_ANY_GENRE_ASIA;
+        return DIR_ADDR_ANY_GENRE_ASIA;
     case AT_GENRE_ROCK:
-        return CENTSERV_GENRE_ROCK;
+        return DIR_ADDR_GENRE_ROCK;
     case AT_GENRE_JAZZ:
-        return CENTSERV_GENRE_JAZZ;
+        return DIR_ADDR_GENRE_JAZZ;
     case AT_GENRE_CLASSICAL_FOLK:
-        return CENTSERV_GENRE_CLASSICAL_FOLK;
+        return DIR_ADDR_GENRE_CLASSICAL_FOLK;
     case AT_GENRE_CHORAL:
-        return CENTSERV_GENRE_CHORAL;
+        return DIR_ADDR_GENRE_CHORAL;
     default:
         return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }

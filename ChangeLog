@@ -1,12 +1,12 @@
 ### 3.12.1dev <- NOTE: the release version number will be 4.0.0 ###
 
+- Add uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023)
+  (contributed by @dingodoppelt)
+
 ### 3.12.1 (2026-05-17) ###
 
 - Client: Fix occasional spurious version updated message display (#3691).
   (contributed by @softins)
-
-- Add uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023)
-  (contributed by @dingodoppelt)
 
 ### 3.12.0 (2026-05-02) ###
 

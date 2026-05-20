@@ -1445,8 +1445,8 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
         break;
 
     case MT_LED_ROUND_SMALL:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_SMALL );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_SMALL );
         break;
     }
 

@@ -36,7 +36,7 @@
 #    include <mach/mach_error.h>
 #    include <mach/mach_time.h>
 #else
-// using mach nanosleep for Linux
+// using nanosleep for Linux
 #    include <sys/time.h>
 #endif
 #include <QCoreApplication>

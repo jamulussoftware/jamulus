@@ -96,22 +96,22 @@ LED bar:      lbr
 #define MAX_DELAY_PANNING_SAMPLES 64
 
 // default server address and port numbers
-#define DEFAULT_QOS_NUMBER            128                          // CS4 (Quality of Service)
-#define DEFAULT_SERVER_ADDRESS        "anygenre1.jamulus.io:22124" // default port explicit to avoid unneeded SRV lookup
+#define DEFAULT_QOS_NUMBER            128                           // CS4 (Quality of Service)
+#define DEFAULT_SERVER_ADDRESS        "anygenre1.jamulus.app:22124" // default port explicit to avoid unneeded SRV lookup
 #define DEFAULT_PORT_NUMBER           22124
-#define CENTSERV_ANY_GENRE2           "anygenre2.jamulus.io:22224"
-#define CENTSERV_ANY_GENRE_ASIA       "asia.jamulus.io:22624"
-#define CENTSERV_GENRE_ROCK           "rock.jamulus.io:22424"
-#define CENTSERV_GENRE_JAZZ           "jazz.jamulus.io:22324"
-#define CENTSERV_GENRE_CLASSICAL_FOLK "classical.jamulus.io:22524"
-#define CENTSERV_GENRE_CHORAL         "choral.jamulus.io:22724"
+#define CENTSERV_ANY_GENRE2           "anygenre2.jamulus.app:22224"
+#define CENTSERV_ANY_GENRE_ASIA       "asia.jamulus.app:22624"
+#define CENTSERV_GENRE_ROCK           "rock.jamulus.app:22424"
+#define CENTSERV_GENRE_JAZZ           "jazz.jamulus.app:22324"
+#define CENTSERV_GENRE_CLASSICAL_FOLK "classical.jamulus.app:22524"
+#define CENTSERV_GENRE_CHORAL         "choral.jamulus.app:22724"
 
 // specify an invalid port to disable the server
 #define INVALID_PORT -1
 
 // servers to check for new versions
-#define UPDATECHECK1_ADDRESS "updatecheck1.jamulus.io"
-#define UPDATECHECK2_ADDRESS "updatecheck2.jamulus.io"
+#define UPDATECHECK1_ADDRESS "updatecheck1.jamulus.app"
+#define UPDATECHECK2_ADDRESS "updatecheck2.jamulus.app"
 
 // getting started and software manual URL
 #define CLIENT_GETTING_STARTED_URL "https://jamulus.io/wiki/Getting-Started"

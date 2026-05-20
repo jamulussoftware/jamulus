@@ -856,9 +856,9 @@ void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
     if ( pSettings->bEnableAudioAlerts )
     {
-        QSoundEffect* sf = new QSoundEffect();
-        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_message.wav" ) );
-        sf->play();
+        QSoundEffect sf;
+        sf.setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_message.wav" ) );
+        sf.play();
     }
     ChatDlg.AddChatText ( strChatText );
 

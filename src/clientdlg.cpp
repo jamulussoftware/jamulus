@@ -1440,8 +1440,8 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
         break;
 
     case MT_BAR_NARROW:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_NARROW );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_NARROW );
         break;
 
     case MT_LED_ROUND_SMALL:

@@ -85,7 +85,7 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
 
-# some depreciated functions need to be kept for older versions to build
+# some deprecated functions need to be kept for older versions to build
 # TODO as soon as we drop support for the old Qt version, remove the following line
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 

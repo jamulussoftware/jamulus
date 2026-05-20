@@ -99,12 +99,12 @@ LED bar:      lbr
 #define DEFAULT_QOS_NUMBER            128                           // CS4 (Quality of Service)
 #define DEFAULT_SERVER_ADDRESS        "anygenre1.jamulus.app:22124" // default port explicit to avoid unneeded SRV lookup
 #define DEFAULT_PORT_NUMBER           22124
-#define CENTSERV_ANY_GENRE2           "anygenre2.jamulus.app:22224"
-#define CENTSERV_ANY_GENRE_ASIA       "asia.jamulus.app:22624"
-#define CENTSERV_GENRE_ROCK           "rock.jamulus.app:22424"
-#define CENTSERV_GENRE_JAZZ           "jazz.jamulus.app:22324"
-#define CENTSERV_GENRE_CLASSICAL_FOLK "classical.jamulus.app:22524"
-#define CENTSERV_GENRE_CHORAL         "choral.jamulus.app:22724"
+#define DIR_ADDR_ANY_GENRE2           "anygenre2.jamulus.app:22224"
+#define DIR_ADDR_ANY_GENRE_ASIA       "asia.jamulus.app:22624"
+#define DIR_ADDR_GENRE_ROCK           "rock.jamulus.app:22424"
+#define DIR_ADDR_GENRE_JAZZ           "jazz.jamulus.app:22324"
+#define DIR_ADDR_GENRE_CLASSICAL_FOLK "classical.jamulus.app:22524"
+#define DIR_ADDR_GENRE_CHORAL         "choral.jamulus.app:22724"
 
 // specify an invalid port to disable the server
 #define INVALID_PORT -1

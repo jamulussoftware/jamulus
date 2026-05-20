@@ -1114,8 +1114,10 @@ public:
         return OT_I_OS;
 #elif defined( Q_OS_ANDROID ) || defined( ANDROID )
         return OT_ANDROID;
-#else
+#elif defined( Q_OS_LINUX )
         return OT_LINUX;
+#else
+        return OT_UNIX;
 #endif
     }
 };

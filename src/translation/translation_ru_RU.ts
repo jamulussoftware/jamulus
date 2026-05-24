@@ -61,7 +61,7 @@
     <message>
         <location filename="../util.cpp" line="505"/>
         <source>Github Contributors list</source>
-        <translation type="unfinished"></translation>
+        <translation>Список участников с Github</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="508"/>

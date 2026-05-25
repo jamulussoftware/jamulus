@@ -39,6 +39,7 @@ import argparse
 import re
 import sys
 import xml.etree.ElementTree as ET
+import xml.sax
 from collections import defaultdict, Counter
 from dataclasses import dataclass
 from enum import IntEnum
@@ -77,18 +78,29 @@ class WarningItem:
     severity: Severity
 
 
-def approximate_message_lines(text: str):
-    """Yield approximate line numbers for <message> elements."""
-    lines = text.splitlines()
-    cursor = 0
-    for _ in range(text.count("<message")):
-        for i in range(cursor, len(lines)):
-            if "<message" in lines[i]:
-                cursor = i + 1
-                yield i + 1
-                break
-        else:
-            yield 0
+class MessageLocator(xml.sax.ContentHandler):
+    """SAX handler to find exact line numbers of <message> elements."""
+    def __init__(self):
+        super().__init__()
+        self.lines = []
+        self.locator = None
+
+    def setDocumentLocator(self, locator):
+        self.locator = locator
+
+    def startElement(self, name, attrs):
+        if name == "message" and self.locator:
+            self.lines.append(self.locator.getLineNumber())
+
+
+def get_exact_message_lines(text: str):
+    """Yield exact line numbers for <message> elements using a SAX parser."""
+    handler = MessageLocator()
+    try:
+        xml.sax.parseString(text.encode("utf-8"), handler)
+    except xml.sax.SAXException:
+        pass
+    yield from handler.lines
 
 
 def check_language_header(ts_file: Path, root, file_lang: str):
@@ -184,7 +196,7 @@ def detect_warnings(ts_file: Path, file_lang: str):
         return [WarningItem(ts_file, 0, file_lang, f"Error parsing XML: {exc}", Severity.SEVERE)]
 
     warnings = check_language_header(ts_file, root, file_lang)
-    line_gen = approximate_message_lines(text)
+    line_gen = get_exact_message_lines(text)
     for context in root.findall("context"):
         warnings.extend(_process_context(ts_file, file_lang, context, line_gen))
     return warnings

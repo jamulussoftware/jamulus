@@ -78,6 +78,7 @@ public:
 
     void ResetTimeOutCounter() { iConTimeOut = iConTimeOutStartVal; }
     bool IsConnected() const { return iConTimeOut > 0; }
+    bool IsIdentified() const { return bIsIdentified; }
     void Disconnect();
 
     void SetEnable ( const bool bNEnStat );

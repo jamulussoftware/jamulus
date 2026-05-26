@@ -1533,7 +1533,7 @@ void CServer::GetConCliParam ( CVector<CHostAddress>&     vecHostAddresses,
     // check all possible channels
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
-        if ( vecChannels[i].IsConnected() )
+        if ( vecChannels[i].IsConnected() && vecChannels[i].IsIdentified() )
         {
             // get requested data
             vecHostAddresses[i]      = vecChannels[i].GetAddress();

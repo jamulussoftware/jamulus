@@ -24,18 +24,6 @@
 
 #include "soundbase.h"
 
-// This is used as a lookup table for parsing option letters, mapping
-// a single character to an EMidiCtlType
-char const sMidiCtlChar[] = {
-    // Has to follow order of EMidiCtlType
-    /* [EMidiCtlType::Fader]       = */ 'f',
-    /* [EMidiCtlType::Pan]         = */ 'p',
-    /* [EMidiCtlType::Solo]        = */ 's',
-    /* [EMidiCtlType::Mute]        = */ 'm',
-    /* [EMidiCtlType::MuteMyself]  = */ 'o',
-    /* [EMidiCtlType::Device]      = */ 'd',
-    /* [EMidiCtlType::None]        = */ '\0' };
-
 /* Implementation *************************************************************/
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          void ( *fpNewProcessCallback ) ( CVector<int16_t>& psData, void* pParg ),

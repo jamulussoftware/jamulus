@@ -84,10 +84,10 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
                                            QString strCountry,
                                            QString strNumClients,
                                            bool    isPermanent,
-                                           bool    bEnableIPv6 )
+                                           bool    bIPv6Available )
 {
     CHostAddress haServerHostAddr;
-    NetworkUtil::ParseNetworkAddress ( strHAddr, haServerHostAddr, bEnableIPv6 );
+    NetworkUtil::ParseNetworkAddress ( strHAddr, haServerHostAddr, bIPv6Available );
     if ( CHostAddress() == haServerHostAddr )
     {
         // do not proceed without server host address!
@@ -95,7 +95,7 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
     }
 
     CHostAddress haServerLocalAddr;
-    NetworkUtil::ParseNetworkAddress ( strLHAddr, haServerLocalAddr, bEnableIPv6 );
+    NetworkUtil::ParseNetworkAddress ( strLHAddr, haServerLocalAddr, bIPv6Available );
     if ( haServerLocalAddr.iPort == 0 )
     {
         haServerLocalAddr.iPort = haServerHostAddr.iPort;
@@ -142,17 +142,17 @@ QString CServerListEntry::toCSV()
 }
 
 // --- CServerListManager ---
-CServerListManager::CServerListManager ( const quint16  iNPortNum,
+CServerListManager::CServerListManager ( CServer*       pServer,
+                                         const quint16  iNPortNum,
                                          const QString& sNDirectoryAddress,
                                          const QString& strServerListFileName,
                                          const QString& strServerInfo,
                                          const QString& strServerListFilter,
                                          const QString& strServerPublicIP,
                                          const int      iNumChannels,
-                                         const bool     bNEnableIPv6,
                                          CProtocol*     pNConLProt ) :
+    pServer ( pServer ),
     DirectoryType ( AT_NONE ),
-    bEnableIPv6 ( bNEnableIPv6 ),
     ServerListFileName ( strServerListFileName ),
     strDirectoryAddress ( "" ),
     bIsDirectory ( false ),
@@ -180,7 +180,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     qDebug() << "Using" << qhaServerPublicIP.toString() << "as external IP.";
     ServerPublicIP = CHostAddress ( qhaServerPublicIP, iNPortNum );
 
-    if ( bEnableIPv6 )
+    if ( pServer->IsIPv6Available() )
     {
         // set the server internal address, including internal port number
         QHostAddress qhaServerPublicIP6;
@@ -829,7 +829,7 @@ bool CServerListManager::Load()
 
         // This uses ParseNetworkAddressBare because it is just parsing ip:host that was saved to the file.
         // Therefore no SRV lookup is appropriate.
-        NetworkUtil::ParseNetworkAddressBare ( slLine[0], haServerHostAddr, bEnableIPv6 );
+        NetworkUtil::ParseNetworkAddressBare ( slLine[0], haServerHostAddr, pServer->IsIPv6Available() );
         int iIdx = IndexOf ( haServerHostAddr );
         if ( iIdx != INVALID_INDEX )
         {
@@ -837,8 +837,14 @@ bool CServerListManager::Load()
             continue;
         }
 
-        serverListEntry =
-            CServerListEntry::parse ( slLine[0], slLine[1], slLine[2], slLine[3], slLine[4], slLine[5], slLine[6].toInt() != 0, bEnableIPv6 );
+        serverListEntry = CServerListEntry::parse ( slLine[0],
+                                                    slLine[1],
+                                                    slLine[2],
+                                                    slLine[3],
+                                                    slLine[4],
+                                                    slLine[5],
+                                                    slLine[6].toInt() != 0,
+                                                    pServer->IsIPv6Available() );
 
         // We expect servers to have addresses...
         if ( ( CHostAddress() == serverListEntry.HostAddr ) )

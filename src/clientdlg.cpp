@@ -54,19 +54,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
-                         const bool       bNEnableIPv6,
                          QWidget*         parent ) :
     CBaseDlg ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bDetectFeedback ( false ),
-    bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_DEFAULT ),          //          "
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
     ChatDlg ( parent ),
-    ConnectDlg ( pNSetP, bNewShowComplRegConnList, bNEnableIPv6, parent ),
+    ConnectDlg ( pNCliP, pNSetP, bNewShowComplRegConnList, parent ),
     AnalyzerConsole ( pNCliP, parent )
 {
     setupUi ( this );
@@ -619,12 +617,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Don't use SRV resolution when resolving update servers.
 
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, pClient->IsIPv6Available() ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, pClient->IsIPv6Available() ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }

@@ -75,8 +75,19 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 );
-    CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 );
+    CSocket ( CChannel*      pNewChannel,
+              const quint16  iPortNumber,
+              const quint16  iQosNumber,
+              const QString& strServerBindIP,
+              const bool     bDisableIPv6,
+              bool&          bIPv6Available );
+
+    CSocket ( CServer*       pNServP,
+              const quint16  iPortNumber,
+              const quint16  iQosNumber,
+              const QString& strServerBindIP,
+              const bool     bDisableIPv6,
+              bool&          bIPv6Available );
 
     virtual ~CSocket();
 
@@ -86,7 +97,7 @@ public:
     void Close();
 
 protected:
-    void    Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP );
+    void    Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, const bool bDisableIPv6 );
     quint16 iPortNumber;
     quint16 iQosNumber;
     QString strServerBindIP;
@@ -108,7 +119,9 @@ protected:
 
     bool bJitterBufferOK;
 
-    bool bEnableIPv6;
+    // This is a reference to CClient::bIPv6Available or CServer::bIPv6Available,
+    // to inform the Client or Server which type of socket was created at startup.
+    bool& bIPv6Available;
 
 public:
     void OnDataReceived();
@@ -138,20 +151,24 @@ class CHighPrioSocket : public QObject
     Q_OBJECT
 
 public:
-    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
-        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP, bEnableIPv6 )
+    CHighPrioSocket ( CChannel*      pNewChannel,
+                      const quint16  iPortNumber,
+                      const quint16  iQosNumber,
+                      const QString& strServerBindIP,
+                      const bool     bDisableIPv6,
+                      bool&          bIPv6Available ) :
+        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6, bIPv6Available )
     {
         Init();
     }
 
-    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, bool bEnableIPv6 ) :
-        Socket ( pNewChannel, iPortNumber, iQosNumber, "", bEnableIPv6 )
-    {
-        Init();
-    }
-
-    CHighPrioSocket ( CServer* pNewServer, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
-        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP, bEnableIPv6 )
+    CHighPrioSocket ( CServer*       pNewServer,
+                      const quint16  iPortNumber,
+                      const quint16  iQosNumber,
+                      const QString& strServerBindIP,
+                      const bool     bDisableIPv6,
+                      bool&          bIPv6Available ) :
+        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6, bIPv6Available )
     {
         Init();
     }

@@ -1422,6 +1422,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
 void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
 {
     // apply MeterStyle to current window
+    // Note: input meter uses big LED and wide bar even in narrow mode
     switch ( eNewMeterStyle )
     {
     case MT_LED_STRIPE:
@@ -1430,23 +1431,15 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
         break;
 
     case MT_LED_ROUND_BIG:
+    case MT_LED_ROUND_SMALL:
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
 
     case MT_BAR_WIDE:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        break;
-
     case MT_BAR_NARROW:
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        break;
-
-    case MT_LED_ROUND_SMALL:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
     }
 

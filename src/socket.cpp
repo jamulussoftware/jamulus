@@ -174,16 +174,16 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
             // FIXME: If binding a dual-protocol interface to a specific address, does it cease to be dual-protocol?
 
-            // TODO - ALLOW IPV6 ADDRESS
-            // if ( !strServerBindIP.isEmpty() )
-            //{
-            //    UdpSocketInAddr.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP ).toIPv4Address() );
-            //}
-            // END TODO - ALLOW IPV6 ADDRESS
+            // It is not possible to bind a dual-protocol socket to a specific address
+            if ( !strServerBindIP.isEmpty() )
+            {
+                qWarning()
+                    << "Option --serverbindip ignored: cannot be used on a dual-protocol IPv6/IPv4 socket. Please add --noipv6 to use IPv4 only.";
+            }
 
             bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
 
-            qInfo() << "IPv6 socket created";
+            qInfo() << "IPv6/IPv4 dual-protocol socket created";
         }
     }
 

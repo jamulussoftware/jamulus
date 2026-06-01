@@ -90,7 +90,6 @@ public:
               const QString&     strServerBindIP,
               const quint16      iPortNumber,
               const quint16      iQosNumber,
-              const QString&     strHTMLStatusFileName,
               const QString&     strDirectoryAddress,
               const QString&     strServerListFileName,
               const QString&     strServerInfo,
@@ -194,9 +193,6 @@ protected:
     template<unsigned int slotId>
     inline void connectChannelSignalsToServerSlots();
 
-    void WriteHTMLChannelList();
-    void WriteHTMLServerQuit();
-
     static void DecodeReceiveDataBlocks ( CServer* pServer, const int iStartChanCnt, const int iStopChanCnt, const int iNumClients );
 
     static void MixEncodeTransmitDataBlocks ( CServer* pServer, const int iStartChanCnt, const int iStopChanCnt, const int iNumClients );
@@ -280,10 +276,6 @@ protected:
 
     // channel level update frame interval counter
     int iFrameCount;
-
-    // HTML file server status
-    bool    bWriteStatusHTMLFile;
-    QString strServerHTMLFileListName;
 
     CHighPrecisionTimer HighPrecisionTimer;
 

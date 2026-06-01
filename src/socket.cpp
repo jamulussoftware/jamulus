@@ -455,7 +455,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
 #ifdef Q_OS_IOS
             // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
-            Init ( iPortNumber, iQosNumber, strServerBindIP ); // reinit
+            Init ( iPortNumber, iQosNumber, strServerBindIP, !bIPv6Available ); // reinit
 
             // loop back to retry
 #endif

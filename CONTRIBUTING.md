@@ -48,11 +48,22 @@ and note the [Editorconfig file](.editorconfig) in the project too.
 
 ### Licensing
 
-If you add new (source code) files, please add a header with the license to the file. This clarifies how your work is licensed. Please use the same format as in e.g. the source files in the `src/` directory. A license header must include:
+**As of Jamulus 3.12.1dev commit eb172d47:** All new source code contributions must be licensed under AGPL 3.0 or any later version.
 
-* A Legal copyright line
-* The Author(s)/Copyright holder(s) list
-* A Declaration of the licence, indicating how to refer to the full text if not provided
+**Existing code:** Code contributed before commit eb172d47 was licensed under GPL 2.0+.
+This code will be licensed under GPL 3.0 (or any later version) from commit eb172d47.
+When distributed as part of Jamulus, the AGPL 3.0 terms govern the combined work, including network use provisions.
+
+**New files**: Any completely new file should include a header with:
+* Copyright line(s)
+* Author(s)/copyright holder(s)
+* License declaration: "Licensed under AGPL 3.0 or any later version. See COPYING for details."
+
+(The warranty disclaimer and equivalent standard text from the existing files is not required, but may be included if desired.)
+
+**Note:** We adopted AGPL 3.0 to ensure that modifications and derivative works developed for network services
+remain available to users.
+
 
 ### Supported platforms
 

@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -373,18 +395,34 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                              " the audio data from each client, mixes the audio data and sends the mix "
                              " back to each client." ) +
                         "</p>"
-                        "<p><font face=\"courier\">" // GPL header text
-                        "This program is free software; you can redistribute it and/or modify "
-                        "it under the terms of the GNU General Public License as published by "
-                        "the Free Software Foundation; either version 2 of the License, or "
+                        "<p><font face=\"courier\">" // license notice (see file headers)
+                        "As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed "
+                        "under AGPL 3.0 or any later version.<br><br>"
+                        "Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+. "
+                        "This code will be licensed under GPL 3.0 (or any later version) from "
+                        "3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern "
+                        "the combined work, including network use provisions.<br><br>"
+                        "This program is free software: you can redistribute it and/or modify "
+                        "it under the terms of the GNU Affero General Public License as published by "
+                        "the Free Software Foundation, either version 3 of the License, or "
                         "(at your option) any later version.<br>This program is distributed in "
                         "the hope that it will be useful, but WITHOUT ANY WARRANTY; without "
                         "even the implied warranty of MERCHANTABILITY or FITNESS FOR A "
-                        "PARTICULAR PURPOSE. See the GNU General Public License for more "
+                        "PARTICULAR PURPOSE.  See the GNU Affero General Public License for more "
+                        "details.<br>You should have received a copy of the GNU Affero General Public "
+                        "License along with this program.  If not, see "
+                        "&lt;https://www.gnu.org/licenses/&gt;.<br>"
+                        "---------------------------------------------------------------------------<br>"
+                        "This program is free software: you can redistribute it and/or modify "
+                        "it under the terms of the GNU General Public License as published by "
+                        "the Free Software Foundation, either version 3 of the License, or "
+                        "(at your option) any later version.<br>This program is distributed in "
+                        "the hope that it will be useful, but WITHOUT ANY WARRANTY; without "
+                        "even the implied warranty of MERCHANTABILITY or FITNESS FOR A "
+                        "PARTICULAR PURPOSE.  See the GNU General Public License for more "
                         "details.<br>You should have received a copy of the GNU General Public "
-                        "License along with his program; if not, write to the Free Software "
-                        "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
-                        "USA"
+                        "License along with this program.  If not, see "
+                        "&lt;https://www.gnu.org/licenses/&gt;."
                         "</font></p>" );
 
     // libraries used by this compilation
@@ -1535,17 +1573,48 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** ";
     }
 
-    strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License version 2 or later (GPLv2)" );
+    strVersionText += QCoreApplication::tr ( "Released under the GNU Affero General Public License 3.0 (or any later version)" );
 
     if ( !bDisplayInGui )
     {
-        // additional non-translated text to show in console output
-        strVersionText += "\n *** <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>";
+        // additional non-translated text to show in console output (see file headers)
+        strVersionText += "\n *** <https://www.gnu.org/licenses/>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** This program is free software; you can redistribute it and/or modify it under";
-        strVersionText += "\n *** the terms of the GNU General Public License as published by the Free Software";
-        strVersionText += "\n *** Foundation; either version 2 of the License, or (at your option) any later version.";
-        strVersionText += "\n *** There is NO WARRANTY, to the extent permitted by law.";
+        strVersionText += "\n *** As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed";
+        strVersionText += "\n *** under AGPL 3.0 or any later version.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.";
+        strVersionText += "\n *** This code will be licensed under GPL 3.0 (or any later version) from";
+        strVersionText += "\n *** 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern";
+        strVersionText += "\n *** the combined work, including network use provisions.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** This program is free software: you can redistribute it and/or modify";
+        strVersionText += "\n *** it under the terms of the GNU Affero General Public License as published by";
+        strVersionText += "\n *** the Free Software Foundation, either version 3 of the License, or";
+        strVersionText += "\n *** (at your option) any later version.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** This program is distributed in the hope that it will be useful,";
+        strVersionText += "\n *** but WITHOUT ANY WARRANTY; without even the implied warranty of";
+        strVersionText += "\n *** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the";
+        strVersionText += "\n *** GNU Affero General Public License for more details.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** You should have received a copy of the GNU Affero General Public License";
+        strVersionText += "\n *** along with this program.  If not, see <https://www.gnu.org/licenses/>.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** ---------------------------------------------------------------------------";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** This program is free software: you can redistribute it and/or modify";
+        strVersionText += "\n *** it under the terms of the GNU General Public License as published by";
+        strVersionText += "\n *** the Free Software Foundation, either version 3 of the License, or";
+        strVersionText += "\n *** (at your option) any later version.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** This program is distributed in the hope that it will be useful,";
+        strVersionText += "\n *** but WITHOUT ANY WARRANTY; without even the implied warranty of";
+        strVersionText += "\n *** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the";
+        strVersionText += "\n *** GNU General Public License for more details.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** You should have received a copy of the GNU General Public License";
+        strVersionText += "\n *** along with this program.  If not, see <https://www.gnu.org/licenses/>.";
         strVersionText += "\n *** ";
 
         strVersionText += "\n *** " + QCoreApplication::tr ( "This app uses the following libraries, resources or code snippets:" );

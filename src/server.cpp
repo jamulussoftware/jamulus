@@ -30,7 +30,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strServerBindIP,
                    const quint16      iPortNumber,
                    const quint16      iQosNumber,
-                   const QString&     strHTMLStatusFileName,
                    const QString&     strDirectoryAddress,
                    const QString&     strServerListFileName,
                    const QString&     strServerInfo,
@@ -54,8 +53,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
     Socket ( this, iPortNumber, iQosNumber, strServerBindIP, bNEnableIPv6 ),
     Logging(),
     iFrameCount ( 0 ),
-    bWriteStatusHTMLFile ( false ),
-    strServerHTMLFileListName ( strHTMLStatusFileName ),
     HighPrecisionTimer ( bNUseDoubleSystemFrameSize ),
     ServerListManager ( iPortNumber,
                         strDirectoryAddress,
@@ -191,14 +188,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
     if ( !strLoggingFileName.isEmpty() )
     {
         Logging.Start ( strLoggingFileName );
-    }
-
-    // HTML status file writing
-    if ( !strServerHTMLFileListName.isEmpty() )
-    {
-        // activate HTML file writing and write initial file
-        bWriteStatusHTMLFile = true;
-        WriteHTMLChannelList();
     }
 
     // manage welcome message: if the welcome message is a valid link to a local
@@ -504,11 +493,6 @@ void CServer::OnAboutToQuit()
     }
 
     Stop();
-
-    if ( bWriteStatusHTMLFile )
-    {
-        WriteHTMLServerQuit();
-    }
 }
 
 void CServer::OnHandledSignal ( int sigNum )
@@ -1267,12 +1251,6 @@ void CServer::CreateAndSendChanListForAllConChannels()
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
         }
     }
-
-    // create status HTML file if enabled
-    if ( bWriteStatusHTMLFile )
-    {
-        WriteHTMLChannelList();
-    }
 }
 
 void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
@@ -1569,54 +1547,6 @@ void CServer::SetWelcomeMessage ( const QString& strNWelcMess )
 
     // restrict welcome message to maximum allowed length
     strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
-}
-
-void CServer::WriteHTMLChannelList()
-{
-    // prepare file and stream
-    QFile serverFileListFile ( strServerHTMLFileListName );
-
-    if ( serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
-    {
-        QTextStream streamFileOut ( &serverFileListFile );
-
-        // depending on number of connected clients write list
-        if ( GetNumberOfConnectedClients() == 0 )
-        {
-            // no clients are connected -> empty server
-            streamFileOut << "  No client connected\n";
-        }
-        else
-        {
-            streamFileOut << "<ul>\n";
-
-            // write entry for each connected client
-            for ( int i = 0; i < iMaxNumChannels; i++ )
-            {
-                if ( vecChannels[i].IsConnected() )
-                {
-                    streamFileOut << "  <li>" << vecChannels[i].GetName().toHtmlEscaped() << "</li>\n";
-                }
-            }
-
-            streamFileOut << "</ul>\n";
-        }
-    }
-}
-
-void CServer::WriteHTMLServerQuit()
-{
-    // prepare file and stream
-    QFile serverFileListFile ( strServerHTMLFileListName );
-
-    if ( !serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
-    {
-        return;
-    }
-
-    QTextStream streamFileOut ( &serverFileListFile );
-    streamFileOut << "  Server terminated\n";
-    serverFileListFile.close();
 }
 
 void CServer::customEvent ( QEvent* pEvent )

@@ -105,7 +105,6 @@ int main ( int argc, char** argv )
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strConnOnStartupAddress     = "";
     QString      strIniFileName              = "";
-    QString      strHTMLStatusFileName       = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
     QString      strDirectoryAddress         = "";
@@ -340,19 +339,6 @@ int main ( int argc, char** argv )
             qInfo() << "- licence required";
             CommandLineOptions << "--licence";
             ServerOnlyOptions << "--licence";
-            continue;
-        }
-
-        // HTML status file ----------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
-        {
-            qWarning() << qUtf8Printable (
-                QString ( "- The HTML status file option (\"--htmlstatus\" or \"-m\") is deprecated and will be removed soon. Please use JSON-RPC "
-                          "instead.  See https://github.com/jamulussoftware/jamulus/blob/main/docs/JSON-RPC.md" ) );
-            strHTMLStatusFileName = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- HTML status file name: %1" ).arg ( strHTMLStatusFileName ) );
-            CommandLineOptions << "--htmlstatus";
-            ServerOnlyOptions << "--htmlstatus";
             continue;
         }
 
@@ -993,7 +979,6 @@ int main ( int argc, char** argv )
                              strServerBindIP,
                              iPortNumber,
                              iQosNumber,
-                             strHTMLStatusFileName,
                              strDirectoryAddress,
                              strServerListFileName,
                              strServerInfo,
@@ -1121,7 +1106,6 @@ QString UsageArguments ( char** argv )
            "  -F, --fastupdate        use 64 samples frame size mode\n"
            "  -l, --log               enable logging, set file name\n"
            "  -L, --licence           show an agreement window before users can connect\n"
-           "  -m, --htmlstatus        deprecated, please use JSON-RPC instead\n"
            "  -o, --serverinfo        registration info for this Server.  Format:\n"
            "                          [name];[city];[country as two-letter ISO country code or Qt5 QLocale ID]\n"
            "      --serverpublicip    public IP address for this Server.  Needed when\n"

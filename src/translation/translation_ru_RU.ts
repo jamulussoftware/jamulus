@@ -131,7 +131,7 @@
     <message>
         <location filename="../util.cpp" line="571"/>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>О программе %1</translation>
     </message>
 </context>
 <context>
@@ -139,22 +139,22 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="20"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>О программе</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation type="unfinished"></translation>
+        <translation>TextLabelVersion</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2026 The Jamulus Development Team</source>
-        <translation type="unfinished">© 2005–2025 Команда разработчиков Jamulus {2005-2026 ?}</translation>
+        <translation>Авторское право © 2005–2026 Команда разработчиков Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation type="unfinished"></translation>
+        <translation>О &amp;программе</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="120"/>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="134"/>
         <source>&amp;Contributors</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Участники</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="148"/>
@@ -174,7 +174,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="198"/>
         <source>&amp;OK</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;ОК</translation>
     </message>
 </context>
 <context>
@@ -182,7 +182,7 @@
     <message>
         <location filename="../analyzerconsole.cpp" line="47"/>
         <source>Analyzer Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Консоль анализатора</translation>
     </message>
     <message>
         <location filename="../analyzerconsole.cpp" line="65"/>
@@ -210,7 +210,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="1072"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
-        <translation type="unfinished">П О П Ы Т К А   П О Д К Л Ю Ч Е Н И Я</translation>
+        <translation>П О П Ы Т К А   П О Д К Л Ю Ч Е Н И Я</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="1279"/>
@@ -220,7 +220,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="1289"/>
         <source>Personal Mix at: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Персональный микс на: %1</translation>
     </message>
 </context>
 <context>
@@ -228,7 +228,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="225"/>
         <source>Channel Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Уровень канала</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="228"/>
@@ -238,12 +238,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="231"/>
         <source>Mixer Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Фейдер микшера</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="234"/>
         <source>Local mix level setting of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка уровня локального микса текущего аудиоканала на сервере</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="237"/>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="238"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывает индикацию состояния клиента, назначенного на этот канал. Поддерживаемые индикаторы:</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="241"/>
@@ -263,7 +263,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="243"/>
         <source>Panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Панорамирование</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="246"/>
@@ -273,27 +273,27 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="248"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
-        <translation type="unfinished"></translation>
+        <translation>С помощью флажка Тихо аудиоканал можно отключить.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="249"/>
         <source>Mute button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка Тихо</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="256"/>
         <source>Solo button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка соло</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="264"/>
         <source>Fader Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Метка фейдера</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="340"/>
         <source>Grp</source>
-        <translation type="unfinished"></translation>
+        <translation>Гр</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="226"/>
@@ -303,12 +303,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="153"/>
         <source>&amp;No grouping</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Без группировки</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="156"/>
         <source>Assign to group</source>
-        <translation type="unfinished"></translation>
+        <translation>Назначить группе</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="232"/>
@@ -318,22 +318,22 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="240"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Динамик с перечёркиванием: указывает, что другой клиент заглушил вас.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="244"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Устанавливает панорамирование канала слева направо. Работает только в стерео-режиме или предпочтительно в режиме моно-вход/стерео-выход.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="252"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation type="unfinished"></translation>
+        <translation>С помощью флажка Соло аудиоканал можно перевести в режим соло, что означает отключение всех остальных каналов, кроме этого. Можно установить соло на более чем одном канале.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="258"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Группа</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="259"/>
@@ -343,84 +343,84 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="262"/>
         <source>Group button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка группы</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="270"/>
         <source>Mixer channel instrument picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Изображение инструмента канала микшера</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="272"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation type="unfinished"></translation>
+        <translation>Метка канала микшера (метка фейдера)</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="310"/>
         <source>PAN</source>
-        <translation type="unfinished"></translation>
+        <translation>ПАН</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="311"/>
         <source>MUTE</source>
-        <translation type="unfinished"></translation>
+        <translation>ТИХО</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="312"/>
         <source>SOLO</source>
-        <translation type="unfinished"></translation>
+        <translation>СОЛО</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="313"/>
         <source>GRP</source>
-        <translation type="unfinished"></translation>
+        <translation>ГР</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="324"/>
         <source>M</source>
-        <translation type="unfinished"></translation>
+        <translation>Т</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="325"/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>С</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="326"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation>Г</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="882"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Псевдоним/имя</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="889"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Инструмент</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="897"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Расположение</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="925"/>
         <location filename="../audiomixerboard.cpp" line="931"/>
         <location filename="../audiomixerboard.cpp" line="937"/>
         <source>Skill Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Уровень мастерства</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="958"/>
         <source>Alias</source>
-        <translation type="unfinished"></translation>
+        <translation>Псевдоним</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="924"/>
         <source>Beginner</source>
-        <translation type="unfinished"></translation>
+        <translation>Начинающий</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="265"/>
@@ -459,14 +459,14 @@
         <location filename="../audiomixerboard.cpp" line="323"/>
         <location filename="../audiomixerboard.cpp" line="337"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation>Пан</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="135"/>
         <location filename="../audiomixerboard.cpp" line="251"/>
         <location filename="../audiomixerboard.cpp" line="339"/>
         <source>Solo</source>
-        <translation type="unfinished"></translation>
+        <translation>Соло</translation>
     </message>
 </context>
 <context>
@@ -479,7 +479,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="34"/>
         <source>The chat window shows a history of all chat messages.</source>
-        <translation type="unfinished"></translation>
+        <translation>Окно чата показывает историю всех сообщений.</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="36"/>
@@ -499,7 +499,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="44"/>
         <source>New chat text edit box</source>
-        <translation type="unfinished">Новое поле для ввода текста чата</translation>
+        <translation>Поле для ввода текста нового сообщения чата</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="54"/>
@@ -525,7 +525,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="148"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>Хотите открыть ссылку «%1» в вашем браузере?</translation>
     </message>
 </context>
 <context>
@@ -546,7 +546,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="54"/>
         <source>Input Level Meter</source>
-        <translation type="unfinished"></translation>
+        <translation>Индикатор уровня входного сигнала</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="59"/>
@@ -561,37 +561,37 @@
     <message>
         <location filename="../clientdlg.cpp" line="78"/>
         <source>Simulates an analog LED level meter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Имитирует аналоговый светодиодный индикатор уровня.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="95"/>
         <source>Connect/Disconnect Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка подключения/отключения</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="99"/>
         <source>Connect and disconnect toggle button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка-переключатель подключения и отключения</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="55"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывает уровень двух стереоканалов вашего аудиовхода.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="62"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation type="unfinished">Если приложение подключено к серверу и вы играете на своём инструменте/поёте в микрофон, индикатор уровня громкости должен реагировать. Если этого не происходит, вы, вероятно, выбрали не тот входной канал (например, «линейный вход» вместо микрофонного) или установили слишком низкий уровень входного усиления в аудиомикшере (Windows).</translation>
+        <translation>Если приложение подключено к серверу и вы играете на своём инструменте/поёте в микрофон, индикатор уровня громкости должен реагировать. Если этого не происходит, вы, вероятно, выбрали не тот входной канал (например, «линейный вход» вместо микрофонного) или установили слишком низкий уровень входного усиления в аудиомикшере (Windows).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="70"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation type="unfinished"></translation>
+        <translation>Для правильного использования приложения, когда оно не подключено, вы не должны слышать свой голос/инструмент через динамики или наушники. Этого можно добиться, отключив (заглушив) ваш входной аудиоканал в микшере воспроизведения (а не в микшере записи!).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="102"/>
         <source>Reverb effect</source>
-        <translation type="unfinished"></translation>
+        <translation>Эффект реверберации</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="103"/>
@@ -601,12 +601,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="114"/>
         <source>Reverb effect level setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка уровня эффекта реверберации</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="117"/>
         <source>Reverb Channel Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбор канала реверберации</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="118"/>
@@ -616,12 +616,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="123"/>
         <source>Left channel selection for reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбор левого канала для реверберации</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="125"/>
         <source>Right channel selection for reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбор правого канала для реверберации</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="132"/>
@@ -631,7 +631,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="133"/>
         <source>The delay is perfect for a jam session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка идеально подходит для джем-сейшна.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="138"/>
@@ -646,42 +646,42 @@
     <message>
         <location filename="../clientdlg.cpp" line="152"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если этот светодиодный индикатор станет красным, вам будет некомфортно играть, используя %1.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="157"/>
         <source>Delay status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Светодиодный индикатор статуса задержки</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="96"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Открывает диалоговое окно для выбора сервера для подключения. Если вы подключены, нажатие этой кнопки завершит сеанс.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
         <source>Shows the current audio delay status:</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывает текущий статус аудиозадержки:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="139"/>
         <source>A session is still possible but it may be harder to play.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сеанс всё ещё возможен, но играть может быть сложнее.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="145"/>
         <source>The delay is too large for jamming.</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка слишком велика для джема.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="170"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка буфера звуковой карты (размер буфера) слишком мала (см. окно «Настройки»).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="174"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость исходящего или входящего потока слишком высока для пропускной способности вашего интернет-соединения.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
@@ -697,7 +697,7 @@
         <location filename="../clientdlg.cpp" line="231"/>
         <location filename="../clientdlg.cpp" line="1277"/>
         <source>C&amp;onnect</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Подключиться</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="284"/>
@@ -717,32 +717,32 @@
     <message>
         <location filename="../clientdlg.cpp" line="397"/>
         <source>My &amp;Profile...</source>
-        <translation type="unfinished"></translation>
+        <translation>Мой &amp;профиль…</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="384"/>
         <source>C&amp;hat...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Чат…</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="389"/>
         <source>&amp;Analyzer Console...</source>
-        <translation type="unfinished"></translation>
+        <translation>Консоль &amp;анализатора…</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="301"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить &amp;все сохранённые настройки Соло и Отключения</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="988"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключиться</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1000"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1010"/>
@@ -752,14 +752,16 @@
     <message>
         <location filename="../clientdlg.cpp" line="1086"/>
         <source>Enable feedback detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить обнаружение акустической обратной связи</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1089"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
-        <translation type="unfinished"></translation>
+        <translation>Обнаружена акустическая обратная связь или слишком громкий сигнал.
+
+Ваш канал был заглушён и включена опция «Приглушить себя». Пожалуйста, сначала устраните проблему обратной связи, затем отключите режим отключения.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1174"/>
@@ -769,7 +771,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="1192"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>ОК</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="296"/>
@@ -784,7 +786,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
         <source>Delay Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>Светодиод статуса задержки</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="166"/>
@@ -799,27 +801,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="184"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если этот светодиодный индикатор станет красным, аудиопоток прерван.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="191"/>
         <source>Current Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущий статус подключения</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="290"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Загрузить настройку каналов микшера…</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="292"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Сохранить настройку каналов микшера…</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="337"/>
         <source>Sort Users by Chann&amp;el</source>
-        <translation type="unfinished"></translation>
+        <translation>Сортировать пользователей по &amp;каналу</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="395"/>
@@ -829,7 +831,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="399"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки аудио/&amp;сети…</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="401"/>
@@ -839,12 +841,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="320"/>
         <source>N&amp;o User Sorting</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Без сортировки пользователей</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="160"/>
         <source>Local Jitter Buffer Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>Светодиод статуса локального джиттер-буфера</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="161"/>
@@ -859,7 +861,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="315"/>
         <source>O&amp;wn Fader First</source>
-        <translation type="unfinished"></translation>
+        <translation>Сначала &amp;мой фейдер</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="323"/>
@@ -884,28 +886,28 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="404"/>
         <source>&amp;MIDI Control Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройк&amp;и MIDI-управления…</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="747"/>
         <source>%1 Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Каталог</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="303"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить для всех фейдеров &amp;уровень нового клиента</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="308"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматически настроить все &amp;фейдеры</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="792"/>
         <location filename="../clientdlg.cpp" line="804"/>
         <source>Select Channel Setup File</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите файл настройки каналов</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="952"/>
@@ -920,7 +922,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="1245"/>
         <source>&amp;Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Отключиться</translation>
     </message>
 </context>
 <context>
@@ -928,32 +930,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="247"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Вход</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="295"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>Л</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="305"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>П</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Джиттер</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Пинг</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="400"/>
@@ -964,7 +966,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>Приглушит&amp;ь себя</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="505"/>
@@ -979,37 +981,37 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="531"/>
         <source>C&amp;onnect</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Подключиться</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="118"/>
         <source>Reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Реверберация</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="202"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="209"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="557"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation type="unfinished"></translation>
+        <translation>ПРИГЛУШЁН (Другие люди вас не услышат)</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="587"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройте аудио, подключитесь к серверу и начинайте джем!</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="609"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверка обновлений</translation>
     </message>
 </context>
 <context>
@@ -1017,27 +1019,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="76"/>
         <source>Jitter Buffer Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер джиттер-буфера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="88"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>Таким образом, настройка джиттер-буфера является компромиссом между качеством аудио и общей задержкой.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="113"/>
         <source>Local jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ползунок управления локальным джиттер-буфером</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="116"/>
         <source>Server jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ползунок управления джиттер-буфером сервера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="118"/>
         <source>Auto jitter buffer check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Флажок автоматического джиттер-буфера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="130"/>
@@ -1047,7 +1049,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="134"/>
         <source>Sound card device selector combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список выбора устройства звуковой карты</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="138"/>
@@ -1072,47 +1074,47 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="163"/>
         <source>Left input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список выбора левого входного канала</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="165"/>
         <source>Right input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список выбора правого входного канала</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="167"/>
         <source>Left output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список выбора левого выходного канала</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="169"/>
         <source>Right output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список выбора правого выходного канала</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="174"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished"></translation>
+        <translation>Маленькие сетевые буферы</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="181"/>
         <source>Small network buffers check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Флажок «Маленькие сетевые буферы»</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="185"/>
         <source>Sound Card Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка буфера звуковой карты</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="235"/>
         <source>Sound card driver settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки драйвера звуковой карты</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="155"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для каждого входного/выходного канала %1 (левого и правого) можно выбрать другой реальный канал звуковой карты.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="175"/>
@@ -1127,17 +1129,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="241"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Открывает настройки драйвера. Примечание: %1 в настоящее время поддерживает только устройства с частотой дискретизации %2 Гц. Вы не сможете выбрать драйвер/устройство, не соответствующее этому требованию. Для получения дополнительной помощи см. jamulus.io.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="262"/>
         <source>ASIO Device Settings push button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка настроек устройства ASIO</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="273"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished">Выберите стиль для индикаторов уровня. Опции «Полоса (узкая)» и «Светодиоды (круглые, маленькие)» применяются только к микшерной панели. Когда выбрана «Полоса (узкая)», для входных индикаторов устанавливается стиль «Полоса (широкая)». Когда выбраны «Светодиоды (круглые, маленькие)», для входных индикаторов устанавливается стиль «Светодиоды (круглые, большие)». Остальные опции применяются как к микшерной панели, так и к входным индикаторам.</translation>
+        <translation>Выберите стиль для индикаторов уровня. Параметры «Полоса (узкая)» и «Светодиоды (круглые, маленькие)» применяются только к микшерной панели. Когда выбрана «Полоса (узкая)», для входных индикаторов устанавливается стиль «Полоса (широкая)». Когда выбраны «Светодиоды (круглые, маленькие)», для входных индикаторов устанавливается стиль «Светодиоды (круглые, большие)». Остальные опции применяются как к микшерной панели, так и к входным индикаторам.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="282"/>
@@ -1152,12 +1154,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="284"/>
         <source>Language combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список языка</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="186"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка задержки буфера является основополагающей настройкой %1. Она влияет на многие свойства соединения.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="60"/>
@@ -1167,7 +1169,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="123"/>
         <source>Audio Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудиоустройство</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="124"/>
@@ -1177,17 +1179,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="189"/>
         <source>Three buffer sizes can be selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Можно выбрать один из трёх размеров буфера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="192"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>64 сэмпла: Обеспечивает наименьшую задержку, но работает не со всеми звуковыми картами.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="198"/>
         <source>256 samples: Should only be used when 64 or 128 samples is causing issues.</source>
-        <translation type="unfinished"></translation>
+        <translation>256 сэмплов: Следует использовать только если размеры 64 или 128 сэмплов вызывают проблемы.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="202"/>
@@ -1198,7 +1200,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="210"/>
         <source>If no buffer size is selected and all settings are disabled, this means a buffer size in use by the driver which does not match the values. %1 will still work with this setting but may have restricted performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если ни один размер буфера не выбран и все настройки отключены, это означает, что драйвер использует размер буфера, не соответствующий этим значениям. %1 будет работать с этой настройкой, но производительность может быть ограничена.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="216"/>
@@ -1208,17 +1210,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="272"/>
         <source>Meter Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль индикатора</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="279"/>
         <source>Meter Style combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список стиля индикатора</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="345"/>
         <source>Input Boost</source>
-        <translation type="unfinished"></translation>
+        <translation>Усиление входа</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="346"/>
@@ -1228,32 +1230,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="359"/>
         <source>Input Boost combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список усиления входа</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="363"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Если вам нужно добавить дополнительные каталоги в раскрывающийся список «Каталог» диалога подключения, вы можете ввести адреса здесь.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="370"/>
         <source>Delete custom directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка удаления пользовательского каталога</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Delete Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить пользовательский каталог</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Click the button to delete the currently selected custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите кнопку, чтобы удалить выбранный пользовательский каталог.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="376"/>
         <source>Audio Upstream Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость исходящего аудиопотока</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="377"/>
@@ -1263,37 +1265,37 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Number of Mixer Panel Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Количество строк панели микшера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройте количество строк для размещения панели микшера.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="389"/>
         <source>Number of Mixer Panel Rows spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле счётчика количества строк панели микшера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Защита от обратной связи</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="392"/>
         <source>Prevents acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Предотвращает акустическую обратную связь между микрофоном и динамиками.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="393"/>
         <source>Feedback Protection check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Флажок защиты от обратной связи</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="396"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудио-предупреждения</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="397"/>
@@ -1303,162 +1305,162 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>Audio Alerts check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Флажок аудио-предупреждений</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="402"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить/отключить MIDI-вход</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
         <source>MIDI-in port check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Флажок MIDI-входа</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="405"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим подхвата</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="406"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation type="unfinished"></translation>
+        <translation>При включении регуляторы фейдера и панорамы MIDI будут ждать, пока положение физического контроллера не совпадёт с текущим значением в программе, прежде чем реагировать. Это предотвращает резкие скачки, когда физический контроллер не синхронизирован с программой.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="409"/>
         <source>Pick-up Mode check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Флажок режима подхвата</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="412"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите, к какому MIDI-выходу подключиться. Jamulus автоматически подключит свой MIDI-вход к выбранному устройству, когда эта опция включена. Вы также можете использовать любой другой менеджер подключений для ручного изменения соединений.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="416"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите, к какому MIDI-источнику подключиться. Jamulus автоматически подключит свой MIDI-вход к выбранному устройству, когда эта опция включена. Вы также можете использовать утилиту Audio MIDI Setup для ручного изменения соединений.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="420"/>
         <source>Select which MIDI input device(s) Jamulus should listen to. Select &apos;All Devices&apos; to receive MIDI from all connected devices, or choose a specific device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите MIDI-входное устройство (устройства), которое Jamulus должен прослушивать. Выберите «Все устройства» для получения MIDI со всех подключённых устройств или выберите конкретное устройство.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="423"/>
         <source>MIDI input device combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список MIDI-входного устройства</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="425"/>
         <source>MIDI controller settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки MIDI-контроллера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="426"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>Существует один глобальный параметр MIDI-канала (0-16) и два параметра, которые можно установить для каждого управляемого элемента: первый MIDI CC и количество последовательных номеров CC (count). Сначала установите канал, который Jamulus должен прослушивать (0 для всех каналов). Затем для каждого элемента, который вы хотите контролировать (фейдер громкости, панорама, соло, отключение звука), установите первый MIDI CC (номер CC, с которого начинать) и количество последовательных номеров CC (count). Есть одно исключение, которое не требует настройки последовательных номеров CC — это параметр «Приглушить себя»; он требует только одного номера CC, так как применяется только к собственному аудиопотоку.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="435"/>
         <source>You can either type in the MIDI CC values or use the &quot;Learn&quot; button: click on &quot;Learn&quot;, actuate the fader/knob/button on your MIDI controller, and the MIDI CC number will be detected and saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы можете либо ввести значения MIDI CC вручную, либо использовать кнопку «Изучить»: нажмите «Изучить», подвигайте фейдером/ручкой/кнопкой на вашем MIDI-контроллере, и номер MIDI CC будет обнаружен и сохранён.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="446"/>
         <source>MIDI channel combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список MIDI-канала</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле счётчика номера MIDI CC для кнопки «Приглушить себя»</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>Fader offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле счётчика смещения фейдера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="449"/>
         <source>Pan offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле счётчика смещения панорамы</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="450"/>
         <source>Solo offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле счётчика смещения соло</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>Mute offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле счётчика смещения отключения звука</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="452"/>
         <source>Mute Myself MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка изучения MIDI CC для «Приглушить себя»</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="453"/>
         <source>Fader offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка изучения MIDI CC для смещения фейдера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="454"/>
         <source>Pan offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка изучения MIDI CC для смещения панорамы</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="455"/>
         <source>Solo offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка изучения MIDI CC для смещения соло</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="456"/>
         <source>Mute offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка изучения MIDI CC для смещения отключения звука</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="460"/>
         <source>ASIO Device Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки устройства ASIO</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="502"/>
         <source>Fancy</source>
-        <translation type="unfinished"></translation>
+        <translation>Красивый</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="503"/>
         <source>Compact</source>
-        <translation type="unfinished"></translation>
+        <translation>Компактный</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="508"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Полоса (узкая)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="509"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished"></translation>
+        <translation>Полоса (широкая)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="510"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished"></translation>
+        <translation>Светодиоды (полоса)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="511"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished"></translation>
+        <translation>Светодиоды (круглые, маленькие)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="512"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished"></translation>
+        <translation>Светодиоды (круглые, большие)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="527"/>
@@ -1466,7 +1468,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="674"/>
         <location filename="../util.cpp" line="1108"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="564"/>
@@ -1481,202 +1483,202 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="580"/>
         <source>Country/region flag button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка флага страны/региона</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="889"/>
         <location filename="../clientsettingsdlg.cpp" line="896"/>
         <source>Could not open MIDI port</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть MIDI-порт</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="890"/>
         <source>No MIDI devices found. Please connect a MIDI device and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-устройства не найдены. Пожалуйста, подключите MIDI-устройство и повторите попытку.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="896"/>
         <source>Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста, проверьте конфигурацию вашей операционной системы.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1451"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Центр</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1463"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>П</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1483"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Изучить</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1518"/>
         <location filename="../clientsettingsdlg.cpp" line="1605"/>
         <source>All Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Все устройства</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1521"/>
         <source>No device connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет подключённого устройства</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1549"/>
         <location filename="../clientsettingsdlg.cpp" line="1555"/>
         <source>MIDI Device Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-устройство не найдено</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1550"/>
         <source>The MIDI device &quot;%1&quot; could not be found. Using all available devices instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось найти MIDI-устройство «%1». Вместо этого используются все доступные устройства.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1556"/>
         <source>The MIDI device &quot;%1&quot; is not currently available. Select a different device from the dropdown to connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-устройство «%1» в настоящее время недоступно. Выберите другое устройство из раскрывающегося списка для подключения.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1603"/>
         <location filename="../clientsettingsdlg.cpp" line="1609"/>
         <source>MIDI Device Connection Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось подключиться к MIDI-устройству</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1604"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось подключиться к MIDI-устройству «%1». Пожалуйста, проверьте конфигурацию вашей операционной системы.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1610"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check that the device is available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось подключиться к MIDI-устройству «%1». Пожалуйста, убедитесь, что устройство доступно.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1631"/>
         <source>Listening...</source>
-        <translation type="unfinished"></translation>
+        <translation>Прослушивание…</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="221"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>Таким образом, настройка буфера является компромиссом между качеством аудио и общей задержкой.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="251"/>
         <source>64 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключатель настройки 64 сэмпла</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="254"/>
         <source>128 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключатель настройки 128 сэмплов</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="257"/>
         <source>256 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключатель настройки 256 сэмплов</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="287"/>
         <source>Audio Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудиоканалы</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="320"/>
         <source>Audio channels combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список аудиоканалов</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="323"/>
         <source>Audio Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Качество аудио</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="330"/>
         <source>Audio quality combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список качества аудио</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="333"/>
         <source>New Client Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Уровень нового клиента</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="342"/>
         <source>New client level edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле ввода уровня нового клиента</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="293"/>
         <location filename="../clientsettingsdlg.cpp" line="487"/>
         <source>Mono</source>
-        <translation type="unfinished"></translation>
+        <translation>Моно</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="293"/>
         <source>and</source>
-        <translation type="unfinished"></translation>
+        <translation>и</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="309"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation> режим увеличит скорость вашего потока. Убедитесь, что скорость вашего исходящего потока не превышает доступную скорость отдачи вашего интернет-соединения.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="362"/>
         <source>Custom Directories</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательские каталоги</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="368"/>
         <source>Custom Directories combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список пользовательских каталогов</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="488"/>
         <source>Mono-in/Stereo-out</source>
-        <translation type="unfinished"></translation>
+        <translation>Моно-вход/стерео-выход</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="293"/>
         <location filename="../clientsettingsdlg.cpp" line="308"/>
         <location filename="../clientsettingsdlg.cpp" line="489"/>
         <source>Stereo</source>
-        <translation type="unfinished"></translation>
+        <translation>Стерео</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="39"/>
         <location filename="../clientsettingsdlg.cpp" line="49"/>
         <location filename="../clientsettingsdlg.cpp" line="50"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Закрыть</translation>
+        <translation>&amp;Закрыть</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="59"/>
         <source>Local Audio Input Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Фейдер локального аудиовхода</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="67"/>
         <location filename="../clientsettingsdlg.cpp" line="1458"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>Л</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="73"/>
         <source>Local audio input fader (left/right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Фейдер локального аудиовхода (левый/правый)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="77"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation type="unfinished"></translation>
+        <translation>Джиттер-буфер компенсирует колебания синхронизации сети и звуковой карты. Размер буфера влияет на качество аудиопотока (количество потерь) и общую задержку (чем длиннее буфер, тем выше задержка).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="82"/>
@@ -1696,22 +1698,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="195"/>
         <source>128 samples: Should work for most available sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>128 сэмплов: Должно работать для большинства доступных звуковых карт.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="267"/>
         <source>Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Обложка</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="267"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите обложку для главного окна.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="269"/>
         <source>Skin combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список обложек</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="288"/>
@@ -1721,12 +1723,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="294"/>
         <source>These modes use one and two audio channels respectively.</source>
-        <translation type="unfinished"></translation>
+        <translation>Эти режимы используют соответственно один и два аудиоканала.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="299"/>
         <source>Mono in/Stereo-out</source>
-        <translation type="unfinished"></translation>
+        <translation>Моно-вход/стерео-выход</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="300"/>
@@ -1736,17 +1738,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="308"/>
         <source>Enabling </source>
-        <translation type="unfinished"></translation>
+        <translation>Включение </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="314"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
-        <translation type="unfinished"></translation>
+        <translation>В стерео-режиме потоковой передачи в главном окне не будет доступен выбор аудиоканала для эффекта реверберации, поскольку в этом случае эффект применяется к обоим каналам.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="324"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Чем выше качество аудио, тем выше скорость вашего аудиопотока. Убедитесь, что скорость вашего исходящего потока не превышает доступную пропускную способность вашего интернет-соединения.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="334"/>
@@ -1756,359 +1758,359 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="494"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Низкое</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="495"/>
         <location filename="../clientsettingsdlg.cpp" line="501"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Обычное</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="496"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Высокое</translation>
     </message>
     <message>
         <location filename="../util.h" line="619"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Другой</translation>
     </message>
     <message>
         <location filename="../util.h" line="601"/>
         <source>Any Genre 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Любой жанр 2</translation>
     </message>
     <message>
         <location filename="../util.h" line="604"/>
         <source>Any Genre 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Любой жанр 3</translation>
     </message>
     <message>
         <location filename="../util.h" line="607"/>
         <source>Genre Rock</source>
-        <translation type="unfinished"></translation>
+        <translation>Жанр Рок</translation>
     </message>
     <message>
         <location filename="../util.h" line="610"/>
         <source>Genre Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation>Жанр Джаз</translation>
     </message>
     <message>
         <location filename="../util.h" line="613"/>
         <source>Genre Classical/Folk</source>
-        <translation type="unfinished"></translation>
+        <translation>Жанр Классика/Фолк</translation>
     </message>
     <message>
         <location filename="../util.h" line="616"/>
         <source>Genre Choral/Barbershop</source>
-        <translation type="unfinished"></translation>
+        <translation>Жанр Хор/Барбершоп</translation>
     </message>
     <message>
         <location filename="../util.h" line="622"/>
         <source>Any Genre 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Любой жанр 1</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="563"/>
         <source>Musician Profile</source>
-        <translation type="unfinished">Карточка музыканта</translation>
+        <translation>Профиль музыканта</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="576"/>
         <source>Alias or name edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле ввода псевдонима или имени</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="578"/>
         <source>Instrument picture button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка изображения инструмента</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="582"/>
         <source>City edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле ввода города</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="584"/>
         <source>Skill level combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список уровня мастерства</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="678"/>
         <source>Beginner</source>
-        <translation type="unfinished"></translation>
+        <translation>Начинающий</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="682"/>
         <source>Intermediate</source>
-        <translation type="unfinished">Промежуточный</translation>
+        <translation>Средний</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="686"/>
         <source>Expert</source>
-        <translation type="unfinished">Экспертный</translation>
+        <translation>Эксперт</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1038"/>
         <location filename="../clientsettingsdlg.cpp" line="1042"/>
         <source>Size: </source>
-        <translation type="unfinished"></translation>
+        <translation>Размер: </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1097"/>
         <source>Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка буфера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1102"/>
         <source>Buffer Delay: </source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка буфера: </translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1111"/>
         <source>Drum Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Ударная установка</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1114"/>
         <source>Djembe</source>
-        <translation type="unfinished"></translation>
+        <translation>Джембе</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1117"/>
         <source>Electric Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Электрогитара</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1120"/>
         <source>Acoustic Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Акустическая гитара</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1123"/>
         <source>Bass Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Бас-гитара</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1126"/>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Клавиатура</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1129"/>
         <source>Synthesizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Синтезатор</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1132"/>
         <source>Grand Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Рояль</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1135"/>
         <source>Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Аккордеон</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1138"/>
         <source>Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation>Вокал</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1141"/>
         <source>Microphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Микрофон</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1144"/>
         <source>Harmonica</source>
-        <translation type="unfinished"></translation>
+        <translation>Губная гармошка</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1147"/>
         <source>Trumpet</source>
-        <translation type="unfinished"></translation>
+        <translation>Труба</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1150"/>
         <source>Trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Тромбон</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1153"/>
         <source>French Horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Валторна</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1156"/>
         <source>Tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Туба</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1159"/>
         <source>Saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Саксофон</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1162"/>
         <source>Clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Кларнет</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1165"/>
         <source>Flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Флейта</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1168"/>
         <source>Violin</source>
-        <translation type="unfinished"></translation>
+        <translation>Скрипка</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1171"/>
         <source>Cello</source>
-        <translation type="unfinished"></translation>
+        <translation>Виолончель</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1174"/>
         <source>Double Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Контрабас</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1177"/>
         <source>Recorder</source>
-        <translation type="unfinished">Recorder</translation>
+        <translation>Рекордер</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1180"/>
         <source>Streamer</source>
-        <translation type="unfinished"></translation>
+        <translation>Стример</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1183"/>
         <source>Listener</source>
-        <translation type="unfinished"></translation>
+        <translation>Слушатель</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1186"/>
         <source>Guitar+Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation>Гитара+Вокал</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1189"/>
         <source>Keyboard+Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation>Клавиши+Вокал</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1192"/>
         <source>Bodhran</source>
-        <translation type="unfinished"></translation>
+        <translation>Бодхран</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1195"/>
         <source>Bassoon</source>
-        <translation type="unfinished"></translation>
+        <translation>Фагот</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1198"/>
         <source>Oboe</source>
-        <translation type="unfinished"></translation>
+        <translation>Гобой</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1201"/>
         <source>Harp</source>
-        <translation type="unfinished"></translation>
+        <translation>Арфа</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1204"/>
         <source>Viola</source>
-        <translation type="unfinished"></translation>
+        <translation>Альт</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1207"/>
         <source>Congas</source>
-        <translation type="unfinished"></translation>
+        <translation>Конги</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1210"/>
         <source>Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Бонги</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1213"/>
         <source>Vocal Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Вокал Бас</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1216"/>
         <source>Vocal Tenor</source>
-        <translation type="unfinished"></translation>
+        <translation>Вокал Тенор</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1219"/>
         <source>Vocal Alto</source>
-        <translation type="unfinished"></translation>
+        <translation>Вокал Альт</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1222"/>
         <source>Vocal Soprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Вокал Сопрано</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1225"/>
         <source>Banjo</source>
-        <translation type="unfinished"></translation>
+        <translation>Банджо</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1228"/>
         <source>Mandolin</source>
-        <translation type="unfinished"></translation>
+        <translation>Мандолина</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1231"/>
         <source>Ukulele</source>
-        <translation type="unfinished"></translation>
+        <translation>Укулеле</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1234"/>
         <source>Bass Ukulele</source>
-        <translation type="unfinished"></translation>
+        <translation>Бас-укулеле</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1237"/>
         <source>Vocal Baritone</source>
-        <translation type="unfinished"></translation>
+        <translation>Вокал Баритон</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1240"/>
         <source>Vocal Lead</source>
-        <translation type="unfinished"></translation>
+        <translation>Ведущий вокал</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1243"/>
         <source>Mountain Dulcimer</source>
-        <translation type="unfinished"></translation>
+        <translation>Маунтин-далсимер</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1246"/>
         <source>Scratching</source>
-        <translation type="unfinished"></translation>
+        <translation>Скретчинг</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1249"/>
         <source>Rapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэп</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1252"/>
         <source>Vibraphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Вибрафон</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1255"/>
         <source>Conductor</source>
-        <translation type="unfinished"></translation>
+        <translation>Дирижёр</translation>
     </message>
 </context>
 <context>
@@ -2116,301 +2118,301 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="14"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="474"/>
         <source>Input Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Сопоставление входных каналов</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="494"/>
         <location filename="../clientsettingsdlgbase.ui" line="557"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>Л</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="510"/>
         <location filename="../clientsettingsdlgbase.ui" line="573"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>П</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="537"/>
         <source>Output Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Сопоставление выходных каналов</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="900"/>
         <source>Small Network Buffers</source>
-        <translation type="unfinished"></translation>
+        <translation>Маленькие сетевые буферы</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="670"/>
         <source>Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка буфера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="109"/>
         <source>Country/Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Страна/регион</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="682"/>
         <source>(preferred)</source>
-        <translation type="unfinished"></translation>
+        <translation>(предпочтительный)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="695"/>
         <source>(default)</source>
-        <translation type="unfinished"></translation>
+        <translation>(по умолчанию)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="708"/>
         <source>(safe)</source>
-        <translation type="unfinished"></translation>
+        <translation>(безопасный)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="424"/>
         <source>Driver Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки драйвера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="40"/>
         <source>My Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Мой профиль</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="79"/>
         <source>Musician&apos;s Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Профиль музыканта</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="89"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Псевдоним/имя</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="99"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Инструмент</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="119"/>
         <source>City</source>
-        <translation type="unfinished"></translation>
+        <translation>Город</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="129"/>
         <source>Skill</source>
-        <translation type="unfinished"></translation>
+        <translation>Навык</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="225"/>
         <source>User Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательский интерфейс</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="245"/>
         <source>Meter Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль индикатора</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="265"/>
         <source>Mixer Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Строки микшера</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="321"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудио-предупреждения</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="366"/>
         <source>Audio/Network Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки аудио/сети</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="376"/>
         <source>Audio Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудиоустройство</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="738"/>
         <source>Jitter Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Джиттер-буфер</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="750"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Авто</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="759"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальный</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="772"/>
         <source>Server</source>
-        <translation type="unfinished">Сервер</translation>
+        <translation>Сервер</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="789"/>
         <location filename="../clientsettingsdlgbase.ui" line="802"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="931"/>
         <source>kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>кбит/с</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1034"/>
         <source>Custom Directories:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательские каталоги:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1108"/>
         <source>Input Boost</source>
-        <translation type="unfinished"></translation>
+        <translation>Усиление входа</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1140"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Защита от обратной связи</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1195"/>
         <source>Input Balance</source>
-        <translation type="unfinished"></translation>
+        <translation>Баланс входа</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1206"/>
         <location filename="../clientsettingsdlgbase.ui" line="2064"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation>Панорама</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1289"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Центр</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1341"/>
         <source>MIDI Control</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-управление</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1365"/>
         <source>MIDI-in</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-вход</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1391"/>
         <source>MIDI Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-канал</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1417"/>
         <source>0 (all)</source>
-        <translation type="unfinished"></translation>
+        <translation>0 (все)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1422"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1427"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1432"/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1437"/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1442"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1447"/>
         <source>6</source>
-        <translation type="unfinished"></translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1452"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation>7</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1457"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1462"/>
         <source>9</source>
-        <translation type="unfinished"></translation>
+        <translation>9</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1467"/>
         <source>10</source>
-        <translation type="unfinished"></translation>
+        <translation>10</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1472"/>
         <source>11</source>
-        <translation type="unfinished"></translation>
+        <translation>11</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1477"/>
         <source>12</source>
-        <translation type="unfinished"></translation>
+        <translation>12</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1482"/>
         <source>13</source>
-        <translation type="unfinished"></translation>
+        <translation>13</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1487"/>
         <source>14</source>
-        <translation type="unfinished"></translation>
+        <translation>14</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1492"/>
         <source>15</source>
-        <translation type="unfinished"></translation>
+        <translation>15</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1497"/>
         <source>16</source>
-        <translation type="unfinished"></translation>
+        <translation>16</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1518"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим подхвата</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1546"/>
         <source>Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>Приглушить себя</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1569"/>
         <source>MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1604"/>
@@ -2419,12 +2421,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="1995"/>
         <location filename="../clientsettingsdlgbase.ui" line="2119"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Изучить</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1679"/>
         <source>Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Фейдер</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1702"/>
@@ -2432,7 +2434,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="1963"/>
         <location filename="../clientsettingsdlgbase.ui" line="2087"/>
         <source>First MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>Первый MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1763"/>
@@ -2440,67 +2442,67 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="2024"/>
         <location filename="../clientsettingsdlgbase.ui" line="2148"/>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Количество</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1803"/>
         <source>Mute</source>
-        <translation type="unfinished">Заглушить</translation>
+        <translation>Отключить</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1940"/>
         <source>Solo</source>
-        <translation type="unfinished"></translation>
+        <translation>Соло</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="2199"/>
         <source>MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-устройство</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="623"/>
         <source>Audio Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудиоканалы</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="633"/>
         <source>Audio Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Качество аудио</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="993"/>
         <source>Advanced Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнительные настройки</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1071"/>
         <source>New Client Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Уровень нового клиента</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="235"/>
         <source>Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Обложка</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="255"/>
         <source>Language</source>
-        <translation type="unfinished">Язык</translation>
+        <translation>Язык</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1086"/>
         <source>%</source>
-        <translation type="unfinished"></translation>
+        <translation>%</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="907"/>
         <source>Audio Stream Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость аудиопотока</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="941"/>
         <source>val</source>
-        <translation type="unfinished"></translation>
+        <translation>знач</translation>
     </message>
 </context>
 <context>
@@ -2508,117 +2510,117 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="149"/>
         <source>Server List</source>
-        <translation type="unfinished"></translation>
+        <translation>Список серверов</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="120"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="121"/>
         <source>Shows the servers listed by the selected directory. You can add custom directories in Advanced Settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывает серверы, перечисленные выбранным каталогом. Вы можете добавлять пользовательские каталоги в дополнительных настройках.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="123"/>
         <source>Directory combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список каталога</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="132"/>
         <source>Filters the server list by the given text. Note that the filter is case insensitive. A single # character will filter for those servers with at least one person connected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтрует список серверов по заданному тексту. Фильтр нечувствителен к регистру. Один символ # отфильтрует серверы, на которых есть хотя бы один подключённый участник.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="143"/>
         <source>Uncheck to collapse the server list to show just the server details. Check to show everyone on the servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Снимите флажок, чтобы свернуть список серверов и показывать только детали сервера. Установите флажок, чтобы показывать всех участников на серверах.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="150"/>
         <source>The Connection Setup window lists the available servers registered with the selected directory. Use the Directory dropdown to change the directory, find the server you want to join in the server list, click on it, and then click the Connect button to connect. Alternatively, double click on the server name to connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Окно «Настройка соединения» содержит список доступных серверов, зарегистрированных в выбранном каталоге. Используйте раскрывающийся список «Каталог» для его изменения, найдите сервер, к которому хотите подключиться, в списке серверов, нажмите на него, а затем нажмите кнопку «Подключиться», чтобы подключиться. Альтернативно, дважды щёлкните по имени сервера для подключения.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="155"/>
         <source>Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Постоянные серверы (те, которые находятся в списке дольше 48 часов) отображаются жирным шрифтом.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="156"/>
         <source>You can add custom directories in Advanced Settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы можете добавлять пользовательские каталоги в дополнительных настройках.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="158"/>
         <source>Server list view</source>
-        <translation type="unfinished"></translation>
+        <translation>Просмотр списка серверов</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="161"/>
         <source>Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес сервера</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="162"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если вы знаете адрес сервера, вы можете подключиться к нему, используя поле «Имя/Адрес сервера». К адресу сервера можно добавить номер порта через двоеточие в качестве разделителя, например %1. В поле также будет отображаться список недавно использованных адресов серверов.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="172"/>
         <source>Holds the current server address. It also stores old addresses in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Содержит текущий адрес сервера. Также сохраняет старые адреса в списке раскрывающегося окна.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="174"/>
         <source>Delete server address button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка удаления адреса сервера</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="175"/>
         <source>Delete Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить адрес сервера</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="176"/>
         <source>Click the button to clear the currently selected server address and delete it from the list of stored servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите кнопку, чтобы очистить выбранный адрес сервера и удалить его из списка сохранённых серверов.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="1155"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Пинг</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="171"/>
         <source>Server address edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле ввода адреса сервера</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="131"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтр</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="134"/>
         <source>Filter edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле ввода фильтра</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="142"/>
         <source>Show All Musicians</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать всех музыкантов</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="146"/>
         <source>Show all musicians check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Флажок «Показать всех музыкантов»</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="235"/>
         <source>Filter text, or # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Текст фильтра или # для занятых серверов</translation>
     </message>
 </context>
 <context>
@@ -2626,62 +2628,62 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlgbase.ui" line="14"/>
         <source>Connection Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка соединения</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="45"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтр</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="55"/>
         <source>Show All Musicians</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать всех музыкантов</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="71"/>
         <source>Server Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя сервера</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="76"/>
         <source>Ping Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Время пинга</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="81"/>
         <source>Musicians</source>
-        <translation type="unfinished"></translation>
+        <translation>Музыканты</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="86"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Местоположение</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="91"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="101"/>
         <source>Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес сервера</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="138"/>
         <source>C&amp;ancel</source>
-        <translation type="unfinished"></translation>
+        <translation>О&amp;тмена</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="145"/>
         <source>&amp;Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Подключиться</translation>
     </message>
 </context>
 <context>
@@ -2689,43 +2691,43 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="622"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Справка</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="629"/>
         <location filename="../util.cpp" line="634"/>
         <source>Getting &amp;Started...</source>
-        <translation type="unfinished"></translation>
+        <translation>Начало &amp;работы…</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="630"/>
         <source>Software &amp;Manual...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Руководство по программе…</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="637"/>
         <source>What&apos;s &amp;This</source>
-        <translation type="unfinished"></translation>
+        <translation>Что это такое</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="640"/>
         <source>P&amp;rivacy policy...</source>
-        <translation type="unfinished"></translation>
+        <translation>П&amp;олитика конфиденциальности…</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="642"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;О Jamulus…</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="644"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation>О &amp;Qt…</translation>
     </message>
     <message>
         <location filename="../util.h" line="436"/>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>О Qt</translation>
     </message>
 </context>
 <context>
@@ -2733,12 +2735,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="707"/>
         <source>Restart Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Требуется перезапуск</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="707"/>
         <source>Please restart the application for the language change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста, перезапустите приложение, чтобы изменение языка вступило в силу.</translation>
     </message>
 </context>
 <context>
@@ -2746,22 +2748,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="598"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Этот сервер требует вашего согласия с условиями, прежде чем вы сможете подключиться. Пожалуйста, ознакомьтесь с ними в окне чата.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="599"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation type="unfinished"></translation>
+        <translation>Я прочитал условия и &amp;соглашаюсь.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="600"/>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Принять</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="601"/>
         <source>Decline</source>
-        <translation type="unfinished"></translation>
+        <translation>Отказаться</translation>
     </message>
 </context>
 <context>
@@ -2769,17 +2771,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../multicolorled.cpp" line="91"/>
         <source>Red</source>
-        <translation type="unfinished">Красный</translation>
+        <translation>Красный</translation>
     </message>
     <message>
         <location filename="../multicolorled.cpp" line="108"/>
         <source>Yellow</source>
-        <translation type="unfinished">Жёлтый</translation>
+        <translation>Жёлтый</translation>
     </message>
     <message>
         <location filename="../multicolorled.cpp" line="125"/>
         <source>Green</source>
-        <translation type="unfinished">Зелёный</translation>
+        <translation>Зелёный</translation>
     </message>
 </context>
 <context>
@@ -2787,7 +2789,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../settings.cpp" line="443"/>
         <source>No Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет имени</translation>
     </message>
 </context>
 <context>
@@ -2795,448 +2797,448 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="51"/>
         <source>Client List</source>
-        <translation type="unfinished"></translation>
+        <translation>Список клиентов</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="52"/>
         <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
-        <translation type="unfinished"></translation>
+        <translation>Список клиентов показывает всех клиентов, которые в данный момент подключены к этому серверу. Для каждого подключённого клиента отображается некоторая информация, такая как IP-адрес и имя.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="56"/>
         <source>Connected clients list view</source>
-        <translation type="unfinished"></translation>
+        <translation>Просмотр списка подключённых клиентов</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="59"/>
         <source>Directory Type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список типа каталога</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="83"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Когда для каталога выбрано значение, отличное от «%1», здесь будет показано, успешна ли регистрация. Если регистрация не удалась, пожалуйста, выберите другой каталог.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="123"/>
         <source>When checked, the recorder will run while a session is in progress (if set up correctly).</source>
-        <translation type="unfinished"></translation>
+        <translation>При установке флажка рекордер будет работать во время сеанса (при правильной настройке).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="135"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог записи не установлен или значение не пригодно для использования. Проверьте значение на вкладке «Параметры».</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="139"/>
         <source>Recording has been switched off by the UI checkbox or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись была отключена флажком пользовательского интерфейса или JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="141"/>
         <source>Recording has been switched off, by the UI checkbox, SIGUSR2 or JSON-RPC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись была отключена флажком пользовательского интерфейса, SIGUSR2 или JSON-RPC.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="146"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если каталог записи непригоден для использования, проблема будет отображаться вместо каталога сеанса.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="177"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите кнопку, чтобы открыть диалоговое окно для выбора основного каталога записи. Выбранное значение должно существовать и быть доступным для записи (разрешать создание подкаталогов пользователем, от имени которого работает %1).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="184"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущее значение основного каталога записи. Выбранное значение должно существовать и быть доступным для записи (разрешать создание подкаталогов пользователем, от имени которого работает %1). Нажмите кнопку, чтобы открыть диалоговое окно для выбора основного каталога записи.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="196"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес пользовательского каталога</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="197"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес пользовательского каталога — это адрес каталога, содержащего список серверов, в который должен быть добавлен этот сервер.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <source>Server List Filename dialog push button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка выбора файла списка серверов</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя файла списка серверов</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="207"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите кнопку, чтобы открыть диалоговое окно для установки имени файла постоянного хранения списка серверов. Пользователь, от имени которого работает %1, должен иметь возможность создать указанное имя файла, даже если он уже существует (при сохранении он будет перезаписан).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовое поле имени файла списка серверов (только для чтения)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="215"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущее значение имени файла постоянного хранения списка серверов. Пользователь, от имени которого работает %1, должен иметь возможность создать указанное имя файла, даже если он уже существует (при сохранении он будет перезаписан). Нажмите кнопку, чтобы открыть диалоговое окно для установки имени файла постоянного хранения списка серверов.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear the server list file name button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка очистки имени файла списка серверов</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="223"/>
         <source>Clear Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить имя файла списка серверов</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="224"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите кнопку, чтобы очистить текущее выбранное имя файла постоянного хранения списка серверов. Это предотвратит сохранение списка серверов, пока не будет выбрано новое значение.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="228"/>
         <source>Start Minimized on Operating System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускать свёрнутым при запуске операционной системы</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="739"/>
         <source>Now a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Это каталог</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="82"/>
         <source>Register Server Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Статус регистрации сервера</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="229"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если установлен флажок «Запускать свёрнутым при запуске операционной системы», сервер будет запущен при запуске операционной системы и автоматически свёрнут в значок на системной панели задач.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="89"/>
         <source>Server Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя сервера</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="90"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя сервера идентифицирует ваш сервер в списке серверов диалога подключения на стороне клиентов.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="96"/>
         <source>Server name line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле ввода имени сервера</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="99"/>
         <source>Location City</source>
-        <translation type="unfinished"></translation>
+        <translation>Город местоположения</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="100"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation type="unfinished"></translation>
+        <translation>Здесь можно указать город, в котором находится сервер. Если ввести название города, оно будет отображаться в списке серверов диалога подключения на стороне клиентов.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="107"/>
         <source>City where the server is located line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле ввода города, где находится сервер</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="110"/>
         <source>Country/Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Страна/регион</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="111"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Укажите страну или регион, где работает сервер. Клиенты будут показывать это местоположение в списке серверов своего диалога подключения.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="118"/>
         <source>Combo box for location of this server</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список для местоположения этого сервера</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="175"/>
         <source>Display dialog to select recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка выбора каталога записи</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
         <location filename="../serverdlg.cpp" line="183"/>
         <source>Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Основной каталог записи</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="182"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовое поле основного каталога записи (только для чтения)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="190"/>
         <source>Clear the recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка очистки каталога записи</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="191"/>
         <source>Clear Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить каталог записи</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="192"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите кнопку, чтобы очистить текущий выбранный каталог записи. Это предотвратит запись, пока не будет выбрано новое значение.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="121"/>
         <source>Checkbox to turn on or off server recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Флажок для включения/отключения записи на сервере</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="122"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Рекордер джемов</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="149"/>
         <source>Current session directory text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовое поле каталога текущего сеанса (только для чтения)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="153"/>
         <source>Current Session Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог текущего сеанса</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="154"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Включено во время записи и содержит каталог текущего сеанса записи. Отключено после записи или когда рекордер не включён.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="131"/>
         <source>Recorder status label</source>
-        <translation type="unfinished"></translation>
+        <translation>Метка статуса рекордера</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Каталог:&lt;/b&gt; Выберите «%1», чтобы не регистрировать ваш сервер в каталоге.&lt;br&gt;Или выберите один из жанров для регистрации в этом каталоге.&lt;br&gt;Или выберите «%2» и укажите адрес пользовательского каталога на вкладке «Параметры» для регистрации в пользовательском каталоге.&lt;br&gt;&lt;br&gt;Для любого значения, кроме &apos;%1&apos;, этот сервер регистрируется в каталоге, чтобы пользователь %3 мог выбрать этот сервер в списке серверов диалога подключения клиента, когда он выберет этот каталог.&lt;br&gt;&lt;br&gt;Регистрация сервера периодически обновляется, чтобы гарантировать, что все серверы в списке серверов диалога подключения действительно доступны.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
         <source>Recorder Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Статус рекордера</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="133"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
-        <translation type="unfinished"></translation>
+        <translation>Отображает текущий статус рекордера. Возможны следующие значения:</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="143"/>
         <source>There is no one connected to the server to record.</source>
-        <translation type="unfinished"></translation>
+        <translation>Никто не подключён к серверу для записи.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
         <source>The performers are being recorded to the specified session directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Исполнители записываются в указанный каталог сеанса.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
         <source>NOTE</source>
-        <translation type="unfinished"></translation>
+        <translation>ПРИМЕЧАНИЕ</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="160"/>
         <source>Server welcome message edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле ввода приветственного сообщения сервера</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="161"/>
         <source>Server Welcome Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Приветственное сообщение сервера</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="162"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Текст приветственного сообщения сервера отображается в окне чата, когда музыкант заходит на сервер. Если сообщение не установлено, приветствие сервера отключено.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="168"/>
         <source>Language</source>
-        <translation type="unfinished">Язык</translation>
+        <translation>Язык</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="168"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished">Выберите язык, который будет использоваться в пользовательском интерфейсе.</translation>
+        <translation>Выберите язык, который будет использоваться в пользовательском интерфейсе.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="172"/>
         <source>Language combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрывающийся список языка</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="202"/>
         <source>Custom Directory line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле ввода пользовательского каталога</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="246"/>
         <source>&amp;Hide %1 server</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Скрыть сервер %1</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="249"/>
         <source>&amp;Show %1 server</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Показать сервер %1</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="254"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>сервер %1</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="338"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите сообщение здесь. Если сообщение не установлено, приветствие сервера отключено.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="44"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>Сервер %1</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="593"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось запустить рекордер. Пожалуйста, проверьте наличие свободного места на диске и разрешения и повторите попытку. Ошибка: </translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="872"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation>ОШИБКА</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="126"/>
         <source>Request new recording button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка запроса новой записи</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="127"/>
         <source>New Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая запись</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="128"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
-        <translation type="unfinished"></translation>
+        <translation>Во время сеанса записи кнопку можно использовать для начала новой записи.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="242"/>
         <location filename="../serverdlg.cpp" line="394"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished">&amp;Выйти</translation>
+        <translation>В&amp;ыход</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="605"/>
         <source>Select Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите основной каталог записи</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="56"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="55"/>
         <source>Not recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Не записывает</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="53"/>
         <source>Not initialised</source>
-        <translation type="unfinished"></translation>
+        <translation>Не инициализирован</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="54"/>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Не включён</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="392"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Окно</translation>
     </message>
     <message>
         <location filename="../util.h" line="598"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <location filename="../util.h" line="645"/>
         <source>Not registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Не зарегистрирован</translation>
     </message>
     <message>
         <location filename="../util.h" line="648"/>
         <source>Bad address</source>
-        <translation type="unfinished"></translation>
+        <translation>Неверный адрес</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>
         <source>Registration requested</source>
-        <translation type="unfinished"></translation>
+        <translation>Регистрация запрошена</translation>
     </message>
     <message>
         <location filename="../util.h" line="654"/>
         <source>Registration failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Регистрация не удалась</translation>
     </message>
     <message>
         <location filename="../util.h" line="657"/>
         <source>Check server version</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверка версии сервера</translation>
     </message>
     <message>
         <location filename="../util.h" line="660"/>
         <source>Registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Зарегистрирован</translation>
     </message>
     <message>
         <location filename="../util.h" line="663"/>
         <source>Server list full at directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Список серверов в каталоге заполнен</translation>
     </message>
     <message>
         <location filename="../util.h" line="666"/>
         <source>Your server version is too old</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия вашего сервера слишком старая</translation>
     </message>
     <message>
         <location filename="../util.h" line="669"/>
         <source>Requirements not fulfilled</source>
-        <translation type="unfinished"></translation>
+        <translation>Требования не выполнены</translation>
     </message>
     <message>
         <location filename="../util.h" line="672"/>
         <source>Unknown value %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестное значение %1</translation>
     </message>
 </context>
 <context>
@@ -3244,115 +3246,115 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="34"/>
         <source>Client IP:Port</source>
-        <translation type="unfinished"></translation>
+        <translation>IP:Порт клиента</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="39"/>
         <location filename="../serverdlgbase.ui" line="118"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="44"/>
         <source>Jitter Buffer Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер джиттер-буфера</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="49"/>
         <source>Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Каналы</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="67"/>
         <source>Server Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка сервера</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="132"/>
         <source>Location: Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Местоположение: Регион</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
         <source>Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Сеанс</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation type="unfinished"></translation>
+        <translation>Приветствие в окне чата (поддерживается HTML/CSS)</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="224"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес пользовательского каталога</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя файла списка серверов</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
         <source>Start Minimized on Windows Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускать свёрнутым при запуске Windows</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Delay panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка панорамирования</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверка обновлений</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="85"/>
         <location filename="../serverdlgbase.ui" line="179"/>
         <source>STATUS</source>
-        <translation type="unfinished"></translation>
+        <translation>СОСТОЯНИЕ</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="253"/>
         <source>Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог записи</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Jam Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Рекордер джемов</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
         <source>New Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая запись</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="232"/>
         <source>Language</source>
         <extracomment>Consider add &quot;(Lang)&quot; as a suffix to ensure that users who selected the wrong language find the correct button</extracomment>
-        <translation type="unfinished">Язык</translation>
+        <translation>Язык (Language)</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="110"/>
         <source>My Server Info</source>
-        <translation type="unfinished"></translation>
+        <translation>Информация о моём сервере</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="125"/>
         <source>Location: City</source>
-        <translation type="unfinished"></translation>
+        <translation>Местоположение: Город</translation>
     </message>
 </context>
 <context>
@@ -3360,32 +3362,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverlist.cpp" line="415"/>
         <source>Now a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Это каталог</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="421"/>
         <source>No longer a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Больше не каталог</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="780"/>
         <source>Could not open &apos;%1&apos; for read/write. Please check that %2 has permission (and that there is free space).</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть «%1» для чтения/записи. Пожалуйста, проверьте, что %2 имеет разрешения (и что есть свободное место).</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="787"/>
         <source>Loading persistent server list file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка файла постоянного списка серверов: %1</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="852"/>
         <source>Could not write to &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось записать в «%1»</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="863"/>
         <source>Saving registration for %1 (%2): %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранение регистрации для %1 (%2): %3</translation>
     </message>
 </context>
 <context>
@@ -3393,128 +3395,128 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/asio/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбранное аудиоустройство больше не присутствует в системе. Пожалуйста, проверьте ваше аудиоустройство.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось инициализировать аудиодрайвер. Проверьте, подключено ли ваше аудиооборудование, и проверьте настройки драйвера.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбранное аудиоустройство несовместимо, поскольку оно не поддерживает частоту дискретизации %1 Гц. Пожалуйста, выберите другое устройство.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущая конфигурация аудиоустройства несовместима, поскольку не удалось установить частоту дискретизации %2 Гц. Пожалуйста, проверьте наличие аппаратного переключателя или настройки драйвера для ручной установки частоты дискретизации и перезапустите %1.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбранное аудиоустройство несовместимо, поскольку оно не поддерживает %1 входных/выходных каналов. Пожалуйста, выберите другое устройство или конфигурацию.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="206"/>
         <location filename="../sound/asio/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбранное аудиоустройство несовместимо, поскольку требуемый формат аудиосэмплов недоступен. Пожалуйста, используйте другое устройство.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="550"/>
         <source>No ASIO audio device driver found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не найден драйвер аудиоустройства ASIO.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="551"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста, установите драйвер ASIO перед запуском %1. Если у вас есть устройство с поддержкой ASIO, установите его официальный драйвер ASIO. Если нет, вам потребуется установить универсальный драйвер, например ASIO4ALL.</translation>
     </message>
     <message>
         <location filename="../sound/oboe/sound.cpp" line="65"/>
         <source>Error requesting stream stop: $s</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка при запросе остановки потока: $s</translation>
     </message>
     <message>
         <location filename="../sound/oboe/sound.cpp" line="71"/>
         <source>Error closing stream: $s</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка при закрытии потока: $s</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось автоматически запустить JACK. Пожалуйста, запустите JACK вручную и проверьте наличие сообщений об ошибках.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK работает не с частотой дискретизации &lt;b&gt;%1 Гц&lt;/b&gt;. Пожалуйста, используйте инструмент типа &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; для установки частоты дискретизации JACK в %1 Гц.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>Регистрация порта JACK не удалась. Вероятно, это ошибка JACK. Пожалуйста, остановите %1 и JACK. После этого проверьте, может ли другая программа с частотой дискретизации %2 Гц подключиться к JACK.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="93"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удаётся активировать клиент JACK. Вероятно, это ошибка JACK. Пожалуйста, проверьте вывод JACK.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="316"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
-        <translation type="unfinished"></translation>
+        <translation>JACK был остановлен. %1 требует работы JACK. Пожалуйста, перезапустите %1, чтобы запустить JACK снова. </translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="109"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>В вашей системе нет звуковой карты. Вызов CoreAudio input AudioHardwareGetProperty не удался.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="118"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>В системе нет звуковой карты. Вызов CoreAudio output AudioHardwareGetProperty не удался.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="280"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбранное в данный момент аудиоустройство больше не присутствует. Пожалуйста, проверьте ваше аудиоустройство.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="381"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудиовходное устройство больше недоступно. Пожалуйста, проверьте, правильно ли подключено ваше входное устройство.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="390"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота дискретизации на текущем входном устройстве не %1 Гц и поэтому несовместима. Пожалуйста, выберите другое устройство или попробуйте установить частоту дискретизации %1 Гц вручную через Audio-MIDI-Setup (в разделе «Программы» -&gt; «Утилиты»).</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="402"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудиовыходное устройство больше недоступно. Пожалуйста, проверьте, правильно ли подключено ваше выходное устройство.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="411"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота дискретизации на текущем выходном устройстве не %1 Гц и поэтому несовместима. Пожалуйста, выберите другое устройство или попробуйте установить частоту дискретизации %1 Гц вручную через Audio-MIDI-Setup (в разделе «Программы» -&gt; «Утилиты»).</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="459"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Формат потока на текущем входном устройстве несовместим с этим программным обеспечением. Пожалуйста, выберите другое устройство.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="470"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Формат потока на текущем выходном устройстве несовместим с %1. Пожалуйста, выберите другое устройство.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="882"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удаётся установить размеры буфера текущего входного и выходного аудиоустройства в общее значение. Пожалуйста, выберите другие входные/выходные устройства в настройках вашей системы.</translation>
     </message>
 </context>
 <context>
@@ -3522,27 +3524,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/soundbase.cpp" line="113"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно использовать выбранное аудиоустройство из-за следующей ошибки: %1 Будет выбран предыдущий драйвер.</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="154"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ранее выбранное аудиоустройство больше недоступно, или драйвер перешёл в несовместимое состояние. Мы попытаемся найти действительное аудиоустройство, но это новое устройство может вызвать акустическую обратную связь. Перед подключением к серверу, пожалуйста, проверьте настройки вашего аудиоустройства.</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="167"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1 не смог найти пригодное аудиоустройство %2.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="178"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translation type="unfinished"></translation>
+        <translation>Возможно, вы сможете исправить ошибки в настройках драйвера. Хотите открыть эти настройки сейчас?</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="185"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удаётся запустить %1. Пожалуйста, перезапустите %1 и проверьте/перенастройте ваши аудионастройки.</translation>
     </message>
 </context>
 <context>
@@ -3551,52 +3553,52 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../util.cpp" line="1521"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1, версия %2</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1538"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Выпущено на условиях GNU General Public License версии 2 или более поздней (GPLv2)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1551"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished">Это приложение использует следующие библиотеки, ресурсы или фрагменты кода:</translation>
+        <translation>Это приложение использует следующие библиотеки, ресурсы или фрагменты кода:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1553"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished">Qt фреймворк для разработки кроссплатформенного программного обеспечения</translation>
+        <translation>Кроссплатформенный фреймворк для приложений Qt</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1554"/>
         <source>(build)</source>
-        <translation type="unfinished">(сборка)</translation>
+        <translation>(сборка)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1554"/>
         <source>(runtime)</source>
-        <translation type="unfinished">(время выполнения)</translation>
+        <translation>(время выполнения)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1572"/>
         <source>Some pixmaps are from the %1</source>
-        <translation type="unfinished">Некоторые пиксельные изображения взяты из %1</translation>
+        <translation>Некоторые пиксельные изображения взяты из %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1578"/>
         <source>Some sound samples are from %1</source>
-        <translation type="unfinished">Некоторые звуковые сэмплы взяты из %1</translation>
+        <translation>Некоторые звуковые сэмплы взяты из %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1568"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="unfinished">Код реверберации от Перри Р. Кука и Гэри П. Скавоне</translation>
+        <translation>Код аудиореверберации от Перри Р. Кука и Гэри П. Скавоне</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1575"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished">Значки флагов от Марка Джеймса</translation>
+        <translation>Значки флагов от Марка Джеймса</translation>
     </message>
 </context>
 <context>
@@ -3604,12 +3606,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../global.h" line="124"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступно обновление %1: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;подробности и загрузка&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="284"/>
         <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Для получения дополнительной информации используйте справку &quot;Что это такое&quot; (меню Справка, правая кнопка мыши или Shift+F1)</translation>
     </message>
 </context>
 </TS>

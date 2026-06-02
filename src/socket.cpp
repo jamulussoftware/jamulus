@@ -159,7 +159,7 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 #endif
 
 #if !defined( Q_OS_BSD4 ) && !defined( Q_OS_WIN )
-            // set the QoS for IPv4 as well, as this is a dual-protocol socket
+            // set the QoS for IPv4 as well, as this is a dual-stack socket
             if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
             {
                 throw CGenErr ( "request to set ToS for IPv4 over IPv6 failed", "Network Error" );
@@ -172,18 +172,17 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
             UdpPort = &UdpSocketAddr.sa6.sin6_port; // where to put the port number
 
-            // FIXME: If binding a dual-protocol interface to a specific address, does it cease to be dual-protocol?
+            // FIXME: If binding a dual-stack interface to a specific address, does it cease to be dual-stack?
 
-            // It is not possible to bind a dual-protocol socket to a specific address
+            // It is not possible to bind a dual-stack socket to a specific address
             if ( !strServerBindIP.isEmpty() )
             {
-                qWarning()
-                    << "Option --serverbindip ignored: cannot be used on a dual-protocol IPv6/IPv4 socket. Please add --noipv6 to use IPv4 only.";
+                qWarning() << "Option --serverbindip ignored: cannot be used on a dual-stack IPv6/IPv4 socket. Please add --noipv6 to use IPv4 only.";
             }
 
             bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
 
-            qInfo() << "IPv6/IPv4 dual-protocol socket created";
+            qInfo() << "IPv6/IPv4 dual-stack socket created";
         }
     }
 

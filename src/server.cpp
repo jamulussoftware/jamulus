@@ -660,6 +660,20 @@ void CServer::OnTimer()
         // calculate levels for all connected clients
         const bool bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients, vecNumAudioChannels, vecvecsData, vecChannelLevels );
 
+        {
+            bool bAnyActivity = false;
+            for ( int j = 0; j < iNumClients && !bAnyActivity; j++ )
+            {
+                const int iDataSize = vecvecsData[j].Size();
+                for ( int k = 0; k < iDataSize && !bAnyActivity; k++ )
+                {
+                    if ( vecvecsData[j][k] < -100 || vecvecsData[j][k] > 100 ) bAnyActivity = true;
+                }
+            }
+            if ( bAnyActivity ) m_iLastAudioActivityMs = QDateTime::currentMSecsSinceEpoch();
+            m_bIsSilent = ( QDateTime::currentMSecsSinceEpoch() - m_iLastAudioActivityMs ) > 2000;
+        }
+
         for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
             // get actual ID of current channel
@@ -731,6 +745,8 @@ void CServer::OnTimer()
     {
         // Disable server if no clients are connected. In this case the server
         // does not consume any significant CPU when no client is connected.
+        m_iLastAudioActivityMs = QDateTime::currentMSecsSinceEpoch();
+        m_bIsSilent            = false;
         Stop();
     }
 }

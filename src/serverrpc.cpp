@@ -270,6 +270,15 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
         response["result"] = "acknowledged";
         Q_UNUSED ( params );
     } );
+
+    /// @rpc_method jamulusserver/getSilenceStatus
+    /// @brief Returns whether the server mix is currently silent.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {boolean} result.silent - True if all connected clients have been below the audio threshold for ≥2 seconds. False if no clients are connected or audio is active.
+    pRpcServer->HandleMethod ( "jamulusserver/getSilenceStatus", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        response["result"] = QJsonObject{ { "silent", pServer->GetIsSilent() } };
+        Q_UNUSED ( params );
+    } );
 }
 
 #if defined( Q_OS_MACOS ) && QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )

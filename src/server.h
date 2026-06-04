@@ -155,6 +155,8 @@ public:
     }
     QString GetRecordingDir() { return JamController.GetRecordingDir(); }
 
+    bool GetIsSilent() const { return m_bIsSilent; }
+
     void    SetWelcomeMessage ( const QString& strNWelcMess );
     QString GetWelcomeMessage() { return strWelcomeMessage; }
 
@@ -311,6 +313,9 @@ protected:
     CSignalHandler* pSignalHandler;
 
     std::unique_ptr<CThreadPool> pThreadPool;
+
+    bool   m_bIsSilent        = false;
+    qint64 m_iLastAudioActivityMs = 0;
 
 signals:
     void Started();

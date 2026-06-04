@@ -1,3 +1,5 @@
+*The original site is no longer available.*  We are directing people to https://www.iconarchive.com/artist/famfamfam.html
+
 Flag icons - http://www.famfamfam.com
 
 These icons are public domain, and as such are free for any use (attribution appreciated but not required).

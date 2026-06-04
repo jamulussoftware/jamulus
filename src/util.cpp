@@ -419,7 +419,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                             "</p>"
                             "<p>" +
                             tr ( "Flag icons by Mark James" ) +
-                            ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i>"
+                            ", <i><a href=\"https://www.iconarchive.com/artist/famfamfam.html\">"
+                            "via www.iconarchive.com</a> (originally www.famfamfam.com)</i>"
                             "</p>"
                             "<p>" +
                             QString ( tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" ) +
@@ -1573,7 +1574,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** <https://openclipart.org>";
         strVersionText += "\n *** ";
         strVersionText += "\n *** " + QCoreApplication::tr ( "Flag icons by Mark James" );
-        strVersionText += "\n *** <http://www.famfamfam.com>";
+        strVersionText += "\n *** https://www.iconarchive.com/artist/famfamfam.html (originally www.famfamfam.com)";
         strVersionText += "\n *** ";
         strVersionText += "\n *** " + QString ( QCoreApplication::tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" );
         strVersionText += "\n *** <https://freesound.org>";

@@ -366,6 +366,8 @@ public slots:
 
     void OnCLReqConnClientsList ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
 
+    void OnCLReqChannelLevelList ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLChannelLevelListMes ( InetAddr, vecChannelLevels, GetNumberOfConnectedClients() ); }
+
     void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo )
     {
         ServerListManager.Append ( InetAddr, LInetAddr, ServerInfo );

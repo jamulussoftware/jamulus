@@ -1012,7 +1012,7 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
     // Allow IPv4 only for communicating with Directories
     // Use SRV DNS discovery for directory connections, fallback to A/AAAA if none.
     const QString strNetworkAddress      = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
-    const bool    bDirectoryAddressValid = NetworkUtil::ParseNetworkAddress ( strNetworkAddress, DirectoryAddress, false );
+    const bool    bDirectoryAddressValid = NetworkUtil::ParseNetworkAddress ( strNetworkAddress, DirectoryAddress, pServer->IsIPv6Available() );
 
     // lock the mutex again now that the address has been resolved.
     locker.relock();

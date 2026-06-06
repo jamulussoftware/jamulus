@@ -1027,7 +1027,18 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
             // For a registered server, the server properties are stored in the
             // very first item in the server list (which is actually no server list
             // but just one item long for the registered server).
-            pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerList[0].LHostAddr, ServerList[0] );
+            if ( DirectoryAddress.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            {
+                pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerPublicIP, ServerList[0] );
+            }
+            else if ( DirectoryAddress.InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
+            {
+                pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerPublicIP6, ServerList[0] );
+            }
+            else
+            {
+                SetSvrRegStatus ( SRS_BAD_ADDRESS );
+            }
         }
         else
         {

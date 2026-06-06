@@ -271,6 +271,14 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Enable IPv6 ---------------------------------------------------------
+        if ( GetFlagArgument ( argv, i, "-6", "--enableipv6" ) )
+        {
+            qWarning() << "IPv6 is now enabled by default: -6 and --enableipv6 have no effect and are deprecated";
+            CommandLineOptions << "--enableipv6";
+            continue;
+        }
+
         // Server only:
 
         // Disconnect all clients on quit --------------------------------------

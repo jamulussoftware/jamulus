@@ -84,7 +84,7 @@ class CConnectDlg : public CBaseDlg, private Ui_CConnectDlgBase
     Q_OBJECT
 
 public:
-    CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, const bool bNEnableIPv6, QWidget* parent = nullptr );
+    CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent = nullptr );
 
     void SetShowAllMusicians ( const bool bState ) { ShowAllMusicians ( bState ); }
     bool GetShowAllMusicians() { return bShowAllMusicians; }
@@ -127,6 +127,7 @@ protected:
     void                   EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void                   UpdateDirectoryComboBox();
 
+    CClient*         pClient;
     CClientSettings* pSettings;
 
     QTimer       TimerPing;
@@ -141,7 +142,6 @@ protected:
     bool         bServerListItemWasChosen;
     bool         bListFilterWasActive;
     bool         bShowAllMusicians;
-    bool         bEnableIPv6;
 
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );

@@ -1076,13 +1076,13 @@ public:
 class NetworkUtil
 {
 public:
-    static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 );
+    static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, const bool bIPv6Available );
 
 #ifndef DISABLE_SRV_DNS
-    static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+    static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available );
 #endif
-    static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
-    static bool ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+    static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available );
+    static bool ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available );
 
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();

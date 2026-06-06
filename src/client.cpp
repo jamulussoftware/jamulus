@@ -54,7 +54,7 @@ CClient::CClient ( const quint16  iPortNumber,
                    const QString& strConnOnStartupAddress,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
-                   const bool     bNEnableIPv6,
+                   const bool     bNDisableIPv6,
                    const bool     bNMuteMeInPersonalMix ) :
     ChannelInfo(),
     strClientName ( strNClientName ),
@@ -72,7 +72,8 @@ CClient::CClient ( const quint16  iPortNumber,
     bIsInitializationPhase ( true ),
     bMuteOutStream ( false ),
     fMuteOutStreamGain ( 1.0f ),
-    Socket ( &Channel, iPortNumber, iQosNumber, "", bNEnableIPv6 ),
+    bIPv6Available ( false ),
+    Socket ( &Channel, iPortNumber, iQosNumber, "", bNDisableIPv6, bIPv6Available ),
     Sound ( AudioCallback, this, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
@@ -90,7 +91,6 @@ CClient::CClient ( const quint16  iPortNumber,
     bEnableAudioAlerts ( false ),
     bEnableOPUS64 ( false ),
     bJitterBufferOK ( true ),
-    bEnableIPv6 ( bNEnableIPv6 ),
     bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
     iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
     bRawAudioIsSupported ( false )
@@ -621,7 +621,7 @@ void CClient::SetRemoteChanPan ( const int iId, const float fPan )
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     CHostAddress HostAddress;
-    if ( NetworkUtil::ParseNetworkAddress ( strNAddr, HostAddress, bEnableIPv6 ) )
+    if ( NetworkUtil::ParseNetworkAddress ( strNAddr, HostAddress, bIPv6Available ) )
     {
         // apply address to the channel
         Channel.SetAddress ( HostAddress );

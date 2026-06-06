@@ -97,6 +97,9 @@ Note: this mechanism will not work in a private network.
 #include "util.h"
 #include "protocol.h"
 
+// Forward declaration - see end of this file for the actual #include
+class CServer;
+
 /* Classes ********************************************************************/
 class CServerListEntry : public CServerInfo
 {
@@ -155,14 +158,14 @@ class CServerListManager : public QObject
     Q_OBJECT
 
 public:
-    CServerListManager ( const quint16  iNPortNum,
+    CServerListManager ( CServer*       pServer,
+                         const quint16  iNPortNum,
                          const QString& sNDirectoryAddress,
                          const QString& strServerListFileName,
                          const QString& strServerInfo,
                          const QString& strServerListFilter,
                          const QString& strServerPublicIP,
                          const int      iNumChannels,
-                         const bool     bNEnableIPv6,
                          CProtocol*     pNConLProt );
 
     void    SetServerName ( const QString& strNewName );
@@ -210,10 +213,10 @@ protected:
 
     QMutex Mutex;
 
+    CServer* pServer;
+
     CHostAddress   DirectoryAddress;
     EDirectoryType DirectoryType;
-
-    bool bEnableIPv6;
 
     CHostAddress ServerPublicIP;
     CHostAddress ServerPublicIP6;
@@ -256,3 +259,5 @@ public slots:
 signals:
     void SvrRegStatusChanged();
 };
+
+#include "server.h"

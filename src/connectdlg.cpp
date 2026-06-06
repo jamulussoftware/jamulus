@@ -122,8 +122,9 @@ bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
     return lhs.toString() < rhs.toString();
 }
 
-CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, const bool bNEnableIPv6, QWidget* parent ) :
+CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent ) :
     CBaseDlg ( parent, Qt::Dialog ),
+    pClient ( pNCliP ),
     pSettings ( pNSetP ),
     strSelectedAddress ( "" ),
     strSelectedServerName ( "" ),
@@ -132,8 +133,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     bReducedServerListReceived ( false ),
     bServerListItemWasChosen ( false ),
     bListFilterWasActive ( false ),
-    bShowAllMusicians ( true ),
-    bEnableIPv6 ( bNEnableIPv6 )
+    bShowAllMusicians ( true )
 {
     setupUi ( this );
 
@@ -892,7 +892,9 @@ void CConnectDlg::OnTimerPing()
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
         // the data to be parsed is just IP:port, so no SRV discovery is needed
-        if ( NetworkUtil::ParseNetworkAddressBare ( pCurListViewItem->data ( LVC_NAME, Qt::UserRole ).toString(), haServerAddress, bEnableIPv6 ) )
+        if ( NetworkUtil::ParseNetworkAddressBare ( pCurListViewItem->data ( LVC_NAME, Qt::UserRole ).toString(),
+                                                    haServerAddress,
+                                                    pClient->IsIPv6Available() ) )
         {
             // if address is valid, send ping message using a new thread
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )

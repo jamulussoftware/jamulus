@@ -506,12 +506,12 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     // Don't use SRV resolution when resolving update servers.
 
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, pServer->IsIPv6Enabled() ) )
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, pServer->IsIPv6Available() ) )
     {
         pServer->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, pServer->IsIPv6Enabled() ) )
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, pServer->IsIPv6Available() ) )
     {
         pServer->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }

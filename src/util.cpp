@@ -764,7 +764,7 @@ QSize CMinimumStackedLayout::sizeHint() const
 * Other Classes                                                                *
 \******************************************************************************/
 // Network utility functions ---------------------------------------------------
-bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, const bool bIPv6Available )
 {
     // try to get host by name, assuming
     // that the string contains a valid host name string or IP address
@@ -780,7 +780,7 @@ bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& 
     {
         // qInfo() << qUtf8Printable ( QString ( "Resolved network address to %1 for proto %2" ) .arg ( HostAddr.toString() ) .arg (
         // HostAddr.protocol() ) );
-        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bEnableIPv6 && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
+        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bIPv6Available && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
         {
             InetAddr = HostAddr;
             return true;
@@ -790,7 +790,7 @@ bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& 
 }
 
 #ifndef DISABLE_SRV_DNS
-bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available )
 {
     // init requested host address with invalid address first
     HostAddress = CHostAddress();
@@ -838,7 +838,7 @@ bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& Hos
         QString ( "resolved %1 to a single SRV record: %2:%3" ).arg ( strAddress ).arg ( record.target() ).arg ( record.port() ) );
 
     QHostAddress InetAddr;
-    if ( ParseNetworkAddressString ( record.target(), InetAddr, bEnableIPv6 ) )
+    if ( ParseNetworkAddressString ( record.target(), InetAddr, bIPv6Available ) )
     {
         HostAddress = CHostAddress ( InetAddr, record.port() );
         return true;
@@ -847,20 +847,20 @@ bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& Hos
 }
 #endif
 
-bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available )
 {
 #ifndef DISABLE_SRV_DNS
     // Try SRV-based discovery first:
-    if ( ParseNetworkAddressSrv ( strAddress, HostAddress, bEnableIPv6 ) )
+    if ( ParseNetworkAddressSrv ( strAddress, HostAddress, bIPv6Available ) )
     {
         return true;
     }
 #endif
     // Try regular connect via plain IP or host name lookup (A/AAAA):
-    return ParseNetworkAddressBare ( strAddress, HostAddress, bEnableIPv6 );
+    return ParseNetworkAddressBare ( strAddress, HostAddress, bIPv6Available );
 }
 
-bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available )
 {
     QHostAddress InetAddr;
     unsigned int iNetPort = DEFAULT_PORT_NUMBER;
@@ -925,7 +925,7 @@ bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& Ho
     // first try if this is an IP number an can directly applied to QHostAddress
     if ( InetAddr.setAddress ( strAddress ) )
     {
-        if ( !bEnableIPv6 && InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
+        if ( !bIPv6Available && InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
         {
             // do not allow IPv6 addresses if not enabled
             // qInfo() << qUtf8Printable ( QString ( "IPv6 addresses disabled" ) );
@@ -941,7 +941,7 @@ bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& Ho
             return false; // invalid address
         }
 
-        if ( !ParseNetworkAddressString ( strAddress, InetAddr, bEnableIPv6 ) )
+        if ( !ParseNetworkAddressString ( strAddress, InetAddr, bIPv6Available ) )
         {
             // no valid address found
             // qInfo() << qUtf8Printable ( QString ( "No IP address found for hostname" ) );

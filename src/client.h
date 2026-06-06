@@ -153,7 +153,7 @@ public:
               const QString& strConnOnStartupAddress,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
-              const bool     bNEnableIPv6,
+              const bool     bNDisableIPv6,
               const bool     bNMuteMeInPersonalMix );
 
     virtual ~CClient();
@@ -163,6 +163,9 @@ public:
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
     bool SetServerAddr ( QString strNAddr );
+
+    // IPv6 Available
+    bool IsIPv6Available() { return bIPv6Available; }
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
@@ -391,7 +394,9 @@ protected:
     float                  fMuteOutStreamGain;
     CVector<unsigned char> vecCeltData;
 
-    CHighPrioSocket         Socket;
+    bool            bIPv6Available; // must be before Socket - passed by reference to Socket
+    CHighPrioSocket Socket;
+
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
 
@@ -427,7 +432,6 @@ protected:
     bool        bEnableOPUS64;
 
     bool   bJitterBufferOK;
-    bool   bEnableIPv6;
     bool   bMuteMeInPersonalMix;
     QMutex MutexDriverReinit;
 

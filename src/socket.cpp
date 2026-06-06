@@ -62,13 +62,18 @@
 
 // we have different connections for client and server, created after Init in corresponding constructor
 
-CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
+CSocket::CSocket ( CChannel*      pNewChannel,
+                   const quint16  iPortNumber,
+                   const quint16  iQosNumber,
+                   const QString& strServerBindIP,
+                   const bool     bDisableIPv6,
+                   bool&          bIPv6Available ) :
     pChannel ( pNewChannel ),
     bIsClient ( true ),
     bJitterBufferOK ( true ),
-    bEnableIPv6 ( bEnableIPv6 )
+    bIPv6Available ( bIPv6Available )
 {
-    Init ( iPortNumber, iQosNumber, strServerBindIP );
+    Init ( iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6 );
 
     // client connections:
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pChannel, &CChannel::OnProtocolMessageReceived );
@@ -78,13 +83,18 @@ CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint
     QObject::connect ( this, static_cast<void ( CSocket::* )()> ( &CSocket::NewConnection ), pChannel, &CChannel::OnNewConnection );
 }
 
-CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
+CSocket::CSocket ( CServer*       pNServP,
+                   const quint16  iPortNumber,
+                   const quint16  iQosNumber,
+                   const QString& strServerBindIP,
+                   const bool     bDisableIPv6,
+                   bool&          bIPv6Available ) :
     pServer ( pNServP ),
     bIsClient ( false ),
     bJitterBufferOK ( true ),
-    bEnableIPv6 ( bEnableIPv6 )
+    bIPv6Available ( bIPv6Available )
 {
-    Init ( iPortNumber, iQosNumber, strServerBindIP );
+    Init ( iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6 );
 
     // server connections:
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pServer, &CServer::OnProtocolMessageReceived );
@@ -99,7 +109,7 @@ CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQ
     QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
 }
 
-void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, const QString& strNewServerBindIP )
+void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, const QString& strNewServerBindIP, const bool bDisableIPv6 )
 {
     uSockAddr UdpSocketAddr;
 
@@ -124,57 +134,59 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
     memset ( &UdpSocketAddr, 0, sizeof ( UdpSocketAddr ) );
 
-    if ( bEnableIPv6 )
+    if ( !bDisableIPv6 )
     {
         // try to create a IPv6 UDP socket
         UdpSocket = socket ( AF_INET6, SOCK_DGRAM, 0 );
-        if ( UdpSocket == -1 )
+        if ( UdpSocket != -1 )
         {
-            // IPv6 requested but not available, throw error
-            throw CGenErr ( "IPv6 requested but not available on this system.", "Network Error" );
-        }
 
-        // The IPV6_V6ONLY socket option must be false in order for the socket to listen on both protocols.
-        // On Linux it's false by default on most (all?) distros, but on Windows it is true by default
-        const int no = 0;
-        if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*) &no, sizeof ( no ) ) == -1 )
-        {
-            throw CGenErr ( "request to support IPv4 over IPv6 failed", "Network Error" );
-        }
+            // The IPV6_V6ONLY socket option must be false in order for the socket to listen on both protocols.
+            // On Linux it's false by default on most (all?) distros, but on Windows it is true by default
+            const int no = 0;
+            if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*) &no, sizeof ( no ) ) == -1 )
+            {
+                throw CGenErr ( "request to support IPv4 over IPv6 failed", "Network Error" );
+            }
 
-        // set the QoS
-        const int tos = (int) iQosNumber; // Quality of Service
+            // set the QoS
+            const int tos = (int) iQosNumber; // Quality of Service
 #if !defined( Q_OS_WIN )
-        if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) ) == -1 )
-        {
-            throw CGenErr ( "request to set ToS for IPv6 failed", "Network Error" );
-        }
+            if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) ) == -1 )
+            {
+                throw CGenErr ( "request to set ToS for IPv6 failed", "Network Error" );
+            }
 #endif
 
 #if !defined( Q_OS_BSD4 ) && !defined( Q_OS_WIN )
-        // set the QoS for IPv4 as well, as this is a dual-protocol socket
-        if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
-        {
-            throw CGenErr ( "request to set ToS for IPv4 over IPv6 failed", "Network Error" );
-        }
+            // set the QoS for IPv4 as well, as this is a dual-stack socket
+            if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
+            {
+                throw CGenErr ( "request to set ToS for IPv4 over IPv6 failed", "Network Error" );
+            }
 #endif
 
-        UdpSocketAddr.sa6.sin6_family = AF_INET6;
-        UdpSocketAddr.sa6.sin6_addr   = in6addr_any;
-        UdpSocketAddrLen              = sizeof ( UdpSocketAddr.sa6 );
+            UdpSocketAddr.sa6.sin6_family = AF_INET6;
+            UdpSocketAddr.sa6.sin6_addr   = in6addr_any;
+            UdpSocketAddrLen              = sizeof ( UdpSocketAddr.sa6 );
 
-        UdpPort = &UdpSocketAddr.sa6.sin6_port; // where to put the port number
+            UdpPort = &UdpSocketAddr.sa6.sin6_port; // where to put the port number
 
-        // FIXME: If binding a dual-protocol interface to a specific address, does it cease to be dual-protocol?
+            // FIXME: If binding a dual-stack interface to a specific address, does it cease to be dual-stack?
 
-        // TODO - ALLOW IPV6 ADDRESS
-        // if ( !strServerBindIP.isEmpty() )
-        //{
-        //    UdpSocketInAddr.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP ).toIPv4Address() );
-        //}
-        // END TODO - ALLOW IPV6 ADDRESS
+            // It is not possible to bind a dual-stack socket to a specific address
+            if ( !strServerBindIP.isEmpty() )
+            {
+                qWarning() << "Option --serverbindip ignored: cannot be used on a dual-stack IPv6/IPv4 socket. Please add --noipv6 to use IPv4 only.";
+            }
+
+            bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
+
+            qInfo() << "IPv6/IPv4 dual-stack socket created";
+        }
     }
-    else
+
+    if ( !bIPv6Available )
     {
         // create the UDP socket for IPv4
         UdpSocket = socket ( AF_INET, SOCK_DGRAM, 0 );
@@ -204,6 +216,8 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         {
             UdpSocketAddr.sa4.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP ).toIPv4Address() );
         }
+
+        qInfo() << "IPv4 socket created";
     }
 
 #ifdef Q_OS_IOS
@@ -371,7 +385,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
         {
             if ( HostAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
             {
-                if ( bEnableIPv6 )
+                if ( bIPv6Available )
                 {
                     // Linux and Mac allow to pass an AF_INET address to a dual-stack socket,
                     // but Windows does not. So use a V4MAPPED address in an AF_INET6 sockaddr,
@@ -419,7 +433,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
                                       sizeof ( UdpSocketAddr.sa4 ) );
                 }
             }
-            else if ( bEnableIPv6 )
+            else if ( bIPv6Available )
             {
                 UdpSocketAddr.sa6.sin6_family = AF_INET6;
                 UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
@@ -440,7 +454,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
 #ifdef Q_OS_IOS
             // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
-            Init ( iPortNumber, iQosNumber, strServerBindIP ); // reinit
+            Init ( iPortNumber, iQosNumber, strServerBindIP, !bIPv6Available ); // reinit
 
             // loop back to retry
 #endif

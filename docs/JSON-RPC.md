@@ -430,6 +430,24 @@ Results:
 | result.registrationStatus | string | The server registration status as string (see ESvrRegStatus and SerializeRegistrationStatus). |
 
 
+### jamulusserver/privateChatMessage
+
+Sends a chat message to a single connected client.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.chatMessage | string | The chat message text. |
+| params.id | number | The client's channel id. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
 ### jamulusserver/restartRecording
 
 Restarts the recording into a new directory.

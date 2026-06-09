@@ -349,6 +349,24 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
         response["result"] = "acknowledged";
         Q_UNUSED ( params );
     } );
+
+    /// @rpc_method jamulusserver/privateChatMessage
+    /// @brief Sends a chat message to a single connected client.
+    /// @param {string} params.chatMessage - The chat message text.
+    /// @param {number} params.id - The client's channel id.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusserver/privateChatMessage", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto      jsonChatMessage = params["chatMessage"];
+        const int id              = params["id"].toInt();
+        if ( !jsonChatMessage.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: chatMessage is not a string" );
+            return;
+        }
+
+        pServer->SendChatTextToConChannel ( id, jsonChatMessage.toString() );
+        response["result"] = "ok";
+    } );
 }
 
 #if defined( Q_OS_MACOS ) && QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )

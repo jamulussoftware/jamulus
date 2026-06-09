@@ -757,6 +757,19 @@ QSize CMinimumStackedLayout::sizeHint() const
     }
     return QStackedLayout::sizeHint();
 }
+
+void PlayAudioAlert ( QUrl soundUrl )
+{
+    QSoundEffect* sf = new QSoundEffect();
+    QObject::connect ( sf, &QSoundEffect::playingChanged, sf, [sf]() {
+        if ( !sf->isPlaying() )
+        {
+            sf->deleteLater();
+        }
+    } );
+    sf->setSource ( soundUrl );
+    sf->play();
+}
 #endif
 
 /******************************************************************************\
@@ -1677,17 +1690,4 @@ QString TruncateString ( QString str, int position )
         position = tbfString.position();
     }
     return str.left ( position );
-}
-
-void PlayAudioAlert ( QUrl soundUrl )
-{
-    QSoundEffect* sf = new QSoundEffect();
-    QObject::connect ( sf, &QSoundEffect::playingChanged, sf, [sf]() {
-        if ( !sf->isPlaying() )
-        {
-            sf->deleteLater();
-        }
-    } );
-    sf->setSource ( soundUrl );
-    sf->play();
 }

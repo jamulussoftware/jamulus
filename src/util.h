@@ -75,6 +75,8 @@
 #include <QElapsedTimer>
 #include <QTextBoundaryFinder>
 #include <QTimer>
+#include <QSoundEffect>
+
 #ifndef DISABLE_SRV_DNS
 #    include <QDnsLookup>
 #endif
@@ -1406,3 +1408,5 @@ struct EnumClassHash
     }
 };
 #endif
+
+void PlayAudioAlert ( QUrl soundUrl );

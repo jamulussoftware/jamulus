@@ -1679,3 +1679,16 @@ QString TruncateString ( QString str, int position )
     }
     return str.left ( position );
 }
+
+void PlayAudioAlert ( QUrl soundUrl )
+{
+    QSoundEffect* sf = new QSoundEffect();
+    QObject::connect ( sf, &QSoundEffect::playingChanged, sf, [sf]() {
+        if ( !sf->isPlaying() )
+        {
+            sf->deleteLater();
+        }
+    } );
+    sf->setSource ( soundUrl );
+    sf->play();
+}

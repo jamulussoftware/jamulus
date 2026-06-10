@@ -190,7 +190,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         CHostAddress haDirectoryAddress;
 
         // Allow IPv4 only for communicating with Directories
-        if ( NetworkUtil::ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, false ) )
+        if ( NetworkUtil::ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, pClient->IsIPv6Available() ) )
         {
             // send the request for the server list
             pClient->CreateCLReqServerListMes ( haDirectoryAddress );

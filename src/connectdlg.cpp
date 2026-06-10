@@ -355,7 +355,7 @@ void CConnectDlg::RequestServerList()
     if ( NetworkUtil::ParseNetworkAddress (
              NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
              haDirectoryAddress,
-             false ) )
+             pClient->IsIPv6Available() ) )
     {
         // send the request for the server list
         emit ReqServerListQuery ( haDirectoryAddress );

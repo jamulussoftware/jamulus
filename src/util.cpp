@@ -758,6 +758,19 @@ QSize CMinimumStackedLayout::sizeHint() const
     }
     return QStackedLayout::sizeHint();
 }
+
+void PlayAudioAlert ( QUrl soundUrl )
+{
+    QSoundEffect* sf = new QSoundEffect();
+    QObject::connect ( sf, &QSoundEffect::playingChanged, sf, [sf]() {
+        if ( !sf->isPlaying() )
+        {
+            sf->deleteLater();
+        }
+    } );
+    sf->setSource ( soundUrl );
+    sf->play();
+}
 #endif
 
 /******************************************************************************\

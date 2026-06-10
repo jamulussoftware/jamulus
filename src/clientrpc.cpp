@@ -190,7 +190,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         CHostAddress haDirectoryAddress;
 
         // Allow IPv4 only for communicating with Directories
-        if ( !NetworkUtil::ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, false ) )
+        if ( !NetworkUtil::ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, pClient->IsIPv6Available() ) )
         {
             response["error"] =
                 CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a valid socket address" );

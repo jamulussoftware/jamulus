@@ -608,7 +608,7 @@ void CServerListManager::Append ( const CHostAddress&    InetAddr,
             // if the server is not listed, refuse registration and send registration response
             if ( !vWhiteList.contains ( InetAddr.InetAddr ) )
             {
-                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQIREMENTS );
+                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQUIREMENTS );
                 return; // leave function early, i.e., we do not register this server
             }
         }
@@ -920,7 +920,7 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
         SetSvrRegStatus ( ESvrRegStatus::SRS_VERSION_TOO_OLD );
         break;
 
-    case ESvrRegResult::SRR_NOT_FULFILL_REQIREMENTS:
+    case ESvrRegResult::SRR_NOT_FULFILL_REQUIREMENTS:
         SetSvrRegStatus ( ESvrRegStatus::SRS_NOT_FULFILL_REQUIREMENTS );
         break;
 

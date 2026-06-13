@@ -703,10 +703,10 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
-    SRR_REGISTERED              = 0,
-    SRR_SERVER_LIST_FULL        = 1,
-    SRR_VERSION_TOO_OLD         = 2,
-    SRR_NOT_FULFILL_REQIREMENTS = 3
+    SRR_REGISTERED               = 0,
+    SRR_SERVER_LIST_FULL         = 1,
+    SRR_VERSION_TOO_OLD          = 2,
+    SRR_NOT_FULFILL_REQUIREMENTS = 3
 };
 
 // Skill level enum ------------------------------------------------------------

@@ -64,7 +64,7 @@ void CActivity::BeginActivity()
 
     pActivity->activityId = [[NSProcessInfo processInfo]
         beginActivityWithOptions:options
-                          reason:@"Jamulus provides low latency audio processing and should not be inturrupted by system throttling."];
+                          reason:@"Jamulus provides low latency audio processing and should not be interrupted by system throttling."];
 }
 
 void CActivity::EndActivity()

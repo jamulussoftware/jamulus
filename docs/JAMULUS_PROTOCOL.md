@@ -64,7 +64,7 @@ The message packet structure is:
 The TAG bytes are zero bytes.
 The ID provides the message type.
 The SEQ is a wrapping sequence number for the message
-LENgth of the data preceeds the data and is followed by a CRC for the packet.
+LENgth of the data precedes the data and is followed by a CRC for the packet.
 
 Data is sent little-endian, i.e. not network byte-order.
 

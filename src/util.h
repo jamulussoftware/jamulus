@@ -528,7 +528,7 @@ enum ENetwFlags
 // Audio quality enum ----------------------------------------------------------
 enum EAudioQuality
 {
-    // used for settings and the comobo box index -> enum values must be fixed!
+    // used for settings and the combo box index -> enum values must be fixed!
     AQ_LOW    = 0,
     AQ_NORMAL = 1,
     AQ_HIGH   = 2,

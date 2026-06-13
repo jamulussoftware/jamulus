@@ -348,10 +348,10 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     CSoundBase::Init ( iJACKBufferSizeMono );
 
     // set internal buffer size value and calculate stereo buffer size
-    iJACKBufferSizeStero = 2 * iJACKBufferSizeMono;
+    iJACKBufferSizeStereo = 2 * iJACKBufferSizeMono;
 
     // create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iJACKBufferSizeStero );
+    vecsTmpAudioSndCrdStereo.Init ( iJACKBufferSizeStereo );
 
     return iJACKBufferSizeMono;
 }

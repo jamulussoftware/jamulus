@@ -528,7 +528,7 @@ enum ENetwFlags
 // Audio quality enum ----------------------------------------------------------
 enum EAudioQuality
 {
-    // used for settings and the comobo box index -> enum values must be fixed!
+    // used for settings and the combo box index -> enum values must be fixed!
     AQ_LOW    = 0,
     AQ_NORMAL = 1,
     AQ_HIGH   = 2,
@@ -703,10 +703,10 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
-    SRR_REGISTERED              = 0,
-    SRR_SERVER_LIST_FULL        = 1,
-    SRR_VERSION_TOO_OLD         = 2,
-    SRR_NOT_FULFILL_REQIREMENTS = 3
+    SRR_REGISTERED               = 0,
+    SRR_SERVER_LIST_FULL         = 1,
+    SRR_VERSION_TOO_OLD          = 2,
+    SRR_NOT_FULFILL_REQUIREMENTS = 3
 };
 
 // Skill level enum ------------------------------------------------------------

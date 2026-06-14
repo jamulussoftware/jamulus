@@ -77,7 +77,7 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP, QWidget* parent ) :
 
     setLayout ( pMainLayout );
 
-    // error rate gaph tab
+    // error rate graph tab
     pTabWidgetBufErrRate           = new QWidget();
     QVBoxLayout* pTabErrRateLayout = new QVBoxLayout ( pTabWidgetBufErrRate );
 

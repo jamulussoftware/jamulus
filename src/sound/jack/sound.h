@@ -116,7 +116,7 @@ public:
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iJACKBufferSizeMono;
-    int            iJACKBufferSizeStero;
+    int            iJACKBufferSizeStereo;
     bool           bJackWasShutDown;
 
     jack_port_t* input_port_left;

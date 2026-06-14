@@ -258,7 +258,7 @@ Results:
 
 ### jamulusclient/setFaderLevel
 
-Sets the fader level. Example: {"id":1,"jsonrpc":"2.0","method":"jamulusclient/setFaderLevel","params":{"channelIndex": 0,"level":  50}}.
+Sets the fader level. Example: {"id":1,"jsonrpc":"2.0","method":"jamulusclient/setFaderLevel","params":{"channelIndex": 0,"level": 50}}.
 
 Parameters:
 
@@ -391,7 +391,7 @@ Results:
 | result.countryId | number | The server country ID (see QLocale::Country). |
 | result.welcomeMessage | string | The server welcome message. |
 | result.directoryType | string | The directory type as a string (see EDirectoryType and SerializeDirectoryType). |
-| result.directoryAddress | string | The string used to look up the directory address (only assume valid if directoryType is "custom"  and registrationStatus is "registered"). |
+| result.directoryAddress | string | The string used to look up the directory address (only assume valid if directoryType is "custom" and registrationStatus is "registered"). |
 | result.directory | string | The directory with which this server requested registration, or blank if none. |
 | result.registrationStatus | string | The server registration status as string (see ESvrRegStatus and SerializeRegistrationStatus). |
 
@@ -410,7 +410,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "acknowledged".   To check if the recording was restarted or if there is any error, call `jamulusserver/getRecorderStatus` again. |
+| result | string | Always "acknowledged". To check if the recording was restarted or if there is any error, call `jamulusserver/getRecorderStatus` again. |
 
 
 ### jamulusserver/setDirectory
@@ -445,7 +445,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "acknowledged".   To check if the directory was changed, call `jamulusserver/getRecorderStatus` again. |
+| result | string | Always "acknowledged". To check if the directory was changed, call `jamulusserver/getRecorderStatus` again. |
 
 
 ### jamulusserver/setServerName
@@ -496,7 +496,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "acknowledged".   To check if the recording was enabled, call `jamulusserver/getRecorderStatus` again. |
+| result | string | Always "acknowledged". To check if the recording was enabled, call `jamulusserver/getRecorderStatus` again. |
 
 
 ### jamulusserver/stopRecording
@@ -513,7 +513,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "acknowledged".   To check if the recording was disabled, call `jamulusserver/getRecorderStatus` again. |
+| result | string | Always "acknowledged". To check if the recording was disabled, call `jamulusserver/getRecorderStatus` again. |
 
 
 ## Notification reference
@@ -525,7 +525,7 @@ Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params.channelLevelList | array | The channel level list.   Each item corresponds to the respective client retrieved from the jamulusclient/clientListReceived notification. |
+| params.channelLevelList | array | The channel level list. Each item corresponds to the respective client retrieved from the jamulusclient/clientListReceived notification. |
 | params.channelLevelList[*] | number | The channel level, an integer between 0 and 9. |
 
 

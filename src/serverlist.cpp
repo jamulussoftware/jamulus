@@ -1056,7 +1056,7 @@ void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
         return;
     }
 
-    // output regirstation result/update on the console
+    // output registration result/update on the console
     qInfo() << qUtf8Printable ( QString ( "Server Registration Status update: %1" ).arg ( svrRegStatusToString ( eNSvrRegStatus ) ) );
 
     // store the state and inform the GUI about the new status

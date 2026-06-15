@@ -951,8 +951,7 @@ int main ( int argc, char** argv )
 #ifndef SERVER_ONLY
         if ( bIsClient )
         {
-            CClient
-                Client ( iPortNumber, iQosNumber, strConnOnStartupAddress, bNoAutoJackConnect, strClientName, bDisableIPv6, bMuteMeInPersonalMix );
+            CClient Client ( iPortNumber, iQosNumber, bNoAutoJackConnect, strClientName, bDisableIPv6, bMuteMeInPersonalMix );
 
             // Create Settings with the client pointer
             CClientSettings Settings ( &Client, strIniFileName );
@@ -988,6 +987,12 @@ int main ( int argc, char** argv )
             else
 #    endif
             {
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.SetServerAddr ( strConnOnStartupAddress );
+                    Client.Start();
+                }
+
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 

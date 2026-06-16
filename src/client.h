@@ -150,7 +150,6 @@ class CClient : public QObject
 public:
     CClient ( const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strConnOnStartupAddress,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
               const bool     bNDisableIPv6,

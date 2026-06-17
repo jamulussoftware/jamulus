@@ -1154,7 +1154,7 @@ QString UsageArguments ( char** argv )
            "  -u, --numchannels       maximum number of channels\n"
            "  -w, --welcomemessage    welcome message to display on connect\n"
            "                          (string or filename, HTML supported)\n"
-           "  -z, --startminimized    start minimizied\n"
+           "  -z, --startminimized    start minimized\n"
            "\n"
            "Client only:\n"
            "  -c, --connect           connect to given Server address on startup\n"

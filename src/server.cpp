@@ -294,6 +294,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqServerFeatures, this, &CServer::OnCLReqServerFeatures );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqWelcomeMessage, this, &CServer::OnCLReqWelcomeMessage );
+
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged, this, &CServer::SvrRegStatusChanged );
 
     QObject::connect ( &JamController, &recorder::CJamController::RestartRecorder, this, &CServer::RestartRecorder );
@@ -527,6 +529,12 @@ void CServer::OnCLReqServerFeatures ( CHostAddress RecHostAddr )
 
     // Create and send the message
     ConnLessProtocol.CreateCLServerFeaturesMes ( RecHostAddr, iFeatures );
+}
+
+void CServer::OnCLReqWelcomeMessage ( CHostAddress RecHostAddr )
+{
+    // Create and send the message
+    ConnLessProtocol.CreateCLWelcomeMessageMes ( RecHostAddr, strWelcomeMessage );
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )

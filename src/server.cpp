@@ -1306,7 +1306,10 @@ void CServer::SendChatTextToAllConChannels ( const QString& strChatText )
     // Send chat text to all connected clients ---------------------------------
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
-        if ( vecChannels[i].IsConnected() ) vecChannels[i].CreateChatTextMes ( strChatText );
+        if ( vecChannels[i].IsConnected() )
+        {
+            vecChannels[i].CreateChatTextMes ( strChatText );
+        }
     }
 }
 

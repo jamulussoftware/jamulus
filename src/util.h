@@ -1224,7 +1224,7 @@ public:
         }
     }
 
-    // return true if a value is inside a given range, otherwise false
+    // return true if a value is within the lower and upper bounds (inclusively), otherwise false
     template<typename T>
     static inline bool InRange ( T value, T lower, T upper )
     {

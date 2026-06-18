@@ -66,6 +66,7 @@ public:
     void AddServerStopped();
 
     void AddNewConnection ( const QHostAddress& ClientInetAddr, const int iNumberOfConnectedClients );
+    bool IsLogging() { return bDoLogging; }
 
 protected:
     void    operator<< ( const QString& sNewStr );

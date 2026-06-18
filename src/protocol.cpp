@@ -459,6 +459,19 @@ CONNECTION LESS MESSAGES
           five times for one registration request at 500ms intervals.
           Beyond this, it should "ping" every 15 minutes
           (standard re-registration timeout).
+
+
+- PROTMESSID_CLM_SERVER_FEATURES: Bitmask of enabled server features
+
+    +------------------+
+    | 4 bytes number n |
+    +------------------+
+
+
+- PROTMESSID_CLM_REQ_SERVER_FEATURES: Request bitmask of enabled server features
+
+    note: does not have any data -> n = 0
+
 */
 
 #include "protocol.h"
@@ -946,6 +959,10 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
 
     case PROTMESSID_CLM_REGISTER_SERVER_RESP:
         EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
+        break;
+
+    case PROTMESSID_CLM_REQ_SERVER_FEATURES:
+        EvaluateCLReqServerFeaturesMes ( InetAddr );
         break;
     }
 }
@@ -2618,6 +2635,24 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, con
     emit CLRegisterServerResp ( InetAddr, static_cast<ESvrRegResult> ( iSvrRegResult ) );
 
     return false; // no error
+}
+
+bool CProtocol::EvaluateCLReqServerFeaturesMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLReqServerFeatures ( InetAddr );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLServerFeaturesMes ( const CHostAddress& InetAddr, const uint32_t iFeatures )
+{
+    int              iPos = 0; // init position pointer
+    CVector<uint8_t> vecData ( 4 );
+
+    PutValOnStream ( vecData, iPos, iFeatures, 4 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_FEATURES, vecData, InetAddr );
 }
 
 /******************************************************************************\

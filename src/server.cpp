@@ -45,6 +45,7 @@
 \******************************************************************************/
 
 #include "server.h"
+#include "util.h"
 
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,
@@ -291,6 +292,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqConnClientsList, this, &CServer::OnCLReqConnClientsList );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqServerFeatures, this, &CServer::OnCLReqServerFeatures );
+
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged, this, &CServer::SvrRegStatusChanged );
 
     QObject::connect ( &JamController, &recorder::CJamController::RestartRecorder, this, &CServer::RestartRecorder );
@@ -470,6 +473,60 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
 
     // logging of new connected channel
     Logging.AddNewConnection ( RecHostAddr.InetAddr, iTotChans );
+}
+
+void CServer::OnCLReqServerFeatures ( CHostAddress RecHostAddr )
+{
+    // This is a bitmask of features enabled at the server.
+    // EFeatureSet from util.h is used to shift each bool into position
+    uint32_t iFeatures = 0;
+
+    // Use 64 samples frame size mode? (argument -F)
+    iFeatures |= ( !bUseDoubleSystemFrameSize << FS_FAST_UPDATE );
+
+    // Multithreading enabled? (argument -T)
+    iFeatures |= ( bUseMultithreading << FS_MULTITHREADING );
+
+    // Recording directory set? (argument -R)
+    // If a recording directory is set a server could potentially record all client audio
+    iFeatures |= ( GetRecorderInitialised() << FS_RECORDER_ENABLED );
+
+    // Will an idle server start recording when a client joins or is it already recording an active session?
+    // (argument --norecord disables recording by default)
+    iFeatures |= ( ( JamController.GetRecorderState() == RS_RECORDING ) << FS_IS_RECORDING );
+
+    // Delay pan enabled? (argument -P)
+    iFeatures |= ( bDelayPan << FS_DELAY_PAN );
+
+    // IPv6 available? (argument --noipv6 disables this feature)
+    iFeatures |= ( bIPv6Available << FS_IPV6_AVAILABLE );
+
+    // "Max" audio quality setting enabled? (argument --noraw disables this feature)
+    iFeatures |= ( !bDisableRaw << FS_RAW_AUDIO );
+
+    // Disconnect all clients on quit? (argument -d)
+    iFeatures |= ( bDisconnectAllClientsOnQuit << FS_DISCONONQUIT );
+
+    // Has welcome message? (argument -w)
+    iFeatures |= ( !strWelcomeMessage.isEmpty() << FS_HAS_WELCOME_MESSAGE );
+
+    // Logging enabled? (argument -l)
+    iFeatures |= ( Logging.IsLogging() << FS_IS_LOGGING );
+
+    // Licence agreement required? (argument -L)
+    iFeatures |= ( ( eLicenceType != LT_NO_LICENCE ) << FS_HAS_LICENCE );
+
+    // TODO:
+    // Running a GUI? (argument -n disables the GUI)
+    // iFeatures |= (  << FS_HAS_GUI );
+    //
+    // // RPC interface enabled? (argument --jsonrpcport)
+    // iFeatures |= (  << FS_RPC_ENABLED );
+
+    // qDebug() << QString::number(iFeatures, 2).rightJustified(32, '0');
+
+    // Create and send the message
+    ConnLessProtocol.CreateCLServerFeaturesMes ( RecHostAddr, iFeatures );
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )

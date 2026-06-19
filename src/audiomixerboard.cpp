@@ -503,9 +503,9 @@ void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
 
     case SL_PROFESSIONAL:
         strStile += QString ( "background-color: rgb(%1, %2, %3); }" )
-                        .arg ( RGBCOL_R_SL_SL_PROFESSIONAL )
-                        .arg ( RGBCOL_G_SL_SL_PROFESSIONAL )
-                        .arg ( RGBCOL_B_SL_SL_PROFESSIONAL );
+                        .arg ( RGBCOL_R_SL_PROFESSIONAL )
+                        .arg ( RGBCOL_G_SL_PROFESSIONAL )
+                        .arg ( RGBCOL_B_SL_PROFESSIONAL );
         break;
 
     default:

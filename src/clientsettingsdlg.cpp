@@ -704,7 +704,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Intermediate" ), SL_INTERMEDIATE );
 
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_SL_PROFESSIONAL, RGBCOL_G_SL_SL_PROFESSIONAL, RGBCOL_B_SL_SL_PROFESSIONAL ) );
+    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_PROFESSIONAL, RGBCOL_G_SL_PROFESSIONAL, RGBCOL_B_SL_PROFESSIONAL ) );
 
     pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Expert" ), SL_PROFESSIONAL );
 

@@ -52,7 +52,10 @@
 /* Implementation *************************************************************/
 CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ), void* arg, const bool, const QString& ) :
     CSoundBase ( "CoreAudio iOS", fpNewProcessCallback, arg ),
-    isInitialized ( false )
+    isInitialized ( false ),
+    iNumInChan ( 2 ),
+    iSelInputLeftChannel ( 0 ),
+    iSelInputRightChannel ( 1 )
 {
     try
     {
@@ -76,10 +79,18 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
         QMessageBox::warning ( nullptr, "Sound exception", generr.GetErrorText() );
     }
 
-    buffer.mNumberChannels    = 2;
-    buffer.mData              = malloc ( 256 * sizeof ( Float32 ) * buffer.mNumberChannels ); // max size
+    // allocate the buffer large enough to hold the maximum number of input
+    // channels we support (the actual channel count is only known once an
+    // input device has been selected and negotiated, see UpdateInputChannelInfo)
+    buffer.mNumberChannels    = iNumInChan;
+    buffer.mData              = malloc ( 256 * sizeof ( Float32 ) * MAX_NUM_IN_OUT_CHANNELS ); // max size
     bufferList.mNumberBuffers = 1;
     bufferList.mBuffers[0]    = buffer;
+
+    for ( int i = 0; i < MAX_NUM_IN_OUT_CHANNELS; i++ )
+    {
+        sChannelNamesInput[i] = QString ( "Channel %1" ).arg ( i + 1 );
+    }
 }
 
 CSound::~CSound() { free ( buffer.mData ); }
@@ -124,17 +135,24 @@ OSStatus CSound::recordingCallback ( void*                       inRefCon,
     return noErr;
 }
 
-void CSound::processBufferList ( AudioBufferList* inInputData, CSound* pSound ) // got stereo input data
+void CSound::processBufferList ( AudioBufferList* inInputData, CSound* pSound ) // got (possibly multichannel) input data
 {
     QMutexLocker locker ( &pSound->MutexAudioProcessCallback );
     Float32*     pData = static_cast<Float32*> ( inInputData->mBuffers[0].mData );
+
+    // the input device may provide more than two channels (e.g. a multichannel
+    // USB audio interface), in which case we pick the user-selected left and
+    // right channels out of the interleaved buffer
+    const int iNumChan = pSound->buffer.mNumberChannels;
+    const int iLeftCh  = pSound->iSelInputLeftChannel;
+    const int iRightCh = pSound->iSelInputRightChannel;
 
     // copy input data
     for ( int i = 0; i < pSound->iCoreAudioBufferSizeMono; i++ )
     {
         // copy left and right channels separately
-        pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( pData[2 * i] * _MAXSHORT );     // left
-        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pData[2 * i + 1] * _MAXSHORT ); // right
+        pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( pData[iNumChan * i + iLeftCh] * _MAXSHORT );  // left
+        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pData[iNumChan * i + iRightCh] * _MAXSHORT ); // right
     }
     pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
 }
@@ -171,6 +189,12 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
         [sessionInstance setPreferredSampleRate:SYSTEM_SAMPLE_RATE_HZ error:&error];
         [[AVAudioSession sharedInstance] setActive:YES error:&error];
 
+        // select the preferred input device (if any was chosen by the user) and
+        // negotiate the number of input channels with it. This must happen before
+        // we configure the audio unit's input stream format below since multichannel
+        // audio interfaces (e.g. USB audio interfaces) may offer more than 2 channels.
+        SwitchDevice ( strCurDevName );
+
         OSStatus status;
 
         // Describe audio component
@@ -197,31 +221,40 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
         status = AudioUnitSetProperty ( audioUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, kOutputBus, &flag, sizeof ( flag ) );
         checkStatus ( status );
 
-        // Describe format
-        AudioStreamBasicDescription audioFormat;
-        audioFormat.mSampleRate       = SYSTEM_SAMPLE_RATE_HZ;
-        audioFormat.mFormatID         = kAudioFormatLinearPCM;
-        audioFormat.mFormatFlags      = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked;
-        audioFormat.mFramesPerPacket  = 1;
-        audioFormat.mChannelsPerFrame = 2;  // stereo, so 2 interleaved channels
-        audioFormat.mBitsPerChannel   = 32; // sizeof float32
-        audioFormat.mBytesPerPacket   = 8;  // (sizeof float32) * 2 channels
-        audioFormat.mBytesPerFrame    = 8;  //(sizeof float32) * 2 channels
+        // Describe playback format (output bus): always stereo, since the device's
+        // speaker/headphone output only ever has 2 channels
+        AudioStreamBasicDescription outputAudioFormat;
+        outputAudioFormat.mSampleRate       = SYSTEM_SAMPLE_RATE_HZ;
+        outputAudioFormat.mFormatID         = kAudioFormatLinearPCM;
+        outputAudioFormat.mFormatFlags      = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked;
+        outputAudioFormat.mFramesPerPacket  = 1;
+        outputAudioFormat.mChannelsPerFrame = 2;  // stereo, so 2 interleaved channels
+        outputAudioFormat.mBitsPerChannel   = 32; // sizeof float32
+        outputAudioFormat.mBytesPerPacket   = 8;  // (sizeof float32) * 2 channels
+        outputAudioFormat.mBytesPerFrame    = 8;  //(sizeof float32) * 2 channels
 
-        // Apply format
+        // Describe recording format (input bus): may have more than 2 interleaved
+        // channels when a multichannel input device (e.g. a USB audio interface) is
+        // selected. iNumInChan was negotiated above in SwitchDevice().
+        AudioStreamBasicDescription inputAudioFormat = outputAudioFormat;
+        inputAudioFormat.mChannelsPerFrame            = iNumInChan;
+        inputAudioFormat.mBytesPerPacket              = 4 * iNumInChan; // (sizeof float32) * iNumInChan channels
+        inputAudioFormat.mBytesPerFrame               = 4 * iNumInChan; // (sizeof float32) * iNumInChan channels
+
+        // Apply formats
         status = AudioUnitSetProperty ( audioUnit,
                                         kAudioUnitProperty_StreamFormat,
                                         kAudioUnitScope_Output,
                                         kInputBus,
-                                        &audioFormat,
-                                        sizeof ( audioFormat ) );
+                                        &inputAudioFormat,
+                                        sizeof ( inputAudioFormat ) );
         checkStatus ( status );
         status = AudioUnitSetProperty ( audioUnit,
                                         kAudioUnitProperty_StreamFormat,
                                         kAudioUnitScope_Input,
                                         kOutputBus,
-                                        &audioFormat,
-                                        sizeof ( audioFormat ) );
+                                        &outputAudioFormat,
+                                        sizeof ( outputAudioFormat ) );
         checkStatus ( status );
 
         // Set callback
@@ -239,8 +272,6 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
         // Initialise
         status = AudioUnitInitialize ( audioUnit );
         checkStatus ( status );
-
-        SwitchDevice ( strCurDevName );
 
         if ( !isInitialized )
         {
@@ -328,10 +359,19 @@ void CSound::GetAvailableInOutDevices()
 
     AVAudioSession* sessionInstance = [AVAudioSession sharedInstance];
 
-    if ( sessionInstance.availableInputs.count > 1 )
+    // list every available input port (e.g. built-in mic, headset mic, or an
+    // external/multichannel USB or Lightning audio interface) as a selectable
+    // device. Output always stays at the system default since iOS does not
+    // allow choosing a separate playback device.
+    for ( AVAudioSessionPortDescription* port in sessionInstance.availableInputs )
     {
-        lNumDevs          = 2;
-        strDriverNames[1] = "in: Built-in Mic/out: System Default";
+        if ( lNumDevs >= MAX_NUMBER_SOUND_CARDS )
+        {
+            break;
+        }
+
+        strDriverNames[lNumDevs] = QString ( "in: %1/out: System Default" ).arg ( QString::fromNSString ( port.portName ) );
+        lNumDevs++;
     }
 }
 
@@ -353,13 +393,86 @@ void CSound::SwitchDevice ( QString strDriverName )
 
     AVAudioSession* sessionInstance = [AVAudioSession sharedInstance];
 
-    if ( iDriverIdx == 0 ) // system default device
+    if ( iDriverIdx <= 0 ) // system default device (or not found -> fall back to default)
     {
-        unsigned long lastInput = sessionInstance.availableInputs.count - 1;
-        [sessionInstance setPreferredInput:sessionInstance.availableInputs[lastInput] error:&error];
+        [sessionInstance setPreferredInput:nil error:&error];
     }
-    else // built-in mic
+    else
     {
-        [sessionInstance setPreferredInput:sessionInstance.availableInputs[0] error:&error];
+        NSArray<AVAudioSessionPortDescription*>* availableInputs = sessionInstance.availableInputs;
+        const NSUInteger                         iPortIdx        = static_cast<NSUInteger> ( iDriverIdx - 1 );
+
+        if ( iPortIdx < availableInputs.count )
+        {
+            [sessionInstance setPreferredInput:availableInputs[iPortIdx] error:&error];
+        }
+    }
+
+    // ask for as many input channels as the now-selected device can provide so
+    // that multichannel input devices are not limited to stereo
+    const NSInteger iMaxChannels = [sessionInstance maximumInputNumberOfChannels];
+
+    [sessionInstance setPreferredInputNumberOfChannels:qBound ( static_cast<NSInteger> ( 1 ), iMaxChannels, static_cast<NSInteger> ( MAX_NUM_IN_OUT_CHANNELS ) )
+                                                  error:&error];
+
+    UpdateInputChannelInfo();
+}
+
+void CSound::UpdateInputChannelInfo()
+{
+    AVAudioSession* sessionInstance = [AVAudioSession sharedInstance];
+
+    // query how many input channels were actually negotiated with the device
+    int iNewNumInChan = static_cast<int> ( sessionInstance.inputNumberOfChannels );
+
+    iNewNumInChan = qBound ( 1, iNewNumInChan, MAX_NUM_IN_OUT_CHANNELS );
+
+    iNumInChan             = iNewNumInChan;
+    buffer.mNumberChannels = iNumInChan;
+
+    // try to get descriptive names for each channel from the active input port
+    AVAudioSessionPortDescription* inputPort = sessionInstance.currentRoute.inputs.firstObject;
+    NSArray<AVAudioSessionChannelDescription*>* channels = inputPort.channels;
+
+    for ( int i = 0; i < iNumInChan; i++ )
+    {
+        QString strChanName = QString ( "Channel %1" ).arg ( i + 1 );
+
+        if ( channels && ( static_cast<NSUInteger> ( i ) < channels.count ) && channels[i].channelName.length > 0 )
+        {
+            strChanName = QString::fromNSString ( channels[i].channelName );
+        }
+
+        sChannelNamesInput[i] = QString ( "%1: %2" ).arg ( i + 1 ).arg ( strChanName );
+    }
+
+    // if the new device has fewer channels than before, clamp the current
+    // selection back into range, defaulting to the first (two) channel(s)
+    if ( ( iSelInputLeftChannel < 0 ) || ( iSelInputLeftChannel >= iNumInChan ) )
+    {
+        iSelInputLeftChannel = 0;
+    }
+
+    if ( ( iSelInputRightChannel < 0 ) || ( iSelInputRightChannel >= iNumInChan ) )
+    {
+        iSelInputRightChannel = ( iNumInChan > 1 ) ? 1 : 0;
+    }
+}
+
+void CSound::SetLeftInputChannel ( const int iNewChan )
+{
+    // apply parameter after input parameter check
+    if ( ( iNewChan >= 0 ) && ( iNewChan < iNumInChan ) )
+    {
+        iSelInputLeftChannel = iNewChan;
+    }
+}
+
+void CSound::SetRightInputChannel ( const int iNewChan )
+{
+    // apply parameter after input parameter check
+    if ( ( iNewChan >= 0 ) && ( iNewChan < iNumInChan ) )
+    {
+        iSelInputRightChannel = iNewChan;
     }
 }

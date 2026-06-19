@@ -188,7 +188,6 @@ win32 {
 
     HEADERS += src/mac/activity.h src/mac/badgelabel.h
     OBJECTIVE_SOURCES += src/mac/activity.mm src/mac/badgelabel.mm
-    CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = app.jamulussoftware
 
     OSX_ENTITLEMENTS.files = mac/Jamulus.entitlements
@@ -686,20 +685,30 @@ SOURCES_OPUS_X86_SSE4 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
      libs/opus/silk/x86/VAD_sse4_1.c \
      libs/opus/silk/x86/VQ_WMat_EC_sse4_1.c
 
-contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
+contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) | contains(QT_ARCH, arm64) {
     HEADERS_OPUS += $$HEADERS_OPUS_ARM
     SOURCES_OPUS_ARCH += $$SOURCES_OPUS_ARM
     DEFINES_OPUS += OPUS_ARM_PRESUME_NEON=1 OPUS_ARM_PRESUME_NEON_INTR=1
     contains(QT_ARCH, arm64-v8a):DEFINES_OPUS += OPUS_ARM_PRESUME_AARCH64_NEON_INTR
 } else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
     HEADERS_OPUS += $$HEADERS_OPUS_X86
-    SOURCES_OPUS_ARCH += $$SOURCES_OPUS_X86_SSE $$SOURCES_OPUS_X86_SSE2 $$SOURCES_OPUS_X86_SSE4
     DEFINES_OPUS += OPUS_X86_MAY_HAVE_SSE OPUS_X86_MAY_HAVE_SSE2 OPUS_X86_MAY_HAVE_SSE4_1
-    # x86_64 implies SSE2
-    contains(QT_ARCH, x86_64):DEFINES_OPUS += OPUS_X86_PRESUME_SSE=1 OPUS_X86_PRESUME_SSE2=1
+    !macx {
+      # x86_64 implies SSE2, macOS does not support it due to the current QT_ARCH being x86_64 on macOS even if compiled on apple silicon (as of 06/2026).
+      SOURCES_OPUS_ARCH += $$SOURCES_OPUS_X86_SSE $$SOURCES_OPUS_X86_SSE2 $$SOURCES_OPUS_X86_SSE4
+      contains(QT_ARCH, x86_64):DEFINES_OPUS += OPUS_X86_PRESUME_SSE=1 OPUS_X86_PRESUME_SSE2=1
+    }
     DEFINES_OPUS += CPU_INFO_BY_C
 }
-DEFINES_OPUS += OPUS_BUILD=1 USE_ALLOCA=1 OPUS_HAVE_RTCD=1 HAVE_LRINTF=1 HAVE_LRINT=1
+DEFINES_OPUS += OPUS_BUILD=1 USE_ALLOCA=1 HAVE_LRINTF=1 HAVE_LRINT=1
+
+!macx | !contains(QT_ARCH, x86_64) {
+  # all but x86 macOS.
+  # macOS fails unless disabled due to QT_ARCH being x86_64 even on apple silicon builds
+  DEFINES_OPUS += OPUS_HAVE_RTCD=1
+} else {
+  message(Skipping Opus RTCD due to incompatibility on macOS)
+}
 
 DISTFILES += ChangeLog \
     COMPILING.md \
@@ -1137,7 +1146,7 @@ contains(CONFIG, "opus_shared_lib") {
     DISTFILES += $$DISTFILES_OPUS
 
     contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
-        msvc | macx-xcode {
+        msvc | macx {
             # According to opus/win32/config.h, "no special compiler
             # flags necessary" when using msvc.  It always supports
             # SSE intrinsics, but does not auto-vectorize.

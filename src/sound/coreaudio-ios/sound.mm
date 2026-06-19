@@ -237,9 +237,9 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
         // channels when a multichannel input device (e.g. a USB audio interface) is
         // selected. iNumInChan was negotiated above in SwitchDevice().
         AudioStreamBasicDescription inputAudioFormat = outputAudioFormat;
-        inputAudioFormat.mChannelsPerFrame            = iNumInChan;
-        inputAudioFormat.mBytesPerPacket              = 4 * iNumInChan; // (sizeof float32) * iNumInChan channels
-        inputAudioFormat.mBytesPerFrame               = 4 * iNumInChan; // (sizeof float32) * iNumInChan channels
+        inputAudioFormat.mChannelsPerFrame           = iNumInChan;
+        inputAudioFormat.mBytesPerPacket             = 4 * iNumInChan; // (sizeof float32) * iNumInChan channels
+        inputAudioFormat.mBytesPerFrame              = 4 * iNumInChan; // (sizeof float32) * iNumInChan channels
 
         // Apply formats
         status = AudioUnitSetProperty ( audioUnit,
@@ -412,8 +412,9 @@ void CSound::SwitchDevice ( QString strDriverName )
     // that multichannel input devices are not limited to stereo
     const NSInteger iMaxChannels = [sessionInstance maximumInputNumberOfChannels];
 
-    [sessionInstance setPreferredInputNumberOfChannels:qBound ( static_cast<NSInteger> ( 1 ), iMaxChannels, static_cast<NSInteger> ( MAX_NUM_IN_OUT_CHANNELS ) )
-                                                  error:&error];
+    [sessionInstance
+        setPreferredInputNumberOfChannels:qBound ( static_cast<NSInteger> ( 1 ), iMaxChannels, static_cast<NSInteger> ( MAX_NUM_IN_OUT_CHANNELS ) )
+                                    error:&error];
 
     UpdateInputChannelInfo();
 }
@@ -431,8 +432,8 @@ void CSound::UpdateInputChannelInfo()
     buffer.mNumberChannels = iNumInChan;
 
     // try to get descriptive names for each channel from the active input port
-    AVAudioSessionPortDescription* inputPort = sessionInstance.currentRoute.inputs.firstObject;
-    NSArray<AVAudioSessionChannelDescription*>* channels = inputPort.channels;
+    AVAudioSessionPortDescription*              inputPort = sessionInstance.currentRoute.inputs.firstObject;
+    NSArray<AVAudioSessionChannelDescription*>* channels  = inputPort.channels;
 
     for ( int i = 0; i < iNumInChan; i++ )
     {

@@ -59,6 +59,7 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
     txvChatWindow->setResizeMode ( QListView::Adjust );
     txvChatWindow->setContextMenuPolicy ( Qt::CustomContextMenu );
     txvChatWindow->installEventFilter ( this );
+    txvChatWindow->viewport()->installEventFilter ( this );
 
     // Menu  -------------------------------------------------------------------
     QMenuBar* pMenu     = new QMenuBar ( this );
@@ -192,21 +193,42 @@ bool CChatDlg::eventFilter ( QObject* obj, QEvent* event )
             return true;
         }
     }
-    if ( obj == txvChatWindow && event->type() == QEvent::MouseButtonPress )
+    if ( obj == txvChatWindow->viewport() )
     {
-        QMouseEvent*  me  = static_cast<QMouseEvent*> ( event );
-        QModelIndex   idx = txvChatWindow->indexAt ( me->pos() );
-        if ( idx.isValid() )
+        if ( event->type() == QEvent::MouseMove )
         {
-            QRect         rect = txvChatWindow->visualRect ( idx );
-            QTextDocument doc;
-            doc.setHtml ( idx.data ( Qt::DisplayRole ).toString() );
-            doc.setTextWidth ( rect.width() );
-            QString anchor = doc.documentLayout()->anchorAt ( me->pos() - rect.topLeft() );
-            if ( !anchor.isEmpty() )
+            QMouseEvent*  me  = static_cast<QMouseEvent*> ( event );
+            QModelIndex   idx = txvChatWindow->indexAt ( me->pos() );
+            if ( idx.isValid() )
             {
-                OnAnchorClicked ( QUrl ( anchor ) );
-                return true;
+                QRect         rect = txvChatWindow->visualRect ( idx );
+                QTextDocument doc;
+                doc.setHtml ( idx.data ( Qt::DisplayRole ).toString() );
+                doc.setTextWidth ( rect.width() );
+                QString anchor = doc.documentLayout()->anchorAt ( me->pos() - rect.topLeft() );
+                txvChatWindow->viewport()->setCursor ( anchor.isEmpty() ? Qt::ArrowCursor : Qt::PointingHandCursor );
+            }
+            else
+            {
+                txvChatWindow->viewport()->setCursor ( Qt::ArrowCursor );
+            }
+        }
+        if ( event->type() == QEvent::MouseButtonPress )
+        {
+            QMouseEvent*  me  = static_cast<QMouseEvent*> ( event );
+            QModelIndex   idx = txvChatWindow->indexAt ( me->pos() );
+            if ( idx.isValid() )
+            {
+                QRect         rect = txvChatWindow->visualRect ( idx );
+                QTextDocument doc;
+                doc.setHtml ( idx.data ( Qt::DisplayRole ).toString() );
+                doc.setTextWidth ( rect.width() );
+                QString anchor = doc.documentLayout()->anchorAt ( me->pos() - rect.topLeft() );
+                if ( !anchor.isEmpty() )
+                {
+                    OnAnchorClicked ( QUrl ( anchor ) );
+                    return true;
+                }
             }
         }
     }

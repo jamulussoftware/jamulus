@@ -79,7 +79,7 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
         QMessageBox::warning ( nullptr, "Sound exception", generr.GetErrorText() );
     }
 
-    // allocate the buffer large enough to hold the maximum number of input
+    // allocate the audio buffer large enough to hold the maximum number of input
     // channels we support (the actual channel count is only known once an
     // input device has been selected and negotiated, see UpdateInputChannelInfo)
     buffer.mNumberChannels    = iNumInChan;

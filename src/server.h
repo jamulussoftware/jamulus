@@ -191,6 +191,9 @@ public:
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
     bool IsDelayPanningEnabled() { return bDelayPan; }
 
+    void SendChatTextToAllConChannels ( const QString& strChatText );
+    void SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText );
+
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }

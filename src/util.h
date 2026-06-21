@@ -1242,6 +1242,13 @@ public:
             return powf ( 10.0f, ( fInValueRange0_1 - 1.0f ) * AUD_MIX_FADER_RANGE_DB / 20.0f );
         }
     }
+
+    // return true if a value is within the lower and upper bounds (inclusively), otherwise false
+    template<typename T>
+    static inline bool InRange ( T value, T lower, T upper )
+    {
+        return !( value < lower || value > upper );
+    }
 };
 
 /******************************************************************************\

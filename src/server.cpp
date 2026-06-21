@@ -1355,13 +1355,27 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID, con
                                          ChanName.toHtmlEscaped() + "</b></font> " + strChatText.toHtmlEscaped();
 
     // Send chat text to all connected clients ---------------------------------
+    SendChatTextToAllConChannels ( strActualMessageText );
+}
+
+void CServer::SendChatTextToAllConChannels ( const QString& strChatText )
+{
+    // Send chat text to all connected clients ---------------------------------
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
-            // send message
-            vecChannels[i].CreateChatTextMes ( strActualMessageText );
+            vecChannels[i].CreateChatTextMes ( strChatText );
         }
+    }
+}
+
+void CServer::SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText )
+{
+    if ( MathUtils::InRange<int> ( iCurChanID, 0, iMaxNumChannels - 1 ) && vecChannels[iCurChanID].IsConnected() )
+    {
+        // send message
+        vecChannels[iCurChanID].CreateChatTextMes ( strChatText );
     }
 }
 

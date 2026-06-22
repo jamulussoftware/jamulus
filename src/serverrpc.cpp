@@ -47,6 +47,9 @@
 
 #include "serverrpc.h"
 
+/* Definitions ****************************************************************/
+#define INVALID_CLIENT_ID -1
+
 CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* parent ) : QObject ( parent )
 {
     // API doc already part of CClientRpc
@@ -106,7 +109,7 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
         }
 
         // set invalid channel ID to make clear this message was not sent by a Jamulus client
-        pServer->SendChatTextToAllConChannels ( -1, jsonChatMessage.toString() );
+        pServer->SendChatTextToAllConChannels ( INVALID_CLIENT_ID, jsonChatMessage.toString() );
         response["result"] = "ok";
     } );
 

@@ -1354,10 +1354,10 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID, con
                                          ChanName.toHtmlEscaped() + "</b></font> " + strChatText.toHtmlEscaped();
 
     // Send chat text to all connected clients ---------------------------------
-    SendChatTextToAllConChannels ( strActualMessageText );
+    SendChatTextToAllConChannels ( iCurChanID, strActualMessageText );
 }
 
-void CServer::SendChatTextToAllConChannels ( const QString& strChatText )
+void CServer::SendChatTextToAllConChannels ( const int iSendingChanID, const QString& strChatText )
 {
     // Send chat text to all connected clients ---------------------------------
     for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -1367,7 +1367,8 @@ void CServer::SendChatTextToAllConChannels ( const QString& strChatText )
             vecChannels[i].CreateChatTextMes ( strChatText );
         }
     }
-    emit sentChatMessage ( strChatText );
+    // forward the message to the RPC server
+    emit sentChatMessage ( iSendingChanID, strChatText );
 }
 
 void CServer::SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText )

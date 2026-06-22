@@ -663,6 +663,7 @@ Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
+| params.id | number | Channel ID of sending client or -1 for RPC sent messages. |
 | params.chatMessage | string | Chat message text. |
 
 

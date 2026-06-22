@@ -82,10 +82,12 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
 
     /// @rpc_notification jamulusserver/chatMessageReceived
     /// @brief Emitted when a chat message is received from either a Jamulus or RPC client and to be broadcast to all connected clients.
+    /// @param {number} params.id - Channel ID of sending client or -1 for RPC sent messages.
     /// @param {string} params.chatMessage - Chat message text.
-    connect ( pServer, &CServer::sentChatMessage, [=] ( const QString& strChatText ) {
+    connect ( pServer, &CServer::sentChatMessage, [=] ( const int iSendingChanID, const QString& strChatText ) {
         pRpcServer->BroadcastNotification ( "jamulusserver/chatMessageReceived",
                                             QJsonObject{
+                                                { "id", iSendingChanID },
                                                 { "chatMessage", strChatText },
                                             } );
     } );
@@ -103,7 +105,8 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
             return;
         }
 
-        pServer->SendChatTextToAllConChannels ( jsonChatMessage.toString() );
+        // set invalid channel ID to make clear this message was not sent by a Jamulus client
+        pServer->SendChatTextToAllConChannels ( -1, jsonChatMessage.toString() );
         response["result"] = "ok";
     } );
 

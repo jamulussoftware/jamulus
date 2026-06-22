@@ -118,9 +118,6 @@ void CChatDlg::OnClearChatHistory()
 
 void CChatDlg::AddChatText ( QString strChatText )
 {
-    // notify accessibility plugin that text has changed
-    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
-
     // analyze strChatText to check if hyperlink (limit ourselves to http(s)://) but do not
     // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
     // coding hisself and we should not mess with that)
@@ -141,9 +138,28 @@ void CChatDlg::AddChatText ( QString strChatText )
                               "<a href=\"\\1\">\\1</a>" );
     }
 
-    // add new message as a discrete row in the model
-    m_pChatModel->appendRow ( new QStandardItem ( strChatText ) );
+    // DisplayRole stores HTML; strip tags for the accessible name so VoiceOver reads
+    // clean text rather than raw angle-bracket markup when navigating to this item
+    QTextDocument plainDoc;
+    plainDoc.setHtml ( strChatText );
+    QString strPlainText = plainDoc.toPlainText();
+
+    QStandardItem* pItem = new QStandardItem ( strChatText );
+    pItem->setData ( strPlainText, Qt::AccessibleTextRole );
+    m_pChatModel->appendRow ( pItem );
     txvChatWindow->scrollToBottom();
+
+    // tell screen readers a new row exists, then announce its text as the list's
+    // current value — drives VoiceOver live-region-style announcement on macOS
+    int row = m_pChatModel->rowCount() - 1;
+    QAccessibleTableModelChangeEvent* pChangeEvent =
+        new QAccessibleTableModelChangeEvent ( txvChatWindow, QAccessibleTableModelChangeEvent::RowsInserted );
+    pChangeEvent->setFirstRow ( row );
+    pChangeEvent->setLastRow ( row );
+    pChangeEvent->setFirstColumn ( 0 );
+    pChangeEvent->setLastColumn ( 0 );
+    QAccessible::updateAccessibility ( pChangeEvent );
+    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strPlainText ) );
 }
 
 void CChatDlg::OnCopyChatMessage()

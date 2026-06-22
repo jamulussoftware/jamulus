@@ -65,15 +65,23 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
 
     edtLocalInputText->setAccessibleName ( tr ( "New chat text edit box" ) );
 
-    // clear chat window and edit line
-    txvChatWindow->clear();
+    // clear edit line
     edtLocalInputText->clear();
-
-    // we do not want to show a cursor in the chat history
-    txvChatWindow->setCursorWidth ( 0 );
 
     // set a placeholder text to make sure where to type the message in (#384)
     edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
+
+    // Set up the list model and delegate for accessible per-message rows ------
+    m_pChatModel = new QStandardItemModel ( this );
+    txvChatWindow->setModel ( m_pChatModel );
+    txvChatWindow->setItemDelegate ( new ChatDelegate ( txvChatWindow ) );
+    txvChatWindow->setSelectionMode ( QAbstractItemView::SingleSelection );
+    txvChatWindow->setEditTriggers ( QAbstractItemView::NoEditTriggers );
+    txvChatWindow->setWordWrap ( true );
+    txvChatWindow->setResizeMode ( QListView::Adjust );
+    txvChatWindow->setContextMenuPolicy ( Qt::CustomContextMenu );
+    txvChatWindow->installEventFilter ( this );
+    txvChatWindow->viewport()->installEventFilter ( this );
 
     // Menu  -------------------------------------------------------------------
     QMenuBar* pMenu     = new QMenuBar ( this );
@@ -98,7 +106,7 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
 
     QObject::connect ( butSend, &QPushButton::clicked, this, &CChatDlg::OnSendText );
 
-    QObject::connect ( txvChatWindow, &QTextBrowser::anchorClicked, this, &CChatDlg::OnAnchorClicked );
+    QObject::connect ( txvChatWindow, &QListView::customContextMenuRequested, this, &CChatDlg::OnChatContextMenu );
 
 #if defined( Q_OS_IOS )
     QObject::connect ( closeAction, &QAction::triggered, this, &CChatDlg::OnCloseClicked );
@@ -127,15 +135,11 @@ void CChatDlg::OnSendText()
 
 void CChatDlg::OnClearChatHistory()
 {
-    // clear chat window
-    txvChatWindow->clear();
+    m_pChatModel->clear();
 }
 
 void CChatDlg::AddChatText ( QString strChatText )
 {
-    // notify accessibility plugin that text has changed
-    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
-
     // analyze strChatText to check if hyperlink (limit ourselves to http(s)://) but do not
     // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
     // coding hisself and we should not mess with that)
@@ -156,8 +160,49 @@ void CChatDlg::AddChatText ( QString strChatText )
                               "<a href=\"\\1\">\\1</a>" );
     }
 
-    // add new text in chat window
-    txvChatWindow->append ( strChatText );
+    // DisplayRole stores HTML; AccessibleTextRole gives screen readers clean text
+    // without angle-bracket markup (VoiceOver reads this role when narrating list items)
+    QTextDocument plainDoc;
+    plainDoc.setHtml ( strChatText );
+    QString strPlainText = plainDoc.toPlainText();
+
+    QStandardItem* pItem = new QStandardItem ( strChatText );
+    pItem->setData ( strPlainText, Qt::AccessibleTextRole );
+    m_pChatModel->appendRow ( pItem );
+    txvChatWindow->scrollToBottom();
+
+    // tell screen readers a new row was inserted, then announce its text as the
+    // list's current value — drives VoiceOver live-region-style announcement on macOS
+    int row = m_pChatModel->rowCount() - 1;
+    QAccessibleTableModelChangeEvent* pChangeEvent =
+        new QAccessibleTableModelChangeEvent ( txvChatWindow, QAccessibleTableModelChangeEvent::RowsInserted );
+    pChangeEvent->setFirstRow ( row );
+    pChangeEvent->setLastRow ( row );
+    pChangeEvent->setFirstColumn ( 0 );
+    pChangeEvent->setLastColumn ( 0 );
+    QAccessible::updateAccessibility ( pChangeEvent );
+    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strPlainText ) );
+}
+
+void CChatDlg::OnCopyChatMessage()
+{
+    QModelIndexList sel = txvChatWindow->selectionModel()->selectedIndexes();
+    if ( sel.isEmpty() )
+        return;
+    QTextDocument doc;
+    doc.setHtml ( sel.first().data ( Qt::DisplayRole ).toString() );
+    QApplication::clipboard()->setText ( doc.toPlainText() );
+}
+
+void CChatDlg::OnChatContextMenu ( const QPoint& pos )
+{
+    QModelIndex idx = txvChatWindow->indexAt ( pos );
+    if ( !idx.isValid() )
+        return;
+    txvChatWindow->setCurrentIndex ( idx );
+    QMenu menu ( this );
+    menu.addAction ( tr ( "Copy message" ), this, &CChatDlg::OnCopyChatMessage );
+    menu.exec ( txvChatWindow->viewport()->mapToGlobal ( pos ) );
 }
 
 void CChatDlg::OnAnchorClicked ( const QUrl& Url )
@@ -173,6 +218,59 @@ void CChatDlg::OnAnchorClicked ( const QUrl& Url )
             QDesktopServices::openUrl ( Url );
         }
     }
+}
+
+bool CChatDlg::eventFilter ( QObject* obj, QEvent* event )
+{
+    if ( obj == txvChatWindow && event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent* ke = static_cast<QKeyEvent*> ( event );
+        if ( ke->matches ( QKeySequence::Copy ) )
+        {
+            OnCopyChatMessage();
+            return true;
+        }
+    }
+    if ( obj == txvChatWindow->viewport() )
+    {
+        if ( event->type() == QEvent::MouseMove )
+        {
+            QMouseEvent*  me  = static_cast<QMouseEvent*> ( event );
+            QModelIndex   idx = txvChatWindow->indexAt ( me->pos() );
+            if ( idx.isValid() )
+            {
+                QRect         rect = txvChatWindow->visualRect ( idx );
+                QTextDocument doc;
+                doc.setHtml ( idx.data ( Qt::DisplayRole ).toString() );
+                doc.setTextWidth ( rect.width() );
+                QString anchor = doc.documentLayout()->anchorAt ( me->pos() - rect.topLeft() );
+                txvChatWindow->viewport()->setCursor ( anchor.isEmpty() ? Qt::ArrowCursor : Qt::PointingHandCursor );
+            }
+            else
+            {
+                txvChatWindow->viewport()->setCursor ( Qt::ArrowCursor );
+            }
+        }
+        if ( event->type() == QEvent::MouseButtonPress )
+        {
+            QMouseEvent*  me  = static_cast<QMouseEvent*> ( event );
+            QModelIndex   idx = txvChatWindow->indexAt ( me->pos() );
+            if ( idx.isValid() )
+            {
+                QRect         rect = txvChatWindow->visualRect ( idx );
+                QTextDocument doc;
+                doc.setHtml ( idx.data ( Qt::DisplayRole ).toString() );
+                doc.setTextWidth ( rect.width() );
+                QString anchor = doc.documentLayout()->anchorAt ( me->pos() - rect.topLeft() );
+                if ( !anchor.isEmpty() )
+                {
+                    OnAnchorClicked ( QUrl ( anchor ) );
+                    return true;
+                }
+            }
+        }
+    }
+    return CBaseDlg::eventFilter ( obj, event );
 }
 
 #if defined( Q_OS_IOS ) || defined( ANDROID ) || defined( Q_OS_ANDROID )

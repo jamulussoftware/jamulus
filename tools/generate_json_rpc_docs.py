@@ -219,7 +219,7 @@ for source_file in source_files:
                 current_item.handle_tag("result")
                 current_item.handle_text(line[len("/// @result "):])
             elif line.startswith("///"):
-                current_item.handle_text(line[len("///"):])
+                current_item.handle_text(line[len("///"):].lstrip())
             elif line == "":
                 pass
             else:

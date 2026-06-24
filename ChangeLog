@@ -1,4 +1,7 @@
-### 3.12.1dev <- NOTE: the release version number will be 3.12.2 ###
+### 3.12.2 (2026-06-24) ###
+
+- Server: fix occasional crash seen when clients < 3.6 change jitter buffer size.
+
 
 ### 3.12.1 (2026-05-17) ###
 

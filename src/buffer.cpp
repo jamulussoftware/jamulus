@@ -64,11 +64,13 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
         // extract all data from buffer in temporary storage
         CVector<CVector<uint8_t>> vecvecTempMemory = vecvecMemory; // allocate worst case memory by copying
 
+        int iTempSize = vecvecTempMemory.size(); // for bounds checking
+
         if ( !bNUseSequenceNumber )
         {
             int iPreviousDataCnt = 0;
 
-            while ( Get ( vecvecTempMemory[iPreviousDataCnt], iBlockSize ) )
+            while ( iPreviousDataCnt < iTempSize && Get ( vecvecTempMemory[iPreviousDataCnt], iBlockSize ) )
             {
                 iPreviousDataCnt++;
             }
@@ -80,6 +82,7 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
             // data back as the new buffer size can hold)
             int iDataCnt = 0;
 
+            // iPreviousDataCnt will be at most iTempSize, so an additional check on iDataCnt is not needed
             while ( ( iDataCnt < iPreviousDataCnt ) && Put ( vecvecTempMemory[iDataCnt], iBlockSize ) )
             {
                 iDataCnt++;
@@ -94,13 +97,13 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
             const int     iOldBlockGetPos            = iBlockGetPos;
             int           iCurBlockPos               = 0;
 
-            while ( iBlockGetPos < iNumBlocksMemory )
+            while ( iBlockGetPos < iNumBlocksMemory && iCurBlockPos < iTempSize )
             {
                 veciTempBlockValid[iCurBlockPos] = veciBlockValid[iBlockGetPos];
                 vecvecTempMemory[iCurBlockPos++] = vecvecMemory[iBlockGetPos++];
             }
 
-            for ( iBlockGetPos = 0; iBlockGetPos < iOldBlockGetPos; iBlockGetPos++ )
+            for ( iBlockGetPos = 0; iBlockGetPos < iOldBlockGetPos && iCurBlockPos < iTempSize; iBlockGetPos++ )
             {
                 veciTempBlockValid[iCurBlockPos] = veciBlockValid[iBlockGetPos];
                 vecvecTempMemory[iCurBlockPos++] = vecvecMemory[iBlockGetPos];
@@ -113,7 +116,7 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
             iSequenceNumberAtGetPos = iOldSequenceNumberAtGetPos;
             iBlockGetPos            = 0; // per definition
 
-            for ( int iCurPos = 0; iCurPos < std::min ( iNewNumBlocks, iOldNumBlocksMemory ); iCurPos++ )
+            for ( int iCurPos = 0; iCurPos < std::min ( iNewNumBlocks, iOldNumBlocksMemory ) && iCurPos < iTempSize; iCurPos++ )
             {
                 veciBlockValid[iCurPos] = veciTempBlockValid[iCurPos];
                 vecvecMemory[iCurPos]   = vecvecTempMemory[iCurPos];

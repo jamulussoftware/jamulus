@@ -739,18 +739,18 @@ enum ESkillLevel
 };
 
 // define the GUI RGB colors for each skill level
-#define RGBCOL_R_SL_NOT_SET         255
-#define RGBCOL_G_SL_NOT_SET         255
-#define RGBCOL_B_SL_NOT_SET         255
-#define RGBCOL_R_SL_BEGINNER        255
-#define RGBCOL_G_SL_BEGINNER        255
-#define RGBCOL_B_SL_BEGINNER        200
-#define RGBCOL_R_SL_INTERMEDIATE    225
-#define RGBCOL_G_SL_INTERMEDIATE    255
-#define RGBCOL_B_SL_INTERMEDIATE    225
-#define RGBCOL_R_SL_SL_PROFESSIONAL 255
-#define RGBCOL_G_SL_SL_PROFESSIONAL 225
-#define RGBCOL_B_SL_SL_PROFESSIONAL 225
+#define RGBCOL_R_SL_NOT_SET      255
+#define RGBCOL_G_SL_NOT_SET      255
+#define RGBCOL_B_SL_NOT_SET      255
+#define RGBCOL_R_SL_BEGINNER     255
+#define RGBCOL_G_SL_BEGINNER     255
+#define RGBCOL_B_SL_BEGINNER     200
+#define RGBCOL_R_SL_INTERMEDIATE 225
+#define RGBCOL_G_SL_INTERMEDIATE 255
+#define RGBCOL_B_SL_INTERMEDIATE 225
+#define RGBCOL_R_SL_PROFESSIONAL 255
+#define RGBCOL_G_SL_PROFESSIONAL 225
+#define RGBCOL_B_SL_PROFESSIONAL 225
 
 // Stereo signal level meter ---------------------------------------------------
 class CStereoSignalLevelMeter

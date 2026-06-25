@@ -1,4 +1,4 @@
-### 3.12.1dev <- NOTE: the release version number will be 4.0.0 ###
+### 3.12.2dev <- NOTE: the release version number will be 4.0.0 ###
 
 - Optimize Images (#3539).
   (contributed by @ann0see)
@@ -31,9 +31,6 @@
   (contributed by @ann0see)
 
 - Refactor server chat handling by extracting methods (#3741).
-  (contributed by @dingodoppelt)
-
-- Add uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023)
   (contributed by @dingodoppelt)
 
 - Client: Ensure INI file settings are loaded before doing -c/--connect startup (#3738).

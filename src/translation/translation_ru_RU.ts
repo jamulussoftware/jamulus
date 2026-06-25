@@ -1983,7 +1983,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1229"/>
         <source>Recorder</source>
-        <translation type="unfinished">Recorder</translation>
+        <translation>Блокфлейта</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1232"/>

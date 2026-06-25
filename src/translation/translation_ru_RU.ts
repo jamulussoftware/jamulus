@@ -81,7 +81,7 @@
     <message>
         <location filename="../util.cpp" line="563"/>
         <source>Dutch</source>
-        <translation>Датский</translation>
+        <translation>Нидерландский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="568"/>

@@ -401,6 +401,8 @@ public slots:
 
     void OnCLReqServerFeatures ( CHostAddress InetAddr );
 
+    void OnCLReqWelcomeMessage ( CHostAddress InetAddr );
+
     void OnCLDisconnection ( CHostAddress InetAddr );
 
     void OnAboutToQuit();

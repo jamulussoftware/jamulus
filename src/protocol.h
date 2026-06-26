@@ -108,6 +108,8 @@
 #define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
 #define PROTMESSID_CLM_SERVER_FEATURES        1019 // server features message
 #define PROTMESSID_CLM_REQ_SERVER_FEATURES    1020 // request server features
+#define PROTMESSID_CLM_WELCOME_MESSAGE        1021 // server welcome message
+#define PROTMESSID_CLM_REQ_WELCOME_MESSAGE    1022 // request server welcome message
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE 2001 // a container for split messages
@@ -180,6 +182,7 @@ public:
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
     void CreateCLServerFeaturesMes ( const CHostAddress& InetAddr, const uint32_t iResult );
+    void CreateCLWelcomeMessageMes ( const CHostAddress& InetAddr, const QString strWelcomeMessage );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -308,6 +311,7 @@ protected:
     bool EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerFeaturesMes ( const CHostAddress& InetAddr );
+    bool EvaluateCLReqWelcomeMessageMes ( const CHostAddress& InetAddr );
 
     int iOldRecID;
     int iOldRecCnt;
@@ -376,4 +380,5 @@ signals:
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
     void CLReqServerFeatures ( CHostAddress InetAddr );
+    void CLReqWelcomeMessage ( CHostAddress InetAddr );
 };

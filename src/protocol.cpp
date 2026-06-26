@@ -472,6 +472,18 @@ CONNECTION LESS MESSAGES
 
     note: does not have any data -> n = 0
 
+
+- PROTMESSID_CLM_WELCOME_MESSAGE: Server welcome message
+
+    +------------------+--------------------------------------+
+    | 2 bytes number n | n bytes UTF-8 string welcome message |
+    +------------------+--------------------------------------+
+
+
+- PROTMESSID_CLM_REQ_WELCOME_MESSAGE: Request server welcome message
+
+    note: does not have any data -> n = 0
+
 */
 
 #include "protocol.h"
@@ -963,6 +975,10 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
 
     case PROTMESSID_CLM_REQ_SERVER_FEATURES:
         EvaluateCLReqServerFeaturesMes ( InetAddr );
+        break;
+
+    case PROTMESSID_CLM_REQ_WELCOME_MESSAGE:
+        EvaluateCLReqWelcomeMessageMes ( InetAddr );
         break;
     }
 }
@@ -2653,6 +2669,35 @@ void CProtocol::CreateCLServerFeaturesMes ( const CHostAddress& InetAddr, const 
     PutValOnStream ( vecData, iPos, iFeatures, 4 );
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_FEATURES, vecData, InetAddr );
+}
+
+bool CProtocol::EvaluateCLReqWelcomeMessageMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLReqWelcomeMessage ( InetAddr );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLWelcomeMessageMes ( const CHostAddress& InetAddr, const QString strWelcomeMessage )
+{
+    int iPos = 0; // init position pointer
+
+    // convert chat text string to utf-8
+    const QByteArray strUTF8WelcomeMessage = strWelcomeMessage.toUtf8();
+
+    const int iStrUTF8Len = strUTF8WelcomeMessage.size(); // get utf-8 str. size / string
+
+    // size of message body
+    const int iEntrLen = 2 + iStrUTF8Len; // utf-8 str. size / string
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // chat text
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8WelcomeMessage );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_WELCOME_MESSAGE, vecData, InetAddr );
 }
 
 /******************************************************************************\

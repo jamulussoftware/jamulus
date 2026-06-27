@@ -192,7 +192,7 @@ public:
     bool IsDelayPanningEnabled() { return bDelayPan; }
 
     void SendChatTextToAllConChannels ( const int iSendingChanID, const QString& strChatText );
-    void SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText );
+    bool SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText );
 
 protected:
     // access functions for actual channels

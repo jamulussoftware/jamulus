@@ -119,15 +119,17 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
     /// @param {number} params.id - The client's channel id.
     /// @result {string} result - Always "ok".
     pRpcServer->HandleMethod ( "jamulusserver/privateChatMessage", [=] ( const QJsonObject& params, QJsonObject& response ) {
-        auto      jsonChatMessage = params["chatMessage"];
-        const int id              = params["id"].toInt();
-        if ( !jsonChatMessage.isString() )
+        auto          jsonChatMessage = params["chatMessage"];
+        const int     id              = params["id"].toInt ( INVALID_CLIENT_ID );
+        const QString chatMessage     = jsonChatMessage.toString();
+        if ( chatMessage.isEmpty() || chatMessage.size() > MAX_LEN_CHAT_TEXT )
         {
-            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: chatMessage is not a string" );
+            response["error"] =
+                CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: chatMessage is not a string or malformed" );
             return;
         }
 
-        if ( pServer->SendChatTextToConChannel ( id, jsonChatMessage.toString() ) )
+        if ( pServer->SendChatTextToConChannel ( id, chatMessage ) )
         {
             response["error"] = "invalid channel ID";
             return;

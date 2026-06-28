@@ -344,7 +344,7 @@ Results:
 
 ### jamulusserver/broadcastChatMessage
 
-Sends a message (as the server) to all connected clients. This can be used to broadcast messages from external sources (e.g. scripts or  monitoring tools).
+Sends a message (as the server) to all connected clients. This can be used to broadcast messages from external sources (e.g. scripts or monitoring tools).
 
 Parameters:
 
@@ -428,6 +428,24 @@ Results:
 | result.directoryAddress | string | The string used to look up the directory address (only assume valid if directoryType is "custom" and registrationStatus is "registered"). |
 | result.directory | string | The directory with which this server requested registration, or blank if none. |
 | result.registrationStatus | string | The server registration status as string (see ESvrRegStatus and SerializeRegistrationStatus). |
+
+
+### jamulusserver/privateChatMessage
+
+Sends a chat message to a single connected client.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.chatMessage | string | The chat message text. |
+| params.id | number | The client's channel id. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | "ok" or "error" if bad arguments. |
 
 
 ### jamulusserver/restartRecording

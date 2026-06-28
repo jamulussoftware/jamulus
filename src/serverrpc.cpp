@@ -113,6 +113,30 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
         response["result"] = "ok";
     } );
 
+    /// @rpc_method jamulusserver/privateChatMessage
+    /// @brief Sends a chat message to a single connected client.
+    /// @param {string} params.chatMessage - The chat message text.
+    /// @param {number} params.id - The client's channel id.
+    /// @result {string} result - "ok" or "error" if bad arguments.
+    pRpcServer->HandleMethod ( "jamulusserver/privateChatMessage", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto          jsonChatMessage = params["chatMessage"];
+        const int     id              = params["id"].toInt ( INVALID_CLIENT_ID );
+        const QString chatMessage     = jsonChatMessage.toString();
+        if ( chatMessage.isEmpty() || chatMessage.size() > MAX_LEN_CHAT_TEXT )
+        {
+            response["error"] =
+                CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: chatMessage is not a string or malformed" );
+            return;
+        }
+
+        if ( !pServer->SendChatTextToConChannel ( id, chatMessage ) )
+        {
+            response["error"] = "invalid channel ID";
+            return;
+        }
+        response["result"] = "ok";
+    } );
+
     /// @rpc_method jamulusserver/getRecorderStatus
     /// @brief Returns the recorder state.
     /// @param {object} params - No parameters (empty object).

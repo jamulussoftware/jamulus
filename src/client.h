@@ -51,6 +51,8 @@
 #include <QString>
 #include <QDateTime>
 #include <QMutex>
+#include <atomic>
+#include <memory>
 #ifdef USE_OPUS_SHARED_LIB
 #    include "opus/opus_custom.h"
 #else
@@ -142,6 +144,7 @@ public:
 };
 
 class CClientSettings;
+class CAuxiliaryMonoSender;
 
 class CClient : public QObject
 {
@@ -185,6 +188,13 @@ public:
     EAudChanConf GetAudioChannels() const { return eAudioChannelConf; }
     void         SetAudioChannels ( const EAudChanConf eNAudChanConf );
 
+    bool IsAuxiliaryMonoSenderEnabled() const { return eAudioChannelConf == CC_TWO_IN_STEREO_OUT; }
+    void SetAuxiliaryMonoSenderEnabled ( const bool bEnable );
+    bool CanUseAuxiliaryMonoSender();
+
+    bool IsAuxiliaryPrimaryOnLeft() const { return bAuxiliaryPrimaryOnLeft.load(); }
+    void SetAuxiliaryPrimaryOnLeft ( const bool bPrimaryOnLeft ) { bAuxiliaryPrimaryOnLeft.store ( bPrimaryOnLeft ); }
+
     int  GetAudioInFader() const { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
@@ -201,19 +211,10 @@ public:
     void SetDoAutoSockBufSize ( const bool bValue );
     bool GetDoAutoSockBufSize() const { return Channel.GetDoAutoSockBufSize(); }
 
-    void SetSockBufNumFrames ( const int iNumBlocks, const bool bPreserve = false ) { Channel.SetSockBufNumFrames ( iNumBlocks, bPreserve ); }
+    void SetSockBufNumFrames ( const int iNumBlocks, const bool bPreserve = false );
     int  GetSockBufNumFrames() { return Channel.GetSockBufNumFrames(); }
 
-    void SetServerSockBufNumFrames ( const int iNumBlocks )
-    {
-        iServerSockBufNumFrames = iNumBlocks;
-
-        // if auto setting is disabled, inform the server about the new size
-        if ( !GetDoAutoSockBufSize() )
-        {
-            Channel.CreateJitBufMes ( iServerSockBufNumFrames );
-        }
-    }
+    void SetServerSockBufNumFrames ( const int iNumBlocks );
     int GetServerSockBufNumFrames() { return iServerSockBufNumFrames; }
 
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
@@ -289,7 +290,7 @@ public:
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
 
-    void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
+    void SetRemoteInfo();
 
     void CreateChatTextMes ( const QString& strChatText ) { Channel.CreateChatTextMes ( strChatText ); }
 
@@ -341,6 +342,11 @@ protected:
     static void AudioCallback ( CVector<short>& psData, void* arg );
 
     void Init();
+    EAudChanConf GetEffectiveAudioChannels() const;
+    void ConfigureAuxiliaryMonoSender();
+    void StartAuxiliaryMonoSender();
+    void StopAuxiliaryMonoSender();
+    CChannelCoreInfo GetAuxiliaryChannelInfo() const;
     void ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
     void ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
 
@@ -389,12 +395,17 @@ protected:
     EAudChanConf           eAudioChannelConf;
     int                    iNumAudioChannels;
     bool                   bIsInitializationPhase;
+    std::atomic<bool>      bAuxiliaryPrimaryOnLeft;
     bool                   bMuteOutStream;
     float                  fMuteOutStreamGain;
     CVector<unsigned char> vecCeltData;
 
     bool            bIPv6Available; // must be before Socket - passed by reference to Socket
+    const quint16   iSocketQosNumber;
+    const bool      bDisableIPv6;
     CHighPrioSocket Socket;
+
+    std::unique_ptr<CAuxiliaryMonoSender> pAuxiliaryMonoSender;
 
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
@@ -416,6 +427,7 @@ protected:
     CBuffer<int16_t> SndCrdConversionBufferOut;
     CVector<int16_t> vecDataConvBuf;
     CVector<int16_t> vecsStereoSndCrdMuteStream;
+    CVector<int16_t> vecAuxiliaryMonoInput;
     CVector<int16_t> vecZeros;
 
     bool bFraSiFactPrefSupported;

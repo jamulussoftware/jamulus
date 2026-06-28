@@ -693,6 +693,39 @@ void CClientDlg::ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept )
 
 void CClientDlg::UpdateRevSelection()
 {
+    if ( pClient->IsAuxiliaryMonoSenderEnabled() )
+    {
+        const QString strPrimaryInput = "<b>" + tr ( "Primary Input" ) + ":</b> " +
+                                        tr ( "Selects which mapped input is sent by the visible client. "
+                                             "The other input is sent by the auxiliary client." );
+
+        lblAudioReverb->setText ( tr ( "Primary Input" ) );
+        lblAudioReverb->setWhatsThis ( strPrimaryInput );
+        sldAudioReverb->setVisible ( false );
+        sldAudioReverb->setEnabled ( false );
+        rbtReverbSelL->setVisible ( true );
+        rbtReverbSelR->setVisible ( true );
+        rbtReverbSelL->setWhatsThis ( strPrimaryInput );
+        rbtReverbSelR->setWhatsThis ( strPrimaryInput );
+        rbtReverbSelL->setAccessibleName ( tr ( "Left primary input" ) );
+        rbtReverbSelR->setAccessibleName ( tr ( "Right primary input" ) );
+        rbtReverbSelL->setChecked ( pClient->IsAuxiliaryPrimaryOnLeft() );
+        rbtReverbSelR->setChecked ( !pClient->IsAuxiliaryPrimaryOnLeft() );
+
+        MainMixerBoard->SetDisplayPans ( false );
+        return;
+    }
+
+    const QString strReverbChannelSelection = "<b>" + tr ( "Reverb Channel Selection" ) + ":</b> " +
+                                              tr ( "Selects the input channel to which reverb is applied." );
+    lblAudioReverb->setText ( tr ( "Reverb" ) );
+    sldAudioReverb->setVisible ( true );
+    sldAudioReverb->setEnabled ( true );
+    rbtReverbSelL->setWhatsThis ( strReverbChannelSelection );
+    rbtReverbSelR->setWhatsThis ( strReverbChannelSelection );
+    rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverb" ) );
+    rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverb" ) );
+
     if ( pClient->GetAudioChannels() == CC_STEREO )
     {
         // for stereo make channel selection invisible since
@@ -719,6 +752,30 @@ void CClientDlg::UpdateRevSelection()
 
     // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
+}
+
+void CClientDlg::OnReverbSelLClicked()
+{
+    if ( pClient->IsAuxiliaryMonoSenderEnabled() )
+    {
+        pClient->SetAuxiliaryPrimaryOnLeft ( true );
+    }
+    else
+    {
+        pClient->SetReverbOnLeftChan ( true );
+    }
+}
+
+void CClientDlg::OnReverbSelRClicked()
+{
+    if ( pClient->IsAuxiliaryMonoSenderEnabled() )
+    {
+        pClient->SetAuxiliaryPrimaryOnLeft ( false );
+    }
+    else
+    {
+        pClient->SetReverbOnLeftChan ( false );
+    }
 }
 
 void CClientDlg::OnConnectDlgAccepted()

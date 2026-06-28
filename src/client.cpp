@@ -49,6 +49,189 @@
 #include "util.h"
 
 /* Implementation *************************************************************/
+class CAuxiliaryMonoSender
+{
+public:
+    CAuxiliaryMonoSender ( const quint16 iQosNumber, const bool bDisableIPv6 ) :
+        Channel ( false ),
+        bIPv6Available ( false ),
+        Socket ( &Channel, 0, iQosNumber, "", bDisableIPv6, bIPv6Available ),
+        pOpusMode ( nullptr ),
+        pOpusEncoder ( nullptr ),
+        eAudioCompressionType ( CT_NONE ),
+        iCodedBytes ( 0 ),
+        iFrameSizeSamples ( 0 ),
+        iFrameSizeFactor ( 0 ),
+        iSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
+        iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
+        bDoAutoSockBufSize ( false )
+    {
+        QObject::connect ( &Channel, &CChannel::MessReadyForSending, &Channel, [this] ( CVector<uint8_t> vecMessage ) {
+            Socket.SendPacket ( vecMessage, Channel.GetAddress() );
+        } );
+
+        QObject::connect ( &Channel, &CChannel::NewConnection, &Channel, [this] {
+            Channel.SetRemoteInfo ( ChannelInfo );
+            CreateServerJitterBufferMessage();
+        } );
+
+        QObject::connect ( &Channel, &CChannel::ReqChanInfo, &Channel, [this] { Channel.SetRemoteInfo ( ChannelInfo ); } );
+
+        QObject::connect ( &Channel, &CChannel::ReqJittBufSize, &Channel, [this] { CreateServerJitterBufferMessage(); } );
+
+        QObject::connect ( &ConnLessProtocol,
+                           &CProtocol::CLMessReadyForSending,
+                           &Channel,
+                           [this] ( CHostAddress InetAddr, CVector<uint8_t> vecMessage ) { Socket.SendPacket ( vecMessage, InetAddr ); } );
+    }
+
+    ~CAuxiliaryMonoSender()
+    {
+        Stop();
+        if ( pOpusEncoder != nullptr )
+        {
+            opus_custom_encoder_destroy ( pOpusEncoder );
+        }
+    }
+
+    void Configure ( const CHostAddress&      ServerAddress,
+                     const CChannelCoreInfo&  AuxiliaryChannelInfo,
+                     OpusCustomMode*          pNewOpusMode,
+                     const EAudComprType      eNewAudioCompressionType,
+                     const int                iNewCodedBytes,
+                     const int                iNewFrameSizeSamples,
+                     const int                iNewFrameSizeFactor,
+                     const int                iNewSockBufNumFrames,
+                     const int                iNewServerSockBufNumFrames,
+                     const bool               bNewDoAutoSockBufSize )
+    {
+        const bool bEncoderChanged = ( pOpusMode != pNewOpusMode );
+
+        ChannelInfo               = AuxiliaryChannelInfo;
+        pOpusMode                 = pNewOpusMode;
+        eAudioCompressionType     = eNewAudioCompressionType;
+        iCodedBytes               = iNewCodedBytes;
+        iFrameSizeSamples         = iNewFrameSizeSamples;
+        iFrameSizeFactor          = iNewFrameSizeFactor;
+        iSockBufNumFrames         = iNewSockBufNumFrames;
+        iServerSockBufNumFrames   = iNewServerSockBufNumFrames;
+        bDoAutoSockBufSize        = bNewDoAutoSockBufSize;
+
+        Channel.SetAddress ( ServerAddress );
+        Channel.SetSockBufNumFrames ( iSockBufNumFrames );
+        Channel.SetDoAutoSockBufSize ( bDoAutoSockBufSize );
+        Channel.SetAudioStreamProperties ( eAudioCompressionType, iCodedBytes, iFrameSizeFactor, 1 );
+
+        if ( bEncoderChanged )
+        {
+            if ( pOpusEncoder != nullptr )
+            {
+                opus_custom_encoder_destroy ( pOpusEncoder );
+            }
+
+            int iOpusError;
+            pOpusEncoder = opus_custom_encoder_create ( pOpusMode, 1, &iOpusError );
+            Q_UNUSED ( iOpusError )
+
+            opus_custom_encoder_ctl ( pOpusEncoder, OPUS_SET_VBR ( 0 ) );
+            opus_custom_encoder_ctl ( pOpusEncoder, OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+            if ( eAudioCompressionType == CT_OPUS64 )
+            {
+                opus_custom_encoder_ctl ( pOpusEncoder, OPUS_SET_PACKET_LOSS_PERC ( 35 ) );
+            }
+            else
+            {
+                opus_custom_encoder_ctl ( pOpusEncoder, OPUS_SET_COMPLEXITY ( 1 ) );
+            }
+        }
+
+        opus_custom_encoder_ctl ( pOpusEncoder,
+                                  OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCodedBytes, iFrameSizeSamples ) ) );
+
+        vecCodedData.Init ( iCodedBytes );
+        vecReceiveData.Init ( iCodedBytes );
+        vecZeros.Init ( iFrameSizeFactor * iFrameSizeSamples, 0 );
+    }
+
+    void Start()
+    {
+        Channel.SetEnable ( true );
+        Socket.Start();
+    }
+
+    void Stop()
+    {
+        if ( Channel.IsEnabled() )
+        {
+            Channel.SetEnable ( false );
+            ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
+        }
+    }
+
+    void Process ( const CVector<int16_t>& vecMonoSamples, const bool bMute )
+    {
+        int iUnused;
+        for ( int i = 0, iOffset = 0; i < iFrameSizeFactor; i++, iOffset += iFrameSizeSamples )
+        {
+            iUnused = opus_custom_encode ( pOpusEncoder,
+                                           bMute ? &vecZeros[iOffset] : &vecMonoSamples[iOffset],
+                                           iFrameSizeSamples,
+                                           &vecCodedData[0],
+                                           iCodedBytes );
+            Channel.PrepAndSendPacket ( &Socket, vecCodedData, iCodedBytes );
+            Channel.GetData ( vecReceiveData, iCodedBytes );
+        }
+        Channel.UpdateSocketBufferSize();
+        Q_UNUSED ( iUnused )
+    }
+
+    void SetChannelInfo ( const CChannelCoreInfo& AuxiliaryChannelInfo )
+    {
+        ChannelInfo = AuxiliaryChannelInfo;
+        if ( Channel.IsEnabled() )
+        {
+            Channel.SetRemoteInfo ( ChannelInfo );
+        }
+    }
+
+    void SetSocketBufferSettings ( const int  iNewSockBufNumFrames,
+                                   const int  iNewServerSockBufNumFrames,
+                                   const bool bNewDoAutoSockBufSize )
+    {
+        iSockBufNumFrames       = iNewSockBufNumFrames;
+        iServerSockBufNumFrames = iNewServerSockBufNumFrames;
+        bDoAutoSockBufSize      = bNewDoAutoSockBufSize;
+        Channel.SetSockBufNumFrames ( iSockBufNumFrames );
+        Channel.SetDoAutoSockBufSize ( bDoAutoSockBufSize );
+        CreateServerJitterBufferMessage();
+    }
+
+private:
+    void CreateServerJitterBufferMessage()
+    {
+        Channel.CreateJitBufMes ( bDoAutoSockBufSize ? AUTO_NET_BUF_SIZE_FOR_PROTOCOL : iServerSockBufNumFrames );
+    }
+
+    CChannel  Channel;
+    bool      bIPv6Available;
+    CHighPrioSocket Socket;
+    CProtocol ConnLessProtocol;
+
+    CChannelCoreInfo ChannelInfo;
+    OpusCustomMode*  pOpusMode;
+    OpusCustomEncoder* pOpusEncoder;
+    EAudComprType     eAudioCompressionType;
+    int               iCodedBytes;
+    int               iFrameSizeSamples;
+    int               iFrameSizeFactor;
+    int               iSockBufNumFrames;
+    int               iServerSockBufNumFrames;
+    bool              bDoAutoSockBufSize;
+    CVector<uint8_t>  vecCodedData;
+    CVector<uint8_t>  vecReceiveData;
+    CVector<int16_t>  vecZeros;
+};
+
 CClient::CClient ( const quint16  iPortNumber,
                    const quint16  iQosNumber,
                    const bool     bNoAutoJackConnect,
@@ -69,9 +252,12 @@ CClient::CClient ( const quint16  iPortNumber,
     eAudioChannelConf ( CC_MONO ),
     iNumAudioChannels ( 1 ),
     bIsInitializationPhase ( true ),
+    bAuxiliaryPrimaryOnLeft ( true ),
     bMuteOutStream ( false ),
     fMuteOutStreamGain ( 1.0f ),
     bIPv6Available ( false ),
+    iSocketQosNumber ( iQosNumber ),
+    bDisableIPv6 ( bNDisableIPv6 ),
     Socket ( &Channel, iPortNumber, iQosNumber, "", bNDisableIPv6, bIPv6Available ),
     Sound ( AudioCallback, this, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
@@ -244,6 +430,8 @@ CClient::~CClient()
         Sound.Stop();
     }
 
+    StopAuxiliaryMonoSender();
+
     // free audio encoders and decoders
     opus_custom_encoder_destroy ( OpusEncoderMono );
     opus_custom_decoder_destroy ( OpusDecoderMono );
@@ -257,6 +445,102 @@ CClient::~CClient()
     // free audio modes
     opus_custom_mode_destroy ( OpusMode );
     opus_custom_mode_destroy ( Opus64Mode );
+}
+
+EAudChanConf CClient::GetEffectiveAudioChannels() const
+{
+    return IsAuxiliaryMonoSenderEnabled() ? CC_MONO : eAudioChannelConf;
+}
+
+bool CClient::CanUseAuxiliaryMonoSender()
+{
+    return ( eAudioQuality != AQ_RAW ) &&
+           ( Sound.GetNumInputChannels() >= 2 ) &&
+           ( Sound.GetLeftInputChannel() >= 0 ) &&
+           ( Sound.GetRightInputChannel() >= 0 ) &&
+           ( Sound.GetLeftInputChannel() != Sound.GetRightInputChannel() );
+}
+
+void CClient::SetAuxiliaryMonoSenderEnabled ( const bool bEnable )
+{
+    SetAudioChannels ( bEnable ? CC_TWO_IN_STEREO_OUT : CC_STEREO );
+}
+
+CChannelCoreInfo CClient::GetAuxiliaryChannelInfo() const
+{
+    const QString strSuffix = " Mic";
+
+    CChannelCoreInfo AuxiliaryChannelInfo = ChannelInfo;
+    AuxiliaryChannelInfo.strName     = ChannelInfo.strName.left ( MAX_LEN_FADER_TAG - strSuffix.size() ) + strSuffix;
+    AuxiliaryChannelInfo.iInstrument = CInstPictures::GetVocalInstrument();
+    return AuxiliaryChannelInfo;
+}
+
+void CClient::ConfigureAuxiliaryMonoSender()
+{
+    if ( pAuxiliaryMonoSender != nullptr )
+    {
+        pAuxiliaryMonoSender->Configure ( Channel.GetAddress(),
+                                          GetAuxiliaryChannelInfo(),
+                                          eAudioCompressionType == CT_OPUS ? OpusMode : Opus64Mode,
+                                          eAudioCompressionType,
+                                          iCeltNumCodedBytes,
+                                          iOPUSFrameSizeSamples,
+                                          iSndCrdFrameSizeFactor,
+                                          Channel.GetSockBufNumFrames(),
+                                          iServerSockBufNumFrames,
+                                          GetDoAutoSockBufSize() );
+    }
+}
+
+void CClient::StartAuxiliaryMonoSender()
+{
+    pAuxiliaryMonoSender.reset ( new CAuxiliaryMonoSender ( iSocketQosNumber, bDisableIPv6 ) );
+    ConfigureAuxiliaryMonoSender();
+    pAuxiliaryMonoSender->Start();
+}
+
+void CClient::StopAuxiliaryMonoSender()
+{
+    pAuxiliaryMonoSender.reset();
+}
+
+void CClient::SetRemoteInfo()
+{
+    Channel.SetRemoteInfo ( ChannelInfo );
+    if ( pAuxiliaryMonoSender != nullptr )
+    {
+        pAuxiliaryMonoSender->SetChannelInfo ( GetAuxiliaryChannelInfo() );
+    }
+}
+
+void CClient::SetSockBufNumFrames ( const int iNumBlocks, const bool bPreserve )
+{
+    Channel.SetSockBufNumFrames ( iNumBlocks, bPreserve );
+    if ( pAuxiliaryMonoSender != nullptr )
+    {
+        pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(),
+                                                         iServerSockBufNumFrames,
+                                                         GetDoAutoSockBufSize() );
+    }
+}
+
+void CClient::SetServerSockBufNumFrames ( const int iNumBlocks )
+{
+    iServerSockBufNumFrames = iNumBlocks;
+
+    // if auto setting is disabled, inform the server about the new size
+    if ( !GetDoAutoSockBufSize() )
+    {
+        Channel.CreateJitBufMes ( iServerSockBufNumFrames );
+    }
+
+    if ( pAuxiliaryMonoSender != nullptr )
+    {
+        pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(),
+                                                         iServerSockBufNumFrames,
+                                                         GetDoAutoSockBufSize() );
+    }
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -301,6 +585,12 @@ void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
         // the new server jitter buffer size since then a message would be sent
         // to the server which is incorrect.
         iServerSockBufNumFrames = iNewJitBufSize;
+        if ( pAuxiliaryMonoSender != nullptr )
+        {
+            pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(),
+                                                             iServerSockBufNumFrames,
+                                                             true );
+        }
     }
 }
 
@@ -473,6 +763,13 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 
     // inform the server about the change
     CreateServerJitterBufferMessage();
+
+    if ( pAuxiliaryMonoSender != nullptr )
+    {
+        pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(),
+                                                         iServerSockBufNumFrames,
+                                                         bValue );
+    }
 }
 
 // In order not to flood the server with gain or pan change messages, particularly when using
@@ -698,6 +995,12 @@ void CClient::SetEnableOPUS64 ( const bool eNEnableOPUS64 )
 
 void CClient::SetAudioQuality ( const EAudioQuality eNAudioQuality )
 {
+    if ( IsAuxiliaryMonoSenderEnabled() && ( eNAudioQuality == AQ_RAW ) )
+    {
+        eAudioChannelConf = CC_STEREO;
+        StopAuxiliaryMonoSender();
+    }
+
     // init with new parameter, if client was running then first
     // stop it and restart again after new initialization
     const bool bWasRunning = Sound.IsRunning();
@@ -718,6 +1021,17 @@ void CClient::SetAudioQuality ( const EAudioQuality eNAudioQuality )
 
 void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
 {
+    if ( IsRunning() )
+    {
+        return;
+    }
+
+    EAudChanConf eRequestedAudioChannels = eNAudChanConf;
+    if ( eRequestedAudioChannels == CC_TWO_IN_STEREO_OUT && !CanUseAuxiliaryMonoSender() )
+    {
+        eRequestedAudioChannels = CC_STEREO;
+    }
+
     // init with new parameter, if client was running then first
     // stop it and restart again after new initialization
     const bool bWasRunning = Sound.IsRunning();
@@ -727,7 +1041,7 @@ void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
     }
 
     // set new parameter
-    eAudioChannelConf = eNAudChanConf;
+    eAudioChannelConf = eRequestedAudioChannels;
     Init();
 
     if ( bWasRunning )
@@ -747,6 +1061,12 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
     }
 
     const QString strError = Sound.SetDev ( strNewDev );
+
+    if ( IsAuxiliaryMonoSenderEnabled() && !CanUseAuxiliaryMonoSender() )
+    {
+        StopAuxiliaryMonoSender();
+        eAudioChannelConf = CC_STEREO;
+    }
 
     // init again because the sound card actual buffer size might
     // be changed on new device
@@ -769,6 +1089,11 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
 
 void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )
 {
+    if ( IsAuxiliaryMonoSenderEnabled() && ( iNewChan == Sound.GetRightInputChannel() ) )
+    {
+        return;
+    }
+
     // if client was running then first
     // stop it and restart again after new initialization
     const bool bWasRunning = Sound.IsRunning();
@@ -789,6 +1114,11 @@ void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )
 
 void CClient::SetSndCrdRightInputChannel ( const int iNewChan )
 {
+    if ( IsAuxiliaryMonoSenderEnabled() && ( iNewChan == Sound.GetLeftInputChannel() ) )
+    {
+        return;
+    }
+
     // if client was running then first
     // stop it and restart again after new initialization
     const bool bWasRunning = Sound.IsRunning();
@@ -875,6 +1205,13 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
                 // reinit the driver if requested
                 // (we use the currently selected driver)
                 strError = Sound.SetDev ( Sound.GetDev() );
+            }
+
+            if ( IsAuxiliaryMonoSenderEnabled() && !CanUseAuxiliaryMonoSender() )
+            {
+                StopAuxiliaryMonoSender();
+                eAudioChannelConf = CC_STEREO;
+                strError = tr ( "Two-in/Stereo-out was disabled because the active device no longer has two distinct input channels." );
             }
 
             // init client object (must always be performed if the driver
@@ -1008,6 +1345,11 @@ void CClient::OnClientIDReceived ( int iServerChanID )
 
 void CClient::OnRawAudioSupported()
 {
+    if ( IsAuxiliaryMonoSenderEnabled() )
+    {
+        return;
+    }
+
     if ( !bRawAudioIsSupported )
     {
         const bool bWasRunning = Sound.IsRunning();
@@ -1029,6 +1371,12 @@ void CClient::OnRawAudioSupported()
 
 void CClient::Start()
 {
+    if ( IsAuxiliaryMonoSenderEnabled() && !CanUseAuxiliaryMonoSender() )
+    {
+        throw CGenErr ( tr ( "Two-in/Stereo-out requires two distinct input channels and non-Max audio quality." ),
+                        tr ( "Audio Settings" ) );
+    }
+
     // init object
     Init();
 
@@ -1037,6 +1385,11 @@ void CClient::Start()
 
     // enable channel
     Channel.SetEnable ( true );
+
+    if ( IsAuxiliaryMonoSenderEnabled() )
+    {
+        StartAuxiliaryMonoSender();
+    }
 
     // start audio interface
     Sound.Start();
@@ -1051,6 +1404,8 @@ void CClient::Stop()
 {
     // stop audio interface
     Sound.Stop();
+
+    StopAuxiliaryMonoSender();
 
     // disable channel
     Channel.SetEnable ( false );
@@ -1092,6 +1447,8 @@ void CClient::Stop()
 
 void CClient::Init()
 {
+    const EAudChanConf eEffectiveAudioChannelConf = GetEffectiveAudioChannels();
+
     // check if possible frame size factors are supported
     const int iFraSizePreffered = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED;
     const int iFraSizeDefault   = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT;
@@ -1181,7 +1538,7 @@ void CClient::Init()
     {
         iOPUSFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
 
-        if ( eAudioChannelConf == CC_MONO )
+        if ( eEffectiveAudioChannelConf == CC_MONO )
         {
             CurOpusEncoder    = OpusEncoderMono;
             CurOpusDecoder    = OpusDecoderMono;
@@ -1254,7 +1611,7 @@ void CClient::Init()
     {
         iOPUSFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
 
-        if ( eAudioChannelConf == CC_MONO )
+        if ( eEffectiveAudioChannelConf == CC_MONO )
         {
             CurOpusEncoder    = Opus64EncoderMono;
             CurOpusDecoder    = Opus64DecoderMono;
@@ -1330,6 +1687,10 @@ void CClient::Init()
     vecCeltData.Init ( iCeltNumCodedBytes );
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
     vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
+    if ( IsAuxiliaryMonoSenderEnabled() )
+    {
+        vecAuxiliaryMonoInput.Init ( iMonoBlockSizeSam );
+    }
 
     // In case we are connected to a non raw audio server or we don't use raw audio we need to initialze the codec
     if ( CurOpusEncoder != nullptr )
@@ -1345,7 +1706,7 @@ void CClient::Init()
     Channel.SetAudioStreamProperties ( eAudioCompressionType, iCeltNumCodedBytes, iSndCrdFrameSizeFactor, iNumAudioChannels );
 
     // init reverberation
-    AudioReverb.Init ( eAudioChannelConf, iStereoBlockSizeSam, SYSTEM_SAMPLE_RATE_HZ );
+    AudioReverb.Init ( eEffectiveAudioChannelConf, iStereoBlockSizeSam, SYSTEM_SAMPLE_RATE_HZ );
 
     // init the sound card conversion buffers
     if ( bSndCrdConversionBufferRequired )
@@ -1363,6 +1724,11 @@ void CClient::Init()
         // block size for initialization (this is the latency which is
         // introduced by the conversion buffer) to avoid buffer underruns
         SndCrdConversionBufferOut.Put ( vecZeros, iStereoBlockSizeSam );
+    }
+
+    if ( pAuxiliaryMonoSender != nullptr )
+    {
+        ConfigureAuxiliaryMonoSender();
     }
 
     // reset initialization phase flag and mute flag
@@ -1439,59 +1805,76 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     SignalLevelMeter.Update ( vecsStereoSndCrd, iMonoBlockSizeSam, true );
 #endif
 
-    // add reverberation effect if activated
-    if ( iReverbLevel != 0 )
+    if ( IsAuxiliaryMonoSenderEnabled() && ( pAuxiliaryMonoSender != nullptr ) )
     {
-        AudioReverb.Process ( vecsStereoSndCrd, bReverbOnLeftChan, static_cast<float> ( iReverbLevel ) / AUD_REVERB_MAX / 4 );
-    }
-
-    // apply pan (audio fader) and mix mono signals
-    if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf == CC_STEREO ) ) )
-    {
-        // calculate pan gain in the range 0 to 1, where 0.5 is the middle position
-        const float fPan = static_cast<float> ( iAudioInFader ) / AUD_FADER_IN_MAX;
-
-        if ( eAudioChannelConf == CC_STEREO )
+        const bool bPrimaryOnLeft = bAuxiliaryPrimaryOnLeft.load();
+        for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
         {
-            // for stereo only apply pan attenuation on one channel (same as pan in the server)
-            const float fGainL = MathUtils::GetLeftPan ( fPan, false );
-            const float fGainR = MathUtils::GetRightPan ( fPan, false );
+            const int16_t iLeftSample  = vecsStereoSndCrd[j];
+            const int16_t iRightSample = vecsStereoSndCrd[j + 1];
 
-            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+            vecsStereoSndCrd[i]      = bPrimaryOnLeft ? iLeftSample : iRightSample;
+            vecAuxiliaryMonoInput[i] = bPrimaryOnLeft ? iRightSample : iLeftSample;
+        }
+
+        pAuxiliaryMonoSender->Process ( vecAuxiliaryMonoInput, bMuteOutStream );
+    }
+    else
+    {
+        // add reverberation effect if activated
+        if ( iReverbLevel != 0 )
+        {
+            AudioReverb.Process ( vecsStereoSndCrd, bReverbOnLeftChan, static_cast<float> ( iReverbLevel ) / AUD_REVERB_MAX / 4 );
+        }
+
+        // apply pan (audio fader) and mix mono signals
+        if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf == CC_STEREO ) ) )
+        {
+            // calculate pan gain in the range 0 to 1, where 0.5 is the middle position
+            const float fPan = static_cast<float> ( iAudioInFader ) / AUD_FADER_IN_MAX;
+
+            if ( eAudioChannelConf == CC_STEREO )
             {
-                // note that the gain is always <= 1, therefore a simple cast is
-                // ok since we never can get an overload
-                vecsStereoSndCrd[j + 1] = static_cast<int16_t> ( fGainR * vecsStereoSndCrd[j + 1] );
-                vecsStereoSndCrd[j]     = static_cast<int16_t> ( fGainL * vecsStereoSndCrd[j] );
+                // for stereo only apply pan attenuation on one channel (same as pan in the server)
+                const float fGainL = MathUtils::GetLeftPan ( fPan, false );
+                const float fGainR = MathUtils::GetRightPan ( fPan, false );
+
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // note that the gain is always <= 1, therefore a simple cast is
+                    // ok since we never can get an overload
+                    vecsStereoSndCrd[j + 1] = static_cast<int16_t> ( fGainR * vecsStereoSndCrd[j + 1] );
+                    vecsStereoSndCrd[j]     = static_cast<int16_t> ( fGainL * vecsStereoSndCrd[j] );
+                }
+            }
+            else
+            {
+                // for mono implement a cross-fade between channels and mix them, for
+                // mono-in/stereo-out use no attenuation in pan center
+                const float fGainL = MathUtils::GetLeftPan ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
+                const float fGainR = MathUtils::GetRightPan ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
+
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // note that we need the Float2Short for stereo pan mode
+                    vecsStereoSndCrd[i] = Float2Short ( fGainL * vecsStereoSndCrd[j] + fGainR * vecsStereoSndCrd[j + 1] );
+                }
             }
         }
-        else
-        {
-            // for mono implement a cross-fade between channels and mix them, for
-            // mono-in/stereo-out use no attenuation in pan center
-            const float fGainL = MathUtils::GetLeftPan ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
-            const float fGainR = MathUtils::GetRightPan ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
 
-            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+        // Support for mono-in/stereo-out mode: Per definition this mode works in
+        // full stereo mode at the transmission level. The only thing which is done
+        // is to mix both sound card inputs together and then put this signal on
+        // both stereo channels to be transmitted to the server.
+        if ( eAudioChannelConf == CC_MONO_IN_STEREO_OUT )
+        {
+            // copy mono data in stereo sound card buffer (note that since the input
+            // and output is the same buffer, we have to start from the end not to
+            // overwrite input values)
+            for ( i = iMonoBlockSizeSam - 1, j = iStereoBlockSizeSam - 2; i >= 0; i--, j -= 2 )
             {
-                // note that we need the Float2Short for stereo pan mode
-                vecsStereoSndCrd[i] = Float2Short ( fGainL * vecsStereoSndCrd[j] + fGainR * vecsStereoSndCrd[j + 1] );
+                vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] = vecsStereoSndCrd[i];
             }
-        }
-    }
-
-    // Support for mono-in/stereo-out mode: Per definition this mode works in
-    // full stereo mode at the transmission level. The only thing which is done
-    // is to mix both sound card inputs together and then put this signal on
-    // both stereo channels to be transmitted to the server.
-    if ( eAudioChannelConf == CC_MONO_IN_STEREO_OUT )
-    {
-        // copy mono data in stereo sound card buffer (note that since the input
-        // and output is the same buffer, we have to start from the end not to
-        // overwrite input values)
-        for ( i = iMonoBlockSizeSam - 1, j = iStereoBlockSizeSam - 2; i >= 0; i--, j -= 2 )
-        {
-            vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] = vecsStereoSndCrd[i];
         }
     }
 
@@ -1592,7 +1975,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     // check if channel is connected and if we do not have the initialization phase
     if ( Channel.IsConnected() && ( !bIsInitializationPhase ) )
     {
-        if ( eAudioChannelConf == CC_MONO )
+        if ( GetEffectiveAudioChannels() == CC_MONO )
         {
             // copy mono data in stereo sound card buffer (note that since the input
             // and output is the same buffer, we have to start from the end not to

@@ -621,7 +621,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // audio channels
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 2 /* CC_STEREO */, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 3 /* CC_TWO_IN_STEREO_OUT */, iValue ) )
     {
         pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iValue ) );
     }
@@ -630,6 +630,12 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audioquality", 0, 3 /* AQ_RAW */, iValue ) )
     {
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
+    }
+
+
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "auxiliaryprimaryleft", bValue ) )
+    {
+        pClient->SetAuxiliaryPrimaryOnLeft ( bValue );
     }
 
     // MIDI settings: Always read from XML first to preserve values
@@ -992,6 +998,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
 
     // audio quality
     SetNumericIniSet ( IniXMLDocument, "client", "audioquality", static_cast<int> ( pClient->GetAudioQuality() ) );
+
+    // primary input for Two-in/Stereo-out mode
+    SetFlagIniSet ( IniXMLDocument, "client", "auxiliaryprimaryleft", pClient->IsAuxiliaryPrimaryOnLeft() );
 
     // custom directories
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )

@@ -89,6 +89,7 @@ protected:
     void    UpdateSoundCardFrame();
     void    UpdateDirectoryComboBox();
     void    UpdateAudioFaderSlider();
+    void    UpdateAuxiliaryMonoSender();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
     virtual void showEvent ( QShowEvent* ) override;

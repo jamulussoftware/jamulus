@@ -504,7 +504,8 @@ enum EAudChanConf
     // used for settings -> enum values should be fixed
     CC_MONO               = 0,
     CC_MONO_IN_STEREO_OUT = 1,
-    CC_STEREO             = 2
+    CC_STEREO             = 2,
+    CC_TWO_IN_STEREO_OUT  = 3
 };
 
 // Audio compression type enum -------------------------------------------------
@@ -844,6 +845,7 @@ public:
 
     // per definition: the very first instrument is the "not used" instrument
     static int  GetNotUsedInstrument() { return 0; }
+    static int  GetVocalInstrument() { return 10; }
     static bool IsNotUsedInstrument ( const int iInstrument ) { return iInstrument == 0; }
 
     static int           GetNumAvailableInst() { return GetTable().Size(); }

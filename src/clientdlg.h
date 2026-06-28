@@ -204,9 +204,9 @@ public slots:
 
     void OnAudioReverbValueChanged ( int value ) { pClient->SetReverbLevel ( value ); }
 
-    void OnReverbSelLClicked() { pClient->SetReverbOnLeftChan ( true ); }
+    void OnReverbSelLClicked();
 
-    void OnReverbSelRClicked() { pClient->SetReverbOnLeftChan ( false ); }
+    void OnReverbSelRClicked();
 
     void OnFeedbackDetectionChanged ( int state ) { ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked ); }
 

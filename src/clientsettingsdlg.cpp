@@ -509,6 +509,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxAudioChannels->addItem ( tr ( "Mono" ) );               // CC_MONO
     cbxAudioChannels->addItem ( tr ( "Mono-in/Stereo-out" ) ); // CC_MONO_IN_STEREO_OUT
     cbxAudioChannels->addItem ( tr ( "Stereo" ) );             // CC_STEREO
+    cbxAudioChannels->addItem ( tr ( "Two-in/Stereo-out" ) );   // CC_TWO_IN_STEREO_OUT
     cbxAudioChannels->setCurrentIndex ( static_cast<int> ( pClient->GetAudioChannels() ) );
 
     // Audio Quality combo box
@@ -1226,12 +1227,14 @@ void CClientSettingsDlg::OnLInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftInputChannel ( iChanIdx );
     UpdateSoundDeviceChannelSelectionFrame();
+    UpdateAuxiliaryMonoSender();
 }
 
 void CClientSettingsDlg::OnRInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightInputChannel ( iChanIdx );
     UpdateSoundDeviceChannelSelectionFrame();
+    UpdateAuxiliaryMonoSender();
 }
 
 void CClientSettingsDlg::OnLOutChanActivated ( int iChanIdx )
@@ -1249,6 +1252,7 @@ void CClientSettingsDlg::OnROutChanActivated ( int iChanIdx )
 void CClientSettingsDlg::OnAudioChannelsActivated ( int iChanIdx )
 {
     pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iChanIdx ) );
+    cbxAudioChannels->setCurrentIndex ( static_cast<int> ( pClient->GetAudioChannels() ) );
     emit AudioChannelsChanged();
     UpdateDisplay(); // upload rate will be changed
 }
@@ -1365,6 +1369,18 @@ void CClientSettingsDlg::UpdateDisplay()
     UpdateJitterBufferFrame();
     UpdateSoundCardFrame();
     UpdateUploadRate();
+    UpdateAuxiliaryMonoSender();
+}
+
+void CClientSettingsDlg::UpdateAuxiliaryMonoSender()
+{
+    const bool bAuxiliaryMonoSenderEnabled = pClient->IsAuxiliaryMonoSenderEnabled();
+
+    cbxAudioChannels->setEnabled ( !pClient->IsRunning() );
+    cbxAudioQuality->setEnabled ( !bAuxiliaryMonoSenderEnabled );
+    sldAudioPan->setEnabled ( !bAuxiliaryMonoSenderEnabled );
+    lblAudioPan->setEnabled ( !bAuxiliaryMonoSenderEnabled );
+    lblAudioPanValue->setEnabled ( !bAuxiliaryMonoSenderEnabled );
 }
 
 void CClientSettingsDlg::UpdateDirectoryComboBox()

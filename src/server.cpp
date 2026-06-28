@@ -1381,16 +1381,13 @@ void CServer::SendChatTextToAllConChannels ( const int iSendingChanID, const QSt
 
 bool CServer::SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText )
 {
-    if ( MathUtils::InRange<int> ( iCurChanID, 0, iMaxNumChannels - 1 ) && vecChannels[iCurChanID].IsConnected() )
+    if ( !MathUtils::InRange<int> ( iCurChanID, 0, iMaxNumChannels - 1 ) || !vecChannels[iCurChanID].IsConnected() )
     {
-        // send message
-        vecChannels[iCurChanID].CreateChatTextMes ( strChatText );
+        return false;
     }
-    else
-    {
-        return true;
-    }
-    return false;
+    // send message
+    vecChannels[iCurChanID].CreateChatTextMes ( strChatText );
+    return true;
 }
 
 void CServer::CreateAndSendRecorderStateForAllConChannels()

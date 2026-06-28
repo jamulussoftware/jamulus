@@ -129,7 +129,7 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
             return;
         }
 
-        if ( pServer->SendChatTextToConChannel ( id, chatMessage ) )
+        if ( !pServer->SendChatTextToConChannel ( id, chatMessage ) )
         {
             response["error"] = "invalid channel ID";
             return;

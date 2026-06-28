@@ -344,7 +344,7 @@ Results:
 
 ### jamulusserver/broadcastChatMessage
 
-Sends a message (as the server) to all connected clients. This can be used to broadcast messages from external sources (e.g. scripts or  monitoring tools).
+Sends a message (as the server) to all connected clients. This can be used to broadcast messages from external sources (e.g. scripts or monitoring tools).
 
 Parameters:
 
@@ -445,7 +445,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "ok". |
+| result | string | "ok" or "error" if bad arguments. |
 
 
 ### jamulusserver/restartRecording

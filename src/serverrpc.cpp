@@ -117,7 +117,7 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
     /// @brief Sends a chat message to a single connected client.
     /// @param {string} params.chatMessage - The chat message text.
     /// @param {number} params.id - The client's channel id.
-    /// @result {string} result - Always "ok".
+    /// @result {string} result - "ok" or "error" if bad arguments.
     pRpcServer->HandleMethod ( "jamulusserver/privateChatMessage", [=] ( const QJsonObject& params, QJsonObject& response ) {
         auto          jsonChatMessage = params["chatMessage"];
         const int     id              = params["id"].toInt ( INVALID_CLIENT_ID );

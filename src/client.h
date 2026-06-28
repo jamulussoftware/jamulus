@@ -215,7 +215,7 @@ public:
     int  GetSockBufNumFrames() { return Channel.GetSockBufNumFrames(); }
 
     void SetServerSockBufNumFrames ( const int iNumBlocks );
-    int GetServerSockBufNumFrames() { return iServerSockBufNumFrames; }
+    int  GetServerSockBufNumFrames() { return iServerSockBufNumFrames; }
 
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
@@ -341,14 +341,14 @@ protected:
     // callback function must be static, otherwise it does not work
     static void AudioCallback ( CVector<short>& psData, void* arg );
 
-    void Init();
-    EAudChanConf GetEffectiveAudioChannels() const;
-    void ConfigureAuxiliaryMonoSender();
-    void StartAuxiliaryMonoSender();
-    void StopAuxiliaryMonoSender();
+    void             Init();
+    EAudChanConf     GetEffectiveAudioChannels() const;
+    void             ConfigureAuxiliaryMonoSender();
+    void             StartAuxiliaryMonoSender();
+    void             StopAuxiliaryMonoSender();
     CChannelCoreInfo GetAuxiliaryChannelInfo() const;
-    void ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
-    void ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
+    void             ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
+    void             ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
 
     int  PreparePingMessage();
     int  EvaluatePingMessage ( const int iMs );

@@ -716,8 +716,8 @@ void CClientDlg::UpdateRevSelection()
         return;
     }
 
-    const QString strReverbChannelSelection = "<b>" + tr ( "Reverb Channel Selection" ) + ":</b> " +
-                                              tr ( "Selects the input channel to which reverb is applied." );
+    const QString strReverbChannelSelection =
+        "<b>" + tr ( "Reverb Channel Selection" ) + ":</b> " + tr ( "Selects the input channel to which reverb is applied." );
     lblAudioReverb->setText ( tr ( "Reverb" ) );
     sldAudioReverb->setVisible ( true );
     sldAudioReverb->setEnabled ( true );

@@ -632,7 +632,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }
 
-
     if ( GetFlagIniSet ( IniXMLDocument, "client", "auxiliaryprimaryleft", bValue ) )
     {
         pClient->SetAuxiliaryPrimaryOnLeft ( bValue );

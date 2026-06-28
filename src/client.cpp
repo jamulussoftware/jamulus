@@ -94,28 +94,28 @@ public:
         }
     }
 
-    void Configure ( const CHostAddress&      ServerAddress,
-                     const CChannelCoreInfo&  AuxiliaryChannelInfo,
-                     OpusCustomMode*          pNewOpusMode,
-                     const EAudComprType      eNewAudioCompressionType,
-                     const int                iNewCodedBytes,
-                     const int                iNewFrameSizeSamples,
-                     const int                iNewFrameSizeFactor,
-                     const int                iNewSockBufNumFrames,
-                     const int                iNewServerSockBufNumFrames,
-                     const bool               bNewDoAutoSockBufSize )
+    void Configure ( const CHostAddress&     ServerAddress,
+                     const CChannelCoreInfo& AuxiliaryChannelInfo,
+                     OpusCustomMode*         pNewOpusMode,
+                     const EAudComprType     eNewAudioCompressionType,
+                     const int               iNewCodedBytes,
+                     const int               iNewFrameSizeSamples,
+                     const int               iNewFrameSizeFactor,
+                     const int               iNewSockBufNumFrames,
+                     const int               iNewServerSockBufNumFrames,
+                     const bool              bNewDoAutoSockBufSize )
     {
         const bool bEncoderChanged = ( pOpusMode != pNewOpusMode );
 
-        ChannelInfo               = AuxiliaryChannelInfo;
-        pOpusMode                 = pNewOpusMode;
-        eAudioCompressionType     = eNewAudioCompressionType;
-        iCodedBytes               = iNewCodedBytes;
-        iFrameSizeSamples         = iNewFrameSizeSamples;
-        iFrameSizeFactor          = iNewFrameSizeFactor;
-        iSockBufNumFrames         = iNewSockBufNumFrames;
-        iServerSockBufNumFrames   = iNewServerSockBufNumFrames;
-        bDoAutoSockBufSize        = bNewDoAutoSockBufSize;
+        ChannelInfo             = AuxiliaryChannelInfo;
+        pOpusMode               = pNewOpusMode;
+        eAudioCompressionType   = eNewAudioCompressionType;
+        iCodedBytes             = iNewCodedBytes;
+        iFrameSizeSamples       = iNewFrameSizeSamples;
+        iFrameSizeFactor        = iNewFrameSizeFactor;
+        iSockBufNumFrames       = iNewSockBufNumFrames;
+        iServerSockBufNumFrames = iNewServerSockBufNumFrames;
+        bDoAutoSockBufSize      = bNewDoAutoSockBufSize;
 
         Channel.SetAddress ( ServerAddress );
         Channel.SetSockBufNumFrames ( iSockBufNumFrames );
@@ -145,8 +145,7 @@ public:
             }
         }
 
-        opus_custom_encoder_ctl ( pOpusEncoder,
-                                  OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCodedBytes, iFrameSizeSamples ) ) );
+        opus_custom_encoder_ctl ( pOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCodedBytes, iFrameSizeSamples ) ) );
 
         vecCodedData.Init ( iCodedBytes );
         vecReceiveData.Init ( iCodedBytes );
@@ -194,9 +193,7 @@ public:
         }
     }
 
-    void SetSocketBufferSettings ( const int  iNewSockBufNumFrames,
-                                   const int  iNewServerSockBufNumFrames,
-                                   const bool bNewDoAutoSockBufSize )
+    void SetSocketBufferSettings ( const int iNewSockBufNumFrames, const int iNewServerSockBufNumFrames, const bool bNewDoAutoSockBufSize )
     {
         iSockBufNumFrames       = iNewSockBufNumFrames;
         iServerSockBufNumFrames = iNewServerSockBufNumFrames;
@@ -212,24 +209,24 @@ private:
         Channel.CreateJitBufMes ( bDoAutoSockBufSize ? AUTO_NET_BUF_SIZE_FOR_PROTOCOL : iServerSockBufNumFrames );
     }
 
-    CChannel  Channel;
-    bool      bIPv6Available;
+    CChannel        Channel;
+    bool            bIPv6Available;
     CHighPrioSocket Socket;
-    CProtocol ConnLessProtocol;
+    CProtocol       ConnLessProtocol;
 
-    CChannelCoreInfo ChannelInfo;
-    OpusCustomMode*  pOpusMode;
+    CChannelCoreInfo   ChannelInfo;
+    OpusCustomMode*    pOpusMode;
     OpusCustomEncoder* pOpusEncoder;
-    EAudComprType     eAudioCompressionType;
-    int               iCodedBytes;
-    int               iFrameSizeSamples;
-    int               iFrameSizeFactor;
-    int               iSockBufNumFrames;
-    int               iServerSockBufNumFrames;
-    bool              bDoAutoSockBufSize;
-    CVector<uint8_t>  vecCodedData;
-    CVector<uint8_t>  vecReceiveData;
-    CVector<int16_t>  vecZeros;
+    EAudComprType      eAudioCompressionType;
+    int                iCodedBytes;
+    int                iFrameSizeSamples;
+    int                iFrameSizeFactor;
+    int                iSockBufNumFrames;
+    int                iServerSockBufNumFrames;
+    bool               bDoAutoSockBufSize;
+    CVector<uint8_t>   vecCodedData;
+    CVector<uint8_t>   vecReceiveData;
+    CVector<int16_t>   vecZeros;
 };
 
 CClient::CClient ( const quint16  iPortNumber,
@@ -447,32 +444,23 @@ CClient::~CClient()
     opus_custom_mode_destroy ( Opus64Mode );
 }
 
-EAudChanConf CClient::GetEffectiveAudioChannels() const
-{
-    return IsAuxiliaryMonoSenderEnabled() ? CC_MONO : eAudioChannelConf;
-}
+EAudChanConf CClient::GetEffectiveAudioChannels() const { return IsAuxiliaryMonoSenderEnabled() ? CC_MONO : eAudioChannelConf; }
 
 bool CClient::CanUseAuxiliaryMonoSender()
 {
-    return ( eAudioQuality != AQ_RAW ) &&
-           ( Sound.GetNumInputChannels() >= 2 ) &&
-           ( Sound.GetLeftInputChannel() >= 0 ) &&
-           ( Sound.GetRightInputChannel() >= 0 ) &&
-           ( Sound.GetLeftInputChannel() != Sound.GetRightInputChannel() );
+    return ( eAudioQuality != AQ_RAW ) && ( Sound.GetNumInputChannels() >= 2 ) && ( Sound.GetLeftInputChannel() >= 0 ) &&
+           ( Sound.GetRightInputChannel() >= 0 ) && ( Sound.GetLeftInputChannel() != Sound.GetRightInputChannel() );
 }
 
-void CClient::SetAuxiliaryMonoSenderEnabled ( const bool bEnable )
-{
-    SetAudioChannels ( bEnable ? CC_TWO_IN_STEREO_OUT : CC_STEREO );
-}
+void CClient::SetAuxiliaryMonoSenderEnabled ( const bool bEnable ) { SetAudioChannels ( bEnable ? CC_TWO_IN_STEREO_OUT : CC_STEREO ); }
 
 CChannelCoreInfo CClient::GetAuxiliaryChannelInfo() const
 {
     const QString strSuffix = " Mic";
 
     CChannelCoreInfo AuxiliaryChannelInfo = ChannelInfo;
-    AuxiliaryChannelInfo.strName     = ChannelInfo.strName.left ( MAX_LEN_FADER_TAG - strSuffix.size() ) + strSuffix;
-    AuxiliaryChannelInfo.iInstrument = CInstPictures::GetVocalInstrument();
+    AuxiliaryChannelInfo.strName          = ChannelInfo.strName.left ( MAX_LEN_FADER_TAG - strSuffix.size() ) + strSuffix;
+    AuxiliaryChannelInfo.iInstrument      = CInstPictures::GetVocalInstrument();
     return AuxiliaryChannelInfo;
 }
 
@@ -500,10 +488,7 @@ void CClient::StartAuxiliaryMonoSender()
     pAuxiliaryMonoSender->Start();
 }
 
-void CClient::StopAuxiliaryMonoSender()
-{
-    pAuxiliaryMonoSender.reset();
-}
+void CClient::StopAuxiliaryMonoSender() { pAuxiliaryMonoSender.reset(); }
 
 void CClient::SetRemoteInfo()
 {
@@ -519,9 +504,7 @@ void CClient::SetSockBufNumFrames ( const int iNumBlocks, const bool bPreserve )
     Channel.SetSockBufNumFrames ( iNumBlocks, bPreserve );
     if ( pAuxiliaryMonoSender != nullptr )
     {
-        pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(),
-                                                         iServerSockBufNumFrames,
-                                                         GetDoAutoSockBufSize() );
+        pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(), iServerSockBufNumFrames, GetDoAutoSockBufSize() );
     }
 }
 
@@ -537,9 +520,7 @@ void CClient::SetServerSockBufNumFrames ( const int iNumBlocks )
 
     if ( pAuxiliaryMonoSender != nullptr )
     {
-        pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(),
-                                                         iServerSockBufNumFrames,
-                                                         GetDoAutoSockBufSize() );
+        pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(), iServerSockBufNumFrames, GetDoAutoSockBufSize() );
     }
 }
 
@@ -587,9 +568,7 @@ void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
         iServerSockBufNumFrames = iNewJitBufSize;
         if ( pAuxiliaryMonoSender != nullptr )
         {
-            pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(),
-                                                             iServerSockBufNumFrames,
-                                                             true );
+            pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(), iServerSockBufNumFrames, true );
         }
     }
 }
@@ -766,9 +745,7 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 
     if ( pAuxiliaryMonoSender != nullptr )
     {
-        pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(),
-                                                         iServerSockBufNumFrames,
-                                                         bValue );
+        pAuxiliaryMonoSender->SetSocketBufferSettings ( Channel.GetSockBufNumFrames(), iServerSockBufNumFrames, bValue );
     }
 }
 
@@ -1211,7 +1188,7 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
             {
                 StopAuxiliaryMonoSender();
                 eAudioChannelConf = CC_STEREO;
-                strError = tr ( "Two-in/Stereo-out was disabled because the active device no longer has two distinct input channels." );
+                strError          = tr ( "Two-in/Stereo-out was disabled because the active device no longer has two distinct input channels." );
             }
 
             // init client object (must always be performed if the driver
@@ -1373,8 +1350,7 @@ void CClient::Start()
 {
     if ( IsAuxiliaryMonoSenderEnabled() && !CanUseAuxiliaryMonoSender() )
     {
-        throw CGenErr ( tr ( "Two-in/Stereo-out requires two distinct input channels and non-Max audio quality." ),
-                        tr ( "Audio Settings" ) );
+        throw CGenErr ( tr ( "Two-in/Stereo-out requires two distinct input channels and non-Max audio quality." ), tr ( "Audio Settings" ) );
     }
 
     // init object

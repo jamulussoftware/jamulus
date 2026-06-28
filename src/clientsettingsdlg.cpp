@@ -509,7 +509,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxAudioChannels->addItem ( tr ( "Mono" ) );               // CC_MONO
     cbxAudioChannels->addItem ( tr ( "Mono-in/Stereo-out" ) ); // CC_MONO_IN_STEREO_OUT
     cbxAudioChannels->addItem ( tr ( "Stereo" ) );             // CC_STEREO
-    cbxAudioChannels->addItem ( tr ( "Two-in/Stereo-out" ) );   // CC_TWO_IN_STEREO_OUT
+    cbxAudioChannels->addItem ( tr ( "Two-in/Stereo-out" ) );  // CC_TWO_IN_STEREO_OUT
     cbxAudioChannels->setCurrentIndex ( static_cast<int> ( pClient->GetAudioChannels() ) );
 
     // Audio Quality combo box

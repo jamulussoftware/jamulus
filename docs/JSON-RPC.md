@@ -291,6 +291,23 @@ Results:
 | result | string | Always "ok". |
 
 
+### jamulusclient/setMuted
+
+Mutes or unmutes the client.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.muted | boolean | muted (true or false). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
 ### jamulusclient/setName
 
 Sets your name.
@@ -317,6 +334,23 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params.skillLevel | string | The new skill level (beginner, intermediate, expert, or null). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
+### jamulusserver/broadcastChatMessage
+
+Sends a message (as the server) to all connected clients. This can be used to broadcast messages from external sources (e.g. scripts or  monitoring tools).
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.chatMessage | string | The chat message text. |
 
 Results:
 
@@ -619,5 +653,41 @@ Parameters:
 | params.servers[*].countryId | number | Server country ID (see QLocale::Country). |
 | params.servers[*].country | string | Server country. |
 | params.servers[*].city | string | Server city. |
+
+
+### jamulusserver/chatMessageReceived
+
+Emitted when a chat message is received from either a Jamulus or RPC client and to be broadcast to all connected clients.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.id | number | Channel ID of sending client or -1 for RPC sent messages. |
+| params.chatMessage | string | Chat message text. |
+
+
+### jamulusserver/clientConnected
+
+Emitted when a client has connected to the server.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.id | number | The channel ID assigned to the client. |
+| params.address | string | The client's address. |
+| params.totalChannels | number | Number of total channels connected to the server. |
+
+
+### jamulusserver/clientDisconnected
+
+Emitted when a client has disconnected from the server.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.id | number | The channel ID assigned to the client. |
 
 

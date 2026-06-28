@@ -475,6 +475,8 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
 
     // logging of new connected channel
     Logging.AddNewConnection ( RecHostAddr.InetAddr, iTotChans );
+
+    emit ClientConnected ( iChID, RecHostAddr.InetAddr, iTotChans );
 }
 
 void CServer::OnCLReqServerFeatures ( CHostAddress RecHostAddr )
@@ -937,10 +939,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             // and emit the client disconnected signal
             if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
             {
-                if ( JamController.GetRecordingEnabled() )
-                {
-                    emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
-                }
+                emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
 
                 FreeChannel ( iCurChanID ); // note that the channel is now not in use
 
@@ -1363,10 +1362,10 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID, con
                                          ChanName.toHtmlEscaped() + "</b></font> " + strChatText.toHtmlEscaped();
 
     // Send chat text to all connected clients ---------------------------------
-    SendChatTextToAllConChannels ( strActualMessageText );
+    SendChatTextToAllConChannels ( iCurChanID, strActualMessageText );
 }
 
-void CServer::SendChatTextToAllConChannels ( const QString& strChatText )
+void CServer::SendChatTextToAllConChannels ( const int iSendingChanID, const QString& strChatText )
 {
     // Send chat text to all connected clients ---------------------------------
     for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -1376,6 +1375,8 @@ void CServer::SendChatTextToAllConChannels ( const QString& strChatText )
             vecChannels[i].CreateChatTextMes ( strChatText );
         }
     }
+    // forward the message to the RPC server
+    emit sentChatMessage ( iSendingChanID, strChatText );
 }
 
 void CServer::SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText )

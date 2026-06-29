@@ -633,7 +633,8 @@ enum EFeatureSet
     FS_IS_LOGGING          = 9,
     FS_HAS_LICENCE         = 10,
     FS_HAS_GUI             = 11,
-    FS_RPC_ENABLED         = 12
+    FS_RPC_ENABLED         = 12,
+    FS_TCP_ENABLED         = 13
 };
 
 inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
@@ -825,6 +826,18 @@ public:
     QHostAddress InetAddr;
     quint16      iPort;
 };
+
+// support using a CHostAddress as a QHash key
+#if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+using qhash_result_t = uint;
+#else
+using qhash_result_t = size_t;
+#endif
+inline qhash_result_t qHash ( const CHostAddress& addr, qhash_result_t seed = 0 )
+{
+    seed = qHash ( addr.InetAddr, seed );
+    return qHash ( addr.iPort, seed );
+}
 
 // Instrument picture data base ------------------------------------------------
 // this is a pure static class

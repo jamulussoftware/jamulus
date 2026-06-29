@@ -53,6 +53,7 @@
 #include <cmath>
 #include "global.h"
 #include "util.h"
+#include "tcpconnection.h"
 
 /* Definitions ****************************************************************/
 // protocol message IDs
@@ -110,6 +111,8 @@
 #define PROTMESSID_CLM_REQ_SERVER_FEATURES    1020 // request server features
 #define PROTMESSID_CLM_WELCOME_MESSAGE        1021 // server welcome message
 #define PROTMESSID_CLM_REQ_WELCOME_MESSAGE    1022 // request server welcome message
+#define PROTMESSID_CLM_TCP_SUPPORTED          1023 // TCP is supported
+#define PROTMESSID_CLM_CLIENT_ID              1024 // Client ID associated with TCP connection
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE 2001 // a container for split messages
@@ -124,6 +127,14 @@
 // message split parameters
 #define MESS_SPLIT_PART_SIZE_BYTES 550
 #define MAX_NUM_MESS_SPLIT_PARTS   ( MAX_SIZE_BYTES_NETW_BUF / MESS_SPLIT_PART_SIZE_BYTES )
+
+/* Enum for protocol mode *****************************************************/
+enum EProtoMode
+{
+    PROTO_UDP,
+    PROTO_TCP_ONCE,
+    PROTO_TCP_LONG,
+};
 
 /* Classes ********************************************************************/
 class CProtocol : public QObject
@@ -169,20 +180,24 @@ public:
     void CreateCLRegisterServerMes ( const CHostAddress& InetAddr, const CHostAddress& LInetAddr, const CServerCoreInfo& ServerInfo );
     void CreateCLRegisterServerExMes ( const CHostAddress& InetAddr, const CHostAddress& LInetAddr, const CServerCoreInfo& ServerInfo );
     void CreateCLUnregisterServerMes ( const CHostAddress& InetAddr );
-    void CreateCLServerListMes ( const CHostAddress& InetAddr, const CVector<CServerInfo> vecServerInfo );
+    void CreateCLServerListMes ( const CHostAddress& InetAddr, const CVector<CServerInfo> vecServerInfo, CTcpConnection* pTcpConnection );
     void CreateCLRedServerListMes ( const CHostAddress& InetAddr, const CVector<CServerInfo> vecServerInfo );
-    void CreateCLReqServerListMes ( const CHostAddress& InetAddr );
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr, enum EProtoMode eProtoMode );
     void CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr, const CHostAddress& TargetInetAddr );
-    void CreateCLEmptyMes ( const CHostAddress& InetAddr );
+    void CreateCLEmptyMes ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection );
     void CreateCLDisconnection ( const CHostAddress& InetAddr );
     void CreateCLVersionAndOSMes ( const CHostAddress& InetAddr );
     void CreateCLReqVersionAndOSMes ( const CHostAddress& InetAddr );
-    void CreateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo );
-    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
+    void CreateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo, CTcpConnection* pTcpConnection );
+    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr, enum EProtoMode eProtoMode );
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
     void CreateCLServerFeaturesMes ( const CHostAddress& InetAddr, const uint32_t iResult );
     void CreateCLWelcomeMessageMes ( const CHostAddress& InetAddr, const QString strWelcomeMessage );
+    void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const int iID );
+    void CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iChanID, enum EProtoMode eProtoMode );
+
+    static int GetBodyLength ( const CVector<uint8_t>& vecbyData );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -192,7 +207,10 @@ public:
 
     void ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData, const int iRecCounter, const int iRecID );
 
-    void ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData, const int iRecID, const CHostAddress& InetAddr );
+    void ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+                                          const int               iRecID,
+                                          const CHostAddress&     InetAddr,
+                                          CTcpConnection*         pTcpConnection );
 
     static bool IsConnectionLessMessageID ( const int iID ) { return ( iID >= 1000 ) && ( iID < 2000 ); }
 
@@ -271,7 +289,11 @@ protected:
 
     void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
 
-    void CreateAndImmSendConLessMessage ( const int iID, const CVector<uint8_t>& vecData, const CHostAddress& InetAddr );
+    void CreateAndImmSendConLessMessage ( const int               iID,
+                                          const CVector<uint8_t>& vecData,
+                                          const CHostAddress&     InetAddr,
+                                          CTcpConnection*         pTcpConnection = nullptr,
+                                          enum EProtoMode         eProtoMode     = PROTO_UDP );
 
     bool EvaluateJitBufMes ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
@@ -299,19 +321,21 @@ protected:
     bool EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLRegisterServerExMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLUnregisterServerMes ( const CHostAddress& InetAddr );
-    bool EvaluateCLServerListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
+    bool EvaluateCLServerListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData, CTcpConnection* pTcpConnection );
     bool EvaluateCLRedServerListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqServerListMes ( const CHostAddress& InetAddr );
+    bool EvaluateCLReqServerListMes ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection );
     bool EvaluateCLSendEmptyMesMes ( const CVector<uint8_t>& vecData );
     bool EvaluateCLDisconnectionMes ( const CHostAddress& InetAddr );
     bool EvaluateCLVersionAndOSMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqVersionAndOSMes ( const CHostAddress& InetAddr );
-    bool EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
+    bool EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData, CTcpConnection* pTcpConnection );
+    bool EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr, CTcpConnection* pTcpConnection );
     bool EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerFeaturesMes ( const CHostAddress& InetAddr );
     bool EvaluateCLReqWelcomeMessageMes ( const CHostAddress& InetAddr );
+    bool EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
+    bool EvaluateCLClientIDMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData, CTcpConnection* pTcpConnection );
 
     int iOldRecID;
     int iOldRecCnt;
@@ -334,7 +358,7 @@ public slots:
 signals:
     // transmitting
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
-    void CLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void CLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
 
     // receiving
     void ChangeJittBufSize ( int iNewJitBufSize );
@@ -368,17 +392,19 @@ signals:
                                       COSUtil::EOpSystemType eOSType,
                                       QString                strVersion );
     void CLUnregisterServerReceived ( CHostAddress InetAddr );
-    void CLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
+    void CLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo, CTcpConnection* pTcpConnection );
     void CLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
-    void CLReqServerList ( CHostAddress InetAddr );
+    void CLReqServerList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection );
     void CLSendEmptyMes ( CHostAddress TargetInetAddr );
     void CLDisconnection ( CHostAddress InetAddr );
     void CLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType eOSType, QString strVersion );
     void CLReqVersionAndOS ( CHostAddress InetAddr );
-    void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
-    void CLReqConnClientsList ( CHostAddress InetAddr );
+    void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo, CTcpConnection* pTcpConnection );
+    void CLReqConnClientsList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection );
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
     void CLReqServerFeatures ( CHostAddress InetAddr );
     void CLReqWelcomeMessage ( CHostAddress InetAddr );
+    void CLTcpSupportedReceived ( CHostAddress InetAddr, int iID );
+    void CLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpConnection* pTcpConnection );
 };

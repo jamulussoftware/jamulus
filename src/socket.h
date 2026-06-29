@@ -53,6 +53,7 @@
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
+#include "tcpconnection.h"
 #ifndef _WIN32
 #    include <netinet/in.h>
 #    include <sys/socket.h>
@@ -138,7 +139,7 @@ signals:
 
     void ProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
 
-    void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
+    void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr, CTcpConnection* pTcpConnection = nullptr );
 };
 
 /* Socket which runs in a separate high priority thread --------------------- */

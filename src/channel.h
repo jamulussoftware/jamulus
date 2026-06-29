@@ -109,6 +109,9 @@ public:
     void                SetAddress ( const CHostAddress& NAddr ) { InetAddr = NAddr; }
     const CHostAddress& GetAddress() const { return InetAddr; }
 
+    void            SetTcpConnection ( CTcpConnection* pConnection ) { pTcpConnection = pConnection; }
+    CTcpConnection* GetTcpConnection() { return pTcpConnection; }
+
     void ResetInfo()
     {
         bIsIdentified = false;
@@ -185,7 +188,7 @@ public:
     void CreateReqChannelLevelListMes() { Protocol.CreateReqChannelLevelListMes(); }
     //### TODO: END ###//
 
-    void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo ) { Protocol.CreateConClientListMes ( vecChanInfo ); }
+    void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo, CProtocol& ConnLessProtocol );
 
     void CreateRecorderStateMes ( const ERecorderState eRecorderState ) { Protocol.CreateRecorderStateMes ( eRecorderState ); }
 
@@ -210,7 +213,8 @@ protected:
     }
 
     // connection parameters
-    CHostAddress InetAddr;
+    CHostAddress    InetAddr;
+    CTcpConnection* pTcpConnection;
 
     // channel info
     CChannelCoreInfo ChannelInfo;
@@ -279,11 +283,12 @@ public slots:
         PutProtocolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
     }
 
-    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection )
     {
-        emit DetectedCLMessage ( vecbyMesBodyData, iRecID, RecHostAddr );
+        emit DetectedCLMessage ( vecbyMesBodyData, iRecID, RecHostAddr, pTcpConnection );
     }
 
+    void OnClientIDReceived ( int iChanID );
     void OnNewConnection() { emit NewConnection(); }
 
 signals:
@@ -307,7 +312,7 @@ signals:
     void RecorderStateReceived ( ERecorderState eRecorderState );
     void Disconnected();
 
-    void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr );
+    void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection );
 
     void ParseMessageBody ( CVector<uint8_t> vecbyMesBodyData, int iRecCounter, int iRecID );
 };

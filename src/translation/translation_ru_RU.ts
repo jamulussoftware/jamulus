@@ -81,7 +81,7 @@
     <message>
         <location filename="../util.cpp" line="563"/>
         <source>Dutch</source>
-        <translation>Датский</translation>
+        <translation>Нидерландский</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="568"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright © 2005-2026 The Jamulus Development Team</source>
-        <translation type="unfinished">© 2005–2025 Команда разработчиков Jamulus {2005-2026 ?}</translation>
+        <translation type="unfinished">© 2005–2026 Команда разработчиков Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -1983,7 +1983,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1229"/>
         <source>Recorder</source>
-        <translation type="unfinished">Recorder</translation>
+        <translation>Блокфлейта</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1232"/>

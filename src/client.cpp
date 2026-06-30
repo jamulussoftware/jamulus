@@ -1164,7 +1164,7 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     if ( bTcpSupported )
     {
         // *** Make TCP connection
-        qDebug() << Q_FUNC_INFO << "need to make TCP connection for" << iClientID;
+        qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
         ConnLessProtocol.CreateCLClientIDMes ( Channel.GetAddress(), iClientID, PROTO_TCP_LONG ); // create persistent TCP connection
     }
 
@@ -1214,6 +1214,7 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID )
         {
             if ( pendingServerList.value ( InetAddr ) == CFM_UDP_REQUEST )
             {
+                qDebug() << "- UDP server list not received from" << InetAddr.toString() << "- retrying via TCP";
                 // request pending but reply not received - probably due to fragmentation drop
                 // re-request using TCP
                 pendingServerList.insert ( InetAddr, CFM_TCP_REQUEST );
@@ -1230,6 +1231,7 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID )
         {
             if ( pendingClientList.value ( InetAddr ) == CFM_UDP_REQUEST )
             {
+                qDebug() << "- UDP client list not received from" << InetAddr.toString() << "- retrying via TCP";
                 // request pending but reply not received - probably due to fragmentation drop
                 // re-request using TCP
                 pendingClientList.insert ( InetAddr, CFM_TCP_REQUEST );
@@ -1248,7 +1250,7 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID )
         if ( iClientID != INVALID_INDEX )
         {
             // *** Make TCP connection
-            qDebug() << Q_FUNC_INFO << "need to make TCP connection for" << iClientID;
+            qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
             Q_ASSERT ( InetAddr == Channel.GetAddress() );
             ConnLessProtocol.CreateCLClientIDMes ( InetAddr, iClientID, PROTO_TCP_LONG ); // create persistent TCP connection
         }

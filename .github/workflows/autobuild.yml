@@ -258,14 +258,14 @@ jobs:
 
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows
-            building_on_os:         windows-2022
+            building_on_os:         windows-2025
             base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
             run_codeql:             true
             is_main_build_target:   true
 
           - config_name:            Windows JACK (artifact)
             target_os:              windows
-            building_on_os:         windows-2022
+            building_on_os:         windows-2025
             base_command:           powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage
             run_codeql:             false
 

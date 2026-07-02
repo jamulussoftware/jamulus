@@ -64,6 +64,8 @@
 #include "util.h"
 #include "serverlogging.h"
 #include "serverlist.h"
+#include "tcpserver.h"
+#include "tcpconnection.h"
 #include "recorder/jamcontroller.h"
 
 #include "threadpool.h"
@@ -126,6 +128,7 @@ public:
               const bool         bDisableRecording,
               const bool         bNDelayPan,
               const bool         bNDisableIPv6,
+              const bool         bNEnableTcp,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -296,6 +299,7 @@ protected:
     // actual working objects
     bool            bIPv6Available; // must be before Socket - passed by reference to Socket
     CHighPrioSocket Socket;
+    CTcpServer      TcpServer;
 
     // logging
     CServerLogging Logging;
@@ -317,6 +321,9 @@ protected:
 
     // for delay panning
     bool bDelayPan;
+
+    // enable TCP Server
+    bool bEnableTcp;
 
     // messaging
     QString      strWelcomeMessage;
@@ -355,9 +362,9 @@ public slots:
 
     void OnServerFull ( CHostAddress RecHostAddr );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
 
-    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
+    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection );
 
     void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
 
@@ -373,15 +380,24 @@ public slots:
         // only send empty message if not a directory
         if ( !ServerListManager.IsDirectory() )
         {
-            ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr );
+            ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr, nullptr );
         }
     }
 
-    void OnCLReqServerList ( CHostAddress InetAddr ) { ServerListManager.RetrieveAll ( InetAddr ); }
+    void OnCLReqServerList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection ) { ServerListManager.RetrieveAll ( InetAddr, pTcpConnection ); }
 
     void OnCLReqVersionAndOS ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
 
-    void OnCLReqConnClientsList ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
+    void OnCLReqConnClientsList ( CHostAddress InetAddr, CTcpConnection* pTcpConnection )
+    {
+        ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList(), pTcpConnection );
+
+        // if TCP is enabled but this request is on UDP, say TCP is supported
+        if ( bEnableTcp && !pTcpConnection )
+        {
+            ConnLessProtocol.CreateCLTcpSupportedMes ( InetAddr, PROTMESSID_CLM_CONN_CLIENTS_LIST );
+        }
+    }
 
     void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo )
     {
@@ -406,6 +422,8 @@ public slots:
     void OnCLReqWelcomeMessage ( CHostAddress InetAddr );
 
     void OnCLDisconnection ( CHostAddress InetAddr );
+
+    void OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpConnection* pTcpConnection );
 
     void OnAboutToQuit();
 

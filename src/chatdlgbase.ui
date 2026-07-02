@@ -28,17 +28,8 @@
   </property>
   <layout class="QVBoxLayout">
    <item>
-    <widget class="QTextBrowser" name="txvChatWindow">
+    <widget class="QListView" name="txvChatWindow">
      <property name="acceptDrops">
-      <bool>false</bool>
-     </property>
-     <property name="textInteractionFlags">
-      <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-     </property>
-     <property name="openExternalLinks">
-      <bool>false</bool>
-     </property>
-     <property name="openLinks">
       <bool>false</bool>
      </property>
     </widget>

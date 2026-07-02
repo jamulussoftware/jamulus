@@ -57,9 +57,51 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QRegularExpression>
+#include <QListView>
+#include <QStandardItemModel>
+#include <QStyledItemDelegate>
+#include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
+#include <QPainter>
+#include <QStyle>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QMenu>
+#include <QClipboard>
+#include <QApplication>
 #include "global.h"
 #include "util.h"
 #include "ui_chatdlgbase.h"
+
+class ChatDelegate : public QStyledItemDelegate
+{
+    Q_OBJECT
+public:
+    explicit ChatDelegate ( QObject* parent = nullptr ) : QStyledItemDelegate ( parent ) {}
+
+    void paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const override
+    {
+        painter->save();
+        if ( option.state & QStyle::State_Selected )
+            painter->fillRect ( option.rect, option.palette.highlight() );
+        QTextDocument doc;
+        doc.setHtml ( index.data ( Qt::DisplayRole ).toString() );
+        doc.setTextWidth ( option.rect.width() );
+        painter->translate ( option.rect.topLeft() );
+        doc.drawContents ( painter, option.rect.translated ( -option.rect.topLeft() ) );
+        painter->restore();
+    }
+
+    QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const override
+    {
+        QListView* view = qobject_cast<QListView*> ( parent() );
+        int        w    = ( view && view->viewport()->width() > 0 ) ? view->viewport()->width() : option.rect.width();
+        QTextDocument doc;
+        doc.setHtml ( index.data ( Qt::DisplayRole ).toString() );
+        doc.setTextWidth ( w > 0 ? w : 200 );
+        return QSize ( w, static_cast<int> ( doc.size().height() ) );
+    }
+};
 
 /* Classes ********************************************************************/
 class CChatDlg : public CBaseDlg, private Ui_CChatDlgBase
@@ -76,10 +118,18 @@ public slots:
     void OnLocalInputTextTextChanged ( const QString& strNewText );
     void OnClearChatHistory();
     void OnAnchorClicked ( const QUrl& Url );
+    void OnCopyChatMessage();
+    void OnChatContextMenu ( const QPoint& pos );
 #if defined( Q_OS_IOS ) || defined( ANDROID ) || defined( Q_OS_ANDROID )
     void OnCloseClicked();
 #endif
 
 signals:
     void NewLocalInputText ( QString strNewText );
+
+protected:
+    bool eventFilter ( QObject* obj, QEvent* event ) override;
+
+private:
+    QStandardItemModel* m_pChatModel;
 };

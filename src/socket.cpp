@@ -166,9 +166,12 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
             }
 #endif
 
+            UdpSocketAddrLen = sizeof ( UdpSocketAddr.sa6 );
+#ifdef Q_OS_BSD4
+            UdpSocketAddr.sa6.sin6_len = UdpSocketAddrLen;
+#endif
             UdpSocketAddr.sa6.sin6_family = AF_INET6;
             UdpSocketAddr.sa6.sin6_addr   = in6addr_any;
-            UdpSocketAddrLen              = sizeof ( UdpSocketAddr.sa6 );
 
             UdpPort = &UdpSocketAddr.sa6.sin6_port; // where to put the port number
 
@@ -206,9 +209,12 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 #endif
 
         // preinitialize socket in address (only the port number is missing)
+        UdpSocketAddrLen = sizeof ( UdpSocketAddr.sa4 );
+#ifdef Q_OS_BSD4
+        UdpSocketAddr.sa4.sin_len = UdpSocketAddrLen;
+#endif
         UdpSocketAddr.sa4.sin_family      = AF_INET;
         UdpSocketAddr.sa4.sin_addr.s_addr = INADDR_ANY;
-        UdpSocketAddrLen                  = sizeof ( UdpSocketAddr.sa4 );
 
         UdpPort = &UdpSocketAddr.sa4.sin_port; // where to put the port number
 
@@ -391,6 +397,9 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
                     // but Windows does not. So use a V4MAPPED address in an AF_INET6 sockaddr,
                     // which works on all platforms.
 
+#ifdef Q_OS_BSD4
+                    UdpSocketAddr.sa6.sin6_len = sizeof ( UdpSocketAddr.sa6 );
+#endif
                     UdpSocketAddr.sa6.sin6_family = AF_INET6;
                     UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
 
@@ -421,6 +430,9 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
                 }
                 else
                 {
+#ifdef Q_OS_BSD4
+                    UdpSocketAddr.sa4.sin_len = sizeof ( UdpSocketAddr.sa4 );
+#endif
                     UdpSocketAddr.sa4.sin_family      = AF_INET;
                     UdpSocketAddr.sa4.sin_port        = htons ( HostAddr.iPort );
                     UdpSocketAddr.sa4.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
@@ -435,6 +447,9 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
             }
             else if ( bIPv6Available )
             {
+#ifdef Q_OS_BSD4
+                UdpSocketAddr.sa6.sin6_len = sizeof ( UdpSocketAddr.sa6 );
+#endif
                 UdpSocketAddr.sa6.sin6_family = AF_INET6;
                 UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
                 inet_pton ( AF_INET6, HostAddr.InetAddr.toString().toLocal8Bit().constData(), &UdpSocketAddr.sa6.sin6_addr );

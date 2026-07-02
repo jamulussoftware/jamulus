@@ -119,7 +119,8 @@ brew link Qt@5 --force
 
 ### Generate Xcode Project file
 
-`qmake -spec macx-xcode Jamulus.pro`
+`qmake QMAKE_APPLE_DEVICE_ARCHS=arm64 QT_ARCH=arm64 -spec macx-xcode Jamulus.pro`
+**Note:** if you still build on x86_64, not Apple Silicon, you must replace `arm64` with `x86_64`.
 
 ### Print build targets and configuration in console
 
@@ -149,6 +150,7 @@ Schemes:
 `xcodebuild build`
 
 Will build the file and make it available in `./Release/Jamulus.app`
+In order to run the application, you need to run `macdeployqt ./Release/Jamulus.app` once to set up all required libraries and frameworks.
 
 If you want to build the installer, please run the `deploy_mac.sh` script: `./mac/deploy_mac.sh`. You'll find the installer in the deploy/ folder.
 

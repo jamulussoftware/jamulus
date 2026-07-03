@@ -50,8 +50,15 @@
 #ifdef _WIN32
 #    include <winsock2.h>
 #    include <ws2tcpip.h>
+#    define pollfd WSAPOLLFD
+#    define poll   WSAPoll
+typedef int socklen_t;
 #else
 #    include <arpa/inet.h>
+#    include <fcntl.h>
+#    include <poll.h>
+typedef int SOCKET;
+#    define INVALID_SOCKET -1
 #endif
 
 /* Implementation *************************************************************/
@@ -219,6 +226,18 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
         qInfo() << "IPv4 socket created";
     }
+
+    // set socket to non-blocking
+#ifdef _WIN32
+    unsigned long mode = 1;
+    ioctlsocket ( UdpSocket, FIONBIO, &mode ); // TODO check for error
+#else
+    int flags = fcntl ( UdpSocket, F_GETFL, 0 );
+    if ( flags != -1 )
+    {
+        fcntl ( UdpSocket, F_SETFL, flags | O_NONBLOCK ); // TODO check for error
+    }
+#endif
 
 #ifdef Q_OS_IOS
     // ignore the broken pipe signal to avoid crash (iOS)
@@ -480,127 +499,170 @@ bool CSocket::GetAndResetbJitterBufferOKFlag()
 void CSocket::OnDataReceived()
 {
     /*
-        The strategy of this function is that only the "put audio" function is
-        called directly (i.e. the high thread priority is used) and all other less
-        important things like protocol parsing and acting on protocol messages is
-        done in the low priority thread. To get a thread transition, we have to
-        use the signal/slot mechanism (i.e. we use messages for that).
-    */
+       The strategy of this function is that only the "put audio" function is
+       called directly (i.e. the high thread priority is used) and all other less
+       important things like protocol parsing and acting on protocol messages is
+       done in the low priority thread. To get a thread transition, we have to
+       use the signal/slot mechanism (i.e. we use messages for that).
+     */
 
     CHostAddress RecHostAddr;
 
-    // read block from network interface and query address of sender
-    uSockAddr UdpSocketAddr;
-#ifdef _WIN32
-    int SenderAddrSize = sizeof ( UdpSocketAddr );
-#else
-    socklen_t SenderAddrSize = sizeof ( UdpSocketAddr );
-#endif
+    // first, poll to wait until data is available
+    pollfd fds[1];
+    fds[0].fd      = UdpSocket;
+    fds[0].events  = POLLIN; // wait for ready to read
+    fds[0].revents = 0;      // clear returned events
 
-    const long iNumBytesRead = recvfrom ( UdpSocket, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, &UdpSocketAddr.sa, &SenderAddrSize );
-
-    // check if an error occurred or no data could be read
-    if ( iNumBytesRead <= 0 )
+    // wait for data ready with 100ms timeout
+    int pollResult = poll ( fds, 1, 100 );
+    if ( pollResult < 0 )
     {
+        qDebug() << "Error returned from poll()";
         return;
     }
 
-    // convert address of client
-    if ( UdpSocketAddr.sa.sa_family == AF_INET6 )
+    if ( pollResult == 0 )
     {
-        if ( IN6_IS_ADDR_V4MAPPED ( &( UdpSocketAddr.sa6.sin6_addr ) ) )
-        {
-            const uint32_t addr = ( (const uint32_t*) ( &( UdpSocketAddr.sa6.sin6_addr ) ) )[3];
-            RecHostAddr.InetAddr.setAddress ( ntohl ( addr ) );
-        }
-        else
-        {
-            RecHostAddr.InetAddr.setAddress ( UdpSocketAddr.sa6.sin6_addr.s6_addr );
-        }
-        RecHostAddr.iPort = ntohs ( UdpSocketAddr.sa6.sin6_port );
-    }
-    else
-    {
-        RecHostAddr.InetAddr.setAddress ( ntohl ( UdpSocketAddr.sa4.sin_addr.s_addr ) );
-        RecHostAddr.iPort = ntohs ( UdpSocketAddr.sa4.sin_port );
+        // timeout with no data
+        return;
     }
 
-    // check if this is a protocol message
-    int              iRecCounter;
-    int              iRecID;
-    CVector<uint8_t> vecbyMesBodyData;
-
-    if ( !CProtocol::ParseMessageFrame ( vecbyRecBuf, iNumBytesRead, vecbyMesBodyData, iRecCounter, iRecID ) )
+    if ( fds[0].revents & POLLIN )
     {
-        // this is a protocol message, check the type of the message
-        if ( CProtocol::IsConnectionLessMessageID ( iRecID ) )
-        {
-            //### TODO: BEGIN ###//
-            // a copy of the vector is used -> avoid malloc in real-time routine
-            emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
-            //### TODO: END ###//
-        }
-        else
-        {
-            //### TODO: BEGIN ###//
-            // a copy of the vector is used -> avoid malloc in real-time routine
-            emit ProtocolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
-            //### TODO: END ###//
-        }
-    }
-    else
-    {
-        // this is most probably a regular audio packet
-        if ( bIsClient )
-        {
-            // client:
 
-            switch ( pChannel->PutAudioData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
+        // read block from network interface and query address of sender
+        uSockAddr UdpSocketAddr;
+        socklen_t SenderAddrSize = sizeof ( UdpSocketAddr );
+
+        while ( true )
+        {
+            const long iNumBytesRead =
+                recvfrom ( UdpSocket, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, &UdpSocketAddr.sa, &SenderAddrSize );
+
+            // check if an error occurred or no data could be read
+            if ( iNumBytesRead < 0 )
             {
-            case PS_AUDIO_ERR:
-            case PS_GEN_ERROR:
-                bJitterBufferOK = false;
-                break;
-
-            case PS_NEW_CONNECTION:
-                // inform other objects that new connection was established
-                emit NewConnection();
-                break;
-
-            case PS_AUDIO_INVALID:
-                // inform about received invalid packet by fireing an event
-                emit InvalidPacketReceived ( RecHostAddr );
-                break;
-
-            default:
-                // do nothing
-                break;
-            }
-        }
-        else
-        {
-            // server:
-
-            int iCurChanID;
-
-            if ( pServer->PutAudioData ( vecbyRecBuf, iNumBytesRead, RecHostAddr, iCurChanID ) )
-            {
-                // we have a new connection, emit a signal
-                emit NewConnection ( iCurChanID, pServer->GetNumberOfConnectedClients(), RecHostAddr );
-
-                // this was an audio packet, start server if it is in sleep mode
-                if ( !pServer->IsRunning() )
+#ifdef _WIN32
+                int err = WSAGetLastError();
+                if ( err == WSAWOULDBLOCK )
                 {
-                    // (note that Qt will delete the event object when done)
-                    QCoreApplication::postEvent ( pServer, new CCustomEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+                    return;
+                }
+#else
+                if ( errno == EAGAIN || errno == EWOULDBLOCK )
+                {
+                    return;
+                }
+#endif
+                qDebug() << "Unexpected error returned by recvfrom()";
+                return;
+            }
+
+            if ( iNumBytesRead == 0 )
+            {
+                qDebug() << "Zero bytes returned by recvfrom()";
+                return;
+            }
+
+            // convert address of client
+            if ( UdpSocketAddr.sa.sa_family == AF_INET6 )
+            {
+                if ( IN6_IS_ADDR_V4MAPPED ( &( UdpSocketAddr.sa6.sin6_addr ) ) )
+                {
+                    const uint32_t addr = ( (const uint32_t*) ( &( UdpSocketAddr.sa6.sin6_addr ) ) )[3];
+                    RecHostAddr.InetAddr.setAddress ( ntohl ( addr ) );
+                }
+                else
+                {
+                    RecHostAddr.InetAddr.setAddress ( UdpSocketAddr.sa6.sin6_addr.s6_addr );
+                }
+                RecHostAddr.iPort = ntohs ( UdpSocketAddr.sa6.sin6_port );
+            }
+            else
+            {
+                RecHostAddr.InetAddr.setAddress ( ntohl ( UdpSocketAddr.sa4.sin_addr.s_addr ) );
+                RecHostAddr.iPort = ntohs ( UdpSocketAddr.sa4.sin_port );
+            }
+
+            // check if this is a protocol message
+            int              iRecCounter;
+            int              iRecID;
+            CVector<uint8_t> vecbyMesBodyData;
+
+            if ( !CProtocol::ParseMessageFrame ( vecbyRecBuf, iNumBytesRead, vecbyMesBodyData, iRecCounter, iRecID ) )
+            {
+                // this is a protocol message, check the type of the message
+                if ( CProtocol::IsConnectionLessMessageID ( iRecID ) )
+                {
+                    //### TODO: BEGIN ###//
+                    // a copy of the vector is used -> avoid malloc in real-time routine
+                    emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
+                    //### TODO: END ###//
+                }
+                else
+                {
+                    //### TODO: BEGIN ###//
+                    // a copy of the vector is used -> avoid malloc in real-time routine
+                    emit ProtocolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
+                    //### TODO: END ###//
                 }
             }
-
-            // check if no channel is available
-            if ( iCurChanID == INVALID_CHANNEL_ID )
+            else
             {
-                // fire message for the state that no free channel is available
-                emit ServerFull ( RecHostAddr );
+                // this is most probably a regular audio packet
+                if ( bIsClient )
+                {
+                    // client:
+
+                    switch ( pChannel->PutAudioData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
+                    {
+                    case PS_AUDIO_ERR:
+                    case PS_GEN_ERROR:
+                        bJitterBufferOK = false;
+                        break;
+
+                    case PS_NEW_CONNECTION:
+                        // inform other objects that new connection was established
+                        emit NewConnection();
+                        break;
+
+                    case PS_AUDIO_INVALID:
+                        // inform about received invalid packet by fireing an event
+                        emit InvalidPacketReceived ( RecHostAddr );
+                        break;
+
+                    default:
+                        // do nothing
+                        break;
+                    }
+                }
+                else
+                {
+                    // server:
+
+                    int iCurChanID;
+
+                    if ( pServer->PutAudioData ( vecbyRecBuf, iNumBytesRead, RecHostAddr, iCurChanID ) )
+                    {
+                        // we have a new connection, emit a signal
+                        emit NewConnection ( iCurChanID, pServer->GetNumberOfConnectedClients(), RecHostAddr );
+
+                        // this was an audio packet, start server if it is in sleep mode
+                        if ( !pServer->IsRunning() )
+                        {
+                            // (note that Qt will delete the event object when done)
+                            QCoreApplication::postEvent ( pServer, new CCustomEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+                        }
+                    }
+
+                    // check if no channel is available
+                    if ( iCurChanID == INVALID_CHANNEL_ID )
+                    {
+                        // fire message for the state that no free channel is available
+                        emit ServerFull ( RecHostAddr );
+                    }
+                }
             }
         }
     }

@@ -92,9 +92,9 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
         {
             // store current complete buffer state in temporary memory
             CVector<int> veciTempBlockValid ( iNumBlocksMemory );
-            const int    iOldNumBlocksMemory        = iNumBlocksMemory;
-            const int    iOldBlockGetPos            = iBlockGetPos;
-            int          iCurBlockPos               = 0;
+            const int    iOldNumBlocksMemory = iNumBlocksMemory;
+            const int    iOldBlockGetPos     = iBlockGetPos;
+            int          iCurBlockPos        = 0;
 
             while ( iBlockGetPos < iNumBlocksMemory && iCurBlockPos < iTempSize )
             {

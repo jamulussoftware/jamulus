@@ -103,9 +103,11 @@ protected:
     QString strServerBindIP;
 
 #ifdef _WIN32
-    SOCKET UdpSocket;
+    SOCKET UdpSocket4;
+    SOCKET UdpSocket6;
 #else
-    int UdpSocket;
+    int UdpSocket4;
+    int UdpSocket6;
 #endif
 
     QMutex Mutex;
@@ -122,6 +124,9 @@ protected:
     // This is a reference to CClient::bIPv6Available or CServer::bIPv6Available,
     // to inform the Client or Server which type of socket was created at startup.
     bool& bIPv6Available;
+
+private:
+    void ProcessPacket ( const CHostAddress& RecHostAddr, const int iNumBytesRead );
 
 public:
     void OnDataReceived();
@@ -250,11 +255,3 @@ protected:
 signals:
     void InvalidPacketReceived ( CHostAddress RecHostAddr );
 };
-
-// overlay generic, IPv4 and IPv6 sockaddr structures
-typedef union
-{
-    struct sockaddr     sa;
-    struct sockaddr_in  sa4;
-    struct sockaddr_in6 sa6;
-} uSockAddr;

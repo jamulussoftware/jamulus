@@ -274,6 +274,23 @@ Results:
 | result | string | Always "ok". |
 
 
+### jamulusclient/setInstrumentCode
+
+Sets your instrument code.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.instrCode | number | The new instrument code. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
 ### jamulusclient/setMidiSettings
 
 Sets one or more MIDI controller settings.

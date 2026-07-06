@@ -331,6 +331,32 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         response["result"] = "ok";
     } );
 
+    /// @rpc_method jamulusclient/setInstrumentCode
+    /// @brief Sets your instrument code.
+    /// @param {number} params.instrCode - The new instrument code.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusclient/setInstrumentCode", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonInstrCode = params["instrCode"];
+
+        if ( !jsonInstrCode.isDouble() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: instrCode is not a number" );
+            return;
+        }
+
+        const int _iInstrument = jsonInstrCode.toInt();
+
+        if ( CInstPictures::GetName ( _iInstrument ).isEmpty() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: unknown instrCode" );
+            return;
+        }
+
+        pClient->ChannelInfo.iInstrument = _iInstrument;
+        pClient->SetRemoteInfo();
+        response["result"] = "ok";
+    } );
+
     /// @rpc_method jamulusclient/sendChatText
     /// @brief Sends a chat text message.
     /// @param {string} params.chatText - The chat text message.

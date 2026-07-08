@@ -79,6 +79,7 @@ public:
               const quint16  iPortNumber,
               const quint16  iQosNumber,
               const QString& strServerBindIP,
+              const QString& strServerBindIP6,
               const bool     bDisableIPv6,
               bool&          bIPv6Available );
 
@@ -86,6 +87,7 @@ public:
               const quint16  iPortNumber,
               const quint16  iQosNumber,
               const QString& strServerBindIP,
+              const QString& strServerBindIP6,
               const bool     bDisableIPv6,
               bool&          bIPv6Available );
 
@@ -97,10 +99,15 @@ public:
     void Close();
 
 protected:
-    void    Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, const bool bDisableIPv6 );
+    void    Init ( const quint16  iPortNumber,
+                   const quint16  iQosNumber,
+                   const QString& strServerBindIP,
+                   const QString& strServerBindIP6,
+                   const bool     bDisableIPv6 );
     quint16 iPortNumber;
     quint16 iQosNumber;
     QString strServerBindIP;
+    QString strServerBindIP6;
 
 #ifdef _WIN32
     SOCKET UdpSocket4;
@@ -160,9 +167,10 @@ public:
                       const quint16  iPortNumber,
                       const quint16  iQosNumber,
                       const QString& strServerBindIP,
+                      const QString& strServerBindIP6,
                       const bool     bDisableIPv6,
                       bool&          bIPv6Available ) :
-        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6, bIPv6Available )
+        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, bDisableIPv6, bIPv6Available )
     {
         Init();
     }
@@ -171,9 +179,10 @@ public:
                       const quint16  iPortNumber,
                       const quint16  iQosNumber,
                       const QString& strServerBindIP,
+                      const QString& strServerBindIP6,
                       const bool     bDisableIPv6,
                       bool&          bIPv6Available ) :
-        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6, bIPv6Available )
+        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, bDisableIPv6, bIPv6Available )
     {
         Init();
     }

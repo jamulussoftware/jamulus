@@ -134,6 +134,7 @@ int main ( int argc, char** argv )
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
     QString      strServerBindIP             = "";
+    QString      strServerBindIP6            = "";
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
@@ -452,6 +453,21 @@ int main ( int argc, char** argv )
             qInfo() << qUtf8Printable ( QString ( "- server bind IP: %1" ).arg ( strServerBindIP ) );
             CommandLineOptions << "--serverbindip";
             ServerOnlyOptions << "--serverbindip";
+            continue;
+        }
+
+        // Server Bind IPv6 --------------------------------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--serverbindip6", // no short form
+                                 "--serverbindip6",
+                                 strArgument ) )
+        {
+            strServerBindIP6 = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- server bind IPv6: %1" ).arg ( strServerBindIP6 ) );
+            CommandLineOptions << "--serverbindip6";
+            ServerOnlyOptions << "--serverbindip6";
             continue;
         }
 
@@ -787,20 +803,17 @@ int main ( int argc, char** argv )
                 }
             }
 
-            if ( strDirectoryAddress.isEmpty() )
+            if ( !strServerPublicIP.isEmpty() )
             {
-                if ( !strServerPublicIP.isEmpty() )
+                if ( strDirectoryAddress.isEmpty() )
                 {
                     qWarning() << "Server Public IP will only take effect when registering a server with a directory.";
                     strServerPublicIP = "";
                 }
-            }
-            else
-            {
-                if ( !strServerPublicIP.isEmpty() )
+                else
                 {
-                    QHostAddress InetAddr;
-                    if ( !InetAddr.setAddress ( strServerPublicIP ) )
+                    QHostAddress InetAddr ( strServerPublicIP );
+                    if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
                     {
                         qWarning() << "Server Public IP is invalid. Only plain IP addresses are supported.";
                         strServerPublicIP = "";
@@ -811,11 +824,21 @@ int main ( int argc, char** argv )
 
         if ( !strServerBindIP.isEmpty() )
         {
-            QHostAddress InetAddr;
-            if ( !InetAddr.setAddress ( strServerBindIP ) )
+            QHostAddress InetAddr ( strServerBindIP );
+            if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
             {
                 qWarning() << "Server Bind IP is invalid. Only plain IP addresses are supported.";
                 strServerBindIP = "";
+            }
+        }
+
+        if ( !strServerBindIP6.isEmpty() )
+        {
+            QHostAddress InetAddr ( strServerBindIP6 );
+            if ( InetAddr.protocol() != QAbstractSocket::IPv6Protocol )
+            {
+                qWarning() << "Server Bind IPv6 is invalid. Only plain IPv6 addresses are supported.";
+                strServerBindIP6 = "";
             }
         }
 #ifndef NO_JSON_RPC
@@ -832,8 +855,8 @@ int main ( int argc, char** argv )
         // we do it here as an upfront check.  The downstream network calls will error
         // out on malformed addresses not caught here.
         {
-            QHostAddress InetAddr;
-            if ( !InetAddr.setAddress ( strJsonRpcBindIP ) )
+            QHostAddress InetAddr ( strJsonRpcBindIP );
+            if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
             {
                 qCritical() << qUtf8Printable ( QString ( "The JSON-RPC address specified is not valid, exiting. " ) );
                 exit ( 1 );
@@ -1007,6 +1030,7 @@ int main ( int argc, char** argv )
             CServer Server ( iNumServerChannels,
                              strLoggingFileName,
                              strServerBindIP,
+                             strServerBindIP6,
                              iPortNumber,
                              iQosNumber,
                              strDirectoryAddress,
@@ -1148,7 +1172,7 @@ QString UsageArguments ( char** argv )
            "      --noraw             disable raw audio\n"
            "  -s, --server            start Server\n"
            "      --serverbindip      IPv4 address the Server will bind to (rather than all)\n"
-           "                          (only works if IPv6 is unavailable or disabled with --noipv6)\n"
+           "      --serverbindip6     IPv6 address the Server will bind to (rather than all)\n"
            "  -T, --multithreading    use multithreading to make better use of\n"
            "                          multi-core CPUs and support more Clients\n"
            "  -u, --numchannels       maximum number of channels\n"

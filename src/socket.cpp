@@ -73,6 +73,7 @@ CSocket::CSocket ( CChannel*      pNewChannel,
                    const quint16  iPortNumber,
                    const quint16  iQosNumber,
                    const QString& strServerBindIP,
+                   const QString& strServerBindIP6,
                    const bool     bDisableIPv6,
                    bool&          bIPv6Available ) :
     pChannel ( pNewChannel ),
@@ -94,7 +95,7 @@ CSocket::CSocket ( CChannel*      pNewChannel,
     UdpSocket4 = INVALID_SOCKET;
     UdpSocket6 = INVALID_SOCKET;
 
-    Init ( iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6 );
+    Init ( iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, bDisableIPv6 );
 
     // client connections:
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pChannel, &CChannel::OnProtocolMessageReceived );
@@ -108,6 +109,7 @@ CSocket::CSocket ( CServer*       pNServP,
                    const quint16  iPortNumber,
                    const quint16  iQosNumber,
                    const QString& strServerBindIP,
+                   const QString& strServerBindIP6,
                    const bool     bDisableIPv6,
                    bool&          bIPv6Available ) :
     pServer ( pNServP ),
@@ -129,7 +131,7 @@ CSocket::CSocket ( CServer*       pNServP,
     UdpSocket4 = INVALID_SOCKET;
     UdpSocket6 = INVALID_SOCKET;
 
-    Init ( iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6 );
+    Init ( iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, bDisableIPv6 );
 
     // server connections:
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pServer, &CServer::OnProtocolMessageReceived );
@@ -144,10 +146,13 @@ CSocket::CSocket ( CServer*       pNServP,
     QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
 }
 
-void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, const QString& strNewServerBindIP, const bool bDisableIPv6 )
+void CSocket::Init ( const quint16  iNewPortNumber,
+                     const quint16  iNewQosNumber,
+                     const QString& strNewServerBindIP,
+                     const QString& strNewServerBindIP6,
+                     const bool     bDisableIPv6 )
 {
-    const bool    bDisableIPv4 = false;    // for future use
-    const QString strServerBindIP6 ( "" ); // for future use
+    const bool bDisableIPv4 = false; // for future use
 
     // first, close sockets if they are open - in case of re-init
     if ( UdpSocket4 == INVALID_SOCKET )
@@ -179,9 +184,10 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
     memset ( &sa6, 0, sa6len );
 
     // first store parameters, in case reinit is required (mostly for iOS)
-    iPortNumber     = iNewPortNumber;
-    iQosNumber      = iNewQosNumber;
-    strServerBindIP = strNewServerBindIP;
+    iPortNumber      = iNewPortNumber;
+    iQosNumber       = iNewQosNumber;
+    strServerBindIP  = strNewServerBindIP;
+    strServerBindIP6 = strNewServerBindIP6;
 
     if ( !bDisableIPv4 )
     {
@@ -506,7 +512,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
 #ifdef Q_OS_IOS
             // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
-            Init ( iPortNumber, iQosNumber, strServerBindIP, !bIPv6Available ); // reinit
+            Init ( iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, !bIPv6Available ); // reinit
 
             // loop back to retry
 #endif

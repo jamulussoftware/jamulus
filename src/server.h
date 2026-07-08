@@ -110,6 +110,7 @@ public:
     CServer ( const int          iNewMaxNumChan,
               const QString&     strLoggingFileName,
               const QString&     strServerBindIP,
+              const QString&     strServerBindIP6,
               const quint16      iPortNumber,
               const quint16      iQosNumber,
               const QString&     strDirectoryAddress,

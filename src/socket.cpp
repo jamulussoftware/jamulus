@@ -48,17 +48,12 @@
 #include "server.h"
 
 #ifdef _WIN32
-#    include <winsock2.h>
-#    include <ws2tcpip.h>
 #    define pollfd WSAPOLLFD
 #    define poll   WSAPoll
 typedef int socklen_t;
 #else
-#    include <arpa/inet.h>
 #    include <fcntl.h>
 #    include <poll.h>
-typedef int SOCKET;
-#    define INVALID_SOCKET -1
 #endif
 
 /* Implementation *************************************************************/
@@ -155,7 +150,7 @@ void CSocket::Init ( const quint16  iNewPortNumber,
     const bool bDisableIPv4 = false; // for future use
 
     // first, close sockets if they are open - in case of re-init
-    if ( UdpSocket4 == INVALID_SOCKET )
+    if ( UdpSocket4 != INVALID_SOCKET )
     {
 #ifdef _WIN32
         closesocket ( UdpSocket4 );
@@ -165,7 +160,7 @@ void CSocket::Init ( const quint16  iNewPortNumber,
         UdpSocket4 = INVALID_SOCKET;
     }
 
-    if ( UdpSocket6 == INVALID_SOCKET )
+    if ( UdpSocket6 != INVALID_SOCKET )
     {
 #ifdef _WIN32
         closesocket ( UdpSocket6 );
@@ -460,7 +455,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
             if ( HostAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
             {
-                if ( UdpSocket4 != -1 )
+                if ( UdpSocket4 != INVALID_SOCKET )
                 {
                     struct sockaddr_in sa4;
                     memset ( &sa4, 0, sizeof ( sa4 ) );
@@ -481,7 +476,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
             }
             else if ( HostAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
             {
-                if ( UdpSocket6 != -1 )
+                if ( UdpSocket6 != INVALID_SOCKET )
                 {
                     struct sockaddr_in6 sa6;
                     memset ( &sa6, 0, sizeof ( sa6 ) );
@@ -491,7 +486,6 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
                     sa6.sin6_family = AF_INET6;
                     sa6.sin6_port   = htons ( HostAddr.iPort );
 
-                    // inet_pton ( AF_INET6, HostAddr.InetAddr.toString().toLocal8Bit().constData(), &sa6.sin6_addr );
                     Q_IPV6ADDR ip6 = HostAddr.InetAddr.toIPv6Address();
                     memcpy ( &sa6.sin6_addr.s6_addr, ip6.c, sizeof ( sa6.sin6_addr.s6_addr ) );
                     sa6.sin6_scope_id = HostAddr.InetAddr.scopeId().toUInt();
@@ -548,16 +542,25 @@ void CSocket::OnDataReceived()
     CHostAddress RecHostAddr;
 
     // first, poll to wait until data is available
+    int    numfds = 0;
     pollfd fds[2];
-    fds[0].fd      = UdpSocket4;
-    fds[0].events  = POLLIN; // wait for ready to read
-    fds[0].revents = 0;      // clear returned events
-    fds[1].fd      = UdpSocket6;
-    fds[1].events  = POLLIN; // wait for ready to read
-    fds[1].revents = 0;      // clear returned events
+    if ( UdpSocket4 != INVALID_SOCKET )
+    {
+        fds[numfds].fd      = UdpSocket4;
+        fds[numfds].events  = POLLIN; // wait for ready to read
+        fds[numfds].revents = 0;      // clear returned events
+        numfds++;
+    }
+    if ( UdpSocket6 != INVALID_SOCKET )
+    {
+        fds[numfds].fd      = UdpSocket6;
+        fds[numfds].events  = POLLIN; // wait for ready to read
+        fds[numfds].revents = 0;      // clear returned events
+        numfds++;
+    }
 
     // wait for data ready with 100ms timeout
-    int pollResult = poll ( fds, 2, 100 );
+    int pollResult = poll ( fds, numfds, 100 );
     if ( pollResult < 0 )
     {
         qDebug() << "Error returned from poll()";
@@ -570,92 +573,103 @@ void CSocket::OnDataReceived()
         return;
     }
 
+    int retfds = 0;
     // IPv4 socket
-    if ( fds[0].revents & POLLIN )
+    if ( retfds < numfds && fds[retfds].fd == UdpSocket4 )
     {
-        // read block from network interface and query address of sender
-        sockaddr_in sa4;
-        socklen_t   sa4len = sizeof ( sa4 );
-
-        while ( true )
+        if ( fds[retfds].revents & POLLIN )
         {
-            const long iNumBytesRead = recvfrom ( UdpSocket4, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa4, &sa4len );
+            // read block from network interface and query address of sender
+            sockaddr_in sa4;
+            socklen_t   sa4len = sizeof ( sa4 );
 
-            // check if an error occurred or no data could be read
-            if ( iNumBytesRead < 0 )
+            while ( true )
             {
+                const long iNumBytesRead =
+                    recvfrom ( UdpSocket4, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa4, &sa4len );
+
+                // check if an error occurred or no data could be read
+                if ( iNumBytesRead < 0 )
+                {
 #ifdef _WIN32
-                int err = WSAGetLastError();
-                if ( err == WSAWOULDBLOCK )
-                {
-                    break;
-                }
+                    int err = WSAGetLastError();
+                    if ( err == WSAEWOULDBLOCK )
+                    {
+                        break;
+                    }
 #else
-                if ( errno == EAGAIN || errno == EWOULDBLOCK )
-                {
+                    if ( errno == EAGAIN || errno == EWOULDBLOCK )
+                    {
+                        break;
+                    }
+#endif
+                    qDebug() << "Unexpected error returned by recvfrom()";
                     break;
                 }
-#endif
-                qDebug() << "Unexpected error returned by recvfrom()";
-                break;
+
+                if ( iNumBytesRead == 0 )
+                {
+                    qDebug() << "Zero bytes returned by recvfrom()";
+                    break;
+                }
+
+                // convert address of client
+                RecHostAddr.InetAddr.setAddress ( ntohl ( sa4.sin_addr.s_addr ) );
+                RecHostAddr.iPort = ntohs ( sa4.sin_port );
+
+                ProcessPacket ( RecHostAddr, iNumBytesRead );
             }
-
-            if ( iNumBytesRead == 0 )
-            {
-                qDebug() << "Zero bytes returned by recvfrom()";
-                break;
-            }
-
-            // convert address of client
-            RecHostAddr.InetAddr.setAddress ( ntohl ( sa4.sin_addr.s_addr ) );
-            RecHostAddr.iPort = ntohs ( sa4.sin_port );
-
-            ProcessPacket ( RecHostAddr, iNumBytesRead );
         }
+        retfds++;
     }
 
     // IPv6 socket
-    if ( fds[1].revents & POLLIN )
+    if ( retfds < numfds && fds[retfds].fd == UdpSocket6 )
     {
-        // read block from network interface and query address of sender
-        sockaddr_in6 sa6;
-        socklen_t    sa6len = sizeof ( sa6 );
-
-        while ( true )
+        if ( fds[retfds].revents & POLLIN )
         {
-            const long iNumBytesRead = recvfrom ( UdpSocket6, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa6, &sa6len );
+            // read block from network interface and query address of sender
+            sockaddr_in6 sa6;
+            socklen_t    sa6len = sizeof ( sa6 );
 
-            // check if an error occurred or no data could be read
-            if ( iNumBytesRead < 0 )
+            while ( true )
             {
+                const long iNumBytesRead =
+                    recvfrom ( UdpSocket6, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa6, &sa6len );
+
+                // check if an error occurred or no data could be read
+                if ( iNumBytesRead < 0 )
+                {
 #ifdef _WIN32
-                int err = WSAGetLastError();
-                if ( err == WSAWOULDBLOCK )
-                {
-                    break;
-                }
+                    int err = WSAGetLastError();
+                    if ( err == WSAEWOULDBLOCK )
+                    {
+                        break;
+                    }
 #else
-                if ( errno == EAGAIN || errno == EWOULDBLOCK )
-                {
+                    if ( errno == EAGAIN || errno == EWOULDBLOCK )
+                    {
+                        break;
+                    }
+#endif
+                    qDebug() << "Unexpected error returned by recvfrom()";
                     break;
                 }
-#endif
-                qDebug() << "Unexpected error returned by recvfrom()";
-                break;
+
+                if ( iNumBytesRead == 0 )
+                {
+                    qDebug() << "Zero bytes returned by recvfrom()";
+                    break;
+                }
+
+                // convert address of client
+                RecHostAddr.InetAddr.setAddress ( sa6.sin6_addr.s6_addr );
+                RecHostAddr.iPort = ntohs ( sa6.sin6_port );
+
+                ProcessPacket ( RecHostAddr, iNumBytesRead );
             }
-
-            if ( iNumBytesRead == 0 )
-            {
-                qDebug() << "Zero bytes returned by recvfrom()";
-                break;
-            }
-
-            // convert address of client
-            RecHostAddr.InetAddr.setAddress ( sa6.sin6_addr.s6_addr );
-            RecHostAddr.iPort = ntohs ( sa6.sin6_port );
-
-            ProcessPacket ( RecHostAddr, iNumBytesRead );
         }
+        retfds++;
     }
 }
 

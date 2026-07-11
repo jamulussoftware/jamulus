@@ -56,6 +56,8 @@
 #ifndef _WIN32
 #    include <netinet/in.h>
 #    include <sys/socket.h>
+typedef int SOCKET;
+#    define INVALID_SOCKET -1
 #endif
 
 // The header files channel.h and server.h require to include this header file

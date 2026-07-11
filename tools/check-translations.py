@@ -49,8 +49,15 @@ from pathlib import Path
 PLACEHOLDER_RE = re.compile(r"%\d+")
 HTML_TAG_RE = re.compile(r"<[^>]+>")
 
-# ANSI escape codes
+# ANSI escape codes (Globals)
 BOLD, CYAN, YELLOW, RED, RESET = "\033[1m", "\033[36m", "\033[33m", "\033[31m", "\033[0m"
+
+
+def configure_colors(color_arg: str):
+    """Disable color constants if outputting to a non-TTY without 'always' override."""
+    global BOLD, CYAN, YELLOW, RED, RESET
+    if color_arg == 'never' or (color_arg == 'auto' and not sys.stdout.isatty()):
+        BOLD = CYAN = YELLOW = RED = RESET = ""
 
 
 class Severity(IntEnum):
@@ -80,6 +87,7 @@ class WarningItem:
 
 class MessageLocator(xml.sax.ContentHandler):
     """SAX handler to find exact line numbers of <message> elements."""
+
     def __init__(self):
         super().__init__()
         self.lines = []
@@ -132,7 +140,7 @@ def check_placeholders(ctx: MessageContext):
 
 def check_html(ctx: MessageContext):
     if (HTML_TAG_RE.search(ctx.source) and not HTML_TAG_RE.search(ctx.translation)
-            and ctx.tr_type != "unfinished"):
+        and ctx.tr_type != "unfinished"):
         msg = (f"HTML missing for '{ctx.excerpt}'\n"
                f"Source: {ctx.source}\nTrans:  {ctx.translation}")
         return [WarningItem(ctx.ts_file, ctx.line, ctx.lang, msg, Severity.WARNING)]
@@ -182,9 +190,11 @@ def _process_context(ts_file, file_lang, context, line_gen):
         clean = src.strip().replace("\n", " ")
         excerpt = clean[:30] + ("..." if len(clean) > 30 else "")
         ctx = MessageContext(ts_file, line, file_lang, src, trans, tr_type, excerpt)
-        for check in [check_empty_translation, check_placeholders, check_html,
-                      check_whitespace, check_newline_consistency]:
-            warnings.extend(check(ctx))
+        if ctx.tr_type not in {"vanished", "obsolete"}:
+            for check in [check_empty_translation, check_placeholders, check_html,
+                          check_whitespace, check_newline_consistency]:
+                warnings.extend(check(ctx))
+
     return warnings
 
 
@@ -217,10 +227,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--ts-dir", type=Path, default=Path("../src/translation"))
     parser.add_argument("--strict", action="store_true")
+    parser.add_argument("--color", choices=["never", "auto", "always"], default="auto",
+                        help="Control color output. 'auto' (default) uses colors only if output is a TTY.")
     args = parser.parse_args()
+
+    configure_colors(args.color)
 
     ts_files = sorted(args.ts_dir.glob("translation_*.ts"))
     if not ts_files:
+        print("Error: No translation files found in the specified directory.", file=sys.stderr)
         return 2
 
     all_warnings, stats = [], defaultdict(lambda: {"severe": 0, "warning": 0})
@@ -240,7 +255,7 @@ def main():
               f"Warnings: {stats[lang]['warning']}")
 
     if sum(s["severe"] for s in stats.values()) > 0 or (
-            args.strict and sum(s["warning"] for s in stats.values()) > 0):
+        args.strict and sum(s["warning"] for s in stats.values()) > 0):
         return 1
     return 0
 

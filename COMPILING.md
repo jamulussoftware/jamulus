@@ -166,7 +166,7 @@ If you want to build the installer, please run the `deploy_mac.sh` script: `./ma
 
 **Note:**
 
-- If have a free Apple Developer Account, you can use it as a "Personal Team":
+- If you have a free Apple Developer Account, you can use it as a "Personal Team":
 - Set it up under Xcode Menu->Preferences->Accounts.
 - Then choose a Bundle Identifier at your choice in the relevant field in the "General" Tab (in section "Identity")
 - Now click on the "Signing & Capabilities" tab. In the section "Signing", the "Automatically manage signing" option should be selected.

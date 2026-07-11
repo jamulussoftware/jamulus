@@ -91,11 +91,10 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
         else
         {
             // store current complete buffer state in temporary memory
-            CVector<int>  veciTempBlockValid ( iNumBlocksMemory );
-            const uint8_t iOldSequenceNumberAtGetPos = iSequenceNumberAtGetPos;
-            const int     iOldNumBlocksMemory        = iNumBlocksMemory;
-            const int     iOldBlockGetPos            = iBlockGetPos;
-            int           iCurBlockPos               = 0;
+            CVector<int> veciTempBlockValid ( iNumBlocksMemory );
+            const int    iOldNumBlocksMemory = iNumBlocksMemory;
+            const int    iOldBlockGetPos     = iBlockGetPos;
+            int          iCurBlockPos        = 0;
 
             while ( iBlockGetPos < iNumBlocksMemory && iCurBlockPos < iTempSize )
             {
@@ -113,8 +112,7 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
             Resize ( iNewNumBlocks, iNewBlockSize );
 
             // write back the temporary data in new memory
-            iSequenceNumberAtGetPos = iOldSequenceNumberAtGetPos;
-            iBlockGetPos            = 0; // per definition
+            iBlockGetPos = 0; // per definition
 
             for ( int iCurPos = 0; iCurPos < std::min ( iNewNumBlocks, iOldNumBlocksMemory ) && iCurPos < iTempSize; iCurPos++ )
             {

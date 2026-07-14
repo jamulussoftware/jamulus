@@ -56,6 +56,7 @@
 #ifndef _WIN32
 #    include <netinet/in.h>
 #    include <sys/socket.h>
+// for compatibility with winsock, avoiding ifdefs
 typedef int SOCKET;
 #    define INVALID_SOCKET -1
 #endif
@@ -111,13 +112,8 @@ protected:
     QString strServerBindIP;
     QString strServerBindIP6;
 
-#ifdef _WIN32
     SOCKET UdpSocket4;
     SOCKET UdpSocket6;
-#else
-    int UdpSocket4;
-    int UdpSocket6;
-#endif
 
     QMutex Mutex;
 

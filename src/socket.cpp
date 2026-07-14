@@ -48,10 +48,12 @@
 #include "server.h"
 
 #ifdef _WIN32
+// Winsock versions of pollfd and poll are named differently, but work the same
 #    define pollfd WSAPOLLFD
 #    define poll   WSAPoll
 typedef int socklen_t;
 #else
+// include Unix-style support for non-blocking and poll()
 #    include <fcntl.h>
 #    include <poll.h>
 #endif

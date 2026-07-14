@@ -827,8 +827,8 @@ int main ( int argc, char** argv )
             QHostAddress InetAddr ( strServerBindIP4 );
             if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
             {
-                qWarning() << "Server Bind IP is invalid. Only plain IP addresses are supported.";
-                strServerBindIP4 = "";
+                qCritical() << "Server Bind IPv4 is invalid. Only plain IP addresses are supported.";
+                exit ( 1 );
             }
         }
 
@@ -837,8 +837,8 @@ int main ( int argc, char** argv )
             QHostAddress InetAddr ( strServerBindIP6 );
             if ( InetAddr.protocol() != QAbstractSocket::IPv6Protocol )
             {
-                qWarning() << "Server Bind IPv6 is invalid. Only plain IPv6 addresses are supported.";
-                strServerBindIP6 = "";
+                qCritical() << "Server Bind IPv6 is invalid. Only plain IPv6 addresses are supported.";
+                exit ( 1 );
             }
         }
 #ifndef NO_JSON_RPC

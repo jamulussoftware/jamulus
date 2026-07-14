@@ -1,4 +1,69 @@
-### 3.11.0dev <- NOTE: the release version number will be 3.12.0 ###
+### 3.12.2dev <- NOTE: the release version number will be 4.0.0 ###
+
+- Optimize Images (#3539).
+  (contributed by @ann0see)
+
+- Added uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023) (#3653).
+  (contributed by @dingodoppelt)
+
+- Internals: fix deprecation warnings in threadpool.h for C++17 onwards (#3681).
+  (contributed by @softins)
+
+- Make server version string searchable (#3693).
+  (contributed by @dingodoppelt)
+
+- Introduce Directory Server in Asia. This replaces Any Genre 3. Asian/Australian users should from now on use Any Genre Asia (#3697).
+  (contributed by @ann0see)
+
+- Move internal domains from jamulus.io to jamulus.app as .io domains have an unclear future (#3701).
+  (contributed by @ann0see)
+
+- Updated copyright to incorporate AGPL3.0+ (#3712).
+  (contributed by @pljones)
+
+- Bugfix: Provide a working location for famfamfam flags (#3722).
+  (contributed by @pljones)
+
+- Request and receive server features by connection-less message (#3727).
+  (contributed by @pljones)
+
+- Bugfix: Fix memory leak for audio alerts (#3728).
+  (contributed by @ann0see)
+
+- Refactor server chat handling by extracting methods (#3741).
+  (contributed by @dingodoppelt)
+
+- Client: Ensure INI file settings are loaded before doing -c/--connect startup (#3738).
+  (contributed by @seanogdelaney)
+
+- Client/Server: Enable IPv6 by default if supported by host. Provide option to disable manually (#3720).
+  (contributed by @softins)
+
+- Server: Report OS as Unix if not Windows, Mac, iOS, Android or Linux (#3699).
+  (contributed by @softins)
+
+- Server: Optimize mixing (#3706).
+  (contributed by @ann0see)
+
+- Server: Removed HTML status file support and -m/--htmlstatus option (#3721).
+  (contributed by @softins)
+
+- Internal: Removed unused array to silence compiler warning (#3717).
+  (contributed by @softins)
+
+
+### 3.12.1 (2026-05-17) ###
+
+- Client: Fix occasional spurious version updated message display (#3691).
+  (contributed by @softins)
+
+### 3.12.0 (2026-05-02) ###
+
+- FreeBSD: make -6 option work properly with both IPv6 and IPv4 peers (#3664).
+  (contributed by @softins)
+
+- Added missing override specifiers for virtual methods (#3667).
+  (contributed by @softins)
 
 - Client+Server: Correct QoS setting for IPv6 (#3622).
   (contributed by @rdica)
@@ -42,14 +107,14 @@
 - Tools: Added missing Makefile.in files to Opus 1.5.2 distro (#3488).
   (contributed by @softins)
 
-- Translations updated from Hosted Weblate (#3540, #3453, #3441, #3388, #3652, #3638, #3620, #3656).
-  (contributed by @weblate)
-
 - Translation: Added Japanese translation (#3568).
   (contributed by @tsukurun)
 
 - Translation: Updated Slovak translation (#3650).
   (contributed by @jose1711)
+
+- Translations updated from Hosted Weblate (#3540, #3453, #3441, #3388, #3652, #3638, #3620, #3656, #3663).
+  (contributed by @weblate)
 
 - Client: Added MIDI tab to Settings GUI exposing MIDI parameters. MIDI Learn feature also added (#3502).
   (contributed by @ignotus666)

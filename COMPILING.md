@@ -95,7 +95,7 @@ If you build with *ASIO* support, you'll need the [ASIO development files](https
 ### Compiling only
 
 1. Create a folder under `\libs` called ASIOSDK2
-1. Download the [ASIOSDK](https://www.steinberg.net/asiosdk), open the top level folder in the .zip file and copy the contents into `[\path\to\jamulus\source]\libs\ASIOSDK2` if not already done, open the top level folder in the .zip file and copy the contents into `[\path\to\jamulus\source]\libs\ASIOSDK2` so that, e.g., the folder `[\path\to\jamulus\source]\libs\ASIOSDK2\common` exists
+1. Download the [ASIOSDK](https://www.steinberg.net/asiosdk), open the top level folder in the .zip file and copy the contents into `[\path\to\jamulus\source]\libs\ASIOSDK2` so that, e.g., the folder `[\path\to\jamulus\source]\libs\ASIOSDK2\common` exists
 1. Open Jamulus.pro in Qt Creator, configure the project with a default kit, then compile & run
 
 If you want to work with Visual Studio, run `qmake -tp vc Jamulus.pro` to generate the `vcxproj` file which enables you to test, debug and build Jamulus via Visual Studio.
@@ -119,7 +119,8 @@ brew link Qt@5 --force
 
 ### Generate Xcode Project file
 
-`qmake -spec macx-xcode Jamulus.pro`
+`qmake QMAKE_APPLE_DEVICE_ARCHS=arm64 QT_ARCH=arm64 -spec macx-xcode Jamulus.pro`
+**Note:** if you still build on x86_64, not Apple Silicon, you must replace `arm64` with `x86_64`.
 
 ### Print build targets and configuration in console
 
@@ -149,6 +150,7 @@ Schemes:
 `xcodebuild build`
 
 Will build the file and make it available in `./Release/Jamulus.app`
+In order to run the application, you need to run `macdeployqt ./Release/Jamulus.app` once to set up all required libraries and frameworks.
 
 If you want to build the installer, please run the `deploy_mac.sh` script: `./mac/deploy_mac.sh`. You'll find the installer in the deploy/ folder.
 
@@ -164,7 +166,7 @@ If you want to build the installer, please run the `deploy_mac.sh` script: `./ma
 
 **Note:**
 
-- If have a free Apple Developer Account, you can use it as a "Personal Team":
+- If you have a free Apple Developer Account, you can use it as a "Personal Team":
 - Set it up under Xcode Menu->Preferences->Accounts.
 - Then choose a Bundle Identifier at your choice in the relevant field in the "General" Tab (in section "Identity")
 - Now click on the "Signing & Capabilities" tab. In the section "Signing", the "Automatically manage signing" option should be selected.

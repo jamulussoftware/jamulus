@@ -1,6 +1,50 @@
+### Copyright (c) 2022-2026
+
+Author(s):
+* Emlyn Bolton
+* The Jamulus Development Team
+
+As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+under AGPL 3.0 or any later version.
+
+Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+This code will be licensed under GPL 3.0 (or any later version) from
+3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+the combined work, including network use provisions.
+
+---
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://www.gnu.org/licenses/).
+
+---
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://www.gnu.org/licenses/).
+
 # The Jamulus Audio Protocol
 
-Jamulus uses connectionless UDP packets to communicate between the client and server, and additionally for directory server registration. The `src/protocol.cpp` file contains much of the details of the packets themselves, whereas this document is intended to form a higher-level view of the protocol interactions.  
+Jamulus uses connectionless UDP packets to communicate between the client and server, and additionally for directory server registration. The `src/protocol.cpp` file contains much of the details of the packets themselves, whereas this document is intended to form a higher-level view of the protocol interactions.
 Some of the messages need to be acknowledged, some do not. If a message ID is less than 1000, the message must be acknowledged in under `SEND_MESS_TIMEOUT_MS` ms.
 
 All of this information can be discovered from reading the code, but hopefully is quicker to digest when available in one location. There is a wireshark dissector available too, [here](https://github.com/softins/jamulus-wireshark), if you would like to inspect the packet flow.
@@ -17,10 +61,10 @@ The message packet structure is:
 +-------------+------------+------------+------------------+--------------+-------------+
 ```
 
-The TAG bytes are zero bytes.  
-The ID provides the message type.  
-The SEQ is a wrapping sequence number for the message  
-LENgth of the data preceeds the data and is followed by a CRC for the packet.
+The TAG bytes are zero bytes.
+The ID provides the message type.
+The SEQ is a wrapping sequence number for the message
+LENgth of the data precedes the data and is followed by a CRC for the packet.
 
 Data is sent little-endian, i.e. not network byte-order.
 
@@ -32,16 +76,16 @@ Where a message will not fit into the maximum packet size before fragmentation, 
 +------------+--------------+----------------+--------------+
 ```
 
-The ID is the message type sent in fragments  
-FRAGS is the total number of fragments  
-FRAG_ID is the sequence number of the data in this fragment  
+The ID is the message type sent in fragments
+FRAGS is the total number of fragments
+FRAG_ID is the sequence number of the data in this fragment
 DATA is the fragment data to be re-assembled
 
 This forms the data component of the packet above.
 
 ## Client Session with a Server
 
-As the protocol is connectionless, the message flow at session start up can happen out of order.  
+As the protocol is connectionless, the message flow at session start up can happen out of order.
 When a client starts a session with a server, it sends valid audio packets to the server port, to which the server will respond with the audio mix for that client.
 
 The server on a new client connection will:
@@ -133,7 +177,7 @@ A typical flow would be:
 
 ## General Streaming Messages
 
-During streaming, some control messages are used.  
+During streaming, some control messages are used.
 Some typical messages could be:
 
 ```

@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -32,19 +54,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
-                         const bool       bNEnableIPv6,
                          QWidget*         parent ) :
     CBaseDlg ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bDetectFeedback ( false ),
-    bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_DEFAULT ),          //          "
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
     ChatDlg ( parent ),
-    ConnectDlg ( pNSetP, bNewShowComplRegConnList, bNEnableIPv6, parent ),
+    ConnectDlg ( pNCliP, pNSetP, bNewShowComplRegConnList, parent ),
     AnalyzerConsole ( pNCliP, parent )
 {
     setupUi ( this );
@@ -597,12 +617,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Don't use SRV resolution when resolving update servers.
 
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, pClient->IsIPv6Available() ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, pClient->IsIPv6Available() ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
@@ -825,34 +845,38 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVer
 
 void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType, QString strVersion )
 {
-    // display version in connect dialog
-    ConnectDlg.SetServerVersionResult ( InetAddr, strVersion );
-
-    // update check
-#if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
-    int            mySuffixIndex;
-    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
-
-    int            serverSuffixIndex;
-    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
-
-    // only compare if the server version has no suffix (such as dev or beta)
-    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
+    // if connect dialog showing, pass version to it, and don't do update check
+    if ( bConnectDlgWasShown )
     {
-        // show the label and hide it after one minute again
-        lblUpdateCheck->show();
-        QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
+        // display version in connect dialog
+        ConnectDlg.SetServerVersionResult ( InetAddr, strVersion );
     }
+    else
+    {
+        // update check
+#if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
+        int            mySuffixIndex;
+        QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
+
+        int            serverSuffixIndex;
+        QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
+
+        // only compare if the server version has no suffix (such as dev or beta)
+        if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
+        {
+            // show the label and hide it after one minute again
+            lblUpdateCheck->show();
+            QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
+        }
 #endif
+    }
 }
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
     if ( pSettings->bEnableAudioAlerts )
     {
-        QSoundEffect* sf = new QSoundEffect();
-        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_message.wav" ) );
-        sf->play();
+        PlayAudioAlert ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_message.wav" ) );
     }
     ChatDlg.AddChatText ( strChatText );
 
@@ -901,9 +925,7 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
     if ( pSettings->bEnableAudioAlerts && iNewNumClients > iClients )
     {
-        QSoundEffect* sf = new QSoundEffect();
-        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_user.wav" ) );
-        sf->play();
+        PlayAudioAlert ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_user.wav" ) );
     }
 
     // iNewNumClients will be zero on the first trigger of this signal handler when connecting to a new server.
@@ -1214,65 +1236,123 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
 }
 
+// NOTE (deferred, not yet implemented): Connect()/OnClientIDReceived()/OnDisconnected() are event-driven
+// (they react to a state *transition*). A future pull-based CClientDlg::Refresh() - callable any time to
+// make the GUI match current CClient state, e.g. on startup - is a natural next step, but two gaps need a
+// decision first:
+//  1. No stored "friendly" server display name: CClient only exposes the raw server address
+//     (GetServerAddress()); the nicer name (e.g. a server list entry's name) is a transient parameter to
+//     this method, never retained. A stateless Refresh() would have to fall back to the raw address, which
+//     is a real (if minor) behavioural difference from what this method shows today.
+//  2. MainMixerBoard->HideAll() (in OnDisconnected()) calls StoreAllFaderSettings() first, a one-time
+//     persistence action, not pure state-reflection; and the timer .start() calls, while idempotent, are
+//     side effects rather than display updates. A strict "reads state, alters nothing" Refresh() would
+//     need to either exclude these or explicitly accept them as in-scope.
+// This is left as-is intentionally for now: unifying these into Refresh() touches the same connect/disconnect
+// code paths already reworked to fix the JSON-RPC API/GUI sync bugs, and is a large enough behavioural change
+// to warrant its own separate, focused review.
 void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel )
 {
-    // set address and check if address is valid
-    if ( pClient->SetServerAddr ( strSelectedAddress ) )
+    // Delegate to the same method the JSON-RPC API's jamulusclient/connect uses (CClient::ConnectToServer),
+    // so both agree on what constitutes success vs. each failure mode. This blocks for a short time (up to a
+    // few seconds) while the outcome is determined, so disable the button for the duration to avoid
+    // re-entering this method via a second click while we are waiting.
+    butConnect->setEnabled ( false );
+    QString                        strErrorMessage;
+    const CClient::EConnectResult eResult = pClient->ConnectToServer ( strSelectedAddress, &strErrorMessage );
+    butConnect->setEnabled ( true );
+
+    switch ( eResult )
     {
-        // try to start client, if error occurred, do not go in
-        // running state but show error message
-        try
-        {
-            if ( !pClient->IsRunning() )
-            {
-                pClient->Start();
-            }
-        }
+    case CClient::CR_INVALID_ADDRESS:
+        // matches the previous behaviour: silently do nothing for an invalid address
+        return;
 
-        catch ( const CGenErr& generr )
-        {
-            // show error message and return the function
-            QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );
-            return;
-        }
+    case CClient::CR_SOUND_DEVICE_ERROR:
+        // show error message and return the function
+        QMessageBox::critical ( this, APP_NAME, strErrorMessage, "Close", nullptr );
+        return;
 
-        // hide label connect to server
-        lblConnectToServer->hide();
-        lbrInputLevelL->setEnabled ( true );
-        lbrInputLevelR->setEnabled ( true );
+    case CClient::CR_GONE:
+        pClient->Stop();
+        QMessageBox::warning ( this, APP_NAME, tr ( "The server did not respond. It may no longer be available." ), "Close", nullptr );
+        return;
 
-        // change connect button text to "disconnect"
-        butConnect->setText ( tr ( "&Disconnect" ) );
+    case CClient::CR_FULL:
+        pClient->Stop();
+        QMessageBox::warning ( this, APP_NAME, tr ( "This server is full." ), "Close", nullptr );
+        return;
 
-        // set server name in audio mixer group box title
-        MainMixerBoard->SetServerName ( strMixerBoardLabel );
+    case CClient::CR_UNAUTHORIZED:
+        // handled by OnLicenceRequired (wired directly to CClient::LicenceRequired), which shows the
+        // licence dialog and disconnects if declined; the connection stays up until then.
+        break;
 
-        // start timer for level meter bar and ping time measurement
-        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
-        TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
-        TimerPing.start ( PING_UPDATE_TIME_MS );
-        TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
+    case CClient::CR_UPGRADE_REQUIRED:
+        // advisory only, similar to the existing "update available" notice; does not block the connection
+        QMessageBox::information (
+            this, APP_NAME, tr ( "This server is running a newer version of Jamulus than you are. Consider upgrading." ), "Close", nullptr );
+        break;
 
-        // audio feedback detection
-        if ( pSettings->bEnableFeedbackDetection )
-        {
-            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
-            bDetectFeedback = true;
-        }
+    case CClient::CR_OK:
+        break;
+    }
+
+    // The rest of the "we are now connected" GUI setup (button text, timers, etc.) happens in
+    // OnClientIDReceived, triggered by CClient::ClientIDReceived, which fires regardless of whether
+    // this method or the JSON-RPC API's jamulusclient/connect initiated the connection. That handler
+    // does not know a human-friendly display name, so override its default (the raw server address)
+    // with the one this dialog knows about (e.g. the server list's name for the chosen entry).
+    MainMixerBoard->SetServerName ( strMixerBoardLabel );
+}
+
+void CClientDlg::OnClientIDReceived ( int iChanID )
+{
+    MainMixerBoard->SetMyChannelID ( iChanID );
+
+    // "we are now connected" GUI setup. Triggered here (rather than directly in Connect()) so it also
+    // applies when the JSON-RPC API's jamulusclient/connect established the connection instead. We have
+    // no human-friendly display name at this point, so default to the raw server address; Connect()
+    // overrides this afterwards with a nicer name when it has one.
+    MainMixerBoard->SetServerName ( pClient->GetServerAddress().toString() );
+
+    // hide label connect to server
+    lblConnectToServer->hide();
+    lbrInputLevelL->setEnabled ( true );
+    lbrInputLevelR->setEnabled ( true );
+
+    // change connect button text to "disconnect"
+    butConnect->setText ( tr ( "&Disconnect" ) );
+
+    // start timer for level meter bar and ping time measurement
+    TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+    TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
+    TimerPing.start ( PING_UPDATE_TIME_MS );
+    TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
+
+    // audio feedback detection
+    if ( pSettings->bEnableFeedbackDetection )
+    {
+        TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+        bDetectFeedback = true;
     }
 }
 
 void CClientDlg::Disconnect()
 {
-    // only stop client if currently running, in case we received
-    // the stopped message, the client is already stopped but the
-    // connect/disconnect button and other GUI controls must be
-    // updated
+    // Just stop the client if it is currently running; the actual GUI cleanup happens in
+    // OnDisconnected(), triggered by CClient::Disconnected. CClient::Stop() always emits that
+    // signal, so this reaches the same cleanup regardless of who else calls Stop() on our
+    // behalf (the JSON-RPC API's jamulusclient/disconnect, or CClient::ConnectToServer()
+    // dropping a stale connection before reconnecting).
     if ( pClient->IsRunning() )
     {
         pClient->Stop();
     }
+}
 
+void CClientDlg::OnDisconnected()
+{
     // change connect button text to "connect"
     butConnect->setText ( tr ( "C&onnect" ) );
 
@@ -1416,6 +1496,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
 void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
 {
     // apply MeterStyle to current window
+    // Note: input meter uses big LED and wide bar even in narrow mode
     switch ( eNewMeterStyle )
     {
     case MT_LED_STRIPE:
@@ -1424,23 +1505,15 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
         break;
 
     case MT_LED_ROUND_BIG:
+    case MT_LED_ROUND_SMALL:
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
 
     case MT_BAR_WIDE:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        break;
-
     case MT_BAR_NARROW:
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        break;
-
-    case MT_LED_ROUND_SMALL:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
     }
 

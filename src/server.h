@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -90,7 +112,6 @@ public:
               const QString&     strServerBindIP,
               const quint16      iPortNumber,
               const quint16      iQosNumber,
-              const QString&     strHTMLStatusFileName,
               const QString&     strDirectoryAddress,
               const QString&     strServerListFileName,
               const QString&     strServerInfo,
@@ -100,10 +121,11 @@ public:
               const QString&     strRecordingDirName,
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
+              const bool         bNDisableRaw,
               const bool         bNUseMultithreading,
               const bool         bDisableRecording,
               const bool         bNDelayPan,
-              const bool         bNEnableIPv6,
+              const bool         bNDisableIPv6,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -124,8 +146,8 @@ public:
 
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-    // IPv6 Enabled
-    bool IsIPv6Enabled() { return bEnableIPv6; }
+    // IPv6 Available
+    bool IsIPv6Available() { return bIPv6Available; }
 
     // GUI settings ------------------------------------------------------------
     int GetClientNumAudioChannels ( const int iChanNum ) { return vecChannels[iChanNum].GetNumAudioChannels(); }
@@ -169,6 +191,9 @@ public:
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
     bool IsDelayPanningEnabled() { return bDelayPan; }
 
+    void SendChatTextToAllConChannels ( const int iSendingChanID, const QString& strChatText );
+    bool SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText );
+
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
@@ -192,9 +217,6 @@ protected:
 
     template<unsigned int slotId>
     inline void connectChannelSignalsToServerSlots();
-
-    void WriteHTMLChannelList();
-    void WriteHTMLServerQuit();
 
     static void DecodeReceiveDataBlocks ( CServer* pServer, const int iStartChanCnt, const int iStopChanCnt, const int iNumClients );
 
@@ -250,6 +272,9 @@ protected:
     CConvBuf<int16_t>  DoubleFrameSizeConvBufIn[MAX_NUM_CHANNELS];
     CConvBuf<int16_t>  DoubleFrameSizeConvBufOut[MAX_NUM_CHANNELS];
 
+    // needed for disabling raw audio transmission
+    bool bDisableRaw;
+
     CVector<QString> vstrChatColors;
     CVector<int>     vecChanIDsCurConChan;
 
@@ -269,6 +294,7 @@ protected:
     CVector<uint16_t> vecChannelLevels;
 
     // actual working objects
+    bool            bIPv6Available; // must be before Socket - passed by reference to Socket
     CHighPrioSocket Socket;
 
     // logging
@@ -276,10 +302,6 @@ protected:
 
     // channel level update frame interval counter
     int iFrameCount;
-
-    // HTML file server status
-    bool    bWriteStatusHTMLFile;
-    QString strServerHTMLFileListName;
 
     CHighPrecisionTimer HighPrecisionTimer;
 
@@ -296,9 +318,6 @@ protected:
     // for delay panning
     bool bDelayPan;
 
-    // enable IPv6
-    bool bEnableIPv6;
-
     // messaging
     QString      strWelcomeMessage;
     ELicenceType eLicenceType;
@@ -312,6 +331,8 @@ signals:
     void Started();
     void Stopped();
     void ClientDisconnected ( const int iChID );
+    void ClientConnected ( const int iChID, const QHostAddress RecHostAddr, const int iTotChans );
+    void sentChatMessage ( const int iSendingChanID, const QString& strChatText );
     void SvrRegStatusChanged();
     void AudioFrame ( const int              iChID,
                       const QString          stChName,
@@ -379,6 +400,10 @@ public slots:
     void OnCLRegisterServerResp ( CHostAddress /* unused */, ESvrRegResult eResult ) { ServerListManager.StoreRegistrationResult ( eResult ); }
 
     void OnCLUnregisterServerReceived ( CHostAddress InetAddr ) { ServerListManager.Remove ( InetAddr ); }
+
+    void OnCLReqServerFeatures ( CHostAddress InetAddr );
+
+    void OnCLReqWelcomeMessage ( CHostAddress InetAddr );
 
     void OnCLDisconnection ( CHostAddress InetAddr );
 

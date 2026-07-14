@@ -1,0 +1,193 @@
+﻿# Header, don't edit
+NLF v6
+# Start editing here
+# Language ID
+1035
+# Font and size - dash (-) means default
+-
+-
+# Codepage - dash (-) means ASCII code page
+1252
+# RTL - anything else than RTL means LTR
+-
+# Translation by Eclipser (Jonne Lehtinen) <Eclipser at pilvikaupunki dot net>
+# Corrections by the Mozilla.fi crew
+# Upd 11/08 by WTLib Team
+# ^Branding
+Nullsoft Install System %s
+# ^SetupCaption
+$(^Name) -asennus
+# ^UninstallCaption
+$(^Name) -poisto
+# ^LicenseSubCaption
+: Lisenssisopimus
+# ^ComponentsSubCaption
+: Asennusvalinnat
+# ^DirSubCaption
+: Asennuskansio
+# ^InstallingSubCaption
+: Asennetaan
+# ^CompletedSubCaption
+: Valmis
+# ^UnComponentsSubCaption
+: Poistovalinnat
+# ^UnDirSubCaption
+: Poistokansio
+# ^ConfirmSubCaption
+: Varmistus
+# ^UninstallingSubCaption
+: Poistetaan
+# ^UnCompletedSubCaption
+: Valmis
+# ^BackBtn
+< &Edellinen
+# ^NextBtn
+&Seuraava >
+# ^AgreeBtn
+&Hyväksyn
+# ^AcceptBtn
+Hyväksyn lisenssisopimuksen ehdot
+# ^DontAcceptBtn
+En hyväksy sopimuksen ehtoja
+# ^InstallBtn
+&Asenna
+# ^UninstallBtn
+&Poista
+# ^CancelBtn
+Peruuta
+# ^CloseBtn
+&Sulje
+# ^BrowseBtn
+S&elaa...
+# ^ShowDetailsBtn
+&Näytä tiedot
+# ^ClickNext
+Jatka valitsemalla Seuraava.
+# ^ClickInstall
+Aloita asennus valitsemalla Asenna.
+# ^ClickUninstall
+Aloita asennuksen poisto valitsemalla Poista.
+# ^Name
+Nimi
+# ^Completed
+Valmis
+# ^LicenseText
+Lue lisenssisopimus ennen asennusta ja jos hyväksyt sopimuksen kaikki ehdot, valitse Hyväksyn.
+# ^LicenseTextCB
+Lue lisenssisopimus ennen asennusta ja jos hyväksyt sopimuksen kaikki ehdot, laita rasti ruutuun. $_CLICK
+# ^LicenseTextRB
+Lue lisenssisopimus ennen asennusta ja jos hyväksyt sopimuksen kaikki ehdot, valitse alta ensimmäinen valinta. $_CLICK
+# ^UnLicenseText
+Lue lisenssisopimus ennen asennuksen poistoa ja jos hyväksyt sopimuksen kaikki ehdot, valitse Hyväksyn.
+# ^UnLicenseTextCB
+Lue lisenssisopimus ennen asennuksen poistoa ja jos hyväksyt sopimuksen kaikki ehdot, laita rasti ruutuun. $_CLICK
+# ^UnLicenseTextRB
+Lue lisenssisopimus ennen asennuksen poistoa ja jos hyväksyt sopimuksen kaikki ehdot, valitse alta ensimmäinen valinta. $_CLICK
+# ^Custom
+Mukautettu
+# ^ComponentsText
+Valitse asennettavat komponentit ja poista valinnat niistä, joita et halua asentaa. $_CLICK
+# ^ComponentsSubText1
+Valitse asennustyyppi:
+# ^ComponentsSubText2_NoInstTypes
+Valitse asennettavat komponentit:
+# ^ComponentsSubText2
+Tai valitse valinnaiset komponentit, jotka haluat asentaa:
+# ^UnComponentsText
+Valitse poistettavat komponentit ja poista valinnat niistä, joita et haluat poistaa. $_CLICK
+# ^UnComponentsSubText1
+Valitse poistotyyppi:
+# ^UnComponentsSubText2_NoInstTypes
+Valitse poistettavat komponentit:
+# ^UnComponentsSubText2
+Tai valitse valinnaiset komponentit, jotka haluat poistaa
+# ^DirText
+$(^NameDA) -asennetaan seuraavaan kansioon. Jos haluat asentaa sen eri kansioon, valitse kansio painamalla Selaa. $_CLICK
+# ^DirSubText
+Kohdekansio
+# ^DirBrowseText
+Valitse kansio, johon $(^NameDA) asennetaan:
+# ^UnDirText
+$(^NameDA) poistetaan seuraavasta kansiosta. Jos haluat poistaa sen eri kansiosta, valitse kansio painamalla Selaa. $_CLICK
+# ^UnDirSubText
+""
+# ^UnDirBrowseText
+Valitse kansio, josta $(^NameDA) poistetaan:
+# ^SpaceAvailable
+"Tilaa vapaana: "
+# ^SpaceRequired
+"Tarvittava tila: "
+# ^UninstallingText
+Tämä asentaja poistaa $(^NameDA) -asennuksen tietokoneelta. $_CLICK
+# ^UninstallingSubText
+Poistetaan kansiosta:
+# ^FileError
+Tiedostomuutoksia ei voida tallentaa: \r\n\t"$0"\r\nLopeta asennus valitsemalla Keskeytä,\r\nyritä uudelleen valitsemalla Uudelleen, tai\r\nohita tiedosto valitsemalla Ohita.
+# ^FileError_NoIgnore
+Tiedostomuutoksia ei voida tallentaa: \r\n\t"$0"\r\nYritä uudelleen valitsemalla Uudelleen tai\r\nlopeta asennus valitsemalla Keskeytä.
+# ^CantWrite
+"Tiedostomuutoksia ei voida tallentaa: "
+# ^CopyFailed
+Kopiointi epäonnistui
+# ^CopyTo
+"Kopioidaan kohteeseen "
+# ^Registering
+"Rekisteröidään: "
+# ^Unregistering
+"Poistetaan rekisteröinti: "
+# ^SymbolNotFound
+"Symbolia ei löytynyt: "
+# ^CouldNotLoad
+"Lataus epäonnistui: "
+# ^CreateFolder
+"Luo kansio: "
+# ^CreateShortcut
+"Luo pikakuvake: "
+# ^CreatedUninstaller
+"Asennuksen poisto luotiin: "
+# ^Delete
+"Poista: "
+# ^DeleteOnReboot
+"Poista uudelleenkäynnistyksen yhteydessä: "
+# ^ErrorCreatingShortcut
+"Virhe luotaessa pikakuvaketta: "
+# ^ErrorCreating
+"Virhe luotaessa: "
+# ^ErrorDecompressing
+Pakettia ei voitu purkaa. Onko asennuksen poisto vioittunut?
+# ^ErrorRegistering
+Virhe rekisteröitäessä DLL-tiedostoa
+# ^ExecShell
+"ExecShell: "
+# ^Exec
+"Suorita: "
+# ^Extract
+"Pura: "
+# ^ErrorWriting
+"Pura: tiedostomuutoksia ei voitu tallentaa "
+# ^InvalidOpcode
+Asennuspaketti on vioittunut: virheellinen opcode
+# ^NoOLE
+"OLE puuttuu: "
+# ^OutputFolder
+"Kansio: "
+# ^RemoveFolder
+"Poista kansio: "
+# ^RenameOnReboot
+"Nimeä uudelleen uudelleenkäynnistyksen yhteydessä: "
+# ^Rename
+"Nimeä uudelleen: "
+# ^Skipped
+"Ohitettiin: "
+# ^CopyDetails
+Kopioi tiedot leikepöydälle
+# ^LogInstall
+Tallenna asennusloki
+# ^Byte
+t
+# ^Kilo
+ k
+# ^Mega
+ M
+# ^Giga
+ G

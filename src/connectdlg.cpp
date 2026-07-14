@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -100,8 +122,9 @@ bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
     return lhs.toString() < rhs.toString();
 }
 
-CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, const bool bNEnableIPv6, QWidget* parent ) :
+CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent ) :
     CBaseDlg ( parent, Qt::Dialog ),
+    pClient ( pNCliP ),
     pSettings ( pNSetP ),
     strSelectedAddress ( "" ),
     strSelectedServerName ( "" ),
@@ -110,8 +133,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     bReducedServerListReceived ( false ),
     bServerListItemWasChosen ( false ),
     bListFilterWasActive ( false ),
-    bShowAllMusicians ( true ),
-    bEnableIPv6 ( bNEnableIPv6 )
+    bShowAllMusicians ( true )
 {
     setupUi ( this );
 
@@ -736,6 +758,12 @@ void CConnectDlg::UpdateListFilter()
                     bFilterFound = true;
                 }
 
+                // search version
+                if ( pCurListViewItem->text ( LVC_VERSION ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                {
+                    bFilterFound = true;
+                }
+
                 // search children
                 for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
                 {
@@ -864,7 +892,9 @@ void CConnectDlg::OnTimerPing()
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
         // the data to be parsed is just IP:port, so no SRV discovery is needed
-        if ( NetworkUtil::ParseNetworkAddressBare ( pCurListViewItem->data ( LVC_NAME, Qt::UserRole ).toString(), haServerAddress, bEnableIPv6 ) )
+        if ( NetworkUtil::ParseNetworkAddressBare ( pCurListViewItem->data ( LVC_NAME, Qt::UserRole ).toString(),
+                                                    haServerAddress,
+                                                    pClient->IsIPv6Available() ) )
         {
             // if address is valid, send ping message using a new thread
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
@@ -1106,7 +1136,7 @@ void CConnectDlg::UpdateDirectoryComboBox()
     cbxDirectory->clear();
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_DEFAULT ) );
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_ANY_GENRE2 ) );
-    cbxDirectory->addItem ( DirectoryTypeToString ( AT_ANY_GENRE3 ) );
+    cbxDirectory->addItem ( DirectoryTypeToString ( AT_ANY_GENRE_ASIA ) );
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_GENRE_ROCK ) );
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_GENRE_JAZZ ) );
     cbxDirectory->addItem ( DirectoryTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );

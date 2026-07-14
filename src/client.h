@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -128,10 +150,9 @@ class CClient : public QObject
 public:
     CClient ( const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strConnOnStartupAddress,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
-              const bool     bNEnableIPv6,
+              const bool     bNDisableIPv6,
               const bool     bNMuteMeInPersonalMix );
 
     virtual ~CClient();
@@ -141,6 +162,38 @@ public:
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
     bool SetServerAddr ( QString strNAddr );
+
+    // The address most recently passed to SetServerAddr()/ConnectToServer(), i.e. the server we are
+    // currently connected (or attempting to connect) to.
+    const CHostAddress& GetServerAddress() const { return Channel.GetAddress(); }
+
+    // The client channel ID assigned to us by the server (see the ClientIDReceived signal), or
+    // INVALID_INDEX if not currently connected.
+    int GetMyChannelID() const { return iMyChannelID; }
+
+    // Outcome of ConnectToServer(). Used by both the client UI and the JSON-RPC API so they agree on
+    // what a connection attempt resulted in.
+    enum EConnectResult
+    {
+        CR_OK,
+        CR_INVALID_ADDRESS,    // strServerAddress could not be parsed
+        CR_SOUND_DEVICE_ERROR, // the audio interface could not be started (see pstrErrorMessage)
+        CR_UNAUTHORIZED,       // the server requires accepting a licence before use
+        CR_GONE,               // the server did not respond, or told us it is disconnecting us
+        CR_UPGRADE_REQUIRED,   // the server requires a newer protocol version than this client supports
+        CR_FULL                // the server is full
+    };
+
+    // Sets the server address and starts the client, then blocks for a short time (up to a few seconds)
+    // while the outcome of the connection attempt is determined. On CR_SOUND_DEVICE_ERROR, *pstrErrorMessage
+    // (if given) is set to a human-readable description of the audio failure. Does not stop the client on a
+    // non-CR_OK outcome; callers decide whether/when to give up on the attempt (e.g. the UI keeps the
+    // connection alive on CR_UNAUTHORIZED so the licence dialog, wired independently to LicenceRequired,
+    // can still let the user accept and continue).
+    EConnectResult ConnectToServer ( const QString& strServerAddress, QString* pstrErrorMessage = nullptr );
+
+    // IPv6 Available
+    bool IsIPv6Available() { return bIPv6Available; }
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
@@ -304,6 +357,7 @@ public:
     // settings
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;
+    void             OnRPCInMuteMyself ( bool bMute ) { OnControllerInMuteMyself ( bMute ); }
 
 public:
     void SetSettings ( CClientSettings* settings );
@@ -369,7 +423,9 @@ protected:
     float                  fMuteOutStreamGain;
     CVector<unsigned char> vecCeltData;
 
-    CHighPrioSocket         Socket;
+    bool            bIPv6Available; // must be before Socket - passed by reference to Socket
+    CHighPrioSocket Socket;
+
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
 
@@ -405,12 +461,15 @@ protected:
     bool        bEnableOPUS64;
 
     bool   bJitterBufferOK;
-    bool   bEnableIPv6;
     bool   bMuteMeInPersonalMix;
     QMutex MutexDriverReinit;
 
     // server settings
-    int iServerSockBufNumFrames;
+    int  iServerSockBufNumFrames;
+    bool bRawAudioIsSupported;
+
+    // see GetMyChannelID()
+    int iMyChannelID;
 
     // for ping measurement
     QElapsedTimer PreciseTime;
@@ -453,6 +512,7 @@ protected slots:
     void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void OnControllerInMuteMyself ( bool bMute );
     void OnClientIDReceived ( int iServerChanID );
+    void OnRawAudioSupported();
     void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
     void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

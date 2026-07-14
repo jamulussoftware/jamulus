@@ -4,25 +4,48 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
 #include "server.h"
+#include "util.h"
 
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,
@@ -30,7 +53,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strServerBindIP,
                    const quint16      iPortNumber,
                    const quint16      iQosNumber,
-                   const QString&     strHTMLStatusFileName,
                    const QString&     strDirectoryAddress,
                    const QString&     strServerListFileName,
                    const QString&     strServerInfo,
@@ -40,35 +62,35 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strRecordingDirName,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
+                   const bool         bNDisableRaw,
                    const bool         bNUseMultithreading,
                    const bool         bDisableRecording,
                    const bool         bNDelayPan,
-                   const bool         bNEnableIPv6,
+                   const bool         bNDisableIPv6,
                    const ELicenceType eNLicenceType ) :
     bUseDoubleSystemFrameSize ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading ( bNUseMultithreading ),
     iMaxNumChannels ( iNewMaxNumChan ),
     iCurNumChannels ( 0 ),
-    Socket ( this, iPortNumber, iQosNumber, strServerBindIP, bNEnableIPv6 ),
+    bDisableRaw ( bNDisableRaw ),
+    bIPv6Available ( false ),
+    Socket ( this, iPortNumber, iQosNumber, strServerBindIP, bNDisableIPv6, bIPv6Available ),
     Logging(),
     iFrameCount ( 0 ),
-    bWriteStatusHTMLFile ( false ),
-    strServerHTMLFileListName ( strHTMLStatusFileName ),
     HighPrecisionTimer ( bNUseDoubleSystemFrameSize ),
-    ServerListManager ( iPortNumber,
+    ServerListManager ( this,
+                        iPortNumber,
                         strDirectoryAddress,
                         strServerListFileName,
                         strServerInfo,
                         strServerPublicIP,
                         strServerListFilter,
                         iNewMaxNumChan,
-                        bNEnableIPv6,
                         &ConnLessProtocol ),
     JamController ( this ),
     bDisableRecording ( bDisableRecording ),
     bAutoRunMinimized ( false ),
     bDelayPan ( bNDelayPan ),
-    bEnableIPv6 ( bNEnableIPv6 ),
     eLicenceType ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler ( CSignalHandler::getSingletonP() )
@@ -191,14 +213,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
         Logging.Start ( strLoggingFileName );
     }
 
-    // HTML status file writing
-    if ( !strServerHTMLFileListName.isEmpty() )
-    {
-        // activate HTML file writing and write initial file
-        bWriteStatusHTMLFile = true;
-        WriteHTMLChannelList();
-    }
-
     // manage welcome message: if the welcome message is a valid link to a local
     // file, the content of that file is used as the welcome message (#361)
     SetWelcomeMessage ( strNewWelcomeMessage ); // first use given text, may be overwritten
@@ -277,6 +291,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived, this, &CServer::CLVersionAndOSReceived );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqConnClientsList, this, &CServer::OnCLReqConnClientsList );
+
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqServerFeatures, this, &CServer::OnCLReqServerFeatures );
+
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqWelcomeMessage, this, &CServer::OnCLReqWelcomeMessage );
 
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged, this, &CServer::SvrRegStatusChanged );
 
@@ -383,6 +401,12 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
     // must be the first message to be sent for a new connection)
     vecChannels[iChID].CreateClientIDMes ( iChID );
 
+    // if not disabled, inform the client that the server supports raw (uncompressed) audio
+    if ( !bDisableRaw )
+    {
+        vecChannels[iChID].CreateRawAudioSupportedMes();
+    }
+
     // Send an empty channel list in order to force clients to reset their
     // audio mixer state. This is required to trigger clients to re-send their
     // gain levels upon reconnecting after server restarts.
@@ -451,6 +475,68 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
 
     // logging of new connected channel
     Logging.AddNewConnection ( RecHostAddr.InetAddr, iTotChans );
+
+    emit ClientConnected ( iChID, RecHostAddr.InetAddr, iTotChans );
+}
+
+void CServer::OnCLReqServerFeatures ( CHostAddress RecHostAddr )
+{
+    // This is a bitmask of features enabled at the server.
+    // EFeatureSet from util.h is used to shift each bool into position
+    uint32_t iFeatures = 0;
+
+    // Use 64 samples frame size mode? (argument -F)
+    iFeatures |= ( !bUseDoubleSystemFrameSize << FS_FAST_UPDATE );
+
+    // Multithreading enabled? (argument -T)
+    iFeatures |= ( bUseMultithreading << FS_MULTITHREADING );
+
+    // Recording directory set? (argument -R)
+    // If a recording directory is set a server could potentially record all client audio
+    iFeatures |= ( GetRecorderInitialised() << FS_RECORDER_ENABLED );
+
+    // Will an idle server start recording when a client joins or is it already recording an active session?
+    // (argument --norecord disables recording by default)
+    iFeatures |= ( ( JamController.GetRecorderState() == RS_RECORDING ) << FS_IS_RECORDING );
+
+    // Delay pan enabled? (argument -P)
+    iFeatures |= ( bDelayPan << FS_DELAY_PAN );
+
+    // IPv6 available? (argument --noipv6 disables this feature)
+    iFeatures |= ( bIPv6Available << FS_IPV6_AVAILABLE );
+
+    // "Max" audio quality setting enabled? (argument --noraw disables this feature)
+    iFeatures |= ( !bDisableRaw << FS_RAW_AUDIO );
+
+    // Disconnect all clients on quit? (argument -d)
+    iFeatures |= ( bDisconnectAllClientsOnQuit << FS_DISCONONQUIT );
+
+    // Has welcome message? (argument -w)
+    iFeatures |= ( !strWelcomeMessage.isEmpty() << FS_HAS_WELCOME_MESSAGE );
+
+    // Logging enabled? (argument -l)
+    iFeatures |= ( Logging.IsLogging() << FS_IS_LOGGING );
+
+    // Licence agreement required? (argument -L)
+    iFeatures |= ( ( eLicenceType != LT_NO_LICENCE ) << FS_HAS_LICENCE );
+
+    // TODO:
+    // Running a GUI? (argument -n disables the GUI)
+    // iFeatures |= (  << FS_HAS_GUI );
+    //
+    // // RPC interface enabled? (argument --jsonrpcport)
+    // iFeatures |= (  << FS_RPC_ENABLED );
+
+    // qDebug() << QString::number(iFeatures, 2).rightJustified(32, '0');
+
+    // Create and send the message
+    ConnLessProtocol.CreateCLServerFeaturesMes ( RecHostAddr, iFeatures );
+}
+
+void CServer::OnCLReqWelcomeMessage ( CHostAddress RecHostAddr )
+{
+    // Create and send the message
+    ConnLessProtocol.CreateCLWelcomeMessageMes ( RecHostAddr, strWelcomeMessage );
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )
@@ -496,11 +582,6 @@ void CServer::OnAboutToQuit()
     }
 
     Stop();
-
-    if ( bWriteStatusHTMLFile )
-    {
-        WriteHTMLServerQuit();
-    }
 }
 
 void CServer::OnHandledSignal ( int sigNum )
@@ -858,10 +939,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             // and emit the client disconnected signal
             if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
             {
-                if ( JamController.GetRecordingEnabled() )
-                {
-                    emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
-                }
+                emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
 
                 FreeChannel ( iCurChanID ); // note that the channel is now not in use
 
@@ -885,16 +963,41 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
                 pCurCodedData = nullptr;
             }
 
-            // OPUS decode received data stream
-            if ( CurOpusDecoder != nullptr )
-            {
-                const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
+            // Recognise a raw audio packet by its size:
+            // The client doesn't pass a value for the selected audio quality implicitly.
+            // Rather the server is passed the length of the data sent by the client in iClientFrameSizeSamples.
+            // We know the exact size to expect from a client sending raw audio packets.
+            // The length is calculated in the client by: iNumAudioChannels * iOPUSFrameSizeSamples * sizeof ( int16_t )
+            // iOPUSFrameSizeSamples can be either 64 or 128 (small network buffers enabled|disabled)
+            // iNumAudioChannels is either 1 for mono or 2 for stereo and mono-in/stereo-out
+            // sizeof ( int16_t ) is the size in bytes for the raw pcm audio data = 2
+            // Sizes other than that are considered OPUS coded because those depend on hardcoded sizes in client.h
+            const bool bIsRawAudio =
+                ( iCeltNumCodedBytes == static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) );
 
-                iUnused = opus_custom_decode ( CurOpusDecoder,
-                                               pCurCodedData,
-                                               iCeltNumCodedBytes,
-                                               &vecvecsData[iChanCnt][iOffset],
-                                               iClientFrameSizeSamples );
+            const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
+
+            if ( !bIsRawAudio )
+            {
+                // OPUS decode received data stream
+                if ( CurOpusDecoder != nullptr )
+                {
+                    iUnused = opus_custom_decode ( CurOpusDecoder,
+                                                   pCurCodedData,
+                                                   iCeltNumCodedBytes,
+                                                   &vecvecsData[iChanCnt][iOffset],
+                                                   iClientFrameSizeSamples );
+                }
+            }
+            else if ( pCurCodedData != nullptr )
+            {
+                // copy received raw data stream
+                memcpy ( &vecvecsData[iChanCnt][iOffset], pCurCodedData, iCeltNumCodedBytes );
+            }
+            else
+            {
+                // lost packet - fill with silence
+                memset ( &vecvecsData[iChanCnt][iOffset], 0, iCeltNumCodedBytes );
             }
         }
 
@@ -949,7 +1052,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecfIntermProcBuf[i] += ( static_cast<float> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
+                        vecfIntermProcBuf[i] += ( static_cast<float> ( vecsData[k] ) + vecsData[k + 1] ) / 2.0f;
                     }
                 }
             }
@@ -968,7 +1071,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecfIntermProcBuf[i] += fGain * ( static_cast<float> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
+                        vecfIntermProcBuf[i] += fGain * ( static_cast<float> ( vecsData[k] ) + vecsData[k + 1] ) / 2.0f;
                     }
                 }
             }
@@ -987,7 +1090,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
         const int maxPanDelay = MAX_DELAY_PANNING_SAMPLES;
 
         int iPanDelL = 0, iPanDelR = 0, iPanDel;
-        int iLpan, iRpan, iPan;
+        int iLpan, iRpan;
 
         for ( j = 0; j < iNumClients; j++ )
         {
@@ -1003,21 +1106,20 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
             const float fGainL = MathUtils::GetLeftPan ( fPan, false ) * fGain;
             const float fGainR = MathUtils::GetRightPan ( fPan, false ) * fGain;
 
+            const bool isMono = vecNumAudioChannels[j] == 1;
+
             if ( bDelayPan )
             {
                 iPanDel  = lround ( (float) ( 2 * maxPanDelay - 2 ) * ( vecvecfPannings[iChanCnt][j] - 0.5f ) );
                 iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
                 iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
-            }
 
-            if ( vecNumAudioChannels[j] == 1 )
-            {
-                // mono: copy same mono data in both out stereo audio channels
-                for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
+                if ( isMono )
                 {
-                    // left/right channel
-                    if ( bDelayPan )
+                    // mono: copy same mono data in both out stereo audio channels
+                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
+                        // left/right channel
                         // pan address shift
 
                         // left channel
@@ -1046,54 +1148,60 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                             vecfIntermProcBuf[k + 1] += vecsData[iRpan] * fGainR;
                         }
                     }
-                    else
+                }
+                else
+                {
+                    // stereo
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
-                        vecfIntermProcBuf[k] += vecsData[i] * fGainL;
-                        vecfIntermProcBuf[k + 1] += vecsData[i] * fGainR;
+                        // pan address shift
+
+                        iLpan = i - 2 * iPanDelL;         // left channel
+                        iRpan = ( i + 1 ) - 2 * iPanDelR; // right channel
+
+                        // interleaved channels
+                        if ( iLpan < 0 )
+                        {
+                            // get from second
+                            iLpan = iLpan + 2 * iServerFrameSizeSamples;
+                            vecfIntermProcBuf[i] += vecsData2[iLpan] * fGain;
+                        }
+                        else
+                        {
+                            vecfIntermProcBuf[i] += vecsData[iLpan] * fGain;
+                        }
+
+                        if ( iRpan < 0 )
+                        {
+                            // get from second
+                            iRpan = iRpan + 2 * iServerFrameSizeSamples;
+                            vecfIntermProcBuf[i + 1] += vecsData2[iRpan] * fGain;
+                        }
+                        else
+                        {
+                            vecfIntermProcBuf[i + 1] += vecsData[iRpan] * fGain;
+                        }
                     }
                 }
             }
             else
             {
-                // stereo
-                for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+                if ( isMono )
                 {
-                    // left/right channel
-                    if ( bDelayPan )
+                    // mono: copy same mono data in both out stereo audio channels
+                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        // pan address shift
-                        if ( ( i & 1 ) == 0 )
-                        {
-                            iPan = i - 2 * iPanDelL; // if even : left channel
-                        }
-                        else
-                        {
-                            iPan = i - 2 * iPanDelR; // if odd  : right channel
-                        }
-                        // interleaved channels
-                        if ( iPan < 0 )
-                        {
-                            // get from second
-                            iPan = iPan + 2 * iServerFrameSizeSamples;
-                            vecfIntermProcBuf[i] += vecsData2[iPan] * fGain;
-                        }
-                        else
-                        {
-                            vecfIntermProcBuf[i] += vecsData[iPan] * fGain;
-                        }
+                        vecfIntermProcBuf[k] += vecsData[i] * fGainL;
+                        vecfIntermProcBuf[k + 1] += vecsData[i] * fGainR;
                     }
-                    else
+                }
+                else
+                {
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
-                        if ( ( i & 1 ) == 0 )
-                        {
-                            // if even : left channel
-                            vecfIntermProcBuf[i] += vecsData[i] * fGainL;
-                        }
-                        else
-                        {
-                            // if odd  : right channel
-                            vecfIntermProcBuf[i] += vecsData[i] * fGainR;
-                        }
+                        // left/right channel
+                        vecfIntermProcBuf[i] += vecsData[i] * fGainL;
+                        vecfIntermProcBuf[i + 1] += vecsData[i + 1] * fGainR;
                     }
                 }
             }
@@ -1107,7 +1215,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
     }
 
     int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
-    OpusCustomEncoder* pCurOpusEncoder         = nullptr;
+    OpusCustomEncoder* CurOpusEncoder          = nullptr;
 
     // get current number of CELT coded bytes
     const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetCeltNumCodedBytes();
@@ -1119,11 +1227,11 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
 
         if ( vecNumAudioChannels[iChanCnt] == 1 )
         {
-            pCurOpusEncoder = OpusEncoderMono[iCurChanID];
+            CurOpusEncoder = OpusEncoderMono[iCurChanID];
         }
         else
         {
-            pCurOpusEncoder = OpusEncoderStereo[iCurChanID];
+            CurOpusEncoder = OpusEncoderStereo[iCurChanID];
         }
     }
     else if ( vecAudioComprType[iChanCnt] == CT_OPUS64 )
@@ -1132,11 +1240,11 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
 
         if ( vecNumAudioChannels[iChanCnt] == 1 )
         {
-            pCurOpusEncoder = Opus64EncoderMono[iCurChanID];
+            CurOpusEncoder = Opus64EncoderMono[iCurChanID];
         }
         else
         {
-            pCurOpusEncoder = Opus64EncoderStereo[iCurChanID];
+            CurOpusEncoder = Opus64EncoderStereo[iCurChanID];
         }
     }
 
@@ -1154,25 +1262,40 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
             DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
         }
 
-        // OPUS encoding
-        if ( pCurOpusEncoder != nullptr )
+        if ( iCeltNumCodedBytes != static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) )
         {
-            //### TODO: BEGIN ###//
-            // find a better place than this: the setting does not change all the time so for speed
-            // optimization it would be better to set it only if the network frame size is changed
-            opus_custom_encoder_ctl ( pCurOpusEncoder,
-                                      OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
-            //### TODO: END ###//
+            // OPUS encoding
+            if ( CurOpusEncoder != nullptr )
+            {
+                //### TODO: BEGIN ###//
+                // find a better place than this: the setting does not change all the time so for speed
+                // optimization it would be better to set it only if the network frame size is changed
+                opus_custom_encoder_ctl ( CurOpusEncoder,
+                                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+                //### TODO: END ###//
 
+                for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+                {
+                    const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
+
+                    iUnused = opus_custom_encode ( CurOpusEncoder,
+                                                   &vecsSendData[iOffset],
+                                                   iClientFrameSizeSamples,
+                                                   &vecvecbyCodedData[iChanCnt][0],
+                                                   iCeltNumCodedBytes );
+
+                    // send separate mix to current clients
+                    vecChannels[iCurChanID].PrepAndSendPacket ( &Socket, vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
+                }
+            }
+        }
+        else
+        {
             for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
             {
                 const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
 
-                iUnused = opus_custom_encode ( pCurOpusEncoder,
-                                               &vecsSendData[iOffset],
-                                               iClientFrameSizeSamples,
-                                               &vecvecbyCodedData[iChanCnt][0],
-                                               iCeltNumCodedBytes );
+                memcpy ( &vecvecbyCodedData[iChanCnt][0], &vecsSendData[iOffset], iCeltNumCodedBytes );
 
                 // send separate mix to current clients
                 vecChannels[iCurChanID].PrepAndSendPacket ( &Socket, vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
@@ -1214,12 +1337,6 @@ void CServer::CreateAndSendChanListForAllConChannels()
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
         }
     }
-
-    // create status HTML file if enabled
-    if ( bWriteStatusHTMLFile )
-    {
-        WriteHTMLChannelList();
-    }
 }
 
 void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
@@ -1245,14 +1362,32 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID, con
                                          ChanName.toHtmlEscaped() + "</b></font> " + strChatText.toHtmlEscaped();
 
     // Send chat text to all connected clients ---------------------------------
+    SendChatTextToAllConChannels ( iCurChanID, strActualMessageText );
+}
+
+void CServer::SendChatTextToAllConChannels ( const int iSendingChanID, const QString& strChatText )
+{
+    // Send chat text to all connected clients ---------------------------------
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
-            // send message
-            vecChannels[i].CreateChatTextMes ( strActualMessageText );
+            vecChannels[i].CreateChatTextMes ( strChatText );
         }
     }
+    // forward the message to the RPC server
+    emit sentChatMessage ( iSendingChanID, strChatText );
+}
+
+bool CServer::SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText )
+{
+    if ( !MathUtils::InRange<int> ( iCurChanID, 0, iMaxNumChannels - 1 ) || !vecChannels[iCurChanID].IsConnected() )
+    {
+        return false;
+    }
+    // send message
+    vecChannels[iCurChanID].CreateChatTextMes ( strChatText );
+    return true;
 }
 
 void CServer::CreateAndSendRecorderStateForAllConChannels()
@@ -1516,54 +1651,6 @@ void CServer::SetWelcomeMessage ( const QString& strNWelcMess )
 
     // restrict welcome message to maximum allowed length
     strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
-}
-
-void CServer::WriteHTMLChannelList()
-{
-    // prepare file and stream
-    QFile serverFileListFile ( strServerHTMLFileListName );
-
-    if ( serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
-    {
-        QTextStream streamFileOut ( &serverFileListFile );
-
-        // depending on number of connected clients write list
-        if ( GetNumberOfConnectedClients() == 0 )
-        {
-            // no clients are connected -> empty server
-            streamFileOut << "  No client connected\n";
-        }
-        else
-        {
-            streamFileOut << "<ul>\n";
-
-            // write entry for each connected client
-            for ( int i = 0; i < iMaxNumChannels; i++ )
-            {
-                if ( vecChannels[i].IsConnected() )
-                {
-                    streamFileOut << "  <li>" << vecChannels[i].GetName().toHtmlEscaped() << "</li>\n";
-                }
-            }
-
-            streamFileOut << "</ul>\n";
-        }
-    }
-}
-
-void CServer::WriteHTMLServerQuit()
-{
-    // prepare file and stream
-    QFile serverFileListFile ( strServerHTMLFileListName );
-
-    if ( !serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
-    {
-        return;
-    }
-
-    QTextStream streamFileOut ( &serverFileListFile );
-    streamFileOut << "  Server terminated\n";
-    serverFileListFile.close();
 }
 
 void CServer::customEvent ( QEvent* pEvent )

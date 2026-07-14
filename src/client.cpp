@@ -96,6 +96,7 @@ CClient::CClient ( const quint16  iPortNumber,
     iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
     bRawAudioIsSupported ( false ),
     iMyChannelID ( INVALID_INDEX )
+    bRawAudioIsSupported ( false )
 {
     int iOpusError;
 

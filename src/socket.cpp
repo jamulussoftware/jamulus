@@ -69,7 +69,7 @@ typedef int socklen_t;
 CSocket::CSocket ( CChannel*      pNewChannel,
                    const quint16  iPortNumber,
                    const quint16  iQosNumber,
-                   const QString& strServerBindIP,
+                   const QString& strServerBindIP4,
                    const QString& strServerBindIP6,
                    const bool     bDisableIPv6,
                    bool&          bIPv6Available ) :
@@ -92,7 +92,7 @@ CSocket::CSocket ( CChannel*      pNewChannel,
     UdpSocket4 = INVALID_SOCKET;
     UdpSocket6 = INVALID_SOCKET;
 
-    Init ( iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, bDisableIPv6 );
+    Init ( iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6 );
 
     // client connections:
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pChannel, &CChannel::OnProtocolMessageReceived );
@@ -105,7 +105,7 @@ CSocket::CSocket ( CChannel*      pNewChannel,
 CSocket::CSocket ( CServer*       pNServP,
                    const quint16  iPortNumber,
                    const quint16  iQosNumber,
-                   const QString& strServerBindIP,
+                   const QString& strServerBindIP4,
                    const QString& strServerBindIP6,
                    const bool     bDisableIPv6,
                    bool&          bIPv6Available ) :
@@ -128,7 +128,7 @@ CSocket::CSocket ( CServer*       pNServP,
     UdpSocket4 = INVALID_SOCKET;
     UdpSocket6 = INVALID_SOCKET;
 
-    Init ( iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, bDisableIPv6 );
+    Init ( iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6 );
 
     // server connections:
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pServer, &CServer::OnProtocolMessageReceived );
@@ -183,7 +183,7 @@ void CSocket::Init ( const quint16  iNewPortNumber,
     // first store parameters, in case reinit is required (mostly for iOS)
     iPortNumber      = iNewPortNumber;
     iQosNumber       = iNewQosNumber;
-    strServerBindIP  = strNewServerBindIP;
+    strServerBindIP4 = strNewServerBindIP;
     strServerBindIP6 = strNewServerBindIP6;
 
     if ( !bDisableIPv4 )
@@ -212,12 +212,12 @@ void CSocket::Init ( const quint16  iNewPortNumber,
         sa4.sin_family      = AF_INET;
         sa4.sin_addr.s_addr = INADDR_ANY;
 
-        if ( !strServerBindIP.isEmpty() )
+        if ( !strServerBindIP4.isEmpty() )
         {
-            QHostAddress qtAddr ( strServerBindIP );
+            QHostAddress qtAddr ( strServerBindIP4 );
             if ( qtAddr.protocol() == QAbstractSocket::IPv4Protocol )
             {
-                sa4.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP ).toIPv4Address() );
+                sa4.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP4 ).toIPv4Address() );
             }
             else
             {
@@ -508,7 +508,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
 #ifdef Q_OS_IOS
             // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
-            Init ( iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, !bIPv6Available ); // reinit
+            Init ( iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, !bIPv6Available ); // reinit
 
             // loop back to retry
 #endif

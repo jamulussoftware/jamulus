@@ -81,7 +81,7 @@ public:
     CSocket ( CChannel*      pNewChannel,
               const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strServerBindIP,
+              const QString& strServerBindIP4,
               const QString& strServerBindIP6,
               const bool     bDisableIPv6,
               bool&          bIPv6Available );
@@ -89,7 +89,7 @@ public:
     CSocket ( CServer*       pNServP,
               const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strServerBindIP,
+              const QString& strServerBindIP4,
               const QString& strServerBindIP6,
               const bool     bDisableIPv6,
               bool&          bIPv6Available );
@@ -104,12 +104,12 @@ public:
 protected:
     void    Init ( const quint16  iPortNumber,
                    const quint16  iQosNumber,
-                   const QString& strServerBindIP,
+                   const QString& strServerBindIP4,
                    const QString& strServerBindIP6,
                    const bool     bDisableIPv6 );
     quint16 iPortNumber;
     quint16 iQosNumber;
-    QString strServerBindIP;
+    QString strServerBindIP4;
     QString strServerBindIP6;
 
     SOCKET UdpSocket4;
@@ -164,11 +164,11 @@ public:
     CHighPrioSocket ( CChannel*      pNewChannel,
                       const quint16  iPortNumber,
                       const quint16  iQosNumber,
-                      const QString& strServerBindIP,
+                      const QString& strServerBindIP4,
                       const QString& strServerBindIP6,
                       const bool     bDisableIPv6,
                       bool&          bIPv6Available ) :
-        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, bDisableIPv6, bIPv6Available )
+        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6, bIPv6Available )
     {
         Init();
     }
@@ -176,11 +176,11 @@ public:
     CHighPrioSocket ( CServer*       pNewServer,
                       const quint16  iPortNumber,
                       const quint16  iQosNumber,
-                      const QString& strServerBindIP,
+                      const QString& strServerBindIP4,
                       const QString& strServerBindIP6,
                       const bool     bDisableIPv6,
                       bool&          bIPv6Available ) :
-        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP, strServerBindIP6, bDisableIPv6, bIPv6Available )
+        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6, bIPv6Available )
     {
         Init();
     }

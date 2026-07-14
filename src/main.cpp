@@ -133,7 +133,7 @@ int main ( int argc, char** argv )
     QString      strServerListFileName       = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
-    QString      strServerBindIP             = "";
+    QString      strServerBindIP4            = "";
     QString      strServerBindIP6            = "";
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
@@ -445,14 +445,14 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "--serverbindip", // no short form
-                                 "--serverbindip",
+                                 "--serverbindip", // use short form for compatibility alias
+                                 "--serverbindip4",
                                  strArgument ) )
         {
-            strServerBindIP = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- server bind IP: %1" ).arg ( strServerBindIP ) );
-            CommandLineOptions << "--serverbindip";
-            ServerOnlyOptions << "--serverbindip";
+            strServerBindIP4 = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- server bind IPv4: %1" ).arg ( strServerBindIP4 ) );
+            CommandLineOptions << "--serverbindip4";
+            ServerOnlyOptions << "--serverbindip4";
             continue;
         }
 
@@ -822,13 +822,13 @@ int main ( int argc, char** argv )
             }
         }
 
-        if ( !strServerBindIP.isEmpty() )
+        if ( !strServerBindIP4.isEmpty() )
         {
-            QHostAddress InetAddr ( strServerBindIP );
+            QHostAddress InetAddr ( strServerBindIP4 );
             if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
             {
                 qWarning() << "Server Bind IP is invalid. Only plain IP addresses are supported.";
-                strServerBindIP = "";
+                strServerBindIP4 = "";
             }
         }
 
@@ -1029,7 +1029,7 @@ int main ( int argc, char** argv )
             // actual server object
             CServer Server ( iNumServerChannels,
                              strLoggingFileName,
-                             strServerBindIP,
+                             strServerBindIP4,
                              strServerBindIP6,
                              iPortNumber,
                              iQosNumber,
@@ -1171,8 +1171,9 @@ QString UsageArguments ( char** argv )
            "      --norecord          set server not to record by default when recording is configured\n"
            "      --noraw             disable raw audio\n"
            "  -s, --server            start Server\n"
-           "      --serverbindip      IPv4 address the Server will bind to (rather than all)\n"
+           "      --serverbindip4     IPv4 address the Server will bind to (rather than all)\n"
            "      --serverbindip6     IPv6 address the Server will bind to (rather than all)\n"
+           "      --serverbindip      Alias for --serverbindip4 (for compatibility with pre-4.0)\n"
            "  -T, --multithreading    use multithreading to make better use of\n"
            "                          multi-core CPUs and support more Clients\n"
            "  -u, --numchannels       maximum number of channels\n"

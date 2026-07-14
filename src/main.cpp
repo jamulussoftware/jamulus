@@ -834,6 +834,12 @@ int main ( int argc, char** argv )
 
         if ( !strServerBindIP6.isEmpty() )
         {
+            if ( bDisableIPv6 )
+            {
+                qCritical() << "IPv6 is disabled; --serverbindip6 not allowed.";
+                exit ( 1 );
+            }
+
             QHostAddress InetAddr ( strServerBindIP6 );
             if ( InetAddr.protocol() != QAbstractSocket::IPv6Protocol )
             {

@@ -663,7 +663,6 @@ SOURCES_OPUS = libs/opus/celt/bands.c \
 SOURCES_OPUS_ARM = libs/opus/celt/arm/armcpu.c \
     libs/opus/celt/arm/arm_celt_map.c \
     libs/opus/silk/arm/arm_silk_map.c \
-    libs/opus/silk/arm/arm_silk_map.c \
     libs/opus/silk/arm/biquad_alt_neon_intr.c \
     libs/opus/silk/arm/LPC_inv_pred_gain_neon_intr.c \
     libs/opus/silk/arm/NSQ_del_dec_neon_intr.c \

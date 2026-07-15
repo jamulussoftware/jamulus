@@ -228,7 +228,8 @@ def main():
     parser.add_argument("--ts-dir", type=Path, default=Path("../src/translation"))
     parser.add_argument("--strict", action="store_true")
     parser.add_argument("--color", choices=["never", "auto", "always"], default="auto",
-                        help="Control color output. 'auto' (default) uses colors only if output is a TTY.")
+                        help=("Control color output. 'auto' (default) "
+                              "uses colors only if output is a TTY."))
     args = parser.parse_args()
 
     configure_colors(args.color)

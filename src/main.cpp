@@ -1179,7 +1179,6 @@ QString UsageArguments ( char** argv )
            "  -s, --server            start Server\n"
            "      --serverbindip4     IPv4 address the Server will bind to (rather than all)\n"
            "      --serverbindip6     IPv6 address the Server will bind to (rather than all)\n"
-           "      --serverbindip      Alias for --serverbindip4 (for compatibility with pre-4.0)\n"
            "  -T, --multithreading    use multithreading to make better use of\n"
            "                          multi-core CPUs and support more Clients\n"
            "  -u, --numchannels       maximum number of channels\n"

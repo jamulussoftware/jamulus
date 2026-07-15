@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -437,6 +459,31 @@ CONNECTION LESS MESSAGES
           five times for one registration request at 500ms intervals.
           Beyond this, it should "ping" every 15 minutes
           (standard re-registration timeout).
+
+
+- PROTMESSID_CLM_SERVER_FEATURES: Bitmask of enabled server features
+
+    +------------------+
+    | 4 bytes number n |
+    +------------------+
+
+
+- PROTMESSID_CLM_REQ_SERVER_FEATURES: Request bitmask of enabled server features
+
+    note: does not have any data -> n = 0
+
+
+- PROTMESSID_CLM_WELCOME_MESSAGE: Server welcome message
+
+    +------------------+--------------------------------------+
+    | 2 bytes number n | n bytes UTF-8 string welcome message |
+    +------------------+--------------------------------------+
+
+
+- PROTMESSID_CLM_REQ_WELCOME_MESSAGE: Request server welcome message
+
+    note: does not have any data -> n = 0
+
 */
 
 #include "protocol.h"
@@ -928,6 +975,14 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
 
     case PROTMESSID_CLM_REGISTER_SERVER_RESP:
         EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
+        break;
+
+    case PROTMESSID_CLM_REQ_SERVER_FEATURES:
+        EvaluateCLReqServerFeaturesMes ( InetAddr );
+        break;
+
+    case PROTMESSID_CLM_REQ_WELCOME_MESSAGE:
+        EvaluateCLReqWelcomeMessageMes ( InetAddr );
         break;
     }
 }
@@ -2598,7 +2653,7 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, con
     const int iSvrRegResult = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     if ( ( iSvrRegResult != SRR_REGISTERED ) && ( iSvrRegResult != SRR_SERVER_LIST_FULL ) && ( iSvrRegResult != SRR_VERSION_TOO_OLD ) &&
-         ( iSvrRegResult != SRR_NOT_FULFILL_REQIREMENTS ) )
+         ( iSvrRegResult != SRR_NOT_FULFILL_REQUIREMENTS ) )
     {
         return true;
     }
@@ -2607,6 +2662,53 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, con
     emit CLRegisterServerResp ( InetAddr, static_cast<ESvrRegResult> ( iSvrRegResult ) );
 
     return false; // no error
+}
+
+bool CProtocol::EvaluateCLReqServerFeaturesMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLReqServerFeatures ( InetAddr );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLServerFeaturesMes ( const CHostAddress& InetAddr, const uint32_t iFeatures )
+{
+    int              iPos = 0; // init position pointer
+    CVector<uint8_t> vecData ( 4 );
+
+    PutValOnStream ( vecData, iPos, iFeatures, 4 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_FEATURES, vecData, InetAddr );
+}
+
+bool CProtocol::EvaluateCLReqWelcomeMessageMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLReqWelcomeMessage ( InetAddr );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLWelcomeMessageMes ( const CHostAddress& InetAddr, const QString strWelcomeMessage )
+{
+    int iPos = 0; // init position pointer
+
+    // convert chat text string to utf-8
+    const QByteArray strUTF8WelcomeMessage = strWelcomeMessage.toUtf8();
+
+    const int iStrUTF8Len = strUTF8WelcomeMessage.size(); // get utf-8 str. size / string
+
+    // size of message body
+    const int iEntrLen = 2 + iStrUTF8Len; // utf-8 str. size / string
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // chat text
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8WelcomeMessage );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_WELCOME_MESSAGE, vecData, InetAddr );
 }
 
 /******************************************************************************\

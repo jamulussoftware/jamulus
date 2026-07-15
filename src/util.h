@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -53,6 +75,7 @@
 #include <QElapsedTimer>
 #include <QTextBoundaryFinder>
 #include <QTimer>
+
 #ifndef DISABLE_SRV_DNS
 #    include <QDnsLookup>
 #endif
@@ -72,6 +95,7 @@
 #    include <QDesktopServices>
 #    include <QKeyEvent>
 #    include <QStackedLayout>
+#    include <QSoundEffect>
 #    include "ui_aboutdlgbase.h"
 #endif
 
@@ -467,6 +491,8 @@ public:
     CMinimumStackedLayout ( QWidget* parent = nullptr ) : QStackedLayout ( parent ) {}
     virtual QSize sizeHint() const override;
 };
+
+void PlayAudioAlert ( QUrl soundUrl );
 #endif
 
 /******************************************************************************\
@@ -502,7 +528,7 @@ enum ENetwFlags
 // Audio quality enum ----------------------------------------------------------
 enum EAudioQuality
 {
-    // used for settings and the comobo box index -> enum values must be fixed!
+    // used for settings and the combo box index -> enum values must be fixed!
     AQ_LOW    = 0,
     AQ_NORMAL = 1,
     AQ_HIGH   = 2,
@@ -591,6 +617,25 @@ enum EDirectoryType
     AT_CUSTOM               = 7 // Must be the last entry!
 };
 
+// Server feature set ----------------------------------------------------------
+enum EFeatureSet
+{
+    // used for protocol -> enum values must be fixed
+    FS_FAST_UPDATE         = 0,
+    FS_MULTITHREADING      = 1,
+    FS_RECORDER_ENABLED    = 2,
+    FS_IS_RECORDING        = 3,
+    FS_DELAY_PAN           = 4,
+    FS_IPV6_AVAILABLE      = 5,
+    FS_RAW_AUDIO           = 6,
+    FS_DISCONONQUIT        = 7,
+    FS_HAS_WELCOME_MESSAGE = 8,
+    FS_IS_LOGGING          = 9,
+    FS_HAS_LICENCE         = 10,
+    FS_HAS_GUI             = 11,
+    FS_RPC_ENABLED         = 12
+};
+
 inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
 {
     switch ( eAddrType )
@@ -677,10 +722,10 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
-    SRR_REGISTERED              = 0,
-    SRR_SERVER_LIST_FULL        = 1,
-    SRR_VERSION_TOO_OLD         = 2,
-    SRR_NOT_FULFILL_REQIREMENTS = 3
+    SRR_REGISTERED               = 0,
+    SRR_SERVER_LIST_FULL         = 1,
+    SRR_VERSION_TOO_OLD          = 2,
+    SRR_NOT_FULFILL_REQUIREMENTS = 3
 };
 
 // Skill level enum ------------------------------------------------------------
@@ -694,18 +739,18 @@ enum ESkillLevel
 };
 
 // define the GUI RGB colors for each skill level
-#define RGBCOL_R_SL_NOT_SET         255
-#define RGBCOL_G_SL_NOT_SET         255
-#define RGBCOL_B_SL_NOT_SET         255
-#define RGBCOL_R_SL_BEGINNER        255
-#define RGBCOL_G_SL_BEGINNER        255
-#define RGBCOL_B_SL_BEGINNER        200
-#define RGBCOL_R_SL_INTERMEDIATE    225
-#define RGBCOL_G_SL_INTERMEDIATE    255
-#define RGBCOL_B_SL_INTERMEDIATE    225
-#define RGBCOL_R_SL_SL_PROFESSIONAL 255
-#define RGBCOL_G_SL_SL_PROFESSIONAL 225
-#define RGBCOL_B_SL_SL_PROFESSIONAL 225
+#define RGBCOL_R_SL_NOT_SET      255
+#define RGBCOL_G_SL_NOT_SET      255
+#define RGBCOL_B_SL_NOT_SET      255
+#define RGBCOL_R_SL_BEGINNER     255
+#define RGBCOL_G_SL_BEGINNER     255
+#define RGBCOL_B_SL_BEGINNER     200
+#define RGBCOL_R_SL_INTERMEDIATE 225
+#define RGBCOL_G_SL_INTERMEDIATE 255
+#define RGBCOL_B_SL_INTERMEDIATE 225
+#define RGBCOL_R_SL_PROFESSIONAL 255
+#define RGBCOL_G_SL_PROFESSIONAL 225
+#define RGBCOL_B_SL_PROFESSIONAL 225
 
 // Stereo signal level meter ---------------------------------------------------
 class CStereoSignalLevelMeter
@@ -1054,13 +1099,13 @@ public:
 class NetworkUtil
 {
 public:
-    static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 );
+    static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, const bool bIPv6Available );
 
 #ifndef DISABLE_SRV_DNS
-    static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+    static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available );
 #endif
-    static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
-    static bool ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
+    static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available );
+    static bool ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available );
 
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
@@ -1196,6 +1241,13 @@ public:
         {
             return powf ( 10.0f, ( fInValueRange0_1 - 1.0f ) * AUD_MIX_FADER_RANGE_DB / 20.0f );
         }
+    }
+
+    // return true if a value is within the lower and upper bounds (inclusively), otherwise false
+    template<typename T>
+    static inline bool InRange ( T value, T lower, T upper )
+    {
+        return !( value < lower || value > upper );
     }
 };
 

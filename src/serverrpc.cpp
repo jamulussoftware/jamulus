@@ -5,25 +5,50 @@
  *  dtinth
  *  Christian Hoffmann
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  \******************************************************************************/
 
 #include "serverrpc.h"
+
+/* Definitions ****************************************************************/
+#define INVALID_CLIENT_ID -1
 
 CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* parent ) : QObject ( parent )
 {
@@ -32,6 +57,84 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
         QJsonObject result{ { "mode", "server" } };
         response["result"] = result;
         Q_UNUSED ( params );
+    } );
+
+    /// @rpc_notification jamulusserver/clientConnected
+    /// @brief Emitted when a client has connected to the server.
+    /// @param {number} params.id - The channel ID assigned to the client.
+    /// @param {string} params.address - The client's address.
+    /// @param {number} params.totalChannels - Number of total channels connected to the server.
+    connect ( pServer, &CServer::ClientConnected, [=] ( const int iChanID, const QHostAddress RecHostAddr, const int iTotChans ) {
+        pRpcServer->BroadcastNotification ( "jamulusserver/clientConnected",
+                                            QJsonObject{
+                                                { "id", iChanID },
+                                                { "address", RecHostAddr.toString() },
+                                                { "totalChannels", iTotChans },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusserver/clientDisconnected
+    /// @brief Emitted when a client has disconnected from the server.
+    /// @param {number} params.id - The channel ID assigned to the client.
+    connect ( pServer, &CServer::ClientDisconnected, this, [=] ( const int iChanID ) {
+        pRpcServer->BroadcastNotification ( "jamulusserver/clientDisconnected",
+                                            QJsonObject{
+                                                { "id", iChanID },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusserver/chatMessageReceived
+    /// @brief Emitted when a chat message is received from either a Jamulus or RPC client and to be broadcast to all connected clients.
+    /// @param {number} params.id - Channel ID of sending client or -1 for RPC sent messages.
+    /// @param {string} params.chatMessage - Chat message text.
+    connect ( pServer, &CServer::sentChatMessage, [=] ( const int iSendingChanID, const QString& strChatText ) {
+        pRpcServer->BroadcastNotification ( "jamulusserver/chatMessageReceived",
+                                            QJsonObject{
+                                                { "id", iSendingChanID },
+                                                { "chatMessage", strChatText },
+                                            } );
+    } );
+
+    /// @rpc_method jamulusserver/broadcastChatMessage
+    /// @brief Sends a message (as the server) to all connected clients. This can be used to broadcast messages from external sources (e.g. scripts or
+    /// monitoring tools).
+    /// @param {string} params.chatMessage - The chat message text.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusserver/broadcastChatMessage", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonChatMessage = params["chatMessage"];
+        if ( !jsonChatMessage.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: chatMessage is not a string" );
+            return;
+        }
+
+        // set invalid channel ID to make clear this message was not sent by a Jamulus client
+        pServer->SendChatTextToAllConChannels ( INVALID_CLIENT_ID, jsonChatMessage.toString() );
+        response["result"] = "ok";
+    } );
+
+    /// @rpc_method jamulusserver/privateChatMessage
+    /// @brief Sends a chat message to a single connected client.
+    /// @param {string} params.chatMessage - The chat message text.
+    /// @param {number} params.id - The client's channel id.
+    /// @result {string} result - "ok" or "error" if bad arguments.
+    pRpcServer->HandleMethod ( "jamulusserver/privateChatMessage", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto          jsonChatMessage = params["chatMessage"];
+        const int     id              = params["id"].toInt ( INVALID_CLIENT_ID );
+        const QString chatMessage     = jsonChatMessage.toString();
+        if ( chatMessage.isEmpty() || chatMessage.size() > MAX_LEN_CHAT_TEXT )
+        {
+            response["error"] =
+                CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: chatMessage is not a string or malformed" );
+            return;
+        }
+
+        if ( !pServer->SendChatTextToConChannel ( id, chatMessage ) )
+        {
+            response["error"] = "invalid channel ID";
+            return;
+        }
+        response["result"] = "ok";
     } );
 
     /// @rpc_method jamulusserver/getRecorderStatus

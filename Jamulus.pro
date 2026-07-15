@@ -1,4 +1,4 @@
-VERSION = 3.12.1dev
+VERSION = 3.12.2dev
 
 # Using lrelease and embed_translations only works for Qt 5.12 or later.
 # See https://github.com/jamulussoftware/jamulus/pull/3288 for these changes.
@@ -662,7 +662,6 @@ SOURCES_OPUS = libs/opus/celt/bands.c \
 
 SOURCES_OPUS_ARM = libs/opus/celt/arm/armcpu.c \
     libs/opus/celt/arm/arm_celt_map.c \
-    libs/opus/silk/arm/arm_silk_map.c \
     libs/opus/silk/arm/arm_silk_map.c \
     libs/opus/silk/arm/biquad_alt_neon_intr.c \
     libs/opus/silk/arm/LPC_inv_pred_gain_neon_intr.c \

@@ -83,8 +83,8 @@
 #define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1015 // channel level list
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
-#define PROTMESSID_CLM_RED_SERVER_LIST           1018 // reduced server list
-#define PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST   1028 // request channel level list (connectionless)
+#define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
+#define PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST 1028 // request channel level list (connectionless)
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE 2001 // a container for split messages

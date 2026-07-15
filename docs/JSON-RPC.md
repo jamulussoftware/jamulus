@@ -31,7 +31,7 @@ The JSON-RPC server is based on the [JSON-RPC 2.0](https://www.jsonrpc.org/speci
 
 ## Connect to a JSON-RPC server
 
-On Linux, you can connect to a JSON-RPC server using the `nc` CLI tool. 
+On Linux, you can connect to a JSON-RPC server using the `nc` CLI tool.
 
 On Windows, [you can download](https://nmap.org/ncat/) and use the `ncat` CLI tool.
 
@@ -292,7 +292,7 @@ Results:
 
 ### jamulusclient/setFaderLevel
 
-Sets the fader level. Example: {"id":1,"jsonrpc":"2.0","method":"jamulusclient/setFaderLevel","params":{"channelIndex": 0,"level":  50}}.
+Sets the fader level. Example: {"id":1,"jsonrpc":"2.0","method":"jamulusclient/setFaderLevel","params":{"channelIndex": 0,"level": 50}}.
 
 Parameters:
 
@@ -317,6 +317,23 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params | object | Any subset of MIDI settings fields to set. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
+### jamulusclient/setMuted
+
+Mutes or unmutes the client.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.muted | boolean | muted (true or false). |
 
 Results:
 
@@ -351,6 +368,23 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params.skillLevel | string | The new skill level (beginner, intermediate, expert, or null). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
+### jamulusserver/broadcastChatMessage
+
+Sends a message (as the server) to all connected clients. This can be used to broadcast messages from external sources (e.g. scripts or monitoring tools).
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.chatMessage | string | The chat message text. |
 
 Results:
 
@@ -425,9 +459,27 @@ Results:
 | result.countryId | number | The server country ID (see QLocale::Country). |
 | result.welcomeMessage | string | The server welcome message. |
 | result.directoryType | string | The directory type as a string (see EDirectoryType and SerializeDirectoryType). |
-| result.directoryAddress | string | The string used to look up the directory address (only assume valid if directoryType is "custom"  and registrationStatus is "registered"). |
+| result.directoryAddress | string | The string used to look up the directory address (only assume valid if directoryType is "custom" and registrationStatus is "registered"). |
 | result.directory | string | The directory with which this server requested registration, or blank if none. |
 | result.registrationStatus | string | The server registration status as string (see ESvrRegStatus and SerializeRegistrationStatus). |
+
+
+### jamulusserver/privateChatMessage
+
+Sends a chat message to a single connected client.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.chatMessage | string | The chat message text. |
+| params.id | number | The client's channel id. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | "ok" or "error" if bad arguments. |
 
 
 ### jamulusserver/restartRecording
@@ -444,7 +496,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "acknowledged".   To check if the recording was restarted or if there is any error, call `jamulusserver/getRecorderStatus` again. |
+| result | string | Always "acknowledged". To check if the recording was restarted or if there is any error, call `jamulusserver/getRecorderStatus` again. |
 
 
 ### jamulusserver/setDirectory
@@ -479,7 +531,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "acknowledged".   To check if the directory was changed, call `jamulusserver/getRecorderStatus` again. |
+| result | string | Always "acknowledged". To check if the directory was changed, call `jamulusserver/getRecorderStatus` again. |
 
 
 ### jamulusserver/setServerName
@@ -530,7 +582,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "acknowledged".   To check if the recording was enabled, call `jamulusserver/getRecorderStatus` again. |
+| result | string | Always "acknowledged". To check if the recording was enabled, call `jamulusserver/getRecorderStatus` again. |
 
 
 ### jamulusserver/stopRecording
@@ -547,7 +599,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "acknowledged".   To check if the recording was disabled, call `jamulusserver/getRecorderStatus` again. |
+| result | string | Always "acknowledged". To check if the recording was disabled, call `jamulusserver/getRecorderStatus` again. |
 
 
 ## Notification reference
@@ -559,7 +611,7 @@ Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params.channelLevelList | array | The channel level list.   Each item corresponds to the respective client retrieved from the jamulusclient/clientListReceived notification. |
+| params.channelLevelList | array | The channel level list. Each item corresponds to the respective client retrieved from the jamulusclient/clientListReceived notification. |
 | params.channelLevelList[*] | number | The channel level, an integer between 0 and 9. |
 
 
@@ -653,5 +705,41 @@ Parameters:
 | params.servers[*].countryId | number | Server country ID (see QLocale::Country). |
 | params.servers[*].country | string | Server country. |
 | params.servers[*].city | string | Server city. |
+
+
+### jamulusserver/chatMessageReceived
+
+Emitted when a chat message is received from either a Jamulus or RPC client and to be broadcast to all connected clients.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.id | number | Channel ID of sending client or -1 for RPC sent messages. |
+| params.chatMessage | string | Chat message text. |
+
+
+### jamulusserver/clientConnected
+
+Emitted when a client has connected to the server.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.id | number | The channel ID assigned to the client. |
+| params.address | string | The client's address. |
+| params.totalChannels | number | Number of total channels connected to the server. |
+
+
+### jamulusserver/clientDisconnected
+
+Emitted when a client has disconnected from the server.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.id | number | The channel ID assigned to the client. |
 
 

@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -32,19 +54,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
-                         const bool       bNEnableIPv6,
                          QWidget*         parent ) :
     CBaseDlg ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bDetectFeedback ( false ),
-    bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_DEFAULT ),          //          "
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
     ChatDlg ( parent ),
-    ConnectDlg ( pNSetP, bNewShowComplRegConnList, bNEnableIPv6, parent ),
+    ConnectDlg ( pNCliP, pNSetP, bNewShowComplRegConnList, parent ),
     AnalyzerConsole ( pNCliP, parent )
 {
     setupUi ( this );
@@ -597,12 +617,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Don't use SRV resolution when resolving update servers.
 
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, pClient->IsIPv6Available() ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
+    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, pClient->IsIPv6Available() ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
@@ -825,34 +845,38 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVer
 
 void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpSystemType, QString strVersion )
 {
-    // display version in connect dialog
-    ConnectDlg.SetServerVersionResult ( InetAddr, strVersion );
-
-    // update check
-#if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
-    int            mySuffixIndex;
-    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
-
-    int            serverSuffixIndex;
-    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
-
-    // only compare if the server version has no suffix (such as dev or beta)
-    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
+    // if connect dialog showing, pass version to it, and don't do update check
+    if ( bConnectDlgWasShown )
     {
-        // show the label and hide it after one minute again
-        lblUpdateCheck->show();
-        QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
+        // display version in connect dialog
+        ConnectDlg.SetServerVersionResult ( InetAddr, strVersion );
     }
+    else
+    {
+        // update check
+#if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
+        int            mySuffixIndex;
+        QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
+
+        int            serverSuffixIndex;
+        QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
+
+        // only compare if the server version has no suffix (such as dev or beta)
+        if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
+        {
+            // show the label and hide it after one minute again
+            lblUpdateCheck->show();
+            QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
+        }
 #endif
+    }
 }
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
     if ( pSettings->bEnableAudioAlerts )
     {
-        QSoundEffect* sf = new QSoundEffect();
-        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_message.wav" ) );
-        sf->play();
+        PlayAudioAlert ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_message.wav" ) );
     }
     ChatDlg.AddChatText ( strChatText );
 
@@ -901,9 +925,7 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
     if ( pSettings->bEnableAudioAlerts && iNewNumClients > iClients )
     {
-        QSoundEffect* sf = new QSoundEffect();
-        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_user.wav" ) );
-        sf->play();
+        PlayAudioAlert ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_user.wav" ) );
     }
 
     // iNewNumClients will be zero on the first trigger of this signal handler when connecting to a new server.
@@ -1416,6 +1438,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
 void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
 {
     // apply MeterStyle to current window
+    // Note: input meter uses big LED and wide bar even in narrow mode
     switch ( eNewMeterStyle )
     {
     case MT_LED_STRIPE:
@@ -1424,23 +1447,15 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
         break;
 
     case MT_LED_ROUND_BIG:
+    case MT_LED_ROUND_SMALL:
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
 
     case MT_BAR_WIDE:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        break;
-
     case MT_BAR_NARROW:
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        break;
-
-    case MT_LED_ROUND_SMALL:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
     }
 

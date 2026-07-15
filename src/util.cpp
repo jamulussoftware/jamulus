@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -373,18 +395,34 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                              " the audio data from each client, mixes the audio data and sends the mix "
                              " back to each client." ) +
                         "</p>"
-                        "<p><font face=\"courier\">" // GPL header text
-                        "This program is free software; you can redistribute it and/or modify "
-                        "it under the terms of the GNU General Public License as published by "
-                        "the Free Software Foundation; either version 2 of the License, or "
+                        "<p><font face=\"courier\">" // license notice (see file headers)
+                        "As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed "
+                        "under AGPL 3.0 or any later version.<br><br>"
+                        "Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+. "
+                        "This code will be licensed under GPL 3.0 (or any later version) from "
+                        "3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern "
+                        "the combined work, including network use provisions.<br><br>"
+                        "This program is free software: you can redistribute it and/or modify "
+                        "it under the terms of the GNU Affero General Public License as published by "
+                        "the Free Software Foundation, either version 3 of the License, or "
                         "(at your option) any later version.<br>This program is distributed in "
                         "the hope that it will be useful, but WITHOUT ANY WARRANTY; without "
                         "even the implied warranty of MERCHANTABILITY or FITNESS FOR A "
-                        "PARTICULAR PURPOSE. See the GNU General Public License for more "
+                        "PARTICULAR PURPOSE.  See the GNU Affero General Public License for more "
+                        "details.<br>You should have received a copy of the GNU Affero General Public "
+                        "License along with this program.  If not, see "
+                        "&lt;https://www.gnu.org/licenses/&gt;.<br>"
+                        "---------------------------------------------------------------------------<br>"
+                        "This program is free software: you can redistribute it and/or modify "
+                        "it under the terms of the GNU General Public License as published by "
+                        "the Free Software Foundation, either version 3 of the License, or "
+                        "(at your option) any later version.<br>This program is distributed in "
+                        "the hope that it will be useful, but WITHOUT ANY WARRANTY; without "
+                        "even the implied warranty of MERCHANTABILITY or FITNESS FOR A "
+                        "PARTICULAR PURPOSE.  See the GNU General Public License for more "
                         "details.<br>You should have received a copy of the GNU General Public "
-                        "License along with his program; if not, write to the Free Software "
-                        "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
-                        "USA"
+                        "License along with this program.  If not, see "
+                        "&lt;https://www.gnu.org/licenses/&gt;."
                         "</font></p>" );
 
     // libraries used by this compilation
@@ -419,7 +457,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                             "</p>"
                             "<p>" +
                             tr ( "Flag icons by Mark James" ) +
-                            ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i>"
+                            ", <i><a href=\"https://www.iconarchive.com/artist/famfamfam.html\">"
+                            "via www.iconarchive.com</a> (originally www.famfamfam.com)</i>"
                             "</p>"
                             "<p>" +
                             QString ( tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" ) +
@@ -719,13 +758,26 @@ QSize CMinimumStackedLayout::sizeHint() const
     }
     return QStackedLayout::sizeHint();
 }
+
+void PlayAudioAlert ( QUrl soundUrl )
+{
+    QSoundEffect* sf = new QSoundEffect();
+    QObject::connect ( sf, &QSoundEffect::playingChanged, sf, [sf]() {
+        if ( !sf->isPlaying() )
+        {
+            sf->deleteLater();
+        }
+    } );
+    sf->setSource ( soundUrl );
+    sf->play();
+}
 #endif
 
 /******************************************************************************\
 * Other Classes                                                                *
 \******************************************************************************/
 // Network utility functions ---------------------------------------------------
-bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, const bool bIPv6Available )
 {
     // try to get host by name, assuming
     // that the string contains a valid host name string or IP address
@@ -741,7 +793,7 @@ bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& 
     {
         // qInfo() << qUtf8Printable ( QString ( "Resolved network address to %1 for proto %2" ) .arg ( HostAddr.toString() ) .arg (
         // HostAddr.protocol() ) );
-        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bEnableIPv6 && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
+        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bIPv6Available && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
         {
             InetAddr = HostAddr;
             return true;
@@ -751,7 +803,7 @@ bool NetworkUtil::ParseNetworkAddressString ( QString strAddress, QHostAddress& 
 }
 
 #ifndef DISABLE_SRV_DNS
-bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available )
 {
     // init requested host address with invalid address first
     HostAddress = CHostAddress();
@@ -799,7 +851,7 @@ bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& Hos
         QString ( "resolved %1 to a single SRV record: %2:%3" ).arg ( strAddress ).arg ( record.target() ).arg ( record.port() ) );
 
     QHostAddress InetAddr;
-    if ( ParseNetworkAddressString ( record.target(), InetAddr, bEnableIPv6 ) )
+    if ( ParseNetworkAddressString ( record.target(), InetAddr, bIPv6Available ) )
     {
         HostAddress = CHostAddress ( InetAddr, record.port() );
         return true;
@@ -808,20 +860,20 @@ bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& Hos
 }
 #endif
 
-bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available )
 {
 #ifndef DISABLE_SRV_DNS
     // Try SRV-based discovery first:
-    if ( ParseNetworkAddressSrv ( strAddress, HostAddress, bEnableIPv6 ) )
+    if ( ParseNetworkAddressSrv ( strAddress, HostAddress, bIPv6Available ) )
     {
         return true;
     }
 #endif
     // Try regular connect via plain IP or host name lookup (A/AAAA):
-    return ParseNetworkAddressBare ( strAddress, HostAddress, bEnableIPv6 );
+    return ParseNetworkAddressBare ( strAddress, HostAddress, bIPv6Available );
 }
 
-bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
+bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available )
 {
     QHostAddress InetAddr;
     unsigned int iNetPort = DEFAULT_PORT_NUMBER;
@@ -886,7 +938,7 @@ bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& Ho
     // first try if this is an IP number an can directly applied to QHostAddress
     if ( InetAddr.setAddress ( strAddress ) )
     {
-        if ( !bEnableIPv6 && InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
+        if ( !bIPv6Available && InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
         {
             // do not allow IPv6 addresses if not enabled
             // qInfo() << qUtf8Printable ( QString ( "IPv6 addresses disabled" ) );
@@ -902,7 +954,7 @@ bool NetworkUtil::ParseNetworkAddressBare ( QString strAddress, CHostAddress& Ho
             return false; // invalid address
         }
 
-        if ( !ParseNetworkAddressString ( strAddress, InetAddr, bEnableIPv6 ) )
+        if ( !ParseNetworkAddressString ( strAddress, InetAddr, bIPv6Available ) )
         {
             // no valid address found
             // qInfo() << qUtf8Printable ( QString ( "No IP address found for hostname" ) );
@@ -964,17 +1016,17 @@ QString NetworkUtil::GetDirectoryAddress ( const EDirectoryType eDirectoryType, 
     case AT_CUSTOM:
         return strDirectoryAddress;
     case AT_ANY_GENRE2:
-        return CENTSERV_ANY_GENRE2;
-    case AT_ANY_GENRE3:
-        return CENTSERV_ANY_GENRE3;
+        return DIR_ADDR_ANY_GENRE2;
+    case AT_ANY_GENRE_ASIA:
+        return DIR_ADDR_ANY_GENRE_ASIA;
     case AT_GENRE_ROCK:
-        return CENTSERV_GENRE_ROCK;
+        return DIR_ADDR_GENRE_ROCK;
     case AT_GENRE_JAZZ:
-        return CENTSERV_GENRE_JAZZ;
+        return DIR_ADDR_GENRE_JAZZ;
     case AT_GENRE_CLASSICAL_FOLK:
-        return CENTSERV_GENRE_CLASSICAL_FOLK;
+        return DIR_ADDR_GENRE_CLASSICAL_FOLK;
     case AT_GENRE_CHORAL:
-        return CENTSERV_GENRE_CHORAL;
+        return DIR_ADDR_GENRE_CHORAL;
     default:
         return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }
@@ -1535,17 +1587,48 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** ";
     }
 
-    strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License version 2 or later (GPLv2)" );
+    strVersionText += QCoreApplication::tr ( "Released under the GNU Affero General Public License 3.0 (or any later version)" );
 
     if ( !bDisplayInGui )
     {
-        // additional non-translated text to show in console output
-        strVersionText += "\n *** <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>";
+        // additional non-translated text to show in console output (see file headers)
+        strVersionText += "\n *** <https://www.gnu.org/licenses/>";
         strVersionText += "\n *** ";
-        strVersionText += "\n *** This program is free software; you can redistribute it and/or modify it under";
-        strVersionText += "\n *** the terms of the GNU General Public License as published by the Free Software";
-        strVersionText += "\n *** Foundation; either version 2 of the License, or (at your option) any later version.";
-        strVersionText += "\n *** There is NO WARRANTY, to the extent permitted by law.";
+        strVersionText += "\n *** As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed";
+        strVersionText += "\n *** under AGPL 3.0 or any later version.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.";
+        strVersionText += "\n *** This code will be licensed under GPL 3.0 (or any later version) from";
+        strVersionText += "\n *** 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern";
+        strVersionText += "\n *** the combined work, including network use provisions.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** This program is free software: you can redistribute it and/or modify";
+        strVersionText += "\n *** it under the terms of the GNU Affero General Public License as published by";
+        strVersionText += "\n *** the Free Software Foundation, either version 3 of the License, or";
+        strVersionText += "\n *** (at your option) any later version.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** This program is distributed in the hope that it will be useful,";
+        strVersionText += "\n *** but WITHOUT ANY WARRANTY; without even the implied warranty of";
+        strVersionText += "\n *** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the";
+        strVersionText += "\n *** GNU Affero General Public License for more details.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** You should have received a copy of the GNU Affero General Public License";
+        strVersionText += "\n *** along with this program.  If not, see <https://www.gnu.org/licenses/>.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** ---------------------------------------------------------------------------";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** This program is free software: you can redistribute it and/or modify";
+        strVersionText += "\n *** it under the terms of the GNU General Public License as published by";
+        strVersionText += "\n *** the Free Software Foundation, either version 3 of the License, or";
+        strVersionText += "\n *** (at your option) any later version.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** This program is distributed in the hope that it will be useful,";
+        strVersionText += "\n *** but WITHOUT ANY WARRANTY; without even the implied warranty of";
+        strVersionText += "\n *** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the";
+        strVersionText += "\n *** GNU General Public License for more details.";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** You should have received a copy of the GNU General Public License";
+        strVersionText += "\n *** along with this program.  If not, see <https://www.gnu.org/licenses/>.";
         strVersionText += "\n *** ";
 
         strVersionText += "\n *** " + QCoreApplication::tr ( "This app uses the following libraries, resources or code snippets:" );
@@ -1573,7 +1656,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** <https://openclipart.org>";
         strVersionText += "\n *** ";
         strVersionText += "\n *** " + QCoreApplication::tr ( "Flag icons by Mark James" );
-        strVersionText += "\n *** <http://www.famfamfam.com>";
+        strVersionText += "\n *** https://www.iconarchive.com/artist/famfamfam.html (originally www.famfamfam.com)";
         strVersionText += "\n *** ";
         strVersionText += "\n *** " + QString ( QCoreApplication::tr ( "Some sound samples are from %1" ) ).arg ( "Freesound" );
         strVersionText += "\n *** <https://freesound.org>";

@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -29,10 +51,9 @@
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
                    const quint16  iQosNumber,
-                   const QString& strConnOnStartupAddress,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
-                   const bool     bNEnableIPv6,
+                   const bool     bNDisableIPv6,
                    const bool     bNMuteMeInPersonalMix ) :
     ChannelInfo(),
     strClientName ( strNClientName ),
@@ -50,7 +71,8 @@ CClient::CClient ( const quint16  iPortNumber,
     bIsInitializationPhase ( true ),
     bMuteOutStream ( false ),
     fMuteOutStreamGain ( 1.0f ),
-    Socket ( &Channel, iPortNumber, iQosNumber, "", bNEnableIPv6 ),
+    bIPv6Available ( false ),
+    Socket ( &Channel, iPortNumber, iQosNumber, "", bNDisableIPv6, bIPv6Available ),
     Sound ( AudioCallback, this, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
@@ -68,9 +90,9 @@ CClient::CClient ( const quint16  iPortNumber,
     bEnableAudioAlerts ( false ),
     bEnableOPUS64 ( false ),
     bJitterBufferOK ( true ),
-    bEnableIPv6 ( bNEnableIPv6 ),
     bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
-    iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL )
+    iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
+    bRawAudioIsSupported ( false )
 {
     int iOpusError;
 
@@ -131,6 +153,8 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &Channel, &CChannel::ClientIDReceived, this, &CClient::OnClientIDReceived );
 
+    QObject::connect ( &Channel, &CChannel::RawAudioSupported, this, &CClient::OnRawAudioSupported );
+
     QObject::connect ( &Channel, &CChannel::MuteStateHasChangedReceived, this, &CClient::OnMuteStateHasChangedReceived );
 
     QObject::connect ( &Channel, &CChannel::LicenceRequired, this, &CClient::LicenceRequired );
@@ -187,13 +211,6 @@ CClient::CClient ( const quint16  iPortNumber,
     // start the socket (it is important to start the socket after all
     // initializations and connections)
     Socket.Start();
-
-    // do an immediate start if a server address is given
-    if ( !strConnOnStartupAddress.isEmpty() )
-    {
-        SetServerAddr ( strConnOnStartupAddress );
-        Start();
-    }
 }
 
 // MIDI setup will be handled after settings are assigned
@@ -596,7 +613,7 @@ void CClient::SetRemoteChanPan ( const int iId, const float fPan )
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     CHostAddress HostAddress;
-    if ( NetworkUtil::ParseNetworkAddress ( strNAddr, HostAddress, bEnableIPv6 ) )
+    if ( NetworkUtil::ParseNetworkAddress ( strNAddr, HostAddress, bIPv6Available ) )
     {
         // apply address to the channel
         Channel.SetAddress ( HostAddress );
@@ -989,6 +1006,27 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     emit ClientIDReceived ( iChanID );
 }
 
+void CClient::OnRawAudioSupported()
+{
+    if ( !bRawAudioIsSupported )
+    {
+        const bool bWasRunning = Sound.IsRunning();
+
+        if ( bWasRunning )
+        {
+            Sound.Stop();
+        }
+
+        bRawAudioIsSupported = true;
+        Init();
+
+        if ( bWasRunning )
+        {
+            Sound.Start();
+        }
+    }
+}
+
 void CClient::Start()
 {
     // init object
@@ -1016,6 +1054,10 @@ void CClient::Stop()
 
     // disable channel
     Channel.SetEnable ( false );
+
+    // Fall back to opus in case raw was used
+    bRawAudioIsSupported = false;
+    Init();
 
     // wait for approx. 100 ms to make sure no audio packet is still in the
     // network queue causing the channel to be reconnected right after having
@@ -1156,6 +1198,21 @@ void CClient::Init()
             case AQ_HIGH:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY_DBLE_FRAMESIZE;
                 break;
+            case AQ_RAW:
+                if ( bRawAudioIsSupported )
+                {
+                    // no OPUS encoding or decoding
+                    CurOpusEncoder = nullptr;
+                    CurOpusDecoder = nullptr;
+
+                    iCeltNumCodedBytes = sizeof ( int16_t ) * iNumAudioChannels * iOPUSFrameSizeSamples;
+                }
+                else
+                {
+                    // fall back to highest OPUS quality
+                    iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY_DBLE_FRAMESIZE;
+                }
+                break;
             }
         }
         else
@@ -1174,6 +1231,21 @@ void CClient::Init()
                 break;
             case AQ_HIGH:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE;
+                break;
+            case AQ_RAW:
+                if ( bRawAudioIsSupported )
+                {
+                    // no OPUS encoding or decoding
+                    CurOpusEncoder = nullptr;
+                    CurOpusDecoder = nullptr;
+
+                    iCeltNumCodedBytes = sizeof ( int16_t ) * iNumAudioChannels * iOPUSFrameSizeSamples;
+                }
+                else
+                {
+                    // fall back to highest OPUS quality
+                    iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE;
+                }
                 break;
             }
         }
@@ -1199,6 +1271,21 @@ void CClient::Init()
             case AQ_HIGH:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
                 break;
+            case AQ_RAW:
+                if ( bRawAudioIsSupported )
+                {
+                    // no OPUS encoding or decoding
+                    CurOpusEncoder = nullptr;
+                    CurOpusDecoder = nullptr;
+
+                    iCeltNumCodedBytes = sizeof ( int16_t ) * iNumAudioChannels * iOPUSFrameSizeSamples;
+                }
+                else
+                {
+                    // fall back to highest OPUS quality
+                    iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
+                }
+                break;
             }
         }
         else
@@ -1218,6 +1305,21 @@ void CClient::Init()
             case AQ_HIGH:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
                 break;
+            case AQ_RAW:
+                if ( bRawAudioIsSupported )
+                {
+                    // no OPUS encoding or decoding
+                    CurOpusEncoder = nullptr;
+                    CurOpusDecoder = nullptr;
+
+                    iCeltNumCodedBytes = sizeof ( int16_t ) * iNumAudioChannels * iOPUSFrameSizeSamples;
+                }
+                else
+                {
+                    // fall back to highest OPUS quality
+                    iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
+                }
+                break;
             }
         }
     }
@@ -1229,8 +1331,12 @@ void CClient::Init()
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
     vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
 
-    opus_custom_encoder_ctl ( CurOpusEncoder,
-                              OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iOPUSFrameSizeSamples ) ) );
+    // In case we are connected to a non raw audio server or we don't use raw audio we need to initialze the codec
+    if ( CurOpusEncoder != nullptr )
+    {
+        opus_custom_encoder_ctl ( CurOpusEncoder,
+                                  OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iOPUSFrameSizeSamples ) ) );
+    }
 
     // inits for network and channel
     vecbyNetwData.Init ( iCeltNumCodedBytes );
@@ -1391,9 +1497,10 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )
     {
-        // OPUS encoding
+        // OPUS encoding or copying RAW audio?
         if ( CurOpusEncoder != nullptr )
         {
+            // OPUS encoding
             if ( bMuteOutStream )
             {
                 iUnused = opus_custom_encode ( CurOpusEncoder, &vecZeros[j], iOPUSFrameSizeSamples, &vecCeltData[0], iCeltNumCodedBytes );
@@ -1401,6 +1508,20 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             else
             {
                 iUnused = opus_custom_encode ( CurOpusEncoder, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples, &vecCeltData[0], iCeltNumCodedBytes );
+            }
+        }
+        else if ( bRawAudioIsSupported )
+        {
+            // RAW audio
+            if ( bMuteOutStream )
+            {
+                // output muted - fill with silence
+                memset ( &vecCeltData[0], 0, iCeltNumCodedBytes );
+            }
+            else
+            {
+                // copy raw audio data
+                memcpy ( &vecCeltData[0], &vecsStereoSndCrd[j], iCeltNumCodedBytes );
             }
         }
 
@@ -1437,10 +1558,25 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             bJitterBufferOK = false;
         }
 
-        // OPUS decoding
+        // OPUS decoding or copying RAW audio?
         if ( CurOpusDecoder != nullptr )
         {
+            // OPUS decoding
             iUnused = opus_custom_decode ( CurOpusDecoder, pCurCodedData, iCeltNumCodedBytes, &vecsStereoSndCrd[j], iOPUSFrameSizeSamples );
+        }
+        else if ( bRawAudioIsSupported )
+        {
+            // RAW audio
+            if ( pCurCodedData != nullptr )
+            {
+                // copy raw audio data
+                memcpy ( &vecsStereoSndCrd[j], pCurCodedData, iCeltNumCodedBytes );
+            }
+            else
+            {
+                // missing audio - fill with silence
+                memset ( &vecsStereoSndCrd[j], 0, iCeltNumCodedBytes );
+            }
         }
     }
 
@@ -1488,7 +1624,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     // length. Since that is usually not the case but the buffers are usually
     // a bit larger than necessary, we introduce some factor for compensation.
     // Consider the jitter buffer on the client and on the server side, too.
-    const float fTotalJitterBufferDelayMs = fSystemBlockDurationMs * ( GetSockBufNumFrames() + GetServerSockBufNumFrames() ) * 0.7f;
+    const float fTotalJitterBufferDelayMs = fSystemBlockDurationMs * ( GetSockBufNumFrames() + GetServerSockBufNumFrames() ) * JITTBUF_COMP_FACTOR;
 
     // consider delay introduced by the sound card conversion buffer by using
     // "GetSndCrdConvBufAdditionalDelayMonoBlSize()"
@@ -1519,7 +1655,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     const float fDelayToFillNetworkPacketsMs = GetSystemMonoBlSize() * 1000.0f / SYSTEM_SAMPLE_RATE_HZ;
 
     // OPUS additional delay at small frame sizes is half a frame size
-    const float fAdditionalAudioCodecDelayMs = fSystemBlockDurationMs / 2;
+    const float fAdditionalAudioCodecDelayMs = CurOpusDecoder != nullptr ? fSystemBlockDurationMs / 2 : 0.0f;
 
     const float fTotalBufferDelayMs =
         fDelayToFillNetworkPacketsMs + fTotalJitterBufferDelayMs + fTotalSoundCardDelayMs + fAdditionalAudioCodecDelayMs;

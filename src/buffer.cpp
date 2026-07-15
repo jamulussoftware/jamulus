@@ -4,24 +4,46 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  * Note: We are assuming here that put and get operations are secured by a mutex
  *       and accessing does not occur at the same time.
  *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -42,11 +64,13 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
         // extract all data from buffer in temporary storage
         CVector<CVector<uint8_t>> vecvecTempMemory = vecvecMemory; // allocate worst case memory by copying
 
+        int iTempSize = vecvecTempMemory.size(); // for bounds checking
+
         if ( !bNUseSequenceNumber )
         {
             int iPreviousDataCnt = 0;
 
-            while ( Get ( vecvecTempMemory[iPreviousDataCnt], iBlockSize ) )
+            while ( iPreviousDataCnt < iTempSize && Get ( vecvecTempMemory[iPreviousDataCnt], iBlockSize ) )
             {
                 iPreviousDataCnt++;
             }
@@ -58,6 +82,7 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
             // data back as the new buffer size can hold)
             int iDataCnt = 0;
 
+            // iPreviousDataCnt will be at most iTempSize, so an additional check on iDataCnt is not needed
             while ( ( iDataCnt < iPreviousDataCnt ) && Put ( vecvecTempMemory[iDataCnt], iBlockSize ) )
             {
                 iDataCnt++;
@@ -66,19 +91,18 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
         else
         {
             // store current complete buffer state in temporary memory
-            CVector<int>  veciTempBlockValid ( iNumBlocksMemory );
-            const uint8_t iOldSequenceNumberAtGetPos = iSequenceNumberAtGetPos;
-            const int     iOldNumBlocksMemory        = iNumBlocksMemory;
-            const int     iOldBlockGetPos            = iBlockGetPos;
-            int           iCurBlockPos               = 0;
+            CVector<int> veciTempBlockValid ( iNumBlocksMemory );
+            const int    iOldNumBlocksMemory = iNumBlocksMemory;
+            const int    iOldBlockGetPos     = iBlockGetPos;
+            int          iCurBlockPos        = 0;
 
-            while ( iBlockGetPos < iNumBlocksMemory )
+            while ( iBlockGetPos < iNumBlocksMemory && iCurBlockPos < iTempSize )
             {
                 veciTempBlockValid[iCurBlockPos] = veciBlockValid[iBlockGetPos];
                 vecvecTempMemory[iCurBlockPos++] = vecvecMemory[iBlockGetPos++];
             }
 
-            for ( iBlockGetPos = 0; iBlockGetPos < iOldBlockGetPos; iBlockGetPos++ )
+            for ( iBlockGetPos = 0; iBlockGetPos < iOldBlockGetPos && iCurBlockPos < iTempSize; iBlockGetPos++ )
             {
                 veciTempBlockValid[iCurBlockPos] = veciBlockValid[iBlockGetPos];
                 vecvecTempMemory[iCurBlockPos++] = vecvecMemory[iBlockGetPos];
@@ -88,10 +112,9 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const boo
             Resize ( iNewNumBlocks, iNewBlockSize );
 
             // write back the temporary data in new memory
-            iSequenceNumberAtGetPos = iOldSequenceNumberAtGetPos;
-            iBlockGetPos            = 0; // per definition
+            iBlockGetPos = 0; // per definition
 
-            for ( int iCurPos = 0; iCurPos < std::min ( iNewNumBlocks, iOldNumBlocksMemory ); iCurPos++ )
+            for ( int iCurPos = 0; iCurPos < std::min ( iNewNumBlocks, iOldNumBlocksMemory ) && iCurPos < iTempSize; iCurPos++ )
             {
                 veciBlockValid[iCurPos] = veciTempBlockValid[iCurPos];
                 vecvecMemory[iCurPos]   = vecvecTempMemory[iCurPos];

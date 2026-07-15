@@ -4,21 +4,43 @@
  * Author(s):
  *  Stefan Menzel
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -35,13 +57,23 @@
 #include <functional>
 #include <stdexcept>
 
+// compatibility with C++17 deprecation of result_of
+#if __cplusplus >= 201703L
+// std::invoke_result_t should be used from C++17 onwards, but is not available in C++14 and earlier
+template<class F, class... Args>
+using threadpool_result_t = std::invoke_result_t<F, Args...>;
+#else
+// std::result_of should be used on C++14 and earlier, but is deprecated in C++17
+template<class F, class... Args>
+using threadpool_result_t = typename std::result_of<F ( Args... )>::type;
+#endif
+
 class CThreadPool
 {
 public:
-    CThreadPool() = default;
     CThreadPool ( size_t );
     template<class F, class... Args>
-    auto enqueue ( F&& f, Args&&... args ) -> std::future<typename std::result_of<F ( Args... )>::type>;
+    auto enqueue ( F&& f, Args&&... args ) -> std::future<threadpool_result_t<F, Args...>>;
     ~CThreadPool();
 
 private:
@@ -87,9 +119,9 @@ inline CThreadPool::CThreadPool ( size_t threads ) : stop ( false )
 
 // add new work item to the pool
 template<class F, class... Args>
-auto CThreadPool::enqueue ( F&& f, Args&&... args ) -> std::future<typename std::result_of<F ( Args... )>::type>
+auto CThreadPool::enqueue ( F&& f, Args&&... args ) -> std::future<threadpool_result_t<F, Args...>>
 {
-    using return_type = typename std::result_of<F ( Args... )>::type;
+    using return_type = threadpool_result_t<F, Args...>;
 
     auto task = std::make_shared<std::packaged_task<return_type()>> ( std::bind ( std::forward<F> ( f ), std::forward<Args> ( args )... ) );
 

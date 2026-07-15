@@ -75,7 +75,7 @@ jobs:
         contents:                   write
     steps:
       - name:                       Checkout code
-        uses:                       actions/checkout@v6
+        uses:                       actions/checkout@v7
 
       - name:                       Determine release version, type and prerelease variables
         run:                        ./.github/autobuild/get_build_vars.py
@@ -258,14 +258,14 @@ jobs:
 
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows
-            building_on_os:         windows-2022
+            building_on_os:         windows-2025
             base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
             run_codeql:             true
             is_main_build_target:   true
 
           - config_name:            Windows JACK (artifact)
             target_os:              windows
-            building_on_os:         windows-2022
+            building_on_os:         windows-2025
             base_command:           powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage
             run_codeql:             false
 
@@ -308,7 +308,7 @@ jobs:
           git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
       - name:                       Checkout code
-        uses:                       actions/checkout@v6
+        uses:                       actions/checkout@v7
         with:
           # only Android needs the oboe submodule, so don't fetch it for other builds
           submodules:               ${{ matrix.config.target_os == 'android' }}
@@ -316,7 +316,7 @@ jobs:
 
       - name:                       Cache Mac dependencies
         if:                         matrix.config.target_os == 'macos'
-        uses:                       actions/cache@v5
+        uses:                       actions/cache@v6
         with:
           path: |
             ~/qt
@@ -325,7 +325,7 @@ jobs:
 
       - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'
-        uses:                       actions/cache@v5
+        uses:                       actions/cache@v6
         with:
           path: |
             C:\Qt
@@ -337,7 +337,7 @@ jobs:
 
       - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'
-        uses:                       actions/cache@v5
+        uses:                       actions/cache@v6
         with:
           path: |
             /opt/Qt

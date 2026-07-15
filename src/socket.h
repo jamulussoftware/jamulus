@@ -50,6 +50,7 @@
 #include <QThread>
 #include <QMutex>
 #include <vector>
+#include <atomic>
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
@@ -210,7 +211,7 @@ protected:
         void Stop()
         {
             // disable run flag so that the thread loop can be exit
-            bRun = false;
+            bRun.store ( false );
 
             // to leave blocking wait for receive
             pSocket->Close();
@@ -228,7 +229,7 @@ protected:
             // case)
             if ( pSocket != nullptr )
             {
-                while ( bRun )
+                while ( bRun.load() )
                 {
                     // this function is a blocking function (waiting for network
                     // packets to be received and processed)
@@ -237,8 +238,8 @@ protected:
             }
         }
 
-        CSocket* pSocket;
-        bool     bRun;
+        CSocket*          pSocket;
+        std::atomic<bool> bRun;
     };
 
     void Init()

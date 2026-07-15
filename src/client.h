@@ -163,6 +163,35 @@ public:
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
     bool SetServerAddr ( QString strNAddr );
 
+    // The address most recently passed to SetServerAddr()/ConnectToServer(), i.e. the server we are
+    // currently connected (or attempting to connect) to.
+    const CHostAddress& GetServerAddress() const { return Channel.GetAddress(); }
+
+    // The client channel ID assigned to us by the server (see the ClientIDReceived signal), or
+    // INVALID_INDEX if not currently connected.
+    int GetMyChannelID() const { return iMyChannelID; }
+
+    // Outcome of ConnectToServer(). Used by both the client UI and the JSON-RPC API so they agree on
+    // what a connection attempt resulted in.
+    enum EConnectResult
+    {
+        CR_OK,
+        CR_INVALID_ADDRESS,    // strServerAddress could not be parsed
+        CR_SOUND_DEVICE_ERROR, // the audio interface could not be started (see pstrErrorMessage)
+        CR_UNAUTHORIZED,       // the server requires accepting a licence before use
+        CR_GONE,               // the server did not respond, or told us it is disconnecting us
+        CR_UPGRADE_REQUIRED,   // the server requires a newer protocol version than this client supports
+        CR_FULL                // the server is full
+    };
+
+    // Sets the server address and starts the client, then blocks for a short time (up to a few seconds)
+    // while the outcome of the connection attempt is determined. On CR_SOUND_DEVICE_ERROR, *pstrErrorMessage
+    // (if given) is set to a human-readable description of the audio failure. Does not stop the client on a
+    // non-CR_OK outcome; callers decide whether/when to give up on the attempt (e.g. the UI keeps the
+    // connection alive on CR_UNAUTHORIZED so the licence dialog, wired independently to LicenceRequired,
+    // can still let the user accept and continue).
+    EConnectResult ConnectToServer ( const QString& strServerAddress, QString* pstrErrorMessage = nullptr );
+
     // IPv6 Available
     bool IsIPv6Available() { return bIPv6Available; }
 
@@ -438,6 +467,9 @@ protected:
     // server settings
     int  iServerSockBufNumFrames;
     bool bRawAudioIsSupported;
+
+    // see GetMyChannelID()
+    int iMyChannelID;
 
     // for ping measurement
     QElapsedTimer PreciseTime;

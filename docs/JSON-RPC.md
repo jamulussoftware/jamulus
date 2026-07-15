@@ -129,6 +129,42 @@ Results:
 | result.version | string | The Jamulus version. |
 
 
+### jamulusclient/connect
+
+Connects to a server previously discovered via jamulusclient/pollServerList on the given directory. Blocks for a short time (up to a few seconds) while the outcome of the connection attempt is determined.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.directory | string | Socket address of the directory the server was discovered from. Must have already been queried via jamulusclient/pollServerList. |
+| params.server | string | Socket address of the server to connect to, as returned in params.servers[*].address of jamulusclient/serverListReceived. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | "ok"; "Not Found" if the directory hasn't been polled, or the server address is invalid; "Unauthorized" if the server requires accepting a licence, which isn't supported over this API; "Gone (server no longer listed)" if the server is not, or is no longer, present in the directory's server list; "Upgrade Required (obsolete protocol, upgrade Jamulus)" if the server requires a newer protocol version than this client supports; or "Insufficient Storage (Full)" if the server is full. If the local audio interface fails to start, an error is returned instead of a result. |
+
+
+### jamulusclient/disconnect
+
+Disconnects from the server that was connected via jamulusclient/connect.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.directory | string | Socket address of the directory that was passed to jamulusclient/connect. |
+| params.server | string | Socket address of the server that was passed to jamulusclient/connect. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | "ok"; "Not Found" if params.directory/params.server do not match the connection established by the most recent jamulusclient/connect call; or, reflecting the outcome of that call, "Unauthorized", "Gone (server no longer listed)", or "Upgrade Required (obsolete protocol, upgrade Jamulus)". |
+
+
 ### jamulusclient/getChannelInfo
 
 Returns the client's profile information.
@@ -143,7 +179,7 @@ Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result.id | number | The channel ID. |
+| result.id | number | The channel ID assigned by the server, or -1 if not currently connected. |
 | result.name | string | The musician’s name. |
 | result.skillLevel | string | The musician’s skill level (beginner, intermediate, expert, or null). |
 | result.countryId | number | The musician’s country ID (see QLocale::Country). |
@@ -186,6 +222,23 @@ Results:
 | Name | Type | Description |
 | --- | --- | --- |
 | result.clients | array | The client list. See jamulusclient/clientListReceived for the format. |
+
+
+### jamulusclient/getDirectories
+
+Returns the list of directories in the same order as presented in Jamulus.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | array | Array of directory socket address strings, usable as params.directory in jamulusclient/pollServerList. |
 
 
 ### jamulusclient/getMidiDevices

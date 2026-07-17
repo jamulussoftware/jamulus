@@ -90,6 +90,8 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 win32 {
+    # fixes error C7525: inline variables require at least '/std:c++17'
+    CONFIG += c++17
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     RC_FILE = src/res/win-mainicon.rc
@@ -404,7 +406,8 @@ HEADERS += src/plugins/audioreverb.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/signalhandler.h
+    src/signalhandler.h \
+    libs/mverb/MVerb.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \

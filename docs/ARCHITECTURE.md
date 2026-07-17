@@ -31,6 +31,29 @@ Audio is processed in frames of 64 or 128 samples at 48 kHz — one UDP packet r
 | `src/util.*`, `src/settings.*` | Shared helpers and persistent settings |
 | `src/*dlg*`, `src/audiomixerboard.*` | Qt GUI — excluded from `CONFIG+=headless` builds |
 
+## Key classes and how they connect
+
+Ownership mirrors the data flow (member names as declared in the headers):
+
+```
+CServer                                    CClient
+├─ CHighPrioSocket   Socket                ├─ CSound            Sound     (CSoundBase subclass;
+├─ CChannel          vecChannels[          │                               hardware callback)
+│      MAX_NUM_CHANNELS]                   ├─ CHighPrioSocket   Socket
+│    ├─ CNetBufWithStats SockBuf           └─ CChannel          Channel   (the one server
+│    └─ CProtocol        Protocol                                          connection)
+├─ CProtocol         ConnLessProtocol
+├─ CHighPrecisionTimer                     (drives OnTimer(), the mix loop)
+└─ CServerListManager
+```
+
+- **`CChannel`** is where a "connection" lives: peer address, name and instrument info, per-client gains and the jitter buffer. Server channels are a fixed pre-allocated array — a free slot is claimed when audio arrives from an unknown address, and `IsConnected()` times the slot out when audio stops.
+- **`CProtocol`** implements framing, sequence numbers, acknowledgement/retransmission and split messages. Every channel has its own instance for connection-based messages (ID < 1000); the server has one extra channel-less instance, `ConnLessProtocol`, for `CLM_*` messages (ID ≥ 1000) such as pings and directory traffic.
+- **`CNetBufWithStats`** extends the plain `CNetBuf` jitter buffer with error-rate statistics used to auto-size it per network conditions.
+- **`CSocket` / `CHighPrioSocket`** own the UDP socket; `CHighPrioSocket` runs `CSocket` on the dedicated high-priority thread described below and classifies every datagram as protocol or audio.
+- **`CSoundBase`** is the abstract audio backend; one subclass per platform driver lives in `src/sound/`. Its callback is the client's real-time engine.
+- **`CServerListManager`** implements both directory roles: registering this server with a directory, and acting as the directory that answers list requests.
+
 ## Threading model
 
 The server runs three execution contexts:

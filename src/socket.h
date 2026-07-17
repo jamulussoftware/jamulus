@@ -49,6 +49,7 @@
 #include <QObject>
 #include <QThread>
 #include <QMutex>
+#include <atomic>
 #include <vector>
 #include "global.h"
 #include "protocol.h"
@@ -124,7 +125,7 @@ protected:
 
     bool bIsClient;
 
-    bool bJitterBufferOK;
+    std::atomic<bool> bJitterBufferOK;
 
     // This is a reference to CClient::bIPv6Available or CServer::bIPv6Available,
     // to inform the Client or Server which type of socket was created at startup.
@@ -237,8 +238,8 @@ protected:
             }
         }
 
-        CSocket* pSocket;
-        bool     bRun;
+        CSocket*          pSocket;
+        std::atomic<bool> bRun;
     };
 
     void Init()

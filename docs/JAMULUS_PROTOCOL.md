@@ -45,7 +45,7 @@ along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://
 # The Jamulus Audio Protocol
 
 Jamulus uses connectionless UDP packets to communicate between the client and server, and additionally for directory server registration. The `src/protocol.cpp` file contains much of the details of the packets themselves, whereas this document is intended to form a higher-level view of the protocol interactions.
-Some of the messages need to be acknowledged, some do not. If a message ID is less than 1000, the message must be acknowledged in under `SEND_MESS_TIMEOUT_MS` ms.
+Messages with an ID below 1000 are connection-based: each one is acknowledged by an `ACKN (1)` message carrying the same sequence counter, and the sender retransmits it every `SEND_MESS_TIMEOUT_MS` ms until the acknowledgement arrives. Messages with an ID of 1000 or above (`CLM_*`) are connectionless: they work without an established audio connection and are never acknowledged.
 
 All of this information can be discovered from reading the code, but hopefully is quicker to digest when available in one location. There is a wireshark dissector available too, [here](https://github.com/softins/jamulus-wireshark), if you would like to inspect the packet flow.
 
@@ -68,6 +68,10 @@ LENgth of the data precedes the data and is followed by a CRC for the packet.
 
 Data is sent little-endian, i.e. not network byte-order.
 
+The CRC is 16 bits, generator polynomial x¹⁶ + x¹² + x⁵ + 1 (CCITT), initial state all ones, calculated over the entire message and transmitted inverted.
+
+Audio and protocol messages share one UDP port. A receiver classifies every incoming datagram by attempting to parse it as a protocol frame — zero TAG bytes, consistent length, valid CRC. Anything that fails this parse is treated as an audio packet (see `CSocket::ProcessPacket()` in `src/socket.cpp`).
+
 Where a message will not fit into the maximum packet size before fragmentation, a split message container is used.
 
 ```
@@ -83,6 +87,64 @@ DATA is the fragment data to be re-assembled
 
 This forms the data component of the packet above.
 
+## Message Reference
+
+Connection-based messages (acknowledged; `PROTMESSID_` prefix omitted). Full payload layouts are in the header comment of `src/protocol.cpp`.
+
+| ID | Name | Purpose |
+|---|---|---|
+| 1 | `ACKN` | Acknowledges the message ID/counter it carries |
+| 10 | `JITT_BUF_SIZE` | Set jitter buffer size |
+| 11 | `REQ_JITT_BUF_SIZE` | Request jitter buffer size |
+| 13 | `CHANNEL_GAIN` | Set a channel's gain in your mix |
+| 16 | `REQ_CONN_CLIENTS_LIST` | Request connected-clients list |
+| 18 | `CHAT_TEXT` | Chat text |
+| 20 | `NETW_TRANSPORT_PROPS` | Audio transport properties |
+| 21 | `REQ_NETW_TRANSPORT_PROPS` | Request audio transport properties |
+| 23 | `REQ_CHANNEL_INFOS` | Request channel info (name, instrument, …) |
+| 24 | `CONN_CLIENTS_LIST` | Channel info of all connected clients |
+| 25 | `CHANNEL_INFOS` | Set own channel info |
+| 26 | `OPUS_SUPPORTED` | OPUS codec is supported |
+| 27 | `LICENCE_REQUIRED` | Server requires licence agreement |
+| 29 | `VERSION_AND_OS` | Version and operating system |
+| 30 | `CHANNEL_PAN` | Set a channel's pan in your mix |
+| 31 | `MUTE_STATE_CHANGED` | Your signal was (un)muted at another client |
+| 32 | `CLIENT_ID` | Your channel ID on the server |
+| 33 | `RECORDER_STATE` | Jam recorder state |
+| 34 | `REQ_SPLIT_MESS_SUPPORT` | Request split-message support |
+| 35 | `SPLIT_MESS_SUPPORTED` | Split messages are supported |
+| 36 | `RAWAUDIO_SUPPORTED` | Raw (uncompressed) audio is supported |
+| 2001 | `SPECIAL_SPLIT_MESSAGE` | Container for split messages |
+
+IDs 12, 14, 15, 17, 19, 22 and 28 are legacy messages no longer sent (28, `REQ_CHANNEL_LEVEL_LIST`, is still understood for compatibility with servers 3.4.6–3.5.12).
+
+Connectionless messages (never acknowledged):
+
+| ID | Name | Purpose |
+|---|---|---|
+| 1001 | `CLM_PING_MS` | Ping time measurement |
+| 1002 | `CLM_PING_MS_WITHNUMCLIENTS` | Ping plus number of connected clients |
+| 1003 | `CLM_SERVER_FULL` | Server is full |
+| 1004 | `CLM_REGISTER_SERVER` | Register with a directory |
+| 1005 | `CLM_UNREGISTER_SERVER` | Unregister from a directory |
+| 1006 | `CLM_SERVER_LIST` | Full server list |
+| 1007 | `CLM_REQ_SERVER_LIST` | Request server list |
+| 1008 | `CLM_SEND_EMPTY_MESSAGE` | Ask recipient to send `CLM_EMPTY_MESSAGE` to the carried address |
+| 1009 | `CLM_EMPTY_MESSAGE` | Empty message (NAT hole punching) |
+| 1010 | `CLM_DISCONNECTION` | Disconnect from server |
+| 1011 | `CLM_VERSION_AND_OS` | Version and operating system |
+| 1012 | `CLM_REQ_VERSION_AND_OS` | Request version and operating system |
+| 1013 | `CLM_CONN_CLIENTS_LIST` | Connected-clients info |
+| 1014 | `CLM_REQ_CONN_CLIENTS_LIST` | Request connected-clients info |
+| 1015 | `CLM_CHANNEL_LEVEL_LIST` | Channel level list |
+| 1016 | `CLM_REGISTER_SERVER_RESP` | Registration result |
+| 1017 | `CLM_REGISTER_SERVER_EX` | Register with extended information |
+| 1018 | `CLM_RED_SERVER_LIST` | Reduced server list (less UDP fragmentation) |
+| 1019 | `CLM_SERVER_FEATURES` | Server features |
+| 1020 | `CLM_REQ_SERVER_FEATURES` | Request server features |
+| 1021 | `CLM_WELCOME_MESSAGE` | Server welcome message |
+| 1022 | `CLM_REQ_WELCOME_MESSAGE` | Request server welcome message |
+
 ## Client Session with a Server
 
 As the protocol is connectionless, the message flow at session start up can happen out of order.
@@ -95,20 +157,20 @@ The server on a new client connection will:
 - Determine if the client supports split messages, with a `REQ_SPLIT_MESSAGE_SUPPORT (34, 0x2200)` message.
 - Request the details of the audio packets from the client with a `REQ_NETW_TRANSPORT_PROPS (21, 0x1500)` message,
 - Request the number of jitter buffer value to use, with a `REQ_JITT_BUF_SIZE (11, 0x0B00)` message.
-- Request the details of the channel info, with a `REQ_CHANNELS_INFOS (23, 0x1700)` message.
+- Request the details of the channel info, with a `REQ_CHANNEL_INFOS (23, 0x1700)` message.
 - Send the version and OS of the server, with a `VERSION_AND_OS (29, 0x1d00)` message.
 
 This is defined in `CServer::OnNewConnection()`
 
 The client on a new connection will:
 
-- Send its channel info with a `CHANNELS_INFO (25, 0x1900)` message
-- Request the list of connected clients with a `REQ_CONN_CLIENT_LIST (16, 0x1000)` message
+- Send its channel info with a `CHANNEL_INFOS (25, 0x1900)` message
+- Request the list of connected clients with a `REQ_CONN_CLIENTS_LIST (16, 0x1000)` message
 - Set the server-side jitter buffer value with a `JITT_BUF_SIZE (10, 0x0a00)` message
 
 This is defined in `CClient::OnNewConnection()`
 
-At the end of the session, the client calls the `CLM_DISCONNECTION (1010, 0xf203)` message, until the server stops streaming audio to it.
+At the end of the session, the client repeatedly sends a `CLM_DISCONNECTION (1010, 0xf203)` message, until the server stops streaming audio to it.
 
 A typical flow would be:
 
@@ -156,8 +218,8 @@ A typical flow would be:
   ACK(RECORDER_STATE) ------------------->
 
 
-  REQ_CONNECTED_CLIENTS_LIST (16, 0x1000) ---->
-      <------------------------------------ ACK(REQ_CONNECTED_CLIENTS_LIST)
+  REQ_CONN_CLIENTS_LIST (16, 0x1000) -------->
+      <------------------------------------ ACK(REQ_CONN_CLIENTS_LIST)
 
   REQ_CHANNEL_LEVEL_LIST (28, 0x1c00) -------->
 
@@ -202,6 +264,17 @@ Some typical messages could be:
   CHANNEL_PAN (30, 0x1e00) ------------------>
       <------------------------------------ ACK(CHANNEL_PAN)
 ```
+
+---
+
+## Directory Registration and Server Lists
+
+A directory is a Jamulus server acting as a registry (implemented in `src/serverlist.cpp`, both roles). All directory traffic uses connectionless messages:
+
+- A server registers with `CLM_REGISTER_SERVER_EX (1017)` (older versions: `CLM_REGISTER_SERVER (1004)`) and receives `CLM_REGISTER_SERVER_RESP (1016)` carrying the result (registered, list full, version too old, requirements not fulfilled). If no response arrives, registration is retried every 500 ms, up to 5 times.
+- Registration is refreshed every 15 minutes; the directory drops a server it has not heard from for 33 minutes. `CLM_UNREGISTER_SERVER (1005)` removes the entry immediately at shutdown.
+- A client requests the list with `CLM_REQ_SERVER_LIST (1007)`. The directory answers with both `CLM_RED_SERVER_LIST (1018)` (a reduced form that avoids UDP fragmentation) and `CLM_SERVER_LIST (1006)`. The client then pings each listed server with `CLM_PING_MS_WITHNUMCLIENTS (1002)` to display latency and occupancy.
+- NAT hole punching: when it answers a list request, the directory also sends every registered server a `CLM_SEND_EMPTY_MESSAGE (1008)` carrying the client's public address; each server responds by sending `CLM_EMPTY_MESSAGE (1009)` to that address, opening its own NAT/firewall for the client's subsequent packets. The directory and its registered servers also ping each other about once a minute to keep their NAT mappings alive.
 
 ---
 

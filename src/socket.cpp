@@ -531,7 +531,7 @@ bool CSocket::GetAndResetbJitterBufferOKFlag()
     return true;
 }
 
-void CSocket::OnDataReceived()
+void CSocket::OnDataReceived ( std::atomic<bool>& bRun )
 {
     /*
        The strategy of this function is that only the "put audio" function is
@@ -585,7 +585,7 @@ void CSocket::OnDataReceived()
             sockaddr_in sa4;
             socklen_t   sa4len = sizeof ( sa4 );
 
-            while ( true )
+            while ( bRun )
             {
                 const long iNumBytesRead =
                     recvfrom ( UdpSocket4, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa4, &sa4len );
@@ -634,7 +634,7 @@ void CSocket::OnDataReceived()
             sockaddr_in6 sa6;
             socklen_t    sa6len = sizeof ( sa6 );
 
-            while ( true )
+            while ( bRun )
             {
                 const long iNumBytesRead =
                     recvfrom ( UdpSocket6, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa6, &sa6len );

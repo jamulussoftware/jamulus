@@ -50,6 +50,7 @@
 #include <QThread>
 #include <QMutex>
 #include <vector>
+#include <atomic>
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
@@ -134,7 +135,7 @@ private:
     void ProcessPacket ( const CHostAddress& RecHostAddr, const int iNumBytesRead );
 
 public:
-    void OnDataReceived();
+    void OnDataReceived ( std::atomic<bool>& bRun );
 
 signals:
     void NewConnection(); // for the client
@@ -212,9 +213,6 @@ protected:
             // disable run flag so that the thread loop can be exit
             bRun = false;
 
-            // to leave blocking wait for receive
-            pSocket->Close();
-
             // give thread some time to terminate
             wait ( 5000 );
         }
@@ -232,13 +230,13 @@ protected:
                 {
                     // this function is a blocking function (waiting for network
                     // packets to be received and processed)
-                    pSocket->OnDataReceived();
+                    pSocket->OnDataReceived ( bRun );
                 }
             }
         }
 
-        CSocket* pSocket;
-        bool     bRun;
+        CSocket*          pSocket;
+        std::atomic<bool> bRun; // atomic, as it is set and tested by different threads
     };
 
     void Init()

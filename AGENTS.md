@@ -6,7 +6,8 @@ This file is the starting point for coding agents. It links to the detailed docs
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) — process, code style, licensing, ownership. Its rules apply to agent-assisted work without exception.
 - [COMPILING.md](COMPILING.md) — building on every supported platform.
-- [DEPLOY.md](DEPLOY.md) — moving a self-built server binary onto production hosts and verifying it.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — source map, threading model, and the invariants that protect live performances.
+- [docs/DEPLOY.md](docs/DEPLOY.md) — moving a self-built server binary onto production hosts and verifying it.
 - [docs/JAMULUS_PROTOCOL.md](docs/JAMULUS_PROTOCOL.md) — the wire protocol.
 - [SECURITY.md](SECURITY.md) — report vulnerabilities to team@jamulus.io, never in a public issue.
 
@@ -16,13 +17,13 @@ This file is the starting point for coding agents. It links to the detailed docs
 - Features must be agreed in a GitHub issue or Discussion **before** coding — see CONTRIBUTING.md. If no agreement exists, propose; don't implement.
 - Stability outranks everything: Jamulus runs live performances. Prefer not adding a feature over adding risk (KISS principles in CONTRIBUTING.md).
 
-## Architecture laws
+## Architecture invariants
 
-Violating these causes audible failures for every connected musician, so they are non-negotiable:
+Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before changing code. Its three invariants, in brief:
 
-1. **Never block the real-time path.** The audio capture/playback callbacks (`src/sound/`) and the server's UDP receive → mix → send path (`socket.cpp`, `channel.cpp`, `server.cpp`) must not perform blocking I/O (DNS, HTTP, disk, database), wait on locks contended by non-real-time threads, or do unbounded allocation per packet. Slow work must run asynchronously on another thread; when its result isn't ready, the real-time path fails open and continues. A single synchronous lookup here freezes the audio of everyone on the server.
-2. **The wire protocol is a compatibility contract.** `protocol.cpp` must interoperate with every older client and server in the wild. Never renumber `PROTMESSID_*` values, never change the layout of an existing message — extend only by adding new message IDs. Read the header comment in `src/protocol.cpp` and [docs/JAMULUS_PROTOCOL.md](docs/JAMULUS_PROTOCOL.md) before touching it.
-3. **All network input is adversarial.** UDP packets arrive from arbitrary internet hosts. Bounds-check every length and count field before use. A malformed packet must be dropped silently — it must never crash, block, or corrupt the server.
+1. Never block the real-time audio path (sound callbacks, socket thread, server mix timer).
+2. Existing wire-protocol message IDs and layouts are frozen — extend only by adding new message IDs.
+3. All network input is untrusted — bounds-check everything; drop malformed packets silently.
 
 ## DO NOT edit (generated or third-party)
 
@@ -69,4 +70,3 @@ Violating these causes audible failures for every connected musician, so they ar
 
 - Naming your branch `autobuild/<name>` triggers CI builds of all targets on your fork — use it before opening the PR.
 - Include the `CHANGELOG:` line, and for new dependencies or build changes add `AUTOBUILD: Please build all targets` to the PR description.
-- PRs need two approving reviews to merge; the submitter is responsible for follow-up questions and agreed changes (see CONTRIBUTING.md).

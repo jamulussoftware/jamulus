@@ -66,7 +66,7 @@ make
 sudo make install # optional
 ```
 
-To control the server with systemd, runtime options and similar, refer to the [Server manual](https://jamulus.io/wiki/Server-Linux). If you plan to copy the binary onto other machines, read [DEPLOY.md](DEPLOY.md) first — architecture and library mismatches between build and target hosts are the most common cause of broken deployments.
+To control the server with systemd, runtime options and similar, refer to the [Server manual](https://jamulus.io/wiki/Server-Linux). If you plan to copy the binary onto other machines, read [docs/DEPLOY.md](docs/DEPLOY.md) first — architecture and library mismatches between build and target hosts are the most common cause of broken deployments.
 
 ### Troubleshooting: moc errors with GCC 13+
 

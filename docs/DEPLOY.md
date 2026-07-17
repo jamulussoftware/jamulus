@@ -1,6 +1,15 @@
+### Copyright (c) 2026
+
+Author(s):
+* The Jamulus Development Team
+
+Licensed under AGPL 3.0 or any later version. See [COPYING](../COPYING) for details.
+
+---
+
 # Deploying a Jamulus Server
 
-[COMPILING.md](COMPILING.md) ends when the binary exists. This document covers the step after that: putting a self-built headless server binary on a production host and verifying it actually runs. Most self-inflicted server outages happen in this step, and every rule below corresponds to a real-world failure.
+[COMPILING.md](../COMPILING.md) ends when the binary exists. This document covers the step after that: putting a self-built headless server binary on a production host and verifying it actually runs. Most self-inflicted server outages happen in this step, and every rule below corresponds to a real-world failure.
 
 For configuring and operating a server (registration, recording, welcome message, etc.), see the [Server manual](https://jamulus.io/wiki/Running-a-Server).
 
@@ -8,12 +17,12 @@ For configuring and operating a server (registration, recording, welcome message
 
 - **CPU architecture must match.** A binary built on x86-64 will not run on an ARM host (and vice versa) — the service crash-loops with `Exec format error`. Before copying, compare `file ./Jamulus` on the build machine with `uname -m` on the target.
 - **Build on the oldest OS release you deploy to.** Binaries depend on the glibc/libstdc++ of the build machine. A binary built on Ubuntu 24.04 fails on 22.04 with `GLIBCXX_3.4.32 not found`, while a 22.04 build runs fine on 24.04 and later. Newer hosts run older binaries; the reverse never holds.
-- **Check shared libraries after every copy.** `ldd /path/to/jamulus | grep "not found"` must print nothing. This catches a missing Qt runtime package before systemd shows you a crash loop. The minimal headless runtime needs the Qt core, network, concurrent and xml libraries (see [COMPILING.md](COMPILING.md)).
+- **Check shared libraries after every copy.** `ldd /path/to/jamulus | grep "not found"` must print nothing. This catches a missing Qt runtime package before systemd shows you a crash loop. The minimal headless runtime needs the Qt core, network, concurrent and xml libraries (see [COMPILING.md](../COMPILING.md)).
 - **Low-memory hosts:** on machines with ≤ 1 GB RAM, build with `make -j1`, or build on a bigger machine of the same OS/architecture and copy the binary. If you must add temporary swap to survive a build, remove it afterwards — see below.
 
 ## Run under systemd
 
-Use the unit shipped in [`linux/debian/jamulus-headless.service`](linux/debian/jamulus-headless.service) as your starting point — it already encodes hard-won defaults (dedicated `jamulus` user, `Nice=-20`, real-time I/O scheduling, `MemorySwapMax=0`, `Restart=on-failure`). Manage the server only through `systemctl`; never kill the process by PID.
+Use the unit shipped in [`linux/debian/jamulus-headless.service`](../linux/debian/jamulus-headless.service) as your starting point — it already encodes hard-won defaults (dedicated `jamulus` user, `Nice=-20`, real-time I/O scheduling, `MemorySwapMax=0`, `Restart=on-failure`). Manage the server only through `systemctl`; never kill the process by PID.
 
 ## Host tuning
 

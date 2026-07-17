@@ -19,11 +19,10 @@ This file is the starting point for coding agents. It links to the detailed docs
 
 ## Architecture invariants
 
-Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before changing code. Its three invariants, in brief:
+Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before changing code. Its invariants, in brief:
 
 1. Never block the real-time audio path (sound callbacks, socket thread, server mix timer).
-2. Existing wire-protocol message IDs and layouts are frozen — extend only by adding new message IDs.
-3. All network input is untrusted — bounds-check everything; drop malformed packets silently.
+2. All network input is untrusted — bounds-check everything; drop malformed packets silently.
 
 ## DO NOT edit (generated or third-party)
 

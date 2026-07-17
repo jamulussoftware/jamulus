@@ -66,7 +66,19 @@ make
 sudo make install # optional
 ```
 
-To control the server with systemd, runtime options and similar, refer to the [Server manual](https://jamulus.io/wiki/Server-Linux).
+To control the server with systemd, runtime options and similar, refer to the [Server manual](https://jamulus.io/wiki/Server-Linux). If you plan to copy the binary onto other machines, read [DEPLOY.md](DEPLOY.md) first — architecture and library mismatches between build and target hosts are the most common cause of broken deployments.
+
+### Troubleshooting: moc errors with GCC 13+
+
+On distributions shipping GCC 13 or later (e.g. Ubuntu 24.04), Qt 5's `moc` can fail to parse the system headers because of the `_GLIBCXX_VISIBILITY` macro. Workaround — after `qmake`, generate `moc_predefs.h` and neutralize the macro, then build:
+
+```shell
+make moc_predefs.h
+printf "\n#undef _GLIBCXX_VISIBILITY\n#define _GLIBCXX_VISIBILITY(V)\n" >> moc_predefs.h
+make
+```
+
+(If your Makefile builds into `release/`, the file is `release/moc_predefs.h` and is produced by `make -f Makefile.Release release/moc_predefs.h`.)
 
 ---
 

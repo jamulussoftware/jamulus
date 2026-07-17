@@ -7,6 +7,8 @@ We’d really appreciate your support! Please ensure that you understand the fol
 - Otherwise, please [post on the GitHub Discussions](https://github.com/jamulussoftware/jamulus/discussions) and say that you are planning to do some coding and explain why. Then we can discuss the specification.
 - Please begin coding only after we have agreed on a specification to avoid putting a lot of effort into something that may not be accepted later.
 
+If you work with an AI coding agent, [AGENTS.md](AGENTS.md) is its entry point into this repository. Everything in this document applies to agent-assisted contributions without exception — you remain the author, and you are expected to understand and stand behind every line you submit.
+
 
 ## Jamulus project/source code general principles
 
@@ -39,7 +41,7 @@ Please see the [.clang_format file](https://github.com/jamulussoftware/jamulus/b
 
 - Insert a space before and after `(` and `)`. There should be no space between `)` and `;` or before an empty `()`.
 - Enclose all bodies of `if`, `else`, `while`, `for`, etc. in braces `{` and `}` on separate lines.
-- Do not use concatinations in strings with parameters. Instead use substitutions. **Do:** `QString ( tr ( "Hello, %1. Have a nice day!" ) ).arg( getName() )` **Don't:** `tr ( "Hello " ) + getName() + tr ( ". Have a nice day!" )` ...to make translation easier.
+- Do not use concatenations in strings with parameters. Instead use substitutions. **Do:** `QString ( tr ( "Hello, %1. Have a nice day!" ) ).arg( getName() )` **Don't:** `tr ( "Hello " ) + getName() + tr ( ". Have a nice day!" )` ...to make translation easier.
 
 #### Python
 Please install and use [pylint](https://pylint.org/) to scan any Python code.

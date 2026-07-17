@@ -192,11 +192,7 @@ public:
     void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
 
     bool IsReverbOnLeftChan() const { return bReverbOnLeftChan; }
-    void SetReverbOnLeftChan ( const bool bIL )
-    {
-        bReverbOnLeftChan = bIL;
-        AudioReverb.Clear();
-    }
+    void SetReverbOnLeftChan ( const bool bIL ) { bReverbOnLeftChan = bIL; }
 
     void SetDoAutoSockBufSize ( const bool bValue );
     bool GetDoAutoSockBufSize() const { return Channel.GetDoAutoSockBufSize(); }

@@ -1345,7 +1345,7 @@ void CClient::Init()
     Channel.SetAudioStreamProperties ( eAudioCompressionType, iCeltNumCodedBytes, iSndCrdFrameSizeFactor, iNumAudioChannels );
 
     // init reverberation
-    AudioReverb.Init ( eAudioChannelConf, iStereoBlockSizeSam, SYSTEM_SAMPLE_RATE_HZ );
+    AudioReverb.Init ( eAudioChannelConf, iStereoBlockSizeSam );
 
     // init the sound card conversion buffers
     if ( bSndCrdConversionBufferRequired )

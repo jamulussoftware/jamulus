@@ -100,7 +100,6 @@ public:
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddress& HostAddr );
 
     bool GetAndResetbJitterBufferOKFlag();
-    void Close();
 
 protected:
     void    Init ( const quint16  iPortNumber,

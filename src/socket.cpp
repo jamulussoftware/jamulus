@@ -386,41 +386,6 @@ void CSocket::Init ( const quint16  iNewPortNumber,
     }
 }
 
-void CSocket::Close()
-{
-    if ( UdpSocket4 != INVALID_SOCKET )
-    {
-#ifdef _WIN32
-        // closesocket will cause recvfrom to return with an error because the
-        // socket is closed -> then the thread can safely be shut down
-        closesocket ( UdpSocket4 );
-#elif defined( __APPLE__ ) || defined( __MACOSX )
-        // on Mac the general close has the same effect as closesocket on Windows
-        close ( UdpSocket4 );
-#else
-        // on Linux the shutdown call cancels the recvfrom
-        shutdown ( UdpSocket4, SHUT_RDWR );
-#endif
-        UdpSocket4 = INVALID_SOCKET;
-    }
-
-    if ( UdpSocket6 != INVALID_SOCKET )
-    {
-#ifdef _WIN32
-        // closesocket will cause recvfrom to return with an error because the
-        // socket is closed -> then the thread can safely be shut down
-        closesocket ( UdpSocket6 );
-#elif defined( __APPLE__ ) || defined( __MACOSX )
-        // on Mac the general close has the same effect as closesocket on Windows
-        close ( UdpSocket6 );
-#else
-        // on Linux the shutdown call cancels the recvfrom
-        shutdown ( UdpSocket6, SHUT_RDWR );
-#endif
-        UdpSocket6 = INVALID_SOCKET;
-    }
-}
-
 CSocket::~CSocket()
 {
     // cleanup the socket (on Windows the WSA cleanup must also be called)

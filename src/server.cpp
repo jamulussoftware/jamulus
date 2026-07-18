@@ -1673,10 +1673,10 @@ void CServer::customEvent ( QEvent* pEvent )
 }
 
 /// @brief Compute frame peak level for each client
-bool CServer::CreateLevelsForAllConChannels ( const int                       iNumClients,
-                                              const CVector<int>&             vecNumAudioChannels,
-                                              const CVector<CVector<int16_t>> vecvecsData,
-                                              CVector<uint16_t>&              vecLevelsOut )
+bool CServer::CreateLevelsForAllConChannels ( const int                        iNumClients,
+                                              const CVector<int>&              vecNumAudioChannels,
+                                              const CVector<CVector<int16_t>>& vecvecsData,
+                                              CVector<uint16_t>&               vecLevelsOut )
 {
     bool bLevelsWereUpdated = false;
 

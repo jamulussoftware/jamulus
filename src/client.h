@@ -189,7 +189,9 @@ public:
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
     int  GetReverbLevel() const { return iReverbLevel; }
+    int  GetReverbPreset() const { return AudioReverb.getPreset(); }
     void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
+    void SetReverbPreset ( const int iNP ) { AudioReverb.setPreset ( iNP ); }
 
     bool IsReverbOnLeftChan() const { return bReverbOnLeftChan; }
     void SetReverbOnLeftChan ( const bool bIL ) { bReverbOnLeftChan = bIL; }

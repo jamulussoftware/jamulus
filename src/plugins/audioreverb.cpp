@@ -13,16 +13,14 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf, const int iNSte
 {
     eAudioChannelConf   = eNAudioChannelConf;
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
-    fMaxShort           = static_cast<float> ( _MAXSHORT );
-    mverb.setParameter ( MVerb<float>::DAMPINGFREQ, 0.5 );
-    mverb.setParameter ( MVerb<float>::DENSITY, 0.5 );
-    mverb.setParameter ( MVerb<float>::BANDWIDTHFREQ, 0.5 );
-    mverb.setParameter ( MVerb<float>::DECAY, 0.5 );
-    mverb.setParameter ( MVerb<float>::PREDELAY, 0.5 );
-    mverb.setParameter ( MVerb<float>::GAIN, 1. );
-    mverb.setParameter ( MVerb<float>::MIX, 1.0 );
-    mverb.setParameter ( MVerb<float>::EARLYMIX, 0.5 );
-    mverb.setParameter ( MVerb<float>::SIZE, 0.75 );
+}
+
+void CAudioReverb::loadPreset()
+{
+    for ( int i = 0; i < MVerb<float>::NUM_PARAMS; i++ )
+    {
+        mverb.setParameter ( i, presets[iPreset][i] );
+    }
 }
 
 void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fReverbGain )

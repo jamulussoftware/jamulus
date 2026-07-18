@@ -56,6 +56,9 @@
 #ifndef _WIN32
 #    include <netinet/in.h>
 #    include <sys/socket.h>
+// for compatibility with winsock, avoiding ifdefs
+typedef int SOCKET;
+#    define INVALID_SOCKET -1
 #endif
 
 // The header files channel.h and server.h require to include this header file
@@ -78,14 +81,16 @@ public:
     CSocket ( CChannel*      pNewChannel,
               const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strServerBindIP,
+              const QString& strServerBindIP4,
+              const QString& strServerBindIP6,
               const bool     bDisableIPv6,
               bool&          bIPv6Available );
 
     CSocket ( CServer*       pNServP,
               const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strServerBindIP,
+              const QString& strServerBindIP4,
+              const QString& strServerBindIP6,
               const bool     bDisableIPv6,
               bool&          bIPv6Available );
 
@@ -97,16 +102,18 @@ public:
     void Close();
 
 protected:
-    void    Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, const bool bDisableIPv6 );
+    void    Init ( const quint16  iPortNumber,
+                   const quint16  iQosNumber,
+                   const QString& strServerBindIP4,
+                   const QString& strServerBindIP6,
+                   const bool     bDisableIPv6 );
     quint16 iPortNumber;
     quint16 iQosNumber;
-    QString strServerBindIP;
+    QString strServerBindIP4;
+    QString strServerBindIP6;
 
-#ifdef _WIN32
-    SOCKET UdpSocket;
-#else
-    int UdpSocket;
-#endif
+    SOCKET UdpSocket4;
+    SOCKET UdpSocket6;
 
     QMutex Mutex;
 
@@ -122,6 +129,9 @@ protected:
     // This is a reference to CClient::bIPv6Available or CServer::bIPv6Available,
     // to inform the Client or Server which type of socket was created at startup.
     bool& bIPv6Available;
+
+private:
+    void ProcessPacket ( const CHostAddress& RecHostAddr, const int iNumBytesRead );
 
 public:
     void OnDataReceived();
@@ -154,10 +164,11 @@ public:
     CHighPrioSocket ( CChannel*      pNewChannel,
                       const quint16  iPortNumber,
                       const quint16  iQosNumber,
-                      const QString& strServerBindIP,
+                      const QString& strServerBindIP4,
+                      const QString& strServerBindIP6,
                       const bool     bDisableIPv6,
                       bool&          bIPv6Available ) :
-        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6, bIPv6Available )
+        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6, bIPv6Available )
     {
         Init();
     }
@@ -165,10 +176,11 @@ public:
     CHighPrioSocket ( CServer*       pNewServer,
                       const quint16  iPortNumber,
                       const quint16  iQosNumber,
-                      const QString& strServerBindIP,
+                      const QString& strServerBindIP4,
+                      const QString& strServerBindIP6,
                       const bool     bDisableIPv6,
                       bool&          bIPv6Available ) :
-        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP, bDisableIPv6, bIPv6Available )
+        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6, bIPv6Available )
     {
         Init();
     }
@@ -250,11 +262,3 @@ protected:
 signals:
     void InvalidPacketReceived ( CHostAddress RecHostAddr );
 };
-
-// overlay generic, IPv4 and IPv6 sockaddr structures
-typedef union
-{
-    struct sockaddr     sa;
-    struct sockaddr_in  sa4;
-    struct sockaddr_in6 sa6;
-} uSockAddr;

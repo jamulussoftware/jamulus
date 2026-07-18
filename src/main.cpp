@@ -133,7 +133,8 @@ int main ( int argc, char** argv )
     QString      strServerListFileName       = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
-    QString      strServerBindIP             = "";
+    QString      strServerBindIP4            = "";
+    QString      strServerBindIP6            = "";
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
@@ -444,14 +445,29 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "--serverbindip", // no short form
-                                 "--serverbindip",
+                                 "--serverbindip", // use short form for compatibility alias
+                                 "--serverbindip4",
                                  strArgument ) )
         {
-            strServerBindIP = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- server bind IP: %1" ).arg ( strServerBindIP ) );
-            CommandLineOptions << "--serverbindip";
-            ServerOnlyOptions << "--serverbindip";
+            strServerBindIP4 = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- server bind IPv4: %1" ).arg ( strServerBindIP4 ) );
+            CommandLineOptions << "--serverbindip4";
+            ServerOnlyOptions << "--serverbindip4";
+            continue;
+        }
+
+        // Server Bind IPv6 --------------------------------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--serverbindip6", // no short form
+                                 "--serverbindip6",
+                                 strArgument ) )
+        {
+            strServerBindIP6 = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- server bind IPv6: %1" ).arg ( strServerBindIP6 ) );
+            CommandLineOptions << "--serverbindip6";
+            ServerOnlyOptions << "--serverbindip6";
             continue;
         }
 
@@ -787,20 +803,17 @@ int main ( int argc, char** argv )
                 }
             }
 
-            if ( strDirectoryAddress.isEmpty() )
+            if ( !strServerPublicIP.isEmpty() )
             {
-                if ( !strServerPublicIP.isEmpty() )
+                if ( strDirectoryAddress.isEmpty() )
                 {
                     qWarning() << "Server Public IP will only take effect when registering a server with a directory.";
                     strServerPublicIP = "";
                 }
-            }
-            else
-            {
-                if ( !strServerPublicIP.isEmpty() )
+                else
                 {
-                    QHostAddress InetAddr;
-                    if ( !InetAddr.setAddress ( strServerPublicIP ) )
+                    QHostAddress InetAddr ( strServerPublicIP );
+                    if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
                     {
                         qWarning() << "Server Public IP is invalid. Only plain IP addresses are supported.";
                         strServerPublicIP = "";
@@ -809,13 +822,29 @@ int main ( int argc, char** argv )
             }
         }
 
-        if ( !strServerBindIP.isEmpty() )
+        if ( !strServerBindIP4.isEmpty() )
         {
-            QHostAddress InetAddr;
-            if ( !InetAddr.setAddress ( strServerBindIP ) )
+            QHostAddress InetAddr ( strServerBindIP4 );
+            if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
             {
-                qWarning() << "Server Bind IP is invalid. Only plain IP addresses are supported.";
-                strServerBindIP = "";
+                qCritical() << "Server Bind IPv4 is invalid. Only plain IP addresses are supported.";
+                exit ( 1 );
+            }
+        }
+
+        if ( !strServerBindIP6.isEmpty() )
+        {
+            if ( bDisableIPv6 )
+            {
+                qCritical() << "IPv6 is disabled; --serverbindip6 not allowed.";
+                exit ( 1 );
+            }
+
+            QHostAddress InetAddr ( strServerBindIP6 );
+            if ( InetAddr.protocol() != QAbstractSocket::IPv6Protocol )
+            {
+                qCritical() << "Server Bind IPv6 is invalid. Only plain IPv6 addresses are supported.";
+                exit ( 1 );
             }
         }
 #ifndef NO_JSON_RPC
@@ -832,8 +861,8 @@ int main ( int argc, char** argv )
         // we do it here as an upfront check.  The downstream network calls will error
         // out on malformed addresses not caught here.
         {
-            QHostAddress InetAddr;
-            if ( !InetAddr.setAddress ( strJsonRpcBindIP ) )
+            QHostAddress InetAddr ( strJsonRpcBindIP );
+            if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
             {
                 qCritical() << qUtf8Printable ( QString ( "The JSON-RPC address specified is not valid, exiting. " ) );
                 exit ( 1 );
@@ -1006,7 +1035,8 @@ int main ( int argc, char** argv )
             // actual server object
             CServer Server ( iNumServerChannels,
                              strLoggingFileName,
-                             strServerBindIP,
+                             strServerBindIP4,
+                             strServerBindIP6,
                              iPortNumber,
                              iQosNumber,
                              strDirectoryAddress,
@@ -1147,8 +1177,8 @@ QString UsageArguments ( char** argv )
            "      --norecord          set server not to record by default when recording is configured\n"
            "      --noraw             disable raw audio\n"
            "  -s, --server            start Server\n"
-           "      --serverbindip      IPv4 address the Server will bind to (rather than all)\n"
-           "                          (only works if IPv6 is unavailable or disabled with --noipv6)\n"
+           "      --serverbindip4     IPv4 address the Server will bind to (rather than all)\n"
+           "      --serverbindip6     IPv6 address the Server will bind to (rather than all)\n"
            "  -T, --multithreading    use multithreading to make better use of\n"
            "                          multi-core CPUs and support more Clients\n"
            "  -u, --numchannels       maximum number of channels\n"

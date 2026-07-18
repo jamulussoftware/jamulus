@@ -22,8 +22,8 @@ along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://
 
 `linux/deploy_deb.sh` (run from the repository root) uses this directory to build two packages with `debuild`:
 
-- **jamulus** — the desktop client/server (built with `CONFIG+=noupcasename`).
-- **jamulus-headless** — a server-only binary (`CONFIG+=headless serveronly`) with no GUI library dependencies, plus a systemd service.
+- **jamulus** — the desktop client/server (built with `CONFIG+=noupcasename`, which renames the target from `Jamulus` to `jamulus`).
+- **jamulus-headless** — a server-only binary (`CONFIG+=headless serveronly` with `TARGET=jamulus-headless`, so `noupcasename` is not needed) with no GUI library dependencies, plus a systemd service.
 
 Most files here are standard Debian packaging (`control`, `rules`, `copyright`, `*.install`, …). `changelog` is regenerated at build time from the top-level `ChangeLog` — don't edit it by hand.
 

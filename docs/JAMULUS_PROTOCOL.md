@@ -45,7 +45,7 @@ along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://
 # The Jamulus audio protocol
 
 Jamulus uses connectionless UDP packets to communicate between the Client and Server, and additionally for registration with a Directory. The `src/protocol.cpp` file contains much of the details of the packets themselves, whereas this document is intended to form a higher-level view of the protocol interactions.
-Messages with an ID below 1000 are connection-based: each one is acknowledged by an `ACKN (1)` message carrying the same sequence counter, and the sender retransmits it every `SEND_MESS_TIMEOUT_MS` ms until the acknowledgement arrives. Messages with an ID of 1000 or above (`CLM_*`) are connectionless: they work without an established audio connection and are never acknowledged.
+Messages with an ID below 1000 are connection-based: each one is acknowledged by an `ACKN (1)` message carrying the same sequence counter, and the sender retransmits it every `SEND_MESS_TIMEOUT_MS` ms until the acknowledgement arrives. Messages with an ID from 1000 to 1999 (`CLM_*`) are connectionless: they work without an established audio connection and are never acknowledged.
 
 All of this information can be discovered from reading the code, but hopefully is quicker to digest when available in one location. There is a Wireshark dissector available too, [here](https://github.com/softins/jamulus-wireshark), if you would like to inspect the packet flow.
 
@@ -114,9 +114,10 @@ Connection-based messages (acknowledged; `PROTMESSID_` prefix omitted). Full pay
 | 34 | `REQ_SPLIT_MESS_SUPPORT` | Request split-message support |
 | 35 | `SPLIT_MESS_SUPPORTED` | Split messages are supported |
 | 36 | `RAWAUDIO_SUPPORTED` | Raw (uncompressed) audio is supported |
-| 2001 | `SPECIAL_SPLIT_MESSAGE` | Container for split messages |
 
 IDs 12, 14, 15, 17, 19, 22 and 28 are legacy messages no longer sent (28, `REQ_CHANNEL_LEVEL_LIST`, is still understood for compatibility with Servers 3.4.6–3.5.12).
+
+`SPECIAL_SPLIT_MESSAGE (2001)` sits outside both ID ranges because it is not a message in its own right: it is the transport container for the fragments of an oversized connection-based message (see the split message container above), with the original message ID carried inside the container. Each fragment frame has its own sequence counter and is acknowledged and retransmitted like any connection-based message.
 
 Connectionless messages (never acknowledged):
 

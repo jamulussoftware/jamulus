@@ -49,8 +49,8 @@
 #include <QObject>
 #include <QThread>
 #include <QMutex>
-#include <atomic>
 #include <vector>
+#include <atomic>
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
@@ -238,8 +238,8 @@ protected:
             }
         }
 
-        CSocket*          pSocket;
-        std::atomic<bool> bRun;
+        CSocket* pSocket;
+        bool     bRun;
     };
 
     void Init()

@@ -272,7 +272,7 @@ Some typical messages could be:
 A directory is a Jamulus server acting as a registry (implemented in `src/serverlist.cpp`, both roles). All directory traffic uses connectionless messages:
 
 - A server registers with `CLM_REGISTER_SERVER_EX (1017)` (older versions: `CLM_REGISTER_SERVER (1004)`) and receives `CLM_REGISTER_SERVER_RESP (1016)` carrying the result (registered, list full, version too old, requirements not fulfilled). If no response arrives, registration is retried every 500 ms, up to 5 times.
-- Registration is refreshed every 15 minutes; the directory drops a server it has not heard from for 33 minutes. `CLM_UNREGISTER_SERVER (1005)` removes the entry immediately at shutdown.
+- Registration is refreshed every 15 minutes; the directory drops a server it has not heard from for 33 minutes. `CLM_UNREGISTER_SERVER (1005)` removes the entry immediately at shutdown or when changing Directory through the Server UI.
 - A client requests the list with `CLM_REQ_SERVER_LIST (1007)`. The directory answers with both `CLM_RED_SERVER_LIST (1018)` (a reduced form that avoids UDP fragmentation) and `CLM_SERVER_LIST (1006)`. The client then pings each listed server with `CLM_PING_MS_WITHNUMCLIENTS (1002)` to display latency and occupancy.
 - NAT hole punching: when it answers a list request, the directory also sends every registered server a `CLM_SEND_EMPTY_MESSAGE (1008)` carrying the client's public address; each server responds by sending `CLM_EMPTY_MESSAGE (1009)` to that address, opening its own NAT/firewall for the client's subsequent packets. The directory and its registered servers also ping each other about once a minute to keep their NAT mappings alive.
 

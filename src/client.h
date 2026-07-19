@@ -162,9 +162,11 @@ public:
     void Disconnect();
     void Connect ( QString strServerAddress, QString strServerName );
 
-    // The ConnectedServerName is emitted by Connected() to update the UI with a human readable server name
+    // The ConnectedServerName is emitted by Connecting() to update the UI with a human readable server name
     void    SetConnectedServerName ( const QString strServerName ) { strConnectedServerName = strServerName; };
     QString GetConnectedServerName() const { return strConnectedServerName; };
+
+    EConnectionState GetConnectionState() const { return eConnectionState; }
 
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
@@ -361,8 +363,13 @@ protected:
     int  FindClientChannel ( const int iServerChannelID, const bool bCreateIfNew ); // returns a client channel ID or INVALID_INDEX
     bool ReorderLevelList ( CVector<uint16_t>& vecLevelList );                      // modifies vecLevelList, passed by reference
     // information for the connected server
-
     QString strConnectedServerName;
+
+    // single source of truth for the connection state, only to be modified
+    // via SetConnectionState() so that every change emits ConnectionStateChanged()
+    EConnectionState eConnectionState;
+
+    void SetConnectionState ( const EConnectionState eNewConnectionState );
 
     // only one channel is needed for client application
     CChannel  Channel;
@@ -518,9 +525,9 @@ signals:
 
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
-    void Connected ( QString strServerName );
+    void ConnectionStateChanged ( EConnectionState eConnectionState );
+    void Connecting ( QString strServerName );
     void ConnectingFailed ( QString errorMessage );
-    void DisconnectClient();
     void Disconnected();
 
     void SoundDeviceChanged ( QString strError );

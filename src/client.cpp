@@ -59,6 +59,7 @@ CClient::CClient ( const quint16  iPortNumber,
     strClientName ( strNClientName ),
     pSignalHandler ( CSignalHandler::getSingletonP() ),
     pSettings ( nullptr ),
+    eConnectionState ( CS_DISCONNECTED ),
     Channel ( false ), /* we need a client channel -> "false" */
     CurOpusEncoder ( nullptr ),
     CurOpusDecoder ( nullptr ),
@@ -1003,6 +1004,9 @@ void CClient::OnClientIDReceived ( int iServerChanID )
         SetRemoteChanGain ( iChanID, 0, false );
     }
 
+    // the server has assigned us a channel ID, so the connection is established
+    SetConnectionState ( CS_CONNECTED );
+
     emit ClientIDReceived ( iChanID );
 }
 
@@ -1046,7 +1050,12 @@ void CClient::Start()
     SetThreadExecutionState ( ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED );
 #endif
 
-    emit Connected ( GetConnectedServerName() );
+    // the connection is requested now but not yet established: the transition
+    // to CS_CONNECTED happens when the server assigns our channel ID
+    // (see OnClientIDReceived)
+    SetConnectionState ( CS_CONNECTING );
+
+    emit Connecting ( GetConnectedServerName() );
 }
 
 /// @method
@@ -1095,6 +1104,8 @@ void CClient::Stop()
     SetThreadExecutionState ( ES_CONTINUOUS );
 #endif
 
+    SetConnectionState ( CS_DISCONNECTED );
+
     // emit Disconnected() to inform UI of disconnection
     emit Disconnected();
 }
@@ -1111,35 +1122,46 @@ void CClient::Disconnect()
 }
 
 /// @method
-/// @brief Connects to strServerAddress
-/// @emit Connected (strServerName) if the client wasn't running and SetServerAddr was valid. emit happens through Start().
+/// @brief Connects to strServerAddress. If a connection is currently requested
+///        or established, that connection is terminated first.
+/// @emit Connecting (strServerName) if SetServerAddr was valid. emit happens through Start().
 ///       Use to set CClientDlg to show being connected
 /// @emit ConnectingFailed (error) if an error occurred
 ///       Use to display error message in CClientDlg
 /// @param strServerAddress - the server address to connect to
-/// @param strServerName - the String argument to be passed to Connecting()
+/// @param strServerName - the human readable server name passed to Connecting()
 void CClient::Connect ( QString strServerAddress, QString strServerName )
 {
     try
     {
-        if ( !IsRunning() )
+        // disconnect from any current server first so that connecting to a
+        // different server while connected behaves as a reconnect
+        Disconnect();
+
+        // Set server address and connect if valid address was supplied
+        if ( SetServerAddr ( strServerAddress ) )
         {
-            // Set server address and connect if valid address was supplied
-            if ( SetServerAddr ( strServerAddress ) )
-            {
-                SetConnectedServerName ( strServerName );
-                Start();
-            }
-            else
-            {
-                throw CGenErr ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
-            }
+            SetConnectedServerName ( strServerName );
+            Start();
+        }
+        else
+        {
+            throw CGenErr ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
         }
     }
     catch ( const CGenErr& generr )
     {
         Stop();
         emit ConnectingFailed ( generr.GetErrorText() );
+    }
+}
+
+void CClient::SetConnectionState ( const EConnectionState eNewConnectionState )
+{
+    if ( eConnectionState != eNewConnectionState )
+    {
+        eConnectionState = eNewConnectionState;
+        emit ConnectionStateChanged ( eConnectionState );
     }
 }
 

@@ -498,7 +498,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
 
-    QObject::connect ( pClient, &CClient::Connected, this, &CClientDlg::OnConnect );
+    QObject::connect ( pClient, &CClient::Connecting, this, &CClientDlg::OnConnecting );
 
     QObject::connect ( pClient, &CClient::ConnectingFailed, this, &CClientDlg::OnConnectingFailed );
 
@@ -760,10 +760,7 @@ void CClientDlg::OnConnectDlgAccepted()
             }
         }
 
-        // Disconnect the client. We could be currently connected.
-        pClient->Disconnect();
-
-        // initiate connection
+        // initiate connection (terminates any current connection first)
         pClient->Connect ( strSelectedAddress, strMixerBoardLabel );
 
         // reset flag
@@ -776,7 +773,7 @@ void CClientDlg::OnConnectDisconBut()
     // the connect/disconnect button implements a toggle functionality
     if ( pClient->IsRunning() )
     {
-        pClient->Stop();
+        pClient->Disconnect();
     }
     else
     {
@@ -1222,7 +1219,7 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
 }
 
-void CClientDlg::OnConnect ( const QString& strMixerBoardLabel )
+void CClientDlg::OnConnecting ( const QString& strMixerBoardLabel )
 {
 
     // hide label connect to server

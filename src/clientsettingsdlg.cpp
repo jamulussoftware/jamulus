@@ -1056,6 +1056,12 @@ void CClientSettingsDlg::showEvent ( QShowEvent* event )
 
 bool CClientSettingsDlg::eventFilter ( QObject* obj, QEvent* event )
 {
+    if ( event->type() == QEvent::ToolTip )
+    {
+        // return true to suppress tooltip, false to allow it
+        return !pSettings->bShowToolTips;
+    }
+
     // Refresh MIDI device list when user clicks on the dropdown
     if ( obj == cbxMidiDevice )
     {
@@ -1718,15 +1724,3 @@ void CClientSettingsDlg::OnMidiCCReceived ( int ccNumber )
 }
 
 void CClientSettingsDlg::OnMIDIPickupModeToggled ( bool checked ) { pSettings->bMIDIPickupMode = checked; }
-
-bool CClientSettingsDlg::eventFilter ( QObject* obj, QEvent* event )
-{
-    if ( event->type() == QEvent::ToolTip )
-    {
-        // return true to suppress tooltip, false to allow it
-        return !pSettings->bShowToolTips;
-    }
-
-    // continue with normal processing for other events
-    return QObject::eventFilter ( obj, event );
-}

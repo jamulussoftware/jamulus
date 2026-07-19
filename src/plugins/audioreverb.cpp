@@ -13,26 +13,30 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf, const int iNSte
 {
     eAudioChannelConf   = eNAudioChannelConf;
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
+
+    // Jamulus uses interleaved stereo, mverb operates on a 2-dimensional array instead
+    // Calculate the number of frames for each channel ( iStereoBlockSizeSam / 2 )
+    numFrames = iStereoBlockSizeSam >> 1;
+
+    // These buffers get filled with dry signal and are then passed to mverb
+    // They need to be vectors as the windows builds fail when arrays are used
+    bufL.resize ( numFrames );
+    bufR.resize ( numFrames );
+
+    mverb->setSampleRate ( static_cast<float> ( SYSTEM_SAMPLE_RATE_HZ ) );
+    loadPreset();
 }
 
 void CAudioReverb::loadPreset()
 {
     for ( int i = 0; i < MVerb<float>::NUM_PARAMS; i++ )
     {
-        mverb.setParameter ( i, presets[iPreset][i] );
+        mverb->setParameter ( i, presets[iPreset][i] );
     }
 }
 
 void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fReverbGain )
 {
-    // Jamulus uses interleaved stereo, mverb operates on a 2-dimensional array instead
-    // Calculate the number of frames for each channel ( iStereoBlockSizeSam / 2 )
-    const int numFrames = iStereoBlockSizeSam >> 1;
-
-    // These buffers get filled with dry signal and are then passed to mverb
-    // They need to be vectors as the windows builds fail when arrays are used
-    std::vector<float> bufL ( numFrames );
-    std::vector<float> bufR ( numFrames );
 
     // One buffer to pass to mverb's process function
     float* fInput[2] = { bufL.data(), bufR.data() };
@@ -55,7 +59,7 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReve
         }
     }
 
-    mverb.process ( fInput, fInput, numFrames );
+    mverb->process ( fInput, fInput, numFrames );
 
     for ( int i = 0, j = 0; j < numFrames; i += 2, j++ )
     {

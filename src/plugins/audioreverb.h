@@ -16,9 +16,12 @@ class CAudioReverb
 public:
     CAudioReverb()
     {
-        mverb.setSampleRate ( static_cast<float> ( SYSTEM_SAMPLE_RATE_HZ ) );
         fMaxShort = static_cast<float> ( _MAXSHORT );
         iPreset   = STADIUM;
+
+        // Create MVerb on the heap
+        mverb = std::unique_ptr<MVerb<float>> ( new MVerb<float>() );
+        mverb->setSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
         loadPreset();
     }
 
@@ -38,13 +41,17 @@ public:
     int getPreset() const { return iPreset; };
 
 protected:
-    MVerb<float> mverb;
+    std::unique_ptr<MVerb<float>> mverb;
 
     void         loadPreset();
     EAudChanConf eAudioChannelConf;
     int          iStereoBlockSizeSam;
     float        fMaxShort;
     int          iPreset;
+
+    int                numFrames;
+    std::vector<float> bufL;
+    std::vector<float> bufR;
 
     enum
     {

@@ -382,9 +382,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // reverb preset
     QString strReverbPreset = "<b>" + tr ( "Reverb Preset" ) + ":</b> " +
-                            tr ( "Jamulus uses MVerb by Martin Eastwood for reverberation. "
-                                 "MVerb comes with a set of presets you can select here. "
-                                 "Available Presets: Subtle, Stadium, Cupboard, Dark, Halves " );
+                              tr ( "Jamulus uses MVerb by Martin Eastwood for reverberation. "
+                                   "MVerb comes with a set of presets you can select here. "
+                                   "Available Presets: Subtle, Stadium, Cupboard, Dark, Halves " );
     lblInputBoost->setWhatsThis ( strReverbPreset );
     cbxInputBoost->setWhatsThis ( strReverbPreset );
     cbxInputBoost->setAccessibleName ( tr ( "Reverb Preset combo box" ) );
@@ -1412,10 +1412,7 @@ void CClientSettingsDlg::OnInputBoostChanged()
     pClient->SetInputBoost ( pSettings->iInputBoost );
 }
 
-void CClientSettingsDlg::OnReverbPresetChanged()
-{
-    pClient->SetReverbPreset ( cbxReverbPreset->currentIndex() );
-}
+void CClientSettingsDlg::OnReverbPresetChanged() { pClient->SetReverbPreset ( cbxReverbPreset->currentIndex() ); }
 
 void CClientSettingsDlg::OnAliasTextChanged ( const QString& strNewName )
 {

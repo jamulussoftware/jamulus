@@ -1228,7 +1228,7 @@ public:
     template<typename T>
     static inline bool InRange ( T value, T lower /* inclusive */, T upper /* exclusive */ )
     {
-        return value >= lower && value < upper ;
+        return value >= lower && value < upper;
     }
 };
 

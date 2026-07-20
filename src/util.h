@@ -1243,11 +1243,11 @@ public:
         }
     }
 
-    // return true if a value is within the lower and upper bounds (inclusively), otherwise false
+    // Returns true if value is in [lower, upper) (inclusive lower, exclusive upper).
     template<typename T>
-    static inline bool InRange ( T value, T lower, T upper )
+    static inline bool InRange ( T value, T lower /* inclusive */, T upper /* exclusive */ )
     {
-        return !( value < lower || value > upper );
+        return !( value < lower || value >= upper );
     }
 };
 

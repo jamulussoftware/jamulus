@@ -566,11 +566,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // Rever Preset combo box
     cbxReverbPreset->clear();
-    cbxReverbPreset->addItem ( tr ( "Subtle" ) );
-    cbxReverbPreset->addItem ( tr ( "Stadium" ) );
-    cbxReverbPreset->addItem ( tr ( "Cupboard" ) );
-    cbxReverbPreset->addItem ( tr ( "Dark" ) );
-    cbxReverbPreset->addItem ( tr ( "Halves" ) );
+    cbxReverbPreset->addItem ( "Subtle" );
+    cbxReverbPreset->addItem ( "Stadium" );
+    cbxReverbPreset->addItem ( "Cupboard" );
+    cbxReverbPreset->addItem ( "Dark" );
+    cbxReverbPreset->addItem ( "Halves" );
     cbxReverbPreset->setCurrentIndex ( pClient->GetReverbPreset() );
 
     // init number of mixer rows

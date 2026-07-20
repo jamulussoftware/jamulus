@@ -126,7 +126,7 @@
     <message>
         <location filename="../util.cpp" line="602"/>
         <source>Japanese</source>
-        <translation>japonês</translation>
+        <translation>Japonês</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="610"/>
@@ -200,7 +200,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="1012"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation>Quando ligado a um servidor, estes controles permitem que defina a sua mistura local sem afectar o que os outros ouvem. O título mostra o nome do servidor e, quando conhecido, se está gravando activamente.</translation>
+        <translation>Quando ligado a um servidor, estes controles permitem que defina a sua mistura local sem afetar o que os outros ouvem de si. O título mostra o nome do servidor e, quando conhecido, se está a gravar ativamente.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="1085"/>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="260"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
-        <translation>Mostra uma indicação de estado sobre o cliente que está atribuído a este canal. Os indicadores suportados são:</translation>
+        <translation>Mostra uma indicação do estado sobre o cliente que está atribuído a este canal. Os indicadores suportados são:</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="263"/>

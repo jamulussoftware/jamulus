@@ -183,6 +183,16 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         response["result"] = "ok";
     } );
 
+    /// @rpc_method jamulusclient/getCurrentDirectory
+    /// @brief Returns the currently selected directory socket address.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {string} result - The socket address of the current directory, usable as params.directory in jamulusclient/pollServerList.
+    pRpcServer->HandleMethod ( "jamulusclient/getCurrentDirectory", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        response["result"] =
+            NetworkUtil::GetDirectoryAddress ( m_pSettings->eDirectoryType, m_pSettings->vstrDirectoryAddress[m_pSettings->iCustomDirectoryIndex] );
+        Q_UNUSED ( params );
+    } );
+
     /// @rpc_method jamulus/getMode
     /// @brief Returns the current mode, i.e. whether Jamulus is running as a server or client.
     /// @param {object} params - No parameters (empty object).

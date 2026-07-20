@@ -240,10 +240,7 @@ protected:
     int                        iMaxNumThreads;
     CVector<std::future<void>> Futures;
 
-    bool CreateLevelsForAllConChannels ( const int                        iNumClients,
-                                         const CVector<int>&              vecNumAudioChannels,
-                                         const CVector<CVector<int16_t>>& vecvecsData,
-                                         CVector<uint16_t>&               vecLevelsOut );
+    bool CreateLevelsForAllConChannels ( const int iNumClients );
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator

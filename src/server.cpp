@@ -732,7 +732,7 @@ void CServer::OnTimer()
     if ( iNumClients > 0 )
     {
         // calculate levels for all connected clients
-        const bool bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients, vecNumAudioChannels, vecvecsData, vecChannelLevels );
+        const bool bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients );
 
         for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
@@ -1673,10 +1673,7 @@ void CServer::customEvent ( QEvent* pEvent )
 }
 
 /// @brief Compute frame peak level for each client
-bool CServer::CreateLevelsForAllConChannels ( const int                        iNumClients,
-                                              const CVector<int>&              vecNumAudioChannels,
-                                              const CVector<CVector<int16_t>>& vecvecsData,
-                                              CVector<uint16_t>&               vecLevelsOut )
+bool CServer::CreateLevelsForAllConChannels ( const int iNumClients )
 {
     bool bLevelsWereUpdated = false;
 
@@ -1694,7 +1691,7 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
                                                                                                                      vecNumAudioChannels[j] > 1 );
 
             // map value to integer for transmission via the protocol (4 bit available)
-            vecLevelsOut[j] = static_cast<uint16_t> ( std::ceil ( dCurSigLevelForMeterdB ) );
+            vecChannelLevels[j] = static_cast<uint16_t> ( std::ceil ( dCurSigLevelForMeterdB ) );
         }
     }
 

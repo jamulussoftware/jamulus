@@ -228,6 +228,39 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         Q_UNUSED ( params );
     } );
 
+    /// @rpc_method jamulusclient/getSocketAndFriendlyDirectories
+    /// @brief Returns the list of directories in the same order as presented in Jamulus, pairing each directory's
+    ///  socket address with the friendly name Jamulus displays for it.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {array} result - Array of directory objects, in the same order as jamulusclient/getDirectories.
+    /// @result {string} result[*].socket - Socket address, usable as params.directory in jamulusclient/pollServerList.
+    /// @result {string} result[*].friendly - The display name Jamulus shows for this directory.
+    pRpcServer->HandleMethod ( "jamulusclient/getSocketAndFriendlyDirectories", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        QJsonArray arrDirectories;
+        // built-in directories in UI order
+        for ( int i = AT_DEFAULT; i < AT_CUSTOM; i++ )
+        {
+            const EDirectoryType eDirectoryType = static_cast<EDirectoryType> ( i );
+            arrDirectories.append ( QJsonObject{
+                { "socket", NetworkUtil::GetDirectoryAddress ( eDirectoryType, "" ) },
+                { "friendly", DirectoryTypeToString ( eDirectoryType ) },
+            } );
+        }
+        // custom directories — stored newest-first, displayed oldest-first (reverse iteration)
+        for ( int i = MAX_NUM_SERVER_ADDR_ITEMS - 1; i >= 0; i-- )
+        {
+            if ( !m_pSettings->vstrDirectoryAddress[i].isEmpty() )
+            {
+                arrDirectories.append ( QJsonObject{
+                    { "socket", m_pSettings->vstrDirectoryAddress[i] },
+                    { "friendly", m_pSettings->vstrDirectoryAddress[i] },
+                } );
+            }
+        }
+        response["result"] = arrDirectories;
+        Q_UNUSED ( params );
+    } );
+
     /// @rpc_method jamulusclient/getCurrentDirectory
     /// @brief Returns the currently selected directory socket address.
     /// @param {object} params - No parameters (empty object).

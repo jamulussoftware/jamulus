@@ -256,6 +256,25 @@ Results:
 | result | object | MIDI settings object. |
 
 
+### jamulusclient/getSocketAndFriendlyDirectories
+
+Returns the list of directories in the same order as presented in Jamulus, pairing each directory's socket address with the friendly name Jamulus displays for it.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | array | Array of directory objects, in the same order as jamulusclient/getDirectories. |
+| result[*].socket | string | Socket address, usable as params.directory in jamulusclient/pollServerList. |
+| result[*].friendly | string | The display name Jamulus shows for this directory. |
+
+
 ### jamulusclient/pollServerList
 
 Request list of servers in a directory.

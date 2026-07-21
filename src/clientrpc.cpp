@@ -344,15 +344,15 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
             return;
         }
 
-        const int _iInstrument = jsonInstrCode.toInt();
+        const int iNInstrument = jsonInstrCode.toInt();
 
-        if ( CInstPictures::GetName ( _iInstrument ).isEmpty() )
+        if ( CInstPictures::GetName ( iNInstrument ).isEmpty() )
         {
             response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: unknown instrCode" );
             return;
         }
 
-        pClient->ChannelInfo.iInstrument = _iInstrument;
+        pClient->ChannelInfo.iInstrument = iNInstrument;
         pClient->SetRemoteInfo();
         response["result"] = "ok";
     } );

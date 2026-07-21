@@ -7,6 +7,8 @@ We’d really appreciate your support! Please ensure that you understand the fol
 - Otherwise, please [post on the GitHub Discussions](https://github.com/jamulussoftware/jamulus/discussions) and say that you are planning to do some coding and explain why. Then we can discuss the specification.
 - Please begin coding only after we have agreed on a specification to avoid putting a lot of effort into something that may not be accepted later.
 
+If you work with an AI coding agent, [AGENTS.md](AGENTS.md) is its entry point into this repository. Everything in this document applies to agent-assisted contributions without exception: you remain the author, and you are expected to understand and stand behind every line you submit.
+
 
 ## Jamulus project/source code general principles
 

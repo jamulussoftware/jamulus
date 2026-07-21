@@ -1382,7 +1382,8 @@ void CServer::SendChatTextToAllConChannels ( const int iSendingChanID, const QSt
 
 bool CServer::SendChatTextToConChannel ( const int iCurChanID, const QString& strChatText )
 {
-    if ( !MathUtils::InRange<int> ( iCurChanID, 0, iMaxNumChannels - 1 ) || !vecChannels[iCurChanID].IsConnected() )
+    // Check if iCurChanID is in range [0, iMaxNumChannels)
+    if ( !MathUtils::InRange<int> ( iCurChanID, 0, iMaxNumChannels ) || !vecChannels[iCurChanID].IsConnected() )
     {
         return false;
     }

@@ -257,6 +257,10 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
     ///        notifications to follow its progress.
     /// @param {string} params.address - Socket address of the server (host:port).
     /// @param {string} params.serverName - Optional human readable server name used for display purposes. Defaults to the address.
+    /// @param {string} params.directory - Optional socket address of a directory to hole-punch through before
+    ///        connecting (host:port). Use for a server behind a cloud firewall/NAT that is registered with that
+    ///        directory; address is connected to verbatim and need not be listed by the directory. Example:
+    ///        anygenre1.jamulus.io:22124
     /// @result {string} result - "ok" once the connection attempt has been initiated.
     pRpcServer->HandleMethod ( "jamulusclient/connect", [=] ( const QJsonObject& params, QJsonObject& response ) {
         auto jsonAddress = params["address"];
@@ -266,11 +270,19 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
             return;
         }
 
+        auto jsonDirectory = params["directory"];
+        if ( !jsonDirectory.isUndefined() && !jsonDirectory.isNull() && !jsonDirectory.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a string" );
+            return;
+        }
+
         auto          jsonServerName = params["serverName"];
         const QString strAddress     = NetworkUtil::FixAddress ( jsonAddress.toString() );
         const QString strServerName  = jsonServerName.isString() ? jsonServerName.toString() : strAddress;
+        const QString strDirectory   = jsonDirectory.isString() ? NetworkUtil::FixAddress ( jsonDirectory.toString() ) : QString();
 
-        pClient->Connect ( strAddress, strServerName );
+        pClient->Connect ( strAddress, strServerName, strDirectory );
 
         response["result"] = "ok";
     } );

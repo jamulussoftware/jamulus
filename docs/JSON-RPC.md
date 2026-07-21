@@ -139,6 +139,7 @@ Parameters:
 | --- | --- | --- |
 | params.address | string | Socket address of the server (host:port). |
 | params.serverName | string | Optional human readable server name used for display purposes. Defaults to the address. |
+| params.directory | string | Optional socket address of a directory to hole-punch through before connecting (host:port). Use for a server behind a cloud firewall/NAT that is registered with that directory; address is connected to verbatim and need not be listed by the directory. Example: anygenre1.jamulus.io:22124 |
 
 Results:
 

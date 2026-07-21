@@ -201,8 +201,6 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
             response["error"] =
                 CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a valid socket address" );
         }
-
-        response["result"] = "ok";
     } );
 
     /// @rpc_method jamulus/getMode

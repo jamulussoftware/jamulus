@@ -909,10 +909,10 @@ void CClient::OnHandledSignal ( int sigNum )
     {
     case SIGINT:
     case SIGTERM:
-        // if connected, Stop client (needed for headless mode)
-        Stop();
+        // tear down any pending or established connection first, so the server
+        // is notified we are leaving (Disconnect() is a no-op if not connected)
+        Disconnect();
 
-        // this should trigger OnAboutToQuit
         QCoreApplication::instance()->exit();
         break;
 
@@ -1111,11 +1111,15 @@ void CClient::Stop()
 }
 
 /// @method
-/// @brief Stops the client if the client is running
+/// @brief Disconnects from the server if a connection is requested or established.
+///        Idempotent: a no-op when already disconnected.
 /// @emit Disconnected
 void CClient::Disconnect()
 {
-    if ( IsRunning() )
+    // Key off the connection state, not IsRunning() (which tracks the audio
+    // device): the two diverge while connecting and in headless mode, and on
+    // SIGTERM we must still send the disconnect message to the server.
+    if ( GetConnectionState() != CS_DISCONNECTED )
     {
         Stop();
     }
@@ -1156,6 +1160,10 @@ void CClient::Connect ( QString strServerAddress, QString strServerName )
     }
 }
 
+/// @method
+/// @brief Updates the connection state and, if it changed, notifies observers.
+/// @emit ConnectionStateChanged (state) when the state actually changes
+/// @param eNewConnectionState - the state to transition to
 void CClient::SetConnectionState ( const EConnectionState eNewConnectionState )
 {
     if ( eConnectionState != eNewConnectionState )

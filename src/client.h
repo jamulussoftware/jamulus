@@ -88,6 +88,17 @@
 #endif
 
 /* Definitions ****************************************************************/
+// Client connection state -----------------------------------------------------
+enum EConnectionState
+{
+    // a connection is "requested" as soon as the client starts the audio
+    // stream towards the configured server and "established" once the server
+    // has assigned a channel ID to the client
+    CS_DISCONNECTED = 0, // no connection requested or established
+    CS_CONNECTING   = 1, // connection requested but not yet established
+    CS_CONNECTED    = 2  // connection established and current
+};
+
 // audio in fader range
 #define AUD_FADER_IN_MIN    0
 #define AUD_FADER_IN_MAX    100
@@ -362,11 +373,10 @@ protected:
     void FreeClientChannel ( const int iServerChannelID );
     int  FindClientChannel ( const int iServerChannelID, const bool bCreateIfNew ); // returns a client channel ID or INVALID_INDEX
     bool ReorderLevelList ( CVector<uint16_t>& vecLevelList );                      // modifies vecLevelList, passed by reference
-    // information for the connected server
+    // human-readable name of the current server, shown in the UI
     QString strConnectedServerName;
 
-    // single source of truth for the connection state, only to be modified
-    // via SetConnectionState() so that every change emits ConnectionStateChanged()
+    // current connection state; set only via SetConnectionState()
     EConnectionState eConnectionState;
 
     void SetConnectionState ( const EConnectionState eNewConnectionState );

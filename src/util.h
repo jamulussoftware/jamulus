@@ -590,17 +590,6 @@ enum ERecorderState
     RS_RECORDING       = 3
 };
 
-// Client connection state -----------------------------------------------------
-enum EConnectionState
-{
-    // a connection is "requested" as soon as the client starts the audio
-    // stream towards the configured server and "established" once the server
-    // has assigned a channel ID to the client
-    CS_DISCONNECTED = 0, // no connection requested or established
-    CS_CONNECTING   = 1, // connection requested but not yet established
-    CS_CONNECTED    = 2  // connection established and current
-};
-
 // Channel sort type -----------------------------------------------------------
 enum EChSortType
 {

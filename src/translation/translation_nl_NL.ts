@@ -1686,7 +1686,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>
@@ -1793,7 +1793,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation type="unfinished"></translation>
+        <translation>Ieder Genre Azië</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>
@@ -3610,7 +3610,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.cpp" line="1590"/>
         <source>Released under the GNU Affero General Public License 3.0 (or any later version)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uitgebracht onder de GNU Affero General Public License 3.0 (of een latere versie)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1658"/>

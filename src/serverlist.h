@@ -139,7 +139,7 @@ public:
                                     QString strCountry,
                                     QString strNumClients,
                                     bool    isPermanent,
-                                    bool    bEnableIPv6 );
+                                    bool    bIPv6Available );
     QString                 toCSV();
 
     // time on which the entry was registered

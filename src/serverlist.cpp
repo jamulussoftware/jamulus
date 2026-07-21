@@ -1012,7 +1012,7 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
     // Allow IPv4 only for communicating with Directories
     // Use SRV DNS discovery for directory connections, fallback to A/AAAA if none.
     const QString strNetworkAddress      = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
-    const bool    bDirectoryAddressValid = NetworkUtil::ParseNetworkAddress ( strNetworkAddress, DirectoryAddress, false );
+    const bool    bDirectoryAddressValid = NetworkUtil::ParseNetworkAddress ( strNetworkAddress, DirectoryAddress, pServer->IsIPv6Available() );
 
     // lock the mutex again now that the address has been resolved.
     locker.relock();
@@ -1027,7 +1027,18 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
             // For a registered server, the server properties are stored in the
             // very first item in the server list (which is actually no server list
             // but just one item long for the registered server).
-            pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerList[0].LHostAddr, ServerList[0] );
+            if ( DirectoryAddress.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            {
+                pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerPublicIP, ServerList[0] );
+            }
+            else if ( DirectoryAddress.InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
+            {
+                pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerPublicIP6, ServerList[0] );
+            }
+            else
+            {
+                SetSvrRegStatus ( SRS_BAD_ADDRESS );
+            }
         }
         else
         {

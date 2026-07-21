@@ -1128,13 +1128,54 @@ void CClient::Disconnect()
 /// @method
 /// @brief Connects to strServerAddress. If a connection is currently requested
 ///        or established, that connection is terminated first.
+///
+///        If strDirectoryAddress is given, the server is assumed to be behind a
+///        firewall/NAT that requires directory-assisted UDP hole punching (the
+///        same mechanism the GUI directory list uses). We first ask that
+///        directory to poke its registered servers towards our socket, wait
+///        briefly for their replies to open the firewall, and only then connect.
+///        strServerAddress is always connected to verbatim and need not appear
+///        in the directory's server list.
 /// @emit Connecting (strServerName) if SetServerAddr was valid. emit happens through Start().
 ///       Use to set CClientDlg to show being connected
 /// @emit ConnectingFailed (error) if an error occurred
 ///       Use to display error message in CClientDlg
 /// @param strServerAddress - the server address to connect to
 /// @param strServerName - the human readable server name passed to Connecting()
-void CClient::Connect ( QString strServerAddress, QString strServerName )
+/// @param strDirectoryAddress - optional directory to hole-punch through first
+void CClient::Connect ( QString strServerAddress, QString strServerName, QString strDirectoryAddress )
+{
+    if ( strDirectoryAddress.isEmpty() )
+    {
+        // no hole punching requested: connect straight away
+        connectToServer ( strServerAddress, strServerName );
+        return;
+    }
+
+    CHostAddress haDirectoryAddress;
+
+    // directories are queried over IPv4 only (same as jamulusclient/pollServerList)
+    if ( !NetworkUtil::ParseNetworkAddress ( strDirectoryAddress, haDirectoryAddress, false ) )
+    {
+        emit ConnectingFailed ( tr ( "Received invalid directory address. Please check for typos in the provided directory address." ) );
+        return;
+    }
+
+    // Ask the directory for its server list. As a side effect the directory
+    // tells each registered server to send us an "empty message", which opens
+    // the server's firewall for our socket (UDP hole punching).
+    CreateCLReqServerListMes ( haDirectoryAddress );
+
+    // Defer the actual connect so the servers' replies have time to arrive and
+    // open the firewall before we send our first packet.
+    QTimer::singleShot ( HOLE_PUNCH_CONNECT_DELAY_MS, this, [this, strServerAddress, strServerName]() {
+        connectToServer ( strServerAddress, strServerName );
+    } );
+}
+
+/// @brief Performs the actual connect. See Connect(), which either calls this
+///        directly or after a directory hole-punch delay.
+void CClient::connectToServer ( QString strServerAddress, QString strServerName )
 {
     try
     {

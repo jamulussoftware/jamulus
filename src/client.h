@@ -171,7 +171,7 @@ public:
     void Start();
     void Stop();
     void Disconnect();
-    void Connect ( QString strServerAddress, QString strServerName );
+    void Connect ( QString strServerAddress, QString strServerName, QString strDirectoryAddress = "" );
 
     // The ConnectedServerName is emitted by Connecting() to update the UI with a human readable server name
     void    SetConnectedServerName ( const QString strServerName ) { strConnectedServerName = strServerName; };
@@ -380,6 +380,10 @@ protected:
     EConnectionState eConnectionState;
 
     void SetConnectionState ( const EConnectionState eNewConnectionState );
+
+    // performs the actual connect; Connect() calls this directly, or after a
+    // directory hole-punch delay when a directory address was supplied
+    void connectToServer ( QString strServerAddress, QString strServerName );
 
     // only one channel is needed for client application
     CChannel  Channel;

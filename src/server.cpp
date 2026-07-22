@@ -592,6 +592,12 @@ void CServer::OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpCon
 {
     qDebug() << "- client ID" << iChanID << "received from" << InetAddr.toString() << "with TCP connection" << pTcpConnection;
 
+    // ensure there is a TcpConnection
+    if ( !pTcpConnection )
+    {
+        return;
+    }
+
     if ( iChanID < 0 || iChanID >= iMaxNumChannels || !vecChannels[iChanID].IsConnected() )
     {
         // ID out of range or channel not connected - reject connection

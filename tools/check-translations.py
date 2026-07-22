@@ -49,15 +49,20 @@ from pathlib import Path
 PLACEHOLDER_RE = re.compile(r"%\d+")
 HTML_TAG_RE = re.compile(r"<[^>]+>")
 
-# ANSI escape codes (Globals)
-BOLD, CYAN, YELLOW, RED, RESET = "\033[1m", "\033[36m", "\033[33m", "\033[31m", "\033[0m"
+
+class Colors:
+    """ANSI escape codes for terminal output."""
+    BOLD = "\033[1m"
+    CYAN = "\033[36m"
+    YELLOW = "\033[33m"
+    RED = "\033[31m"
+    RESET = "\033[0m"
 
 
 def configure_colors(color_arg: str):
     """Disable color constants if outputting to a non-TTY without 'always' override."""
-    global BOLD, CYAN, YELLOW, RED, RESET
     if color_arg == 'never' or (color_arg == 'auto' and not sys.stdout.isatty()):
-        BOLD = CYAN = YELLOW = RED = RESET = ""
+        Colors.BOLD = Colors.CYAN = Colors.YELLOW = Colors.RED = Colors.RESET = ""
 
 
 class Severity(IntEnum):
@@ -214,11 +219,11 @@ def detect_warnings(ts_file: Path, file_lang: str):
 
 def _print_results(grouped):
     for file in sorted(grouped.keys()):
-        print(f"\n{BOLD}File: {file.name}{RESET}")
+        print(f"\n{Colors.BOLD}File: {file.name}{Colors.RESET}")
         for w in sorted(grouped[file], key=lambda x: x.line):
-            color, sev = (RED, "SEVERE ") if w.severity == Severity.SEVERE else (YELLOW, "WARNING")
+            color, sev = (Colors.RED, "SEVERE ") if w.severity == Severity.SEVERE else (Colors.YELLOW, "WARNING")
             lines = w.message.split("\n")
-            print(f"  {CYAN}Line {w.line:<4}{RESET} | {color}{sev}{RESET} | {lines[0]}")
+            print(f"  {Colors.CYAN}Line {w.line:<4}{Colors.RESET} | {color}{sev}{Colors.RESET} | {lines[0]}")
             for extra in lines[1:]:
                 print(f"            |         | {extra}")
 
@@ -252,7 +257,7 @@ def main():
 
     print("\n== Test Summary ==")
     for lang in sorted(stats.keys()):
-        print(f"{BOLD}[{lang}]{RESET} Severe: {stats[lang]['severe']}, "
+        print(f"{Colors.BOLD}[{lang}]{Colors.RESET} Severe: {stats[lang]['severe']}, "
               f"Warnings: {stats[lang]['warning']}")
 
     if sum(s["severe"] for s in stats.values()) > 0 or (

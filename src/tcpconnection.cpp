@@ -119,7 +119,13 @@ void CTcpConnection::OnReadyRead()
                 // now have a complete header
                 iPayloadRemain = CProtocol::GetBodyLength ( vecbyRecBuf );
 
-                Q_ASSERT ( iPayloadRemain <= MAX_SIZE_BYTES_NETW_BUF - MESS_HEADER_LENGTH_BYTE );
+                // check for valid packet length on the wire
+                if ( iPayloadRemain < 0 || iPayloadRemain > MAX_SIZE_BYTES_NETW_BUF - MESS_HEADER_LENGTH_BYTE )
+                {
+                    qWarning() << "- Jamulus-TCP: invalid frame length" << iPayloadRemain << "- dropping connection";
+                    disconnectFromHost();
+                    return;
+                }
 
                 iPayloadRemain -= iPos - MESS_HEADER_LENGTH_BYTE;
             }

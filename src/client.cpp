@@ -304,7 +304,8 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
 #else
 #    define ERRORSIGNAL QOverload<QAbstractSocket::SocketError>::of ( &QAbstractSocket::error )
 #endif
-        connect ( pSocket, ERRORSIGNAL, this, [pSocket, pTimer] ( QAbstractSocket::SocketError err ) {
+        // keep a reference to this connection so we can disconnect it when handing off to the CTcpConnection
+        QMetaObject::Connection errConn = connect ( pSocket, ERRORSIGNAL, this, [pSocket, pTimer] ( QAbstractSocket::SocketError err ) {
             Q_UNUSED ( err );
 
             pTimer->stop();
@@ -315,9 +316,12 @@ void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
             pSocket->deleteLater();
         } );
 
-        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, pTimer, InetAddr, vecMessage, eProtoMode]() {
+        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, pTimer, errConn, InetAddr, vecMessage, eProtoMode]() {
             pTimer->stop();
             pTimer->deleteLater();
+
+            // disconnect the above error handler as no longer needed
+            disconnect ( errConn );
 
             // connection succeeded, give it to a CTcpConnection
             CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket,

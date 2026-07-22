@@ -2786,6 +2786,12 @@ void CProtocol::CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iC
 
 bool CProtocol::EvaluateCLClientIDMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData, CTcpConnection* pTcpConnection )
 {
+    // this message is only meaningful over TCP - ignore otherwise
+    if ( !pTcpConnection )
+    {
+        return true; // return error code
+    }
+
     int iPos = 0; // init position pointer
 
     // check size

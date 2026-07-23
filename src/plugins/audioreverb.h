@@ -2,56 +2,78 @@
 * Audio Reverberation                                                          *
 \******************************************************************************/
 /*
-    The following code is based on "JCRev: John Chowning's reverberator class"
-    by Perry R. Cook and Gary P. Scavone, 1995 - 2004
-    which is in "The Synthesis ToolKit in C++ (STK)"
-    http://ccrma.stanford.edu/software/stk
-
-    Original description:
-    This class is derived from the CLM JCRev function, which is based on the use
-    of networks of simple allpass and comb delay filters. This class implements
-    three series allpass units, followed by four parallel comb filters, and two
-    decorrelation delay lines in parallel at the output.
+    The following code calls MVerb for reverberation.
+    MVerb was written by Martin Eastwood.
+    https://github.com/martineastwood/mverb
 */
 
 #pragma once
 #include "util.h"
+#include "libs/mverb/MVerb.h"
 
 class CAudioReverb
 {
 public:
-    CAudioReverb() {}
+    CAudioReverb()
+    {
+        fMaxShort = static_cast<float> ( _MAXSHORT );
+        iPreset   = STADIUM;
 
-    void Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam, const int iSampleRate, const float fT60 = 1.1f );
+        // Create MVerb on the heap
+        mverb = std::unique_ptr<MVerb<float>> ( new MVerb<float>() );
+        mverb->setSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
+        loadPreset();
+    }
+
+    void Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam );
 
     void Clear();
-    void Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fAttenuation );
+    void Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fReverbGain );
+    void setPreset ( const int iNPreset )
+    {
+        // silently fail if preset doesn't exist
+        if ( MathUtils::InRange<int> ( iNPreset, 0, NUM_REV_PRESETS ) )
+        {
+            iPreset = iNPreset;
+            loadPreset();
+        }
+    };
+    int getPreset() const { return iPreset; };
 
 protected:
-    void setT60 ( const float fT60, const int iSampleRate );
-    bool isPrime ( const int number );
+    std::unique_ptr<MVerb<float>> mverb;
 
-    class COnePole
-    {
-    public:
-        COnePole() : fA ( 0 ), fB ( 0 ) { Reset(); }
-        void  setPole ( const float fPole );
-        float Calc ( const float fIn );
-        void  Reset() { fLastSample = 0; }
-
-    protected:
-        float fA;
-        float fB;
-        float fLastSample;
-    };
-
+    void         loadPreset();
     EAudChanConf eAudioChannelConf;
     int          iStereoBlockSizeSam;
-    CFIFO<float> allpassDelays[3];
-    CFIFO<float> combDelays[4];
-    COnePole     combFilters[4];
-    CFIFO<float> outLeftDelay;
-    CFIFO<float> outRightDelay;
-    float        allpassCoefficient;
-    float        combCoefficient[4];
+    float        fMaxShort;
+    int          iPreset;
+
+    int                numFrames;
+    std::vector<float> bufL;
+    std::vector<float> bufR;
+
+    enum
+    {
+        SUBTLE = 0,
+        STADIUM,
+        CUPBOARD,
+        DARK,
+        HALVES,
+        DRUMROOM,
+        CLUB,
+        NUM_REV_PRESETS
+    };
+
+    // Parameters are set iteratively by enum. See MVerb.h for reference.
+    // NOTE: parameters "GAIN" and "MIX" must be "1."
+    constexpr static inline float const presets[NUM_REV_PRESETS][MVerb<float>::NUM_PARAMS] = { { 0., .5, 1., .5, 0., .5, 1., 1., .75 },
+                                                                                               { 0., .5, 1., .5, 0., 1., 1., 1., .75 },
+                                                                                               { 0., .5, 1., .5, 0., .25, 1., 1., .75 },
+                                                                                               { .9, .5, .1, .5, 0., .5, 1., 1., .75 },
+                                                                                               { .5, .5, .5, .5, .5, .75, 1., 1., .5 },
+                                                                                               { .2, .4, .4, .6, .1, .05, 1., 1., .4 },
+                                                                                               { .4, .2, .3, .6, .2, .2, 1., 1., .5 }
+
+    };
 };

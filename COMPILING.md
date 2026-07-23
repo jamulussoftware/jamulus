@@ -17,7 +17,19 @@ First of all, you need to get the Jamulus source code. You can either download i
 - For .tar.gz [use this link](https://github.com/jamulussoftware/jamulus/archive/latest.tar.gz) to download the latest release
 - For .zip [use this link](https://github.com/jamulussoftware/jamulus/archive/latest.zip)
 - If you use `git`, [set it up](https://docs.github.com/en/get-started/quickstart/set-up-git) – preferably with SSH if you want to contribute.
-Then run `git clone git@github.com:jamulussoftware/jamulus` in Terminal to get the bleeding edge version directly from GitHub.
+Then run
+```
+git clone git@github.com:jamulussoftware/jamulus
+```
+in Terminal to get the bleeding edge version directly from GitHub.
+- The reverberation is done by MVerb and you need to pull it in as a submodule.
+```
+# Change into the jamulus/ directory
+cd jamulus
+# Initialize submodule MVerb
+git submodule update --init libs/mverb
+```
+
 
 ## Linux
 

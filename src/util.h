@@ -47,6 +47,7 @@
 #pragma once
 #include <vector>
 #include <algorithm>
+#include <atomic>
 #ifdef _WIN32
 #    include <winsock2.h>
 #    include <ws2tcpip.h>
@@ -1352,11 +1353,11 @@ public:
 protected:
     virtual void run();
 
-    bool     bRun;
+    std::atomic<bool> bRun;
 
 #    if defined( __APPLE__ ) || defined( __MACOSX )
-    uint64_t Delay;
-    uint64_t NextEnd;
+    uint64_t          Delay;
+    uint64_t          NextEnd;
 #    else
     long     Delay;
     timespec NextEnd;

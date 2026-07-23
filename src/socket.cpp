@@ -483,17 +483,10 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
 bool CSocket::GetAndResetbJitterBufferOKFlag()
 {
-    // check jitter buffer status
-    if ( !bJitterBufferOK )
-    {
-        // reset flag and return "not OK" status
-        bJitterBufferOK = true;
-        return false;
-    }
-
-    // the buffer was OK, we do not have to reset anything and just return the
-    // OK status
-    return true;
+    // atomically read the jitter buffer status and reset it to OK so that a
+    // "not OK" set by the socket thread between a separate read and reset
+    // cannot be lost
+    return bJitterBufferOK.exchange ( true );
 }
 
 void CSocket::OnDataReceived ( std::atomic<bool>& bRun )

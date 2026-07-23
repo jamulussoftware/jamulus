@@ -51,6 +51,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QMutex>
+#include <atomic>
 #ifdef USE_OPUS_SHARED_LIB
 #    include "opus/opus_custom.h"
 #else
@@ -431,9 +432,9 @@ protected:
     bool        bEnableAudioAlerts;
     bool        bEnableOPUS64;
 
-    bool   bJitterBufferOK;
-    bool   bMuteMeInPersonalMix;
-    QMutex MutexDriverReinit;
+    std::atomic<bool> bJitterBufferOK;
+    bool              bMuteMeInPersonalMix;
+    QMutex            MutexDriverReinit;
 
     // server settings
     int  iServerSockBufNumFrames;

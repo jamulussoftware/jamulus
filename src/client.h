@@ -88,6 +88,17 @@
 #endif
 
 /* Definitions ****************************************************************/
+// Client connection state -----------------------------------------------------
+enum EConnectionState
+{
+    // a connection is "requested" as soon as the client starts the audio
+    // stream towards the configured server and "established" once the server
+    // has assigned a channel ID to the client
+    CS_DISCONNECTED = 0, // no connection requested or established
+    CS_CONNECTING   = 1, // connection requested but not yet established
+    CS_CONNECTED    = 2  // connection established and current
+};
+
 // audio in fader range
 #define AUD_FADER_IN_MIN    0
 #define AUD_FADER_IN_MAX    100
@@ -159,6 +170,15 @@ public:
 
     void Start();
     void Stop();
+    void Disconnect();
+    void Connect ( QString strServerAddress, QString strServerName );
+
+    // The ConnectedServerName is emitted by Connecting() to update the UI with a human readable server name
+    void    SetConnectedServerName ( const QString strServerName ) { strConnectedServerName = strServerName; };
+    QString GetConnectedServerName() const { return strConnectedServerName; };
+
+    EConnectionState GetConnectionState() const { return eConnectionState; }
+
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
     bool SetServerAddr ( QString strNAddr );
@@ -353,6 +373,13 @@ protected:
     void FreeClientChannel ( const int iServerChannelID );
     int  FindClientChannel ( const int iServerChannelID, const bool bCreateIfNew ); // returns a client channel ID or INVALID_INDEX
     bool ReorderLevelList ( CVector<uint16_t>& vecLevelList );                      // modifies vecLevelList, passed by reference
+    // human-readable name of the current server, shown in the UI
+    QString strConnectedServerName;
+
+    // current connection state; set only via SetConnectionState()
+    EConnectionState eConnectionState;
+
+    void SetConnectionState ( const EConnectionState eNewConnectionState );
 
     // only one channel is needed for client application
     CChannel  Channel;
@@ -464,7 +491,8 @@ protected slots:
     {
         if ( InetAddr == Channel.GetAddress() )
         {
-            emit Disconnected();
+            // Stop client in case it received a Disconnection request
+            Stop();
         }
     }
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
@@ -507,7 +535,11 @@ signals:
 
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
+    void ConnectionStateChanged ( EConnectionState eConnectionState );
+    void Connecting ( QString strServerName );
+    void ConnectingFailed ( QString errorMessage );
     void Disconnected();
+
     void SoundDeviceChanged ( QString strError );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
     void ControllerInPanValue ( int iChannelIdx, int iValue );

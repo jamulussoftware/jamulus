@@ -491,7 +491,7 @@ Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params.recordingDirectory | string | The new recording directory. |
+| params.recordingDirectory | string | The new recording directory. May be prefixed with "localtimezone;" to name recording session folders using local time instead of UTC. |
 
 Results:
 

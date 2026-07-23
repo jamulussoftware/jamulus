@@ -169,11 +169,13 @@ QString CJamClient::TranslateChars ( const QString& input ) const
 /**
  * @brief CJamSession::CJamSession Construct a new jam recording session
  * @param recordBaseDir The recording base directory
+ * @param bRecordLocalTime Name the session folder using local time instead of UTC
  *
  * Each session is stored into its own subdirectory of the recording base directory.
  */
-CJamSession::CJamSession ( QDir recordBaseDir ) :
-    sessionDir ( QDir ( recordBaseDir.absoluteFilePath ( "Jam-" + QDateTime().currentDateTimeUtc().toString ( "yyyyMMdd-HHmmsszzz" ) ) ) ),
+CJamSession::CJamSession ( QDir recordBaseDir, const bool bRecordLocalTime ) :
+    sessionDir ( QDir ( recordBaseDir.absoluteFilePath (
+        "Jam-" + ( bRecordLocalTime ? QDateTime::currentDateTime() : QDateTime::currentDateTimeUtc() ).toString ( "yyyyMMdd-HHmmsszzz" ) ) ) ),
     currentFrame ( 0 ),
     chIdDisconnected ( -1 ),
     vecptrJamClients ( MAX_NUM_CHANNELS ),
@@ -426,7 +428,7 @@ void CJamRecorder::Start()
         QMutexLocker mutexLocker ( &ChIdMutex );
         try
         {
-            currentSession = new CJamSession ( recordBaseDir );
+            currentSession = new CJamSession ( recordBaseDir, bRecordLocalTime );
             isRecording    = true;
         }
         catch ( const CGenErr& err )

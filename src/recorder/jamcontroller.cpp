@@ -109,9 +109,22 @@ void CJamController::SetRecordingDir ( QString newRecordingDir, int iServerFrame
         pthJamRecorder = nullptr;
     }
 
-    if ( !newRecordingDir.isEmpty() )
+    // An optional "localtimezone;" prefix selects local time instead of UTC for
+    // session folder names (#497). strRecordingDir keeps the full string below so
+    // the prefix round-trips unchanged through the ini file, JSON-RPC and the GUI.
+    const QString strLocalTimePrefix  = "localtimezone;";
+    bool          bRecordLocalTime    = false;
+    QString       strRecordingBaseDir = newRecordingDir;
+
+    if ( strRecordingBaseDir.startsWith ( strLocalTimePrefix ) )
     {
-        pJamRecorder         = new recorder::CJamRecorder ( newRecordingDir, iServerFrameSizeSamples );
+        bRecordLocalTime    = true;
+        strRecordingBaseDir = strRecordingBaseDir.mid ( strLocalTimePrefix.length() );
+    }
+
+    if ( !strRecordingBaseDir.isEmpty() )
+    {
+        pJamRecorder         = new recorder::CJamRecorder ( strRecordingBaseDir, iServerFrameSizeSamples, bRecordLocalTime );
         strRecorderErrMsg    = pJamRecorder->Init();
         bRecorderInitialised = ( strRecorderErrMsg == QString() );
         bEnableRecording     = bRecorderInitialised && !bDisableRecording;

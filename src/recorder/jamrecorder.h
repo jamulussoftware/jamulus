@@ -135,7 +135,7 @@ class CJamSession : public QObject
     Q_OBJECT
 
 public:
-    CJamSession ( QDir recordBaseDir );
+    CJamSession ( QDir recordBaseDir, const bool bRecordLocalTime );
 
     virtual ~CJamSession();
 
@@ -176,9 +176,10 @@ class CJamRecorder : public QObject
     Q_OBJECT
 
 public:
-    CJamRecorder ( const QString strRecordingBaseDir, const int iServerFrameSizeSamples ) :
+    CJamRecorder ( const QString strRecordingBaseDir, const int iServerFrameSizeSamples, const bool bRecordLocalTime ) :
         recordBaseDir ( strRecordingBaseDir ),
         iServerFrameSizeSamples ( iServerFrameSizeSamples ),
+        bRecordLocalTime ( bRecordLocalTime ),
         isRecording ( false ),
         currentSession ( nullptr )
     {}
@@ -203,6 +204,7 @@ private:
 
     QDir         recordBaseDir;
     int          iServerFrameSizeSamples;
+    bool         bRecordLocalTime;
     bool         isRecording;
     CJamSession* currentSession;
     QMutex       ChIdMutex;

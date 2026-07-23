@@ -142,6 +142,8 @@ protected:
     virtual void dropEvent ( QDropEvent* Event ) { ManageDragNDrop ( Event, false ); }
     void         UpdateDisplay();
 
+    bool eventFilter ( QObject* obj, QEvent* event );
+
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;

@@ -104,11 +104,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lbrInputLevelL->setAccessibleName ( strInpLevHAccText );
     lbrInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelL->setToolTip ( strInpLevHTT );
+    lbrInputLevelL->installEventFilter ( this ); // install event filter for tooltips
     lbrInputLevelL->setEnabled ( false );
     lbrInputLevelR->setWhatsThis ( strInpLevH );
     lbrInputLevelR->setAccessibleName ( strInpLevHAccText );
     lbrInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelR->setToolTip ( strInpLevHTT );
+    lbrInputLevelR->installEventFilter ( this ); // install event filter for tooltips
     lbrInputLevelR->setEnabled ( false );
 
     // connect/disconnect button
@@ -173,6 +175,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                                 "you will not have much fun using %1." )
                                .arg ( APP_NAME ) +
                            TOOLTIP_COM_END_TEXT );
+    ledDelay->installEventFilter ( this ); // install event filter for tooltips
 
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 
@@ -204,6 +207,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ledBuffers->setToolTip ( tr ( "If this LED indicator turns red, "
                                   "the audio stream is interrupted." ) +
                              TOOLTIP_COM_END_TEXT );
+    ledBuffers->installEventFilter ( this ); // install event filter for tooltips
 
     ledBuffers->setAccessibleName ( tr ( "Local Jitter Buffer status LED indicator" ) );
 
@@ -1557,4 +1561,16 @@ void CClientDlg::OnMIDIControllerUsageChanged ( bool bEnabled )
 
     // Enable/disable runtime MIDI via the sound interface through the public CClient interface
     pClient->EnableMIDI ( bEnabled );
+}
+
+bool CClientDlg::eventFilter ( QObject* obj, QEvent* event )
+{
+    if ( event->type() == QEvent::ToolTip )
+    {
+        // return true to suppress tooltip, false to allow it
+        return !pSettings->bShowToolTips;
+    }
+
+    // continue with normal processing for other events
+    return QObject::eventFilter ( obj, event );
 }

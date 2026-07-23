@@ -909,7 +909,7 @@ int main ( int argc, char** argv )
     // For accessible support we need to add a plugin to qt. The plugin has to
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.
-    QDir ApplDir ( QApplication::applicationDirPath() );
+    QDir ApplDir ( QCoreApplication::applicationDirPath() );
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 

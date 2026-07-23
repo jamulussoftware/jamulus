@@ -11,6 +11,7 @@
 #pragma once
 
 #include <QtTest>
+#include <algorithm>
 #include "protocol.h"
 
 /* CProtocolTester **************************************************************/

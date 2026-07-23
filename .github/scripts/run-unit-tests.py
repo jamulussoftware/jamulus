@@ -31,6 +31,7 @@ import xml.etree.ElementTree as ET
 
 BUILD_DIR = "build-test"
 RESULTS_PATH = "test-results.xml"
+OUTPUT_PATH = "test-output.txt"
 
 
 def qmake_extra_args():
@@ -158,14 +159,20 @@ def cmd_run():
     junit_format = pick_junit_format ( binary )
     print ( "Using QtTest JUnit logger format: " + junit_format )
 
+    # remove stale reports so the gate below can only ever see this run's
+    # output, even if the binary crashes before writing anything
+    for path in [ RESULTS_PATH, OUTPUT_PATH ]:
+        if os.path.exists ( path ):
+            os.remove ( path )
+
     # "-o file,txt" not "-o -,txt": on windows-latest runners this binary's
     # stdout comes back 0 bytes regardless of capture method (suspected: Qt's
     # console detection on the inherited handle); QtTest's own file writer
     # works there. Using it on Unix too avoids a platform branch.
-    subprocess.run ( [ binary, "-o", "test-output.txt,txt", "-o", "test-results.xml," + junit_format ] )
+    subprocess.run ( [ binary, "-o", OUTPUT_PATH + ",txt", "-o", RESULTS_PATH + "," + junit_format ] )
 
-    if os.path.exists ( "test-output.txt" ):
-        with open ( "test-output.txt", encoding="utf-8", errors="replace" ) as f:
+    if os.path.exists ( OUTPUT_PATH ):
+        with open ( OUTPUT_PATH, encoding="utf-8", errors="replace" ) as f:
             sys.stdout.write ( f.read() )
 
     # The binary's own exit code is unreliable on Windows runners, so it's

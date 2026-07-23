@@ -1430,7 +1430,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Máx</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>
@@ -1793,7 +1793,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation type="unfinished"></translation>
+        <translation>Cualquier Género Asiático</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>
@@ -3610,7 +3610,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.cpp" line="1590"/>
         <source>Released under the GNU Affero General Public License 3.0 (or any later version)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lanzado bajo la Licencia Pública General Affero de GNU 3.0 (o cualquier versión posterior)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1658"/>

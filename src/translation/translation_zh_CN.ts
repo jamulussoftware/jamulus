@@ -1593,7 +1593,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>最大值</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="531"/>

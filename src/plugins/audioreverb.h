@@ -32,7 +32,7 @@ public:
     void setPreset ( const int iNPreset )
     {
         // silently fail if preset doesn't exist
-        if ( MathUtils::InRange<int> ( iNPreset, SUBTLE, HALVES ) )
+        if ( MathUtils::InRange<int> ( iNPreset, 0, NUM_REV_PRESETS ) )
         {
             iPreset = iNPreset;
             loadPreset();
@@ -55,19 +55,25 @@ protected:
 
     enum
     {
-        SUBTLE          = 0,
-        STADIUM         = 1,
-        CUPBOARD        = 2,
-        DARK            = 3,
-        HALVES          = 4,
-        NUM_REV_PRESETS = 5
+        SUBTLE = 0,
+        STADIUM,
+        CUPBOARD,
+        DARK,
+        HALVES,
+        DRUMROOM,
+        CLUB,
+        NUM_REV_PRESETS
     };
 
-    constexpr static inline float const presets[NUM_REV_PRESETS][MVerb<float>::NUM_PARAMS] = { { .5, .5, .5, .5, .5, 1., 1., .5, .75 },
-                                                                                               { 0., .5, 1., .5, 0., 1., 1., .35, .75 },
+    // Parameters are set iteratively by enum. See MVerb.h for reference.
+    // NOTE: parameters "GAIN" and "MIX" must be "1."
+    constexpr static inline float const presets[NUM_REV_PRESETS][MVerb<float>::NUM_PARAMS] = { { 0., .5, 1., .5, 0., .5, 1., 1., .75 },
                                                                                                { 0., .5, 1., .5, 0., 1., 1., 1., .75 },
-                                                                                               { .9, .5, .1, .5, 0., 1., 1., 1., .75 },
-                                                                                               { .5, .5, .5, .5, .5, 1., 1., .5, .75 }
+                                                                                               { 0., .5, 1., .5, 0., .25, 1., 1., .75 },
+                                                                                               { .9, .5, .1, .5, 0., .5, 1., 1., .75 },
+                                                                                               { .5, .5, .5, .5, .5, .75, 1., 1., .5 },
+                                                                                               { .2, .4, .4, .6, .1, .05, 1., 1., .4 },
+                                                                                               { .4, .2, .3, .6, .2, .2, 1., 1., .5 }
 
     };
 };

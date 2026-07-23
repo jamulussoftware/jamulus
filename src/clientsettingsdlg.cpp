@@ -571,6 +571,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxReverbPreset->addItem ( "Cupboard" );
     cbxReverbPreset->addItem ( "Dark" );
     cbxReverbPreset->addItem ( "Halves" );
+    cbxReverbPreset->addItem ( "Drum Room" );
+    cbxReverbPreset->addItem ( "Club" );
     cbxReverbPreset->setCurrentIndex ( pClient->GetReverbPreset() );
 
     // init number of mixer rows

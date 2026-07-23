@@ -114,7 +114,7 @@ jobs:
           path: |
             ~/qt
             ~/Library/Cache/jamulus-dependencies
-          key: macos-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/mac.sh', 'mac/deploy_mac.sh') }}-QT_VERSION=6.10.2 SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
+          key: macos-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/mac.sh', 'mac/deploy_mac.sh') }}-QT_VERSION=${{ env.QT_VERSION }} SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
 
       # Same cache path/key as autobuild.yml's "Windows (artifact+codeQL)"
       # job, so this job shares that cache instead of keeping a separate one.

@@ -2,7 +2,7 @@
  * Copyright (c) 2026
  *
  * Author(s):
- *  The Jamulus Development Team
+ *  dtinth
  *
  * Licensed under AGPL 3.0 or any later version. See COPYING for details.
  *

@@ -32,8 +32,7 @@ DEFINES += APP_VERSION=\\\"unittest\\\" \
     SERVER_ONLY \
     HEADLESS \
     NO_JSON_RPC \
-    HAVE_STDINT_H \
-    QT_NO_DEPRECATED_WARNINGS
+    HAVE_STDINT_H
 
 # same as in Jamulus.pro: prevent the windows.h min/max macros from breaking
 # std::min/std::max usage in the sources under test

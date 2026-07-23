@@ -1,4 +1,4 @@
-### Copyright (c) 2026
+### Debian packaging
 
 Author(s):
 * The Jamulus Development Team

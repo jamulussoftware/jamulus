@@ -136,8 +136,6 @@ jobs:
       # besides qtbase).
       - name: Install Qt (macOS, via autobuild's mac.sh)
         if: runner.os == 'macOS'
-        env:
-          JAMULUS_BUILD_VERSION: 0.0.0 # required by the script's validation; unused by "setup"
         run: ./.github/autobuild/mac.sh setup
 
       - name: Add Qt to PATH (macOS)
@@ -154,8 +152,6 @@ jobs:
       - name: Install Qt (Windows, via autobuild's windows.ps1)
         if: runner.os == 'Windows'
         shell: pwsh
-        env:
-          JAMULUS_BUILD_VERSION: 0.0.0 # required by the script's validation; unused by "setup"
         run: powershell .\.github\autobuild\windows.ps1 -Stage setup
 
       - name: Add Qt to PATH (Windows)

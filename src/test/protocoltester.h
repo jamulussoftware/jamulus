@@ -111,9 +111,13 @@ public:
      */
 
     // chops iBytes off the end of vecbyFrame, e.g. to cut into the CRC or the
-    // body; clamped at 0 so an oversize iBytes yields an empty frame instead
-    // of a negative resize (which wraps to a huge size_t).
-    static void TruncateBy ( CVector<uint8_t>& vecbyFrame, const int iBytes ) { vecbyFrame.resize ( std::max ( vecbyFrame.Size() - iBytes, 0 ) ); }
+    // body; clamped so it can never grow the frame: a negative iBytes is a
+    // no-op, an oversize iBytes yields an empty frame (instead of a negative
+    // resize, which wraps to a huge size_t).
+    static void TruncateBy ( CVector<uint8_t>& vecbyFrame, const int iBytes )
+    {
+        vecbyFrame.resize ( std::max ( vecbyFrame.Size() - std::max ( iBytes, 0 ), 0 ) );
+    }
 
     // flips every bit of the trailing CRC byte so the checksum no longer
     // matches the header plus body

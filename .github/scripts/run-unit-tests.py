@@ -104,7 +104,7 @@ def cmd_build():
     if platform.system() == "Windows":
         apply_msvc_environment()
         run (
-            [ qmake_bin, "..\\src\\test\\test.pro", "CONFIG-=debug_and_release", "CONFIG+=release", "DESTDIR=." ],
+            [ qmake_bin, "..\\src\\test\\test.pro", "CONFIG-=debug_and_release", "CONFIG+=release", "DESTDIR=." ] + qmake_extra_args(),
             cwd=BUILD_DIR,
         )
         run ( [ "nmake" ], cwd=BUILD_DIR )

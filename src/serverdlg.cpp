@@ -524,6 +524,13 @@ void CServerDlg::closeEvent ( QCloseEvent* Event )
 
     // default implementation of this event handler routine
     Event->accept();
+
+    // On some desktop environments (observed on KDE with Qt 5.15, Ubuntu 22.04+
+    // and Fedora 37+) closing the server GUI only hides the window while the
+    // process and system tray icon keep running (#3016). Explicitly quitting the
+    // application on close restores the expected behaviour. This is a pragmatic
+    // fix; a signals/slots-based shutdown may be the cleaner long-term solution.
+    QApplication::quit();
 }
 
 void CServerDlg::OnStartOnOSStartStateChanged ( int value )

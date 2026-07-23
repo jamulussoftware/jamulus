@@ -6,8 +6,6 @@ Real-time networked music jamming app. Qt/C++ qmake project. Client and server s
 
 Priority order: Stability > Low latency / real-time safety > Backwards compatibility > Maintainability > New features.
 
-Before editing code search and read the relevant doc below first.
-
 ---
 
 ## Never Do
@@ -37,13 +35,6 @@ and `macdeployqt ./Release/Jamulus.app` (or `./Debug/Jamulus.app`) to make it ru
 
 No automated test suite. State in the PR what and how you tested.
 
-## Audio stack by platform
-
-- **macOS**: Core Audio (default). `CONFIG+=jackonmac` uses JACK (untested).
-- **Linux**: JACK. On Windows: ASIO (default) or JACK (`CONFIG+=jackonwindows`).
-- **iOS**: Core Audio iOS. Client-only build.
-- **Android**: Oboe library (git submodule `libs/oboe`). Requires `git submodule update --init`.
-
 ## Qt / portability
 
 - Minimum Qt: **5.12.2**. Qt 6.x.y recommended. Guard newer APIs with `#if QT_VERSION >= QT_VERSION_CHECK(...)`.
@@ -66,15 +57,14 @@ make clang_format   # run before commit (after qmake Jamulus.pro or before .cpp/
 
 ## JSON-RPC
 
-- Enabled by default unless `CONFIG+=nojsonrpc`.
 - If you change RPC methods, regenerate `docs/JSON-RPC.md` with `tools/generate_json_rpc_docs.py` (CI fails otherwise).
 - Requires `--jsonrpcport` + `--jsonrpcsecretfile` at runtime. Binds to localhost by default.
 
 ## PR expectations
 
-- Small changes preferred
+- Small changes preferred, every change tested
 - Branch `autobuild/<name>` triggers CI builds on your fork.
-- Include `CHANGELOG:` line with changelog description. For new deps/build changes, add `AUTOBUILD: Please build all targets`.
+- Follow `.github/pull_request_template.md`. Include `CHANGELOG:` line with changelog description. For new deps/build changes, add `AUTOBUILD: Please build all targets`.
 
 ## Before opening a PR
 

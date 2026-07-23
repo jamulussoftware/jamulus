@@ -72,9 +72,12 @@ def msvc_environment():
     # the cmd.exe nesting and silently swallows vcvarsall.bat's effect on the
     # "after" snapshot (before == after, so no variables get applied).
     def snapshot ( cmd ):
-        out = subprocess.run ( cmd, shell=True, capture_output=True, text=True ).stdout
+        result = subprocess.run ( cmd, shell=True, capture_output=True, text=True )
+        if result.returncode != 0:
+            sys.exit ( "command failed (exit {}): {}\nstdout:\n{}\nstderr:\n{}".format ( result.returncode, cmd, result.stdout, result.stderr ) )
+
         env = {}
-        for line in out.splitlines():
+        for line in result.stdout.splitlines():
             m = re.match ( r"^([^=]+)=(.*)$", line )
             if m:
                 env[m.group ( 1 )] = m.group ( 2 )

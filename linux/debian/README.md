@@ -18,7 +18,7 @@ along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://
 
 ---
 
-# Debian Packaging
+## Files in this folder
 
 `linux/deploy_deb.sh` (run from the repository root) uses this directory to build two packages with `debuild`:
 

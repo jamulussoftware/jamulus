@@ -47,6 +47,21 @@
 
 #include "clientrpc.h"
 
+static QString ConnectionStateToString ( const EConnectionState eState )
+{
+    switch ( eState )
+    {
+    case CS_CONNECTING:
+        return "connecting";
+
+    case CS_CONNECTED:
+        return "connected";
+
+    default:
+        return "disconnected";
+    }
+}
+
 CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServer* pRpcServer, QObject* parent ) :
     QObject ( parent ),
     m_pSettings ( pSettings )
@@ -168,6 +183,36 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
     /// @param {object} params - No parameters (empty object).
     connect ( pClient, &CClient::Disconnected, [=]() { pRpcServer->BroadcastNotification ( "jamulusclient/disconnected", QJsonObject{} ); } );
 
+    /// @rpc_notification jamulusclient/connecting
+    /// @brief Emitted when a connection to a server has been requested but is not yet established.
+    /// @param {string} params.serverName - The human readable server name (or the address if no name is known).
+    connect ( pClient, &CClient::Connecting, [=] ( QString strServerName ) {
+        pRpcServer->BroadcastNotification ( "jamulusclient/connecting",
+                                            QJsonObject{
+                                                { "serverName", strServerName },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusclient/connectingFailed
+    /// @brief Emitted when a connection attempt failed before it could be requested from the server.
+    /// @param {string} params.error - The error message.
+    connect ( pClient, &CClient::ConnectingFailed, [=] ( QString strError ) {
+        pRpcServer->BroadcastNotification ( "jamulusclient/connectingFailed",
+                                            QJsonObject{
+                                                { "error", strError },
+                                            } );
+    } );
+
+    /// @rpc_notification jamulusclient/connectionStateChanged
+    /// @brief Emitted whenever the connection state changes.
+    /// @param {string} params.state - The new connection state (disconnected, connecting, or connected).
+    connect ( pClient, &CClient::ConnectionStateChanged, [=] ( EConnectionState eState ) {
+        pRpcServer->BroadcastNotification ( "jamulusclient/connectionStateChanged",
+                                            QJsonObject{
+                                                { "state", ConnectionStateToString ( eState ) },
+                                            } );
+    } );
+
     /// @rpc_notification jamulusclient/recorderState
     /// @brief Emitted when the client is connected to a server whose recorder state changes.
     /// @param {number} params.state - The recorder state.
@@ -203,6 +248,70 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         }
 
         response["result"] = "ok";
+    } );
+
+    /// @rpc_method jamulusclient/connect
+    /// @brief Connects the client to a server. Any current connection is terminated first.
+    ///        The connection is established asynchronously: subscribe to the jamulusclient/connecting,
+    ///        jamulusclient/connected, jamulusclient/connectingFailed and jamulusclient/connectionStateChanged
+    ///        notifications to follow its progress.
+    /// @param {string} params.address - Socket address of the server (host:port).
+    /// @param {string} params.serverName - Optional human readable server name used for display purposes. Defaults to the address.
+    /// @param {string} params.directory - Optional socket address of a directory to hole-punch through before
+    ///        connecting (host:port). Use for a server behind a cloud firewall/NAT that is registered with that
+    ///        directory; address is connected to verbatim and need not be listed by the directory. Example:
+    ///        anygenre1.jamulus.io:22124
+    /// @result {string} result - "ok" once the connection attempt has been initiated.
+    pRpcServer->HandleMethod ( "jamulusclient/connect", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonAddress = params["address"];
+        if ( !jsonAddress.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: address is not a string" );
+            return;
+        }
+
+        auto jsonDirectory = params["directory"];
+        if ( !jsonDirectory.isUndefined() && !jsonDirectory.isNull() && !jsonDirectory.isString() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a string" );
+            return;
+        }
+
+        auto          jsonServerName = params["serverName"];
+        const QString strAddress     = NetworkUtil::FixAddress ( jsonAddress.toString() );
+        const QString strServerName  = jsonServerName.isString() ? jsonServerName.toString() : strAddress;
+        const QString strDirectory   = jsonDirectory.isString() ? NetworkUtil::FixAddress ( jsonDirectory.toString() ) : QString();
+
+        pClient->Connect ( strAddress, strServerName, strDirectory );
+
+        response["result"] = "ok";
+    } );
+
+    /// @rpc_method jamulusclient/disconnect
+    /// @brief Disconnects the client from the current server. Does nothing if the client is not connected.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusclient/disconnect", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        pClient->Disconnect();
+
+        response["result"] = "ok";
+        Q_UNUSED ( params );
+    } );
+
+    /// @rpc_method jamulusclient/getConnectionState
+    /// @brief Returns the current connection state.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {string} result.state - The connection state (disconnected, connecting, or connected).
+    /// @result {string} result.serverName - The human readable name of the current server (empty if disconnected).
+    pRpcServer->HandleMethod ( "jamulusclient/getConnectionState", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        const EConnectionState eState = pClient->GetConnectionState();
+
+        QJsonObject result{
+            { "state", ConnectionStateToString ( eState ) },
+            { "serverName", eState == CS_DISCONNECTED ? QString() : pClient->GetConnectedServerName() },
+        };
+        response["result"] = result;
+        Q_UNUSED ( params );
     } );
 
     /// @rpc_method jamulus/getMode

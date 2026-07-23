@@ -123,6 +123,11 @@ LED bar:      lbr
 // specify an invalid port to disable the server
 #define INVALID_PORT -1
 
+// when connecting via a directory (hole punching), wait this long after asking
+// the directory to poke its registered servers before connecting, so the
+// servers' replies have time to open their firewall for our socket
+#define HOLE_PUNCH_CONNECT_DELAY_MS 400
+
 // servers to check for new versions
 #define UPDATECHECK1_ADDRESS "updatecheck1.jamulus.app"
 #define UPDATECHECK2_ADDRESS "updatecheck2.jamulus.app"

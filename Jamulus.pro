@@ -1175,6 +1175,9 @@ contains(CONFIG, "opus_shared_lib") {
     }
 }
 
+# Always enable auto vectorization
+QMAKE_CXXFLAGS+=-ftree-vectorize
+
 # disable version check if requested (#370)
 contains(CONFIG, "disable_version_check") {
     message(The version check is disabled.)

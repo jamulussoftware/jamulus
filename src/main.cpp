@@ -66,6 +66,8 @@
 #endif
 #if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
+#endif
+#if defined( Q_OS_MACOS ) && !defined( HEADLESS )
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
 #include <memory>
@@ -82,7 +84,7 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 int main ( int argc, char** argv )
 {
 
-#if defined( Q_OS_MACOS )
+#if defined( Q_OS_MACOS ) && !defined( HEADLESS )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
     // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
     qt_set_sequence_auto_mnemonic ( true );
@@ -909,7 +911,7 @@ int main ( int argc, char** argv )
     // For accessible support we need to add a plugin to qt. The plugin has to
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.
-    QDir ApplDir ( QApplication::applicationDirPath() );
+    QDir ApplDir ( QCoreApplication::applicationDirPath() );
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 

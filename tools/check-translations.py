@@ -221,9 +221,14 @@ def _print_results(grouped):
     for file in sorted(grouped.keys()):
         print(f"\n{Colors.BOLD}File: {file.name}{Colors.RESET}")
         for w in sorted(grouped[file], key=lambda x: x.line):
-            color, sev = (Colors.RED, "SEVERE ") if w.severity == Severity.SEVERE else (Colors.YELLOW, "WARNING")
+            is_severe = w.severity == Severity.SEVERE
+            color = Colors.RED if is_severe else Colors.YELLOW
+            sev = "SEVERE " if is_severe else "WARNING"
+
             lines = w.message.split("\n")
-            print(f"  {Colors.CYAN}Line {w.line:<4}{Colors.RESET} | {color}{sev}{Colors.RESET} | {lines[0]}")
+            prefix = f"  {Colors.CYAN}Line {w.line:<4}{Colors.RESET}"
+
+            print(f"{prefix} | {color}{sev}{Colors.RESET} | {lines[0]}")
             for extra in lines[1:]:
                 print(f"            |         | {extra}")
 

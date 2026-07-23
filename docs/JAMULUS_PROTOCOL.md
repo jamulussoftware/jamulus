@@ -154,7 +154,7 @@ When a Client starts a session with a Server, it sends valid audio packets to th
 The Server on a new Client connection will:
 
 - Tell the Client connection its ID, with a `CLIENT_ID (32, 0x2000)` message.
-- Reset the connected Client list with a `CONN_CLIENTS_LIST (24, 0x1800)` message.
+- Send the Client an empty connected Client list with a `CONN_CLIENTS_LIST (24, 0x1800)` message.
 - Determine if the Client supports split messages, with a `REQ_SPLIT_MESSAGE_SUPPORT (34, 0x2200)` message.
 - Request the details of the audio packets from the Client with a `REQ_NETW_TRANSPORT_PROPS (21, 0x1500)` message,
 - Request the Jitter Buffer value to use, with a `REQ_JITT_BUF_SIZE (11, 0x0B00)` message.

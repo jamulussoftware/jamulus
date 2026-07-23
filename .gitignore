@@ -38,6 +38,9 @@ build/
 deploy/
 build-gui/
 build-nox/
+build-test/
+test-output.txt
+test-results.xml
 jamulus.sln
 jamulus.vcxproj
 jamulus.vcxproj.filters

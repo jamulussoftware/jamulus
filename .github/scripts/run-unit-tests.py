@@ -148,7 +148,7 @@ def gate_on_results():
         return "gate failed: {} reported 0 tests".format ( RESULTS_PATH )
 
     if total_failed != 0:
-        return "gate failed: {} of {} tests failed".format ( total_failed, total_tests )
+        return "gate failed: {} reported {} of {} tests failed".format ( RESULTS_PATH, total_failed, total_tests )
 
     print ( "gate passed: {} tests, 0 failures".format ( total_tests ) )
     return None

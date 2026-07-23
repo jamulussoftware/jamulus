@@ -1,4 +1,4 @@
-### Debian packaging
+# Debian packaging
 
 Author(s):
 * The Jamulus Development Team

@@ -165,11 +165,13 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLMessReadyForSending, this, &CClient::OnSendCLProtMessage );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLServerListReceived, this, &CClient::CLServerListReceived );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLServerListReceived, this, &CClient::OnCLServerListReceived );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLRedServerListReceived, this, &CClient::CLRedServerListReceived );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::CLConnClientsListMesReceived );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLTcpSupportedReceived, this, &CClient::OnCLTcpSupportedReceived );
+
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::OnCLConnClientsListMesReceived );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived, this, &CClient::OnCLPingReceived );
 
@@ -266,11 +268,155 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
 }
 
-void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode )
 {
+    if ( pTcpConnection )
+    {
+        // already have TCP connection - just send and return
+        pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
+        return;
+    }
+
     // the protocol queries me to call the function to send the message
     // send it through the network
-    Socket.SendPacket ( vecMessage, InetAddr );
+    if ( eProtoMode != PROTO_UDP )
+    {
+        // create a TCP client connection and send message
+        QTcpSocket* pSocket = new QTcpSocket ( this );
+
+        // timer for TCP connect timeout because Qt defaults to 30 seconds
+        // and we want it to be 3 seconds (TCP_CONNECT_TIMEOUT_MS)
+        QTimer* pTimer = new QTimer ( this );
+        pTimer->setSingleShot ( true );
+
+        connect ( pTimer, &QTimer::timeout, this, [pSocket, pTimer, InetAddr]() {
+            if ( pSocket->state() != QAbstractSocket::ConnectedState )
+            {
+                pSocket->abort();
+                pSocket->deleteLater();
+                qWarning() << "- Jamulus-TCP: timeout connecting to" << InetAddr.toString();
+            }
+            pTimer->deleteLater();
+        } );
+
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 15, 0 )
+#    define ERRORSIGNAL &QTcpSocket::errorOccurred
+#else
+#    define ERRORSIGNAL QOverload<QAbstractSocket::SocketError>::of ( &QAbstractSocket::error )
+#endif
+        // keep a reference to this connection so we can disconnect it when handing off to the CTcpConnection
+        QMetaObject::Connection errConn = connect ( pSocket, ERRORSIGNAL, this, [pSocket, pTimer] ( QAbstractSocket::SocketError err ) {
+            Q_UNUSED ( err );
+
+            pTimer->stop();
+            pTimer->deleteLater();
+
+            qWarning() << "- TCP connection error:" << pSocket->errorString();
+            // may want to specifically handle ConnectionRefusedError?
+            pSocket->deleteLater();
+        } );
+
+        connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, pTimer, errConn, InetAddr, vecMessage, eProtoMode]() {
+            pTimer->stop();
+            pTimer->deleteLater();
+
+            // disconnect the above error handler as no longer needed
+            disconnect ( errConn );
+
+            // connection succeeded, give it to a CTcpConnection
+            CTcpConnection* pTcpConnection = new CTcpConnection ( pSocket,
+                                                                  InetAddr,
+                                                                  this,
+                                                                  &Channel,
+                                                                  eProtoMode == PROTO_TCP_LONG ); // client connection, will self-delete on disconnect
+
+            if ( eProtoMode == PROTO_TCP_LONG )
+            {
+                Channel.SetTcpConnection ( pTcpConnection ); // link session connection with channel
+            }
+
+            pTcpConnection->write ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size() );
+
+            // the CTcpConnection object will pass the reply back up to CClient::Channel
+        } );
+
+        pSocket->connectToHost ( InetAddr.InetAddr, InetAddr.iPort );
+        pTimer->start ( TCP_CONNECT_TIMEOUT_MS );
+    }
+    else
+    {
+        Socket.SendPacket ( vecMessage, InetAddr );
+    }
+}
+
+void CClient::CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr )
+{
+    if ( pendingClientList.contains ( InetAddr ) )
+    {
+        enum EFetchMode eFetchMode = pendingClientList.value ( InetAddr );
+
+        switch ( eFetchMode )
+        {
+        case CFM_UDP_REQUEST:
+            qWarning() << "Unsatisfied Client List request via UDP for" << InetAddr.toString();
+            ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_UDP );
+            break;
+        case CFM_TCP_REQUEST:
+            qWarning() << "Unsatisfied Client List request via TCP for" << InetAddr.toString() << "(switching back to UDP)";
+            pendingClientList.insert ( InetAddr, CFM_UDP_REQUEST );
+            ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_UDP );
+            break;
+        case CFM_TCP_RESULT:
+            // we know TCP has succeeded, so keep using it
+            pendingClientList.insert ( InetAddr, CFM_TCP_REQUEST );
+            ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_TCP_ONCE );
+            break;
+        default:
+            qWarning() << "Unexpected eFetchMode" << eFetchMode;
+            break;
+        }
+    }
+    else
+    {
+        // no pending request - use UDP
+        pendingClientList.insert ( InetAddr, CFM_UDP_REQUEST );
+        ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_UDP );
+    }
+}
+
+void CClient::CreateCLReqServerListMes ( const CHostAddress& InetAddr )
+{
+    if ( pendingServerList.contains ( InetAddr ) )
+    {
+        enum EFetchMode eFetchMode = pendingServerList.value ( InetAddr );
+
+        switch ( eFetchMode )
+        {
+        case CFM_UDP_REQUEST:
+            qWarning() << "Unsatisfied Server List request via UDP for" << InetAddr.toString();
+            ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, PROTO_UDP );
+            break;
+        case CFM_TCP_REQUEST:
+            qWarning() << "Unsatisfied Server List request via TCP for" << InetAddr.toString() << "(switching back to UDP)";
+            pendingServerList.insert ( InetAddr, CFM_UDP_REQUEST );
+            ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, PROTO_UDP );
+            break;
+        case CFM_TCP_RESULT:
+            // we know TCP has succeeded, so keep using it
+            pendingServerList.insert ( InetAddr, CFM_TCP_REQUEST );
+            ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, PROTO_TCP_ONCE );
+            break;
+        default:
+            qWarning() << "Unexpected eFetchMode" << eFetchMode;
+            break;
+        }
+    }
+    else
+    {
+        // no pending request - use UDP
+        pendingServerList.insert ( InetAddr, CFM_UDP_REQUEST );
+        ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, PROTO_UDP );
+    }
 }
 
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
@@ -285,10 +431,10 @@ void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
     }
 }
 
-void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr )
+void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection )
 {
     // connection less messages are always processed
-    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
+    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr, pTcpConnection );
 }
 
 void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
@@ -992,6 +1138,16 @@ void CClient::OnClientIDReceived ( int iServerChanID )
         ClearClientChannels();
     }
 
+    // if TCP Supported has already been received, make TCP connection to server
+    iClientID = iServerChanID; // for sending back to server over TCP
+
+    if ( bTcpSupported )
+    {
+        // *** Make TCP connection
+        qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
+        ConnLessProtocol.CreateCLClientIDMes ( Channel.GetAddress(), iClientID, PROTO_TCP_LONG ); // create persistent TCP connection
+    }
+
     // allocate and map client-side channel 0
     int iChanID = FindClientChannel ( iServerChanID, true ); // should always return channel 0
 
@@ -1027,10 +1183,110 @@ void CClient::OnRawAudioSupported()
     }
 }
 
+void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID )
+{
+    qDebug() << "- TCP supported at server" << InetAddr.toString() << "for ID =" << iID;
+
+    switch ( iID )
+    {
+    case PROTMESSID_CLM_SERVER_LIST:
+        if ( pendingServerList.contains ( InetAddr ) )
+        {
+            if ( pendingServerList.value ( InetAddr ) == CFM_UDP_REQUEST )
+            {
+                qDebug() << "- UDP server list not received from" << InetAddr.toString() << "- retrying via TCP";
+                // request pending but reply not received - probably due to fragmentation drop
+                // re-request using TCP
+                pendingServerList.insert ( InetAddr, CFM_TCP_REQUEST );
+                ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, PROTO_TCP_ONCE );
+            }
+            else
+            {
+                qWarning() << "Ignoring unexpected CLM_TCP_SUPPORTED for server list from" << InetAddr.toString();
+            }
+        }
+        break;
+    case PROTMESSID_CLM_CONN_CLIENTS_LIST:
+        if ( pendingClientList.contains ( InetAddr ) )
+        {
+            if ( pendingClientList.value ( InetAddr ) == CFM_UDP_REQUEST )
+            {
+                qDebug() << "- UDP client list not received from" << InetAddr.toString() << "- retrying via TCP";
+                // request pending but reply not received - probably due to fragmentation drop
+                // re-request using TCP
+                pendingClientList.insert ( InetAddr, CFM_TCP_REQUEST );
+                ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_TCP_ONCE );
+            }
+            else
+            {
+                qWarning() << "Ignoring unexpected CLM_TCP_SUPPORTED for client list from" << InetAddr.toString();
+            }
+        }
+        break;
+    case PROTMESSID_CLM_CLIENT_ID:
+        // if client ID already received, make TCP connection to server
+        bTcpSupported = true;
+
+        if ( iClientID != INVALID_INDEX )
+        {
+            // *** Make TCP connection
+            qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
+            Q_ASSERT ( InetAddr == Channel.GetAddress() );
+            ConnLessProtocol.CreateCLClientIDMes ( InetAddr, iClientID, PROTO_TCP_LONG ); // create persistent TCP connection
+        }
+        break;
+    }
+}
+
+void CClient::OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo, CTcpConnection* pTcpConnection )
+{
+    if ( pTcpConnection )
+    {
+        // record that TCP worked
+        pendingServerList.insert ( InetAddr, CFM_TCP_RESULT );
+    }
+    else
+    {
+        // for UDP, just remove pending request
+        pendingServerList.remove ( InetAddr );
+    }
+    qDebug() << "- server list received";
+    emit CLServerListReceived ( InetAddr, vecServerInfo );
+}
+
+void CClient::OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo, CTcpConnection* pTcpConnection )
+{
+    // test if we are receiving for the connect dialog or a connected session
+    if ( pTcpConnection && pTcpConnection->IsSession() )
+    {
+        qDebug() << "- sending client list to client dialog";
+        OnConClientListMesReceived ( vecChanInfo ); // connected session
+    }
+    else
+    {
+        if ( pTcpConnection )
+        {
+            // record that TCP worked
+            pendingClientList.insert ( InetAddr, CFM_TCP_RESULT );
+        }
+        else
+        {
+            // for UDP, just remove pending request
+            pendingClientList.remove ( InetAddr );
+        }
+        qDebug() << "- sending client list to connect dialog";
+        emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo ); // connect dialog
+    }
+}
+
 void CClient::Start()
 {
     // init object
     Init();
+
+    // clear TCP info
+    iClientID     = INVALID_INDEX;
+    bTcpSupported = false;
 
     // initialise client channels
     ClearClientChannels();
@@ -1051,6 +1307,14 @@ void CClient::Stop()
 {
     // stop audio interface
     Sound.Stop();
+
+    // close any session TCP connection
+    CTcpConnection* pTcpConnection = Channel.GetTcpConnection();
+    if ( pTcpConnection )
+    {
+        Channel.SetTcpConnection ( nullptr );
+        pTcpConnection->disconnectFromHost();
+    }
 
     // disable channel
     Channel.SetEnable ( false );

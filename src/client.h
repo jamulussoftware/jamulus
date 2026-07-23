@@ -51,6 +51,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QMutex>
+#include <atomic>
 #ifdef USE_OPUS_SHARED_LIB
 #    include "opus/opus_custom.h"
 #else
@@ -390,8 +391,8 @@ protected:
     EAudChanConf           eAudioChannelConf;
     int                    iNumAudioChannels;
     bool                   bIsInitializationPhase;
-    bool                   bMuteOutStream;
-    float                  fMuteOutStreamGain;
+    std::atomic<bool>      bMuteOutStream;
+    std::atomic<float>     fMuteOutStreamGain;
     CVector<unsigned char> vecCeltData;
 
     bool            bIPv6Available; // must be before Socket - passed by reference to Socket
@@ -402,11 +403,11 @@ protected:
 
     CVector<uint8_t> vecbyNetwData;
 
-    int          iAudioInFader;
-    bool         bReverbOnLeftChan;
-    int          iReverbLevel;
-    CAudioReverb AudioReverb;
-    int          iInputBoost;
+    std::atomic<int>  iAudioInFader;
+    std::atomic<bool> bReverbOnLeftChan;
+    std::atomic<int>  iReverbLevel;
+    CAudioReverb      AudioReverb;
+    std::atomic<int>  iInputBoost;
 
     int iSndCrdPrefFrameSizeFactor;
     int iSndCrdFrameSizeFactor;

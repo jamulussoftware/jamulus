@@ -47,6 +47,7 @@
 
 #pragma once
 
+#include <QSet>
 #include "client.h"
 #include "util.h"
 #include "rpcserver.h"
@@ -64,4 +65,14 @@ private:
     CClientSettings*  m_pSettings;
     QJsonArray        arrStoredChanInfo;
     static QJsonValue SerializeSkillLevel ( ESkillLevel skillLevel );
+
+    // last server list received per directory (keyed by CHostAddress::toString() of the directory),
+    // used to check whether a server is (still) listed before connecting to it
+    QMap<QString, QSet<QString>> m_mapDirectoryServers;
+
+    // identifies the connection established (or attempted) by the most recent jamulusclient/connect
+    // call, along with its outcome, so jamulusclient/disconnect can validate its params against it
+    QString m_strConnectedDirectory;
+    QString m_strConnectedServer;
+    QString m_strConnectStatus;
 };

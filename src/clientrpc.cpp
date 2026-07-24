@@ -132,8 +132,9 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
     /// @param {string} params.servers[*].city - Server city.
     connect ( pClient->getConnLessProtocol(),
               &CProtocol::CLServerListReceived,
-              [=] ( CHostAddress /* unused */, CVector<CServerInfo> vecServerInfo ) {
-                  QJsonArray arrServerInfo;
+              [=] ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo ) {
+                  QJsonArray    arrServerInfo;
+                  QSet<QString> setServerAddresses;
                   for ( const auto& serverInfo : vecServerInfo )
                   {
                       QJsonObject objServerInfo{
@@ -144,8 +145,12 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
                           { "city", serverInfo.strCity },
                       };
                       arrServerInfo.append ( objServerInfo );
+                      setServerAddresses.insert ( serverInfo.HostAddr.toString() );
                       pClient->CreateCLServerListPingMes ( serverInfo.HostAddr );
                   }
+                  // remember which servers this directory listed, so jamulusclient/connect can tell
+                  // a delisted server apart from one that was never seen in the first place
+                  m_mapDirectoryServers[InetAddr.toString()] = setServerAddresses;
                   pRpcServer->BroadcastNotification ( "jamulusclient/serverListReceived",
                                                       QJsonObject{
                                                           { "servers", arrServerInfo },
@@ -166,7 +171,14 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
     /// @rpc_notification jamulusclient/disconnected
     /// @brief Emitted when the client is disconnected from the server.
     /// @param {object} params - No parameters (empty object).
-    connect ( pClient, &CClient::Disconnected, [=]() { pRpcServer->BroadcastNotification ( "jamulusclient/disconnected", QJsonObject{} ); } );
+    connect ( pClient, &CClient::Disconnected, [=]() {
+        // keep our record of the current connection (used by jamulusclient/disconnect) in sync,
+        // whether the disconnect was initiated by us, the server, or the desktop UI
+        m_strConnectedDirectory.clear();
+        m_strConnectedServer.clear();
+        m_strConnectStatus.clear();
+        pRpcServer->BroadcastNotification ( "jamulusclient/disconnected", QJsonObject{} );
+    } );
 
     /// @rpc_notification jamulusclient/recorderState
     /// @brief Emitted when the client is connected to a server whose recorder state changes.
@@ -205,6 +217,156 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         response["result"] = "ok";
     } );
 
+    /// @rpc_method jamulusclient/getDirectories
+    /// @brief Returns the list of directories in the same order as presented in Jamulus.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {array} result - Array of directory socket address strings, usable as params.directory in jamulusclient/pollServerList.
+    pRpcServer->HandleMethod ( "jamulusclient/getDirectories", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        QJsonArray arrDirectories;
+        // built-in directories in UI order
+        for ( int i = AT_DEFAULT; i < AT_CUSTOM; i++ )
+        {
+            arrDirectories.append ( NetworkUtil::GetDirectoryAddress ( static_cast<EDirectoryType> ( i ), "" ) );
+        }
+        // custom directories — stored newest-first, displayed oldest-first (reverse iteration)
+        for ( int i = MAX_NUM_SERVER_ADDR_ITEMS - 1; i >= 0; i-- )
+        {
+            if ( !m_pSettings->vstrDirectoryAddress[i].isEmpty() )
+            {
+                arrDirectories.append ( m_pSettings->vstrDirectoryAddress[i] );
+            }
+        }
+        response["result"] = arrDirectories;
+        Q_UNUSED ( params );
+    } );
+
+    /// @rpc_method jamulusclient/connect
+    /// @brief Connects to a server previously discovered via jamulusclient/pollServerList on the given directory.
+    ///  Blocks for a short time (up to a few seconds) while the outcome of the connection attempt is determined.
+    /// @param {string} params.directory - Socket address of the directory the server was discovered from. Must
+    ///  have already been queried via jamulusclient/pollServerList.
+    /// @param {string} params.server - Socket address of the server to connect to, as returned in
+    ///  params.servers[*].address of jamulusclient/serverListReceived.
+    /// @result {string} result - "ok"; "Not Found" if the directory hasn't been polled, or the server address is
+    ///  invalid; "Unauthorized" if the server requires accepting a licence, which isn't supported over this API;
+    ///  "Gone (server no longer listed)" if the server is not, or is no longer, present in the directory's server
+    ///  list; "Upgrade Required (obsolete protocol, upgrade Jamulus)" if the server requires a newer protocol
+    ///  version than this client supports; or "Insufficient Storage (Full)" if the server is full. If the local
+    ///  audio interface fails to start, an error is returned instead of a result.
+    pRpcServer->HandleMethod ( "jamulusclient/connect", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonDirectory = params["directory"];
+        auto jsonServer    = params["server"];
+        if ( !jsonDirectory.isString() || !jsonServer.isString() )
+        {
+            response["error"] =
+                CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory and server must be strings" );
+            return;
+        }
+
+        // Resolve the directory the same way jamulusclient/pollServerList does, so it matches the key that the
+        // jamulusclient/serverListReceived handler cached the server list under.
+        CHostAddress haDirectoryAddress;
+        const QString strDirectoryKey =
+            NetworkUtil::ParseNetworkAddress ( jsonDirectory.toString(), haDirectoryAddress, false ) ? haDirectoryAddress.toString() : QString();
+
+        if ( strDirectoryKey.isEmpty() || !m_mapDirectoryServers.contains ( strDirectoryKey ) )
+        {
+            response["result"] = "Not Found";
+            return;
+        }
+
+        const QString strServer = jsonServer.toString();
+
+        if ( !m_mapDirectoryServers[strDirectoryKey].contains ( strServer ) )
+        {
+            response["result"] = "Gone (server no longer listed)";
+            return;
+        }
+
+        // Delegate the actual connection attempt to the same method the desktop UI's "Connect" button uses
+        // (CClientDlg::Connect), so both agree on what constitutes success vs. each failure mode.
+        QString                       strErrorMessage;
+        const CClient::EConnectResult eResult = pClient->ConnectToServer ( strServer, &strErrorMessage );
+
+        if ( eResult == CClient::CR_SOUND_DEVICE_ERROR )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( 1, "Could not start the audio interface: " + strErrorMessage );
+            return;
+        }
+
+        switch ( eResult )
+        {
+        case CClient::CR_OK:
+            response["result"] = "ok";
+            break;
+        case CClient::CR_INVALID_ADDRESS:
+            response["result"] = "Not Found";
+            break;
+        case CClient::CR_UNAUTHORIZED:
+            response["result"] = "Unauthorized";
+            break;
+        case CClient::CR_GONE:
+            response["result"] = "Gone (server no longer listed)";
+            break;
+        case CClient::CR_UPGRADE_REQUIRED:
+            response["result"] = "Upgrade Required (obsolete protocol, upgrade Jamulus)";
+            break;
+        case CClient::CR_FULL:
+            response["result"] = "Insufficient Storage (Full)";
+            break;
+        default:
+            break;
+        }
+
+        // Unlike the desktop UI (which keeps the connection alive on CR_UNAUTHORIZED/CR_UPGRADE_REQUIRED so
+        // the user can interact with the licence dialog, or simply because it never blocked on stale
+        // versions), there is no interactive fallback here, so any non-ok outcome ends the attempt.
+        if ( ( eResult != CClient::CR_OK ) && pClient->IsRunning() )
+        {
+            pClient->Stop();
+        }
+
+        m_strConnectedDirectory = jsonDirectory.toString();
+        m_strConnectedServer    = strServer;
+        m_strConnectStatus      = response["result"].toString();
+    } );
+
+    /// @rpc_method jamulusclient/disconnect
+    /// @brief Disconnects from the server that was connected via jamulusclient/connect.
+    /// @param {string} params.directory - Socket address of the directory that was passed to jamulusclient/connect.
+    /// @param {string} params.server - Socket address of the server that was passed to jamulusclient/connect.
+    /// @result {string} result - "ok"; "Not Found" if params.directory/params.server do not match the connection
+    ///  established by the most recent jamulusclient/connect call; or, reflecting the outcome of that call,
+    ///  "Unauthorized", "Gone (server no longer listed)", or "Upgrade Required (obsolete protocol, upgrade
+    ///  Jamulus)".
+    pRpcServer->HandleMethod ( "jamulusclient/disconnect", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonDirectory = params["directory"];
+        auto jsonServer    = params["server"];
+        if ( !jsonDirectory.isString() || !jsonServer.isString() )
+        {
+            response["error"] =
+                CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory and server must be strings" );
+            return;
+        }
+
+        if ( ( jsonDirectory.toString() != m_strConnectedDirectory ) || ( jsonServer.toString() != m_strConnectedServer ) )
+        {
+            response["result"] = "Not Found";
+            return;
+        }
+
+        // capture before Stop(): it synchronously emits CClient::Disconnected, which our own handler
+        // above (kept in sync with the desktop UI's cleanup) reacts to by clearing these fields
+        const QString strPreviousStatus = m_strConnectStatus;
+
+        if ( pClient->IsRunning() )
+        {
+            pClient->Stop();
+        }
+
+        response["result"] = strPreviousStatus;
+    } );
+
     /// @rpc_method jamulus/getMode
     /// @brief Returns the current mode, i.e. whether Jamulus is running as a server or client.
     /// @param {object} params - No parameters (empty object).
@@ -228,7 +390,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
     /// @rpc_method jamulusclient/getChannelInfo
     /// @brief Returns the client's profile information.
     /// @param {object} params - No parameters (empty object).
-    /// @result {number} result.id - The channel ID.
+    /// @result {number} result.id - The channel ID assigned by the server, or -1 if not currently connected.
     /// @result {string} result.name - The musician’s name.
     /// @result {string} result.skillLevel - The musician’s skill level (beginner, intermediate, expert, or null).
     /// @result {number} result.countryId - The musician’s country ID (see QLocale::Country).
@@ -239,7 +401,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
     /// @result {string} result.skillLevel - Your skill level (beginner, intermediate, expert, or null).
     pRpcServer->HandleMethod ( "jamulusclient/getChannelInfo", [=] ( const QJsonObject& params, QJsonObject& response ) {
         QJsonObject result{
-            // TODO: We cannot include "id" here is pClient->ChannelInfo is a CChannelCoreInfo which lacks that field.
+            { "id", pClient->GetMyChannelID() },
             { "name", pClient->ChannelInfo.strName },
             { "countryId", pClient->ChannelInfo.eCountry },
             { "country", QLocale::countryToString ( pClient->ChannelInfo.eCountry ) },

@@ -244,7 +244,7 @@ public slots:
         ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo );
     }
 
-    void OnClientIDReceived ( int iChanID ) { MainMixerBoard->SetMyChannelID ( iChanID ); }
+    void OnClientIDReceived ( int iChanID );
 
     void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted ) { MainMixerBoard->SetRemoteFaderIsMute ( iChanID, bIsMuted ); }
 
@@ -254,7 +254,7 @@ public slots:
     }
 
     void OnConnectDlgAccepted();
-    void OnDisconnected() { Disconnect(); }
+    void OnDisconnected();
     void OnGUIDesignChanged();
     void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );

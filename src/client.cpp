@@ -47,6 +47,8 @@
 #include "client.h"
 #include "settings.h"
 #include "util.h"
+#include <QEventLoop>
+#include <QVersionNumber>
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
@@ -92,7 +94,8 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK ( true ),
     bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
     iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
-    bRawAudioIsSupported ( false )
+    bRawAudioIsSupported ( false ),
+    iMyChannelID ( INVALID_INDEX )
 {
     int iOpusError;
 
@@ -1003,6 +1006,8 @@ void CClient::OnClientIDReceived ( int iServerChanID )
         SetRemoteChanGain ( iChanID, 0, false );
     }
 
+    iMyChannelID = iChanID;
+
     emit ClientIDReceived ( iChanID );
 }
 
@@ -1059,6 +1064,9 @@ void CClient::Stop()
     bRawAudioIsSupported = false;
     Init();
 
+    // no longer connected, so no valid channel ID (see GetMyChannelID())
+    iMyChannelID = INVALID_INDEX;
+
     // wait for approx. 100 ms to make sure no audio packet is still in the
     // network queue causing the channel to be reconnected right after having
     // received the disconnect message (seems not to gain much, disconnect is
@@ -1088,6 +1096,118 @@ void CClient::Stop()
     // Allow hibernation or display dimming if the app is running again (Windows)
     SetThreadExecutionState ( ES_CONTINUOUS );
 #endif
+
+    // Let every caller of Stop() (the UI's Disconnect button, the JSON-RPC API, or our own
+    // ConnectToServer() dropping a stale connection before reconnecting) rely on this single
+    // signal for post-disconnect cleanup, instead of each having to duplicate it. This is in
+    // addition to the same signal being emitted when the channel notices a timeout on its own.
+    emit Disconnected();
+}
+
+CClient::EConnectResult CClient::ConnectToServer ( const QString& strServerAddress, QString* pstrErrorMessage )
+{
+    if ( IsRunning() )
+    {
+        Stop();
+    }
+
+    if ( !SetServerAddr ( strServerAddress ) )
+    {
+        return CR_INVALID_ADDRESS;
+    }
+
+    // Wait for the connection attempt to resolve into a known outcome, collecting the result from
+    // whichever signal the connection process triggers first. On success, we wait for both the client
+    // ID and the version info so a server that turns out to require a newer client is still caught
+    // rather than being missed because we already quit the loop.
+    bool           bGotClientID = false;
+    bool           bGotVersion  = false;
+    EConnectResult eResult      = CR_OK;
+    QEventLoop     loop;
+
+    auto conClientID = connect ( this, &CClient::ClientIDReceived, [&] ( int /* unused */ ) {
+        bGotClientID = true;
+        if ( bGotVersion )
+        {
+            loop.quit();
+        }
+    } );
+
+    auto conVersion = connect ( this, &CClient::VersionAndOSReceived, [&] ( COSUtil::EOpSystemType /* unused */, QString strServerVersion ) {
+        int            iServerSuffixIndex;
+        QVersionNumber serverVersion = QVersionNumber::fromString ( strServerVersion, &iServerSuffixIndex );
+
+        int            iMySuffixIndex;
+        QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &iMySuffixIndex );
+
+        // only compare release versions (a dev/beta suffix means we cannot reliably compare)
+        if ( ( strServerVersion.size() == iServerSuffixIndex ) && ( QVersionNumber::compare ( serverVersion, myVersion ) > 0 ) )
+        {
+            eResult = CR_UPGRADE_REQUIRED;
+            loop.quit();
+            return;
+        }
+
+        bGotVersion = true;
+        if ( bGotClientID )
+        {
+            loop.quit();
+        }
+    } );
+
+    auto conFull = connect ( getConnLessProtocol(), &CProtocol::ServerFullMesReceived, [&]() {
+        eResult = CR_FULL;
+        loop.quit();
+    } );
+
+    auto conLicence = connect ( this, &CClient::LicenceRequired, [&] ( ELicenceType /* unused */ ) {
+        eResult = CR_UNAUTHORIZED;
+        loop.quit();
+    } );
+
+    auto conGone = connect ( getConnLessProtocol(), &CProtocol::CLDisconnection, [&] ( CHostAddress InetAddr ) {
+        if ( InetAddr.toString() == strServerAddress )
+        {
+            eResult = CR_GONE;
+            loop.quit();
+        }
+    } );
+
+    QTimer::singleShot ( 3000, &loop, &QEventLoop::quit );
+
+    try
+    {
+        Start();
+        loop.exec();
+    }
+    catch ( const CGenErr& generr )
+    {
+        disconnect ( conClientID );
+        disconnect ( conVersion );
+        disconnect ( conFull );
+        disconnect ( conLicence );
+        disconnect ( conGone );
+
+        if ( pstrErrorMessage )
+        {
+            *pstrErrorMessage = generr.GetErrorText();
+        }
+        return CR_SOUND_DEVICE_ERROR;
+    }
+
+    disconnect ( conClientID );
+    disconnect ( conVersion );
+    disconnect ( conFull );
+    disconnect ( conLicence );
+    disconnect ( conGone );
+
+    if ( ( eResult == CR_OK ) && !bGotClientID )
+    {
+        // no response of any kind before the timeout
+        eResult = CR_GONE;
+    }
+
+    return eResult;
 }
 
 void CClient::Init()

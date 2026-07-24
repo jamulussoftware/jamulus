@@ -126,6 +126,7 @@ int main ( int argc, char** argv )
     quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strConnOnStartupAddress     = "";
+    QString      strConnectDirectory         = "";
     QString      strIniFileName              = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
@@ -533,6 +534,16 @@ int main ( int argc, char** argv )
             qInfo() << qUtf8Printable ( QString ( "- connect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
             CommandLineOptions << "--connect";
             ClientOnlyOptions << "--connect";
+            continue;
+        }
+
+        // Directory to hole-punch through for connect on startup --------------
+        if ( GetStringArgument ( argc, argv, i, "--connectdirectory", "--connectdirectory", strArgument ) )
+        {
+            strConnectDirectory = NetworkUtil::FixAddress ( strArgument );
+            qInfo() << qUtf8Printable ( QString ( "- connect on startup via directory: %1" ).arg ( strConnectDirectory ) );
+            CommandLineOptions << "--connectdirectory";
+            ClientOnlyOptions << "--connectdirectory";
             continue;
         }
 
@@ -1005,25 +1016,30 @@ int main ( int argc, char** argv )
                 }
 
                 // GUI object
-                CClientDlg
-                    ClientDlg ( &Client, &Settings, strConnOnStartupAddress, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, nullptr );
+                CClientDlg ClientDlg ( &Client, &Settings, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, nullptr );
 
                 // show dialog
                 ClientDlg.show();
+
+                // Connect on startup if requested
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress, strConnectDirectory );
+                }
 
                 pApp->exec();
             }
             else
 #    endif
             {
-                if ( !strConnOnStartupAddress.isEmpty() )
-                {
-                    Client.SetServerAddr ( strConnOnStartupAddress );
-                    Client.Start();
-                }
-
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+
+                // Connect on startup if requested
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress, strConnectDirectory );
+                }
 
                 pApp->exec();
             }
@@ -1188,6 +1204,7 @@ QString UsageArguments ( char** argv )
            "\n"
            "Client only:\n"
            "  -c, --connect           connect to given Server address on startup\n"
+           "      --connectdirectory  directory to hole-punch through for --connect (host:port)\n"
            "  -j, --nojackconnect     disable auto JACK connections\n"
            "  -M, --mutestream        prevent others on a server from hearing what I play\n"
            "      --mutemyown         prevent me from hearing what I play in the server mix (headless only)\n"

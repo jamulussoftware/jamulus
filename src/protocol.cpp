@@ -969,6 +969,10 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
         EvaluateCLChannelLevelListMes ( InetAddr, vecbyMesBodyData );
         break;
 
+    case PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST:
+        EvaluateCLReqChannelLevelListMes ( InetAddr );
+        break;
+
     case PROTMESSID_CLM_REGISTER_SERVER_RESP:
         EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
         break;
@@ -2614,6 +2618,13 @@ bool CProtocol::EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, co
 
     // invoke message action
     emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
+
+    return false; // no error
+}
+
+bool CProtocol::EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr )
+{
+    emit CLReqChannelLevelList ( InetAddr );
 
     return false; // no error
 }

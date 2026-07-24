@@ -1,0 +1,230 @@
+name: Unit Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/unit-tests.yml'
+      - '.github/scripts/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/unit-tests.yml'
+      - '.github/scripts/**'
+
+permissions:
+  contents: read
+
+env:
+  # gcovr version used by the coverage job below, pinned for reproducible output.
+  GCOVR_VERSION: 8.6
+
+jobs:
+  unit-tests:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.runs_on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          # `id` is a short, stable slug (no spaces/parens, unlike `name`)
+          # used for per-job artifact names (junit-<id>, see the "Upload
+          # JUnit XML" step below) so parallel matrix jobs never collide.
+          #
+          # Oldest supported Qt line: distro Qt 5.15 proves the Qt >= 5.12
+          # compatibility floor of the test suite.
+          - name: Linux (Qt 5, ubuntu-22.04)
+            id: linux-qt5
+            runs_on: ubuntu-22.04
+            qt_packages: qtbase5-dev qt5-qmake
+            qmake: qmake
+          - name: Linux (Qt 6, ubuntu-24.04)
+            id: linux-qt6
+            runs_on: ubuntu-24.04
+            qt_packages: qt6-base-dev
+            qmake: qmake6
+          # macos-15 with Xcode 16.3.0 mirrors the autobuild workflow's macOS
+          # configuration; the Xcode 26 toolchain of newer images cannot
+          # compile the Qt 6 headers yet (implicit __yield declaration error).
+          - name: macOS (Qt 6)
+            id: macos-qt6
+            runs_on: macos-15
+            xcode_version: 16.3.0
+            qmake: qmake
+          # windows-2025 matches autobuild.yml's Windows job -- same OS image
+          # as the Qt/toolchain cache this job shares with it.
+          - name: Windows (Qt 6, MSVC)
+            id: windows-qt6
+            runs_on: windows-2025
+            qmake: qmake
+
+          # Same Qt6/ubuntu-24.04 toolchain as the Linux Qt6 job above, plus
+          # GCC's sanitizers -- appended via qmake_extra_args rather than
+          # edited into test.pro, so no other job is affected.
+          - name: Linux (Qt 6, ASan/UBSan)
+            id: linux-qt6-asan
+            runs_on: ubuntu-24.04
+            qt_packages: qt6-base-dev
+            qmake: qmake6
+            qmake_extra_args: >-
+              QMAKE_CXXFLAGS+="-fsanitize=address,undefined"
+              QMAKE_LFLAGS+="-fsanitize=address,undefined"
+
+          # Same Qt6/ubuntu-24.04 toolchain, built with GCC's --coverage flag
+          # for the line/function/branch report generated below.
+          - name: Linux (Qt 6, coverage)
+            id: linux-qt6-coverage
+            runs_on: ubuntu-24.04
+            qt_packages: qt6-base-dev
+            qmake: qmake6
+            coverage: true
+            qmake_extra_args: >-
+              QMAKE_CXXFLAGS+="--coverage"
+              QMAKE_LFLAGS+="--coverage"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      # Single source of truth for the Qt version is autobuild.yml's macOS
+      # main build entry -- parsed here instead of duplicating the number.
+      # The Qt setup below reuses that workflow's scripts and cache.
+      - name: Determine Qt version from autobuild.yml
+        if: runner.os != 'Linux'
+        shell: bash
+        run: |
+          QT_VERSION="$(grep -E 'base_command:.*QT_VERSION=.*mac\.sh' .github/workflows/autobuild.yml \
+            | grep -v ARTIFACT_SUFFIX \
+            | sed -Ee 's/.*QT_VERSION=([0-9.]+).*/\1/' || true)"
+          if [[ ! "$QT_VERSION" =~ ^[0-9]+(\.[0-9]+)+$ ]]; then
+            echo "Could not determine a unique QT_VERSION from autobuild.yml (got: '$QT_VERSION')" >&2
+            exit 1
+          fi
+          echo "Using Qt version $QT_VERSION (from autobuild.yml)"
+          echo "QT_VERSION=$QT_VERSION" >> "$GITHUB_ENV"
+
+      - name: Install Qt (Linux distro packages)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -qq --no-install-recommends -y install ${{ matrix.config.qt_packages }}
+
+      - name: Select Xcode version
+        if: runner.os == 'macOS'
+        uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1.6.0
+        with:
+          xcode-version: ${{ matrix.config.xcode_version }}
+
+      # Same cache path/key as autobuild.yml's "MacOS (artifacts)" job, so
+      # this job shares that cache instead of keeping a separate one.
+      - name: Cache Qt (macOS)
+        if: runner.os == 'macOS'
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/qt
+            ~/Library/Cache/jamulus-dependencies
+          key: macos-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/mac.sh', 'mac/deploy_mac.sh') }}-QT_VERSION=${{ env.QT_VERSION }} SIGN_IF_POSSIBLE=1 TARGET_ARCHS="x86_64 arm64" ./.github/autobuild/mac.sh
+
+      # Same cache path/key as autobuild.yml's "Windows (artifact+codeQL)"
+      # job, so this job shares that cache instead of keeping a separate one.
+      - name: Cache Qt (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/cache@v6
+        with:
+          path: |
+            C:\Qt
+            C:\ChocoCache
+            C:\AutobuildCache
+            ${{ github.workspace }}\libs\NSIS\NSIS-source
+            ${{ github.workspace }}\libs\ASIOSDK2
+          key: windows-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-powershell .\.github\autobuild\windows.ps1 -Stage
+
+      # Reuses autobuild's own Qt setup instead of a separate aqtinstall call,
+      # so the cache above is genuinely shared rather than duplicated --
+      # heavier than this suite needs (qttools/qttranslations/qtmultimedia
+      # besides qtbase).
+      - name: Install Qt (macOS, via autobuild's mac.sh)
+        if: runner.os == 'macOS'
+        run: ./.github/autobuild/mac.sh setup
+
+      - name: Add Qt to PATH (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          # macos/ is the Qt6 layout, clang_64/ is Qt5's; only one will exist.
+          echo "$HOME/qt/${{ env.QT_VERSION }}/macos/bin" >> "$GITHUB_PATH"
+          echo "$HOME/qt/${{ env.QT_VERSION }}/clang_64/bin" >> "$GITHUB_PATH"
+
+      # Reuses autobuild's own Qt setup instead of a separate aqtinstall call,
+      # so the cache above is genuinely shared rather than duplicated --
+      # heavier than this suite needs (a 32-bit Qt, jom, full module set
+      # besides qtbase).
+      - name: Install Qt (Windows, via autobuild's windows.ps1)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: powershell .\.github\autobuild\windows.ps1 -Stage setup
+
+      - name: Add Qt to PATH (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # windows.ps1 hardcodes this Qt/MSVC pairing internally (no env
+          # override), so it must be kept in sync with it by hand.
+          Add-Content -Path $env:GITHUB_PATH -Value "C:\Qt\${{ env.QT_VERSION }}\msvc2022_64\bin"
+
+      - name: Build unit tests
+        env:
+          QMAKE_BIN: ${{ matrix.config.qmake }}
+          QMAKE_EXTRA_ARGS: ${{ matrix.config.qmake_extra_args }}
+        run: python3 .github/scripts/run-unit-tests.py build
+
+      # crash the test process when ASan/UBSan complains (no-op when disabled)
+      - name: Run unit tests
+        env:
+          ASAN_OPTIONS: halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: python3 .github/scripts/run-unit-tests.py run
+
+      # Coverage for src/ only (excluding tests). `always()` so this still
+      # runs even if Run unit tests failed on a real test failure, not a crash.
+      - name: Generate coverage report
+        if: always() && matrix.config.coverage
+        run: |
+          mkdir coverage-html
+          pipx run "gcovr==${{ env.GCOVR_VERSION }}" \
+            --root "$GITHUB_WORKSPACE" \
+            --filter "$GITHUB_WORKSPACE/src/" \
+            --exclude "$GITHUB_WORKSPACE/src/test/" \
+            --object-directory build-test \
+            --html-details coverage-html/index.html \
+            --markdown coverage-summary.md \
+            --print-summary
+          cat coverage-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage report
+        if: always() && matrix.config.coverage
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-html
+          path: coverage-html
+          retention-days: 31
+          if-no-files-found: error
+
+      # `if: always()` so this still runs even if Run unit tests failed.
+      - name: Summarize test results
+        if: always()
+        env:
+          JOB_NAME: ${{ matrix.config.name }}
+        run: python3 .github/scripts/summarize-test-results.py
+
+      - name: Upload JUnit XML
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: junit-${{ matrix.config.id }}
+          path: test-results.xml
+          retention-days: 31
+          if-no-files-found: warn

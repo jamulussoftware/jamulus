@@ -19,10 +19,6 @@ permissions:
   contents: read
 
 env:
-  # Must match autobuild.yml's macOS/Windows QT_VERSION -- Qt setup below
-  # reuses those jobs' scripts and cache.
-  QT_VERSION: 6.10.2
-
   # gcovr version used by the coverage job below, pinned for reproducible output.
   GCOVR_VERSION: 8.6
 
@@ -92,6 +88,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+
+      # Single source of truth for the Qt version is autobuild.yml's macOS
+      # main build entry -- parsed here instead of duplicating the number.
+      # The Qt setup below reuses that workflow's scripts and cache.
+      - name: Determine Qt version from autobuild.yml
+        if: runner.os != 'Linux'
+        shell: bash
+        run: |
+          QT_VERSION="$(grep -E 'base_command:.*QT_VERSION=.*mac\.sh' .github/workflows/autobuild.yml \
+            | grep -v ARTIFACT_SUFFIX \
+            | sed -Ee 's/.*QT_VERSION=([0-9.]+).*/\1/' || true)"
+          if [[ ! "$QT_VERSION" =~ ^[0-9]+(\.[0-9]+)+$ ]]; then
+            echo "Could not determine a unique QT_VERSION from autobuild.yml (got: '$QT_VERSION')" >&2
+            exit 1
+          fi
+          echo "Using Qt version $QT_VERSION (from autobuild.yml)"
+          echo "QT_VERSION=$QT_VERSION" >> "$GITHUB_ENV"
 
       - name: Install Qt (Linux distro packages)
         if: runner.os == 'Linux'

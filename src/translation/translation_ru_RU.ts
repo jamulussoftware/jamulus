@@ -1789,7 +1789,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation type="unfinished"></translation>
+        <translation>Любой жанр Азия</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>
@@ -3598,7 +3598,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1590"/>
         <source>Released under the GNU Affero General Public License 3.0 (or any later version)</source>
-        <translation type="unfinished"></translation>
+        <translation>Распространяется под лицензией GNU Affero General Public License 3.0 (или любой более поздней версией)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1658"/>

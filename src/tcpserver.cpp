@@ -25,23 +25,33 @@
 
 #include "server.h"
 
-CTcpServer::CTcpServer ( CServer* pNServP, const QString& strServerBindIP, int iPort ) :
+CTcpServer::CTcpServer ( CServer* pNServP, const QString& strServerBindIP4, const QString& strServerBindIP6, int iPort ) :
     pServer ( pNServP ),
-    strServerBindIP ( strServerBindIP ),
+    strServerBindIP4 ( strServerBindIP4 ),
+    strServerBindIP6 ( strServerBindIP6 ),
     iPort ( iPort ),
-    pTcpServer ( new QTcpServer ( this ) )
+    pTcpServer4 ( new QTcpServer ( this ) ),
+    pTcpServer6 ( new QTcpServer ( this ) )
 {
-    connect ( pTcpServer, &QTcpServer::newConnection, this, &CTcpServer::OnNewConnection );
+    connect ( pTcpServer4, &QTcpServer::newConnection, this, [this]() { AcceptConnections ( pTcpServer4 ); } );
+    connect ( pTcpServer6, &QTcpServer::newConnection, this, [this]() { AcceptConnections ( pTcpServer6 ); } );
 }
 
 CTcpServer::~CTcpServer()
 {
-    if ( pTcpServer->isListening() )
+    if ( pTcpServer4->isListening() )
     {
-        qInfo() << "- stopping Jamulus-TCP server";
-        pTcpServer->close();
+        qInfo() << "- stopping Jamulus-TCP IPv4 server";
+        pTcpServer4->close();
     }
-    pTcpServer->deleteLater();
+    pTcpServer4->deleteLater();
+
+    if ( pTcpServer6->isListening() )
+    {
+        qInfo() << "- stopping Jamulus-TCP IPv6 server";
+        pTcpServer6->close();
+    }
+    pTcpServer6->deleteLater();
 }
 
 bool CTcpServer::Start()
@@ -51,49 +61,71 @@ bool CTcpServer::Start()
         return false;
     }
 
-    // default to any-address for either both IP protocols or just IPv4
-    QHostAddress hostAddress = pServer->IsIPv6Available() ? QHostAddress::Any : QHostAddress::AnyIPv4;
+    QHostAddress hostAddress;
 
-    if ( !pServer->IsIPv6Available() )
+    // IPv4 socket
+    if ( !strServerBindIP4.isEmpty() )
     {
-        if ( !strServerBindIP.isEmpty() )
+        hostAddress = QHostAddress ( strServerBindIP4 );
+    }
+    else
+    {
+        hostAddress = QHostAddress::AnyIPv4;
+    }
+
+    if ( hostAddress.protocol() == QAbstractSocket::IPv4Protocol && pTcpServer4->listen ( hostAddress, iPort ) )
+    {
+        qInfo() << qUtf8Printable (
+            QString ( "- Jamulus-TCP: IPv4 server started on %1:%2" ).arg ( hostAddress.toString() ).arg ( pTcpServer4->serverPort() ) );
+    }
+    else
+    {
+        qWarning() << qUtf8Printable ( QString ( "- Jamulus-TCP: unable to start IPv4 server on %1:%2 - %3" )
+                                           .arg ( hostAddress.toString() )
+                                           .arg ( iPort )
+                                           .arg ( pTcpServer4->errorString() ) );
+    }
+
+    if ( pServer->IsIPv6Available() )
+    {
+        // IPv6 socket
+        if ( !strServerBindIP6.isEmpty() )
         {
-            hostAddress = QHostAddress ( strServerBindIP );
+            hostAddress = QHostAddress ( strServerBindIP6 );
+        }
+        else
+        {
+            hostAddress = QHostAddress::AnyIPv6;
+        }
+
+        if ( hostAddress.protocol() == QAbstractSocket::IPv6Protocol && pTcpServer6->listen ( hostAddress, iPort ) )
+        {
+            qInfo() << qUtf8Printable (
+                QString ( "- Jamulus-TCP: IPv6 server started on [%1]:%2" ).arg ( hostAddress.toString() ).arg ( pTcpServer6->serverPort() ) );
+        }
+        else
+        {
+            qWarning() << qUtf8Printable ( QString ( "- Jamulus-TCP: unable to start IPv6 server on [%1]:%2 - %3" )
+                                               .arg ( hostAddress.toString() )
+                                               .arg ( iPort )
+                                               .arg ( pTcpServer6->errorString() ) );
         }
     }
-
-    if ( pTcpServer->listen ( hostAddress, iPort ) )
-    {
-        qInfo() << qUtf8Printable ( QString ( "- Jamulus-TCP: server started on port %1" ).arg ( pTcpServer->serverPort() ) );
-        return true;
-    }
-    qWarning() << qUtf8Printable (
-        QString ( "- Jamulus-TCP: unable to start server on port %1: %2" ).arg ( pTcpServer->serverPort() ).arg ( pTcpServer->errorString() ) );
     return false;
 }
 
-void CTcpServer::OnNewConnection()
+void CTcpServer::AcceptConnections ( QTcpServer* pTcpServer )
 {
-    QTcpSocket* pSocket = pTcpServer->nextPendingConnection();
-    if ( !pSocket )
+    while ( pTcpServer->hasPendingConnections() )
     {
-        return;
-    }
-
-    // express IPv4 address as IPv4
-    CHostAddress peerAddress ( pSocket->peerAddress(), pSocket->peerPort() );
-
-    if ( peerAddress.InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
-    {
-        bool    ok;
-        quint32 ip4 = peerAddress.InetAddr.toIPv4Address ( &ok );
-        if ( ok )
+        QTcpSocket* const pSocket = pTcpServer->nextPendingConnection();
+        if ( pSocket )
         {
-            peerAddress.InetAddr.setAddress ( ip4 );
+            CHostAddress peerAddress ( pSocket->peerAddress(), pSocket->peerPort() );
+
+            qDebug() << "- Jamulus-TCP: received connection from:" << peerAddress.toString();
+
+            new CTcpConnection ( pSocket, peerAddress, pServer ); // will auto-delete on disconnect
         }
     }
-
-    qDebug() << "- Jamulus-TCP: received connection from:" << peerAddress.toString();
-
-    new CTcpConnection ( pSocket, peerAddress, pServer ); // will auto-delete on disconnect
 }

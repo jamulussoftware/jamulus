@@ -110,7 +110,7 @@ def cmd_build():
         run(
             [
                 qmake_bin,
-                "..\\src\\test\\test.pro",
+                "..\\test\\test.pro",
                 "CONFIG-=debug_and_release",
                 "CONFIG+=release",
                 "DESTDIR=.",
@@ -120,7 +120,7 @@ def cmd_build():
         )
         run(["nmake"], cwd=BUILD_DIR)
     else:
-        run([qmake_bin, "../src/test/test.pro"] + qmake_extra_args(), cwd=BUILD_DIR)
+        run([qmake_bin, "../test/test.pro"] + qmake_extra_args(), cwd=BUILD_DIR)
         run(["make", "-j{}".format(os.cpu_count() or 1)], cwd=BUILD_DIR)
 
 

@@ -6,12 +6,14 @@ on:
     branches: [ main ]
     paths:
       - 'src/**'
+      - 'test/**'
       - '.github/workflows/unit-tests.yml'
       - '.github/scripts/**'
   pull_request:
     branches: [ main ]
     paths:
       - 'src/**'
+      - 'test/**'
       - '.github/workflows/unit-tests.yml'
       - '.github/scripts/**'
 
@@ -197,7 +199,6 @@ jobs:
           pipx run "gcovr==${{ env.GCOVR_VERSION }}" \
             --root "$GITHUB_WORKSPACE" \
             --filter "$GITHUB_WORKSPACE/src/" \
-            --exclude "$GITHUB_WORKSPACE/src/test/" \
             --object-directory build-test \
             --html-details coverage-html/index.html \
             --markdown coverage-summary.md \

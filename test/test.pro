@@ -2,7 +2,7 @@
 #
 # Build and run (out of tree builds are recommended):
 #   mkdir build-test && cd build-test
-#   qmake ../src/test/test.pro
+#   qmake ../test/test.pro
 #   make && ./jamulus-test
 #
 # "make check" is supported as well (CONFIG += testcase).
@@ -40,13 +40,13 @@ win32 {
     DEFINES += NOMINMAX
 }
 
-INCLUDEPATH += ..
+INCLUDEPATH += ../src
 
-HEADERS += ../global.h \
-    ../protocol.h \
-    ../util.h \
+HEADERS += ../src/global.h \
+    ../src/protocol.h \
+    ../src/util.h \
     protocoltester.h
 
-SOURCES += ../protocol.cpp \
-    ../util.cpp \
+SOURCES += ../src/protocol.cpp \
+    ../src/util.cpp \
     tst_protocol.cpp

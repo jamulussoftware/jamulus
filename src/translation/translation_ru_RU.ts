@@ -1430,7 +1430,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальное</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>

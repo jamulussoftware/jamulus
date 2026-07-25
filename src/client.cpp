@@ -1429,8 +1429,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // apply a general gain boost to all audio input:
         for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
         {
-            vecsStereoSndCrd[j + 1] = static_cast<int16_t> ( iInputBoost * vecsStereoSndCrd[j + 1] );
-            vecsStereoSndCrd[j]     = static_cast<int16_t> ( iInputBoost * vecsStereoSndCrd[j] );
+            vecsStereoSndCrd[j + 1] = Float2Short ( static_cast<float> ( iInputBoost ) * vecsStereoSndCrd[j + 1] );
+            vecsStereoSndCrd[j]     = Float2Short ( static_cast<float> ( iInputBoost ) * vecsStereoSndCrd[j] );
         }
     }
 

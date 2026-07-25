@@ -46,17 +46,18 @@ class CTcpServer : public QObject
     Q_OBJECT
 
 public:
-    CTcpServer ( CServer* pNServP, const QString& strServerBindIP, int iPort );
+    CTcpServer ( CServer* pNServP, const QString& strServerBindIP4, const QString& strServerBindIP6, int iPort );
     ~CTcpServer();
 
     bool Start();
 
 private:
     CServer*      pServer; // for server
-    const QString strServerBindIP;
+    const QString strServerBindIP4;
+    const QString strServerBindIP6;
     const int     iPort;
-    QTcpServer*   pTcpServer;
+    QTcpServer*   pTcpServer4;
+    QTcpServer*   pTcpServer6;
 
-private slots:
-    void OnNewConnection();
+    void AcceptConnections ( QTcpServer* pTcpServer );
 };

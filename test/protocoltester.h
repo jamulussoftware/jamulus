@@ -120,10 +120,14 @@ public:
     }
 
     // flips every bit of the trailing CRC byte so the checksum no longer
-    // matches the header plus body
+    // matches the header plus body; no-op on an empty frame (a state
+    // TruncateBy can legally produce)
     static void CorruptCRC ( CVector<uint8_t>& vecbyFrame )
     {
-        vecbyFrame[vecbyFrame.Size() - 1] = static_cast<uint8_t> ( vecbyFrame[vecbyFrame.Size() - 1] ^ 0xFF );
+        if ( vecbyFrame.Size() > 0 )
+        {
+            vecbyFrame[vecbyFrame.Size() - 1] = static_cast<uint8_t> ( vecbyFrame[vecbyFrame.Size() - 1] ^ 0xFF );
+        }
     }
 
     // overwrites vecbyFrame's declared body length field, independently of the

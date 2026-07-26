@@ -194,8 +194,8 @@ public:
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
     void CreateCLServerFeaturesMes ( const CHostAddress& InetAddr, const uint32_t iResult );
     void CreateCLWelcomeMessageMes ( const CHostAddress& InetAddr, const QString strWelcomeMessage );
-    void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const int iID );
-    void CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iChanID, enum EProtoMode eProtoMode );
+    void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const int iID, const quint32 token = 0 );
+    void CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iChanID, const quint32 token, enum EProtoMode eProtoMode );
 
     static int GetBodyLength ( const CVector<uint8_t>& vecbyData );
 
@@ -405,6 +405,6 @@ signals:
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
     void CLReqServerFeatures ( CHostAddress InetAddr );
     void CLReqWelcomeMessage ( CHostAddress InetAddr );
-    void CLTcpSupportedReceived ( CHostAddress InetAddr, int iID );
-    void CLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpConnection* pTcpConnection );
+    void CLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32 token );
+    void CLClientIDReceived ( CHostAddress InetAddr, int iChanID, quint32 token, CTcpConnection* pTcpConnection );
 };

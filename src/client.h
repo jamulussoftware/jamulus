@@ -451,8 +451,9 @@ protected:
 
     // for TCP protocol support
 
-    bool bTcpSupported;
-    int  iClientID;
+    bool    bTcpSupported;
+    int     iClientID;
+    quint32 iChannelToken; // given by the server for authenticating TCP connection
 
     // UDP/TCP mode for fetching client list - stored in a hash keyed by CHostAddress
     enum EFetchMode
@@ -485,7 +486,7 @@ protected slots:
         }
     }
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
-    void OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID );
+    void OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32 token );
 
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
 

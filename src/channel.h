@@ -106,6 +106,9 @@ public:
     void SetEnable ( const bool bNEnStat );
     bool IsEnabled() { return bIsEnabled; }
 
+    void    SetChannelToken ( const quint32 iNChannelToken ) { iChannelToken = iNChannelToken; }
+    quint32 GetChannelToken() { return iChannelToken; }
+
     void                SetAddress ( const CHostAddress& NAddr ) { InetAddr = NAddr; }
     const CHostAddress& GetAddress() const { return InetAddr; }
 
@@ -244,6 +247,8 @@ protected:
     std::atomic<bool> bIsEnabled;
     bool              bIsServer;
     bool              bIsIdentified;
+
+    quint32 iChannelToken;
 
     int iNetwFrameSizeFact;
     int iNetwFrameSize;

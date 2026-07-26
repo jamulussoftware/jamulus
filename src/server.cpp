@@ -1561,6 +1561,9 @@ void CServer::InitChannel ( const int iNewChanID, const CHostAddress& InetAddr )
     // initialize new channel by storing the calling host address
     vecChannels[iNewChanID].SetAddress ( InetAddr );
 
+    // allocate a random channel token for authenticating TCP associations
+    vecChannels[iNewChanID].SetChannelToken ( QRandomGenerator::global()->generate() );
+
     // reset channel info
     vecChannels[iNewChanID].ResetInfo();
 

@@ -50,6 +50,7 @@
 #include <QDateTime>
 #include <QHostAddress>
 #include <QFileInfo>
+#include <QRandomGenerator>
 #include <algorithm>
 #include <atomic>
 #ifdef USE_OPUS_SHARED_LIB

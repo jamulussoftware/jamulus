@@ -411,7 +411,9 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
     // if TCP is enabled, we need to announce this first, before sending Client ID
     if ( bEnableTcp )
     {
-        ConnLessProtocol.CreateCLTcpSupportedMes ( vecChannels[iChID].GetAddress(), PROTMESSID_CLM_CLIENT_ID );
+        quint32 token = vecChannels[iChID].GetChannelToken(); // random token that the client must auth with
+
+        ConnLessProtocol.CreateCLTcpSupportedMes ( vecChannels[iChID].GetAddress(), PROTMESSID_CLM_CLIENT_ID, token );
     }
 
     // inform the client about its own ID at the server (note that this
@@ -588,15 +590,15 @@ void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecM
     }
 }
 
-void CServer::OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpConnection* pTcpConnection )
+void CServer::OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, quint32 token, CTcpConnection* pTcpConnection )
 {
-    qDebug() << "- client ID" << iChanID << "received from" << InetAddr.toString() << "with TCP connection" << pTcpConnection;
-
     // ensure there is a TcpConnection
     if ( !pTcpConnection )
     {
         return;
     }
+
+    qDebug() << "- client ID" << iChanID << "received from" << InetAddr.toString() << "over TCP connection";
 
     if ( iChanID < 0 || iChanID >= iMaxNumChannels || !vecChannels[iChanID].IsConnected() )
     {
@@ -608,20 +610,20 @@ void CServer::OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpCon
 
     CChannel* pChannel = &vecChannels[iChanID];
 
-    qInfo() << "- Jamulus-TCP: request to link TCP connection with UDP client at" << pChannel->GetAddress().toString();
+    qInfo() << "- Jamulus-TCP: request to link TCP connection with UDP client at" << pChannel->GetAddress().toString() << "with token" << token;
 
-    // compare IP addresses, but not port numbers
-    if ( InetAddr.InetAddr != pChannel->GetAddress().InetAddr )
+    // compare the token to authenticate the request
+    if ( pChannel->GetChannelToken() != token )
     {
-        // IP address mismatch - reject connection
+        // token mismatch - reject connection
         pTcpConnection->disconnectFromHost();
-        qWarning() << "- Jamulus-TCP: rejected mismatched IP address";
+        qWarning() << "- Jamulus-TCP: rejected mismatched channel token - expected" << pChannel->GetChannelToken();
         return;
     }
 
     // link TCP connection with UDP channel
     pTcpConnection->SetChannel ( pChannel );
-    pChannel->SetTcpConnection ( pTcpConnection );
+    pChannel->SetTcpConnection ( pTcpConnection ); // TODO - handle situation where there is already a connection
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )

@@ -1171,7 +1171,7 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     {
         // *** Make TCP connection
         qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
-        ConnLessProtocol.CreateCLClientIDMes ( Channel.GetAddress(), iClientID, PROTO_TCP_LONG ); // create persistent TCP connection
+        ConnLessProtocol.CreateCLClientIDMes ( Channel.GetAddress(), iClientID, iChannelToken, PROTO_TCP_LONG ); // create persistent TCP connection
     }
 
     // allocate and map client-side channel 0
@@ -1212,7 +1212,7 @@ void CClient::OnRawAudioSupported()
     }
 }
 
-void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID )
+void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32 token )
 {
     qDebug() << "- TCP supported at server" << InetAddr.toString() << "for ID =" << iID;
 
@@ -1253,15 +1253,16 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID )
         }
         break;
     case PROTMESSID_CLM_CLIENT_ID:
-        // if client ID already received, make TCP connection to server
         bTcpSupported = true;
+        iChannelToken = token; // store the token given to us by the server
 
+        // if client ID already received, make TCP connection to server
         if ( iClientID != INVALID_INDEX )
         {
             // *** Make TCP connection
-            qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
+            qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID << "with token" << iChannelToken;
             Q_ASSERT ( InetAddr == Channel.GetAddress() );
-            ConnLessProtocol.CreateCLClientIDMes ( InetAddr, iClientID, PROTO_TCP_LONG ); // create persistent TCP connection
+            ConnLessProtocol.CreateCLClientIDMes ( InetAddr, iClientID, iChannelToken, PROTO_TCP_LONG ); // create persistent TCP connection
         }
         break;
     }

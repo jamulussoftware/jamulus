@@ -60,6 +60,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     bIsEnabled ( false ),
     bIsServer ( bNIsServer ),
     bIsIdentified ( false ),
+    iChannelToken ( 0 ),
     iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
     SignalLevelMeter ( false, 0.5 ) // server mode with mono out and faster smoothing
 {

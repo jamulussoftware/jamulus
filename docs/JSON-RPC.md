@@ -31,7 +31,7 @@ The JSON-RPC server is based on the [JSON-RPC 2.0](https://www.jsonrpc.org/speci
 
 ## Connect to a JSON-RPC server
 
-On Linux, you can connect to a JSON-RPC server using the `nc` CLI tool. 
+On Linux, you can connect to a JSON-RPC server using the `nc` CLI tool.
 
 On Windows, [you can download](https://nmap.org/ncat/) and use the `ncat` CLI tool.
 

@@ -423,7 +423,7 @@ public slots:
 
     void OnCLDisconnection ( CHostAddress InetAddr );
 
-    void OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, CTcpConnection* pTcpConnection );
+    void OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, quint32 token, CTcpConnection* pTcpConnection );
 
     void OnAboutToQuit();
 

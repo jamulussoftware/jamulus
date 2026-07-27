@@ -760,3 +760,14 @@ void CChannel::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo
         Protocol.CreateConClientListMes ( vecChanInfo );
     }
 }
+
+void CChannel::SetTcpConnection ( CTcpConnection* pConnection )
+{
+    if ( pTcpConnection )
+    {
+        // this should never happen, but handle it if it does
+        pTcpConnection->disconnectFromHost();
+    }
+
+    pTcpConnection = pConnection;
+}

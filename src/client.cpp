@@ -1248,6 +1248,13 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32
         }
         break;
     case PROTMESSID_CLM_CLIENT_ID:
+        // check that this message came from the server we are connected to - drop if not
+        if ( InetAddr != Channel.GetAddress() )
+        {
+            qWarning() << "Ignoring unexpected CLM_TCP_SUPPORTED for client ID from" << InetAddr.toString();
+            break;
+        }
+
         bTcpSupported = true;
         iChannelToken = token; // store the token given to us by the server
 
@@ -1256,7 +1263,6 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32
         {
             // *** Make TCP connection
             qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID << "with token" << iChannelToken;
-            Q_ASSERT ( InetAddr == Channel.GetAddress() );
             ConnLessProtocol.CreateCLClientIDMes ( InetAddr, iClientID, iChannelToken, PROTO_TCP_LONG ); // create persistent TCP connection
         }
         break;

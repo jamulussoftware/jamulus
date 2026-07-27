@@ -81,6 +81,7 @@ LANGS[sv_SE]="Swedish"
 LANGS[zh_CN]="Simplified Chinese"
 
 find_or_add_missing_entries() {
+    local branch=${1:-main}
     local changelog
     changelog=$(sed -rne '/^###.*'"${target_release//./\.}"'\b/,/^### '"${prev_release//./\.}"'\b/p' ChangeLog)
     local changelog_begin_position
@@ -91,7 +92,7 @@ find_or_add_missing_entries() {
         check_or_add_pr "$id"
     done
 
-    local target_ref=origin/main
+    local target_ref=origin/${branch}
     if git tag | grep -qxF "${target_release_tag}"; then
         # already released, use this
         target_ref="${target_release_tag}"
@@ -99,11 +100,11 @@ find_or_add_missing_entries() {
     echo
     echo "Checking if all PR references in git log since ${prev_release_tag} are included for ${target_release} based on ref ${target_ref}..."
     local milestone
-    for id in $(git log "${prev_release_tag}..main" | grep -oP '#\K(\d+)'); do
+    for id in $(git log "${prev_release_tag}..${target_ref}" | grep -oP '#\K(\d+)'); do
         gh pr view "${id}" --json title &> /dev/null || continue # Skip non-PRs
         milestone=$(gh pr view "${id}" --json milestone --jq .milestone.title)
         if [[ "${milestone}" =~ "Release " ]] && [[ "${milestone}" != "Release ${target_release}" ]]; then
-            echo "-> Ignoring PR #${id}, which was mentioned in 'git log ${prev_release_tag}..HEAD', but already has milestone '${milestone}'"
+            echo "-> Ignoring PR #${id}, which was mentioned in 'git log ${prev_release_tag}..${target_ref}', but already has milestone '${milestone}'"
             continue
         fi
         check_or_add_pr "${id}"
@@ -337,30 +338,58 @@ sanitize_title() {
         -re 's/\b((Add)|(Updat|Enhanc|Improv|Remov)e)\b/\2\3ed/i'
 }
 
-case "${1:-1}" in
-    find-missing-entries)
-        ACTION=find-missing-entries
-        ;;
-    add-missing-entries)
-        ACTION=add-missing-entries
-        ;;
-    group-entries)
-        ACTION=group-entries
-        ;;
-    --help)
-        echo "Usage: $0 ACTION"
-        echo "  Supported actions:"
-        echo "    * find-missing-entries: Prints a list"
-        echo "    * add-missing-entries: Inserts missing entries into the file"
-        echo "    * group-entries: Groups existing entries by prefix"
-        echo
-        exit
-        ;;
-    *)
-        echo "ERROR: Bad invocation, see --help"
+branch=main
+ACTION=""
+
+set_action() {
+    local new_action="${1}"
+    if [[ -n "${ACTION}" ]]; then
+        echo "ERROR: Only one ACTION may be specified (got '${ACTION}' and '${new_action}')"
         exit 1
-        ;;
-esac
+    fi
+    ACTION="${new_action}"
+}
+
+while true; do
+    case "${1:-}" in
+        find-missing-entries)
+            set_action find-missing-entries
+            shift
+            ;;
+        add-missing-entries)
+            set_action add-missing-entries
+            shift
+            ;;
+        group-entries)
+            set_action group-entries
+            shift
+            ;;
+        --branch)
+            shift
+            [[ -z "${1:-}" ]] && echo "ERROR: Missing argument for --branch" && exit 1
+            branch="${1}"
+            shift
+            ;;
+        --help)
+            echo "Usage: $0 [--branch branch-name] ACTION"
+            echo "  Supported actions:"
+            echo "    * find-missing-entries: Prints a list"
+            echo "    * add-missing-entries: Inserts missing entries into the file"
+            echo "    * group-entries: Groups existing entries by prefix"
+            echo
+            echo "  Options:"
+            echo "    --branch branch-name: Specify the branch to check (default: main)"
+            echo "      This option ensures only PRs merged into the specified branch are considered."
+            echo
+            exit
+            ;;
+        *)
+            [[ -n "${ACTION}" && $# -eq 0 ]] && break
+            echo "ERROR: Bad invocation, see --help"
+            exit 1
+            ;;
+    esac
+done
 
 target_release=$(grep -oP '^### .*\K(\d+\.\d+\.\d+)\b' ChangeLog  | head -n1)
 prev_release=$(grep -oP '^### .*\K(\d+\.\d+\.\d+)\b' ChangeLog  | head -n2 | tail -n1)
@@ -373,7 +402,7 @@ echo
 
 case "$ACTION" in
     find-missing-entries | add-missing-entries)
-        find_or_add_missing_entries
+        find_or_add_missing_entries "${branch}"
         ;;
     group-entries)
         group_entries

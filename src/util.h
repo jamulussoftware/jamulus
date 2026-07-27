@@ -816,8 +816,9 @@ public:
         return *this;
     }
 
-    // compare operator
+    // compare operators
     bool operator== ( const CHostAddress& CompAddr ) const { return ( ( CompAddr.InetAddr == InetAddr ) && ( CompAddr.iPort == iPort ) ); }
+    bool operator!= ( const CHostAddress& CompAddr ) const { return ( ( CompAddr.InetAddr != InetAddr ) || ( CompAddr.iPort != iPort ) ); }
 
     int Compare ( const CHostAddress& other ) const;
 

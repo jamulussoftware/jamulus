@@ -46,7 +46,12 @@ class CTcpServer : public QObject
     Q_OBJECT
 
 public:
-    CTcpServer ( CServer* pNServP, const QString& strServerBindIP4, const QString& strServerBindIP6, int iPort );
+    CTcpServer ( CServer*       pNServP,
+                 const QString& strServerBindIP4,
+                 const QString& strServerBindIP6,
+                 int            iPort,
+                 bool&          bTCPv4Available,
+                 bool&          bTCPv6Available );
     ~CTcpServer();
 
     bool Start();
@@ -56,8 +61,14 @@ private:
     const QString strServerBindIP4;
     const QString strServerBindIP6;
     const int     iPort;
-    QTcpServer*   pTcpServer4;
-    QTcpServer*   pTcpServer6;
+
+    // these are references to CServer::bTCPv4Available and CServer::bTCPv6Available
+    // to inform the server which TCP servers are running
+    bool& bTCPv4Available;
+    bool& bTCPv6Available;
+
+    QTcpServer* pTcpServer4;
+    QTcpServer* pTcpServer6;
 
     void AcceptConnections ( QTcpServer* pTcpServer );
 };

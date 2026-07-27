@@ -25,11 +25,18 @@
 
 #include "server.h"
 
-CTcpServer::CTcpServer ( CServer* pNServP, const QString& strServerBindIP4, const QString& strServerBindIP6, int iPort ) :
+CTcpServer::CTcpServer ( CServer*       pNServP,
+                         const QString& strServerBindIP4,
+                         const QString& strServerBindIP6,
+                         int            iPort,
+                         bool&          bTCPv4Available,
+                         bool&          bTCPv6Available ) :
     pServer ( pNServP ),
     strServerBindIP4 ( strServerBindIP4 ),
     strServerBindIP6 ( strServerBindIP6 ),
     iPort ( iPort ),
+    bTCPv4Available ( bTCPv4Available ),
+    bTCPv6Available ( bTCPv6Available ),
     pTcpServer4 ( new QTcpServer ( this ) ),
     pTcpServer6 ( new QTcpServer ( this ) )
 {
@@ -41,17 +48,17 @@ CTcpServer::~CTcpServer()
 {
     if ( pTcpServer4->isListening() )
     {
+        bTCPv4Available = false; // this is a reference to CServer::bTCPv4Available
         qInfo() << "- stopping Jamulus-TCP IPv4 server";
         pTcpServer4->close();
     }
-    pTcpServer4->deleteLater();
 
     if ( pTcpServer6->isListening() )
     {
+        bTCPv6Available = false; // this is a reference to CServer::bTCPv4Available
         qInfo() << "- stopping Jamulus-TCP IPv6 server";
         pTcpServer6->close();
     }
-    pTcpServer6->deleteLater();
 }
 
 bool CTcpServer::Start()
@@ -75,6 +82,8 @@ bool CTcpServer::Start()
 
     if ( hostAddress.protocol() == QAbstractSocket::IPv4Protocol && pTcpServer4->listen ( hostAddress, iPort ) )
     {
+        bTCPv4Available = true; // this is a reference to CServer::bTCPv4Available
+
         qInfo() << qUtf8Printable (
             QString ( "- Jamulus-TCP: IPv4 server started on %1:%2" ).arg ( hostAddress.toString() ).arg ( pTcpServer4->serverPort() ) );
     }
@@ -100,6 +109,8 @@ bool CTcpServer::Start()
 
         if ( hostAddress.protocol() == QAbstractSocket::IPv6Protocol && pTcpServer6->listen ( hostAddress, iPort ) )
         {
+            bTCPv6Available = true; // this is a reference to CServer::bTCPv6Available
+
             qInfo() << qUtf8Printable (
                 QString ( "- Jamulus-TCP: IPv6 server started on [%1]:%2" ).arg ( hostAddress.toString() ).arg ( pTcpServer6->serverPort() ) );
         }

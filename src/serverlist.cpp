@@ -150,11 +150,9 @@ CServerListManager::CServerListManager ( CServer*       pServer,
                                          const QString& strServerListFilter,
                                          const QString& strServerPublicIP,
                                          const int      iNumChannels,
-                                         const bool     bNEnableTcp,
                                          CProtocol*     pNConLProt ) :
     pServer ( pServer ),
     DirectoryType ( AT_NONE ),
-    bEnableTcp ( bNEnableTcp ),
     ServerListFileName ( strServerListFileName ),
     strDirectoryAddress ( "" ),
     bIsDirectory ( false ),
@@ -756,7 +754,8 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr, CTcpConnect
         pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo, pTcpConnection );
 
         // if TCP is enabled but this request is on UDP, say TCP is supported
-        if ( bEnableTcp && !pTcpConnection )
+        if ( !pTcpConnection && ( ( pServer->IsTCPv4Available() && InetAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol ) ||
+                                  ( pServer->IsTCPv6Available() && InetAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol ) ) )
         {
             pConnLessProtocol->CreateCLTcpSupportedMes ( InetAddr, PROTMESSID_CLM_SERVER_LIST );
         }

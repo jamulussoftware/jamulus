@@ -1033,8 +1033,12 @@ void CClientDlg::ShowChatWindow ( const bool bForceRaise )
 
     if ( bForceRaise )
     {
-        // make sure dialog is upfront and has focus
+#if defined( ANDROID ) || defined( Q_OS_IOS )
+        // on Android/iOS the dialog is always shown maximized (#3383); showNormal() would undo that
+#else
+        // make sure dialog is upfront and has focus (not applicable on Android/iOS, see above)
         ChatDlg.showNormal();
+#endif
         ChatDlg.raise();
         ChatDlg.activateWindow();
     }

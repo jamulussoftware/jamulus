@@ -112,7 +112,7 @@ public:
     void                SetAddress ( const CHostAddress& NAddr ) { InetAddr = NAddr; }
     const CHostAddress& GetAddress() const { return InetAddr; }
 
-    void            SetTcpConnection ( CTcpConnection* pConnection ) { pTcpConnection = pConnection; }
+    void            SetTcpConnection ( CTcpConnection* pConnection );
     CTcpConnection* GetTcpConnection() { return pTcpConnection; }
 
     void ResetInfo()

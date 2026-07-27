@@ -625,7 +625,7 @@ void CServer::OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, quint32
 
     // link TCP connection with UDP channel
     pTcpConnection->SetChannel ( pChannel );
-    pChannel->SetTcpConnection ( pTcpConnection ); // TODO - handle situation where there is already a connection
+    pChannel->SetTcpConnection ( pTcpConnection );
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )

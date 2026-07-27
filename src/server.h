@@ -155,6 +155,10 @@ public:
     // IPv6 Available
     bool IsIPv6Available() { return bIPv6Available; }
 
+    // TCP v4/v6 Available
+    bool IsTCPv4Available() { return bTCPv4Available; }
+    bool IsTCPv6Available() { return bTCPv6Available; }
+
     // GUI settings ------------------------------------------------------------
     int GetClientNumAudioChannels ( const int iChanNum ) { return vecChannels[iChanNum].GetNumAudioChannels(); }
 
@@ -299,7 +303,10 @@ protected:
     // actual working objects
     bool            bIPv6Available; // must be before Socket - passed by reference to Socket
     CHighPrioSocket Socket;
-    CTcpServer      TcpServer;
+
+    bool       bTCPv4Available; // must be before TcpServer - passed by reference to TcpServer
+    bool       bTCPv6Available; // must be before TcpServer - passed by reference to TcpServer
+    CTcpServer TcpServer;
 
     // logging
     CServerLogging Logging;
@@ -393,7 +400,8 @@ public slots:
         ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList(), pTcpConnection );
 
         // if TCP is enabled but this request is on UDP, say TCP is supported
-        if ( bEnableTcp && !pTcpConnection )
+        if ( !pTcpConnection && ( ( bTCPv4Available && InetAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol ) ||
+                                  ( bTCPv6Available && InetAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol ) ) )
         {
             ConnLessProtocol.CreateCLTcpSupportedMes ( InetAddr, PROTMESSID_CLM_CONN_CLIENTS_LIST );
         }

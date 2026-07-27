@@ -77,7 +77,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bDisableRaw ( bNDisableRaw ),
     bIPv6Available ( false ),
     Socket ( this, iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bNDisableIPv6, bIPv6Available ),
-    TcpServer ( this, strServerBindIP4, strServerBindIP6, iPortNumber ),
+    bTCPv4Available ( false ),
+    bTCPv6Available ( false ),
+    TcpServer ( this, strServerBindIP4, strServerBindIP6, iPortNumber, bTCPv4Available, bTCPv6Available ),
     Logging(),
     iFrameCount ( 0 ),
     HighPrecisionTimer ( bNUseDoubleSystemFrameSize ),
@@ -89,7 +91,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
                         strServerPublicIP,
                         strServerListFilter,
                         iNewMaxNumChan,
-                        bNEnableTcp,
                         &ConnLessProtocol ),
     JamController ( this ),
     bDisableRecording ( bDisableRecording ),
@@ -328,10 +329,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     // start the socket (it is important to start the socket after all
     // initializations and connections)
-    Socket.Start();
+    Socket.Start(); // will set bIPv6Available if IPv6 creation succeeds
     if ( bEnableTcp )
     {
-        TcpServer.Start();
+        TcpServer.Start(); // will set bTCPv4Available and/or bTCPv6Available if listener setup succeeds
     }
 }
 
@@ -409,11 +410,12 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
     QMutexLocker locker ( &Mutex );
 
     // if TCP is enabled, we need to announce this first, before sending Client ID
-    if ( bEnableTcp )
+    if ( ( bTCPv4Available && RecHostAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol ) ||
+         ( bTCPv6Available && RecHostAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
     {
         quint32 token = vecChannels[iChID].GetChannelToken(); // random token that the client must auth with
 
-        ConnLessProtocol.CreateCLTcpSupportedMes ( vecChannels[iChID].GetAddress(), PROTMESSID_CLM_CLIENT_ID, token );
+        ConnLessProtocol.CreateCLTcpSupportedMes ( RecHostAddr, PROTMESSID_CLM_CLIENT_ID, token );
     }
 
     // inform the client about its own ID at the server (note that this

@@ -937,6 +937,7 @@ void CClient::OnHandledSignal ( int sigNum )
         // is notified we are leaving (Disconnect() is a no-op if not connected)
         Disconnect();
 
+        // this should trigger OnAboutToQuit
         QCoreApplication::instance()->exit();
         break;
 

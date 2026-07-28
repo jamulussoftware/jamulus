@@ -44,8 +44,13 @@ along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://
 
 # The Jamulus audio protocol
 
-Jamulus uses connectionless UDP packets to communicate between the Client and Server, and additionally for registration with a Directory. The `src/protocol.cpp` file contains much of the details of the packets themselves, whereas this document is intended to form a higher-level view of the protocol interactions.
-Messages with an ID below 1000 are connection-based: each one is acknowledged by an `ACKN (1)` message carrying the same sequence counter, and the sender retransmits it every `SEND_MESS_TIMEOUT_MS` ms until the acknowledgement arrives. Messages with an ID from 1000 to 1999 (`CLM_*`) are connectionless: they work without an established audio connection and are never acknowledged.
+Jamulus uses UDP to communicate between the Client and Server, and additionally for registration with a Directory. The `src/protocol.cpp` file contains much of the details of the packets themselves, whereas this document is intended to form a higher-level view of the protocol interactions.
+
+UDP offers no delivery guarantee and no notion of a connection, so Jamulus layers its own session and reliability semantics on top of it. A Client and Server count as *connected* once the Client is sending valid audio packets and the Server has assigned it a channel. The two message classes below are named relative to that session, not to anything at the transport level.
+
+Messages with an ID below 1000 are connection-based: they apply to an established session, and each is acknowledged by an `ACKN (1)` message carrying the same sequence counter. Until that acknowledgement arrives, the sender retransmits the message every `SEND_MESS_TIMEOUT_MS` (400) ms. The protocol layer sets no retry limit: retransmission ends when the message is acknowledged, or when the channel clears the send queue via `CProtocol::Reset()` — on disconnect, on channel time-out, or when the protocol is disabled.
+
+Messages with an ID from 1000 to 1999 (`CLM_*`) are connectionless: they need no established session and are never acknowledged.
 
 All of this information can be discovered from reading the code, but hopefully is quicker to digest when available in one location. There is a Wireshark dissector available too, [here](https://github.com/softins/jamulus-wireshark), if you would like to inspect the packet flow.
 

@@ -1593,7 +1593,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>最大值</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="531"/>
@@ -1851,7 +1851,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation type="unfinished"></translation>
+        <translation>任何亚洲流派</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>
@@ -3613,7 +3613,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1590"/>
         <source>Released under the GNU Affero General Public License 3.0 (or any later version)</source>
-        <translation type="unfinished"></translation>
+        <translation>根据GNU Affero通用公共许可证3.0（或任何更新版本）发布</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1658"/>

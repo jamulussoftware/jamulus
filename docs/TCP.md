@@ -174,7 +174,7 @@ Therefore, if the server has an active TCP connection from the client, it will u
 
 So the sequence is as follows:
 
-1. As soon as a TCP-enabled server sees audio from a new client and creates a channel for it, it will send `CLM_TCP_SUPPORTED` to the client, with a data field of `CLM_CLIENT_ID`.
+1. As soon as a TCP-enabled server sees audio from a new client and creates a channel for it, it will send `CLM_TCP_SUPPORTED` to the client, with data fields of `CLM_CLIENT_ID` as the message type and a 32-bit channel token, which was created with a random value when the new connection was allocated to a channel.
 
 2. The server will then send the connected-mode `CLIENT_ID` message as normal, containing the channel ID that has been allocated.
 
@@ -184,9 +184,11 @@ So the sequence is as follows:
 
 5. The server will accept the TCP connection, and will wait for the first message to arrive via that connection.
 
-6. When a newer client receives the `CLIENT_ID` message from a server it knows supports TCP, the client will send, as its first message over the connection, a `CLM_CLIENT_ID` message containing the channel ID that it received over UDP. (`CLM_CLIENT_ID` is a newly-defined connectionless message).
+6. When a newer client receives the `CLIENT_ID` message from a server it knows supports TCP, the client will send, as its first message over the connection, a `CLM_CLIENT_ID` message containing:
+   a. the channel ID that it received over UDP. (`CLM_CLIENT_ID` is a newly-defined connectionless message), and
+   b. the channel token that it received in the `CLM_TCP_SUPPORTED` message. This token authenticates the TCP connection to the server.
 
-7. The server will lookup the channel specified by the `CLM_CLIENT_ID` message, and *will check that the IP address of the channel matches the remote address of the TCP connection*. If it does not, it will close the connection. This prevents hijacking of a session by sending another client's ID.
+7. The server will lookup the channel specified by the `CLM_CLIENT_ID` message, and *will check that the channel token in the channel matches the token supplied by the client*. If it does not, it will close the connection. This prevents hijacking of a session by sending another client's ID.
 
 8. If the TCP connection matches the client channel, the socket descriptor will be stored in the channel, and the channel pointer will be stored in the TCP Connection instance.
 

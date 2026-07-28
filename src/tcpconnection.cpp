@@ -106,6 +106,13 @@ void CTcpConnection::OnReadyRead()
             long iNumBytesRead = pTcpSocket->read ( (char*) &vecbyRecBuf[iPos], MESS_HEADER_LENGTH_BYTE - iPos );
             if ( iNumBytesRead == -1 )
             {
+                qWarning() << "- Jamulus-TCP: socket error:" << pTcpSocket->errorString();
+                return;
+            }
+
+            if ( iNumBytesRead == 0 )
+            {
+                qWarning() << "- Jamulus-TCP: unexpected EOF";
                 return;
             }
 
@@ -136,6 +143,13 @@ void CTcpConnection::OnReadyRead()
             long iNumBytesRead = pTcpSocket->read ( (char*) &vecbyRecBuf[iPos], iPayloadRemain );
             if ( iNumBytesRead == -1 )
             {
+                qWarning() << "- Jamulus-TCP: socket error:" << pTcpSocket->errorString();
+                return;
+            }
+
+            if ( iNumBytesRead == 0 )
+            {
+                qWarning() << "- Jamulus-TCP: unexpected EOF";
                 return;
             }
 

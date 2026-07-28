@@ -274,6 +274,23 @@ Results:
 | result | string | Always "ok". |
 
 
+### jamulusclient/setInputBoost
+
+Sets the input boost factor.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.boost | int | boost factor, 1 (no boost) to 10. |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
 ### jamulusclient/setMidiSettings
 
 Sets one or more MIDI controller settings.

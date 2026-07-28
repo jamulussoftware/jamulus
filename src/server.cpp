@@ -612,14 +612,14 @@ void CServer::OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, quint32
 
     CChannel* pChannel = &vecChannels[iChanID];
 
-    qInfo() << "- Jamulus-TCP: request to link TCP connection with UDP client at" << pChannel->GetAddress().toString() << "with token" << token;
+    qInfo() << "- Jamulus-TCP: request to link TCP connection with UDP client at" << pChannel->GetAddress().toString();
 
     // compare the token to authenticate the request
     if ( pChannel->GetChannelToken() != token )
     {
         // token mismatch - reject connection
         pTcpConnection->disconnectFromHost();
-        qWarning() << "- Jamulus-TCP: rejected mismatched channel token - expected" << pChannel->GetChannelToken();
+        qWarning() << "- Jamulus-TCP: rejected mismatched channel token";
         return;
     }
 

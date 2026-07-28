@@ -1271,7 +1271,7 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32
         if ( iClientID != INVALID_INDEX )
         {
             // *** Make TCP connection
-            qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID << "with token" << iChannelToken;
+            qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
             ConnLessProtocol.CreateCLClientIDMes ( InetAddr, iClientID, iChannelToken, PROTO_TCP_LONG ); // create persistent TCP connection
         }
         break;

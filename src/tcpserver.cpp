@@ -55,17 +55,17 @@ CTcpServer::~CTcpServer()
 
     if ( pTcpServer6->isListening() )
     {
-        bTCPv6Available = false; // this is a reference to CServer::bTCPv4Available
+        bTCPv6Available = false; // this is a reference to CServer::bTCPv6Available
         qInfo() << "- stopping Jamulus-TCP IPv6 server";
         pTcpServer6->close();
     }
 }
 
-bool CTcpServer::Start()
+void CTcpServer::Start()
 {
     if ( iPort < 0 )
     {
-        return false;
+        return;
     }
 
     QHostAddress hostAddress;
@@ -122,7 +122,6 @@ bool CTcpServer::Start()
                                                .arg ( pTcpServer6->errorString() ) );
         }
     }
-    return false;
 }
 
 void CTcpServer::AcceptConnections ( QTcpServer* pTcpServer )

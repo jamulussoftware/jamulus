@@ -331,8 +331,10 @@ public:
     QString          strClientName;
     void             OnRPCInMuteMyself ( bool bMute ) { OnControllerInMuteMyself ( bMute ); }
 
-public:
     void SetSettings ( CClientSettings* settings );
+
+    // for TCP support
+    void InitPendingLists();
 
 protected:
     // Signal handler must be declared before pSettings for correct init order

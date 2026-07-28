@@ -1004,6 +1004,8 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 
 void CClientDlg::ShowConnectionSetupDialog()
 {
+    pClient->InitPendingLists(); // wipe slate clean for TCP support
+
     // show connect dialog
     bConnectDlgWasShown = true;
     ConnectDlg.show();

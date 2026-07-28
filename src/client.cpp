@@ -210,6 +210,9 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &TimerGainOrPan, &QTimer::timeout, this, &CClient::OnTimerRemoteChanGainOrPan );
 
+    // reset hashes used for TCP mode tracking
+    InitPendingLists();
+
     // start the socket (it is important to start the socket after all
     // initializations and connections)
     Socket.Start();
@@ -358,7 +361,8 @@ void CClient::CreateCLServerListReqConnClientsListMes ( const CHostAddress& Inet
         switch ( eFetchMode )
         {
         case CFM_UDP_REQUEST:
-            qWarning() << "Unsatisfied Client List request via UDP for" << InetAddr.toString();
+            // suppress this warning, as it is triggered by the connect dialog sending two requests at once on open
+            // qWarning() << "Unsatisfied Client List request via UDP for" << InetAddr.toString();
             ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_UDP );
             break;
         case CFM_TCP_REQUEST:
@@ -1302,6 +1306,13 @@ void CClient::OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CC
         qDebug() << "- sending client list to connect dialog";
         emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo ); // connect dialog
     }
+}
+
+// called when Connect dialog opens to give it fresh empty lists
+void CClient::InitPendingLists()
+{
+    pendingClientList.clear();
+    pendingServerList.clear();
 }
 
 void CClient::Start()

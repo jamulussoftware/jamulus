@@ -54,7 +54,7 @@ public:
                  bool&          bTCPv6Available );
     ~CTcpServer();
 
-    bool Start();
+    void Start();
 
 private:
     CServer*      pServer; // for server

@@ -542,7 +542,8 @@ void CServer::OnCLReqServerFeatures ( CHostAddress RecHostAddr )
     iFeatures |= ( ( eLicenceType != LT_NO_LICENCE ) << FS_HAS_LICENCE );
 
     // TCP enabled? (argument --enabletcp)
-    iFeatures |= ( bEnableTcp << FS_TCP_ENABLED );
+    // will only be set if the server successfully started a TCP listener
+    iFeatures |= ( ( bTCPv4Available || bTCPv6Available ) << FS_TCP_ENABLED );
 
     // TODO:
     // Running a GUI? (argument -n disables the GUI)
@@ -1566,7 +1567,7 @@ void CServer::InitChannel ( const int iNewChanID, const CHostAddress& InetAddr )
     vecChannels[iNewChanID].SetAddress ( InetAddr );
 
     // allocate a random channel token for authenticating TCP associations
-    vecChannels[iNewChanID].SetChannelToken ( QRandomGenerator::global()->generate() );
+    vecChannels[iNewChanID].SetChannelToken ( QRandomGenerator::system()->generate() );
 
     // reset channel info
     vecChannels[iNewChanID].ResetInfo();

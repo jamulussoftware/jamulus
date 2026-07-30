@@ -318,6 +318,9 @@ void CConnectDlg::showEvent ( QShowEvent* )
 
 void CConnectDlg::RequestServerList()
 {
+    // ensure ping timer is stopped
+    TimerPing.stop();
+
     // reset flags
     bServerListReceived        = false;
     bReducedServerListReceived = false;

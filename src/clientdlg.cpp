@@ -868,7 +868,7 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpS
         {
             // show the label and hide it after one minute again
             lblUpdateCheck->show();
-            QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
+            QTimer::singleShot ( 60000, this, [this]() { lblUpdateCheck->hide(); } );
         }
 #endif
     }

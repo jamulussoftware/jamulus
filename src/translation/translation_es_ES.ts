@@ -1782,12 +1782,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation>Cualquier Género 2</translation>
     </message>
     <message>
-        <location filename="../util.h" line="604"/>
-        <source>Any Genre 3</source>
-        <translation>Cualquier Género 3</translation>
+        <location filename="../util.h" line="650"/>
+        <source>Any Genre Asia</source>
+        <translation>Cualquier Género Asia</translation>
     </message>
     <message>
-        <location filename="../util.h" line="607"/>
+        <location filename="../util.h" line="653"/>
         <source>Genre Rock</source>
         <translation>Género Rock</translation>
     </message>

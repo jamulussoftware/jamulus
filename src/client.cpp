@@ -853,7 +853,7 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
 
     // audio device notifications can come at any time and they are in a
     // different thread, therefore we need a mutex here
-    MutexDriverReinit.lock();
+    QMutexLocker locker ( &MutexDriverReinit );
     {
         // in older QT versions, enums cannot easily be used in signals without
         // registering them -> workaroud: we use the int type and cast to the enum
@@ -888,7 +888,6 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
             Sound.Start();
         }
     }
-    MutexDriverReinit.unlock();
 
     // inform GUI about the sound card device change
     emit SoundDeviceChanged ( strError );

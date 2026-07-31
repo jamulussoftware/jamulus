@@ -6,6 +6,16 @@ lessThan(QT_MAJOR_VERSION, 5) | equals(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_
     error(Jamulus requires at least Qt5.12. See https://github.com/jamulussoftware/jamulus/pull/3288)
 }
 
+# Target naming. The two Debian packages get their binary names by different means
+# (see linux/debian/rules): the desktop build passes CONFIG+=noupcasename, handled
+# here, while the headless build passes TARGET=jamulus-headless on the qmake command
+# line. TARGET selects the installed usr/bin/<TARGET> listed in debian/*.install and
+# is substituted into Exec= in the generated .desktop files, and it has to keep
+# matching the hardcoded ExecStart=/usr/bin/jamulus-headless in the headless unit.
+# Note the assignment below overrides any TARGET= given on the command line, so
+# adding noupcasename to the headless build would silently rename its binary to
+# "jamulus" and break that package.
+
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
     message(The target name is jamulus instead of Jamulus.)

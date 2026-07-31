@@ -445,69 +445,74 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
+    // get the actual sound card buffer size which is supported
+    // by the audio hardware
+    iASIOBufferSizeMono = GetActualBufferSize ( iNewPrefMonoBufferSize );
+
+    // init base class
+    CSoundBase::Init ( iASIOBufferSizeMono );
+
+    // set internal buffer size value and calculate stereo buffer size
+    iASIOBufferSizeStereo = 2 * iASIOBufferSizeMono;
+
+    // set the sample rate
+    ASIOSetSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
+
+    // create memory for intermediate audio buffer. This reallocation is the
+    // only part which must not race with a running audio callback, so only it
+    // is guarded by the mutex. The opaque driver calls are deliberately kept
+    // outside the mutex: a driver may block inside them until its audio thread
+    // returns from bufferSwitch(), which would deadlock if the mutex were held
+    // here (see issue #3779)
     ASIOMutex.lock(); // get mutex lock
     {
-        // get the actual sound card buffer size which is supported
-        // by the audio hardware
-        iASIOBufferSizeMono = GetActualBufferSize ( iNewPrefMonoBufferSize );
-
-        // init base class
-        CSoundBase::Init ( iASIOBufferSizeMono );
-
-        // set internal buffer size value and calculate stereo buffer size
-        iASIOBufferSizeStereo = 2 * iASIOBufferSizeMono;
-
-        // set the sample rate
-        ASIOSetSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
-
-        // create memory for intermediate audio buffer
         vecsMultChanAudioSndCrd.Init ( iASIOBufferSizeStereo );
-
-        // create and activate ASIO buffers (buffer size in samples),
-        // dispose old buffers (if any)
-        ASIODisposeBuffers();
-
-        // prepare input channels
-        for ( int i = 0; i < lNumInChan; i++ )
-        {
-            bufferInfos[i].isInput    = ASIOTrue;
-            bufferInfos[i].channelNum = i;
-            bufferInfos[i].buffers[0] = 0;
-            bufferInfos[i].buffers[1] = 0;
-        }
-
-        // prepare output channels
-        for ( int i = 0; i < lNumOutChan; i++ )
-        {
-            bufferInfos[lNumInChan + i].isInput    = ASIOFalse;
-            bufferInfos[lNumInChan + i].channelNum = i;
-            bufferInfos[lNumInChan + i].buffers[0] = 0;
-            bufferInfos[lNumInChan + i].buffers[1] = 0;
-        }
-
-        ASIOCreateBuffers ( bufferInfos, lNumInChan + lNumOutChan, iASIOBufferSizeMono, &asioCallbacks );
-
-        // query the latency of the driver
-        long lInputLatency  = 0;
-        long lOutputLatency = 0;
-
-        if ( ASIOGetLatencies ( &lInputLatency, &lOutputLatency ) != ASE_NotPresent )
-        {
-            // add the input and output latencies (returned in number of
-            // samples) and calculate the time in ms
-            fInOutLatencyMs = ( static_cast<float> ( lInputLatency ) + lOutputLatency ) * 1000 / SYSTEM_SAMPLE_RATE_HZ;
-        }
-        else
-        {
-            // no latency available
-            fInOutLatencyMs = 0.0f;
-        }
-
-        // check whether the driver requires the ASIOOutputReady() optimization
-        // (can be used by the driver to reduce output latency by one block)
-        bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
     }
     ASIOMutex.unlock();
+
+    // create and activate ASIO buffers (buffer size in samples),
+    // dispose old buffers (if any)
+    ASIODisposeBuffers();
+
+    // prepare input channels
+    for ( int i = 0; i < lNumInChan; i++ )
+    {
+        bufferInfos[i].isInput    = ASIOTrue;
+        bufferInfos[i].channelNum = i;
+        bufferInfos[i].buffers[0] = 0;
+        bufferInfos[i].buffers[1] = 0;
+    }
+
+    // prepare output channels
+    for ( int i = 0; i < lNumOutChan; i++ )
+    {
+        bufferInfos[lNumInChan + i].isInput    = ASIOFalse;
+        bufferInfos[lNumInChan + i].channelNum = i;
+        bufferInfos[lNumInChan + i].buffers[0] = 0;
+        bufferInfos[lNumInChan + i].buffers[1] = 0;
+    }
+
+    ASIOCreateBuffers ( bufferInfos, lNumInChan + lNumOutChan, iASIOBufferSizeMono, &asioCallbacks );
+
+    // query the latency of the driver
+    long lInputLatency  = 0;
+    long lOutputLatency = 0;
+
+    if ( ASIOGetLatencies ( &lInputLatency, &lOutputLatency ) != ASE_NotPresent )
+    {
+        // add the input and output latencies (returned in number of
+        // samples) and calculate the time in ms
+        fInOutLatencyMs = ( static_cast<float> ( lInputLatency ) + lOutputLatency ) * 1000 / SYSTEM_SAMPLE_RATE_HZ;
+    }
+    else
+    {
+        // no latency available
+        fInOutLatencyMs = 0.0f;
+    }
+
+    // check whether the driver requires the ASIOOutputReady() optimization
+    // (can be used by the driver to reduce output latency by one block)
+    bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
 
     return iASIOBufferSizeMono;
 }

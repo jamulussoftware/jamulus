@@ -691,6 +691,14 @@ QStringList CSound::GetMIDIDevNames()
 
 void CSound::bufferSwitch ( long index, ASIOBool )
 {
+    // if we are not running, ignore any stray callback (e.g. from ASIO4ALL's
+    // emulation thread during Init()/teardown) so that it cannot block on
+    // ASIOMutex which is owned by the re-init thread (see issue #3779)
+    if ( !pSound->bRun )
+    {
+        return;
+    }
+
     int iCurSample;
 
     // get references to class members

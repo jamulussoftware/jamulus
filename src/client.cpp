@@ -743,6 +743,8 @@ void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
 
 QString CClient::SetSndCrdDev ( const QString strNewDev )
 {
+    QString strError = "";
+
     // if client was running then first
     // stop it and restart again after new initialization
     const bool bWasRunning = Sound.IsRunning();
@@ -751,16 +753,25 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
         Sound.Stop();
     }
 
-    const QString strError = Sound.SetDev ( strNewDev );
-
-    // init again because the sound card actual buffer size might
-    // be changed on new device
-    Init();
-
-    if ( bWasRunning )
+    // Jamulus sound drivers for different platforms may throw CGenErr exception
+    // on error condition. Catch it here as exceptions must not escape from a Qt slot.
+    try
     {
-        // restart client
-        Sound.Start();
+        strError = Sound.SetDev ( strNewDev );
+
+        // init again because the sound card actual buffer size might
+        // be changed on new device
+        Init();
+
+        if ( bWasRunning )
+        {
+            // restart client
+            Sound.Start();
+        }
+    }
+    catch ( const CGenErr& generr )
+    {
+        strError = generr.GetErrorText();
     }
 
     // in case of an error inform the GUI about it
@@ -859,6 +870,10 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
     // audio device notifications can come at any time and they are in a
     // different thread, therefore we need a mutex here
     QMutexLocker locker ( &MutexDriverReinit );
+
+    // Jamulus sound drivers for different platforms may throw CGenErr exception
+    // on error condition. Catch it here as exceptions must not escape from a Qt slot.
+    try
     {
         // in older QT versions, enums cannot easily be used in signals without
         // registering them -> workaroud: we use the int type and cast to the enum
@@ -892,6 +907,10 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
             // restart client
             Sound.Start();
         }
+    }
+    catch ( const CGenErr& generr )
+    {
+        strError = generr.GetErrorText();
     }
 
     // inform GUI about the sound card device change

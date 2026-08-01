@@ -748,6 +748,8 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
         Sound.Stop();
     }
 
+    // Jamulus sound drivers for different platforms may throw CGenErr exception
+    // on error condition. Catch it here as exceptions must not escape from a Qt slot.
     try
     {
         strError = Sound.SetDev ( strNewDev );
@@ -863,6 +865,9 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
     // audio device notifications can come at any time and they are in a
     // different thread, therefore we need a mutex here
     QMutexLocker locker ( &MutexDriverReinit );
+
+    // Jamulus sound drivers for different platforms may throw CGenErr exception
+    // on error condition. Catch it here as exceptions must not escape from a Qt slot.
     try
     {
         // in older QT versions, enums cannot easily be used in signals without

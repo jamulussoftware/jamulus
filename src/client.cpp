@@ -169,7 +169,7 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLRedServerListReceived, this, &CClient::CLRedServerListReceived );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLTcpSupportedReceived, this, &CClient::OnCLTcpSupportedReceived );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLTcpOfferedReceived, this, &CClient::OnCLTcpOfferedReceived );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived, this, &CClient::OnCLConnClientsListMesReceived );
 
@@ -1166,10 +1166,10 @@ void CClient::OnClientIDReceived ( int iServerChanID )
         ClearClientChannels();
     }
 
-    // if TCP Supported has already been received, make TCP connection to server
+    // if TCP Offered has already been received, make TCP connection to server
     iClientID = iServerChanID; // for sending back to server over TCP
 
-    if ( bTcpSupported )
+    if ( bTcpOffered )
     {
         // *** Make TCP connection
         qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
@@ -1211,9 +1211,9 @@ void CClient::OnRawAudioSupported()
     }
 }
 
-void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32 token )
+void CClient::OnCLTcpOfferedReceived ( CHostAddress InetAddr, int iID, quint32 token )
 {
-    qDebug() << "- TCP supported at server" << InetAddr.toString() << "for ID =" << iID;
+    qDebug() << "- TCP Offered by server" << InetAddr.toString() << "for ID =" << iID;
 
     switch ( iID )
     {
@@ -1230,7 +1230,7 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32
             }
             else
             {
-                qWarning() << "Ignoring unexpected CLM_TCP_SUPPORTED for server list from" << InetAddr.toString();
+                qWarning() << "Ignoring unexpected CLM_TCP_OFFERED for server list from" << InetAddr.toString();
             }
         }
         break;
@@ -1247,7 +1247,7 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32
             }
             else
             {
-                qWarning() << "Ignoring unexpected CLM_TCP_SUPPORTED for client list from" << InetAddr.toString();
+                qWarning() << "Ignoring unexpected CLM_TCP_OFFERED for client list from" << InetAddr.toString();
             }
         }
         break;
@@ -1255,11 +1255,11 @@ void CClient::OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32
         // check that this message came from the server we are connected to - drop if not
         if ( InetAddr != Channel.GetAddress() )
         {
-            qWarning() << "Ignoring unexpected CLM_TCP_SUPPORTED for client ID from" << InetAddr.toString();
+            qWarning() << "Ignoring unexpected CLM_TCP_OFFERED for client ID from" << InetAddr.toString();
             break;
         }
 
-        bTcpSupported = true;
+        bTcpOffered   = true;
         iChannelToken = token; // store the token given to us by the server
 
         // if client ID already received, make TCP connection to server
@@ -1327,8 +1327,8 @@ void CClient::Start()
     Init();
 
     // clear TCP info
-    iClientID     = INVALID_INDEX;
-    bTcpSupported = false;
+    iClientID   = INVALID_INDEX;
+    bTcpOffered = false;
 
     // initialise client channels
     ClearClientChannels();

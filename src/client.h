@@ -454,16 +454,16 @@ protected:
 
     // for TCP protocol support
 
-    bool    bTcpSupported;
+    bool    bTcpOffered;
     int     iClientID;
     quint32 iChannelToken; // given by the server for authenticating TCP connection
 
-    // UDP/TCP mode for fetching client list - stored in a hash keyed by CHostAddress
+    // UDP/TCP mode for fetching server or client list - stored in a hash keyed by CHostAddress
     enum EFetchMode
     {
         CFM_UDP_REQUEST, // set when sending request by UDP
         CFM_UDP_RESULT,  // set when received a client list by UDP
-        CFM_TCP_REQUEST, // set when "TCP Supported" message arrives but client list has not arrived - re-request using TCP and remain in TCP mode
+        CFM_TCP_REQUEST, // set when "TCP Offered" message arrives but requested list has not arrived - re-request using TCP and remain in TCP mode
         CFM_TCP_RESULT   // set when requested message received by TCP
     };
 
@@ -489,7 +489,7 @@ protected slots:
         }
     }
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
-    void OnCLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32 token );
+    void OnCLTcpOfferedReceived ( CHostAddress InetAddr, int iID, quint32 token );
 
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
 
@@ -529,7 +529,7 @@ signals:
 
     void CLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
 
-    void CLTcpSupportedReceived ( CHostAddress InetAddr, int iID );
+    void CLTcpOfferedReceived ( CHostAddress InetAddr, int iID );
 
     void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
 

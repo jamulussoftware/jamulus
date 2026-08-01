@@ -111,7 +111,7 @@
 #define PROTMESSID_CLM_REQ_SERVER_FEATURES    1020 // request server features
 #define PROTMESSID_CLM_WELCOME_MESSAGE        1021 // server welcome message
 #define PROTMESSID_CLM_REQ_WELCOME_MESSAGE    1022 // request server welcome message
-#define PROTMESSID_CLM_TCP_SUPPORTED          1023 // TCP is supported
+#define PROTMESSID_CLM_TCP_OFFERED            1023 // TCP offered to the client
 #define PROTMESSID_CLM_CLIENT_ID              1024 // Client ID associated with TCP connection
 
 // special IDs
@@ -194,7 +194,7 @@ public:
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
     void CreateCLServerFeaturesMes ( const CHostAddress& InetAddr, const uint32_t iResult );
     void CreateCLWelcomeMessageMes ( const CHostAddress& InetAddr, const QString strWelcomeMessage );
-    void CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const int iID, const quint32 token = 0 );
+    void CreateCLTcpOfferedMes ( const CHostAddress& InetAddr, const int iID, const quint32 token = 0 );
     void CreateCLClientIDMes ( const CHostAddress& InetAddr, const int iChanID, const quint32 token, enum EProtoMode eProtoMode );
 
     static int GetBodyLength ( const CVector<uint8_t>& vecbyData );
@@ -334,7 +334,7 @@ protected:
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerFeaturesMes ( const CHostAddress& InetAddr );
     bool EvaluateCLReqWelcomeMessageMes ( const CHostAddress& InetAddr );
-    bool EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
+    bool EvaluateCLTcpOfferedMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLClientIDMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData, CTcpConnection* pTcpConnection );
 
     int iOldRecID;
@@ -405,6 +405,6 @@ signals:
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
     void CLReqServerFeatures ( CHostAddress InetAddr );
     void CLReqWelcomeMessage ( CHostAddress InetAddr );
-    void CLTcpSupportedReceived ( CHostAddress InetAddr, int iID, quint32 token );
+    void CLTcpOfferedReceived ( CHostAddress InetAddr, int iID, quint32 token );
     void CLClientIDReceived ( CHostAddress InetAddr, int iChanID, quint32 token, CTcpConnection* pTcpConnection );
 };

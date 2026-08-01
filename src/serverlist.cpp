@@ -753,11 +753,12 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr, CTcpConnect
         }
         pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo, pTcpConnection );
 
-        // if TCP is enabled but this request is on UDP, say TCP is supported
+        // if TCP is enabled but this request is on UDP, offer TCP to the client;
+        // client will only take up the offer if it has failed to receive the list over UDP
         if ( !pTcpConnection && ( ( pServer->IsTCPv4Available() && InetAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol ) ||
                                   ( pServer->IsTCPv6Available() && InetAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol ) ) )
         {
-            pConnLessProtocol->CreateCLTcpSupportedMes ( InetAddr, PROTMESSID_CLM_SERVER_LIST );
+            pConnLessProtocol->CreateCLTcpOfferedMes ( InetAddr, PROTMESSID_CLM_SERVER_LIST );
         }
     }
 }

@@ -409,13 +409,13 @@ void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAd
 {
     QMutexLocker locker ( &Mutex );
 
-    // if TCP is enabled, we need to announce this first, before sending Client ID
+    // if TCP is available, we need to offer it first, before sending Client ID
     if ( ( bTCPv4Available && RecHostAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol ) ||
          ( bTCPv6Available && RecHostAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
     {
         quint32 token = vecChannels[iChID].GetChannelToken(); // random token that the client must auth with
 
-        ConnLessProtocol.CreateCLTcpSupportedMes ( RecHostAddr, PROTMESSID_CLM_CLIENT_ID, token );
+        ConnLessProtocol.CreateCLTcpOfferedMes ( RecHostAddr, PROTMESSID_CLM_CLIENT_ID, token );
     }
 
     // inform the client about its own ID at the server (note that this

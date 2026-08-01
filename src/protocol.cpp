@@ -491,7 +491,7 @@ CONNECTION LESS MESSAGES
 
 
 
-- PROTMESSID_CLM_TCP_SUPPORTED: TCP supported message
+- PROTMESSID_CLM_TCP_OFFERED: TCP offered to client if it needs it
 
     +-------------------------------------------------------+--------------------------------+
     | 2 bytes ID of message to be potentially sent over TCP | 4 bytes channel token for auth |
@@ -1017,8 +1017,8 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
         EvaluateCLReqWelcomeMessageMes ( InetAddr );
         break;
 
-    case PROTMESSID_CLM_TCP_SUPPORTED:
-        EvaluateCLTcpSupportedMes ( InetAddr, vecbyMesBodyData );
+    case PROTMESSID_CLM_TCP_OFFERED:
+        EvaluateCLTcpOfferedMes ( InetAddr, vecbyMesBodyData );
         break;
 
     case PROTMESSID_CLM_CLIENT_ID:
@@ -2744,7 +2744,7 @@ void CProtocol::CreateCLWelcomeMessageMes ( const CHostAddress& InetAddr, const 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_WELCOME_MESSAGE, vecData, InetAddr );
 }
 
-void CProtocol::CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const int iID, const quint32 token )
+void CProtocol::CreateCLTcpOfferedMes ( const CHostAddress& InetAddr, const int iID, const quint32 token )
 {
     int iPos = 0; // init position pointer
 
@@ -2757,10 +2757,10 @@ void CProtocol::CreateCLTcpSupportedMes ( const CHostAddress& InetAddr, const in
     // token (4 bytes) - only used when message ID is CLM_CLIENT_ID
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( token ), 4 );
 
-    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_TCP_SUPPORTED, vecData, InetAddr );
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_TCP_OFFERED, vecData, InetAddr );
 }
 
-bool CProtocol::EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateCLTcpOfferedMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData )
 {
     int iPos = 0; // init position pointer
 
@@ -2775,7 +2775,7 @@ bool CProtocol::EvaluateCLTcpSupportedMes ( const CHostAddress& InetAddr, const 
     const quint32 token = static_cast<quint32> ( GetValFromStream ( vecData, iPos, 4 ) );
 
     // invoke message action
-    emit CLTcpSupportedReceived ( InetAddr, iId, token );
+    emit CLTcpOfferedReceived ( InetAddr, iId, token );
 
     return false; // no error
 }

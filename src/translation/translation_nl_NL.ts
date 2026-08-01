@@ -1787,10 +1787,6 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Ieder Genre 2</translation>
     </message>
     <message>
-        <source>Any Genre 3</source>
-        <translation type="vanished">Ieder Genre 3</translation>
-    </message>
-    <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
         <translation>Ieder Genre Azië</translation>

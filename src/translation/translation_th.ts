@@ -2234,7 +2234,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../util.h" line="594"/>
-        <source>Any Genre 3</source>
+        <source>Any Genre Asia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

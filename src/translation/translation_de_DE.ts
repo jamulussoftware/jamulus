@@ -1787,10 +1787,6 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <translation>Alle Genres 2</translation>
     </message>
     <message>
-        <source>Any Genre 3</source>
-        <translation type="vanished">Alle Genres 3</translation>
-    </message>
-    <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
         <translation type="unfinished"></translation>

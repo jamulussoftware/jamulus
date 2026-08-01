@@ -234,8 +234,8 @@ public slots:
         case 19: // PROTMESSID_CLM_SERVER_LIST
             vecServerInfo[0].bPermanentOnline = static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
             vecServerInfo[0].eCountry         = static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
-            vecServerInfo[0].HostAddr         = CurHostAddress;
-            vecServerInfo[0].LHostAddr        = CurLocalAddress;
+            vecServerInfo[0].HostAddr4        = CurHostAddress;
+            vecServerInfo[0].LHostAddr4       = CurLocalAddress;
             vecServerInfo[0].iMaxNumClients   = GenRandomIntInRange ( -2, 10000 );
             vecServerInfo[0].strCity          = GenRandomString();
             vecServerInfo[0].strName          = GenRandomString();

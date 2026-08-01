@@ -137,14 +137,14 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
                   for ( const auto& serverInfo : vecServerInfo )
                   {
                       QJsonObject objServerInfo{
-                          { "address", serverInfo.HostAddr.toString() },
+                          { "address", serverInfo.HostAddr4.toString() },
                           { "name", serverInfo.strName },
                           { "countryId", serverInfo.eCountry },
                           { "country", QLocale::countryToString ( serverInfo.eCountry ) },
                           { "city", serverInfo.strCity },
                       };
                       arrServerInfo.append ( objServerInfo );
-                      pClient->CreateCLServerListPingMes ( serverInfo.HostAddr );
+                      pClient->CreateCLServerListPingMes ( serverInfo.HostAddr4 );
                   }
                   pRpcServer->BroadcastNotification ( "jamulusclient/serverListReceived",
                                                       QJsonObject{

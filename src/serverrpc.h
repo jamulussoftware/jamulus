@@ -74,7 +74,7 @@ private:
     const static std::unordered_map<ESvrRegStatus, std::string>  sumSvrRegStatusToString;
 #endif
 
-    QJsonValue     SerializeDirectoryType ( EDirectoryType eAddrType );
-    EDirectoryType DeserializeDirectoryType ( std::string sAddrType );
-    QJsonValue     SerializeRegistrationStatus ( ESvrRegStatus eSvrRegStatus );
+    QJsonValue SerializeDirectoryType ( EDirectoryType eAddrType );
+    bool       DeserializeDirectoryType ( const std::string& sAddrType, EDirectoryType& eAddrType );
+    QJsonValue SerializeRegistrationStatus ( ESvrRegStatus eSvrRegStatus );
 };

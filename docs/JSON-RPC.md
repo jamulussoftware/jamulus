@@ -507,14 +507,14 @@ Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params.directoryType | string | The directory type as a string (see EDirectoryType and DeserializeDirectoryType). |
+| params.directoryType | string | The directory type as a string. One of: none, any_genre_1, any_genre_2, any_genre_asia, genre_rock, genre_jazz, genre_classical_folk, genre_choral_barbershop, custom. The value is matched exactly: it is case-sensitive and is not trimmed. An unrecognised value is rejected. |
 | [params.directoryAddress] | string | (optional) The directory address, required if `directoryType` is "custom". |
 
 Results:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| result | string | Always "ok". |
+| result | string | "ok" on success. An unrecognised `directoryType` returns error -32602 and leaves the directory setting unchanged. |
 
 
 ### jamulusserver/setRecordingDirectory

@@ -358,7 +358,7 @@ void CConnectDlg::RequestServerList()
     if ( NetworkUtil::ParseNetworkAddress (
              NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
              haDirectoryAddress,
-             false ) )
+             pClient->IsIPv6Available() ) )
     {
         // send the request for the server list
         emit ReqServerListQuery ( haDirectoryAddress );
@@ -457,7 +457,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
 
         if ( iIdx > 0 )
         {
-            CurHostAddress = vecServerInfo[iIdx].HostAddr;
+            CurHostAddress = vecServerInfo[iIdx].HostAddr4;
         }
         else
         {
@@ -485,7 +485,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
             // IP address and port (use IP number without last byte)
             // Definition: If the port number is the default port number, we do
             // not show it.
-            if ( vecServerInfo[iIdx].HostAddr.iPort == DEFAULT_PORT_NUMBER )
+            if ( vecServerInfo[iIdx].HostAddr4.iPort == DEFAULT_PORT_NUMBER )
             {
                 // only show IP number, no port number
                 pNewListViewItem->setText ( LVC_NAME, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );

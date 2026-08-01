@@ -398,11 +398,12 @@ public slots:
     {
         ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList(), pTcpConnection );
 
-        // if TCP is enabled but this request is on UDP, say TCP is supported
+        // if TCP is enabled but this request is on UDP, offer TCP to the client;
+        // client will only take up the offer if it has failed to receive the list over UDP
         if ( !pTcpConnection && ( ( bTCPv4Available && InetAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol ) ||
                                   ( bTCPv6Available && InetAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol ) ) )
         {
-            ConnLessProtocol.CreateCLTcpSupportedMes ( InetAddr, PROTMESSID_CLM_CONN_CLIENTS_LIST );
+            ConnLessProtocol.CreateCLTcpOfferedMes ( InetAddr, PROTMESSID_CLM_CONN_CLIENTS_LIST );
         }
     }
 

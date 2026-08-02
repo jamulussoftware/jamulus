@@ -46,6 +46,54 @@
 
 #include "util.h"
 
+namespace
+{
+QString MapVersionStrForCompare ( const QString& versionStr )
+{
+    QString key;
+    QString x = ">"; // default suffix is later (git, dev, nightly, etc)
+
+    // Regex for SemVer: major.minor.patch-suffix
+    QRegularExpression      semVerRegex ( R"(^(\d+)\.(\d+)\.(\d+)-?(.*):?(.*)$)" );
+    QRegularExpressionMatch match = semVerRegex.match ( versionStr );
+
+    if ( !match.hasMatch() )
+    {
+        return versionStr; // fallback: plain text
+    }
+
+    int     major  = match.captured ( 1 ).toInt();
+    int     minor  = match.captured ( 2 ).toInt();
+    int     patch  = match.captured ( 3 ).toInt();
+    QString suffix = match.captured ( 4 ); // may be empty
+    QString tstamp = match.captured ( 5 ); // may be empty
+
+    if ( suffix.isEmpty() )
+    {
+        x = "="; // bare version number
+    }
+    else if ( suffix.startsWith ( "rc" ) || suffix.startsWith ( "beta" ) || suffix.startsWith ( "alpha" ) )
+    {
+        x = "<"; // pre-release version
+    }
+
+    // construct a sortable key mmmnnnpppksuffix, where:
+    //    mmm = major
+    //    nnn = minor
+    //    ppp = patch
+    //    k = sort key to sort alpha, beta, rc before bare version number, and other suffixes after (<, =, >)
+    //    suffix = supplied suffix
+    key = QString ( "%1%2%3%4%5" )
+              .arg ( major, 3, 10, QLatin1Char ( '0' ) )
+              .arg ( minor, 3, 10, QLatin1Char ( '0' ) )
+              .arg ( patch, 3, 10, QLatin1Char ( '0' ) )
+              .arg ( x )
+              .arg ( tstamp.isEmpty() ? suffix : tstamp );
+
+    return key;
+}
+}
+
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
 void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio, const int iMonoBlockSizeSam, const bool bIsStereoIn )
@@ -1701,4 +1749,12 @@ QString TruncateString ( QString str, int position )
         position = tbfString.position();
     }
     return str.left ( position );
+}
+
+int CompareVersionStrings ( const QString& lhsVersion, const QString& rhsVersion )
+{
+    const QString lhsMapped = MapVersionStrForCompare ( lhsVersion );
+    const QString rhsMapped = MapVersionStrForCompare ( rhsVersion );
+
+    return lhsMapped.compare ( rhsMapped );
 }

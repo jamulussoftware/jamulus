@@ -139,6 +139,7 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes, c
 QString GetVersionAndNameStr ( const bool bDisplayInGui = true );
 QString MakeClientNameTitle ( QString win, QString client );
 QString TruncateString ( QString str, int position );
+int     CompareVersionStrings ( const QString& lhsVersion, const QString& rhsVersion );
 
 /******************************************************************************\
 * CVector Base Class                                                           *

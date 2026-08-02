@@ -689,14 +689,7 @@ void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType
 {
     // update check
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
-    int            mySuffixIndex;
-    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
-
-    int            serverSuffixIndex;
-    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
-
-    // only compare if the server version has no suffix (such as dev or beta)
-    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
+    if ( CompareVersionStrings ( strVersion, VERSION ) > 0 )
     {
         lblUpdateCheck->show();
     }

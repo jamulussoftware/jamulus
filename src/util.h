@@ -1223,6 +1223,13 @@ public:
             return powf ( 10.0f, ( fInValueRange0_1 - 1.0f ) * AUD_MIX_FADER_RANGE_DB / 20.0f );
         }
     }
+
+    // Returns true if value is in [lower, upper) (inclusive lower, exclusive upper).
+    template<typename T>
+    static inline bool InRange ( T value, T lower /* inclusive */, T upper /* exclusive */ )
+    {
+        return value >= lower && value < upper;
+    }
 };
 
 /******************************************************************************\

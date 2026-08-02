@@ -1349,9 +1349,12 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
 
         for ( size_t iFader = 0; iFader < iNumConnectedClients; iFader++ )
         {
-            // ideally "iChanID" in CChannelInfo would be size_t if it can never be INVALID_INDEX
-            // as assumed here
-            iFaderNumber[vecChanInfo[iFader].iChanID] = static_cast<int> ( iFader );
+            const int iChanID = vecChanInfo[iFader].iChanID;
+
+            if ( MathUtils::InRange<int> ( iChanID, 0, MAX_NUM_CHANNELS ) )
+            {
+                iFaderNumber[iChanID] = static_cast<int> ( iFader );
+            }
         }
 
         // Hide all unused faders and initialize used ones

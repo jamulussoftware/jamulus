@@ -50,6 +50,7 @@
 #include <QThread>
 #include <QMutex>
 #include <vector>
+#include <atomic>
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
@@ -106,7 +107,7 @@ protected:
 
     bool bIsClient;
 
-    bool bJitterBufferOK;
+    std::atomic<bool> bJitterBufferOK;
 
     bool bEnableIPv6;
 

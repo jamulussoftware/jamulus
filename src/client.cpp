@@ -631,14 +631,12 @@ bool CClient::GetAndResetbJitterBufferOKFlag()
     // get the socket buffer put status flag and reset it
     const bool bSocketJitBufOKFlag = Socket.GetAndResetbJitterBufferOKFlag();
 
-    if ( !bJitterBufferOK )
+    // atomically read our own get status flag and reset it to OK
+    if ( !bJitterBufferOK.exchange ( true ) )
     {
         // our jitter buffer get status is not OK so the overall status of the
         // jitter buffer is also not OK (we do not have to consider the status
         // of the socket buffer put status flag)
-
-        // reset flag before returning the function
-        bJitterBufferOK = true;
         return false;
     }
 

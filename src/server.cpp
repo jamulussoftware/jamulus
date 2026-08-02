@@ -944,9 +944,9 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
 
                 FreeChannel ( iCurChanID ); // note that the channel is now not in use
 
-                // note that no mutex is needed for this shared resource since it is not a
-                // read-modify-write operation but an atomic write and also each thread can
-                // only set it to true and never to false
+                // note that no mutex is needed for this shared resource since it is a
+                // std::atomic write (not a read-modify-write operation) and also each
+                // thread can only set it to true and never to false
                 bChannelIsNowDisconnected = true;
 
                 // since the channel is no longer in use, we should return

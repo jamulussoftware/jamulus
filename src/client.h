@@ -388,8 +388,8 @@ protected:
     EAudChanConf           eAudioChannelConf;
     int                    iNumAudioChannels;
     bool                   bIsInitializationPhase;
-    bool                   bMuteOutStream;
-    float                  fMuteOutStreamGain;
+    std::atomic<bool>      bMuteOutStream;
+    std::atomic<float>     fMuteOutStreamGain;
     CVector<unsigned char> vecCeltData;
 
     CHighPrioSocket         Socket;
@@ -398,11 +398,11 @@ protected:
 
     CVector<uint8_t> vecbyNetwData;
 
-    int          iAudioInFader;
-    bool         bReverbOnLeftChan;
-    int          iReverbLevel;
-    CAudioReverb AudioReverb;
-    int          iInputBoost;
+    std::atomic<int>  iAudioInFader;
+    std::atomic<bool> bReverbOnLeftChan;
+    std::atomic<int>  iReverbLevel;
+    CAudioReverb      AudioReverb;
+    std::atomic<int>  iInputBoost;
 
     int iSndCrdPrefFrameSizeFactor;
     int iSndCrdFrameSizeFactor;

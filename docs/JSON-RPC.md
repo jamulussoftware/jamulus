@@ -188,6 +188,23 @@ Results:
 | result.clients | array | The client list. See jamulusclient/clientListReceived for the format. |
 
 
+### jamulusclient/getCurrentDirectory
+
+Returns the currently selected directory socket address.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | The socket address of the current directory, usable as params.directory in jamulusclient/pollServerList. |
+
+
 ### jamulusclient/getMidiDevices
 
 Returns a list of available MIDI input devices.

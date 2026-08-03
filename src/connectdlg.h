@@ -127,6 +127,9 @@ protected:
     void                   EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void                   UpdateDirectoryComboBox();
 
+    bool                   eventFilter ( QObject* obj, QEvent* event ) override;
+    CMappedTreeWidgetItem* savedServer;
+
     CClientSettings* pSettings;
 
     QTimer       TimerPing;
@@ -145,7 +148,6 @@ protected:
 
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
-    void OnServerAddrEditTextChanged ( const QString& );
     void OnDirectoryChanged ( int iTypeIdx );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }

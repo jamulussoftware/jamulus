@@ -689,9 +689,16 @@ void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType
 {
     // update check
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
-    if ( CompareVersionStrings ( strVersion, VERSION ) > 0 )
+    // Ignore non-release remote versions when deciding whether to notify.
+    if ( IsReleaseVersion ( strVersion ) )
     {
-        lblUpdateCheck->show();
+        const QString mappedServerVersion  = MapVersionStrForCompare ( strVersion );
+        const QString mappedCurrentVersion = MapVersionStrForCompare ( VERSION );
+
+        if ( mappedServerVersion.compare ( mappedCurrentVersion ) > 0 )
+        {
+            lblUpdateCheck->show();
+        }
     }
 #endif
 }

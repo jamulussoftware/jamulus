@@ -73,7 +73,7 @@ bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
     if ( !lhs.isValid() || !rhs.isValid() )
         return QTreeWidgetItem::operator<( other );
 
-    return CompareVersionStrings ( lhs.toString(), rhs.toString() ) < 0;
+    return lhs.toString() < rhs.toString();
 }
 
 CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent ) :
@@ -1031,8 +1031,8 @@ void CConnectDlg::SetServerVersionResult ( const CHostAddress& InetAddr, const Q
     {
         pCurListViewItem->setText ( LVC_VERSION, GetDisplayVersion ( strVersion ) );
 
-        // and store original version string for semver-aware sorting
-        pCurListViewItem->setData ( LVC_VERSION, Qt::UserRole, strVersion );
+        // and store sortable mapped version number
+        pCurListViewItem->setData ( LVC_VERSION, Qt::UserRole, MapVersionStrForCompare ( strVersion ) );
 
         if ( pCurListViewItem == lvwServers->currentItem() )
         {

@@ -48,14 +48,28 @@
 
 namespace
 {
+const QRegularExpression& GetSemVerRegex()
+{
+    static const QRegularExpression semVerRegex ( R"(^(\d+)\.(\d+)\.(\d+)-?(.*):?(.*)$)" );
+    return semVerRegex;
+}
+} // namespace
+
+// Only bare x.y.z versions should trigger update notifications.
+bool IsReleaseVersion ( const QString& version )
+{
+    const QRegularExpressionMatch match = GetSemVerRegex().match ( version );
+
+    return match.hasMatch() && match.captured ( 4 ).isEmpty() && match.captured ( 5 ).isEmpty();
+}
+
 QString MapVersionStrForCompare ( const QString& versionStr )
 {
     QString key;
     QString x = ">"; // default suffix is later (git, dev, nightly, etc)
 
     // Regex for SemVer: major.minor.patch-suffix
-    QRegularExpression      semVerRegex ( R"(^(\d+)\.(\d+)\.(\d+)-?(.*):?(.*)$)" );
-    QRegularExpressionMatch match = semVerRegex.match ( versionStr );
+    QRegularExpressionMatch match = GetSemVerRegex().match ( versionStr );
 
     if ( !match.hasMatch() )
     {
@@ -91,7 +105,6 @@ QString MapVersionStrForCompare ( const QString& versionStr )
               .arg ( tstamp.isEmpty() ? suffix : tstamp );
 
     return key;
-}
 }
 
 /* Implementation *************************************************************/
@@ -1749,12 +1762,4 @@ QString TruncateString ( QString str, int position )
         position = tbfString.position();
     }
     return str.left ( position );
-}
-
-int CompareVersionStrings ( const QString& lhsVersion, const QString& rhsVersion )
-{
-    const QString lhsMapped = MapVersionStrForCompare ( lhsVersion );
-    const QString rhsMapped = MapVersionStrForCompare ( rhsVersion );
-
-    return lhsMapped.compare ( rhsMapped );
 }

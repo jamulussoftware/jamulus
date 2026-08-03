@@ -855,11 +855,18 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpS
     {
         // update check
 #if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
-        if ( CompareVersionStrings ( strVersion, VERSION ) > 0 )
+        // Ignore non-release remote versions when deciding whether to notify.
+        if ( IsReleaseVersion ( strVersion ) )
         {
-            // show the label and hide it after one minute again
-            lblUpdateCheck->show();
-            QTimer::singleShot ( 60000, this, [this]() { lblUpdateCheck->hide(); } );
+            const QString mappedServerVersion  = MapVersionStrForCompare ( strVersion );
+            const QString mappedCurrentVersion = MapVersionStrForCompare ( VERSION );
+
+            if ( mappedServerVersion.compare ( mappedCurrentVersion ) > 0 )
+            {
+                // show the label and hide it after one minute again
+                lblUpdateCheck->show();
+                QTimer::singleShot ( 60000, this, [this]() { lblUpdateCheck->hide(); } );
+            }
         }
 #endif
     }

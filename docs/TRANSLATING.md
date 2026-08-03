@@ -334,7 +334,7 @@ To add a new translation to the Installer (while undertaking the above steps wit
 
 Start translating the new language using Hosted Weblate or Git (as described in the first section of this guide). If you plan to work on the translation for a longer period, please contact the administrators to be invited to the Jamulus organisation as well as translators channel on Discord or Matrix.
 
-Since every contributor can and should be added to the in-app contributor list, please remind us to add you to the `src/utils.h` file as translator or open a pull request yourself.
+Since every contributor can and should be added to the in-app contributor list, please remind us to add you to the translators list in `src/util.cpp` (in `CAboutDlg::CAboutDlg()`) or open a pull request yourself.
 
 ---
 

@@ -147,7 +147,6 @@ protected:
 
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
-    void OnServerAddrEditTextChanged ( const QString& );
     void OnDirectoryChanged ( int iTypeIdx );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }

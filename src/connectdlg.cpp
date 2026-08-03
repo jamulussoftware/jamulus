@@ -279,8 +279,6 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool 
     QObject::connect ( edtFilter, &QLineEdit::textEdited, this, &CConnectDlg::OnFilterTextEdited );
 
     // combo boxes
-    QObject::connect ( cbxServerAddr, &QComboBox::editTextChanged, this, &CConnectDlg::OnServerAddrEditTextChanged );
-
     QObject::connect ( cbxDirectory, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CConnectDlg::OnDirectoryChanged );
 
     // check boxes
@@ -662,13 +660,6 @@ void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int )
     {
         OnConnectClicked();
     }
-}
-
-void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
-{
-    // in the server address combo box, a text was changed, remove selection
-    // in the server list (if any)
-    lvwServers->clearSelection();
 }
 
 void CConnectDlg::OnCustomDirectoriesChanged()

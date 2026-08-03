@@ -205,6 +205,9 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool 
     cbxServerAddr->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
     cbxServerAddr->setInsertPolicy ( QComboBox::NoInsert );
 
+    // install event filter to catch FocusIn
+    cbxServerAddr->installEventFilter ( this );
+
     // set up list view for connected clients (note that the last column size
     // must not be specified since this column takes all the remaining space)
 #ifdef ANDROID
@@ -1194,4 +1197,15 @@ void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWi
     }
     QAccessible::updateAccessibility ( new QAccessibleAnnouncementEvent ( lvwServers, announcement ) );
 #endif
+}
+
+bool CConnectDlg::eventFilter ( QObject* obj, QEvent* event )
+{
+    if ( obj == cbxServerAddr && event->type() == QEvent::FocusIn )
+    {
+        // remove selection in the server list (if any)
+        lvwServers->clearSelection();
+    }
+
+    return QDialog::eventFilter ( obj, event );
 }

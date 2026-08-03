@@ -49,6 +49,7 @@
 #include <QThread>
 #include <QDateTime>
 #include <QFile>
+#include <atomic>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
@@ -231,14 +232,14 @@ protected:
     // network protocol
     CProtocol Protocol;
 
-    int iConTimeOut;
-    int iConTimeOutStartVal;
-    int iFadeInCnt;
-    int iFadeInCntMax;
+    std::atomic<int> iConTimeOut;
+    int              iConTimeOutStartVal;
+    int              iFadeInCnt;
+    int              iFadeInCntMax;
 
-    bool bIsEnabled;
-    bool bIsServer;
-    bool bIsIdentified;
+    std::atomic<bool> bIsEnabled;
+    bool              bIsServer;
+    bool              bIsIdentified;
 
     int iNetwFrameSizeFact;
     int iNetwFrameSize;

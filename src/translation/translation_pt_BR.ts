@@ -1791,10 +1791,6 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation>Gênero Variado 2</translation>
     </message>
     <message>
-        <source>Any Genre 3</source>
-        <translation type="vanished">Gênero Variado 3</translation>
-    </message>
-    <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
         <translation type="unfinished"></translation>

@@ -2567,7 +2567,7 @@ void CProtocol::CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, cons
     CVector<uint8_t> vecData ( iNumBytes );
     int              iPos = 0; // init position pointer
 
-    for ( int i = 0, j = 0; i < iNumClients; i += 2 /* pack two per byte */, j++ )
+    for ( int i = 0; i < iNumClients; i += 2 /* pack two per byte */ )
     {
         uint16_t levelLo = vecLevelList[i] & 0x0F;
         uint16_t levelHi = ( i + 1 < iNumClients ) ? vecLevelList[i + 1] & 0x0F : 0x0F;

@@ -39,7 +39,7 @@ Please see the [.clang_format file](https://github.com/jamulussoftware/jamulus/b
 
 - Insert a space before and after `(` and `)`. There should be no space between `)` and `;` or before an empty `()`.
 - Enclose all bodies of `if`, `else`, `while`, `for`, etc. in braces `{` and `}` on separate lines.
-- Do not use concatinations in strings with parameters. Instead use substitutions. **Do:** `QString ( tr ( "Hello, %1. Have a nice day!" ) ).arg( getName() )` **Don't:** `tr ( "Hello " ) + getName() + tr ( ". Have a nice day!" )` ...to make translation easier.
+- Do not use concatenations in strings with parameters. Instead use substitutions. **Do:** `QString ( tr ( "Hello, %1. Have a nice day!" ) ).arg( getName() )` **Don't:** `tr ( "Hello " ) + getName() + tr ( ". Have a nice day!" )` ...to make translation easier.
 
 #### Python
 Please install and use [pylint](https://pylint.org/) to scan any Python code.

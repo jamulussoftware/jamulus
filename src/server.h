@@ -51,6 +51,7 @@
 #include <QHostAddress>
 #include <QFileInfo>
 #include <algorithm>
+#include <atomic>
 #ifdef USE_OPUS_SHARED_LIB
 #    include "opus/opus_custom.h"
 #else
@@ -240,10 +241,7 @@ protected:
     int                        iMaxNumThreads;
     CVector<std::future<void>> Futures;
 
-    bool CreateLevelsForAllConChannels ( const int                       iNumClients,
-                                         const CVector<int>&             vecNumAudioChannels,
-                                         const CVector<CVector<int16_t>> vecvecsData,
-                                         CVector<uint16_t>&              vecLevelsOut );
+    bool CreateLevelsForAllConChannels ( const int iNumClients );
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -254,10 +252,10 @@ protected:
     int    vecChannelOrder[MAX_NUM_CHANNELS];
     QMutex MutexChanOrder;
 
-    CProtocol ConnLessProtocol;
-    QMutex    Mutex;
-    QMutex    MutexWelcomeMessage;
-    bool      bChannelIsNowDisconnected;
+    CProtocol         ConnLessProtocol;
+    QMutex            Mutex;
+    QMutex            MutexWelcomeMessage;
+    std::atomic<bool> bChannelIsNowDisconnected;
 
     // audio encoder/decoder
     OpusCustomMode*    Opus64Mode[MAX_NUM_CHANNELS];

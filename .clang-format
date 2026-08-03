@@ -1,5 +1,6 @@
 ---
-# Style for Clang-Format version 10
+# Style for Clang-Format
+# See the appropriate version web page for a description of the options, for example
 # https://releases.llvm.org/10.0.0/tools/clang/docs/ClangFormatStyleOptions.html
 BasedOnStyle: LLVM
 AccessModifierOffset: -4

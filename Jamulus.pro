@@ -1,4 +1,4 @@
-VERSION = 3.12.2dev
+VERSION = 3.12.3dev
 
 # Using lrelease and embed_translations only works for Qt 5.12 or later.
 # See https://github.com/jamulussoftware/jamulus/pull/3288 for these changes.
@@ -1174,6 +1174,9 @@ contains(CONFIG, "opus_shared_lib") {
         }
     }
 }
+
+# Always enable auto vectorization
+QMAKE_CXXFLAGS+=-ftree-vectorize
 
 # disable version check if requested (#370)
 contains(CONFIG, "disable_version_check") {

@@ -120,7 +120,7 @@ protected:
 
     CMappedTreeWidgetItem* FindListViewItem ( const CHostAddress& InetAddr );
     CMappedTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
-    void                   DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
+    void                   DeleteAllListViewItemChildren ( QTreeWidgetItem* pItem );
     void                   UpdateListFilter();
     void                   ShowAllMusicians ( const bool bState );
     void                   RequestServerList();

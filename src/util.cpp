@@ -1369,6 +1369,10 @@ QLocale::Country CLocale::WireFormatCountryCodeToQtCountry ( unsigned short iCou
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
     // The Jamulus protocol wire format gives us Qt5 country IDs.
     // Qt6 changed those IDs, so we have to convert back:
+    if ( iCountryCode >= qt6CountryToWireFormatLen )
+    {
+        return QLocale::AnyCountry;
+    }
     return (QLocale::Country) wireFormatToQt6Table[iCountryCode];
 #else
     return (QLocale::Country) iCountryCode;
@@ -1380,7 +1384,13 @@ unsigned short CLocale::QtCountryToWireFormatCountryCode ( const QLocale::Countr
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
     // The Jamulus protocol wire format expects Qt5 country IDs.
     // Qt6 changed those IDs, so we have to convert back:
-    return qt6CountryToWireFormat[(unsigned short) eCountry];
+    const unsigned short iIdx = static_cast<unsigned short> ( eCountry );
+
+    if ( iIdx >= qt6CountryToWireFormatLen )
+    {
+        return 0;
+    }
+    return qt6CountryToWireFormat[iIdx];
 #else
     return (unsigned short) eCountry;
 #endif

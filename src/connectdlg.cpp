@@ -318,6 +318,9 @@ void CConnectDlg::showEvent ( QShowEvent* )
 
 void CConnectDlg::RequestServerList()
 {
+    // ensure ping timer is stopped
+    TimerPing.stop();
+
     // reset flags
     bServerListReceived        = false;
     bReducedServerListReceived = false;
@@ -560,10 +563,14 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
         }
     }
 
+    // only if the ping timer is not already running (avoids double ping):
     // immediately issue the ping measurements and start the ping timer since
     // the server list is filled now
-    OnTimerPing();
-    TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
+    if ( !TimerPing.isActive() )
+    {
+        OnTimerPing();
+        TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
+    }
 }
 
 void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo )

@@ -386,41 +386,6 @@ void CSocket::Init ( const quint16  iNewPortNumber,
     }
 }
 
-void CSocket::Close()
-{
-    if ( UdpSocket4 != INVALID_SOCKET )
-    {
-#ifdef _WIN32
-        // closesocket will cause recvfrom to return with an error because the
-        // socket is closed -> then the thread can safely be shut down
-        closesocket ( UdpSocket4 );
-#elif defined( __APPLE__ ) || defined( __MACOSX )
-        // on Mac the general close has the same effect as closesocket on Windows
-        close ( UdpSocket4 );
-#else
-        // on Linux the shutdown call cancels the recvfrom
-        shutdown ( UdpSocket4, SHUT_RDWR );
-#endif
-        UdpSocket4 = INVALID_SOCKET;
-    }
-
-    if ( UdpSocket6 != INVALID_SOCKET )
-    {
-#ifdef _WIN32
-        // closesocket will cause recvfrom to return with an error because the
-        // socket is closed -> then the thread can safely be shut down
-        closesocket ( UdpSocket6 );
-#elif defined( __APPLE__ ) || defined( __MACOSX )
-        // on Mac the general close has the same effect as closesocket on Windows
-        close ( UdpSocket6 );
-#else
-        // on Linux the shutdown call cancels the recvfrom
-        shutdown ( UdpSocket6, SHUT_RDWR );
-#endif
-        UdpSocket6 = INVALID_SOCKET;
-    }
-}
-
 CSocket::~CSocket()
 {
     // cleanup the socket (on Windows the WSA cleanup must also be called)
@@ -518,20 +483,13 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
 bool CSocket::GetAndResetbJitterBufferOKFlag()
 {
-    // check jitter buffer status
-    if ( !bJitterBufferOK )
-    {
-        // reset flag and return "not OK" status
-        bJitterBufferOK = true;
-        return false;
-    }
-
-    // the buffer was OK, we do not have to reset anything and just return the
-    // OK status
-    return true;
+    // atomically read the jitter buffer status and reset it to OK so that a
+    // "not OK" set by the socket thread between a separate read and reset
+    // cannot be lost
+    return bJitterBufferOK.exchange ( true );
 }
 
-void CSocket::OnDataReceived()
+void CSocket::OnDataReceived ( std::atomic<bool>& bRun )
 {
     /*
        The strategy of this function is that only the "put audio" function is
@@ -585,7 +543,7 @@ void CSocket::OnDataReceived()
             sockaddr_in sa4;
             socklen_t   sa4len = sizeof ( sa4 );
 
-            while ( true )
+            while ( bRun )
             {
                 const long iNumBytesRead =
                     recvfrom ( UdpSocket4, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa4, &sa4len );
@@ -634,7 +592,7 @@ void CSocket::OnDataReceived()
             sockaddr_in6 sa6;
             socklen_t    sa6len = sizeof ( sa6 );
 
-            while ( true )
+            while ( bRun )
             {
                 const long iNumBytesRead =
                     recvfrom ( UdpSocket6, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa6, &sa6len );

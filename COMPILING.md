@@ -34,7 +34,7 @@ On Debian 11+ you can install the dependencies by issuing the following command:
 - qt5-qtbase
 - jack-audio-connection-kit-devel
 - qt5-linguist
-- qt5-qtmultimedia
+- qt5-qtmultimedia-devel
 
 ### For all desktop distributions
 

@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -26,10 +48,14 @@
 #include "server.h"
 
 #ifdef _WIN32
-#    include <winsock2.h>
-#    include <ws2tcpip.h>
+// Winsock versions of pollfd and poll are named differently, but work the same
+#    define pollfd WSAPOLLFD
+#    define poll   WSAPoll
+typedef int socklen_t;
 #else
-#    include <arpa/inet.h>
+// include Unix-style support for non-blocking and poll()
+#    include <fcntl.h>
+#    include <poll.h>
 #endif
 
 /* Implementation *************************************************************/
@@ -40,13 +66,33 @@
 
 // we have different connections for client and server, created after Init in corresponding constructor
 
-CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
+CSocket::CSocket ( CChannel*      pNewChannel,
+                   const quint16  iPortNumber,
+                   const quint16  iQosNumber,
+                   const QString& strServerBindIP4,
+                   const QString& strServerBindIP6,
+                   const bool     bDisableIPv6,
+                   bool&          bIPv6Available ) :
     pChannel ( pNewChannel ),
     bIsClient ( true ),
     bJitterBufferOK ( true ),
-    bEnableIPv6 ( bEnableIPv6 )
+    bIPv6Available ( bIPv6Available )
 {
-    Init ( iPortNumber, iQosNumber, strServerBindIP );
+#ifdef _WIN32
+    // for the Windows socket usage we have to start it up first
+
+    //### TODO: BEGIN ###//
+    // check for error and exit application on error
+    //### TODO: END ###//
+
+    WSADATA wsa;
+    WSAStartup ( MAKEWORD ( 1, 0 ), &wsa );
+#endif
+
+    UdpSocket4 = INVALID_SOCKET;
+    UdpSocket6 = INVALID_SOCKET;
+
+    Init ( iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6 );
 
     // client connections:
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pChannel, &CChannel::OnProtocolMessageReceived );
@@ -56,13 +102,33 @@ CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint
     QObject::connect ( this, static_cast<void ( CSocket::* )()> ( &CSocket::NewConnection ), pChannel, &CChannel::OnNewConnection );
 }
 
-CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
+CSocket::CSocket ( CServer*       pNServP,
+                   const quint16  iPortNumber,
+                   const quint16  iQosNumber,
+                   const QString& strServerBindIP4,
+                   const QString& strServerBindIP6,
+                   const bool     bDisableIPv6,
+                   bool&          bIPv6Available ) :
     pServer ( pNServP ),
     bIsClient ( false ),
     bJitterBufferOK ( true ),
-    bEnableIPv6 ( bEnableIPv6 )
+    bIPv6Available ( bIPv6Available )
 {
-    Init ( iPortNumber, iQosNumber, strServerBindIP );
+#ifdef _WIN32
+    // for the Windows socket usage we have to start it up first
+
+    //### TODO: BEGIN ###//
+    // check for error and exit application on error
+    //### TODO: END ###//
+
+    WSADATA wsa;
+    WSAStartup ( MAKEWORD ( 1, 0 ), &wsa );
+#endif
+
+    UdpSocket4 = INVALID_SOCKET;
+    UdpSocket6 = INVALID_SOCKET;
+
+    Init ( iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6 );
 
     // server connections:
     QObject::connect ( this, &CSocket::ProtocolMessageReceived, pServer, &CServer::OnProtocolMessageReceived );
@@ -77,86 +143,54 @@ CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQ
     QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
 }
 
-void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, const QString& strNewServerBindIP )
+void CSocket::Init ( const quint16  iNewPortNumber,
+                     const quint16  iNewQosNumber,
+                     const QString& strNewServerBindIP,
+                     const QString& strNewServerBindIP6,
+                     const bool     bDisableIPv6 )
 {
-    uSockAddr UdpSocketAddr;
+    const bool bDisableIPv4 = false; // for future use
 
-    int       UdpSocketAddrLen;
-    uint16_t* UdpPort;
+    // first, close sockets if they are open - in case of re-init
+    if ( UdpSocket4 != INVALID_SOCKET )
+    {
+#ifdef _WIN32
+        closesocket ( UdpSocket4 );
+#else
+        close ( UdpSocket4 );
+#endif
+        UdpSocket4 = INVALID_SOCKET;
+    }
+
+    if ( UdpSocket6 != INVALID_SOCKET )
+    {
+#ifdef _WIN32
+        closesocket ( UdpSocket6 );
+#else
+        close ( UdpSocket6 );
+#endif
+        UdpSocket6 = INVALID_SOCKET;
+    }
+
+    struct sockaddr_in sa4;
+    socklen_t          sa4len = sizeof ( sa4 );
+    memset ( &sa4, 0, sa4len );
+
+    struct sockaddr_in6 sa6;
+    socklen_t           sa6len = sizeof ( sa6 );
+    memset ( &sa6, 0, sa6len );
 
     // first store parameters, in case reinit is required (mostly for iOS)
-    iPortNumber     = iNewPortNumber;
-    iQosNumber      = iNewQosNumber;
-    strServerBindIP = strNewServerBindIP;
+    iPortNumber      = iNewPortNumber;
+    iQosNumber       = iNewQosNumber;
+    strServerBindIP4 = strNewServerBindIP;
+    strServerBindIP6 = strNewServerBindIP6;
 
-#ifdef _WIN32
-    // for the Windows socket usage we have to start it up first
-
-    //### TODO: BEGIN ###//
-    // check for error and exit application on error
-    //### TODO: END ###//
-
-    WSADATA wsa;
-    WSAStartup ( MAKEWORD ( 1, 0 ), &wsa );
-#endif
-
-    memset ( &UdpSocketAddr, 0, sizeof ( UdpSocketAddr ) );
-
-    if ( bEnableIPv6 )
-    {
-        // try to create a IPv6 UDP socket
-        UdpSocket = socket ( AF_INET6, SOCK_DGRAM, 0 );
-        if ( UdpSocket == -1 )
-        {
-            // IPv6 requested but not available, throw error
-            throw CGenErr ( "IPv6 requested but not available on this system.", "Network Error" );
-        }
-
-        // The IPV6_V6ONLY socket option must be false in order for the socket to listen on both protocols.
-        // On Linux it's false by default on most (all?) distros, but on Windows it is true by default
-        const int no = 0;
-        if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*) &no, sizeof ( no ) ) == -1 )
-        {
-            throw CGenErr ( "request to support IPv4 over IPv6 failed", "Network Error" );
-        }
-
-        // set the QoS
-        const int tos = (int) iQosNumber; // Quality of Service
-#if !defined( Q_OS_WIN )
-        if ( setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) ) == -1 )
-        {
-            throw CGenErr ( "request to set ToS for IPv6 failed", "Network Error" );
-        }
-#endif
-
-#if !defined( Q_OS_DARWIN ) && !defined( Q_OS_WIN )
-        // set the QoS for IPv4 as well, as this is a dual-protocol socket
-        if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
-        {
-            throw CGenErr ( "request to set ToS for IPv4 over IPv6 failed", "Network Error" );
-        }
-#endif
-
-        UdpSocketAddr.sa6.sin6_family = AF_INET6;
-        UdpSocketAddr.sa6.sin6_addr   = in6addr_any;
-        UdpSocketAddrLen              = sizeof ( UdpSocketAddr.sa6 );
-
-        UdpPort = &UdpSocketAddr.sa6.sin6_port; // where to put the port number
-
-        // FIXME: If binding a dual-protocol interface to a specific address, does it cease to be dual-protocol?
-
-        // TODO - ALLOW IPV6 ADDRESS
-        // if ( !strServerBindIP.isEmpty() )
-        //{
-        //    UdpSocketInAddr.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP ).toIPv4Address() );
-        //}
-        // END TODO - ALLOW IPV6 ADDRESS
-    }
-    else
+    if ( !bDisableIPv4 )
     {
         // create the UDP socket for IPv4
-        UdpSocket = socket ( AF_INET, SOCK_DGRAM, 0 );
-        if ( UdpSocket == -1 )
+        UdpSocket4 = socket ( AF_INET, SOCK_DGRAM, 0 );
+        if ( UdpSocket4 == INVALID_SOCKET )
         {
             // IPv4 requested but not available, throw error (should never happen, but check anyway)
             throw CGenErr ( "IPv4 requested but not available on this system.", "Network Error" );
@@ -165,30 +199,120 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 #if !defined( Q_OS_WIN )
         // set the QoS
         const int tos = (int) iQosNumber; // Quality of Service
-        if ( setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
+        if ( setsockopt ( UdpSocket4, IPPROTO_IP, IP_TOS, (const char*) &tos, sizeof ( tos ) ) == -1 )
         {
             throw CGenErr ( "request to set ToS for IPv4 failed", "Network Error" );
         }
 #endif
 
         // preinitialize socket in address (only the port number is missing)
-        UdpSocketAddr.sa4.sin_family      = AF_INET;
-        UdpSocketAddr.sa4.sin_addr.s_addr = INADDR_ANY;
-        UdpSocketAddrLen                  = sizeof ( UdpSocketAddr.sa4 );
+#ifdef Q_OS_BSD4
+        sa4.sin_len = sa4len;
+#endif
+        sa4.sin_family      = AF_INET;
+        sa4.sin_addr.s_addr = INADDR_ANY;
 
-        UdpPort = &UdpSocketAddr.sa4.sin_port; // where to put the port number
-
-        if ( !strServerBindIP.isEmpty() )
+        if ( !strServerBindIP4.isEmpty() )
         {
-            UdpSocketAddr.sa4.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP ).toIPv4Address() );
+            QHostAddress qtAddr ( strServerBindIP4 );
+            if ( qtAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            {
+                sa4.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP4 ).toIPv4Address() );
+            }
+            else
+            {
+                throw CGenErr ( "Invalid IPv4 address given for bind", "Network Error" );
+            }
         }
-    }
+
+        // set socket to non-blocking
+#ifdef _WIN32
+        unsigned long mode = 1;
+        ioctlsocket ( UdpSocket4, FIONBIO, &mode ); // TODO check for error
+#else
+        int flags = fcntl ( UdpSocket4, F_GETFL, 0 );
+        if ( flags != -1 )
+        {
+            fcntl ( UdpSocket4, F_SETFL, flags | O_NONBLOCK ); // TODO check for error
+        }
+#endif
 
 #ifdef Q_OS_IOS
-    // ignore the broken pipe signal to avoid crash (iOS)
-    int valueone = 1;
-    setsockopt ( UdpSocket, SOL_SOCKET, SO_NOSIGPIPE, &valueone, sizeof ( valueone ) );
+        // ignore the broken pipe signal to avoid crash (iOS)
+        int valueone = 1;
+        setsockopt ( UdpSocket4, SOL_SOCKET, SO_NOSIGPIPE, &valueone, sizeof ( valueone ) );
 #endif
+
+        qInfo() << "IPv4 socket created";
+    }
+
+    if ( !bDisableIPv6 )
+    {
+        // try to create a IPv6 UDP socket
+        UdpSocket6 = socket ( AF_INET6, SOCK_DGRAM, 0 );
+        if ( UdpSocket6 != INVALID_SOCKET )
+        {
+            // The IPV6_V6ONLY socket option must be true in order for the socket to listen on just IPv6 protocol.
+            // On Linux it's false by default on most (all?) distros, but on Windows it is true by default
+            const int yes = 1;
+            if ( setsockopt ( UdpSocket6, IPPROTO_IPV6, IPV6_V6ONLY, (const char*) &yes, sizeof ( yes ) ) == -1 )
+            {
+                throw CGenErr ( "request to set IPv6-only failed", "Network Error" );
+            }
+
+            // set the QoS
+            const int tos = (int) iQosNumber; // Quality of Service
+#if !defined( Q_OS_WIN )
+            if ( setsockopt ( UdpSocket6, IPPROTO_IPV6, IPV6_TCLASS, (const char*) &tos, sizeof ( tos ) ) == -1 )
+            {
+                throw CGenErr ( "request to set ToS for IPv6 failed", "Network Error" );
+            }
+#endif
+
+#ifdef Q_OS_BSD4
+            sa6.sin6_len = sa6len;
+#endif
+            sa6.sin6_family = AF_INET6;
+            sa6.sin6_addr   = in6addr_any;
+
+            if ( !strServerBindIP6.isEmpty() )
+            {
+                QHostAddress qtAddr ( strServerBindIP6 );
+                if ( qtAddr.protocol() == QAbstractSocket::IPv6Protocol )
+                {
+                    Q_IPV6ADDR ip6 = qtAddr.toIPv6Address();
+                    memcpy ( &sa6.sin6_addr.s6_addr, ip6.c, sizeof ( sa6.sin6_addr.s6_addr ) );
+                    sa6.sin6_scope_id = qtAddr.scopeId().toUInt();
+                }
+                else
+                {
+                    throw CGenErr ( "Invalid IPv6 address given for bind", "Network Error" );
+                }
+            }
+
+            bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
+
+            // set socket to non-blocking
+#ifdef _WIN32
+            unsigned long mode = 1;
+            ioctlsocket ( UdpSocket6, FIONBIO, &mode ); // TODO check for error
+#else
+            int flags = fcntl ( UdpSocket6, F_GETFL, 0 );
+            if ( flags != -1 )
+            {
+                fcntl ( UdpSocket6, F_SETFL, flags | O_NONBLOCK ); // TODO check for error
+            }
+#endif
+
+#ifdef Q_OS_IOS
+            // ignore the broken pipe signal to avoid crash (iOS)
+            int valueone = 1;
+            setsockopt ( UdpSocket6, SOL_SOCKET, SO_NOSIGPIPE, &valueone, sizeof ( valueone ) );
+#endif
+
+            qInfo() << "IPv6 socket created";
+        }
+    }
 
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
@@ -201,9 +325,14 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         if ( iPortNumber == 0 )
         {
             // if port number is 0, bind the client to a random available port
-            *UdpPort = htons ( 0 );
+            sa4.sin_port = sa6.sin6_port = htons ( 0 );
 
-            bSuccess = ( ::bind ( UdpSocket, &UdpSocketAddr.sa, UdpSocketAddrLen ) == 0 );
+            bSuccess = ( ::bind ( UdpSocket4, (struct sockaddr*) &sa4, sa4len ) == 0 );
+
+            if ( UdpSocket6 != INVALID_SOCKET )
+            {
+                bSuccess = bSuccess && ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) == 0 );
+            }
         }
         else
         {
@@ -219,9 +348,14 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
 
             while ( !bSuccess && ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
             {
-                *UdpPort = htons ( startingPortNumber + iClientPortIncrement );
+                sa4.sin_port = sa6.sin6_port = htons ( startingPortNumber + iClientPortIncrement );
 
-                bSuccess = ( ::bind ( UdpSocket, &UdpSocketAddr.sa, UdpSocketAddrLen ) == 0 );
+                bSuccess = ( ::bind ( UdpSocket4, (struct sockaddr*) &sa4, sa4len ) == 0 );
+
+                if ( UdpSocket6 != INVALID_SOCKET )
+                {
+                    bSuccess = bSuccess && ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) == 0 );
+                }
 
                 iClientPortIncrement++;
             }
@@ -232,9 +366,15 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
         // for the server, only try the given port number and do not try out
         // other port numbers to bind since it is important that the server
         // gets the desired port number
-        *UdpPort = htons ( iPortNumber );
 
-        bSuccess = ( ::bind ( UdpSocket, &UdpSocketAddr.sa, UdpSocketAddrLen ) == 0 );
+        sa4.sin_port = sa6.sin6_port = htons ( iPortNumber );
+
+        bSuccess = ( ::bind ( UdpSocket4, (struct sockaddr*) &sa4, sa4len ) == 0 );
+
+        if ( UdpSocket6 != INVALID_SOCKET )
+        {
+            bSuccess = bSuccess && ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) == 0 );
+        }
     }
 
     if ( !bSuccess )
@@ -246,84 +386,25 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
     }
 }
 
-void CSocket::Close()
-{
-#ifdef _WIN32
-    // closesocket will cause recvfrom to return with an error because the
-    // socket is closed -> then the thread can safely be shut down
-    closesocket ( UdpSocket );
-#elif defined( __APPLE__ ) || defined( __MACOSX )
-    // on Mac the general close has the same effect as closesocket on Windows
-    close ( UdpSocket );
-#else
-    // on Linux the shutdown call cancels the recvfrom
-    shutdown ( UdpSocket, SHUT_RDWR );
-#endif
-}
-
 CSocket::~CSocket()
 {
     // cleanup the socket (on Windows the WSA cleanup must also be called)
 #ifdef _WIN32
-    closesocket ( UdpSocket );
+    if ( UdpSocket4 != INVALID_SOCKET )
+        closesocket ( UdpSocket4 );
+    if ( UdpSocket6 != INVALID_SOCKET )
+        closesocket ( UdpSocket6 );
     WSACleanup();
 #else
-    close ( UdpSocket );
+    if ( UdpSocket4 != INVALID_SOCKET )
+        close ( UdpSocket4 );
+    if ( UdpSocket6 != INVALID_SOCKET )
+        close ( UdpSocket6 );
 #endif
 }
-
-#if defined( Q_OS_DARWIN )
-// sendto_ipv4_with_tos - helper function for macOS to set TOS when sending IPv4 over IPv6 socket
-static ssize_t sendto_ipv4_with_tos ( int fd, const void* buf, size_t len, int flags, const struct sockaddr* dest, socklen_t destlen, int tos )
-{
-    // For a description of 'struct cmsghdr' and the 'CMSG_xxx' macros, see 'man 3 cmsg' on a Linux machine.
-    // The macOS man pages are less descriptive, but the API is the same, being based on the BSD socket interface.
-
-    // The cmsg buffer is only set up once (tos doesn't change) so can be static
-    static union
-    {
-        unsigned char  cbuf[CMSG_SPACE ( sizeof ( int ) )];
-        struct cmsghdr h;
-    } u;
-    static socklen_t clen = 0;
-
-    if ( clen == 0 )
-    {
-        // set up the cmsg buffer
-        memset ( u.cbuf, 0, sizeof ( u.cbuf ) );
-
-        u.h.cmsg_level = IPPROTO_IP;
-        u.h.cmsg_type  = IP_TOS;
-        u.h.cmsg_len   = CMSG_LEN ( sizeof ( int ) );
-        memcpy ( CMSG_DATA ( &u.h ), &tos, sizeof ( int ) );
-        clen = (socklen_t) u.h.cmsg_len;
-    }
-
-    struct iovec iov;
-    iov.iov_base = const_cast<void*> ( buf );
-    iov.iov_len  = len;
-
-    struct msghdr msg;
-
-    msg.msg_name       = const_cast<sockaddr*> ( dest );
-    msg.msg_namelen    = destlen;
-    msg.msg_iov        = &iov;
-    msg.msg_iovlen     = 1;
-    msg.msg_control    = (void*) u.cbuf;
-    msg.msg_controllen = clen;
-
-    return sendmsg ( fd, &msg, flags );
-}
-#endif
 
 void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddress& HostAddr )
 {
-    int status = 0;
-
-    uSockAddr UdpSocketAddr;
-
-    memset ( &UdpSocketAddr, 0, sizeof ( UdpSocketAddr ) );
-
     QMutexLocker locker ( &Mutex );
 
     const int iVecSizeOut = vecbySendBuf.Size();
@@ -337,68 +418,52 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
         for ( int tries = 0; tries < 2; tries++ ) // retry loop in case send fails on iOS
         {
+            int status = -1;
+
             if ( HostAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
             {
-                if ( bEnableIPv6 )
+                if ( UdpSocket4 != INVALID_SOCKET )
                 {
-                    // Linux and Mac allow to pass an AF_INET address to a dual-stack socket,
-                    // but Windows does not. So use a V4MAPPED address in an AF_INET6 sockaddr,
-                    // which works on all platforms.
-
-                    UdpSocketAddr.sa6.sin6_family = AF_INET6;
-                    UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
-
-                    uint32_t* addr = (uint32_t*) &UdpSocketAddr.sa6.sin6_addr;
-
-                    addr[0] = 0;
-                    addr[1] = 0;
-                    addr[2] = htonl ( 0xFFFF );
-                    addr[3] = htonl ( HostAddr.InetAddr.toIPv4Address() );
-
-#if defined( Q_OS_DARWIN )
-                    // In macOS we need to set TOS explicitly when sending IPv4 over IPv6 socket
-                    status = sendto_ipv4_with_tos ( UdpSocket,
-                                                    (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                                                    iVecSizeOut,
-                                                    0,
-                                                    &UdpSocketAddr.sa,
-                                                    sizeof ( UdpSocketAddr.sa6 ),
-                                                    (int) iQosNumber );
-#else
-                    status = sendto ( UdpSocket,
-                                      (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                                      iVecSizeOut,
-                                      0,
-                                      &UdpSocketAddr.sa,
-                                      sizeof ( UdpSocketAddr.sa6 ) );
+                    struct sockaddr_in sa4;
+                    memset ( &sa4, 0, sizeof ( sa4 ) );
+#ifdef Q_OS_BSD4
+                    sa4.sin_len = sizeof ( sa4 );
 #endif
-                }
-                else
-                {
-                    UdpSocketAddr.sa4.sin_family      = AF_INET;
-                    UdpSocketAddr.sa4.sin_port        = htons ( HostAddr.iPort );
-                    UdpSocketAddr.sa4.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
+                    sa4.sin_family      = AF_INET;
+                    sa4.sin_port        = htons ( HostAddr.iPort );
+                    sa4.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
 
-                    status = sendto ( UdpSocket,
+                    status = sendto ( UdpSocket4,
                                       (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
                                       iVecSizeOut,
                                       0,
-                                      &UdpSocketAddr.sa,
-                                      sizeof ( UdpSocketAddr.sa4 ) );
+                                      (struct sockaddr*) &sa4,
+                                      sizeof ( sa4 ) );
                 }
             }
-            else if ( bEnableIPv6 )
+            else if ( HostAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
             {
-                UdpSocketAddr.sa6.sin6_family = AF_INET6;
-                UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
-                inet_pton ( AF_INET6, HostAddr.InetAddr.toString().toLocal8Bit().constData(), &UdpSocketAddr.sa6.sin6_addr );
+                if ( UdpSocket6 != INVALID_SOCKET )
+                {
+                    struct sockaddr_in6 sa6;
+                    memset ( &sa6, 0, sizeof ( sa6 ) );
+#ifdef Q_OS_BSD4
+                    sa6.sin6_len = sizeof ( sa6 );
+#endif
+                    sa6.sin6_family = AF_INET6;
+                    sa6.sin6_port   = htons ( HostAddr.iPort );
 
-                status = sendto ( UdpSocket,
-                                  (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                                  iVecSizeOut,
-                                  0,
-                                  &UdpSocketAddr.sa,
-                                  sizeof ( UdpSocketAddr.sa6 ) );
+                    Q_IPV6ADDR ip6 = HostAddr.InetAddr.toIPv6Address();
+                    memcpy ( &sa6.sin6_addr.s6_addr, ip6.c, sizeof ( sa6.sin6_addr.s6_addr ) );
+                    sa6.sin6_scope_id = HostAddr.InetAddr.scopeId().toUInt();
+
+                    status = sendto ( UdpSocket6,
+                                      (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                                      iVecSizeOut,
+                                      0,
+                                      (struct sockaddr*) &sa6,
+                                      sizeof ( sa6 ) );
+                }
             }
 
             if ( status >= 0 )
@@ -408,7 +473,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
 #ifdef Q_OS_IOS
             // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
-            Init ( iPortNumber, iQosNumber, strServerBindIP ); // reinit
+            Init ( iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, !bIPv6Available ); // reinit
 
             // loop back to retry
 #endif
@@ -418,67 +483,158 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
 
 bool CSocket::GetAndResetbJitterBufferOKFlag()
 {
-    // check jitter buffer status
-    if ( !bJitterBufferOK )
-    {
-        // reset flag and return "not OK" status
-        bJitterBufferOK = true;
-        return false;
-    }
-
-    // the buffer was OK, we do not have to reset anything and just return the
-    // OK status
-    return true;
+    // atomically read the jitter buffer status and reset it to OK so that a
+    // "not OK" set by the socket thread between a separate read and reset
+    // cannot be lost
+    return bJitterBufferOK.exchange ( true );
 }
 
-void CSocket::OnDataReceived()
+void CSocket::OnDataReceived ( std::atomic<bool>& bRun )
 {
     /*
-        The strategy of this function is that only the "put audio" function is
-        called directly (i.e. the high thread priority is used) and all other less
-        important things like protocol parsing and acting on protocol messages is
-        done in the low priority thread. To get a thread transition, we have to
-        use the signal/slot mechanism (i.e. we use messages for that).
-    */
+       The strategy of this function is that only the "put audio" function is
+       called directly (i.e. the high thread priority is used) and all other less
+       important things like protocol parsing and acting on protocol messages is
+       done in the low priority thread. To get a thread transition, we have to
+       use the signal/slot mechanism (i.e. we use messages for that).
+     */
 
     CHostAddress RecHostAddr;
 
-    // read block from network interface and query address of sender
-    uSockAddr UdpSocketAddr;
-#ifdef _WIN32
-    int SenderAddrSize = sizeof ( UdpSocketAddr );
-#else
-    socklen_t SenderAddrSize = sizeof ( UdpSocketAddr );
-#endif
-
-    const long iNumBytesRead = recvfrom ( UdpSocket, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, &UdpSocketAddr.sa, &SenderAddrSize );
-
-    // check if an error occurred or no data could be read
-    if ( iNumBytesRead <= 0 )
+    // first, poll to wait until data is available
+    int    numfds = 0;
+    pollfd fds[2];
+    if ( UdpSocket4 != INVALID_SOCKET )
     {
+        fds[numfds].fd      = UdpSocket4;
+        fds[numfds].events  = POLLIN; // wait for ready to read
+        fds[numfds].revents = 0;      // clear returned events
+        numfds++;
+    }
+    if ( UdpSocket6 != INVALID_SOCKET )
+    {
+        fds[numfds].fd      = UdpSocket6;
+        fds[numfds].events  = POLLIN; // wait for ready to read
+        fds[numfds].revents = 0;      // clear returned events
+        numfds++;
+    }
+
+    // wait for data ready with 100ms timeout
+    int pollResult = poll ( fds, numfds, 100 );
+    if ( pollResult < 0 )
+    {
+        qDebug() << "Error returned from poll()";
         return;
     }
 
-    // convert address of client
-    if ( UdpSocketAddr.sa.sa_family == AF_INET6 )
+    if ( pollResult == 0 )
     {
-        if ( IN6_IS_ADDR_V4MAPPED ( &( UdpSocketAddr.sa6.sin6_addr ) ) )
-        {
-            const uint32_t addr = ( (const uint32_t*) ( &( UdpSocketAddr.sa6.sin6_addr ) ) )[3];
-            RecHostAddr.InetAddr.setAddress ( ntohl ( addr ) );
-        }
-        else
-        {
-            RecHostAddr.InetAddr.setAddress ( UdpSocketAddr.sa6.sin6_addr.s6_addr );
-        }
-        RecHostAddr.iPort = ntohs ( UdpSocketAddr.sa6.sin6_port );
-    }
-    else
-    {
-        RecHostAddr.InetAddr.setAddress ( ntohl ( UdpSocketAddr.sa4.sin_addr.s_addr ) );
-        RecHostAddr.iPort = ntohs ( UdpSocketAddr.sa4.sin_port );
+        // timeout with no data
+        return;
     }
 
+    int retfds = 0;
+    // IPv4 socket
+    if ( retfds < numfds && fds[retfds].fd == UdpSocket4 )
+    {
+        if ( fds[retfds].revents & POLLIN )
+        {
+            // read block from network interface and query address of sender
+            sockaddr_in sa4;
+            socklen_t   sa4len = sizeof ( sa4 );
+
+            while ( bRun )
+            {
+                const long iNumBytesRead =
+                    recvfrom ( UdpSocket4, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa4, &sa4len );
+
+                // check if an error occurred or no data could be read
+                if ( iNumBytesRead < 0 )
+                {
+#ifdef _WIN32
+                    int err = WSAGetLastError();
+                    if ( err == WSAEWOULDBLOCK )
+                    {
+                        break;
+                    }
+#else
+                    if ( errno == EAGAIN || errno == EWOULDBLOCK )
+                    {
+                        break;
+                    }
+#endif
+                    qDebug() << "Unexpected error returned by recvfrom()";
+                    break;
+                }
+
+                if ( iNumBytesRead == 0 )
+                {
+                    qDebug() << "Zero bytes returned by recvfrom()";
+                    break;
+                }
+
+                // convert address of client
+                RecHostAddr.InetAddr.setAddress ( ntohl ( sa4.sin_addr.s_addr ) );
+                RecHostAddr.iPort = ntohs ( sa4.sin_port );
+
+                ProcessPacket ( RecHostAddr, iNumBytesRead );
+            }
+        }
+        retfds++;
+    }
+
+    // IPv6 socket
+    if ( retfds < numfds && fds[retfds].fd == UdpSocket6 )
+    {
+        if ( fds[retfds].revents & POLLIN )
+        {
+            // read block from network interface and query address of sender
+            sockaddr_in6 sa6;
+            socklen_t    sa6len = sizeof ( sa6 );
+
+            while ( bRun )
+            {
+                const long iNumBytesRead =
+                    recvfrom ( UdpSocket6, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (struct sockaddr*) &sa6, &sa6len );
+
+                // check if an error occurred or no data could be read
+                if ( iNumBytesRead < 0 )
+                {
+#ifdef _WIN32
+                    int err = WSAGetLastError();
+                    if ( err == WSAEWOULDBLOCK )
+                    {
+                        break;
+                    }
+#else
+                    if ( errno == EAGAIN || errno == EWOULDBLOCK )
+                    {
+                        break;
+                    }
+#endif
+                    qDebug() << "Unexpected error returned by recvfrom()";
+                    break;
+                }
+
+                if ( iNumBytesRead == 0 )
+                {
+                    qDebug() << "Zero bytes returned by recvfrom()";
+                    break;
+                }
+
+                // convert address of client
+                RecHostAddr.InetAddr.setAddress ( sa6.sin6_addr.s6_addr );
+                RecHostAddr.iPort = ntohs ( sa6.sin6_port );
+
+                ProcessPacket ( RecHostAddr, iNumBytesRead );
+            }
+        }
+        retfds++;
+    }
+}
+
+void CSocket::ProcessPacket ( const CHostAddress& RecHostAddr, const int iNumBytesRead )
+{
     // check if this is a protocol message
     int              iRecCounter;
     int              iRecID;

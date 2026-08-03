@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -62,10 +84,10 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
                                            QString strCountry,
                                            QString strNumClients,
                                            bool    isPermanent,
-                                           bool    bEnableIPv6 )
+                                           bool    bIPv6Available )
 {
     CHostAddress haServerHostAddr;
-    NetworkUtil::ParseNetworkAddress ( strHAddr, haServerHostAddr, bEnableIPv6 );
+    NetworkUtil::ParseNetworkAddress ( strHAddr, haServerHostAddr, bIPv6Available );
     if ( CHostAddress() == haServerHostAddr )
     {
         // do not proceed without server host address!
@@ -73,7 +95,7 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
     }
 
     CHostAddress haServerLocalAddr;
-    NetworkUtil::ParseNetworkAddress ( strLHAddr, haServerLocalAddr, bEnableIPv6 );
+    NetworkUtil::ParseNetworkAddress ( strLHAddr, haServerLocalAddr, bIPv6Available );
     if ( haServerLocalAddr.iPort == 0 )
     {
         haServerLocalAddr.iPort = haServerHostAddr.iPort;
@@ -120,17 +142,17 @@ QString CServerListEntry::toCSV()
 }
 
 // --- CServerListManager ---
-CServerListManager::CServerListManager ( const quint16  iNPortNum,
+CServerListManager::CServerListManager ( CServer*       pServer,
+                                         const quint16  iNPortNum,
                                          const QString& sNDirectoryAddress,
                                          const QString& strServerListFileName,
                                          const QString& strServerInfo,
                                          const QString& strServerListFilter,
                                          const QString& strServerPublicIP,
                                          const int      iNumChannels,
-                                         const bool     bNEnableIPv6,
                                          CProtocol*     pNConLProt ) :
+    pServer ( pServer ),
     DirectoryType ( AT_NONE ),
-    bEnableIPv6 ( bNEnableIPv6 ),
     ServerListFileName ( strServerListFileName ),
     strDirectoryAddress ( "" ),
     bIsDirectory ( false ),
@@ -158,7 +180,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     qDebug() << "Using" << qhaServerPublicIP.toString() << "as external IP.";
     ServerPublicIP = CHostAddress ( qhaServerPublicIP, iNPortNum );
 
-    if ( bEnableIPv6 )
+    if ( pServer->IsIPv6Available() )
     {
         // set the server internal address, including internal port number
         QHostAddress qhaServerPublicIP6;
@@ -586,7 +608,7 @@ void CServerListManager::Append ( const CHostAddress&    InetAddr,
             // if the server is not listed, refuse registration and send registration response
             if ( !vWhiteList.contains ( InetAddr.InetAddr ) )
             {
-                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQIREMENTS );
+                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQUIREMENTS );
                 return; // leave function early, i.e., we do not register this server
             }
         }
@@ -807,7 +829,7 @@ bool CServerListManager::Load()
 
         // This uses ParseNetworkAddressBare because it is just parsing ip:host that was saved to the file.
         // Therefore no SRV lookup is appropriate.
-        NetworkUtil::ParseNetworkAddressBare ( slLine[0], haServerHostAddr, bEnableIPv6 );
+        NetworkUtil::ParseNetworkAddressBare ( slLine[0], haServerHostAddr, pServer->IsIPv6Available() );
         int iIdx = IndexOf ( haServerHostAddr );
         if ( iIdx != INVALID_INDEX )
         {
@@ -815,8 +837,14 @@ bool CServerListManager::Load()
             continue;
         }
 
-        serverListEntry =
-            CServerListEntry::parse ( slLine[0], slLine[1], slLine[2], slLine[3], slLine[4], slLine[5], slLine[6].toInt() != 0, bEnableIPv6 );
+        serverListEntry = CServerListEntry::parse ( slLine[0],
+                                                    slLine[1],
+                                                    slLine[2],
+                                                    slLine[3],
+                                                    slLine[4],
+                                                    slLine[5],
+                                                    slLine[6].toInt() != 0,
+                                                    pServer->IsIPv6Available() );
 
         // We expect servers to have addresses...
         if ( ( CHostAddress() == serverListEntry.HostAddr ) )
@@ -892,7 +920,7 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
         SetSvrRegStatus ( ESvrRegStatus::SRS_VERSION_TOO_OLD );
         break;
 
-    case ESvrRegResult::SRR_NOT_FULFILL_REQIREMENTS:
+    case ESvrRegResult::SRR_NOT_FULFILL_REQUIREMENTS:
         SetSvrRegStatus ( ESvrRegStatus::SRS_NOT_FULFILL_REQUIREMENTS );
         break;
 
@@ -1028,7 +1056,7 @@ void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
         return;
     }
 
-    // output regirstation result/update on the console
+    // output registration result/update on the console
     qInfo() << qUtf8Printable ( QString ( "Server Registration Status update: %1" ).arg ( svrRegStatusToString ( eNSvrRegStatus ) ) );
 
     // store the state and inform the GUI about the new status

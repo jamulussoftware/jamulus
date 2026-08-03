@@ -39,7 +39,7 @@ Please see the [.clang_format file](https://github.com/jamulussoftware/jamulus/b
 
 - Insert a space before and after `(` and `)`. There should be no space between `)` and `;` or before an empty `()`.
 - Enclose all bodies of `if`, `else`, `while`, `for`, etc. in braces `{` and `}` on separate lines.
-- Do not use concatinations in strings with parameters. Instead use substitutions. **Do:** `QString ( tr ( "Hello, %1. Have a nice day!" ) ).arg( getName() )` **Don't:** `tr ( "Hello " ) + getName() + tr ( ". Have a nice day!" )` ...to make translation easier.
+- Do not use concatenations in strings with parameters. Instead use substitutions. **Do:** `QString ( tr ( "Hello, %1. Have a nice day!" ) ).arg( getName() )` **Don't:** `tr ( "Hello " ) + getName() + tr ( ". Have a nice day!" )` ...to make translation easier.
 
 #### Python
 Please install and use [pylint](https://pylint.org/) to scan any Python code.
@@ -48,11 +48,22 @@ and note the [Editorconfig file](.editorconfig) in the project too.
 
 ### Licensing
 
-If you add new (source code) files, please add a header with the license to the file. This clarifies how your work is licensed. Please use the same format as in e.g. the source files in the `src/` directory. A license header must include:
+**As of Jamulus 3.12.1dev commit eb172d47:** All new source code contributions must be licensed under AGPL 3.0 or any later version.
 
-* A Legal copyright line
-* The Author(s)/Copyright holder(s) list
-* A Declaration of the licence, indicating how to refer to the full text if not provided
+**Existing code:** Code contributed before commit eb172d47 was licensed under GPL 2.0+.
+This code will be licensed under GPL 3.0 (or any later version) from commit eb172d47.
+When distributed as part of Jamulus, the AGPL 3.0 terms govern the combined work, including network use provisions.
+
+**New files**: Any completely new file should include a header with:
+* Copyright line(s)
+* Author(s)/copyright holder(s)
+* License declaration: "Licensed under AGPL 3.0 or any later version. See COPYING for details."
+
+(The warranty disclaimer and equivalent standard text from the existing files is not required, but may be included if desired.)
+
+**Note:** We adopted AGPL 3.0 to ensure that modifications and derivative works developed for network services
+remain available to users.
+
 
 ### Supported platforms
 

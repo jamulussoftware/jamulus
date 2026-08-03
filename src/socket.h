@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -28,12 +50,16 @@
 #include <QThread>
 #include <QMutex>
 #include <vector>
+#include <atomic>
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
 #ifndef _WIN32
 #    include <netinet/in.h>
 #    include <sys/socket.h>
+// for compatibility with winsock, avoiding ifdefs
+typedef int SOCKET;
+#    define INVALID_SOCKET -1
 #endif
 
 // The header files channel.h and server.h require to include this header file
@@ -53,27 +79,41 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 );
-    CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 );
+    CSocket ( CChannel*      pNewChannel,
+              const quint16  iPortNumber,
+              const quint16  iQosNumber,
+              const QString& strServerBindIP4,
+              const QString& strServerBindIP6,
+              const bool     bDisableIPv6,
+              bool&          bIPv6Available );
+
+    CSocket ( CServer*       pNServP,
+              const quint16  iPortNumber,
+              const quint16  iQosNumber,
+              const QString& strServerBindIP4,
+              const QString& strServerBindIP6,
+              const bool     bDisableIPv6,
+              bool&          bIPv6Available );
 
     virtual ~CSocket();
 
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddress& HostAddr );
 
     bool GetAndResetbJitterBufferOKFlag();
-    void Close();
 
 protected:
-    void    Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP );
+    void    Init ( const quint16  iPortNumber,
+                   const quint16  iQosNumber,
+                   const QString& strServerBindIP4,
+                   const QString& strServerBindIP6,
+                   const bool     bDisableIPv6 );
     quint16 iPortNumber;
     quint16 iQosNumber;
-    QString strServerBindIP;
+    QString strServerBindIP4;
+    QString strServerBindIP6;
 
-#ifdef _WIN32
-    SOCKET UdpSocket;
-#else
-    int UdpSocket;
-#endif
+    SOCKET UdpSocket4;
+    SOCKET UdpSocket6;
 
     QMutex Mutex;
 
@@ -84,12 +124,17 @@ protected:
 
     bool bIsClient;
 
-    bool bJitterBufferOK;
+    std::atomic<bool> bJitterBufferOK;
 
-    bool bEnableIPv6;
+    // This is a reference to CClient::bIPv6Available or CServer::bIPv6Available,
+    // to inform the Client or Server which type of socket was created at startup.
+    bool& bIPv6Available;
+
+private:
+    void ProcessPacket ( const CHostAddress& RecHostAddr, const int iNumBytesRead );
 
 public:
-    void OnDataReceived();
+    void OnDataReceived ( std::atomic<bool>& bRun );
 
 signals:
     void NewConnection(); // for the client
@@ -116,20 +161,26 @@ class CHighPrioSocket : public QObject
     Q_OBJECT
 
 public:
-    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
-        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP, bEnableIPv6 )
+    CHighPrioSocket ( CChannel*      pNewChannel,
+                      const quint16  iPortNumber,
+                      const quint16  iQosNumber,
+                      const QString& strServerBindIP4,
+                      const QString& strServerBindIP6,
+                      const bool     bDisableIPv6,
+                      bool&          bIPv6Available ) :
+        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6, bIPv6Available )
     {
         Init();
     }
 
-    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, bool bEnableIPv6 ) :
-        Socket ( pNewChannel, iPortNumber, iQosNumber, "", bEnableIPv6 )
-    {
-        Init();
-    }
-
-    CHighPrioSocket ( CServer* pNewServer, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
-        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP, bEnableIPv6 )
+    CHighPrioSocket ( CServer*       pNewServer,
+                      const quint16  iPortNumber,
+                      const quint16  iQosNumber,
+                      const QString& strServerBindIP4,
+                      const QString& strServerBindIP6,
+                      const bool     bDisableIPv6,
+                      bool&          bIPv6Available ) :
+        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP4, strServerBindIP6, bDisableIPv6, bIPv6Available )
     {
         Init();
     }
@@ -161,9 +212,6 @@ protected:
             // disable run flag so that the thread loop can be exit
             bRun = false;
 
-            // to leave blocking wait for receive
-            pSocket->Close();
-
             // give thread some time to terminate
             wait ( 5000 );
         }
@@ -181,13 +229,13 @@ protected:
                 {
                     // this function is a blocking function (waiting for network
                     // packets to be received and processed)
-                    pSocket->OnDataReceived();
+                    pSocket->OnDataReceived ( bRun );
                 }
             }
         }
 
-        CSocket* pSocket;
-        bool     bRun;
+        CSocket*          pSocket;
+        std::atomic<bool> bRun; // atomic, as it is set and tested by different threads
     };
 
     void Init()
@@ -211,11 +259,3 @@ protected:
 signals:
     void InvalidPacketReceived ( CHostAddress RecHostAddr );
 };
-
-// overlay generic, IPv4 and IPv6 sockaddr structures
-typedef union
-{
-    struct sockaddr     sa;
-    struct sockaddr_in  sa4;
-    struct sockaddr_in6 sa6;
-} uSockAddr;

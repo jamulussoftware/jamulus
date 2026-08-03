@@ -75,7 +75,7 @@ jobs:
         contents:                   write
     steps:
       - name:                       Checkout code
-        uses:                       actions/checkout@v6
+        uses:                       actions/checkout@v7
 
       - name:                       Determine release version, type and prerelease variables
         run:                        ./.github/autobuild/get_build_vars.py
@@ -205,7 +205,6 @@ jobs:
           - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-22.04
-            building_container:     ubuntu:20.04
             base_command:           ./.github/autobuild/linux_deb.sh
             run_codeql:             true
             is_main_build_target:   true
@@ -213,14 +212,12 @@ jobs:
           - config_name:            Linux .deb armhf (artifacts)
             target_os:              linux
             building_on_os:         ubuntu-22.04-arm
-            building_container:     ubuntu:20.04
             base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
             run_codeql:             false
 
           - config_name:            Linux .deb arm64 (artifacts)
             target_os:              linux
             building_on_os:         ubuntu-22.04-arm
-            building_container:     ubuntu:20.04
             base_command:           TARGET_ARCH=arm64 ./.github/autobuild/linux_deb.sh
             run_codeql:             false
 
@@ -258,14 +255,14 @@ jobs:
 
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows
-            building_on_os:         windows-2022
+            building_on_os:         windows-2025
             base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
             run_codeql:             true
             is_main_build_target:   true
 
           - config_name:            Windows JACK (artifact)
             target_os:              windows
-            building_on_os:         windows-2022
+            building_on_os:         windows-2025
             base_command:           powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage
             run_codeql:             false
 
@@ -280,7 +277,6 @@ jobs:
               is_main_build_target: null
 
     runs-on:                        ${{ matrix.config.building_on_os }}
-    container:                      ${{ matrix.config.building_container }}
     steps:
       - name:                       Select Xcode version for Mac
         if:                         matrix.config.target_os == 'macos' || matrix.config.target_os == 'ios'
@@ -288,27 +284,8 @@ jobs:
         with:
           xcode-version:            ${{ matrix.config.xcode_version }}
 
-      - name:                       Set up base dependencies in container environment
-        if:                         matrix.config.building_container == 'ubuntu:20.04'
-        run:                        |
-          set -eu
-          apt-get -qq update
-          apt-get install -y software-properties-common sudo curl
-          add-apt-repository ppa:git-core/ppa
-          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-          sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          apt-get -qq update
-          apt-get -qq -y install git-core gh
-          # Github Runner environments usually whitelist the default checkout directory for git.
-          # However, when using containers, we have to do that manually in order for git commands to work
-          # (e.g. in Jamulus.pro's VERSION logic):
-          # https://github.com/actions/runner/issues/2033
-          # https://github.com/actions/checkout/issues/766
-          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-
       - name:                       Checkout code
-        uses:                       actions/checkout@v6
+        uses:                       actions/checkout@v7
         with:
           # only Android needs the oboe submodule, so don't fetch it for other builds
           submodules:               ${{ matrix.config.target_os == 'android' }}
@@ -316,7 +293,7 @@ jobs:
 
       - name:                       Cache Mac dependencies
         if:                         matrix.config.target_os == 'macos'
-        uses:                       actions/cache@v5
+        uses:                       actions/cache@v6
         with:
           path: |
             ~/qt
@@ -325,7 +302,7 @@ jobs:
 
       - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'
-        uses:                       actions/cache@v5
+        uses:                       actions/cache@v6
         with:
           path: |
             C:\Qt
@@ -337,7 +314,7 @@ jobs:
 
       - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'
-        uses:                       actions/cache@v5
+        uses:                       actions/cache@v6
         with:
           path: |
             /opt/Qt

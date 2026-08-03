@@ -1,4 +1,4 @@
-VERSION = 3.11.0dev
+VERSION = 3.12.3dev
 
 # Using lrelease and embed_translations only works for Qt 5.12 or later.
 # See https://github.com/jamulussoftware/jamulus/pull/3288 for these changes.
@@ -85,7 +85,7 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
 
-# some depreciated functions need to be kept for older versions to build
+# some deprecated functions need to be kept for older versions to build
 # TODO as soon as we drop support for the old Qt version, remove the following line
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 
@@ -663,7 +663,6 @@ SOURCES_OPUS = libs/opus/celt/bands.c \
 SOURCES_OPUS_ARM = libs/opus/celt/arm/armcpu.c \
     libs/opus/celt/arm/arm_celt_map.c \
     libs/opus/silk/arm/arm_silk_map.c \
-    libs/opus/silk/arm/arm_silk_map.c \
     libs/opus/silk/arm/biquad_alt_neon_intr.c \
     libs/opus/silk/arm/LPC_inv_pred_gain_neon_intr.c \
     libs/opus/silk/arm/NSQ_del_dec_neon_intr.c \
@@ -1175,6 +1174,9 @@ contains(CONFIG, "opus_shared_lib") {
         }
     }
 }
+
+# Always enable auto vectorization
+QMAKE_CXXFLAGS+=-ftree-vectorize
 
 # disable version check if requested (#370)
 contains(CONFIG, "disable_version_check") {

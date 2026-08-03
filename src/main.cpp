@@ -4,21 +4,43 @@
  * Author(s):
  *  Volker Fischer
  *
+ * As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
+ * under AGPL 3.0 or any later version.
+ *
+ * Existing code: Code contributed before 3.12.1dev (commit eb172d47) was licensed under GPL 2.0+.
+ * This code will be licensed under GPL 3.0 (or any later version) from
+ * 3.12.1dev (commit eb172d47).  When distributed as part of Jamulus, the AGPL 3.0 terms govern
+ * the combined work, including network use provisions.
+ *
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -44,6 +66,8 @@
 #endif
 #if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
+#endif
+#if defined( Q_OS_MACOS ) && !defined( HEADLESS )
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
 #include <memory>
@@ -60,7 +84,7 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 int main ( int argc, char** argv )
 {
 
-#if defined( Q_OS_MACOS )
+#if defined( Q_OS_MACOS ) && !defined( HEADLESS )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
     // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
     qt_set_sequence_auto_mnemonic ( true );
@@ -87,6 +111,7 @@ int main ( int argc, char** argv )
     bool         bDisconnectAllClientsOnQuit = false;
     bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
     bool         bUseMultithreading          = false;
+    bool         bDisableRaw                 = false;
     bool         bShowAnalyzerConsole        = false;
     bool         bMuteStream                 = false;
     bool         bMuteMeInPersonalMix        = false;
@@ -95,7 +120,7 @@ int main ( int argc, char** argv )
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
-    bool         bEnableIPv6                 = false;
+    bool         bDisableIPv6                = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     int          iJsonRpcPortNumber          = INVALID_PORT;
@@ -104,14 +129,14 @@ int main ( int argc, char** argv )
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strConnOnStartupAddress     = "";
     QString      strIniFileName              = "";
-    QString      strHTMLStatusFileName       = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
     QString      strDirectoryAddress         = "";
     QString      strServerListFileName       = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
-    QString      strServerBindIP             = "";
+    QString      strServerBindIP4            = "";
+    QString      strServerBindIP6            = "";
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
@@ -240,11 +265,19 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Disable IPv6 ---------------------------------------------------------
+        if ( GetFlagArgument ( argv, i, "--noipv6", "--noipv6" ) )
+        {
+            bDisableIPv6 = true;
+            qInfo() << "- IPv6 disabled";
+            CommandLineOptions << "--noipv6";
+            continue;
+        }
+
         // Enable IPv6 ---------------------------------------------------------
         if ( GetFlagArgument ( argv, i, "-6", "--enableipv6" ) )
         {
-            bEnableIPv6 = true;
-            qInfo() << "- IPv6 enabled";
+            qWarning() << "IPv6 is now enabled by default: -6 and --enableipv6 have no effect and are deprecated";
             CommandLineOptions << "--enableipv6";
             continue;
         }
@@ -342,19 +375,6 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // HTML status file ----------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
-        {
-            qWarning() << qUtf8Printable (
-                QString ( "- The HTML status file option (\"--htmlstatus\" or \"-m\") is deprecated and will be removed soon. Please use JSON-RPC "
-                          "instead.  See https://github.com/jamulussoftware/jamulus/blob/main/docs/JSON-RPC.md" ) );
-            strHTMLStatusFileName = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- HTML status file name: %1" ).arg ( strHTMLStatusFileName ) );
-            CommandLineOptions << "--htmlstatus";
-            ServerOnlyOptions << "--htmlstatus";
-            continue;
-        }
-
         // Server info ---------------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-o", "--serverinfo", strArgument ) )
         {
@@ -427,14 +447,29 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "--serverbindip", // no short form
-                                 "--serverbindip",
+                                 "--serverbindip", // use short form for compatibility alias
+                                 "--serverbindip4",
                                  strArgument ) )
         {
-            strServerBindIP = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- server bind IP: %1" ).arg ( strServerBindIP ) );
-            CommandLineOptions << "--serverbindip";
-            ServerOnlyOptions << "--serverbindip";
+            strServerBindIP4 = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- server bind IPv4: %1" ).arg ( strServerBindIP4 ) );
+            CommandLineOptions << "--serverbindip4";
+            ServerOnlyOptions << "--serverbindip4";
+            continue;
+        }
+
+        // Server Bind IPv6 --------------------------------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--serverbindip6", // no short form
+                                 "--serverbindip6",
+                                 strArgument ) )
+        {
+            strServerBindIP6 = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- server bind IPv6: %1" ).arg ( strServerBindIP6 ) );
+            CommandLineOptions << "--serverbindip6";
+            ServerOnlyOptions << "--serverbindip6";
             continue;
         }
 
@@ -475,6 +510,19 @@ int main ( int argc, char** argv )
             qInfo() << "- start minimized enabled";
             CommandLineOptions << "--startminimized";
             ServerOnlyOptions << "--startminimized";
+            continue;
+        }
+
+        // Disable raw audio feature -------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--noraw", // no short form
+                               "--noraw" ) )
+        {
+            bDisableRaw = true;
+            qInfo() << "- raw audio is disabled";
+            CommandLineOptions << "--noraw";
+            ServerOnlyOptions << "--noraw";
             continue;
         }
 
@@ -757,20 +805,17 @@ int main ( int argc, char** argv )
                 }
             }
 
-            if ( strDirectoryAddress.isEmpty() )
+            if ( !strServerPublicIP.isEmpty() )
             {
-                if ( !strServerPublicIP.isEmpty() )
+                if ( strDirectoryAddress.isEmpty() )
                 {
                     qWarning() << "Server Public IP will only take effect when registering a server with a directory.";
                     strServerPublicIP = "";
                 }
-            }
-            else
-            {
-                if ( !strServerPublicIP.isEmpty() )
+                else
                 {
-                    QHostAddress InetAddr;
-                    if ( !InetAddr.setAddress ( strServerPublicIP ) )
+                    QHostAddress InetAddr ( strServerPublicIP );
+                    if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
                     {
                         qWarning() << "Server Public IP is invalid. Only plain IP addresses are supported.";
                         strServerPublicIP = "";
@@ -779,13 +824,29 @@ int main ( int argc, char** argv )
             }
         }
 
-        if ( !strServerBindIP.isEmpty() )
+        if ( !strServerBindIP4.isEmpty() )
         {
-            QHostAddress InetAddr;
-            if ( !InetAddr.setAddress ( strServerBindIP ) )
+            QHostAddress InetAddr ( strServerBindIP4 );
+            if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
             {
-                qWarning() << "Server Bind IP is invalid. Only plain IP addresses are supported.";
-                strServerBindIP = "";
+                qCritical() << "Server Bind IPv4 is invalid. Only plain IP addresses are supported.";
+                exit ( 1 );
+            }
+        }
+
+        if ( !strServerBindIP6.isEmpty() )
+        {
+            if ( bDisableIPv6 )
+            {
+                qCritical() << "IPv6 is disabled; --serverbindip6 not allowed.";
+                exit ( 1 );
+            }
+
+            QHostAddress InetAddr ( strServerBindIP6 );
+            if ( InetAddr.protocol() != QAbstractSocket::IPv6Protocol )
+            {
+                qCritical() << "Server Bind IPv6 is invalid. Only plain IPv6 addresses are supported.";
+                exit ( 1 );
             }
         }
 #ifndef NO_JSON_RPC
@@ -802,8 +863,8 @@ int main ( int argc, char** argv )
         // we do it here as an upfront check.  The downstream network calls will error
         // out on malformed addresses not caught here.
         {
-            QHostAddress InetAddr;
-            if ( !InetAddr.setAddress ( strJsonRpcBindIP ) )
+            QHostAddress InetAddr ( strJsonRpcBindIP );
+            if ( InetAddr.protocol() != QAbstractSocket::IPv4Protocol )
             {
                 qCritical() << qUtf8Printable ( QString ( "The JSON-RPC address specified is not valid, exiting. " ) );
                 exit ( 1 );
@@ -850,7 +911,7 @@ int main ( int argc, char** argv )
     // For accessible support we need to add a plugin to qt. The plugin has to
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.
-    QDir ApplDir ( QApplication::applicationDirPath() );
+    QDir ApplDir ( QCoreApplication::applicationDirPath() );
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
@@ -921,7 +982,7 @@ int main ( int argc, char** argv )
 #ifndef SERVER_ONLY
         if ( bIsClient )
         {
-            CClient Client ( iPortNumber, iQosNumber, strConnOnStartupAddress, bNoAutoJackConnect, strClientName, bEnableIPv6, bMuteMeInPersonalMix );
+            CClient Client ( iPortNumber, iQosNumber, bNoAutoJackConnect, strClientName, bDisableIPv6, bMuteMeInPersonalMix );
 
             // Create Settings with the client pointer
             CClientSettings Settings ( &Client, strIniFileName );
@@ -946,14 +1007,8 @@ int main ( int argc, char** argv )
                 }
 
                 // GUI object
-                CClientDlg ClientDlg ( &Client,
-                                       &Settings,
-                                       strConnOnStartupAddress,
-                                       bShowComplRegConnList,
-                                       bShowAnalyzerConsole,
-                                       bMuteStream,
-                                       bEnableIPv6,
-                                       nullptr );
+                CClientDlg
+                    ClientDlg ( &Client, &Settings, strConnOnStartupAddress, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, nullptr );
 
                 // show dialog
                 ClientDlg.show();
@@ -963,6 +1018,12 @@ int main ( int argc, char** argv )
             else
 #    endif
             {
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.SetServerAddr ( strConnOnStartupAddress );
+                    Client.Start();
+                }
+
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
@@ -976,10 +1037,10 @@ int main ( int argc, char** argv )
             // actual server object
             CServer Server ( iNumServerChannels,
                              strLoggingFileName,
-                             strServerBindIP,
+                             strServerBindIP4,
+                             strServerBindIP6,
                              iPortNumber,
                              iQosNumber,
-                             strHTMLStatusFileName,
                              strDirectoryAddress,
                              strServerListFileName,
                              strServerInfo,
@@ -989,10 +1050,11 @@ int main ( int argc, char** argv )
                              strRecordingDirName,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
+                             bDisableRaw,
                              bUseMultithreading,
                              bDisableRecording,
                              bDelayPan,
-                             bEnableIPv6,
+                             bDisableIPv6,
                              eLicenceType );
 
 #ifndef NO_JSON_RPC
@@ -1094,7 +1156,8 @@ QString UsageArguments ( char** argv )
            "  -Q, --qos               set the QoS value. Default is 128. Disable with 0\n"
            "                          (see the Jamulus website to enable QoS on Windows)\n"
            "  -t, --notranslation     disable translation (use English language)\n"
-           "  -6, --enableipv6        enable IPv6 addressing (IPv4 is always enabled)\n"
+           "      --noipv6            disable IPv6 addressing (IPv4 is always enabled)\n"
+           "                          (recommended to leave IPv6 enabled by default)\n"
            "\n"
            "Server only:\n"
            "  -d, --discononquit      disconnect all Clients on quit\n"
@@ -1106,7 +1169,6 @@ QString UsageArguments ( char** argv )
            "  -F, --fastupdate        use 64 samples frame size mode\n"
            "  -l, --log               enable logging, set file name\n"
            "  -L, --licence           show an agreement window before users can connect\n"
-           "  -m, --htmlstatus        deprecated, please use JSON-RPC instead\n"
            "  -o, --serverinfo        registration info for this Server.  Format:\n"
            "                          [name];[city];[country as two-letter ISO country code or Qt5 QLocale ID]\n"
            "      --serverpublicip    public IP address for this Server.  Needed when\n"
@@ -1115,14 +1177,16 @@ QString UsageArguments ( char** argv )
            "  -P, --delaypan          start with delay panning enabled\n"
            "  -R, --recording         set server recording directory; server will record when a session is active by default\n"
            "      --norecord          set server not to record by default when recording is configured\n"
+           "      --noraw             disable raw audio\n"
            "  -s, --server            start Server\n"
-           "      --serverbindip      IP address the Server will bind to (rather than all)\n"
+           "      --serverbindip4     IPv4 address the Server will bind to (rather than all)\n"
+           "      --serverbindip6     IPv6 address the Server will bind to (rather than all)\n"
            "  -T, --multithreading    use multithreading to make better use of\n"
            "                          multi-core CPUs and support more Clients\n"
            "  -u, --numchannels       maximum number of channels\n"
            "  -w, --welcomemessage    welcome message to display on connect\n"
            "                          (string or filename, HTML supported)\n"
-           "  -z, --startminimized    start minimizied\n"
+           "  -z, --startminimized    start minimized\n"
            "\n"
            "Client only:\n"
            "  -c, --connect           connect to given Server address on startup\n"

@@ -31,19 +31,33 @@ LED bar:      lbr
 
  ******************************************************************************
  *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
 \******************************************************************************/
 
@@ -96,22 +110,22 @@ LED bar:      lbr
 #define MAX_DELAY_PANNING_SAMPLES 64
 
 // default server address and port numbers
-#define DEFAULT_QOS_NUMBER            128                          // CS4 (Quality of Service)
-#define DEFAULT_SERVER_ADDRESS        "anygenre1.jamulus.io:22124" // default port explicit to avoid unneeded SRV lookup
+#define DEFAULT_QOS_NUMBER            128                           // CS4 (Quality of Service)
+#define DEFAULT_SERVER_ADDRESS        "anygenre1.jamulus.app:22124" // default port explicit to avoid unneeded SRV lookup
 #define DEFAULT_PORT_NUMBER           22124
-#define CENTSERV_ANY_GENRE2           "anygenre2.jamulus.io:22224"
-#define CENTSERV_ANY_GENRE3           "anygenre3.jamulus.io:22624"
-#define CENTSERV_GENRE_ROCK           "rock.jamulus.io:22424"
-#define CENTSERV_GENRE_JAZZ           "jazz.jamulus.io:22324"
-#define CENTSERV_GENRE_CLASSICAL_FOLK "classical.jamulus.io:22524"
-#define CENTSERV_GENRE_CHORAL         "choral.jamulus.io:22724"
+#define DIR_ADDR_ANY_GENRE2           "anygenre2.jamulus.app:22224"
+#define DIR_ADDR_ANY_GENRE_ASIA       "asia.jamulus.app:22624"
+#define DIR_ADDR_GENRE_ROCK           "rock.jamulus.app:22424"
+#define DIR_ADDR_GENRE_JAZZ           "jazz.jamulus.app:22324"
+#define DIR_ADDR_GENRE_CLASSICAL_FOLK "classical.jamulus.app:22524"
+#define DIR_ADDR_GENRE_CHORAL         "choral.jamulus.app:22724"
 
 // specify an invalid port to disable the server
 #define INVALID_PORT -1
 
 // servers to check for new versions
-#define UPDATECHECK1_ADDRESS "updatecheck1.jamulus.io"
-#define UPDATECHECK2_ADDRESS "updatecheck2.jamulus.io"
+#define UPDATECHECK1_ADDRESS "updatecheck1.jamulus.app"
+#define UPDATECHECK2_ADDRESS "updatecheck2.jamulus.app"
 
 // getting started and software manual URL
 #define CLIENT_GETTING_STARTED_URL "https://jamulus.io/wiki/Getting-Started"
@@ -229,6 +243,9 @@ LED bar:      lbr
 
 // defines the time interval at which the ping time is updated in the GUI
 #define PING_UPDATE_TIME_MS 500 // ms
+
+// defines a factor to compensate for larger than ideal jitter buffer sizes for estimated overall delay calculation
+#define JITTBUF_COMP_FACTOR 0.7f
 
 // defines the time interval at which the ping time is updated for the server list
 #define PING_UPDATE_TIME_SERVER_LIST_MS 2500 // ms

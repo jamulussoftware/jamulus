@@ -1127,13 +1127,13 @@ void CConnectDlg::DeleteAllListViewItemChildren ( QTreeWidgetItem* pItem )
     while ( pItem->childCount() > 0 )
     {
         // get the first child in the list
-        QTreeWidgetItem* pCurChildItem = pItem->child ( 0 );
+        QTreeWidgetItem* pCurChild = pItem->child ( 0 );
 
         // remove it from the item (note that the object is not deleted)
-        pItem->removeChild ( pCurChildItem );
+        pItem->removeChild ( pCurChild );
 
         // delete the object to avoid a memory leak
-        delete pCurChildItem;
+        delete pCurChild;
     }
 }
 

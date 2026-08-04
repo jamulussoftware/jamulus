@@ -581,7 +581,7 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVect
     if ( pCurListViewItem )
     {
         // first remove any existing children
-        DeleteAllListViewItemChilds ( pCurListViewItem );
+        DeleteAllListViewItemChildren ( pCurListViewItem );
 
         // get number of connected clients
         const int iNumConnectedClients = vecChanInfo.Size();
@@ -1046,19 +1046,19 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
     }
 
     // if no server item has children, do not show decoration
-    bool      bAnyListItemHasChilds = false;
-    const int iServerListLen        = lvwServers->topLevelItemCount();
+    bool      bAnyListItemHasChildren = false;
+    const int iServerListLen          = lvwServers->topLevelItemCount();
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
         // check if the current list item has children
         if ( lvwServers->topLevelItem ( iIdx )->childCount() > 0 )
         {
-            bAnyListItemHasChilds = true;
+            bAnyListItemHasChildren = true;
         }
     }
 
-    if ( !bAnyListItemHasChilds )
+    if ( !bAnyListItemHasChildren )
     {
         lvwServers->setRootIsDecorated ( false );
     }
@@ -1121,19 +1121,19 @@ CMappedTreeWidgetItem* CConnectDlg::GetParentListViewItem ( QTreeWidgetItem* pIt
     }
 }
 
-void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
+void CConnectDlg::DeleteAllListViewItemChildren ( QTreeWidgetItem* pItem )
 {
     // loop over all children
     while ( pItem->childCount() > 0 )
     {
         // get the first child in the list
-        QTreeWidgetItem* pCurChildItem = pItem->child ( 0 );
+        QTreeWidgetItem* pCurChild = pItem->child ( 0 );
 
         // remove it from the item (note that the object is not deleted)
-        pItem->removeChild ( pCurChildItem );
+        pItem->removeChild ( pCurChild );
 
         // delete the object to avoid a memory leak
-        delete pCurChildItem;
+        delete pCurChild;
     }
 }
 

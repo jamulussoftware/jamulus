@@ -207,6 +207,7 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool 
 
     // install event filter to catch FocusIn
     cbxServerAddr->installEventFilter ( this );
+    lvwServers->installEventFilter ( this );
 
     // set up list view for connected clients (note that the last column size
     // must not be specified since this column takes all the remaining space)
@@ -334,6 +335,7 @@ void CConnectDlg::RequestServerList()
 
     // clear server list view
     lvwServers->clear();
+    savedServer = nullptr;
 
     // update list combo box (disable events to avoid a signal)
     cbxDirectory->blockSignals ( true );
@@ -1194,8 +1196,26 @@ bool CConnectDlg::eventFilter ( QObject* obj, QEvent* event )
 {
     if ( obj == cbxServerAddr && event->type() == QEvent::FocusIn )
     {
+        // check for a selected server before clearing the selection in the list
+        QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
+
+        if ( CurSelListItemList.count() > 0 )
+        {
+            // there was a selected item - save it before deselecting
+            savedServer = GetParentListViewItem ( CurSelListItemList[0] );
+        }
         // remove selection in the server list (if any)
         lvwServers->clearSelection();
+    }
+
+    if ( obj == lvwServers && event->type() == QEvent::FocusIn )
+    {
+        if ( savedServer )
+        {
+            // re-select any previously-selected server on regaining focus
+            lvwServers->setCurrentItem ( savedServer );
+            savedServer = nullptr;
+        }
     }
 
     return QDialog::eventFilter ( obj, event );

@@ -127,7 +127,8 @@ protected:
     void                   EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void                   UpdateDirectoryComboBox();
 
-    bool eventFilter ( QObject* obj, QEvent* event );
+    bool                   eventFilter ( QObject* obj, QEvent* event ) override;
+    CMappedTreeWidgetItem* savedServer;
 
     CClient*         pClient;
     CClientSettings* pSettings;

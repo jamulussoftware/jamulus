@@ -855,10 +855,11 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress InetAddr, COSUtil::EOpS
     {
         // update check
 #if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) ) && !defined( DISABLE_VERSION_CHECK )
+        const QString mappedServerVersion = MapVersionStrForCompare ( strVersion );
+
         // Ignore non-release remote versions when deciding whether to notify.
-        if ( IsReleaseVersion ( strVersion ) )
+        if ( IsMappedReleaseVersion ( mappedServerVersion ) )
         {
-            const QString mappedServerVersion  = MapVersionStrForCompare ( strVersion );
             const QString mappedCurrentVersion = MapVersionStrForCompare ( VERSION );
 
             if ( mappedServerVersion.compare ( mappedCurrentVersion ) > 0 )

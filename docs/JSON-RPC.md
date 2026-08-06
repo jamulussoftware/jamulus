@@ -129,6 +129,42 @@ Results:
 | result.version | string | The Jamulus version. |
 
 
+### jamulusclient/connect
+
+Connects the client to a server. Any current connection is terminated first. The connection is established asynchronously: subscribe to the jamulusclient/connecting, jamulusclient/connected, jamulusclient/connectingFailed and jamulusclient/connectionStateChanged notifications to follow its progress.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.address | string | Socket address of the server (host:port). |
+| params.serverName | string | Optional human readable server name used for display purposes. Defaults to the address. |
+| params.directory | string | Optional socket address of a directory to hole-punch through before connecting (host:port). Use for a server behind a cloud firewall/NAT that is registered with that directory; address is connected to verbatim and need not be listed by the directory. Example: anygenre1.jamulus.io:22124 |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | "ok" once the connection attempt has been initiated. |
+
+
+### jamulusclient/disconnect
+
+Disconnects the client from the current server. Does nothing if the client is not connected.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result | string | Always "ok". |
+
+
 ### jamulusclient/getChannelInfo
 
 Returns the client's profile information.
@@ -186,6 +222,24 @@ Results:
 | Name | Type | Description |
 | --- | --- | --- |
 | result.clients | array | The client list. See jamulusclient/clientListReceived for the format. |
+
+
+### jamulusclient/getConnectionState
+
+Returns the current connection state.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result.state | string | The connection state (disconnected, connecting, or connected). |
+| result.serverName | string | The human readable name of the current server (empty if disconnected). |
 
 
 ### jamulusclient/getMidiDevices
@@ -620,6 +674,39 @@ Parameters:
 | Name | Type | Description |
 | --- | --- | --- |
 | params.id | number | The channel ID assigned to the client. |
+
+
+### jamulusclient/connecting
+
+Emitted when a connection to a server has been requested but is not yet established.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.serverName | string | The human readable server name (or the address if no name is known). |
+
+
+### jamulusclient/connectingFailed
+
+Emitted when a connection attempt failed before it could be requested from the server.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.error | string | The error message. |
+
+
+### jamulusclient/connectionStateChanged
+
+Emitted whenever the connection state changes.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params.state | string | The new connection state (disconnected, connecting, or connected). |
 
 
 ### jamulusclient/disconnected

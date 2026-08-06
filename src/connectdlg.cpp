@@ -283,6 +283,9 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool 
     // combo boxes
     QObject::connect ( cbxDirectory, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CConnectDlg::OnDirectoryChanged );
 
+    // connect when pressing Enter in the Server Address box
+    QObject::connect ( cbxServerAddr->lineEdit(), &QLineEdit::returnPressed, this, &CConnectDlg::OnConnectClicked );
+
     // check boxes
     QObject::connect ( chbExpandAll, &QCheckBox::stateChanged, this, &CConnectDlg::OnExpandAllStateChanged );
 

@@ -689,16 +689,17 @@ void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType
 {
     // update check
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
-    int            mySuffixIndex;
-    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
+    const QString mappedServerVersion = MapVersionStrForCompare ( strVersion );
 
-    int            serverSuffixIndex;
-    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
-
-    // only compare if the server version has no suffix (such as dev or beta)
-    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
+    // Ignore non-release remote versions when deciding whether to notify.
+    if ( IsMappedReleaseVersion ( mappedServerVersion ) )
     {
-        lblUpdateCheck->show();
+        const QString mappedCurrentVersion = MapVersionStrForCompare ( VERSION );
+
+        if ( mappedServerVersion.compare ( mappedCurrentVersion ) > 0 )
+        {
+            lblUpdateCheck->show();
+        }
     }
 #endif
 }

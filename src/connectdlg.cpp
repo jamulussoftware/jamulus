@@ -124,6 +124,7 @@ bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
 
 CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent ) :
     CBaseDlg ( parent, Qt::Dialog ),
+    savedServer ( nullptr ),
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     strSelectedAddress ( "" ),
@@ -334,8 +335,8 @@ void CConnectDlg::RequestServerList()
     strSelectedServerName = "";
 
     // clear server list view
-    lvwServers->clear();
     savedServer = nullptr;
+    lvwServers->clear();
 
     // update list combo box (disable events to avoid a signal)
     cbxDirectory->blockSignals ( true );
@@ -446,6 +447,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     }
 
     // first clear list
+    savedServer = nullptr;
     lvwServers->clear();
 
     // add list item for each server in the server list

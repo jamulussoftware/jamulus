@@ -2832,6 +2832,14 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn, int& iPos,
     Q_ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
     Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
 
+    // The asserts above are compiled out in release builds, so also guard at
+    // runtime: CVector uses unchecked operator[], and reading past the end of a
+    // truncated/malformed network message would be an out-of-bounds access.
+    if ( ( iNumOfBytes < 1 ) || ( iNumOfBytes > 4 ) || ( vecIn.Size() < iPos + iNumOfBytes ) )
+    {
+        return 0;
+    }
+
     uint32_t iRet = 0;
 
     for ( int i = 0; i < iNumOfBytes; i++ )

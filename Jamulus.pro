@@ -1175,8 +1175,13 @@ contains(CONFIG, "opus_shared_lib") {
     }
 }
 
-# Always enable auto vectorization
-QMAKE_CXXFLAGS+=-ftree-vectorize
+# GCC enables -ftree-vectorize at -O3, and also at -O2 from GCC 12 on. Setting it
+# explicitly keeps vectorization on for GCC builds that would not enable it by
+# default. Clang already vectorizes and MSVC would warn on the flag, so scope it
+# to GCC mkspecs (linux-g++, win32-g++, ...). (#3863)
+*-g++* {
+    QMAKE_CXXFLAGS += -ftree-vectorize
+}
 
 # disable version check if requested (#370)
 contains(CONFIG, "disable_version_check") {

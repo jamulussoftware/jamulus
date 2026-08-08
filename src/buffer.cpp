@@ -164,8 +164,16 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
             return false;
         }
 
-        // to get the number of input blocks we assume that the number of bytes for
-        // the sequence number is much smaller than the number of coded audio bytes
+        // This divide is exact if and only if iNumBlocks * iNumBytesSeqNum < iBlockSize,
+        // since the actual input is iNumBlocks * ( iBlockSize + iNumBytesSeqNum ) bytes. The
+        // sequence number merely being "much smaller" than the coded audio is not the
+        // condition: at iNumBlocks == iBlockSize the count comes out one too high whatever
+        // the ratio is. The bound is not enforced here but by the properties validator in
+        // protocol.cpp, EvaluateNetwTranspPropsMes, which rejects a base network packet size
+        // below CELT_MINIMUM_NUM_BYTES (10) and a block size factor outside
+        // { FRAME_SIZE_FACTOR_PREFERRED, _DEFAULT, _SAFE }. With iNumBytesSeqNum == 1 and
+        // iBlockSize == iBaseNetworkPacketSize - 1 (channel.cpp), the worst reachable case is
+        // a factor of 4 against a block size of 9.
         const int iNumBlocks = /* floor */ ( iInSize / iBlockSize );
 
         // copy new data in internal buffer

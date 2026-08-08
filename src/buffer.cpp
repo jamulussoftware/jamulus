@@ -164,8 +164,16 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
             return false;
         }
 
-        // to get the number of input blocks we assume that the number of bytes for
-        // the sequence number is much smaller than the number of coded audio bytes
+        // This divide is exact if and only if iNumBlocks * iNumBytesSeqNum < iBlockSize,
+        // since the actual input is iNumBlocks * ( iBlockSize + iNumBytesSeqNum ) bytes. The
+        // sequence number merely being "much smaller" than the coded audio is not the
+        // condition: at iNumBlocks == iBlockSize the count comes out one too high whatever
+        // the ratio is. The bound is not enforced here but by the properties validator in
+        // protocol.cpp, EvaluateNetwTranspPropsMes, which rejects a base network packet size
+        // below CELT_MINIMUM_NUM_BYTES (10) and a block size factor outside
+        // { FRAME_SIZE_FACTOR_PREFERRED, _DEFAULT, _SAFE }. With iNumBytesSeqNum == 1 and
+        // iBlockSize == iBaseNetworkPacketSize - 1 (channel.cpp), the worst reachable case is
+        // a factor of 4 against a block size of 9.
         const int iNumBlocks = /* floor */ ( iInSize / iBlockSize );
 
         // copy new data in internal buffer
@@ -190,16 +198,23 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
                 iSeqNumDiff -= 256;
             }
 
-            // The 1-byte sequence number wraps around at a count of 256. So, if a packet is delayed
-            // further than this we cannot detect it. But it does not matter since such a packet is
-            // more than 100 ms delayed so we have a bad network situation anyway. Therefore we
+            // The 1-byte sequence number is folded into a signed difference above, so a
+            // delayed packet is mistaken for an early one once it is more than 128 counts
+            // late, not 256. At the fastest possible frame rate that is still 171 ms
+            // (64-sample frames, 750 counts/s) and at the default frame size 341 ms
+            // (128-sample frames, 375 counts/s), so such a packet is long useless either
+            // way and we have a bad network situation anyway. Therefore we
             // assume that the sequence number difference between the received and local counter is
             // correct. The idea of the following code is that we always move our "buffer window" so
             // that the received packet fits into the buffer. By doing this we are robust against
             // sample rate offsets between client/server or buffer glitches in the audio driver since
             // we adjust the window. The downside is that we never throw away single packets which arrive
             // too late so we throw away valid packets when we move the "buffer window" to the delayed
-            // packet and then back to the correct place when the next normal packet is received. But
+            // packet and then back to the correct place when the next normal packet is received.
+            // Note that this is not the only way a valid block is lost: a block can also be
+            // overwritten in its slot before it is played out. That second channel is the only
+            // one that exists at a buffer length of 1, while the window move dominates from a
+            // buffer length of 3 upwards. But
             // tests showed that the new buffer strategy does not perform worse than the old jitter
             // buffer which did not use any sequence number at all.
             if ( iSeqNumDiff < 0 )

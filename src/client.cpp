@@ -999,9 +999,12 @@ void CClient::OnControllerInMuteMyself ( bool bMute )
 
 void CClient::OnClientIDReceived ( int iServerChanID )
 {
-    // if we have just connected to a running server, iActiveChannels will be 0
-    // if iActiveChannels is not 0, the server must have been restarted on the fly
-    // in that case, channels might have changed, so clear our list to get it afresh.
+    // If we have just connected to a running server, iActiveChannels will be 0.
+    // If it is not 0, the server has begun a NEW connection for us while this client kept
+    // running. A restart is only one way that happens: the server also drops a channel whose
+    // receive timeout expires ( CON_TIME_OUT_SEC_MAX, channel.h ) and treats the next packet
+    // from the same peer as a new connection, so a traffic gap of longer than that is enough.
+    // Either way the channel list we hold may be stale, so clear it and get it afresh.
     if ( iActiveChannels != 0 )
     {
         qInfo() << "> Server restarted?";
@@ -1009,7 +1012,14 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     }
 
     // allocate and map client-side channel 0
-    int iChanID = FindClientChannel ( iServerChanID, true ); // should always return channel 0
+    // In normal operation this returns channel 0. It is NOT guaranteed: FindClientChannel
+    // returns INVALID_INDEX ( -1 ) for any iServerChanID >= MAX_NUM_CHANNELS ( 150 ), and a
+    // server-sent CLIENT_ID is only length-checked ( EvaluateClientIDMes, protocol.cpp ), never
+    // range-checked, so a malicious or buggy server can deliver an id of 150..255. The result is
+    // used below without a guard; with the headless mute-me-in-personal-mix flag set it reaches
+    // SetRemoteChanGain, which dereferences &clientChannels[-1]. FIXME: reject iServerChanID
+    // outside [0, MAX_NUM_CHANNELS) here or in EvaluateClientIDMes before this line.
+    int iChanID = FindClientChannel ( iServerChanID, true );
 
     // for headless mode we support to mute our own signal in the personal mix
     // (note that the check for headless is done in the main.cpp and must not

@@ -165,10 +165,17 @@ CServer::CServer ( const int          iNewMaxNumChan,
         iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
     }
 
-    // To avoid audio clitches, in the entire realtime timer audio processing
-    // routine including the ProcessData no memory must be allocated. Since we
-    // do not know the required sizes for the vectors, we allocate memory for
-    // the worst case here:
+    // To avoid audio glitches, the realtime timer audio routine ( OnTimer ->
+    // ProcessData ) should allocate no memory. The worst-case vectors below are
+    // pre-sized here for that reason. Note that the goal is not currently met: the
+    // send path still allocates once per outgoing audio packet. CSocket::SendPacket
+    // takes its argument as a const CVector, and the ( CVector<uint8_t> ) cast that
+    // strips the const deep-copies the whole datagram -- one malloc, one memmove, one
+    // free for every packet sent, on this same timer thread ( attribute by stack, not
+    // by thread name: OnTimer runs on the Qt event-loop thread via a queued connection ).
+    // CNetBufWithStats::Init also allocates on this path. FIXME: remove these before
+    // relying on the no-allocation guarantee. Since we do not know the required sizes
+    // for the vectors, we allocate memory for the worst case here:
 
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init ( iMaxNumChannels );
@@ -662,7 +669,11 @@ void CServer::OnTimer()
     bool bUseMT               = false;
     int  iNumBlocks           = 0;     // init number of blocks for multithreading
     int  iMTBlockSize         = 0;     // init block size for multithreading
-    bChannelIsNowDisconnected = false; // note that the flag must be a member function since QtConcurrent::run can only take 5 params
+    // The flag is a member variable, not a local. Nothing in the threading forces that: the
+    // decode workers below are dispatched through CThreadPool::enqueue ( threadpool.h ), which is
+    // variadic and takes any number of arguments. The five-argument cap this note used to cite is
+    // Qt5 QtConcurrent::run's, and that path is no longer used here.
+    bChannelIsNowDisconnected = false;
 
     {
         // Make put and get calls thread safe.
@@ -944,9 +955,14 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
 
                 FreeChannel ( iCurChanID ); // note that the channel is now not in use
 
-                // note that no mutex is needed for this shared resource since it is a
-                // std::atomic write (not a read-modify-write operation) and also each
-                // thread can only set it to true and never to false
+                // Note that no mutex is needed for this shared resource: the store is a
+                // std::atomic write, not a read-modify-write operation. It is NOT true that
+                // a thread can only ever set this to true: OnTimer clears it to false once
+                // per tick, and in the default configuration ( multithreading off ) the
+                // decode runs inline, so the same thread writes both values. What makes the
+                // access safe is the ordering -- the clear is sequenced before any decode
+                // work is handed to the thread pool, and the flag is read back only after
+                // every future has been waited on.
                 bChannelIsNowDisconnected = true;
 
                 // since the channel is no longer in use, we should return

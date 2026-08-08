@@ -110,6 +110,13 @@ QJsonObject CRpcServer::CreateJsonRpcErrorReply ( int code, QString message )
     return object;
 }
 
+// Maximum size of a single JSON-RPC request line. An unauthenticated client that
+// sends data without a terminating newline is only ever consumed on a complete line
+// (canReadLine()), so without a bound the received bytes accumulate in the socket read
+// buffer without limit until the process is killed by the allocator. Requests larger
+// than this, or unterminated data that fills the buffer, are rejected instead of held.
+static constexpr int MAX_JSON_RPC_REQUEST_BYTES = 64 * 1024;
+
 void CRpcServer::OnNewConnection()
 {
     QTcpSocket* pSocket = pTransportServer->nextPendingConnection();
@@ -121,6 +128,9 @@ void CRpcServer::OnNewConnection()
     qDebug() << "- JSON-RPC: received connection from:" << pSocket->peerAddress().toString();
     vecClients.append ( pSocket );
     isAuthenticated[pSocket] = false;
+
+    // Bound the per-connection read buffer so unterminated input cannot exhaust memory.
+    pSocket->setReadBufferSize ( MAX_JSON_RPC_REQUEST_BYTES );
 
     connect ( pSocket, &QTcpSocket::disconnected, [this, pSocket]() {
         qDebug() << "- JSON-RPC: connection from:" << pSocket->peerAddress().toString() << "closed";
@@ -196,6 +206,14 @@ void CRpcServer::OnNewConnection()
                                                           "Invalid request: Unrecognized JSON; a request must be either an object or an array" ) ) );
             pSocket->disconnectFromHost();
             return;
+        }
+
+        // A full buffer with no complete line is an oversized or unterminated request:
+        // reject and close rather than hold the bytes indefinitely.
+        if ( !pSocket->canReadLine() && pSocket->bytesAvailable() >= MAX_JSON_RPC_REQUEST_BYTES )
+        {
+            Send ( pSocket, QJsonDocument ( CreateJsonRpcErrorReply ( iErrParseError, "Parse error: Request exceeds maximum size" ) ) );
+            pSocket->disconnectFromHost();
         }
     } );
 }

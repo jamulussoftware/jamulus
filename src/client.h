@@ -335,7 +335,6 @@ public:
     void SetSettings ( CClientSettings* settings );
 
 protected:
-    // Signal handler must be declared before pSettings for correct init order
     CSignalHandler* pSignalHandler;
     // Pointer to settings for MIDI and other config
     CClientSettings* pSettings;

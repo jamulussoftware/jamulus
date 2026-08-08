@@ -24,28 +24,24 @@ along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://
 
 # The src folder
 
-This file is a map of `src/` for a reader new to the code: which class lives where, which
-threads exist at runtime, and which lock protects what. Like [sound/README.md](sound/README.md),
-it describes how the code behaves today, not why it was designed that way. It is not complete;
-the last section lists what is still missing.
+A map of `src/`: which class lives where, which threads exist at runtime, and which lock
+protects what. The last section lists what is not covered yet.
 
 ## Where things live
 
 Code used by both client and server:
 
 - [main.cpp](main.cpp) parses the command line and constructs a `CClient` or a `CServer`.
-- [protocol.cpp](protocol.cpp) — `CProtocol`: protocol message framing, acknowledgement, and
-  retransmission of unacknowledged messages from `SendMessQueue`. The wire format itself is
-  described in [../docs/JAMULUS_PROTOCOL.md](../docs/JAMULUS_PROTOCOL.md).
-- [channel.cpp](channel.cpp) — `CChannel`: one connection, holding the receive jitter buffer
-  (`SockBuf`) and a `CProtocol` instance. The client has one; the server has a fixed array of
-  `MAX_NUM_CHANNELS` of them (`vecChannels`).
-- [socket.cpp](socket.cpp) — `CSocket`, wrapped in `CHighPrioSocket` together with its receive
-  thread: the UDP socket shared by all sending and receiving.
-- [buffer.h](buffer.h) — `CNetBuf` and `CNetBufWithStats`: the jitter buffer itself, including
-  the automatic size decision.
-- [util.h](util.h) / [util.cpp](util.cpp) — `CHighPrecisionTimer` (the server's frame clock)
-  and assorted helpers.
+- [protocol.cpp](protocol.cpp) — `CProtocol`: message framing, acknowledgement and
+  retransmission. Wire format: [../docs/JAMULUS_PROTOCOL.md](../docs/JAMULUS_PROTOCOL.md).
+- [channel.cpp](channel.cpp) — `CChannel`: the connection and its receive jitter buffer, used by
+  both client and server. The client has one; the server an array of `MAX_NUM_CHANNELS`.
+- [socket.cpp](socket.cpp) — `CSocket` and `CHighPrioSocket`: the UDP socket shared by all
+  sending and receiving, with its receive thread.
+- [buffer.h](buffer.h) — `CNetBuf` and `CNetBufWithStats`: the jitter buffer, including the
+  automatic size decision.
+- [util.h](util.h) / [util.cpp](util.cpp) — `CHighPrecisionTimer`, the server's frame clock, and
+  assorted helpers.
 
 Client only: [client.cpp](client.cpp) (`CClient`), the sound layer in [sound/](sound/), the GUI
 ([clientdlg.cpp](clientdlg.cpp), [clientsettingsdlg.cpp](clientsettingsdlg.cpp),
@@ -72,23 +68,12 @@ The JSON-RPC API ([rpcserver.cpp](rpcserver.cpp), [clientrpc.cpp](clientrpc.cpp)
 | recorder thread | server with recording | `CJamController` | `CJamRecorder`, fed by queued `AudioFrame` signals from the frame cycle |
 | `QThreadPool` global pool | client GUI | the connect dialog | one task per listed server for the ping/info fan-out (`QtConcurrent::run`) |
 
-Three consequences that are easy to miss:
-
-- **The server's frame cycle runs on the main thread.** `CHighPrecisionTimer`'s thread runs at
-  `QThread::TimeCriticalPriority`, but the only work it does is `emit timeout()`. The slot on the
-  other side of that signal, `CServer::OnTimer` — jitter buffer drain, Opus decode, mix, encode,
-  transmit — executes on the main thread, because the connection between the two is queued
-  (verified with a debugger on Linux; a TODO in [util.cpp](util.cpp) notes the same). On Windows,
-  `CHighPrecisionTimer` is built on a plain `QTimer`, which fires on the main thread as well.
-  With `--multithreading`, the heavy blocks run on the pool, but `OnTimer` still runs every
-  frame and waits for all futures before it returns.
-- **`CSoundBase` inherits `QThread`, but no such thread ever runs.** Nothing in
-  [sound/](sound/) overrides `run()` or calls `start()` on it. Audio callbacks always arrive on
-  threads owned by the driver.
-- **The client's audio send is clocked by the sound hardware; its receive is clocked by the
-  network.** `CClient::ProcessAudioDataIntern` sends from inside the driver callback; arriving
-  packets are buffered by `CSocketThread`. The two paths meet only at the jitter buffer and at
-  the socket send lock.
+**The server's frame cycle runs on the main thread.** The `CHighPrecisionTimer` thread only
+emits `timeout()`; the slot behind that queued connection, `CServer::OnTimer`, does the jitter
+buffer drain, decode, mix, encode and transmit — on the main thread. The TODO in
+[util.cpp](util.cpp) notes the same escape from the timer thread. On Windows the pacer is a
+plain `QTimer`, also main thread. With `--multithreading` the heavy blocks go to the pool, but
+`OnTimer` waits for them.
 
 ## Locks
 

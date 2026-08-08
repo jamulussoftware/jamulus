@@ -165,7 +165,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
         iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
     }
 
-    // To avoid audio clitches, in the entire realtime timer audio processing
+    // To avoid audio glitches, in the entire realtime timer audio processing
     // routine including the ProcessData no memory must be allocated. Since we
     // do not know the required sizes for the vectors, we allocate memory for
     // the worst case here:

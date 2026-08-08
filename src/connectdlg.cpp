@@ -124,6 +124,7 @@ bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
 
 CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, const bool bNEnableIPv6, QWidget* parent ) :
     CBaseDlg ( parent, Qt::Dialog ),
+    savedServer ( nullptr ),
     pSettings ( pNSetP ),
     strSelectedAddress ( "" ),
     strSelectedServerName ( "" ),
@@ -205,6 +206,10 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     cbxServerAddr->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
     cbxServerAddr->setInsertPolicy ( QComboBox::NoInsert );
 
+    // install event filter to catch FocusIn
+    cbxServerAddr->installEventFilter ( this );
+    lvwServers->installEventFilter ( this );
+
     // set up list view for connected clients (note that the last column size
     // must not be specified since this column takes all the remaining space)
 #ifdef ANDROID
@@ -276,9 +281,10 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QObject::connect ( edtFilter, &QLineEdit::textEdited, this, &CConnectDlg::OnFilterTextEdited );
 
     // combo boxes
-    QObject::connect ( cbxServerAddr, &QComboBox::editTextChanged, this, &CConnectDlg::OnServerAddrEditTextChanged );
-
     QObject::connect ( cbxDirectory, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CConnectDlg::OnDirectoryChanged );
+
+    // connect when pressing Enter in the Server Address box
+    QObject::connect ( cbxServerAddr->lineEdit(), &QLineEdit::returnPressed, this, &CConnectDlg::OnConnectClicked );
 
     // check boxes
     QObject::connect ( chbExpandAll, &QCheckBox::stateChanged, this, &CConnectDlg::OnExpandAllStateChanged );
@@ -332,6 +338,7 @@ void CConnectDlg::RequestServerList()
     strSelectedServerName = "";
 
     // clear server list view
+    savedServer = nullptr;
     lvwServers->clear();
 
     // update list combo box (disable events to avoid a signal)
@@ -443,6 +450,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     }
 
     // first clear list
+    savedServer = nullptr;
     lvwServers->clear();
 
     // add list item for each server in the server list
@@ -659,13 +667,6 @@ void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int )
     {
         OnConnectClicked();
     }
-}
-
-void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
-{
-    // in the server address combo box, a text was changed, remove selection
-    // in the server list (if any)
-    lvwServers->clearSelection();
 }
 
 void CConnectDlg::OnCustomDirectoriesChanged()
@@ -1186,4 +1187,33 @@ void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWi
     }
     QAccessible::updateAccessibility ( new QAccessibleAnnouncementEvent ( lvwServers, announcement ) );
 #endif
+}
+
+bool CConnectDlg::eventFilter ( QObject* obj, QEvent* event )
+{
+    if ( obj == cbxServerAddr && event->type() == QEvent::FocusIn )
+    {
+        // check for a selected server before clearing the selection in the list
+        QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
+
+        if ( CurSelListItemList.count() > 0 )
+        {
+            // there was a selected item - save it before deselecting
+            savedServer = GetParentListViewItem ( CurSelListItemList[0] );
+        }
+        // remove selection in the server list (if any)
+        lvwServers->clearSelection();
+    }
+
+    if ( obj == lvwServers && event->type() == QEvent::FocusIn )
+    {
+        if ( savedServer )
+        {
+            // re-select any previously-selected server on regaining focus
+            lvwServers->setCurrentItem ( savedServer );
+            savedServer = nullptr;
+        }
+    }
+
+    return QDialog::eventFilter ( obj, event );
 }

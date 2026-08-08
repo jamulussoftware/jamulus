@@ -165,10 +165,17 @@ CServer::CServer ( const int          iNewMaxNumChan,
         iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
     }
 
-    // To avoid audio clitches, in the entire realtime timer audio processing
-    // routine including the ProcessData no memory must be allocated. Since we
-    // do not know the required sizes for the vectors, we allocate memory for
-    // the worst case here:
+    // To avoid audio glitches, the realtime timer audio routine ( OnTimer ->
+    // ProcessData ) should allocate no memory. The worst-case vectors below are
+    // pre-sized here for that reason. Note that the goal is not currently met: the
+    // send path still allocates once per outgoing audio packet. CSocket::SendPacket
+    // takes its argument as a const CVector, and the ( CVector<uint8_t> ) cast that
+    // strips the const deep-copies the whole datagram -- one malloc, one memmove, one
+    // free for every packet sent, on this same timer thread ( attribute by stack, not
+    // by thread name: OnTimer runs on the Qt event-loop thread via a queued connection ).
+    // CNetBufWithStats::Init also allocates on this path. FIXME: remove these before
+    // relying on the no-allocation guarantee. Since we do not know the required sizes
+    // for the vectors, we allocate memory for the worst case here:
 
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init ( iMaxNumChannels );

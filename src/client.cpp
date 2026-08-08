@@ -482,7 +482,7 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 //
 // When the first gain or pan change message is requested after an idle period (i.e. the timer is not
 // running), it will be sent immediately, and a timer started. The timer period is dependent on
-// the current ping time to the remote server.
+// the current ping time to the remote server, which only a GUI client measures (see #3874).
 //
 // If a gain or pan change message is requested while the timer is still running, the new value is not sent,
 // but just stored in newGain or newPan within clientChannels[iId], and the minGainOrPanId and maxGainOrPanId

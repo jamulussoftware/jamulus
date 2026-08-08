@@ -676,7 +676,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
         if ( !CurFlagIcon.isNull() )
         {
             // create a combo box item with text and image
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+            pcbxCountry->addItem ( QIcon ( CurFlagIcon ), QLocale::territoryToString ( eCountry ), iCurCntry );
+#else
             pcbxCountry->addItem ( QIcon ( CurFlagIcon ), QLocale::countryToString ( eCountry ), iCurCntry );
+#endif
         }
     }
 
@@ -718,13 +722,29 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QObject::connect ( sldNetBufServer, &QSlider::valueChanged, this, &CClientSettingsDlg::OnNetBufServerValueChanged );
 
     // check boxes
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbAutoJitBuf, &QCheckBox::checkStateChanged, this, &CClientSettingsDlg::OnAutoJitBufStateChanged );
+#else
     QObject::connect ( chbAutoJitBuf, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnAutoJitBufStateChanged );
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbSmallNetworkBuffers, &QCheckBox::checkStateChanged, this, &CClientSettingsDlg::OnEnableOPUS64StateChanged );
+#else
     QObject::connect ( chbSmallNetworkBuffers, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnEnableOPUS64StateChanged );
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbDetectFeedback, &QCheckBox::checkStateChanged, this, &CClientSettingsDlg::OnFeedbackDetectionChanged );
+#else
     QObject::connect ( chbDetectFeedback, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnFeedbackDetectionChanged );
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbAudioAlerts, &QCheckBox::checkStateChanged, this, &CClientSettingsDlg::OnAudioAlertsChanged );
+#else
     QObject::connect ( chbAudioAlerts, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnAudioAlertsChanged );
+#endif
 
     // line edits
     QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );

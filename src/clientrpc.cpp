@@ -91,7 +91,11 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
                 { "name", chanInfo.strName },
                 { "skillLevel", SerializeSkillLevel ( chanInfo.eSkillLevel ) },
                 { "countryId", chanInfo.eCountry },
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+                { "country", QLocale::territoryToString ( chanInfo.eCountry ) },
+#else
                 { "country", QLocale::countryToString ( chanInfo.eCountry ) },
+#endif
                 { "city", chanInfo.strCity },
                 { "instrumentId", chanInfo.iInstrument },
                 { "instrument", CInstPictures::GetName ( chanInfo.iInstrument ) },
@@ -140,7 +144,11 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
                           { "address", serverInfo.HostAddr.toString() },
                           { "name", serverInfo.strName },
                           { "countryId", serverInfo.eCountry },
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+                          { "country", QLocale::territoryToString ( serverInfo.eCountry ) },
+#else
                           { "country", QLocale::countryToString ( serverInfo.eCountry ) },
+#endif
                           { "city", serverInfo.strCity },
                       };
                       arrServerInfo.append ( objServerInfo );
@@ -239,7 +247,11 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
             // TODO: We cannot include "id" here is pClient->ChannelInfo is a CChannelCoreInfo which lacks that field.
             { "name", pClient->ChannelInfo.strName },
             { "countryId", pClient->ChannelInfo.eCountry },
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+            { "country", QLocale::territoryToString ( pClient->ChannelInfo.eCountry ) },
+#else
             { "country", QLocale::countryToString ( pClient->ChannelInfo.eCountry ) },
+#endif
             { "city", pClient->ChannelInfo.strCity },
             { "instrumentId", pClient->ChannelInfo.iInstrument },
             { "instrument", CInstPictures::GetName ( pClient->ChannelInfo.iInstrument ) },

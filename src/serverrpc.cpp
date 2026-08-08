@@ -201,7 +201,11 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
                 { "channels", pServer->GetClientNumAudioChannels ( i ) },
                 { "instrumentCode", vecChanInfo[i].iInstrument },
                 { "city", vecChanInfo[i].strCity },
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+                { "countryName", QLocale::territoryToString ( vecChanInfo[i].eCountry ) },
+#else
                 { "countryName", QLocale::countryToString ( vecChanInfo[i].eCountry ) },
+#endif
                 { "skillLevelCode", vecChanInfo[i].eSkillLevel },
             };
             clients.append ( client );

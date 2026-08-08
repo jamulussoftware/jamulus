@@ -300,11 +300,23 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
 
     QObject::connect ( pPan, &QDial::valueChanged, this, &CChannelFader::OnPanValueChanged );
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( pcbMute, &QCheckBox::checkStateChanged, this, &CChannelFader::OnMuteStateChanged );
+#else
     QObject::connect ( pcbMute, &QCheckBox::stateChanged, this, &CChannelFader::OnMuteStateChanged );
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( pcbSolo, &QCheckBox::checkStateChanged, this, &CChannelFader::soloStateChanged );
+#else
     QObject::connect ( pcbSolo, &QCheckBox::stateChanged, this, &CChannelFader::soloStateChanged );
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( pcbGroup, &QCheckBox::checkStateChanged, this, &CChannelFader::OnGroupStateChanged );
+#else
     QObject::connect ( pcbGroup, &QCheckBox::stateChanged, this, &CChannelFader::OnGroupStateChanged );
+#endif
 }
 
 void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -932,8 +944,13 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
         if ( eTTCountry != QLocale::AnyCountry )
         {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+            strToolTip += QLocale::territoryToString ( eTTCountry );
+            strLocationAccessible += QLocale::territoryToString ( eTTCountry );
+#else
             strToolTip += QLocale::countryToString ( eTTCountry );
             strLocationAccessible += QLocale::countryToString ( eTTCountry );
+#endif
         }
     }
 

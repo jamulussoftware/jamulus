@@ -241,7 +241,11 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool 
     QObject::connect ( cbxServerAddr->lineEdit(), &QLineEdit::returnPressed, this, &CConnectDlg::OnConnectClicked );
 
     // check boxes
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbExpandAll, &QCheckBox::checkStateChanged, this, &CConnectDlg::OnExpandAllStateChanged );
+#else
     QObject::connect ( chbExpandAll, &QCheckBox::stateChanged, this, &CConnectDlg::OnExpandAllStateChanged );
+#endif
 
     // buttons
     QObject::connect ( butCancel, &QPushButton::clicked, this, &CConnectDlg::close );
@@ -485,7 +489,11 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
 
         if ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry )
         {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+            QString strCountryToString = QLocale::territoryToString ( vecServerInfo[iIdx].eCountry );
+#else
             QString strCountryToString = QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
+#endif
 
             // Qt countryToString does not use spaces in between country name
             // parts but they use upper case letters which we can detect and
@@ -564,7 +572,11 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVect
 
             if ( vecChanInfo[i].eCountry != QLocale::AnyCountry )
             {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+                pNewChildListViewItem->setData ( LVC_NAME, Qt::UserRole, QLocale::territoryToString ( vecChanInfo[i].eCountry ) );
+#else
                 pNewChildListViewItem->setData ( LVC_NAME, Qt::UserRole, QLocale::countryToString ( vecChanInfo[i].eCountry ) );
+#endif
                 // try to load the country flag icon
                 QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( vecChanInfo[i].eCountry ) );
 

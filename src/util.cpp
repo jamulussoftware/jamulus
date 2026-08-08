@@ -728,7 +728,11 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : CBaseDlg ( parent )
     butAccept->setEnabled ( false );
     butAccept->setDefault ( true );
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbAgree, &QCheckBox::checkStateChanged, this, &CLicenceDlg::OnAgreeStateChanged );
+#else
     QObject::connect ( chbAgree, &QCheckBox::stateChanged, this, &CLicenceDlg::OnAgreeStateChanged );
+#endif
 
     QObject::connect ( butAccept, &QPushButton::clicked, this, &CLicenceDlg::accept );
 

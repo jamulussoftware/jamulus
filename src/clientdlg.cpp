@@ -478,11 +478,23 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
 
     // check boxes
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbSettings, &QCheckBox::checkStateChanged, this, &CClientDlg::OnSettingsStateChanged );
+#else
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbChat, &QCheckBox::checkStateChanged, this, &CClientDlg::OnChatStateChanged );
+#else
     QObject::connect ( chbChat, &QCheckBox::stateChanged, this, &CClientDlg::OnChatStateChanged );
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbLocalMute, &QCheckBox::checkStateChanged, this, &CClientDlg::OnLocalMuteStateChanged );
+#else
     QObject::connect ( chbLocalMute, &QCheckBox::stateChanged, this, &CClientDlg::OnLocalMuteStateChanged );
+#endif
 
     // timers
     QObject::connect ( &TimerSigMet, &QTimer::timeout, this, &CClientDlg::OnTimerSigMet );
@@ -1117,7 +1129,11 @@ void CClientDlg::OnTimerSigMet()
         msgbox.setDefaultButton ( QMessageBox::Ok );
         msgbox.setCheckBox ( chb );
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+        QObject::connect ( chb, &QCheckBox::checkStateChanged, this, &CClientDlg::OnFeedbackDetectionChanged );
+#else
         QObject::connect ( chb, &QCheckBox::stateChanged, this, &CClientDlg::OnFeedbackDetectionChanged );
+#endif
 
         msgbox.exec();
     }

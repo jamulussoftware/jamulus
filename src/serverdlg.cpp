@@ -350,7 +350,11 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
         // store the country enum index together with the string (this is
         // important since we sort the combo box items later on)
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+        cbxLocationCountry->addItem ( QLocale::territoryToString ( static_cast<QLocale::Country> ( iCurCntry ) ), iCurCntry );
+#else
         cbxLocationCountry->addItem ( QLocale::countryToString ( static_cast<QLocale::Country> ( iCurCntry ) ), iCurCntry );
+#endif
     }
 
     // sort country combo box items in alphabetical order
@@ -433,11 +437,23 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     // Connections -------------------------------------------------------------
     // check boxes
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbJamRecorder, &QCheckBox::checkStateChanged, this, &CServerDlg::OnEnableRecorderStateChanged );
+#else
     QObject::connect ( chbJamRecorder, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableRecorderStateChanged );
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbStartOnOSStart, &QCheckBox::checkStateChanged, this, &CServerDlg::OnStartOnOSStartStateChanged );
+#else
     QObject::connect ( chbStartOnOSStart, &QCheckBox::stateChanged, this, &CServerDlg::OnStartOnOSStartStateChanged );
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    QObject::connect ( chbDelayPanning, &QCheckBox::checkStateChanged, this, &CServerDlg::OnEnableDelayPanningStateChanged );
+#else
     QObject::connect ( chbDelayPanning, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableDelayPanningStateChanged );
+#endif
 
     // line edits
     QObject::connect ( edtServerName, &QLineEdit::editingFinished, this, &CServerDlg::OnServerNameEditingFinished );

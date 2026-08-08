@@ -212,7 +212,11 @@ CServerListManager::CServerListManager ( CServer*       pServer,
      *
      * If we are a directory, we assume that we are a permanent server.
      */
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+    CServerListEntry ThisServerListEntry ( haServerAddr, ServerPublicIP, "", QLocale::system().territory(), "", iNumChannels, bIsDirectory );
+#else
     CServerListEntry ThisServerListEntry ( haServerAddr, ServerPublicIP, "", QLocale::system().country(), "", iNumChannels, bIsDirectory );
+#endif
 
     // parse the server info string according to definition:
     // [this server name];[this server city];[this server country as QLocale ID] (; ... ignored)
@@ -253,7 +257,11 @@ CServerListManager::CServerListManager ( CServer*       pServer,
                                         .arg ( ThisServerListEntry.strName )
                                         .arg ( ThisServerListEntry.strCity )
                                         .arg ( slServInfoSeparateParams[2] )
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+                                        .arg ( QLocale::territoryToString ( ThisServerListEntry.eCountry ) ) );
+#else
                                         .arg ( QLocale::countryToString ( ThisServerListEntry.eCountry ) ) );
+#endif
     }
 
     // per definition, the very first entry is this server and this entry will

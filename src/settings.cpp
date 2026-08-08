@@ -482,7 +482,11 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     else
     {
         // if no country is given, use the one from the operating system
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 5, 0 )
+        pClient->ChannelInfo.eCountry = QLocale::system().territory();
+#else
         pClient->ChannelInfo.eCountry = QLocale::system().country();
+#endif
     }
 
     // city

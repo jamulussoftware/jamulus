@@ -164,8 +164,7 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool 
     cbxServerAddr->installEventFilter ( this );
     lvwServers->installEventFilter ( this );
 
-    // set up list view for connected clients (note that the last column size
-    // must not be specified since this column takes all the remaining space)
+    // set up list view for connected clients
 #ifdef ANDROID
     // for Android we need larger numbers because of the default font size
     lvwServers->setColumnWidth ( LVC_NAME, 200 );

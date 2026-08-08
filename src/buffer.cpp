@@ -198,9 +198,12 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
                 iSeqNumDiff -= 256;
             }
 
-            // The 1-byte sequence number wraps around at a count of 256. So, if a packet is delayed
-            // further than this we cannot detect it. But it does not matter since such a packet is
-            // more than 100 ms delayed so we have a bad network situation anyway. Therefore we
+            // The 1-byte sequence number is folded into a signed difference above, so a
+            // delayed packet is mistaken for an early one once it is more than 128 counts
+            // late, not 256. At the fastest possible frame rate that is still 171 ms
+            // (64-sample frames, 750 counts/s) and at the default frame size 341 ms
+            // (128-sample frames, 375 counts/s), so such a packet is long useless either
+            // way and we have a bad network situation anyway. Therefore we
             // assume that the sequence number difference between the received and local counter is
             // correct. The idea of the following code is that we always move our "buffer window" so
             // that the received packet fits into the buffer. By doing this we are robust against

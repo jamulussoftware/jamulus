@@ -192,7 +192,7 @@ void CSocket::Init ( const quint16  iNewPortNumber,
         UdpSocket4 = socket ( AF_INET, SOCK_DGRAM, 0 );
         if ( UdpSocket4 == INVALID_SOCKET )
         {
-            // IPv4 requested but not available, throw error (should never happen, but check anyway)
+            // socket creation can fail (e.g. under file descriptor exhaustion), throw error
             throw CGenErr ( "IPv4 requested but not available on this system.", "Network Error" );
         }
 

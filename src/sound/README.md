@@ -76,8 +76,10 @@ and JACK's buffer size callback both report that by calling
 `Init()` is only ever entered with the device stopped. Callers that may be running stop it first
 and restart it afterwards, which is the `bWasRunning` pattern throughout `client.cpp`.
 
-The audio callback runs on a thread owned by the driver. Backends keep it away from a device that
-is being re-initialised in two ways, and the ASIO backend is the exception to both:
+The audio callback runs on a thread owned by the driver. `CSoundBase` inherits `QThread`, but
+nothing here overrides `run()` or calls `start()`, so no such thread exists. Backends keep the
+callback away from a device that is being re-initialised in two ways, and the ASIO backend is the
+exception to both:
 
 | backend | audio callback | ignores the callback while stopped | takes `MutexAudioProcessCallback` |
 |---|---|---|---|

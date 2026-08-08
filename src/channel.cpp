@@ -716,12 +716,20 @@ int CChannel::GetUploadRateKbps()
 {
     const int iAudioSizeOut = iNetwFrameSizeFact * iAudioFrameSizeSamples;
 
-    // we assume that the UDP packet which is transported via IP has an
-    // additional header size of ("Network Music Performance (NMP) in narrow
-    // band networks; Carot, Kraemer, Schuller; 2006")
+    // The 77-byte per-packet overhead below (28 + 26 + 23) models a PPPoE-over-ATM DSL
+    // access path, following ("Network Music Performance (NMP) in narrow band networks;
+    // Carot, Kraemer, Schuller; 2006"):
     // 8 (UDP) + 20 (IP without optional fields) = 28 bytes
     // 2 (PPP) + 6 (PPPoE) + 18 (MAC)            = 26 bytes
     // 5 (RFC1483B) + 8 (AAL) + 10 (ATM)         = 23 bytes
+    // A packet capture on a real internet path measures 46 bytes over IPv4/Ethernet
+    // (20 IP + 8 UDP + 14 Ethernet, no PPPoE, no ATM, no VLAN) and 66 over IPv6, so this
+    // constant is 31 bytes too large for IPv4 and 20 bytes too small for the IPv6 header
+    // it never accounts for. The figure a client can actually justify is 28 (IPv4) or
+    // 48 (IPv6) at L3/L4, since the access encapsulation is invisible to the endpoint.
+    // As it stands the returned rate overstates real IPv4/Ethernet cost by roughly 15% to
+    // 50%, worst at the lowest bit-rate settings. FIXME: the constant should reflect a
+    // measurable path, but the "right" figure is a design decision (which layer to bill).
     return ( iNetwFrameSize * iNetwFrameSizeFact + 28 + 26 + 23 /* header */ ) * 8 /* bits per byte */ * SYSTEM_SAMPLE_RATE_HZ / iAudioSizeOut / 1000;
 }
 

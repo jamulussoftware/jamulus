@@ -1012,7 +1012,14 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     }
 
     // allocate and map client-side channel 0
-    int iChanID = FindClientChannel ( iServerChanID, true ); // should always return channel 0
+    // In normal operation this returns channel 0. It is NOT guaranteed: FindClientChannel
+    // returns INVALID_INDEX ( -1 ) for any iServerChanID >= MAX_NUM_CHANNELS ( 150 ), and a
+    // server-sent CLIENT_ID is only length-checked ( EvaluateClientIDMes, protocol.cpp ), never
+    // range-checked, so a malicious or buggy server can deliver an id of 150..255. The result is
+    // used below without a guard; with the headless mute-me-in-personal-mix flag set it reaches
+    // SetRemoteChanGain, which dereferences &clientChannels[-1]. FIXME: reject iServerChanID
+    // outside [0, MAX_NUM_CHANNELS) here or in EvaluateClientIDMes before this line.
+    int iChanID = FindClientChannel ( iServerChanID, true );
 
     // for headless mode we support to mute our own signal in the personal mix
     // (note that the check for headless is done in the main.cpp and must not

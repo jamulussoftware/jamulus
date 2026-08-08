@@ -662,7 +662,11 @@ void CServer::OnTimer()
     bool bUseMT               = false;
     int  iNumBlocks           = 0;     // init number of blocks for multithreading
     int  iMTBlockSize         = 0;     // init block size for multithreading
-    bChannelIsNowDisconnected = false; // note that the flag must be a member function since QtConcurrent::run can only take 5 params
+    // The flag is a member variable, not a local. Nothing in the threading forces that: the
+    // decode workers below are dispatched through CThreadPool::enqueue ( threadpool.h ), which is
+    // variadic and takes any number of arguments. The five-argument cap this note used to cite is
+    // Qt5 QtConcurrent::run's, and that path is no longer used here.
+    bChannelIsNowDisconnected = false;
 
     {
         // Make put and get calls thread safe.

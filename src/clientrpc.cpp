@@ -511,6 +511,30 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
 
         response["result"] = "ok";
     } );
+
+    /// @rpc_method jamulusclient/setInputBoost
+    /// @brief Sets the input boost factor.
+    /// @param {int} params.boost - boost factor, 1 (no boost) to 10.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusclient/setInputBoost", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto boost = params["boost"];
+        if ( !boost.isDouble() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: boost is not a number" );
+            return;
+        }
+
+        const int iBoost = boost.toInt();
+        if ( iBoost < 1 || iBoost > 10 )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: boost must be between 1 and 10" );
+            return;
+        }
+
+        pClient->SetInputBoost ( iBoost );
+
+        response["result"] = "ok";
+    } );
 }
 
 QJsonValue CClientRpc::SerializeSkillLevel ( ESkillLevel eSkillLevel )

@@ -1009,7 +1009,7 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     }
 
     // allocate and map client-side channel 0
-    int iChanID = FindClientChannel ( iServerChanID, true ); // should always return channel 0
+    int iChanID = FindClientChannel ( iServerChanID, true ); // returns channel 0 for an in-range iServerChanID
 
     // for headless mode we support to mute our own signal in the personal mix
     // (note that the check for headless is done in the main.cpp and must not

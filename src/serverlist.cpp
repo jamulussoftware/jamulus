@@ -567,7 +567,7 @@ void CServerListManager::OnTimerPollList()
 
     locker.unlock();
 
-    foreach ( const CHostAddress HostAddr, vecRemovedHostAddr )
+    for ( const CHostAddress& HostAddr : vecRemovedHostAddr )
     {
         qInfo() << qUtf8Printable ( QString ( "Expired entry for %1" ).arg ( HostAddr.toString() ) );
     }

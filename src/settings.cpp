@@ -77,7 +77,11 @@ void CSettings::ReadFromFile ( const QString& strCurFileName, QDomDocument& XMLD
 
     if ( file.open ( QIODevice::ReadOnly ) )
     {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 1, 0 )
+        XMLDocument.setContent ( QTextStream ( &file ).readAll().toUtf8(), QDomDocument::ParseOption::Default );
+#else
         XMLDocument.setContent ( QTextStream ( &file ).readAll(), false );
+#endif
         file.close();
     }
 }

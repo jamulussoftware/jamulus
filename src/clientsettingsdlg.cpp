@@ -380,6 +380,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
+    // reverb preset
+    QString strReverbPreset = "<b>" + tr ( "Reverb Preset" ) + ":</b> " +
+                              tr ( "Jamulus uses MVerb by Martin Eastwood for reverberation. "
+                                   "MVerb comes with a set of presets you can select here. "
+                                   "Available Presets: Subtle, Stadium, Cupboard, Dark, Halves " );
+    lblInputBoost->setWhatsThis ( strReverbPreset );
+    cbxInputBoost->setWhatsThis ( strReverbPreset );
+    cbxInputBoost->setAccessibleName ( tr ( "Reverb Preset combo box" ) );
+
     // custom directories
     QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
                                    tr ( "If you need to add additional directories to the Connect dialog Directory drop down, "
@@ -554,6 +563,17 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     }
     // factor is 1-based while index is 0-based:
     cbxInputBoost->setCurrentIndex ( pSettings->iInputBoost - 1 );
+
+    // Rever Preset combo box
+    cbxReverbPreset->clear();
+    cbxReverbPreset->addItem ( "Subtle" );
+    cbxReverbPreset->addItem ( "Stadium" );
+    cbxReverbPreset->addItem ( "Cupboard" );
+    cbxReverbPreset->addItem ( "Dark" );
+    cbxReverbPreset->addItem ( "Halves" );
+    cbxReverbPreset->addItem ( "Drum Room" );
+    cbxReverbPreset->addItem ( "Club" );
+    cbxReverbPreset->setCurrentIndex ( pClient->GetReverbPreset() );
 
     // init number of mixer rows
     spnMixerRows->setValue ( pSettings->iNumMixerPanelRows );
@@ -785,6 +805,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
                        &CClientSettingsDlg::OnInputBoostChanged );
+
+    QObject::connect ( cbxReverbPreset,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                       this,
+                       &CClientSettingsDlg::OnReverbPresetChanged );
 
     // buttons
 #if defined( _WIN32 ) && !defined( WITH_JACK )
@@ -1388,6 +1413,8 @@ void CClientSettingsDlg::OnInputBoostChanged()
     pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
     pClient->SetInputBoost ( pSettings->iInputBoost );
 }
+
+void CClientSettingsDlg::OnReverbPresetChanged() { pClient->SetReverbPreset ( cbxReverbPreset->currentIndex() ); }
 
 void CClientSettingsDlg::OnAliasTextChanged ( const QString& strNewName )
 {

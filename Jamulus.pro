@@ -90,6 +90,8 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 
 win32 {
+    # fixes error C7525: inline variables require at least '/std:c++17'
+    CONFIG += c++17
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     RC_FILE = src/res/win-mainicon.rc
@@ -387,8 +389,7 @@ FORMS_GUI = src/aboutdlgbase.ui \
         src/connectdlgbase.ui
 }
 
-HEADERS += src/plugins/audioreverb.h \
-    src/buffer.h \
+HEADERS += src/buffer.h \
     src/channel.h \
     src/global.h \
     src/protocol.h \
@@ -408,7 +409,9 @@ HEADERS += src/plugins/audioreverb.h \
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
         src/sound/soundbase.h \
-        src/testbench.h
+        src/testbench.h \
+        src/plugins/audioreverb.h \
+        libs/mverb/MVerb.h
 }
 
 HEADERS_GUI = src/serverdlg.h
@@ -495,8 +498,7 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/x86cpu.h \
     $$files(libs/opus/silk/x86/*.h)
 
-SOURCES += src/plugins/audioreverb.cpp \
-    src/buffer.cpp \
+SOURCES += src/buffer.cpp \
     src/channel.cpp \
     src/main.cpp \
     src/protocol.cpp \
@@ -515,6 +517,7 @@ SOURCES += src/plugins/audioreverb.cpp \
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
         src/sound/soundbase.cpp \
+        src/plugins/audioreverb.cpp
 }
 
 SOURCES_GUI = src/serverdlg.cpp

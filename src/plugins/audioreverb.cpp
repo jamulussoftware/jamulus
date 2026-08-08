@@ -2,206 +2,69 @@
 * Audio Reverberation                                                          *
 \******************************************************************************/
 /*
-    The following code is based on "JCRev: John Chowning's reverberator class"
-    by Perry R. Cook and Gary P. Scavone, 1995 - 2004
-    which is in "The Synthesis ToolKit in C++ (STK)"
-    http://ccrma.stanford.edu/software/stk
-
-    Original description:
-    This class is derived from the CLM JCRev function, which is based on the use
-    of networks of simple allpass and comb delay filters. This class implements
-    three series allpass units, followed by four parallel comb filters, and two
-    decorrelation delay lines in parallel at the output.
+    The following code calls MVerb for reverberation.
+    MVerb was written by Martin Eastwood.
+    https://github.com/martineastwood/mverb
 */
 
 #include "audioreverb.h"
 
-void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam, const int iSampleRate, const float fT60 )
+void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam )
 {
-    // store parameters
     eAudioChannelConf   = eNAudioChannelConf;
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
-    // delay lengths for 44100 Hz sample rate
-    int         lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
-    const float scaler     = static_cast<float> ( iSampleRate ) / 44100.0f;
+    // Jamulus uses interleaved stereo, mverb operates on a 2-dimensional array instead
+    // Calculate the number of frames for each channel ( iStereoBlockSizeSam / 2 )
+    numFrames = iStereoBlockSizeSam >> 1;
 
-    if ( scaler != 1.0f )
-    {
-        for ( int i = 0; i < 9; i++ )
-        {
-            int delay = static_cast<int> ( floorf ( scaler * lengths[i] ) );
+    // These buffers get filled with dry signal and are then passed to mverb
+    // They need to be vectors as the windows builds fail when arrays are used
+    bufL.resize ( numFrames );
+    bufR.resize ( numFrames );
 
-            if ( ( delay & 1 ) == 0 )
-            {
-                delay++;
-            }
-
-            while ( !isPrime ( delay ) )
-            {
-                delay += 2;
-            }
-
-            lengths[i] = delay;
-        }
-    }
-
-    for ( int i = 0; i < 3; i++ )
-    {
-        allpassDelays[i].Init ( lengths[i + 4] );
-    }
-
-    for ( int i = 0; i < 4; i++ )
-    {
-        combDelays[i].Init ( lengths[i] );
-        combFilters[i].setPole ( 0.2f );
-    }
-
-    setT60 ( fT60, iSampleRate );
-    outLeftDelay.Init ( lengths[7] );
-    outRightDelay.Init ( lengths[8] );
-    allpassCoefficient = 0.7f;
-    Clear();
+    mverb->setSampleRate ( static_cast<float> ( SYSTEM_SAMPLE_RATE_HZ ) );
+    loadPreset();
 }
 
-bool CAudioReverb::isPrime ( const int number )
+void CAudioReverb::loadPreset()
 {
-    /*
-        Returns true if argument value is prime. Taken from "class Effect" in
-        "STK abstract effects parent class".
-    */
-    if ( number == 2 )
+    for ( int i = 0; i < MVerb<float>::NUM_PARAMS; i++ )
     {
-        return true;
+        mverb->setParameter ( i, presets[iPreset][i] );
     }
+}
 
-    if ( number & 1 )
+void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fReverbGain )
+{
+
+    // One buffer to pass to mverb's process function
+    float* fInput[2] = { bufL.data(), bufR.data() };
+
+    if ( eAudioChannelConf == CC_STEREO )
     {
-        for ( int i = 3; i < static_cast<int> ( sqrtf ( static_cast<float> ( number ) ) ) + 1; i += 2 )
+        for ( int i = 0, j = 0; j < numFrames; i += 2, j++ )
         {
-            if ( ( number % i ) == 0 )
-            {
-                return false;
-            }
+            // True stereo reverb
+            bufL[j] = static_cast<float> ( vecsStereoInOut[i] ) / fMaxShort;
+            bufR[j] = static_cast<float> ( vecsStereoInOut[i + 1] ) / fMaxShort;
         }
-
-        return true; // prime
     }
     else
     {
-        return false; // even
+        for ( int i = 0, j = 0; j < numFrames; i += 2, j++ )
+        {
+            // For Mono and Mono-in/Stereo-out only one channel is selected and copied into both fInput channels
+            bufR[j] = bufL[j] = static_cast<float> ( vecsStereoInOut[i + !bReverbOnLeftChan] ) / fMaxShort;
+        }
     }
-}
 
-void CAudioReverb::Clear()
-{
-    // reset and clear all internal state
-    allpassDelays[0].Reset ( 0 );
-    allpassDelays[1].Reset ( 0 );
-    allpassDelays[2].Reset ( 0 );
-    combDelays[0].Reset ( 0 );
-    combDelays[1].Reset ( 0 );
-    combDelays[2].Reset ( 0 );
-    combDelays[3].Reset ( 0 );
-    combFilters[0].Reset();
-    combFilters[1].Reset();
-    combFilters[2].Reset();
-    combFilters[3].Reset();
-    outRightDelay.Reset ( 0 );
-    outLeftDelay.Reset ( 0 );
-}
+    mverb->process ( fInput, fInput, numFrames );
 
-void CAudioReverb::setT60 ( const float fT60, const int iSampleRate )
-{
-    // set the reverberation T60 decay time
-    for ( int i = 0; i < 4; i++ )
+    for ( int i = 0, j = 0; j < numFrames; i += 2, j++ )
     {
-        combCoefficient[i] = powf ( 10.0f, static_cast<float> ( -3.0f * combDelays[i].Size() / ( fT60 * iSampleRate ) ) );
-    }
-}
-
-void CAudioReverb::COnePole::setPole ( const float fPole )
-{
-    // calculate IIR filter coefficients based on the pole value
-    fA = -fPole;
-    fB = 1.0f - fPole;
-}
-
-float CAudioReverb::COnePole::Calc ( const float fIn )
-{
-    // calculate IIR filter
-    fLastSample = fB * fIn - fA * fLastSample;
-
-    return fLastSample;
-}
-
-void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fAttenuation )
-{
-    float fMixedInput, temp, temp0, temp1, temp2;
-
-    for ( int i = 0; i < iStereoBlockSizeSam; i += 2 )
-    {
-        // we sum up the stereo input channels (in case mono input is used, a zero
-        // shall be input for the right channel)
-        if ( eAudioChannelConf == CC_STEREO )
-        {
-            fMixedInput = 0.5f * ( vecsStereoInOut[i] + vecsStereoInOut[i + 1] );
-        }
-        else
-        {
-            if ( bReverbOnLeftChan )
-            {
-                fMixedInput = vecsStereoInOut[i];
-            }
-            else
-            {
-                fMixedInput = vecsStereoInOut[i + 1];
-            }
-        }
-
-        temp  = allpassDelays[0].Get();
-        temp0 = allpassCoefficient * temp;
-        temp0 += fMixedInput;
-        allpassDelays[0].Add ( temp0 );
-        temp0 = -( allpassCoefficient * temp0 ) + temp;
-
-        temp  = allpassDelays[1].Get();
-        temp1 = allpassCoefficient * temp;
-        temp1 += temp0;
-        allpassDelays[1].Add ( temp1 );
-        temp1 = -( allpassCoefficient * temp1 ) + temp;
-
-        temp  = allpassDelays[2].Get();
-        temp2 = allpassCoefficient * temp;
-        temp2 += temp1;
-        allpassDelays[2].Add ( temp2 );
-        temp2 = -( allpassCoefficient * temp2 ) + temp;
-
-        const float temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
-        const float temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
-        const float temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
-        const float temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
-
-        combDelays[0].Add ( temp3 );
-        combDelays[1].Add ( temp4 );
-        combDelays[2].Add ( temp5 );
-        combDelays[3].Add ( temp6 );
-
-        const float filtout = temp3 + temp4 + temp5 + temp6;
-
-        outLeftDelay.Add ( filtout );
-        outRightDelay.Add ( filtout );
-
-        // inplace apply the attenuated reverb signal (for stereo always apply
-        // reverberation effect on both channels)
-        if ( ( eAudioChannelConf == CC_STEREO ) || bReverbOnLeftChan )
-        {
-            vecsStereoInOut[i] = Float2Short ( ( 1.0f - fAttenuation ) * vecsStereoInOut[i] + 0.5f * fAttenuation * outLeftDelay.Get() );
-        }
-
-        if ( ( eAudioChannelConf == CC_STEREO ) || !bReverbOnLeftChan )
-        {
-            vecsStereoInOut[i + 1] = Float2Short ( ( 1.0f - fAttenuation ) * vecsStereoInOut[i + 1] + 0.5f * fAttenuation * outRightDelay.Get() );
-        }
+        // Mix wet and dry signal
+        vecsStereoInOut[i]     = Float2Short ( vecsStereoInOut[i] + bufL[j] * fMaxShort * fReverbGain );
+        vecsStereoInOut[i + 1] = Float2Short ( vecsStereoInOut[i + 1] + bufR[j] * fMaxShort * fReverbGain );
     }
 }

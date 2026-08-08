@@ -287,9 +287,19 @@ jobs:
       - name:                       Checkout code
         uses:                       actions/checkout@v7
         with:
-          # only Android needs the oboe submodule, so don't fetch it for other builds
-          submodules:               ${{ matrix.config.target_os == 'android' }}
+          submodules:               false
           fetch-depth:              ${{ matrix.config.checkout_fetch_depth || '1' }}
+
+      - name:                       Initialize Submodules
+        shell: bash
+        run: |
+          # clone mverb for all platforms
+          git submodule update --init libs/mverb
+
+          # clone oboe only for android builds
+          if [[ "${{ matrix.config.target_os }}" == "android" ]]; then
+            git submodule update --init libs/oboe
+          fi
 
       - name:                       Cache Mac dependencies
         if:                         matrix.config.target_os == 'macos'

@@ -210,7 +210,11 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
             // sample rate offsets between client/server or buffer glitches in the audio driver since
             // we adjust the window. The downside is that we never throw away single packets which arrive
             // too late so we throw away valid packets when we move the "buffer window" to the delayed
-            // packet and then back to the correct place when the next normal packet is received. But
+            // packet and then back to the correct place when the next normal packet is received.
+            // Note that this is not the only way a valid block is lost: a block can also be
+            // overwritten in its slot before it is played out. That second channel is the only
+            // one that exists at a buffer length of 1, while the window move dominates from a
+            // buffer length of 3 upwards. But
             // tests showed that the new buffer strategy does not perform worse than the old jitter
             // buffer which did not use any sequence number at all.
             if ( iSeqNumDiff < 0 )

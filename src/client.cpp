@@ -999,9 +999,12 @@ void CClient::OnControllerInMuteMyself ( bool bMute )
 
 void CClient::OnClientIDReceived ( int iServerChanID )
 {
-    // if we have just connected to a running server, iActiveChannels will be 0
-    // if iActiveChannels is not 0, the server must have been restarted on the fly
-    // in that case, channels might have changed, so clear our list to get it afresh.
+    // If we have just connected to a running server, iActiveChannels will be 0.
+    // If it is not 0, the server has begun a NEW connection for us while this client kept
+    // running. A restart is only one way that happens: the server also drops a channel whose
+    // receive timeout expires ( CON_TIME_OUT_SEC_MAX, channel.h ) and treats the next packet
+    // from the same peer as a new connection, so a traffic gap of longer than that is enough.
+    // Either way the channel list we hold may be stale, so clear it and get it afresh.
     if ( iActiveChannels != 0 )
     {
         qInfo() << "> Server restarted?";

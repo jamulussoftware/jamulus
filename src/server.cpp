@@ -662,7 +662,7 @@ void CServer::OnTimer()
     bool bUseMT               = false;
     int  iNumBlocks           = 0;     // init number of blocks for multithreading
     int  iMTBlockSize         = 0;     // init block size for multithreading
-    bChannelIsNowDisconnected = false; // note that the flag must be a member function since QtConcurrent::run can only take 5 params
+    bChannelIsNowDisconnected = false; // note that the flag is a member since DecodeReceiveData sets it and the check below reads it
 
     {
         // Make put and get calls thread safe.

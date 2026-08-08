@@ -948,9 +948,14 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
 
                 FreeChannel ( iCurChanID ); // note that the channel is now not in use
 
-                // note that no mutex is needed for this shared resource since it is a
-                // std::atomic write (not a read-modify-write operation) and also each
-                // thread can only set it to true and never to false
+                // Note that no mutex is needed for this shared resource: the store is a
+                // std::atomic write, not a read-modify-write operation. It is NOT true that
+                // a thread can only ever set this to true: OnTimer clears it to false once
+                // per tick, and in the default configuration ( multithreading off ) the
+                // decode runs inline, so the same thread writes both values. What makes the
+                // access safe is the ordering -- the clear is sequenced before any decode
+                // work is handed to the thread pool, and the flag is read back only after
+                // every future has been waited on.
                 bChannelIsNowDisconnected = true;
 
                 // since the channel is no longer in use, we should return

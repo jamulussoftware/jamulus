@@ -182,7 +182,15 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived, this, &CClient::OnCLChannelLevelListReceived );
 
     // other
-    QObject::connect ( &Sound, &CSound::ReinitRequest, this, &CClient::OnSndCrdReinitRequest );
+    QObject::connect ( &Sound,
+                       &CSound::ReinitRequest,
+                       this,
+                       &CClient::OnSndCrdReinitRequest
+#if defined( Q_OS_WINDOWS )
+                       ,
+                       Qt::QueuedConnection // On Windows, use a queued connection to avoid an ASIO4ALL hang (#3867)
+#endif
+    );
 
     QObject::connect ( &Sound, &CSound::ControllerInFaderLevel, this, &CClient::OnControllerInFaderLevel );
 

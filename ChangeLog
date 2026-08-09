@@ -1,4 +1,29 @@
-### 3.12.3dev <- NOTE: the release version number will be 3.12.4 ###
+### 3.12.4 (2026-08-09) ###
+
+- Bug: Make cross-thread run/status flags std::atomic (#3798 batches A/B) (#3800).
+  (contributed by @mcfnord)
+
+- Bug: Client: Make cross-thread audio params and channel/server flags std::atomic (#3802).
+  (contributed by @mcfnord)
+
+- Bug: Client: Fix hang on Windows while changing devices in ASIO4ALL (#3867).
+  (contributed by @ann0see)
+
+- Bug: Client: removed double ping from Connect Dialog, improving accuracy of initial ping times displayed (#3847).
+  (contributed by @softins)
+
+- Bug: Client: Avoid crashing on sound device errors (#3851).
+  (contributed by @softins)
+
+- Bug: Server: Fix #1083: free CJamRecorder if Init() fails (#3838).
+  (contributed by @mcfnord)
+
+- Client: Improved server list navigation in Connect Dialog (#3859, #3870).
+  (contributed by @softins)
+
+- Server: avoid per-frame deep copy of audio buffers in CreateLevelsForAllConChannels (#3803).
+  (contributed by @mcfnord)
+
 
 ### 3.12.3 (2026-07-26) ###
 

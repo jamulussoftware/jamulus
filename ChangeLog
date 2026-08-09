@@ -1,42 +1,30 @@
-### 3.12.4dev <- NOTE: the release version number will be 4.0.0 ###
+### 4.0.0beta2 ###
 
-- Optimize Images (#3539).
-  (contributed by @ann0see)
-
-- Added uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023) (#3653).
-  (contributed by @dingodoppelt)
-
-- Internals: fix deprecation warnings in threadpool.h for C++17 onwards (#3681).
-  (contributed by @softins)
-
-- Make server version string searchable (#3693).
-  (contributed by @dingodoppelt)
-
-- Introduce Directory Server in Asia. This replaces Any Genre 3. Asian/Australian users should from now on use Any Genre Asia (#3697).
-  (contributed by @ann0see)
-
-- Move internal domains from jamulus.io to jamulus.app as .io domains have an unclear future (#3701).
-  (contributed by @ann0see)
-
-- Updated copyright to incorporate AGPL3.0+ (#3712).
-  (contributed by @pljones)
-
-- Bugfix: Provide a working location for famfamfam flags (#3722).
-  (contributed by @pljones)
-
-- Request and receive server features by connection-less message (#3727).
-  (contributed by @pljones)
-
-- Bugfix: Fix memory leak for audio alerts (#3728).
-  (contributed by @ann0see)
-
-- Refactor server chat handling by extracting methods (#3741).
+- Client: Make server version string searchable (#3693).
   (contributed by @dingodoppelt)
 
 - Client: Ensure INI file settings are loaded before doing -c/--connect startup (#3738).
   (contributed by @seanogdelaney)
 
+- Client/Server: Improved handling of IPv6 by using separate sockets (#3774).
+  (contributed by @softins)
+
 - Client/Server: Enable IPv6 by default if supported by host. Provide option to disable manually (#3720).
+  (contributed by @softins)
+
+- Client/Server: Use mapped version for updated notification check (#3855).
+  (contributed by @pljones)
+
+- Client/Server: Added uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023) (#3653).
+  (contributed by @dingodoppelt)
+
+- Client/Server: Introduce Directory Server in Asia. This replaces Any Genre 3. Asian/Australian users should from now on use Any Genre Asia (#3697).
+  (contributed by @ann0see)
+
+- Client/Server: Move internal domains from jamulus.io to jamulus.app as .io domains have an unclear future (#3701).
+  (contributed by @ann0see)
+
+- Server: Added protocol for requesting a server's Welcome Message without connecting (#3742).
   (contributed by @softins)
 
 - Server: Report OS as Unix if not Windows, Mac, iOS, Android or Linux (#3699).
@@ -48,8 +36,68 @@
 - Server: Removed HTML status file support and -m/--htmlstatus option (#3721).
   (contributed by @softins)
 
+- JSONRPC: Added new RPC methods and notifications (mostly for scripting interaction) to server and client (#3730).
+  (contributed by @dingodoppelt)
+
+- JSONRPC: Added jamulusserver/privateChatMessage RPC method for sending messages to single channels (#3731).
+  (contributed by @dingodoppelt)
+
+- Bugfix: Provide a working location for famfamfam flags (#3722).
+  (contributed by @pljones)
+
+- Bugfix: Fix memory leak for audio alerts (#3728).
+  (contributed by @ann0see)
+
+- Bugfix: Resolve out of bounds access issue (#3810).
+  (contributed by @ann0see)
+
+- Bugfix: Fix jamulus/pollServerList reporting success on invalid directory address (#3820).
+  (contributed by @mcfnord)
+
+- Updated copyright to incorporate AGPL3.0+ (#3712).
+  (contributed by @pljones)
+
+- Docs: fix Fedora dependency list to build the GUI (qt5-qtmultimedia-devel) (#3852).
+  (contributed by @mcfnord)
+
+- Protocol: Request and receive server features by connection-less message (#3727).
+  (contributed by @pljones)
+
+- Performance: Enable auto vectorization by default (#3739).
+  (contributed by @ann0see)
+
+- Internal: Refactor server chat handling by extracting methods (#3741).
+  (contributed by @dingodoppelt)
+
+- Internal: Improved thread safety in socket handling (#3788).
+  (contributed by @softins)
+
 - Internal: Removed unused array to silence compiler warning (#3717).
   (contributed by @softins)
+
+- Build: Windows: Updated Windows build environment to Windows Server 2025 (#3763).
+  (contributed by @ann0see)
+
+- Build: Bump actions/cache from 5 to 6 (#3759).
+  (contributed by @app/dependabot)
+
+- Build: Bump github/codeql-action from 4 to 4.37.4 (#3860).
+  (contributed by @app/dependabot)
+
+- Build: Bump actions/checkout from 6 to 7 (#3749).
+  (contributed by @app/dependabot)
+
+- Build: Updated create-dmg (macOS) to version 1.3.0 (#3764).
+  (contributed by @app/github-actions)
+
+- Build: use Ubuntu 22 for building Linux deb packages (#3797).
+  (contributed by @softins)
+
+- Build: Fixed headless builds (`CONFIG+=headless`) not compiling on macOS and Windows (#3826).
+  (contributed by @dtinth)
+
+- Translations updated from Hosted Weblate (#3817, #3713, #3849).
+  (contributed by @weblate)
 
 
 ### 3.12.1 (2026-05-17) ###

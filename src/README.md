@@ -23,7 +23,6 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://www.gnu.org/licenses/).
 
 
-A map of `src/`: which class lives where, which threads exist at runtime, and which lock
 protects what. The last section lists what is not covered yet.
 
 # Where things live

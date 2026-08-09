@@ -24,13 +24,14 @@ on:
         description: 'Build all targets (instead of just the main platforms)'
   push:
     tags:
-      - "r*"
+      - 'r*'
     branches:
       # For developers: Branches starting with autobuild will be built and evaluated on each push.
-      - "autobuild**"
+      - 'autobuild**'
       # CodeQL requires every branch from on.pull_request to be part of on.push as well in order to run comparisons.
       # We also need main here to trigger builds on PR merge to main and manual pushes (e.g. as part of the release process):
-      - "main"
+      - 'main'
+      - 'release/**'
     paths-ignore:
       - '**README.md'
       - 'docs/**'
@@ -43,7 +44,8 @@ on:
       - '.github/pull_request_template.md'
   pull_request:
     branches:
-      - main
+      - 'main'
+      - 'release/**'
     paths-ignore:
       - '**README.md'
       - 'docs/**'

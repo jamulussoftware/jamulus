@@ -1,4 +1,4 @@
-### 4.0.0beta2 ###
+### 3.12.4dev <- NOTE: the release version number will be 4.0.0 ###
 
 - Client: Make server version string searchable (#3693).
   (contributed by @dingodoppelt)

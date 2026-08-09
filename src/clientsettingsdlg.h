@@ -109,7 +109,9 @@ public slots:
     void OnCustomDirectoriesChanged ( bool bDelete );
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnInputBoostChanged();
+#ifndef NO_REVERB
     void OnReverbPresetChanged();
+#endif
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );

@@ -495,7 +495,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     {
         pClient->SetAudioInFader ( iValue );
     }
-
+#    ifndef NO_REVERB
     // reverberation level
     if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
     {
@@ -513,7 +513,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     {
         pClient->SetReverbPreset ( iValue );
     }
-
+#    endif
     // sound card selection
     const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
 
@@ -950,7 +950,7 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
 
     // audio fader
     SetNumericIniSet ( IniXMLDocument, "client", "audfad", pClient->GetAudioInFader() );
-
+#    ifndef NO_REVERB
     // reverberation level
     SetNumericIniSet ( IniXMLDocument, "client", "revlev", pClient->GetReverbLevel() );
 
@@ -959,7 +959,7 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
 
     // reverb preset
     SetNumericIniSet ( IniXMLDocument, "client", "revpreset", pClient->GetReverbPreset() );
-
+#    endif
     // sound card selection
     PutIniSetting ( IniXMLDocument, "client", "auddev_base64", ToBase64 ( pClient->GetSndCrdDev() ) );
 

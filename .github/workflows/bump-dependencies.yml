@@ -61,8 +61,8 @@ jobs:
           - name: choco-jom
             # not Changelog-worthy
             get_upstream_version: |
-              curl -s -o /dev/null --location --range 0-5 --write-out '%{url_effective}' https://community.chocolatey.org/api/v2/package/jom/ |
-                grep -oP 'jom\.\K.*(?=\.nupkg)'
+              curl -sL "https://community.chocolatey.org/api/v2/FindPackagesById()?id='jom'" |
+                grep -oP '(?<=<d:Version>)[^<]+' | sort --version-sort | tail -n1
             local_version_regex: (.*JomVersion\s*=\s*"?)([0-9.]+)("?.*)
 
           - name: NSIS

@@ -102,7 +102,7 @@ LED bar:      lbr
 
 // System block size, this is the block size on which the audio coder works.
 // All other block sizes must be a multiple of this size.
-// Note that the UpdateAutoSetting() function assumes a value of 128.
+// Note that the IIR_WEIGTH_* filter constants in buffer.h assume values of 64 and 128.
 #define SYSTEM_FRAME_SIZE_SAMPLES        64
 #define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES )
 

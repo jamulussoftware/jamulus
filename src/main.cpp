@@ -706,8 +706,8 @@ int main ( int argc, char** argv )
 #ifndef HEADLESS
         if ( bUseGUI )
         {
-            // by definition, when running with the GUI we always default to registering somewhere but
-            // until the settings are loaded we do not know where, so we cannot be prescriptive here
+            // when running with the GUI, until the settings are loaded we do not know whether or
+            // where this server will register, so we cannot be prescriptive here
 
             if ( !strServerListFileName.isEmpty() )
             {

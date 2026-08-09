@@ -316,7 +316,7 @@ protected:
     int iOldRecID;
     int iOldRecCnt;
 
-    // these two objects must be sequred by a mutex
+    // these two objects must be secured by a mutex
     uint8_t                 iCounter;
     std::list<CSendMessage> SendMessQueue;
 

@@ -575,8 +575,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &ConnectDlg, &CConnectDlg::ReqServerListQuery, this, &CClientDlg::OnReqServerListQuery );
 
-    // note that this connection must be a queued connection, otherwise the server list ping
-    // times are not accurate and the client list may not be retrieved for all servers listed
+    // note that this delivery must be queued, otherwise the server list ping times are not
+    // accurate and the client list may not be retrieved for all servers listed
     // (it seems the sendto() function needs to be called from different threads to fire the
     // packet immediately and do not collect packets before transmitting)
     QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListPingMes, this, &CClientDlg::OnCreateCLServerListPingMes, Qt::QueuedConnection );

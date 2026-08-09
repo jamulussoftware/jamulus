@@ -1339,7 +1339,8 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
         // get all channels which are in use/not in use.
         // We use the array index of vecChanInfo if the fader is in use,
         // else INVALID_INDEX to specify it is not in use
-        // so must use "int" for the array type.
+        // so the array type is "int", which also keeps the comparisons below
+        // free of signedness warnings.
         int iFaderNumber[MAX_NUM_CHANNELS];
 
         for ( size_t iChanID = 0; iChanID < MAX_NUM_CHANNELS; iChanID++ )

@@ -716,9 +716,9 @@ int CChannel::GetUploadRateKbps()
 {
     const int iAudioSizeOut = iNetwFrameSizeFact * iAudioFrameSizeSamples;
 
-    // we assume that the UDP packet which is transported via IP has an
-    // additional header size of ("Network Music Performance (NMP) in narrow
-    // band networks; Carot, Kraemer, Schuller; 2006")
+    // we assume the PPPoE-over-ATM DSL access path described in ("Network Music
+    // Performance (NMP) in narrow band networks; Carot, Kraemer, Schuller; 2006"),
+    // whose additional header size is
     // 8 (UDP) + 20 (IP without optional fields) = 28 bytes
     // 2 (PPP) + 6 (PPPoE) + 18 (MAC)            = 26 bytes
     // 5 (RFC1483B) + 8 (AAL) + 10 (ATM)         = 23 bytes

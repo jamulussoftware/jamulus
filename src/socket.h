@@ -151,9 +151,9 @@ signals:
     void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
 };
 
-/* Socket which runs in a separate high priority thread --------------------- */
+/* Socket which runs in a separate thread requesting high priority ---------- */
 // The receive socket should be put in a high priority thread to ensure the GUI
-// does not effect the stability of the audio stream (e.g. if the GUI is on
+// does not affect the stability of the audio stream (e.g. if the GUI is on
 // high load because of a table update, the incoming network packets must still
 // be put in the jitter buffer with highest priority).
 class CHighPrioSocket : public QObject
@@ -240,7 +240,7 @@ protected:
 
     void Init()
     {
-        // Creation of the new socket thread which has to have the highest
+        // Creation of the new socket thread which requests the highest
         // possible thread priority to make sure the jitter buffer is reliably
         // filled with the network audio packets and does not get interrupted
         // by other GUI threads. The following code is based on:

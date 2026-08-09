@@ -482,7 +482,7 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 //
 // When the first gain or pan change message is requested after an idle period (i.e. the timer is not
 // running), it will be sent immediately, and a timer started. The timer period is dependent on
-// the current ping time to the remote server.
+// the current ping time to the remote server, which only a GUI client measures (see #3874).
 //
 // If a gain or pan change message is requested while the timer is still running, the new value is not sent,
 // but just stored in newGain or newPan within clientChannels[iId], and the minGainOrPanId and maxGainOrPanId
@@ -1000,7 +1000,7 @@ void CClient::OnControllerInMuteMyself ( bool bMute )
 void CClient::OnClientIDReceived ( int iServerChanID )
 {
     // if we have just connected to a running server, iActiveChannels will be 0
-    // if iActiveChannels is not 0, the server must have been restarted on the fly
+    // if iActiveChannels is not 0, the server was restarted or our channel timed out
     // in that case, channels might have changed, so clear our list to get it afresh.
     if ( iActiveChannels != 0 )
     {
@@ -1009,7 +1009,7 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     }
 
     // allocate and map client-side channel 0
-    int iChanID = FindClientChannel ( iServerChanID, true ); // should always return channel 0
+    int iChanID = FindClientChannel ( iServerChanID, true ); // returns channel 0 for an in-range iServerChanID
 
     // for headless mode we support to mute our own signal in the personal mix
     // (note that the check for headless is done in the main.cpp and must not

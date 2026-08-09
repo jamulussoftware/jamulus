@@ -1213,6 +1213,11 @@ bool CConnectDlg::eventFilter ( QObject* obj, QEvent* event )
             lvwServers->setCurrentItem ( savedServer );
             savedServer = nullptr;
         }
+        else if ( lvwServers->topLevelItemCount() > 0 )
+        {
+            // no saved server: select first item in list for keyboard navigation
+            lvwServers->setCurrentItem ( lvwServers->topLevelItem ( 0 ) );
+        }
     }
 
     return QDialog::eventFilter ( obj, event );

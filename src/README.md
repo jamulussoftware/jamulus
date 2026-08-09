@@ -27,7 +27,7 @@ along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://
 A map of `src/`: which class lives where, which threads exist at runtime, and which lock
 protects what. The last section lists what is not covered yet.
 
-## Where things live
+# Where things live
 
 Code used by both client and server:
 

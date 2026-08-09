@@ -172,10 +172,10 @@ public:
     void Start();
     void Stop();
     void Disconnect();
-    void Connect ( QString strServerAddress, QString strServerName );
+    void Connect ( const QString& strServerAddress, const QString& strServerName );
 
     // The ConnectedServerName is emitted by Connecting() to update the UI with a human readable server name
-    void    SetConnectedServerName ( const QString strServerName ) { strConnectedServerName = strServerName; };
+    void    SetConnectedServerName ( const QString& strServerName ) { strConnectedServerName = strServerName; };
     QString GetConnectedServerName() const { return strConnectedServerName; };
 
     EConnectionState GetConnectionState() const { return eConnectionState; }
@@ -537,8 +537,8 @@ signals:
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
     void ConnectionStateChanged ( EConnectionState eConnectionState );
-    void Connecting ( QString strServerName );
-    void ConnectingFailed ( QString errorMessage );
+    void Connecting ( const QString& strServerName );
+    void ConnectingFailed ( const QString& errorMessage );
     void Disconnected();
 
     void SoundDeviceChanged ( QString strError );

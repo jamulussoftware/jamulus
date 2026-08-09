@@ -1159,7 +1159,7 @@ void CClient::Disconnect()
 ///       Use to display error message in CClientDlg
 /// @param strServerAddress - the server address to connect to
 /// @param strServerName - the human readable server name passed to Connecting()
-void CClient::Connect ( QString strServerAddress, QString strServerName )
+void CClient::Connect ( const QString& strServerAddress, const QString& strServerName )
 {
     try
     {

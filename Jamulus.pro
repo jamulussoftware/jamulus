@@ -42,6 +42,21 @@ contains(CONFIG, "nosound") {
     warning("\"nosound\" is deprecated: please use \"serveronly\" for a server-only build.")
 }
 
+!contains(CONFIG, "serveronly") {
+    !contains(CONFIG, "noreverb"):!exists($$PWD/libs/mverb/MVerb.h) {
+        !system("git -C $$PWD submodule update --init --force libs/mverb") {
+            message("MVerb not found and could not be cloned.")
+            CONFIG += noreverb
+        }
+    }
+    contains(CONFIG, "noreverb") {
+        message("building without reverb plugin")
+        DEFINES += NO_REVERB
+    } else {
+         message("building with MVerb")
+    }
+}
+
 contains(CONFIG, "headless") {
     message(Headless mode activated.)
     QT -= gui
@@ -390,8 +405,7 @@ FORMS_GUI = src/aboutdlgbase.ui \
         src/connectdlgbase.ui
 }
 
-HEADERS += src/plugins/audioreverb.h \
-    src/buffer.h \
+HEADERS += src/buffer.h \
     src/channel.h \
     src/global.h \
     src/protocol.h \
@@ -406,13 +420,16 @@ HEADERS += src/plugins/audioreverb.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/signalhandler.h \
-    libs/mverb/MVerb.h
+    src/signalhandler.h
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
         src/sound/soundbase.h \
         src/testbench.h
+    !contains(CONFIG, noreverb) {
+        HEADERS += src/plugins/audioreverb.h \
+            libs/mverb/MVerb.h
+    }
 }
 
 HEADERS_GUI = src/serverdlg.h
@@ -499,8 +516,7 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/x86cpu.h \
     $$files(libs/opus/silk/x86/*.h)
 
-SOURCES += src/plugins/audioreverb.cpp \
-    src/buffer.cpp \
+SOURCES += src/buffer.cpp \
     src/channel.cpp \
     src/main.cpp \
     src/protocol.cpp \
@@ -518,7 +534,10 @@ SOURCES += src/plugins/audioreverb.cpp \
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
-        src/sound/soundbase.cpp \
+        src/sound/soundbase.cpp
+    !contains(CONFIG, "noreverb") {
+        SOURCES += src/plugins/audioreverb.cpp
+    }
 }
 
 SOURCES_GUI = src/serverdlg.cpp

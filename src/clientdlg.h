@@ -114,7 +114,9 @@ protected:
     void ShowChatWindow ( const bool bForceRaise = true );
     void ShowAnalyzerConsole();
     void UpdateAudioFaderSlider();
+#ifndef NO_REVERB
     void UpdateRevSelection();
+#endif
     void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
     void SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
@@ -201,13 +203,13 @@ public slots:
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
-
+#ifndef NO_REVERB
     void OnAudioReverbValueChanged ( int value ) { pClient->SetReverbLevel ( value ); }
 
     void OnReverbSelLClicked() { pClient->SetReverbOnLeftChan ( true ); }
 
     void OnReverbSelRClicked() { pClient->SetReverbOnLeftChan ( false ); }
-
+#endif
     void OnFeedbackDetectionChanged ( int state ) { ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked ); }
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
@@ -258,7 +260,12 @@ public slots:
     void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
-    void OnAudioChannelsChanged() { UpdateRevSelection(); }
+    void OnAudioChannelsChanged()
+    {
+#ifndef NO_REVERB
+        UpdateRevSelection();
+#endif
+    }
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones

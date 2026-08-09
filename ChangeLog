@@ -1,4 +1,4 @@
-### 3.12.3dev <- NOTE: the release version number will be 4.0.0 ###
+### 3.12.4dev <- NOTE: the release version number will be 4.0.0 ###
 
 - Optimize Images (#3539).
   (contributed by @ann0see)

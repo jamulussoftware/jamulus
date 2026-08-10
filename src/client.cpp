@@ -1097,7 +1097,15 @@ void CClient::Stop()
 
     // Fall back to opus in case raw was used
     bRawAudioIsSupported = false;
-    Init();
+    try
+    {
+        Init();
+    }
+    catch ( const CGenErr& )
+    {
+        // a dead audio backend (e.g. JACK was shut down) must not prevent the
+        // disconnect message below from reaching the server
+    }
 
     // wait for approx. 100 ms to make sure no audio packet is still in the
     // network queue causing the channel to be reconnected right after having

@@ -289,6 +289,7 @@ win32 {
     HEADERS += $$OBOE_HEADERS
     SOURCES += $$OBOE_SOURCES
     DISTFILES += $$DISTFILES_OBOE
+    QMAKE_DISTCLEAN += android-$${TARGET}-deployment-settings.json
 } else:unix {
     # we want to compile with C++11
     CONFIG += c++11

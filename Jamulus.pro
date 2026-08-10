@@ -1175,12 +1175,9 @@ contains(CONFIG, "opus_shared_lib") {
     }
 }
 
-# Scope -ftree-vectorize to GCC mkspecs (linux-g++, win32-g++, ...). Clang already
-# auto-vectorizes and MSVC warns on the unknown flag (#3863). On every current GCC
-# the explicit flag turns vectorization on at the 'cheap' cost model: on GCC <= 11
-# it raises -O2 from scalar, and on GCC 12+ it lifts the -O2 default from
-# 'very-cheap' to 'cheap'. That vectorizes the audio mixing loops with no
-# -ffast-math needed.
+# Scope -ftree-vectorize to GCC mkspecs (#3863): Clang already auto-vectorizes
+# and MSVC warns on the flag. At -O2 the flag raises GCC's cost model to `cheap`,
+# which vectorizes the mixer loops on every current GCC (11 through 14).
 *-g++* {
     QMAKE_CXXFLAGS += -ftree-vectorize
 }

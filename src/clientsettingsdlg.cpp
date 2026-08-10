@@ -384,7 +384,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QString strReverbPreset = "<b>" + tr ( "Reverb Preset" ) + ":</b> " +
                               tr ( "Jamulus uses MVerb by Martin Eastwood for reverberation. "
                                    "MVerb comes with a set of presets you can select here. "
-                                   "Available Presets: Subtle, Stadium, Cupboard, Dark, Halves " );
+                                   "Available Presets: Subtle, Stadium, Cupboard, Dark, Halves, Drum Room, Club " );
     lblReverbPreset->setWhatsThis ( strReverbPreset );
     cbxReverbPreset->setWhatsThis ( strReverbPreset );
     cbxReverbPreset->setAccessibleName ( tr ( "Reverb Preset combo box" ) );

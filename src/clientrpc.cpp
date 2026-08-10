@@ -341,7 +341,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
             return;
         }
 
-        const int iNInstrument = jsonInstrCode.toInt();
+        const int iNInstrument = static_cast<int> ( jsonInstrCode.toDouble() );
 
         if ( CInstPictures::GetName ( iNInstrument ).isEmpty() )
         {

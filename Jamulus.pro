@@ -42,19 +42,18 @@ contains(CONFIG, "nosound") {
     warning("\"nosound\" is deprecated: please use \"serveronly\" for a server-only build.")
 }
 
-!contains(CONFIG, "serveronly") {
-    !contains(CONFIG, "noreverb"):!exists($$PWD/libs/mverb/MVerb.h) {
+contains(CONFIG, "serveronly") | contains(CONFIG, "noreverb") {
+    message("building without reverb plugin")
+    DEFINES += NO_REVERB
+} else {
+    !exists($$PWD/libs/mverb/MVerb.h) {
         !system("git -C $$PWD submodule update --init --force libs/mverb") {
-            message("MVerb not found and could not be cloned.")
-            CONFIG += noreverb
+            error('MVerb not found and could not be cloned as a submodule.$$escape_expand(\n) \
+                   Try cloning MVerb manually with: \'git submodule update --init --force libs/mverb\'$$escape_expand(\n) \
+                   To disable the reverb plugin call QMake with "CONFIG+=noreverb"$$escape_expand(\n)Exiting...')
         }
     }
-    contains(CONFIG, "noreverb") {
-        message("building without reverb plugin")
-        DEFINES += NO_REVERB
-    } else {
-         message("building with MVerb")
-    }
+    message("building with MVerb")
 }
 
 contains(CONFIG, "headless") {

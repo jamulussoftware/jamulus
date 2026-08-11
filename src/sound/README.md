@@ -90,8 +90,10 @@ exception to both:
 | ASIO | `bufferSwitch()` | no | no, it uses its own `ASIOMutex` |
 
 `CSoundBase::Stop()` clears `bRun` and then takes `MutexAudioProcessCallback` to wait for a
-callback that is already in flight. The ASIO backend never takes that mutex, so on Windows that
-wait returns immediately and `CSound::Stop()` waits on `ASIOMutex` instead.
+callback that is already in flight. The ASIO backend is the exception: it defines and owns its
+own `ASIOMutex` (in `asio/sound.h`) instead of using the shared `MutexAudioProcessCallback`.
+So on Windows, `CSoundBase::Stop()`'s wait returns immediately, and the ASIO-specific
+`CSound::Stop()` waits on `ASIOMutex` instead.
 
 ### Not yet documented
 

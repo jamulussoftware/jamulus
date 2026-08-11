@@ -346,7 +346,7 @@ void CSocket::Init ( const quint16  iNewPortNumber,
             // faulty router gets stuck and confused by a particular port (like
             // the starting port). Might work around frustrating "cannot connect"
             // problems (#568)
-            const quint32 startingPortNumber = static_cast<quint32> ( iPortNumber ) + rand() % NUM_SOCKET_PORTS_TO_TRY;
+            const quint32 startingPortNumber = static_cast<quint32> ( iPortNumber ) + QRandomGenerator::global()->bounded ( NUM_SOCKET_PORTS_TO_TRY );
 
             for ( quint32 port = startingPortNumber; port < startingPortNumber + NUM_SOCKET_PORTS_TO_TRY; port++ )
             {

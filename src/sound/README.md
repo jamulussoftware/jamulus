@@ -49,7 +49,9 @@ This folder contains the related files for all sound APIs.
 ## Documentation of sound design
 
 This describes how the code behaves today. It covers the device lifecycle and the threading rules
-around the audio callback; the areas still missing are listed at the end.
+around the audio callback; the areas still missing are listed at the end. Where today's behaviour
+only makes sense in light of how it arose, the origin is given as well, so that an accident of
+history is not read as a deliberate design.
 
 Each platform provides one `CSound` class deriving from `CSoundBase`, and exactly one of the five
 backend subdirectories is compiled in: `asio/` (Windows), `coreaudio-mac/`, `coreaudio-ios/`,
@@ -139,6 +141,25 @@ ASIO defines and owns its own `ASIOMutex` (in `asio/sound.h`) instead of using t
 `MutexAudioProcessCallback`. Its own `CSound::Stop()` calls `ASIOStop()` first, then
 `CSoundBase::Stop()` (whose wait on the unused `MutexAudioProcessCallback` returns immediately
 for this backend), then waits on `ASIOMutex` directly to confirm the callback thread is done.
+
+The two are not interchangeable, because `ASIOMutex` covers more ground. It is also held across
+the whole of `CSound::Init()` — spanning `ASIODisposeBuffers()`, `ASIOCreateBuffers()` and the
+`vecsMultChanAudioSndCrd` reallocation — whereas no other backend locks anything in its `Init()`.
+The waits differ too: `CSoundBase::Stop()` blocks unconditionally on its `QMutexLocker`, while
+ASIO's `Stop()` uses `tryLock ( 5000 )` and carries on regardless if the callback has not finished
+within five seconds. The two differences compound: because ASIO's stop can return while a callback
+is still in flight, the lock held across `Init()` is what actually keeps `ASIOCreateBuffers()` off
+a live `bufferSwitch()`.
+
+That there are two mutexes at all is chronological rather than a design decision. `ASIOMutex` was
+added with the ASIO backend itself in `5eb86941` (2008-07-12), when ASIO was the only backend and
+`CSoundBase` did not yet exist (`3fb2d9ca`, 2009-02-22); its drain-on-stop wait followed in
+`73f408e4` (2011-12-27). The shared `MutexAudioProcessCallback` arrived nine years after that, in
+`ecff80fc` (2020-08-26), to fix a crash when the JACK backend was reconfigured quickly; that commit
+touches `linux/sound.cpp` and `soundbase.{h,cpp}` and nothing else. It is a later, independent
+re-implementation of a guard ASIO already had, and it was never extended to ASIO. Collapsing the
+two into one would therefore not be a rename: it would have to preserve the coverage across
+`Init()` and settle which of the two wait policies applies.
 
 ### Not yet documented
 

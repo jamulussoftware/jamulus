@@ -1175,8 +1175,12 @@ contains(CONFIG, "opus_shared_lib") {
     }
 }
 
-# Always enable auto vectorization
-QMAKE_CXXFLAGS+=-ftree-vectorize
+# Scope -ftree-vectorize to GCC mkspecs (#3863): Clang already auto-vectorizes
+# and MSVC warns on the flag. At -O2 the flag raises GCC's cost model to `cheap`,
+# which vectorizes the mixer loops on every current GCC (11 through 14).
+*-g++* {
+    QMAKE_CXXFLAGS += -ftree-vectorize
+}
 
 # disable version check if requested (#370)
 contains(CONFIG, "disable_version_check") {

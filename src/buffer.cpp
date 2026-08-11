@@ -164,9 +164,8 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
             return false;
         }
 
-        // to get the number of input blocks we assume that the number of bytes for
-        // the sequence number is much smaller than the number of coded audio bytes
-        const int iNumBlocks = /* floor */ ( iInSize / iBlockSize );
+        // the div for the number of blocks is exact, due to the check above
+        const int iNumBlocks = iInSize / ( iBlockSize + iNumBytesSeqNum );
 
         // copy new data in internal buffer
         for ( int iBlock = 0; iBlock < iNumBlocks; iBlock++ )

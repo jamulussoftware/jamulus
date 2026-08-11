@@ -51,9 +51,11 @@ This folder contains the related files for all sound APIs.
 This describes how the code behaves today. It covers the device lifecycle and the threading rules
 around the audio callback; the areas still missing are listed at the end.
 
-Each platform provides one `CSound` class deriving from `CSoundBase`, and exactly one of the
-subdirectories is compiled in: `asio/` (Windows), `coreaudio-mac/`, `coreaudio-ios/`, `oboe/`
-(Android) and `jack/` (where JACK is enabled).
+Each platform provides one `CSound` class deriving from `CSoundBase`, and exactly one of the five
+backend subdirectories is compiled in: `asio/` (Windows), `coreaudio-mac/`, `coreaudio-ios/`,
+`oboe/` (Android) and `jack/` (where JACK is enabled). A sixth subdirectory, `midi-win/`, holds the
+Windows MIDI implementation (`CMidi`) rather than a backend; the default Windows build compiles it
+alongside `asio/`, while a `CONFIG+=jackonwindows` build takes `jack/` and neither of the other two.
 
 ### Buffer size negotiation
 
@@ -66,10 +68,18 @@ the size selected in the settings. Those three flags drive the enabled state of 
 radio buttons, and the settings dialog polls them once a second; no signal runs from the sound
 device to that dialog.
 
-A driver may also change the buffer size on its own. `kAsioBufferSizeChange` in the ASIO backend
-and JACK's buffer size callback both report that by calling
+A driver can also change its buffer size on its own, outside any call from Jamulus. Reporting
+that back needs a native change-notification callback from the driver API, and only two of the
+five backends have one: ASIO's `kAsioBufferSizeChange` (`asioMessages()`, `asio/sound.cpp`) and
+JACK's buffer-size callback (`jack/sound.cpp`) both call
 `EmitReinitRequestSignal ( RS_ONLY_RESTART_AND_INIT )`, which reaches
-`CClient::OnSndCrdReinitRequest` and repeats the negotiation above.
+`CClient::OnSndCrdReinitRequest` and repeats the negotiation above. The other three backends
+can't do this the same way: the two CoreAudio backends only watch device-identity/route events
+(`kAudioDevicePropertyDeviceHasChanged`/`IsAlive`/default-device switches on macOS,
+`AVAudioSessionRouteChangeNotification` on iOS) and never register a buffer-size-specific
+listener, so a size change on its own is invisible to them. Oboe does detect it —
+`onAudioInput()` compares the delivered frame count against the requested size on every callback
+— but the mismatch is only logged (`qDebug()`), never renegotiated.
 
 ### Start, stop and the audio callback
 
@@ -77,23 +87,58 @@ and JACK's buffer size callback both report that by calling
 and restart it afterwards, which is the `bWasRunning` pattern throughout `client.cpp`.
 
 The audio callback runs on a thread owned by the driver. `CSoundBase` inherits `QThread`, but
-nothing here overrides `run()` or calls `start()`, so no such thread exists. Backends keep the
-callback away from a device that is being re-initialised in two ways, and the ASIO backend is the
-exception to both:
+nothing here overrides `run()` or calls `start()`, so no such thread exists — nor has it ever:
+neither appears anywhere in this file's tracked history, and no other `QThread`-specific method
+is used in the sound layer either. The inheritance predates the current driver-callback
+architecture and contributes nothing; changing it to `QObject` looks safe from this file alone,
+but that wasn't verified further here.
 
-| backend | audio callback | ignores the callback while stopped | takes `MutexAudioProcessCallback` |
+Every backend but ASIO also overrides `Stop()`, and every override but JACK's calls a
+driver-level stop function *before* touching `bRun` at all:
+
+| backend | own `Stop()` calls first |
+|---|---|
+| ASIO | (no override — `ASIOStop()` happens inside `CSound::Stop()` itself, see below) |
+| CoreAudio (macOS) | `AudioDeviceStop()` + `AudioDeviceDestroyIOProcID()` |
+| CoreAudio (iOS) | `AudioOutputUnitStop()` |
+| Oboe | `closeStreams()` |
+| JACK | nothing — goes straight to `CSoundBase::Stop()` |
+
+Inside the callback itself, backends differ again, and not just in which flag they read but in
+*when* they read it relative to the mutex:
+
+| backend | audio callback | flag check | mutex behavior |
 |---|---|---|---|
-| JACK | `process()` | yes, `IsRunning()` | yes |
-| CoreAudio (macOS) | `callbackIO()` | yes, `bRun` | yes |
-| CoreAudio (iOS) | `processBufferList()` | no | yes |
-| Oboe | `onAudioReady()` | yes, `!bRun` | yes |
-| ASIO | `bufferSwitch()` | no | no, it uses its own `ASIOMutex` |
+| Oboe | `onAudioReady()` | `!bRun`, first line, before any lock | skipped entirely once stopped |
+| JACK | `process()` | `IsRunning()`, after the lock | always taken; only the processing is skipped |
+| CoreAudio (macOS) | `callbackIO()` | `bRun`, after the lock | always taken; only the processing is skipped |
+| CoreAudio (iOS) | `processBufferList()` | none | always taken; always processes |
+| ASIO | `bufferSwitch()` | none | always taken (its own `ASIOMutex`); always processes |
 
-`CSoundBase::Stop()` clears `bRun` and then takes `MutexAudioProcessCallback` to wait for a
-callback that is already in flight. The ASIO backend is the exception: it defines and owns its
-own `ASIOMutex` (in `asio/sound.h`) instead of using the shared `MutexAudioProcessCallback`.
-So on Windows, `CSoundBase::Stop()`'s wait returns immediately, and the ASIO-specific
-`CSound::Stop()` waits on `ASIOMutex` instead.
+`IsRunning()`, `bRun` and `!bRun` all read the same flag (`IsRunning()` is `return bRun;`) —
+three spellings of one check. But only Oboe's placement actually avoids the mutex; JACK's and
+CoreAudio (macOS)'s checks run *after* the lock is already held, so they cost the same
+mutex-contention as not checking at all and only save the processing work itself.
+
+`CSoundBase::Stop()` clears `bRun` and then briefly takes `MutexAudioProcessCallback`, releasing
+it as soon as `Stop()` returns:
+```cpp
+void CSoundBase::Stop() {
+    bRun = false;
+    QMutexLocker locker ( &MutexAudioProcessCallback );
+}
+```
+CoreAudio (iOS) and ASIO have no flag check anywhere in their callback, so they depend entirely
+on their own driver-level stop call above (or, for ASIO, on `ASIOStop()` inside its own
+`CSound::Stop()`) actually preventing further callbacks — if the driver fires one more callback
+after that call returns, it runs to completion regardless of `bRun`. Whether `AudioOutputUnitStop`
+/ `ASIOStop` are synchronous enough to rule that out wasn't tested here; it would need real
+hardware.
+
+ASIO defines and owns its own `ASIOMutex` (in `asio/sound.h`) instead of using the shared
+`MutexAudioProcessCallback`. Its own `CSound::Stop()` calls `ASIOStop()` first, then
+`CSoundBase::Stop()` (whose wait on the unused `MutexAudioProcessCallback` returns immediately
+for this backend), then waits on `ASIOMutex` directly to confirm the callback thread is done.
 
 ### Not yet documented
 

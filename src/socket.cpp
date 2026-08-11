@@ -290,8 +290,6 @@ void CSocket::Init ( const quint16  iNewPortNumber,
                 }
             }
 
-            bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
-
             // set socket to non-blocking
 #ifdef _WIN32
             unsigned long mode = 1;
@@ -318,20 +316,27 @@ void CSocket::Init ( const quint16  iNewPortNumber,
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
     // initialize the listening socket
-    bool bSuccess;
+    bool bSuccess = false; // will become true if IPv4 bind succeeds
 
     if ( bIsClient )
     {
+        // for a client, it does not matter if the IPv4 and IPv6 sockets get bound
+        // to different local port numbers
         if ( iPortNumber == 0 )
         {
             // if port number is 0, bind the client to a random available port
             sa4.sin_port = sa6.sin6_port = htons ( 0 );
 
-            bSuccess = ( ::bind ( UdpSocket4, (struct sockaddr*) &sa4, sa4len ) == 0 );
+            bSuccess = ( ::bind ( UdpSocket4, (struct sockaddr*) &sa4, sa4len ) != -1 );
 
-            if ( UdpSocket6 != INVALID_SOCKET )
+            // only try to bind the IPv6 socket if IPv4 has succeeded and IPv6 socket is open
+            if ( bSuccess && UdpSocket6 != INVALID_SOCKET )
             {
-                bSuccess = bSuccess && ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) == 0 );
+                if ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) != -1 )
+                {
+                    // note that IPv6 is available
+                    bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
+                }
             }
         }
         else
@@ -341,23 +346,38 @@ void CSocket::Init ( const quint16  iNewPortNumber,
             // faulty router gets stuck and confused by a particular port (like
             // the starting port). Might work around frustrating "cannot connect"
             // problems (#568)
-            const quint16 startingPortNumber = iPortNumber + rand() % NUM_SOCKET_PORTS_TO_TRY;
+            const quint32 startingPortNumber = static_cast<quint32> ( iPortNumber ) + rand() % NUM_SOCKET_PORTS_TO_TRY;
 
-            quint16 iClientPortIncrement = 0;
-            bSuccess                     = false; // initialization for while loop
-
-            while ( !bSuccess && ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
+            for ( quint32 port = startingPortNumber; port < startingPortNumber + NUM_SOCKET_PORTS_TO_TRY; port++ )
             {
-                sa4.sin_port = sa6.sin6_port = htons ( startingPortNumber + iClientPortIncrement );
-
-                bSuccess = ( ::bind ( UdpSocket4, (struct sockaddr*) &sa4, sa4len ) == 0 );
-
-                if ( UdpSocket6 != INVALID_SOCKET )
+                // do not overflow 16-bit port number
+                if ( port > 65535U )
                 {
-                    bSuccess = bSuccess && ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) == 0 );
+                    break;
                 }
 
-                iClientPortIncrement++;
+                // bind IPv4 socket if not bound
+                if ( !bSuccess )
+                {
+                    sa4.sin_port = htons ( port );
+                    bSuccess     = ( ::bind ( UdpSocket4, (struct sockaddr*) &sa4, sa4len ) != -1 );
+                }
+
+                // only try to bind the IPv6 socket if IPv4 has succeeded and IPv6 socket is open
+                if ( bSuccess && UdpSocket6 != INVALID_SOCKET && !bIPv6Available )
+                {
+                    sa6.sin6_port = htons ( port );
+                    if ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) != -1 )
+                    {
+                        // note that IPv6 is available
+                        bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
+                    }
+                }
+
+                if ( bSuccess && ( bIPv6Available || UdpSocket6 == INVALID_SOCKET ) )
+                {
+                    break;
+                }
             }
         }
     }
@@ -369,12 +389,29 @@ void CSocket::Init ( const quint16  iNewPortNumber,
 
         sa4.sin_port = sa6.sin6_port = htons ( iPortNumber );
 
-        bSuccess = ( ::bind ( UdpSocket4, (struct sockaddr*) &sa4, sa4len ) == 0 );
+        bSuccess = ( ::bind ( UdpSocket4, (struct sockaddr*) &sa4, sa4len ) != -1 );
 
-        if ( UdpSocket6 != INVALID_SOCKET )
+        // only try to bind the IPv6 socket if IPv4 has succeeded and IPv6 socket is open
+        if ( bSuccess && UdpSocket6 != INVALID_SOCKET )
         {
-            bSuccess = bSuccess && ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) == 0 );
+            if ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) != -1 )
+            {
+                // note that IPv6 is available
+                bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
+            }
         }
+    }
+
+    if ( UdpSocket6 != INVALID_SOCKET && !bIPv6Available )
+    {
+        // IPv6 bind failed - don't cancel bSuccess, but close the IPv6 socket
+#ifdef _WIN32
+        closesocket ( UdpSocket6 );
+#else
+        close ( UdpSocket6 );
+#endif
+        UdpSocket6 = INVALID_SOCKET;
+        qWarning() << "IPv6 socket closed - failed to bind";
     }
 
     if ( !bSuccess )

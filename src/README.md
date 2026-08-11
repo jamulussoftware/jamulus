@@ -84,13 +84,15 @@ The locks taken from more than one thread:
 | `CChannel::Mutex` | per-channel state: the enable flag, gain and pan tables, name | setters in protocol slots on the main thread; getters in the server's frame cycle |
 | `CChannel::MutexConvBuf` | the send-side conversion buffer | `PrepAndSendPacket()` on the sending thread; re-init from the main thread |
 
-Smaller ones: `CProtocol::Mutex` (the queue of sent but not yet acknowledged messages),
-`CServer::MutexChanOrder` (channel allocation in `FindChannel` and `FreeChannel`),
-`CServer::MutexWelcomeMessage`, `CClient::MutexChannels` (the client-side channel number map),
-`CClient::MutexGainOrPan` (the gain/pan message rate limiter), and
-`CClient::MutexDriverReinit` (serializes sound device re-initialization). The sound layer's own
-locks — `MutexAudioProcessCallback`, `MutexDevProperties`, and the per-backend ones — are
-covered in [sound/README.md](sound/README.md).
+**Smaller locks:**
+
+- `CProtocol::Mutex` — queue of sent but not yet acknowledged messages
+- `CServer::MutexChanOrder` — channel allocation in `FindChannel` and `FreeChannel`
+- `CServer::MutexWelcomeMessage`
+- `CClient::MutexChannels` — client-side channel number map
+- `CClient::MutexGainOrPan` — gain/pan message rate limiter
+- `CClient::MutexDriverReinit` — serializes sound device re-initialization
+- Sound layer locks (`MutexAudioProcessCallback`, `MutexDevProperties`, per-backend) — see [sound/README.md](sound/README.md)
 
 ## Not yet documented
 

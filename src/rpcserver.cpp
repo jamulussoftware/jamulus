@@ -115,7 +115,11 @@ QJsonObject CRpcServer::CreateJsonRpcErrorReply ( int code, QString message )
 // (canReadLine()), so without a bound the received bytes accumulate in the socket read
 // buffer without limit until the process is killed by the allocator. Requests larger
 // than this, or unterminated data that fills the buffer, are rejected instead of held.
-static constexpr int MAX_JSON_RPC_REQUEST_BYTES = 64 * 1024;
+// The largest single request is a welcome or chat message, which CServer truncates to
+// MAX_LEN_CHAT_TEXT (1600) characters and which is 9698 bytes as a compact JSON line
+// when every character is escaped as \uXXXX; 16 KiB leaves 1.6x that, or room for a
+// batch of about 220 ordinary calls.
+static constexpr int MAX_JSON_RPC_REQUEST_BYTES = 16 * 1024;
 
 void CRpcServer::OnNewConnection()
 {
@@ -212,7 +216,10 @@ void CRpcServer::OnNewConnection()
         // reject and close rather than hold the bytes indefinitely.
         if ( !pSocket->canReadLine() && pSocket->bytesAvailable() >= MAX_JSON_RPC_REQUEST_BYTES )
         {
-            Send ( pSocket, QJsonDocument ( CreateJsonRpcErrorReply ( iErrParseError, "Parse error: Request exceeds maximum size" ) ) );
+            Send ( pSocket,
+                   QJsonDocument ( CreateJsonRpcErrorReply (
+                       iErrParseError,
+                       QString ( "Parse error: Request exceeds maximum size of %1 bytes" ).arg ( MAX_JSON_RPC_REQUEST_BYTES ) ) ) );
             pSocket->disconnectFromHost();
         }
     } );

@@ -111,11 +111,11 @@ Inside the callback itself, backends differ again, and not just in which flag th
 
 | backend | audio callback | flag check | mutex behavior |
 |---|---|---|---|
-| Oboe | `onAudioReady()` | `!bRun`, first line, before any lock | skipped entirely once stopped |
-| JACK | `process()` | `IsRunning()`, after the lock | always taken; only the processing is skipped |
+| ASIO | `bufferSwitch()` | none | always taken (its own `ASIOMutex`); always processes |
 | CoreAudio (macOS) | `callbackIO()` | `bRun`, after the lock | always taken; only the processing is skipped |
 | CoreAudio (iOS) | `processBufferList()` | none | always taken; always processes |
-| ASIO | `bufferSwitch()` | none | always taken (its own `ASIOMutex`); always processes |
+| Oboe | `onAudioReady()` | `!bRun`, first line, before any lock | skipped entirely once stopped |
+| JACK | `process()` | `IsRunning()`, after the lock | always taken; only the processing is skipped |
 
 `IsRunning()`, `bRun` and `!bRun` all read the same flag (`IsRunning()` is `return bRun;`) —
 three spellings of one check. But only Oboe's placement actually avoids the mutex; JACK's and

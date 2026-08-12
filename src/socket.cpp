@@ -172,6 +172,8 @@ void CSocket::Init ( const quint16  iNewPortNumber,
         UdpSocket6 = INVALID_SOCKET;
     }
 
+    bIPv6Available = false; // re-init before opening sockets
+
     struct sockaddr_in sa4;
     socklen_t          sa4len = sizeof ( sa4 );
     memset ( &sa4, 0, sa4len );

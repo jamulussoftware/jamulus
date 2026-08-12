@@ -1101,10 +1101,11 @@ void CClient::Stop()
     {
         Init();
     }
-    catch ( const CGenErr& )
+    catch ( const CGenErr& generr )
     {
         // a dead audio backend (e.g. JACK was shut down) must not prevent the
         // disconnect message below from reaching the server
+        qWarning() << "Could not reinitialise the sound device while disconnecting:" << generr.GetErrorText();
     }
 
     // wait for approx. 100 ms to make sure no audio packet is still in the

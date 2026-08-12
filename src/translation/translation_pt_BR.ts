@@ -1690,7 +1690,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation>Máx.</translation>
+        <translation type="unfinished">Máx</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>

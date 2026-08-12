@@ -169,8 +169,6 @@ public:
 
     virtual ~CClient();
 
-    void Start();
-    void Stop();
     void Disconnect();
     void Connect ( const QString& strServerAddress, const QString& strServerName );
 
@@ -361,6 +359,9 @@ protected:
     CClientSettings* pSettings;
     // callback function must be static, otherwise it does not work
     static void AudioCallback ( CVector<short>& psData, void* arg );
+
+    void Start();
+    void Stop();
 
     void Init();
     void ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );

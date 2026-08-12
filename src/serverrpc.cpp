@@ -319,7 +319,21 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
             return;
         }
 
-        pServer->SetWelcomeMessage ( jsonWelcomeMessage.toString() );
+        // Check the decoded string, not the request bytes: \uXXXX escapes and multi-byte
+        // UTF-8 both make the encoded form longer than the string it produces. The bound is
+        // MAX_LEN_CHAT_TEXT because that is what CServer::SetWelcomeMessage truncates to;
+        // accepting more here would report success and then silently discard the excess.
+        const QString strWelcomeMessage = jsonWelcomeMessage.toString();
+
+        if ( strWelcomeMessage.length() > MAX_LEN_CHAT_TEXT )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError (
+                CRpcServer::iErrInvalidParams,
+                QString ( "Invalid params: welcomeMessage exceeds maximum length of %1 characters" ).arg ( MAX_LEN_CHAT_TEXT ) );
+            return;
+        }
+
+        pServer->SetWelcomeMessage ( strWelcomeMessage );
         response["result"] = "ok";
     } );
 

@@ -89,18 +89,19 @@ listener, so a size change on its own is invisible to them. Oboe does detect it 
 and restart it afterwards, which is the `bWasRunning` pattern throughout `client.cpp`.
 
 The audio callback runs on a thread owned by the driver. `CSoundBase` inherits `QThread`, but
-nothing here overrides `run()` or calls `start()`, so no such thread exists — nor has it ever:
-neither appears anywhere in this file's tracked history, and no other `QThread`-specific method
-is used in the sound layer either. The inheritance predates the current driver-callback
-architecture and contributes nothing; changing it to `QObject` looks safe from this file alone,
-but that wasn't verified further here.
+nothing overrides `run()` or calls `start()`, so no such thread is ever created.
 
-Every backend but ASIO also overrides `Stop()`, and every override but JACK's calls a
-driver-level stop function *before* touching `bRun` at all:
+Three separate mechanisms keep that callback off a device that is stopping or being
+re-initialised: the driver-level stop call in a backend's own `Stop()`, the `bRun` flag the
+callback may test, and a mutex the callback and `Stop()` share. All three are in use, but no two
+backends combine them the same way.
+
+All five backends override `Stop()`, and all but JACK's call a driver-level stop function before
+`CSoundBase::Stop()` clears `bRun`:
 
 | backend | own `Stop()` calls first |
 |---|---|
-| ASIO | (no override — `ASIOStop()` happens inside `CSound::Stop()` itself, see below) |
+| ASIO | `ASIOStop()` — then, after the base call, waits on `ASIOMutex`, see below |
 | CoreAudio (macOS) | `AudioDeviceStop()` + `AudioDeviceDestroyIOProcID()` |
 | CoreAudio (iOS) | `AudioOutputUnitStop()` |
 | Oboe | `closeStreams()` |
@@ -113,8 +114,8 @@ Inside the callback itself, backends differ again, and not just in which flag th
 |---|---|---|---|
 | ASIO | `bufferSwitch()` | none | always taken (its own `ASIOMutex`); always processes |
 | CoreAudio (macOS) | `callbackIO()` | `bRun`, after the lock | always taken; only the processing is skipped |
-| CoreAudio (iOS) | `processBufferList()` | none | always taken; always processes |
-| Oboe | `onAudioReady()` | `!bRun`, first line, before any lock | skipped entirely once stopped |
+| CoreAudio (iOS) | `recordingCallback()` | none | taken in `processBufferList()` only; output copy unlocked |
+| Oboe | `onAudioReady()` | `!bRun`, before any lock | skipped once stopped; only `onAudioOutput()` locks |
 | JACK | `process()` | `IsRunning()`, after the lock | always taken; only the processing is skipped |
 
 `IsRunning()`, `bRun` and `!bRun` all read the same flag (`IsRunning()` is `return bRun;`) —
@@ -130,12 +131,11 @@ void CSoundBase::Stop() {
     QMutexLocker locker ( &MutexAudioProcessCallback );
 }
 ```
-CoreAudio (iOS) and ASIO have no flag check anywhere in their callback, so they depend entirely
-on their own driver-level stop call above (or, for ASIO, on `ASIOStop()` inside its own
-`CSound::Stop()`) actually preventing further callbacks — if the driver fires one more callback
-after that call returns, it runs to completion regardless of `bRun`. Whether `AudioOutputUnitStop`
-/ `ASIOStop` are synchronous enough to rule that out wasn't tested here; it would need real
-hardware.
+CoreAudio (iOS) and ASIO have no flag check anywhere in their callback, so they depend entirely on
+their own driver-level stop call — `AudioOutputUnitStop()` and `ASIOStop()` — actually preventing
+further callbacks: if the driver fires one more after that call returns, it runs to completion
+regardless of `bRun`. Whether either is synchronous enough to rule that out wasn't tested here; it
+would need real hardware.
 
 ASIO defines and owns its own `ASIOMutex` (in `asio/sound.h`) instead of using the shared
 `MutexAudioProcessCallback`. Its own `CSound::Stop()` calls `ASIOStop()` first, then

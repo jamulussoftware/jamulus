@@ -270,7 +270,7 @@ This snippet uses [jayson](https://www.npmjs.com/package/jayson) to connect usin
 const jayson = require("jayson/promise");
 const client = new jayson.client.tcp({ host: "127.0.0.1", port: 22100 });
 
-client.request('jamulusserver/getServerInfo', {})
+client.request('jamulus/apiAuth', { secret: "...the secret from the file in --jsonrpcsecretfile..." })
 .then(console.log)
 .catch(console.error)
 ```

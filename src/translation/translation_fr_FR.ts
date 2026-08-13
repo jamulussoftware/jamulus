@@ -3606,7 +3606,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../util.cpp" line="1590"/>
         <source>Released under the GNU Affero General Public License 3.0 (or any later version)</source>
-        <translation type="unfinished"></translation>
+        <translation>Publié sous la licence GNU Affero General Public License 3.0 (ou toute version ultérieure)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1658"/>

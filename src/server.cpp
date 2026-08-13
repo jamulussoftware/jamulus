@@ -183,6 +183,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecNumFrameSizeConvBlocks.Init ( iMaxNumChannels );
     vecUseDoubleSysFraSizeConvBuf.Init ( iMaxNumChannels );
     vecAudioComprType.Init ( iMaxNumChannels );
+    vecAudioCodingArg.Init ( iMaxNumChannels );
 
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
@@ -844,6 +845,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
     // get and store number of audio channels and compression type
     vecNumAudioChannels[iChanCnt] = vecChannels[iCurChanID].GetNumAudioChannels();
     vecAudioComprType[iChanCnt]   = vecChannels[iCurChanID].GetAudioCompressionType();
+    vecAudioCodingArg[iChanCnt]   = vecChannels[iCurChanID].GetAudioCodingArg();
 
     // get info about required frame size conversion properties
     vecUseDoubleSysFraSizeConvBuf[iChanCnt] = ( !bUseDoubleSystemFrameSize && ( vecAudioComprType[iChanCnt] == CT_OPUS ) );
@@ -974,7 +976,8 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             // sizeof ( int16_t ) is the size in bytes for the raw pcm audio data = 2
             // Sizes other than that are considered OPUS coded because those depend on hardcoded sizes in client.h
             const bool bIsRawAudio =
-                ( iCeltNumCodedBytes == static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) );
+                ( vecAudioCodingArg[iChanCnt] == AQ_RAW ||
+                  iCeltNumCodedBytes == static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) );
 
             const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
 
@@ -1263,7 +1266,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
             DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
         }
 
-        if ( iCeltNumCodedBytes != static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) )
+        if ( vecAudioCodingArg[iChanCnt] != AQ_RAW &&
+             iCeltNumCodedBytes != static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) )
         {
             // OPUS encoding
             if ( CurOpusEncoder != nullptr )

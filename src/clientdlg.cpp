@@ -268,10 +268,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     const int iCurAudReverb = pClient->GetReverbLevel();
     sldAudioReverb->setValue ( iCurAudReverb );
     sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
-
-    // init reverb channel
-    UpdateRevSelection();
 #endif
+
+    // init reverb channel (needed for pan feature as well)
+    UpdateRevSelection();
+
     // init input boost
     pClient->SetInputBoost ( pSettings->iInputBoost );
 
@@ -688,9 +689,9 @@ void CClientDlg::ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept )
         }
     }
 }
-#ifndef NO_REVERB
 void CClientDlg::UpdateRevSelection()
 {
+#ifndef NO_REVERB
     if ( pClient->GetAudioChannels() == CC_STEREO )
     {
         // for stereo make channel selection invisible since
@@ -714,11 +715,10 @@ void CClientDlg::UpdateRevSelection()
             rbtReverbSelR->setChecked ( true );
         }
     }
-
+#endif
     // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
 }
-#endif
 void CClientDlg::OnConnectDlgAccepted()
 {
     // We had an issue that the accepted signal was emit twice if a list item was double

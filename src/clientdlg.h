@@ -114,9 +114,7 @@ protected:
     void ShowChatWindow ( const bool bForceRaise = true );
     void ShowAnalyzerConsole();
     void UpdateAudioFaderSlider();
-#ifndef NO_REVERB
     void UpdateRevSelection();
-#endif
     void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
     void SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
@@ -260,12 +258,7 @@ public slots:
     void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
-    void OnAudioChannelsChanged()
-    {
-#ifndef NO_REVERB
-        UpdateRevSelection();
-#endif
-    }
+    void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones

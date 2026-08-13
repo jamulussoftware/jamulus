@@ -22,8 +22,6 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://www.gnu.org/licenses/).
 
-
-
 # Where things live
 
 Code used by both client and server:
@@ -57,11 +55,11 @@ The JSON-RPC API ([rpcserver.cpp](rpcserver.cpp), [clientrpc.cpp](clientrpc.cpp)
 
 | thread | exists | started from | what runs on it |
 |---|---|---|---|
-| Qt main thread | always | — | the GUI; every protocol message, parsed and created, on client and server; directory registration; JSON-RPC; and the server's complete frame cycle (see below) |
-| `CSocketThread` | always | `CHighPrioSocket::Start()`, at `QThread::TimeCriticalPriority` | a blocking UDP receive loop. Audio packets are decoded into the jitter buffer synchronously, in `CChannel::PutAudioData` (client) or `CServer::PutAudioData` (server). Protocol frames are not parsed here: they are re-emitted as queued signals and handled on the main thread. |
+| Qt main thread | always | — | the GUI; every protocol message body, parsed and created, on client and server; directory registration; JSON-RPC; and the server's complete frame cycle (see below) |
+| `CSocketThread` | always | `CHighPrioSocket::Start()`, at `QThread::TimeCriticalPriority` | a blocking UDP receive loop. Audio packets are decoded into the jitter buffer synchronously, in `CChannel::PutAudioData` (client) or `CServer::PutAudioData` (server). Protocol messages are split across the two threads: `CProtocol::ParseMessageFrame` validates the frame here, then the body is re-emitted as a queued signal and `ParseMessageBody` runs it on the main thread. |
 | audio driver threads | client | the sound driver | the backend callback, which runs `CClient::AudioCallback`: Opus decode of the received stream, Opus encode of the sound card input, and the UDP send of the encoded packet |
 | `CHighPrecisionT…` | server, except on Windows | `CHighPrecisionTimer::Start()`, at `QThread::TimeCriticalPriority` | only `emit timeout()` once per frame, plus the absolute-time sleep that paces it |
-| `CThreadPool` workers | server with `--multithreading` | `CServer`'s constructor | Opus decode and mix/encode/send work, in per-block chunks handed out by `CServer::OnTimer` |
+| `CThreadPool` workers | server with `--multithreading`, on more than one core | `CServer`'s constructor | Opus decode and mix/encode/send work, in per-block chunks handed out by `CServer::OnTimer` |
 | recorder thread | server with recording | `CJamController` | `CJamRecorder`, fed by queued `AudioFrame` signals from the frame cycle |
 | `QThreadPool` global pool | client GUI | the connect dialog | one task per listed server for the ping/info fan-out (`QtConcurrent::run`) |
 
@@ -70,7 +68,8 @@ emits `timeout()`; the slot behind that queued connection, `CServer::OnTimer`, d
 buffer drain, decode, mix, encode and transmit — on the main thread. The TODO in
 [util.cpp](util.cpp) notes the same escape from the timer thread. On Windows the pacer is a
 plain `QTimer`, also main thread. With `--multithreading` the heavy blocks go to the pool, but
-`OnTimer` waits for them.
+`OnTimer` waits for them — and on a machine reporting one core, `CServer`'s constructor turns the
+option back off, so no pool thread is created at all.
 
 ## Locks
 

@@ -337,7 +337,8 @@ void CChannel::SetPan ( const int iChanID, const float fNewPan )
     // set value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        vecfPannings[iChanID] = fNewPan;
+        // pan range is 0..1; guard to avoid wrong values from the network
+        vecfPannings[iChanID] = std::min ( 1.0f, std::max ( fNewPan, 0.0f ) );
     }
 }
 

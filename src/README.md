@@ -4,9 +4,6 @@ Author(s):
 * mcfnord
 * The Jamulus Development Team
 
-As of Jamulus 3.12.1dev (commit eb172d47): All new source code contributions must be licensed
-under AGPL 3.0 or any later version.
-
 ---
 
 This program is free software: you can redistribute it and/or modify
@@ -38,15 +35,23 @@ Code used by both client and server:
 - [util.h](util.h) / [util.cpp](util.cpp) — `CHighPrecisionTimer`, the server's frame clock, and
   assorted helpers.
 
-Client only: [client.cpp](client.cpp) (`CClient`), the sound layer in [sound/](sound/), the GUI
-([clientdlg.cpp](clientdlg.cpp), [clientsettingsdlg.cpp](clientsettingsdlg.cpp),
-[audiomixerboard.cpp](audiomixerboard.cpp), [connectdlg.cpp](connectdlg.cpp),
-[chatdlg.cpp](chatdlg.cpp)), and [clientrpc.cpp](clientrpc.cpp).
+Client only:
 
-Server only: [server.cpp](server.cpp) (`CServer`: the channels and the mix),
-[serverlist.cpp](serverlist.cpp) (directory registration and the server list),
-[recorder/](recorder/), [serverlogging.cpp](serverlogging.cpp),
-[serverrpc.cpp](serverrpc.cpp) and [serverdlg.cpp](serverdlg.cpp).
+- [client.cpp](client.cpp) — `CClient`: the client's audio path and its one channel.
+- [sound/](sound/) — the sound layer, one backend per platform. See [sound/README.md](sound/README.md).
+- [clientdlg.cpp](clientdlg.cpp), [clientsettingsdlg.cpp](clientsettingsdlg.cpp),
+  [audiomixerboard.cpp](audiomixerboard.cpp), [connectdlg.cpp](connectdlg.cpp),
+  [chatdlg.cpp](chatdlg.cpp) — the GUI.
+- [clientrpc.cpp](clientrpc.cpp) — the client half of the JSON-RPC API.
+
+Server only:
+
+- [server.cpp](server.cpp) — `CServer`: the channels and the mix.
+- [serverlist.cpp](serverlist.cpp) — directory registration and the server list.
+- [recorder/](recorder/) — `CJamController` and `CJamRecorder`.
+- [serverlogging.cpp](serverlogging.cpp) — the connection log.
+- [serverrpc.cpp](serverrpc.cpp) — the server half of the JSON-RPC API.
+- [serverdlg.cpp](serverdlg.cpp) — the server GUI.
 
 The JSON-RPC API ([rpcserver.cpp](rpcserver.cpp), [clientrpc.cpp](clientrpc.cpp),
 [serverrpc.cpp](serverrpc.cpp)) is documented in [../docs/JSON-RPC.md](../docs/JSON-RPC.md).
@@ -87,7 +92,9 @@ The locks taken from more than one thread:
 
 - `CProtocol::Mutex` — queue of sent but not yet acknowledged messages
 - `CServer::MutexChanOrder` — channel allocation in `FindChannel` and `FreeChannel`
-- `CServer::MutexWelcomeMessage`
+- `CServer::MutexWelcomeMessage` — the welcome message string. Taken in `OnNewConnection` and
+  `SetWelcomeMessage` only; the other readers (`OnCLReqServerFeatures`, `OnCLReqWelcomeMessage`,
+  `GetWelcomeMessage`) do not take it, and every one of them is reached on the main thread.
 - `CClient::MutexChannels` — client-side channel number map
 - `CClient::MutexGainOrPan` — gain/pan message rate limiter
 - `CClient::MutexDriverReinit` — serializes sound device re-initialization

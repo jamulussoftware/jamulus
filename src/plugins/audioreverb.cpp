@@ -2,9 +2,9 @@
 * Audio Reverberation                                                          *
 \******************************************************************************/
 /*
-    The following code calls MVerb for reverberation.
-    MVerb was written by Martin Eastwood.
-    https://github.com/martineastwood/mverb
+    The following code uses the MVerb library by Martin Eastwood.
+    Source: https://github.com/martineastwood/mverb
+    License: GNU General Public License v3.0 (GPL-3.0)
 */
 
 #include "audioreverb.h"

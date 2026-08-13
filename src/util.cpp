@@ -525,7 +525,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 #        ifndef HEADLESS
                             "<p>" +
                             tr ( "Audio reverberation powered by MVerb" ) +
-                            ", Copyright (c) 2010 Martin Eastwood"
+                            ", Copyright (c) 2010 Martin Eastwood, licensed under the GPL3.0 License"
                             ", <i><a href=\"https://github.com/martineastwood/mverb\">https://github.com/martineastwood/mverb</a></i>"
                             "</p>"
                             "<p>" +

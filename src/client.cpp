@@ -59,6 +59,7 @@ CClient::CClient ( const quint16  iPortNumber,
     strClientName ( strNClientName ),
     pSignalHandler ( CSignalHandler::getSingletonP() ),
     pSettings ( nullptr ),
+    eConnectionState ( CS_DISCONNECTED ),
     Channel ( false ), /* we need a client channel -> "false" */
     CurOpusEncoder ( nullptr ),
     CurOpusDecoder ( nullptr ),
@@ -145,7 +146,7 @@ CClient::CClient ( const quint16  iPortNumber,
     // The first ConClientListMesReceived handler performs the necessary cleanup and has to run first:
     QObject::connect ( &Channel, &CChannel::ConClientListMesReceived, this, &CClient::OnConClientListMesReceived );
 
-    QObject::connect ( &Channel, &CChannel::Disconnected, this, &CClient::Disconnected );
+    QObject::connect ( &Channel, &CChannel::Disconnected, this, &CClient::Stop );
 
     QObject::connect ( &Channel, &CChannel::NewConnection, this, &CClient::OnNewConnection );
 
@@ -626,6 +627,9 @@ bool CClient::SetServerAddr ( QString strNAddr )
         // apply address to the channel
         Channel.SetAddress ( HostAddress );
 
+        // By default, set server name to HostAddress. If using the Connect() method, this may be overwritten
+        SetConnectedServerName ( HostAddress.toString() );
+
         return true;
     }
     else
@@ -929,11 +933,9 @@ void CClient::OnHandledSignal ( int sigNum )
     {
     case SIGINT:
     case SIGTERM:
-        // if connected, terminate connection (needed for headless mode)
-        if ( IsRunning() )
-        {
-            Stop();
-        }
+        // tear down any pending or established connection first, so the server
+        // is notified we are leaving (Disconnect() is a no-op if not connected)
+        Disconnect();
 
         // this should trigger OnAboutToQuit
         QCoreApplication::instance()->exit();
@@ -1027,6 +1029,9 @@ void CClient::OnClientIDReceived ( int iServerChanID )
         SetRemoteChanGain ( iChanID, 0, false );
     }
 
+    // the server has assigned us a channel ID, so the connection is established
+    SetConnectionState ( CS_CONNECTED );
+
     emit ClientIDReceived ( iChanID );
 }
 
@@ -1069,8 +1074,19 @@ void CClient::Start()
     // Disable hibernation or display dimming if the app is running on Windows
     SetThreadExecutionState ( ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED );
 #endif
+
+    // the connection is requested now but not yet established: the transition
+    // to CS_CONNECTED happens when the server assigns our channel ID
+    // (see OnClientIDReceived)
+    SetConnectionState ( CS_CONNECTING );
+
+    emit Connecting ( GetConnectedServerName() );
 }
 
+/// @method
+/// @brief Stops client and disconnects from server
+/// @emit Disconnected
+///       Use to set CClientDlg to show not being connected
 void CClient::Stop()
 {
     // stop audio interface
@@ -1081,7 +1097,16 @@ void CClient::Stop()
 
     // Fall back to opus in case raw was used
     bRawAudioIsSupported = false;
-    Init();
+    try
+    {
+        Init();
+    }
+    catch ( const CGenErr& generr )
+    {
+        // a dead audio backend (e.g. JACK was shut down) must not prevent the
+        // disconnect message below from reaching the server
+        qWarning() << "Could not reinitialise the sound device while disconnecting:" << generr.GetErrorText();
+    }
 
     // wait for approx. 100 ms to make sure no audio packet is still in the
     // network queue causing the channel to be reconnected right after having
@@ -1112,6 +1137,74 @@ void CClient::Stop()
     // Allow hibernation or display dimming if the app is running again (Windows)
     SetThreadExecutionState ( ES_CONTINUOUS );
 #endif
+
+    SetConnectionState ( CS_DISCONNECTED );
+
+    // emit Disconnected() to inform UI of disconnection
+    emit Disconnected();
+}
+
+/// @method
+/// @brief Disconnects from the server if a connection is requested or established.
+///        Idempotent: a no-op when already disconnected.
+/// @emit Disconnected
+void CClient::Disconnect()
+{
+    // Key off the connection state, not IsRunning() (which tracks the audio
+    // device): the two diverge while connecting and in headless mode, and on
+    // SIGTERM we must still send the disconnect message to the server.
+    if ( GetConnectionState() != CS_DISCONNECTED )
+    {
+        Stop();
+    }
+}
+
+/// @method
+/// @brief Connects to strServerAddress. If a connection is currently requested
+///        or established, that connection is terminated first.
+/// @emit Connecting (strServerName) if SetServerAddr was valid. emit happens through Start().
+///       Use to set CClientDlg to show being connected
+/// @emit ConnectingFailed (error) if an error occurred
+///       Use to display error message in CClientDlg
+/// @param strServerAddress - the server address to connect to
+/// @param strServerName - the human readable server name passed to Connecting()
+void CClient::Connect ( const QString& strServerAddress, const QString& strServerName )
+{
+    try
+    {
+        // disconnect from any current server first so that connecting to a
+        // different server while connected behaves as a reconnect
+        Disconnect();
+
+        // Set server address and connect if valid address was supplied
+        if ( SetServerAddr ( strServerAddress ) )
+        {
+            SetConnectedServerName ( strServerName );
+            Start();
+        }
+        else
+        {
+            throw CGenErr ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
+        }
+    }
+    catch ( const CGenErr& generr )
+    {
+        Stop();
+        emit ConnectingFailed ( generr.GetErrorText() );
+    }
+}
+
+/// @method
+/// @brief Updates the connection state and, if it changed, notifies observers.
+/// @emit ConnectionStateChanged (state) when the state actually changes
+/// @param eNewConnectionState - the state to transition to
+void CClient::SetConnectionState ( const EConnectionState eNewConnectionState )
+{
+    if ( eConnectionState != eNewConnectionState )
+    {
+        eConnectionState = eNewConnectionState;
+        emit ConnectionStateChanged ( eConnectionState );
+    }
 }
 
 void CClient::Init()

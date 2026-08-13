@@ -289,6 +289,7 @@ win32 {
     HEADERS += $$OBOE_HEADERS
     SOURCES += $$OBOE_SOURCES
     DISTFILES += $$DISTFILES_OBOE
+    QMAKE_DISTCLEAN += android-$${TARGET}-deployment-settings.json
 } else:unix {
     # we want to compile with C++11
     CONFIG += c++11
@@ -1202,3 +1203,27 @@ CLANG_FORMAT_SOURCES = $$find(CLANG_FORMAT_SOURCES, ^\(android|ios|mac|linux|src
 CLANG_FORMAT_SOURCES ~= s!^\(libs/.*/|src/res/qrc_resources\.cpp\)\S*$!!g
 clang_format.commands = 'clang-format -i $$CLANG_FORMAT_SOURCES'
 QMAKE_EXTRA_TARGETS += clang_format
+
+# QMAKE_DISTCLEAN only removes files. Use a custom target to remove
+# generated directory trees. Deliberately do not remove user-installed
+# dependencies such as libs/ASIOSDK2.
+android {
+    for (abi, ANDROID_ABIS) {
+        DISTCLEAN_DIRS += debug-$${abi} release-$${abi}
+    }
+    DISTCLEAN_DIRS += .qm
+} else {
+    DISTCLEAN_DIRS += debug release .qm
+}
+
+win32 {
+    for(dir, DISTCLEAN_DIRS) {
+        distclean_dirs.commands += if exist $$replace(dir, /, \\) rmdir /s /q $$replace(dir, /, \\) $$escape_expand(\\n\\t)
+    }
+} else {
+    # Works for Linux, macOS, iOS, and Android using standard Unix rm
+    distclean_dirs.commands += rm -rf $$DISTCLEAN_DIRS
+}
+
+QMAKE_EXTRA_TARGETS += distclean_dirs
+DISTCLEAN_DEPS += distclean_dirs

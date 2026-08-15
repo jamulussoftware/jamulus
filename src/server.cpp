@@ -601,26 +601,22 @@ void CServer::OnCLClientIDReceived ( CHostAddress InetAddr, int iChanID, quint32
         return;
     }
 
-    qDebug() << "- client ID" << iChanID << "received from" << InetAddr.toString() << "over TCP connection";
-
     if ( iChanID < 0 || iChanID >= iMaxNumChannels || !vecChannels[iChanID].IsConnected() )
     {
         // ID out of range or channel not connected - reject connection
         pTcpConnection->disconnectFromHost();
-        qWarning() << "- Jamulus-TCP: rejected invalid client ID";
+        qWarning() << "- Jamulus-TCP: rejected invalid client ID from" << InetAddr.toString();
         return;
     }
 
     CChannel* pChannel = &vecChannels[iChanID];
-
-    qInfo() << "- Jamulus-TCP: request to link TCP connection with UDP client at" << pChannel->GetAddress().toString();
 
     // compare the token to authenticate the request
     if ( pChannel->GetChannelToken() != token )
     {
         // token mismatch - reject connection
         pTcpConnection->disconnectFromHost();
-        qWarning() << "- Jamulus-TCP: rejected mismatched channel token";
+        qWarning() << "- Jamulus-TCP: rejected mismatched channel token from" << InetAddr.toString();
         return;
     }
 

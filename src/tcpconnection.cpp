@@ -81,7 +81,6 @@ CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcp
 
 void CTcpConnection::OnDisconnected()
 {
-    qInfo() << "- Jamulus-TCP: disconnected from:" << tcpAddress.toString();
     TimerKeepalive.stop();
     TimerIdleTimeout.stop();
     pTcpSocket->deleteLater();
@@ -95,8 +94,6 @@ void CTcpConnection::OnDisconnected()
 void CTcpConnection::OnReadyRead()
 {
     long iBytesAvail = pTcpSocket->bytesAvailable();
-
-    qDebug() << "- readyRead(), bytesAvailable() =" << iBytesAvail;
 
     while ( iBytesAvail > 0 )
     {
@@ -115,8 +112,6 @@ void CTcpConnection::OnReadyRead()
                 qWarning() << "- Jamulus-TCP: unexpected EOF";
                 return;
             }
-
-            qDebug() << "-- (hdr) iNumBytesRead =" << iNumBytesRead;
 
             iPos += iNumBytesRead;
             iBytesAvail -= iNumBytesRead;
@@ -153,8 +148,6 @@ void CTcpConnection::OnReadyRead()
                 return;
             }
 
-            qDebug() << "-- (body) iNumBytesRead =" << iNumBytesRead;
-
             iPos += iNumBytesRead;
             iPayloadRemain -= iNumBytesRead;
             iBytesAvail -= iNumBytesRead;
@@ -164,8 +157,6 @@ void CTcpConnection::OnReadyRead()
             if ( iPayloadRemain == 0 )
             {
                 // have a complete payload
-                qDebug() << "- Jamulus-TCP: received protocol message of length" << iPos;
-
                 // check if this is a protocol message
                 int              iRecCounter;
                 int              iRecID;
@@ -173,8 +164,6 @@ void CTcpConnection::OnReadyRead()
 
                 if ( !CProtocol::ParseMessageFrame ( vecbyRecBuf, iPos, vecbyMesBodyData, iRecCounter, iRecID ) )
                 {
-                    qDebug() << "- Jamulus-TCP: message parsed OK, ID =" << iRecID;
-
                     // this is a protocol message, check the type of the message
                     if ( CProtocol::IsConnectionLessMessageID ( iRecID ) )
                     {
@@ -207,8 +196,6 @@ void CTcpConnection::OnReadyRead()
         }
     }
 
-    qDebug() << "- end of readyRead(), bytesAvailable() =" << pTcpSocket->bytesAvailable();
-
     if ( pServer )
     {
         // restart server idle timer allowing for keepalive interval
@@ -218,13 +205,11 @@ void CTcpConnection::OnReadyRead()
 
 void CTcpConnection::OnTimerKeepalive()
 {
-    // qDebug() << "- Keepalive timer" << this << "to TCP" << tcpAddress.toString();
     emit CLSendEmptyMes ( tcpAddress, this );
 }
 
 void CTcpConnection::OnTimerIdleTimeout()
 {
-    // qDebug() << "- ConnTimeout timer" << this << "from TCP" << tcpAddress.toString();
     qWarning() << "- Jamulus-TCP: idle timeout - disconnecting";
     disconnectFromHost();
 }

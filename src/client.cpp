@@ -370,8 +370,7 @@ void CClient::CreateCLServerListReqConnClientsListMes ( const CHostAddress& Inet
         switch ( eFetchMode )
         {
         case CFM_UDP_REQUEST:
-            // suppress this warning, as it is triggered by the connect dialog sending two requests at once on open
-            // qWarning() << "Unsatisfied Client List request via UDP for" << InetAddr.toString();
+            qWarning() << "Unsatisfied Client List request via UDP for" << InetAddr.toString();
             ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_UDP );
             break;
         case CFM_TCP_REQUEST:
@@ -1174,7 +1173,6 @@ void CClient::OnClientIDReceived ( int iServerChanID )
     if ( bTcpOffered )
     {
         // *** Make TCP connection
-        qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
         ConnLessProtocol.CreateCLClientIDMes ( Channel.GetAddress(), iClientID, iChannelToken, PROTO_TCP_LONG ); // create persistent TCP connection
     }
 
@@ -1218,8 +1216,6 @@ void CClient::OnRawAudioSupported()
 
 void CClient::OnCLTcpOfferedReceived ( CHostAddress InetAddr, int iID, quint32 token )
 {
-    qDebug() << "- TCP Offered by server" << InetAddr.toString() << "for ID =" << iID;
-
     switch ( iID )
     {
     case PROTMESSID_CLM_SERVER_LIST:
@@ -1227,7 +1223,6 @@ void CClient::OnCLTcpOfferedReceived ( CHostAddress InetAddr, int iID, quint32 t
         {
             if ( pendingServerList.value ( InetAddr ) == CFM_UDP_REQUEST )
             {
-                qDebug() << "- UDP server list not received from" << InetAddr.toString() << "- retrying via TCP";
                 // request pending but reply not received - probably due to fragmentation drop
                 // re-request using TCP
                 pendingServerList.insert ( InetAddr, CFM_TCP_REQUEST );
@@ -1244,7 +1239,6 @@ void CClient::OnCLTcpOfferedReceived ( CHostAddress InetAddr, int iID, quint32 t
         {
             if ( pendingClientList.value ( InetAddr ) == CFM_UDP_REQUEST )
             {
-                qDebug() << "- UDP client list not received from" << InetAddr.toString() << "- retrying via TCP";
                 // request pending but reply not received - probably due to fragmentation drop
                 // re-request using TCP
                 pendingClientList.insert ( InetAddr, CFM_TCP_REQUEST );
@@ -1271,7 +1265,6 @@ void CClient::OnCLTcpOfferedReceived ( CHostAddress InetAddr, int iID, quint32 t
         if ( iClientID != INVALID_INDEX )
         {
             // *** Make TCP connection
-            qDebug() << Q_FUNC_INFO << "need to make TCP connection for client ID" << iClientID;
             ConnLessProtocol.CreateCLClientIDMes ( InetAddr, iClientID, iChannelToken, PROTO_TCP_LONG ); // create persistent TCP connection
         }
         break;
@@ -1290,7 +1283,6 @@ void CClient::OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInf
         // for UDP, just remove pending request
         pendingServerList.remove ( InetAddr );
     }
-    qDebug() << "- server list received";
     emit CLServerListReceived ( InetAddr, vecServerInfo );
 }
 
@@ -1299,7 +1291,6 @@ void CClient::OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CC
     // test if we are receiving for the connect dialog or a connected session
     if ( pTcpConnection && pTcpConnection->IsSession() )
     {
-        qDebug() << "- sending client list to client dialog";
         OnConClientListMesReceived ( vecChanInfo ); // connected session
     }
     else
@@ -1314,7 +1305,6 @@ void CClient::OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CC
             // for UDP, just remove pending request
             pendingClientList.remove ( InetAddr );
         }
-        qDebug() << "- sending client list to connect dialog";
         emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo ); // connect dialog
     }
 }

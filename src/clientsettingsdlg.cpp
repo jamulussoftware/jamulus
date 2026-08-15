@@ -388,8 +388,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     lblReverbPreset->setWhatsThis ( strReverbPreset );
     cbxReverbPreset->setWhatsThis ( strReverbPreset );
     cbxReverbPreset->setAccessibleName ( tr ( "Reverb Preset combo box" ) );
-#endif
-#ifdef NO_REVERB
+#else
     lblReverbPreset->setVisible ( false );
     cbxReverbPreset->setVisible ( false );
     verticalSpacer_13->changeSize ( 0, 0 );

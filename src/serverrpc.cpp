@@ -326,6 +326,7 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
     /// @rpc_method jamulusserver/setRecordingDirectory
     /// @brief Sets the server recording directory.
     /// @param {string} params.recordingDirectory - The new recording directory.
+    ///  May be prefixed with "localtimezone;" to name recording session folders using local time instead of UTC.
     /// @result {string} result - Always "acknowledged".
     ///  To check if the directory was changed, call `jamulusserver/getRecorderStatus` again.
     pRpcServer->HandleMethod ( "jamulusserver/setRecordingDirectory", [=] ( const QJsonObject& params, QJsonObject& response ) {

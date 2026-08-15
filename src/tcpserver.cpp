@@ -133,8 +133,6 @@ void CTcpServer::AcceptConnections ( QTcpServer* pTcpServer )
         {
             CHostAddress peerAddress ( pSocket->peerAddress(), pSocket->peerPort() );
 
-            qDebug() << "- Jamulus-TCP: received connection from:" << peerAddress.toString();
-
             new CTcpConnection ( pSocket, peerAddress, pServer ); // will auto-delete on disconnect
         }
     }

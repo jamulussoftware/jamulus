@@ -2,6 +2,10 @@
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
+## Contents of this feature branch
+
+This branch implements the "localtimezone" prefix to make recording sessions using the server's local time zone. The related PR was provided by @mcfnord: https://github.com/jamulussoftware/jamulus/pull/3832
+
 # Jamulus - Internet Jam Session Software
 
 <a href="https://jamulus.io/"><img align="left" width="102" height="102" src="https://jamulus.io/assets/img/jamulus-icon-2020.svg"/></a>

@@ -60,15 +60,15 @@ The basic summary is that TCP need only be used as a fallback when it is determi
 
 1. A server (which may also be a directory) can be configured with the command-line option `--enabletcp` to enable TCP operation.
 
-2. If the directory server has TCP enabled, then *after* it has sent the `CLM_RED_SERVER_LIST` and `CLM_SERVER_LIST` by UDP, it will send a new message `CLM_TCP_SUPPORTED` to the client, with a data field of `CLM_SERVER_LIST`. This data field enables the client to know which request may need to be retried over TCP.
+2. If the directory server has TCP enabled, then *after* it has sent the `CLM_RED_SERVER_LIST` and `CLM_SERVER_LIST` by UDP, it will send a new message `CLM_TCP_OFFERED` to the client, with a data field of `CLM_SERVER_LIST`. This data field enables the client to know which request may need to be retried over TCP.
 
    a. An older version of client that does not support TCP will ignore this message and continue operating in the normal way just on UDP.
 
-   b. A newer client that supports TCP should receive and process the `CLM_TCP_SUPPORTED` message *after* it has received and processed the UDP server list, unless fragmentation (or another cause) prevented the list from arriving.
+   b. A newer client that supports TCP should receive and process the `CLM_TCP_OFFERED` message *after* it has received and processed the UDP server list, unless fragmentation (or another cause) prevented the list from arriving.
 
    c. If such a client has already processed a full server list from `CLM_SERVER_LIST`, it will have no need to open a TCP connection to the directory, so this will be skipped.
 
-   d. If the client receives `CLM_TCP_SUPPORTED` having *not* received and processed a `CLM_SERVER_LIST`, it will open a TCP connection to the directory server, and request the server list again over the TCP connection.
+   d. If the client receives `CLM_TCP_OFFERED` having *not* received and processed a `CLM_SERVER_LIST`, it will open a TCP connection to the directory server, and request the server list again over the TCP connection.
 
 3. If the directory server accepts a TCP connection and receives a `CLM_REQ_SERVER_LIST` over it, it will process the request in the same way as for a UDP request, with the following differences:
 
@@ -82,15 +82,15 @@ The basic summary is that TCP need only be used as a fallback when it is determi
 
 6. As above, if the number of connected clients has changed, the client sends a `CLM_REQ_CONN_CLIENTS_LIST` over UDP in the normal way.
 
-7. If a server in the list supports TCP, when it has sent a reply to the client list request with `CLM_CONN_CLIENTS_LIST`, it will follow it immediately with a `CLM_TCP_SUPPORTED`, with a data field of `CLM_CONN_CLIENTS_LIST`.
+7. If a server in the list supports TCP, when it has sent a reply to the client list request with `CLM_CONN_CLIENTS_LIST`, it will follow it immediately with a `CLM_TCP_OFFERED`, with a data field of `CLM_CONN_CLIENTS_LIST`.
 
-   a. An older version of client that does not support TCP will ignore the `CLM_TCP_SUPPORTED` message and continue operating in the normal way just on UDP.
+   a. An older version of client that does not support TCP will ignore the `CLM_TCP_OFFERED` message and continue operating in the normal way just on UDP.
 
-   b. A newer client that supports TCP should received the `CLM_TCP_SUPPORTED` message *after* it has received and processed the UDP client list, unless fragmentation (or another cause) prevented the list from arriving.
+   b. A newer client that supports TCP should received the `CLM_TCP_OFFERED` message *after* it has received and processed the UDP client list, unless fragmentation (or another cause) prevented the list from arriving.
 
    c. If such a client has already processed a client list from `CLM_CONN_CLIENTS_LIST`, it will have no need to open a TCP connection to the server, so this will be skipped.
 
-   d. If the client receives `CLM_TCP_SUPPORTED` having *not* received and processed a `CLM_CONN_CLIENTS_LIST`, it will open a TCP connection to the server, and request the client list again over the TCP connection.
+   d. If the client receives `CLM_TCP_OFFERED` having *not* received and processed a `CLM_CONN_CLIENTS_LIST`, it will open a TCP connection to the server, and request the client list again over the TCP connection.
 
 8. If the server accepts a TCP connection and receives a `CLM_REQ_CONN_CLIENTS_LIST` over it, it will process the request in the same way as for a UDP request, but will send the reply over the TCP connection.
 
@@ -99,7 +99,7 @@ The basic summary is that TCP need only be used as a fallback when it is determi
 
 ### Summary
 
-By sending the `CLM_TCP_SUPPORTED` message immediately *after* sending a potentially large list of servers or connected clients, it allows a client easily to determine whether or not it needs to fall back to TCP without the necessity of timeouts or other delays. It will only need to use TCP if it has not already succeeded in receiving the message over UDP.
+By sending the `CLM_TCP_OFFERED` message immediately *after* sending a potentially large list of servers or connected clients, it allows a client easily to determine whether or not it needs to fall back to TCP without the necessity of timeouts or other delays. It will only need to use TCP if it has not already succeeded in receiving the message over UDP.
 
 ## CONNECTED MODE
 
@@ -170,29 +170,29 @@ Consequently, TCP will not be used for connected-mode protocol messages.
 
 The reason for using a TCP connection in an active session is just to provide a reliable path for delivering a list of connected clients that could be large and subject to fragmentation (if it is sent over UDP). So the established TCP connection is only used to deliver client lists, and not other protocol messages.
 
-Therefore, if the server has an active TCP connection from the client, it will use the connectionless `CLM_CONN_CLIENTS_LIST` message to deliver updates for the connected client list. If there is no active TCP connection, updates will be delivered using the connected-mode `CONN_CLIENTS_LIST` over UDP as at present.
+Therefore, if the server has an active TCP connection from a connected client, it will use the connectionless `CLM_CONN_CLIENTS_LIST` message over TCP to deliver updates for the connected client list. If there is no active TCP connection, updates will be delivered using the connected-mode `CONN_CLIENTS_LIST` over UDP as at present.
 
 So the sequence is as follows:
 
-1. As soon as a TCP-enabled server sees audio from a new client and creates a channel for it, it will send `CLM_TCP_SUPPORTED` to the client, with data fields of `CLM_CLIENT_ID` as the message type and a 32-bit channel token, which was created with a random value when the new connection was allocated to a channel.
+1. As soon as a TCP-enabled server sees audio from a new client and creates a channel for it, it will send `CLM_TCP_OFFERED` to the client, with data fields of `CLM_CLIENT_ID` as the message type and a 32-bit channel token, which was created with a random value when the new connection was allocated to a channel.
 
 2. The server will then send the connected-mode `CLIENT_ID` message as normal, containing the channel ID that has been allocated.
 
-3. An older version of client that does not support TCP will ignore the `CLM_TCP_SUPPORTED` message and continue operating in the normal way just on UDP.
+3. An older version of client that does not support TCP will ignore the `CLM_TCP_OFFERED` message and continue operating in the normal way just on UDP.
 
-4. A newer client that supports TCP will receive the `CLM_TCP_SUPPORTED` message, and will note that the server supports TCP. The client will open a long-lived TCP connection to the server (on the same port number as UDP).
+4. A newer client that supports TCP will receive the `CLM_TCP_OFFERED` message, and will note that the server supports TCP. The client will open a long-lived TCP connection to the server (on the same port number as UDP).
 
 5. The server will accept the TCP connection, and will wait for the first message to arrive via that connection.
 
 6. When a newer client receives the `CLIENT_ID` message from a server it knows supports TCP, the client will send, as its first message over the connection, a `CLM_CLIENT_ID` message containing:
    a. the channel ID that it received over UDP. (`CLM_CLIENT_ID` is a newly-defined connectionless message), and
-   b. the channel token that it received in the `CLM_TCP_SUPPORTED` message. This token authenticates the TCP connection to the server.
+   b. the channel token that it received in the `CLM_TCP_OFFERED` message. This token authenticates the TCP connection to the server.
 
 7. The server will lookup the channel specified by the `CLM_CLIENT_ID` message, and *will check that the channel token in the channel matches the token supplied by the client*. If it does not, it will close the connection. This prevents hijacking of a session by sending another client's ID.
 
 8. If the TCP connection matches the client channel, the socket descriptor will be stored in the channel, and the channel pointer will be stored in the TCP Connection instance.
 
-9. Any messages from the client that arrive over TCP will be handled in the same way as messages received over UDP. Responses will be send back over TCP too. At present, there are no such messages defined. Existing protocol messages will continue to use UDP.
+9. Any messages from the client that arrive over TCP will be handled in the same way as messages received over UDP. Responses will be sent back over TCP too. At present, there are no such messages defined. Existing protocol messages will continue to use UDP.
 
 10. Updates to the Connected Clients List generated by the server will be sent over TCP as `CLM_CONN_CLIENTS_LIST`, if there is an active socket descriptor stored for the channel. If not, they will be sent over UDP as `CONN_CLIENTS_LIST` in the normal way.
 
@@ -204,7 +204,7 @@ So the sequence is as follows:
 
 14. To disconnect, a client will send `CLM_DISCONNECT` over UDP exactly as at present, and will also close the TCP connection.
 
-If the server receives a disconnection of the TCP socket, it will revert to UDP for connected client updates. It could send another `CLM_TCP_SUPPORTED` to invite the client to re-establish a TCP connection.
+If the server receives a disconnection of the TCP socket, it will revert to UDP for connected client updates. It could send another `CLM_TCP_OFFERED` to invite the client to re-establish a TCP connection.
 
 ## OTHER CONSIDERATIONS
 

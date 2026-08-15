@@ -262,8 +262,16 @@ win32 {
     # enabled only for debugging on android devices
     DEFINES += ANDROIDDEBUG
 
-    target.path = /tmp/your_executable # path on device
-    INSTALLS += target
+    CONFIG(debug, debug|release) {
+        DESTDIR = $$OUT_PWD/debug
+    } else {
+        DESTDIR = $$OUT_PWD/release
+    }
+
+    CONFIG -= android_install
+    android_lib.files = $$DESTDIR/libJamulus_$${QT_ARCH}.so
+    android_lib.path = /libs/$$ANDROID_TARGET_ARCH
+    INSTALLS += android_lib
 
     HEADERS += src/sound/oboe/sound.h
 

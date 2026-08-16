@@ -132,6 +132,7 @@ protected:
     QString CheckInputDeviceCapabilities ( const int iInDevIdx );
     QString CheckOutputDeviceCapabilities ( const int iOutDevIdx );
     void    ApplyDeviceSelection ( const int iInDevIdx, const int iOutDevIdx );
+    void    SetDeviceNotifications ( const AudioDeviceID DeviceID, const bool bEnable );
     void    UpdateChSelection();
     void    GetAvailableInOutDevices();
 

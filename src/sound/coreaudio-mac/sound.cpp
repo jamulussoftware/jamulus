@@ -481,80 +481,113 @@ QVector<CDriverInitError> CSound::LoadAndInitializeFirstValidDriver ( const bool
     return vErrorList;
 }
 
-void CSound::ApplyDeviceSelection ( const int iInDevIdx, const int iOutDevIdx )
+void CSound::SetDeviceNotifications ( const AudioDeviceID DeviceID, const bool bEnable )
 {
-    const QString strNewDevName = ComposeDevName ( strInputDeviceNames[iInDevIdx], strOutputDeviceNames[iOutDevIdx] );
-
-    // nothing to do if the selected devices are already in use
-    if ( strCurDevName.compare ( strNewDevName ) == 0 )
-    {
-        return;
-    }
-
     AudioObjectPropertyAddress stPropertyAddress;
 
     stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
     stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
 
-    // unregister the callback functions if devices were already selected (a
-    // device ID of zero means that no device was registered so far)
-    if ( CurrentAudioInputDeviceID != 0 )
+    const AudioObjectPropertySelector aSelectors[] = { kAudioDevicePropertyDeviceHasChanged, kAudioDevicePropertyDeviceIsAlive };
+
+    for ( const AudioObjectPropertySelector eSelector : aSelectors )
     {
+        stPropertyAddress.mSelector = eSelector;
+
+        if ( bEnable )
+        {
+            AudioObjectAddPropertyListener ( DeviceID, &stPropertyAddress, deviceNotification, this );
+        }
+        else
+        {
+            AudioObjectRemovePropertyListener ( DeviceID, &stPropertyAddress, deviceNotification, this );
+        }
+    }
+}
+
+void CSound::ApplyDeviceSelection ( const int iInDevIdx, const int iOutDevIdx )
+{
+    const AudioDeviceID NewAudioInputDeviceID  = audioInputDevice[iInDevIdx];
+    const AudioDeviceID NewAudioOutputDeviceID = audioOutputDevice[iOutDevIdx];
+    const AudioDeviceID OldAudioInputDeviceID  = CurrentAudioInputDeviceID;
+    const AudioDeviceID OldAudioOutputDeviceID = CurrentAudioOutputDeviceID;
+
+    const bool bInDevChanged  = ( strCurInDevName.compare ( strInputDeviceNames[iInDevIdx] ) != 0 );
+    const bool bOutDevChanged = ( strCurOutDevName.compare ( strOutputDeviceNames[iOutDevIdx] ) != 0 );
+
+    // store the names of the selected devices
+    strCurInDevName  = strInputDeviceNames[iInDevIdx];
+    strCurOutDevName = strOutputDeviceNames[iOutDevIdx];
+    strCurDevName    = ComposeDevName ( strCurInDevName, strCurOutDevName );
+
+    if ( !bInDevChanged && !bOutDevChanged )
+    {
+        // nothing else to do since the notifications are already registered
+        return;
+    }
+
+    // the system default device notifications only have to be registered once
+    const bool bRegisterSystemNotifications = ( OldAudioInputDeviceID == 0 ) && ( OldAudioOutputDeviceID == 0 );
+
+    // store IDs of the selected devices
+    CurrentAudioInputDeviceID  = NewAudioInputDeviceID;
+    CurrentAudioOutputDeviceID = NewAudioOutputDeviceID;
+
+    // One device can serve both directions, in which case CoreAudio keeps one
+    // single registration for it. The notifications are therefore managed per
+    // device ID: they are only removed from a device which is no longer used by
+    // either direction and only added to a device which was not in use before.
+    if ( ( OldAudioInputDeviceID != 0 ) && ( OldAudioInputDeviceID != NewAudioInputDeviceID ) && ( OldAudioInputDeviceID != NewAudioOutputDeviceID ) )
+    {
+        SetDeviceNotifications ( OldAudioInputDeviceID, false );
+    }
+
+    if ( ( OldAudioOutputDeviceID != 0 ) && ( OldAudioOutputDeviceID != OldAudioInputDeviceID ) &&
+         ( OldAudioOutputDeviceID != NewAudioInputDeviceID ) && ( OldAudioOutputDeviceID != NewAudioOutputDeviceID ) )
+    {
+        SetDeviceNotifications ( OldAudioOutputDeviceID, false );
+    }
+
+    if ( ( NewAudioInputDeviceID != OldAudioInputDeviceID ) && ( NewAudioInputDeviceID != OldAudioOutputDeviceID ) )
+    {
+        SetDeviceNotifications ( NewAudioInputDeviceID, true );
+    }
+
+    if ( ( NewAudioOutputDeviceID != NewAudioInputDeviceID ) && ( NewAudioOutputDeviceID != OldAudioInputDeviceID ) &&
+         ( NewAudioOutputDeviceID != OldAudioOutputDeviceID ) )
+    {
+        SetDeviceNotifications ( NewAudioOutputDeviceID, true );
+    }
+
+    if ( bRegisterSystemNotifications )
+    {
+        AudioObjectPropertyAddress stPropertyAddress;
+
+        stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
+        stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
+
         stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 
-        AudioObjectRemovePropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
+        AudioObjectAddPropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
 
         stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
 
-        AudioObjectRemovePropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
-
-        stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
-
-        AudioObjectRemovePropertyListener ( CurrentAudioOutputDeviceID, &stPropertyAddress, deviceNotification, this );
-
-        AudioObjectRemovePropertyListener ( CurrentAudioInputDeviceID, &stPropertyAddress, deviceNotification, this );
-
-        stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
-
-        AudioObjectRemovePropertyListener ( CurrentAudioOutputDeviceID, &stPropertyAddress, deviceNotification, this );
-
-        AudioObjectRemovePropertyListener ( CurrentAudioInputDeviceID, &stPropertyAddress, deviceNotification, this );
+        AudioObjectAddPropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
     }
 
-    // store the selected devices
-    CurrentAudioInputDeviceID  = audioInputDevice[iInDevIdx];
-    CurrentAudioOutputDeviceID = audioOutputDevice[iOutDevIdx];
-    strCurInDevName            = strInputDeviceNames[iInDevIdx];
-    strCurOutDevName           = strOutputDeviceNames[iOutDevIdx];
-    strCurDevName              = strNewDevName;
+    // a device has changed, per definition we reset the channel mapping of that
+    // direction to the defaults (first two available channels)
+    if ( bInDevChanged )
+    {
+        SetLeftInputChannel ( 0 );
+        SetRightInputChannel ( 1 );
+    }
 
-    // setup callbacks for device property changes
-    stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
-
-    AudioObjectAddPropertyListener ( CurrentAudioInputDeviceID, &stPropertyAddress, deviceNotification, this );
-
-    AudioObjectAddPropertyListener ( CurrentAudioOutputDeviceID, &stPropertyAddress, deviceNotification, this );
-
-    stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
-
-    AudioObjectAddPropertyListener ( CurrentAudioInputDeviceID, &stPropertyAddress, deviceNotification, this );
-
-    AudioObjectAddPropertyListener ( CurrentAudioOutputDeviceID, &stPropertyAddress, deviceNotification, this );
-
-    stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
-
-    AudioObjectAddPropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
-
-    stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
-
-    AudioObjectAddPropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
-
-    // the device has changed, per definition we reset the channel
-    // mapping to the defaults (first two available channels)
-    SetLeftInputChannel ( 0 );
-    SetRightInputChannel ( 1 );
-    SetLeftOutputChannel ( 0 );
-    SetRightOutputChannel ( 1 );
+    if ( bOutDevChanged )
+    {
+        SetLeftOutputChannel ( 0 );
+        SetRightOutputChannel ( 1 );
+    }
 }
 
 QString CSound::CheckInputDeviceCapabilities ( const int iInDevIdx )

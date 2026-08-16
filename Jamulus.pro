@@ -247,7 +247,9 @@ win32 {
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {
-    ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    isEmpty(ANDROID_ABIS) {
+        ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    }
     ANDROID_VERSION_NAME = $$VERSION
     ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")

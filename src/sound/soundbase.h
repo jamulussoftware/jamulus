@@ -84,6 +84,15 @@ public:
     int          iChannel;
 };
 
+// name of a device which could not be initialized together with the reason why
+class CDriverInitError
+{
+public:
+    CDriverInitError ( const QString& strNDevName = "", const QString& strNError = "" ) : strDevName ( strNDevName ), strError ( strNError ) {}
+    QString strDevName;
+    QString strError;
+};
+
 /* Classes ********************************************************************/
 class CSoundBase : public QThread
 {
@@ -157,11 +166,15 @@ public:
                                     int iMuteMyselfCC );
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
-    virtual void     UnloadCurrentDriver() {}
-    QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
-    void             ParseCommandLineArgument ( const QString& strMIDISetup );
-    QString          GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
+    virtual QString LoadAndInitializeDriver ( QString, bool ) { return ""; }
+    virtual void    UnloadCurrentDriver() {}
+
+    // returns an empty list if a driver could be initialized, otherwise the
+    // error message of each driver which was tried
+    virtual QVector<CDriverInitError> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
+
+    void    ParseCommandLineArgument ( const QString& strMIDISetup );
+    QString GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
 
     static void GetSelCHAndAddCH ( const int iSelCH, const int iNumInChan, int& iSelCHOut, int& iSelAddCHOut )
     {

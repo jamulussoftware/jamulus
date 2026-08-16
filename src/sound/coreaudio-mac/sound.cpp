@@ -512,10 +512,16 @@ void CSound::ApplyDeviceSelection ( const int iInDevIdx, const int iOutDevIdx )
     const AudioDeviceID OldAudioInputDeviceID  = CurrentAudioInputDeviceID;
     const AudioDeviceID OldAudioOutputDeviceID = CurrentAudioOutputDeviceID;
 
-    const bool bInDevChanged  = ( strCurInDevName.compare ( strInputDeviceNames[iInDevIdx] ) != 0 );
-    const bool bOutDevChanged = ( strCurOutDevName.compare ( strOutputDeviceNames[iOutDevIdx] ) != 0 );
+    // compare the device IDs and not the device names: the device behind an
+    // entry can change while its name stays the same, i.e. for the system
+    // default entry when the driver is reloaded after the default device was
+    // changed in macOS
+    const bool bInDevChanged  = ( NewAudioInputDeviceID != OldAudioInputDeviceID );
+    const bool bOutDevChanged = ( NewAudioOutputDeviceID != OldAudioOutputDeviceID );
 
-    // store the names of the selected devices
+    // store the names of the selected devices in any case since the same device
+    // may now be addressed by another entry (i.e. by its name instead of by the
+    // system default entry)
     strCurInDevName  = strInputDeviceNames[iInDevIdx];
     strCurOutDevName = strOutputDeviceNames[iOutDevIdx];
     strCurDevName    = ComposeDevName ( strCurInDevName, strCurOutDevName );

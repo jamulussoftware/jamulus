@@ -119,6 +119,19 @@ public:
         return strCurDevName;
     }
 
+    // Separate input/output device selection: sound APIs which handle the input
+    // and the output device independently of each other (i.e. CoreAudio on macOS)
+    // return true here and offer one device list per direction. For all other
+    // APIs a device is a single entity and the combined list above is used.
+    // Note that even with separate lists the selected device is still identified
+    // by one single (combined) device name, see GetDev()/SetDev().
+    virtual bool        IsInOutDevSelectionSeparate() const { return false; }
+    virtual QStringList GetInputDevNames() { return QStringList(); }
+    virtual QStringList GetOutputDevNames() { return QStringList(); }
+    virtual QString     GetInputDev() { return QString(); }
+    virtual QString     GetOutputDev() { return QString(); }
+    virtual QString     SetInOutDev ( const QString& /* strInDevName */, const QString& /* strOutDevName */ ) { return QString(); }
+
     virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
     virtual void    SetLeftInputChannel ( const int ) {}

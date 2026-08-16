@@ -397,6 +397,58 @@
             </widget>
            </item>
            <item>
+            <widget class="QLabel" name="lblInputDevice">
+             <property name="text">
+              <string>Input Device</string>
+             </property>
+             <property name="buddy">
+              <cstring>cbxInputDevice</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="cbxInputDevice">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblOutputDevice">
+             <property name="text">
+              <string>Output Device</string>
+             </property>
+             <property name="buddy">
+              <cstring>cbxOutputDevice</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="cbxOutputDevice">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer_3">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -2267,6 +2319,8 @@
   <tabstop>spnMixerRows</tabstop>
   <tabstop>chbAudioAlerts</tabstop>
   <tabstop>cbxSoundcard</tabstop>
+  <tabstop>cbxInputDevice</tabstop>
+  <tabstop>cbxOutputDevice</tabstop>
   <tabstop>butDriverSetup</tabstop>
   <tabstop>cbxLInChan</tabstop>
   <tabstop>cbxRInChan</tabstop>

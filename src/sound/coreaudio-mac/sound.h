@@ -82,6 +82,15 @@ public:
     virtual int     GetLeftOutputChannel() override { return iSelOutputLeftChannel; }
     virtual int     GetRightOutputChannel() override { return iSelOutputRightChannel; }
 
+    // CoreAudio manages the input and the output device separately, therefore we
+    // offer one device list per direction instead of all possible combinations
+    virtual bool        IsInOutDevSelectionSeparate() const override { return true; }
+    virtual QStringList GetInputDevNames() override;
+    virtual QStringList GetOutputDevNames() override;
+    virtual QString     GetInputDev() override;
+    virtual QString     GetOutputDev() override;
+    virtual QString     SetInOutDev ( const QString& strInDevName, const QString& strOutDevName ) override;
+
     // MIDI functions
     virtual void        EnableMIDI ( const bool bEnable ) override;
     virtual bool        IsMIDIEnabled() const override;
@@ -94,7 +103,6 @@ public:
     int            iCoreAudioBufferSizeStereo;
     AudioDeviceID  CurrentAudioInputDeviceID;
     AudioDeviceID  CurrentAudioOutputDeviceID;
-    long           lCurDev;
     int            iNumInChan;
     int            iNumInChanPlusAddChan; // includes additional "added" channels
     int            iNumOutChan;
@@ -118,11 +126,20 @@ public:
     CVector<int>   vecNumOutBufChan;
 
 protected:
-    virtual QString LoadAndInitializeDriver ( QString strDriverName, bool ) override;
+    virtual QString                   LoadAndInitializeDriver ( QString strDriverName, bool ) override;
+    virtual QVector<CDriverInitError> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false ) override;
 
-    QString CheckDeviceCapabilities ( const int iDriverIdx );
+    QString CheckInputDeviceCapabilities ( const int iInDevIdx );
+    QString CheckOutputDeviceCapabilities ( const int iOutDevIdx );
+    void    ApplyDeviceSelection ( const int iInDevIdx, const int iOutDevIdx );
     void    UpdateChSelection();
     void    GetAvailableInOutDevices();
+
+    // the input and the output device are selected separately but are stored in
+    // one single combined device name, see ComposeDevName()/SplitAndResolveDevName()
+    static QString ComposeDevName ( const QString& strInDevName, const QString& strOutDevName );
+    bool           SplitAndResolveDevName ( const QString& strDevName, int& iInDevIdx, int& iOutDevIdx ) const;
+    int            FindDevIdx ( const QString strDevNames[], const long lNumDevices, const QString& strDevName ) const;
 
     int CountChannels ( AudioDeviceID devID, bool isInput );
 
@@ -148,8 +165,20 @@ protected:
 
     static void callbackMIDI ( const MIDIPacketList* pktlist, void* refCon, void* );
 
-    AudioDeviceID       audioInputDevice[MAX_NUMBER_SOUND_CARDS];
-    AudioDeviceID       audioOutputDevice[MAX_NUMBER_SOUND_CARDS];
+    // available input and output devices (each list starts with the entry which
+    // follows the device selected as system default)
+    long          lNumInDevs;
+    long          lNumOutDevs;
+    QString       strInputDeviceNames[MAX_NUMBER_SOUND_CARDS];
+    QString       strOutputDeviceNames[MAX_NUMBER_SOUND_CARDS];
+    AudioDeviceID audioInputDevice[MAX_NUMBER_SOUND_CARDS];
+    AudioDeviceID audioOutputDevice[MAX_NUMBER_SOUND_CARDS];
+
+    // names of the currently selected devices (the combined name is stored in
+    // strCurDevName of the base class)
+    QString strCurInDevName;
+    QString strCurOutDevName;
+
     AudioDeviceIOProcID audioInputProcID;
     AudioDeviceIOProcID audioOutputProcID;
 

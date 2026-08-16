@@ -4,11 +4,13 @@
 # Copyright (c) 2026
 #
 # Author(s):
-# ChatGPT
-# ann0see
-# JaminShanti
-# Gemini
-# The Jamulus Development Team
+#  JaminShanti
+#  ann0see
+#  The Jamulus Development Team
+#
+# Code generated with assistance from:
+#  ChatGPT
+#  Gemini
 #
 ##############################################################################
 #

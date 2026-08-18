@@ -183,6 +183,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecNumFrameSizeConvBlocks.Init ( iMaxNumChannels );
     vecUseDoubleSysFraSizeConvBuf.Init ( iMaxNumChannels );
     vecAudioComprType.Init ( iMaxNumChannels );
+    vecAudioCodingArg.Init ( iMaxNumChannels );
 
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
@@ -844,6 +845,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
     // get and store number of audio channels and compression type
     vecNumAudioChannels[iChanCnt] = vecChannels[iCurChanID].GetNumAudioChannels();
     vecAudioComprType[iChanCnt]   = vecChannels[iCurChanID].GetAudioCompressionType();
+    vecAudioCodingArg[iChanCnt]   = vecChannels[iCurChanID].GetAudioCodingArg();
 
     // get info about required frame size conversion properties
     vecUseDoubleSysFraSizeConvBuf[iChanCnt] = ( !bUseDoubleSystemFrameSize && ( vecAudioComprType[iChanCnt] == CT_OPUS ) );
@@ -964,6 +966,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
                 pCurCodedData = nullptr;
             }
 
+            //### DEPRECATED: BEGIN ###//
             // Recognise a raw audio packet by its size:
             // The client doesn't pass a value for the selected audio quality implicitly.
             // Rather the server is passed the length of the data sent by the client in iClientFrameSizeSamples.
@@ -973,8 +976,12 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             // iNumAudioChannels is either 1 for mono or 2 for stereo and mono-in/stereo-out
             // sizeof ( int16_t ) is the size in bytes for the raw pcm audio data = 2
             // Sizes other than that are considered OPUS coded because those depend on hardcoded sizes in client.h
+            //### DEPRECATED: END ###//
+            // The client sent its audio quality setting. Check if raw audio was set
+            // for backwards compatibility the size check is left in, see above
             const bool bIsRawAudio =
-                ( iCeltNumCodedBytes == static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) );
+                ( vecAudioCodingArg[iChanCnt] == AQ_RAW ||
+                  iCeltNumCodedBytes == static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) );
 
             const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
 
@@ -1249,6 +1256,9 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
         }
     }
 
+    // Check if the client wants raw audio rather than guessing by packet sizes
+    const bool bWantsRawAudio = vecAudioCodingArg[iChanCnt] == AQ_RAW;
+
     // If the server frame size is smaller than the received OPUS frame size, we need a conversion
     // buffer which stores the large buffer.
     // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
@@ -1263,7 +1273,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
             DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
         }
 
-        if ( iCeltNumCodedBytes != static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) )
+        if ( !bWantsRawAudio &&
+             iCeltNumCodedBytes != static_cast<int> ( sizeof ( int16_t ) * iClientFrameSizeSamples * vecNumAudioChannels[iChanCnt] ) )
         {
             // OPUS encoding
             if ( CurOpusEncoder != nullptr )

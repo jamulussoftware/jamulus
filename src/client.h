@@ -321,9 +321,9 @@ public:
 
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr ); }
+    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr );
 
-    void CreateCLReqServerListMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqServerListMes ( InetAddr ); }
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr );
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
 
@@ -349,8 +349,10 @@ public:
     QString          strClientName;
     void             OnRPCInMuteMyself ( bool bMute ) { OnControllerInMuteMyself ( bMute ); }
 
-public:
     void SetSettings ( CClientSettings* settings );
+
+    // for TCP support
+    void InitPendingLists();
 
 protected:
     // Signal handler must be declared before pSettings for correct init order
@@ -478,12 +480,30 @@ protected:
     int    maxGainOrPanId;
     int    iCurPingTime;
 
+    // for TCP protocol support
+
+    bool    bTcpOffered;
+    int     iClientID;
+    quint32 iChannelToken; // given by the server for authenticating TCP connection
+
+    // UDP/TCP mode for fetching server or client list - stored in a hash keyed by CHostAddress
+    enum EFetchMode
+    {
+        CFM_UDP_REQUEST, // set when sending request by UDP
+        CFM_UDP_RESULT,  // set when received a client list by UDP
+        CFM_TCP_REQUEST, // set when "TCP Offered" message arrives but requested list has not arrived - re-request using TCP and remain in TCP mode
+        CFM_TCP_RESULT   // set when requested message received by TCP
+    };
+
+    QHash<CHostAddress, enum EFetchMode> pendingServerList;
+    QHash<CHostAddress, enum EFetchMode> pendingClientList;
+
 protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
 
-    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr );
+    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection );
 
     void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
     void OnJittBufSizeChanged ( int iNewJitBufSize );
@@ -498,8 +518,9 @@ protected slots:
         }
     }
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
+    void OnCLTcpOfferedReceived ( CHostAddress InetAddr, int iID, quint32 token );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
 
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
 
@@ -514,6 +535,14 @@ protected slots:
     void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
     void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void OnCLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo, CTcpConnection* pTcpConnection );
+    void OnCLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo, CTcpConnection* pTcpConnection );
+
+public slots:
+    void OnCLSendEmptyMes ( CHostAddress InetAddr, CTcpConnection* pTcpConnection )
+    {
+        ConnLessProtocol.CreateCLEmptyMes ( InetAddr, pTcpConnection );
+    }
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
@@ -528,6 +557,8 @@ signals:
     void CLServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
 
     void CLRedServerListReceived ( CHostAddress InetAddr, CVector<CServerInfo> vecServerInfo );
+
+    void CLTcpOfferedReceived ( CHostAddress InetAddr, int iID );
 
     void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
 

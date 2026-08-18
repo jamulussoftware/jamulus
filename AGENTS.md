@@ -59,10 +59,10 @@ macOS: `qmake QMAKE_APPLE_DEVICE_ARCHS=arm64 QT_ARCH=arm64 -spec macx-xcode Jamu
 
 ## PR expectations
 
-- One logical change per PR — no unrelated cleanup or reformatting of untouched code. Discuss features in an issue before implementing. See `CONTRIBUTING.md`.
+- No unrelated cleanup or reformatting of untouched code. Discuss features in an issue before implementing.
 - Branch names starting with `autobuild` trigger CI builds on your fork.
 - Follow `.github/pull_request_template.md`. Include `CHANGELOG:` line. Add `AUTOBUILD: Please build all targets` for skipped targets (iOS, Windows JACK, Linux armhf/arm64) if touched; see `.github/workflows/autobuild.yml`.
-- Builds? Tested? Smallest change possible? Self reviewed against "Priority order" above?
+- Self reviewed against "Priority order" above?
 - Disclose AI-generated text at the end of Comments/PRs. (e.g: `> 🤖 Used AI: <model>, <harness>`) — never in code comments.
 
 ## Read when relevant

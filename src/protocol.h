@@ -106,6 +106,7 @@
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
 #define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
+#define PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST 1028 // request channel level list (connectionless)
 #define PROTMESSID_CLM_SERVER_FEATURES        1019 // server features message
 #define PROTMESSID_CLM_REQ_SERVER_FEATURES    1020 // request server features
 #define PROTMESSID_CLM_WELCOME_MESSAGE        1021 // server welcome message
@@ -309,6 +310,7 @@ protected:
     bool EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
     bool EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
+    bool EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr );
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerFeaturesMes ( const CHostAddress& InetAddr );
     bool EvaluateCLReqWelcomeMessageMes ( const CHostAddress& InetAddr );
@@ -378,6 +380,7 @@ signals:
     void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
     void CLReqConnClientsList ( CHostAddress InetAddr );
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
+    void CLReqChannelLevelList ( CHostAddress InetAddr );
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
     void CLReqServerFeatures ( CHostAddress InetAddr );
     void CLReqWelcomeMessage ( CHostAddress InetAddr );

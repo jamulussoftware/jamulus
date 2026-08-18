@@ -524,10 +524,9 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 #        endif
 #        ifndef HEADLESS
                             "<p>" +
-                            tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
-                            ", 1995 - 2021"
-                            ", The Synthesis ToolKit in C++ (STK)"
-                            ", <i><a href=\"https://ccrma.stanford.edu/software/stk\">https://ccrma.stanford.edu/software/stk</a></i>"
+                            tr ( "Audio reverberation powered by MVerb" ) +
+                            ", Copyright (c) 2010 Martin Eastwood, licensed under the GPL3.0 License"
+                            ", <i><a href=\"https://github.com/martineastwood/mverb\">https://github.com/martineastwood/mverb</a></i>"
                             "</p>"
                             "<p>" +
                             QString ( tr ( "Some pixmaps are from the %1" ) ).arg ( "Open Clip Art Library (OCAL)" ) +

@@ -46,6 +46,7 @@
 
 #pragma once
 
+#include <QApplication>
 #include <QCloseEvent>
 #include <QLabel>
 #include <QListView>

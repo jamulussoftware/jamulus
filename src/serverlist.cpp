@@ -130,8 +130,8 @@ QString CServerListEntry::toCSV()
 {
     QStringList sl;
 
-    sl.append ( this->HostAddr.toString() );
-    sl.append ( this->LHostAddr.toString() );
+    sl.append ( this->HostAddr4.toString() );
+    sl.append ( this->LHostAddr4.toString() );
     sl.append ( ToBase64 ( this->strName ) );
     sl.append ( ToBase64 ( this->strCity ) );
     sl.append ( QString::number ( this->eCountry ) );
@@ -543,7 +543,7 @@ void CServerListManager::OnTimerPingServerInList()
     for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
     {
         // send empty message to keep NAT port open at registered server
-        pConnLessProtocol->CreateCLEmptyMes ( ServerList[iIdx].HostAddr );
+        pConnLessProtocol->CreateCLEmptyMes ( ServerList[iIdx].HostAddr4 );
     }
 }
 
@@ -560,7 +560,7 @@ void CServerListManager::OnTimerPollList()
         if ( ServerList[iIdx].RegisterTime.elapsed() > ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
         {
             // remove this list entry
-            vecRemovedHostAddr.Add ( ServerList[iIdx].HostAddr );
+            vecRemovedHostAddr.Add ( ServerList[iIdx].HostAddr4 );
             ServerList.removeAt ( iIdx );
         }
     }
@@ -637,7 +637,7 @@ void CServerListManager::Append ( const CHostAddress&    InetAddr,
         else
         {
             // update all data and call update registration function
-            ServerList[iSelIdx].LHostAddr        = LInetAddr;
+            ServerList[iSelIdx].LHostAddr4       = LInetAddr;
             ServerList[iSelIdx].strName          = ServerInfo.strName;
             ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
             ServerList[iSelIdx].strCity          = ServerInfo.strCity;
@@ -695,12 +695,12 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
         bool clientIsInternal = NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr );
 
         CHostAddress clientPublicAddr = InetAddr;
-        if ( clientIsInternal && CHostAddress().InetAddr != ServerList[0].LHostAddr.InetAddr &&
-             !NetworkUtil::IsPrivateNetworkIP ( ServerList[0].LHostAddr.InetAddr ) )
+        if ( clientIsInternal && CHostAddress().InetAddr != ServerList[0].LHostAddr4.InetAddr &&
+             !NetworkUtil::IsPrivateNetworkIP ( ServerList[0].LHostAddr4.InetAddr ) )
         {
             // client and directory on same LAN, directory has public IP set, that should be suitable for the
             // client, too (i.e. same router with same public IP will be used for both), so use it for client public IP
-            clientPublicAddr.InetAddr = ServerList[0].LHostAddr.InetAddr;
+            clientPublicAddr.InetAddr = ServerList[0].LHostAddr4.InetAddr;
         }
 
         const ushort iCurServerListSize = static_cast<ushort> ( ServerList.size() );
@@ -709,8 +709,8 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
         CVector<CServerInfo> vecServerInfo ( iCurServerListSize );
 
         // copy list item for the directory and just let the protocol sort out the actual details
-        vecServerInfo[0]          = ServerList[0];
-        vecServerInfo[0].HostAddr = CHostAddress();
+        vecServerInfo[0]           = ServerList[0];
+        vecServerInfo[0].HostAddr4 = CHostAddress();
 
         // copy the list (we have to copy it since the message requires a vector but the list is actually stored in a QList object
         // and not in a vector object)
@@ -719,25 +719,25 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
             // copy list item
             CServerInfo& siCurListEntry = vecServerInfo[iIdx] = ServerList[iIdx];
 
-            bool serverIsInternal = NetworkUtil::IsPrivateNetworkIP ( siCurListEntry.HostAddr.InetAddr );
+            bool serverIsInternal = NetworkUtil::IsPrivateNetworkIP ( siCurListEntry.HostAddr4.InetAddr );
 
-            bool wantHostAddr = clientIsInternal /* HostAddr is local IP if local server else external IP, so do not replace */ ||
+            bool wantHostAddr = clientIsInternal /* HostAddr4 is local IP if local server else external IP, so do not replace */ ||
                                 ( !serverIsInternal &&
-                                  InetAddr.InetAddr != siCurListEntry.HostAddr.InetAddr /* external server and client have different public IPs */ );
+                                  InetAddr.InetAddr != siCurListEntry.HostAddr4.InetAddr /* external server and client have different public IPs */ );
 
             if ( !wantHostAddr )
             {
-                vecServerInfo[iIdx].HostAddr = siCurListEntry.LHostAddr;
+                vecServerInfo[iIdx].HostAddr4 = siCurListEntry.LHostAddr4;
             }
 
             // do not send a "ping" to a server local to the directory (no need)
             if ( !serverIsInternal )
             {
                 // create "send empty message" for all other registered servers
-                // this causes the server (vecServerInfo[iIdx].HostAddr)
+                // this causes the server (vecServerInfo[iIdx].HostAddr4)
                 // to send a "reply" to the client (InetAddr or best guess public IP address if internal to directory)
                 // - with the intent of opening the server firewall for the client
-                pConnLessProtocol->CreateCLSendEmptyMesMes ( siCurListEntry.HostAddr, clientPublicAddr );
+                pConnLessProtocol->CreateCLSendEmptyMesMes ( siCurListEntry.HostAddr4, clientPublicAddr );
             }
         }
 
@@ -758,7 +758,7 @@ int CServerListManager::IndexOf ( const CHostAddress& haSearchTerm )
     // (i.e., this server).
     for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
     {
-        if ( ServerList[iIdx].HostAddr == haSearchTerm )
+        if ( ServerList[iIdx].HostAddr4 == haSearchTerm )
         {
             return iIdx;
         }
@@ -847,15 +847,15 @@ bool CServerListManager::Load()
                                                     pServer->IsIPv6Available() );
 
         // We expect servers to have addresses...
-        if ( ( CHostAddress() == serverListEntry.HostAddr ) )
+        if ( ( CHostAddress() == serverListEntry.HostAddr4 ) )
         {
             qWarning() << qUtf8Printable ( QString ( "Could not parse '%1' successfully - invalid host" ).arg ( line ) );
             continue;
         }
 
         qInfo() << qUtf8Printable ( QString ( "Loading registration for %1 (%2): %3" )
-                                        .arg ( serverListEntry.HostAddr.toString() )
-                                        .arg ( serverListEntry.LHostAddr.toString() )
+                                        .arg ( serverListEntry.HostAddr4.toString() )
+                                        .arg ( serverListEntry.LHostAddr4.toString() )
                                         .arg ( serverListEntry.strName ) );
         ServerList.append ( serverListEntry );
     }
@@ -889,8 +889,8 @@ void CServerListManager::Save()
     for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
     {
         qInfo() << qUtf8Printable ( QString ( tr ( "Saving registration for %1 (%2): %3" ) )
-                                        .arg ( ServerList[iIdx].HostAddr.toString() )
-                                        .arg ( ServerList[iIdx].LHostAddr.toString() )
+                                        .arg ( ServerList[iIdx].HostAddr4.toString() )
+                                        .arg ( ServerList[iIdx].LHostAddr4.toString() )
                                         .arg ( ServerList[iIdx].strName ) );
         out << ServerList[iIdx].toCSV() << '\n';
     }
@@ -1012,7 +1012,7 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
     // Allow IPv4 only for communicating with Directories
     // Use SRV DNS discovery for directory connections, fallback to A/AAAA if none.
     const QString strNetworkAddress      = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
-    const bool    bDirectoryAddressValid = NetworkUtil::ParseNetworkAddress ( strNetworkAddress, DirectoryAddress, false );
+    const bool    bDirectoryAddressValid = NetworkUtil::ParseNetworkAddress ( strNetworkAddress, DirectoryAddress, pServer->IsIPv6Available() );
 
     // lock the mutex again now that the address has been resolved.
     locker.relock();
@@ -1027,7 +1027,18 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
             // For a registered server, the server properties are stored in the
             // very first item in the server list (which is actually no server list
             // but just one item long for the registered server).
-            pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerList[0].LHostAddr, ServerList[0] );
+            if ( DirectoryAddress.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            {
+                pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerPublicIP, ServerList[0] );
+            }
+            else if ( DirectoryAddress.InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
+            {
+                pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerPublicIP6, ServerList[0] );
+            }
+            else
+            {
+                SetSvrRegStatus ( SRS_BAD_ADDRESS );
+            }
         }
         else
         {

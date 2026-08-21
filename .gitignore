@@ -17,6 +17,7 @@ Makefile.*
 *.user.*
 *.o
 moc_*.cpp
+ui/
 ui_*.h
 moc_predefs.h
 .qm/

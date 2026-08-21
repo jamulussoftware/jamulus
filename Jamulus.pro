@@ -380,6 +380,8 @@ win32 {
 # It doesn't work with multiple targets or architectures.
 RESOURCES += src/resources.qrc
 
+UI_DIR += ui
+
 FORMS_GUI = src/aboutdlgbase.ui \
     src/serverdlgbase.ui
 
@@ -1213,9 +1215,9 @@ android {
     for (abi, ANDROID_ABIS) {
         DISTCLEAN_DIRS += debug-$${abi} release-$${abi}
     }
-    DISTCLEAN_DIRS += .qm
+    DISTCLEAN_DIRS += ui .qm
 } else {
-    DISTCLEAN_DIRS += debug release .qm
+    DISTCLEAN_DIRS += debug release ui .qm
 }
 
 win32 {

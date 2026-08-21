@@ -95,7 +95,7 @@ static bool midiPickupShouldApply ( int midiValue, int currentValue, int toleran
     // Handles the case where rapid movement causes MIDI values to "skip over" the software value
     if ( recentMidiValues.size() >= 2 )
     {
-        int prevMidi = recentMidiValues.back();
+        int prevMidi = recentMidiValues[recentMidiValues.size() - 2];
         // Check if current and previous MIDI values bracket the software value
         if ( ( prevMidi <= currentValue && midiValue >= currentValue ) || ( prevMidi >= currentValue && midiValue <= currentValue ) )
             return true;
@@ -117,7 +117,11 @@ static bool midiPickupTryApply ( int midiValue, int currentValue, int tolerance,
         tempPickup.push_back ( midiValue );
 
         if ( !midiPickupShouldApply ( midiValue, currentValue, tolerance, tempPickup ) )
+        {
+            // keep this value: the next message needs it to detect a crossing
+            pickupBuffer = tempPickup;
             return true; // Still waiting for pickup
+        }
 
         // Picked up. Stop waiting
         waitingForPickup = false;

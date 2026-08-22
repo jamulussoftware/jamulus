@@ -48,10 +48,12 @@
 
 set -eu
 
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+readonly PROJECT_DIR
+# shellcheck disable=SC1091
+source "${PROJECT_DIR}/.github/autobuild/mac-dependencies.sh"
+
 QT_DIR=~/qt
-# The following version pinnings are semi-automatically checked for
-# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-AQTINSTALL_VERSION=3.3.0
 
 TARGET_ARCHS="${TARGET_ARCHS:-}"
 
@@ -65,7 +67,8 @@ if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 fi
 
 setup() {
-    if [[ -d "${QT_DIR}" ]]; then
+    if [[ -x "${QT_DIR}/${QT_VERSION}/macos/bin/qmake" &&
+        -x "${QT_DIR}/${QT_VERSION}/macos/bin/macdeployqt" ]]; then
         echo "Using Qt installation from previous run (actions/cache)"
     else
         echo "Installing Qt..."

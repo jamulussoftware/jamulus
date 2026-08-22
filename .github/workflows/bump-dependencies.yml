@@ -39,8 +39,8 @@ jobs:
           - name: aqt
             # not Changelog-worthy
             get_upstream_version: GH_REPO=miurahr/aqtinstall gh release view --json tagName --jq .tagName | sed -re 's/^v//'
-            # The following regexps capture both the *nix and the Windows variable syntax (different case, underscore):
-            local_version_regex: (.*AQTINSTALL_?VERSION\s*=\s*"?)([0-9.]*)("?.*)
+            # Capture both plain assignments and shell parameter-expansion defaults.
+            local_version_regex: (.*AQTINSTALL_?VERSION\s*=\s*"?[^0-9]*)([0-9.]+)(.*)
           - name: create-dmg
             changelog_name: create-dmg (macOS)
             get_upstream_version: GH_REPO=create-dmg/create-dmg gh release view --json tagName --jq .tagName | sed -re 's/^v//'
@@ -50,8 +50,8 @@ jobs:
             get_upstream_version: |
               latest_minor="$(curl -s https://download.qt.io/official_releases/qt/ | grep -oP 'href="\K[0-9.]+(?=/")' | sort --reverse --version-sort | head -n1)";
               curl -s https://download.qt.io/official_releases/qt/"${latest_minor}"/ | grep -oP 'href="\K[0-9.]+(?=/")' | sort --reverse --version-sort | head -n1
-            # The following regex captures both the *nix and the Windows variable syntax (different case, underscore):
-            local_version_regex: (.*QT[0-9_]+VERSION\s*=\s*"?)(6\.[0-9.]+)("?.*)
+            # Capture both plain assignments and shell parameter-expansion defaults.
+            local_version_regex: (.*QT[0-9_]+VERSION\s*=\s*"?[^0-9]*)(6\.[0-9.]+)(.*)
 
           - name: jack
             changelog_name: bundled JACK (Windows-only)

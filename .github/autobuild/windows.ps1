@@ -68,15 +68,7 @@ $ProgressPreference = 'SilentlyContinue'
 $QtDir = 'C:\Qt'
 $ChocoCacheDir = 'C:\ChocoCache'
 $DownloadCacheDir = 'C:\AutobuildCache'
-# The following version pinnings are semi-automatically checked for
-# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-$Qt32Version = "5.15.2"
-$Qt64Version = "6.10.2"
-$AqtinstallVersion = "3.3.0"
-$JackVersion = "1.9.22"
-$Msvc32Version = "win32_msvc2019"
-$Msvc64Version = "win64_msvc2022_64"
-$JomVersion = "1.1.2"
+. "$PSScriptRoot\windows-dependencies.ps1"
 
 # Compose JACK download urls
 $JackBaseUrl = "https://github.com/jackaudio/jack2-releases/releases/download/v${JackVersion}/jack2-win"
@@ -150,7 +142,8 @@ Function Install-Qt
 
 Function Ensure-Qt
 {
-    if ( Test-Path -Path $QtDir )
+    if ( (Test-Path -Path "$QtDir\$Qt32Version\bin\qmake.exe" -PathType Leaf) -and
+         (Test-Path -Path "$QtDir\$Qt64Version\bin\qmake.exe" -PathType Leaf) )
     {
         echo "Using Qt installation from previous run (actions/cache)"
         return

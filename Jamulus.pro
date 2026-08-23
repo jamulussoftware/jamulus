@@ -380,7 +380,15 @@ win32 {
 # It doesn't work with multiple targets or architectures.
 RESOURCES += src/resources.qrc
 
+# store ui_*.h files in a directory instead of project root
 UI_DIR += ui
+
+# A tree built in place before UI_DIR was set still has ui_*.h in its root, and
+# they must be deleted before creating the new Makefiles.
+STALE_UI_HEADERS = $$files(ui_*.h)
+for (stale, STALE_UI_HEADERS) {
+    system($$QMAKE_DEL_FILE $$stale)
+}
 
 FORMS_GUI = src/aboutdlgbase.ui \
     src/serverdlgbase.ui

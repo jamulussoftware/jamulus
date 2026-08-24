@@ -203,10 +203,7 @@ void CTcpConnection::OnReadyRead()
     }
 }
 
-void CTcpConnection::OnTimerKeepalive()
-{
-    emit CLSendEmptyMes ( tcpAddress, this );
-}
+void CTcpConnection::OnTimerKeepalive() { emit CLSendEmptyMes ( tcpAddress, this ); }
 
 void CTcpConnection::OnTimerIdleTimeout()
 {

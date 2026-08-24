@@ -767,10 +767,7 @@ void CChannel::UpdateSocketBufferSize()
     }
 }
 
-void CChannel::OnClientIDReceived ( int iChanID )
-{
-    emit ClientIDReceived ( iChanID );
-}
+void CChannel::OnClientIDReceived ( int iChanID ) { emit ClientIDReceived ( iChanID ); }
 
 void CChannel::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo, CProtocol& ConnLessProtocol )
 {

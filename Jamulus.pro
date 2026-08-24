@@ -381,7 +381,7 @@ win32 {
 RESOURCES += src/resources.qrc
 
 # store ui_*.h files in a directory instead of project root
-UI_DIR += ui
+UI_DIR = ui
 
 # A tree built in place before UI_DIR was set still has ui_*.h in its root, and
 # they must be deleted before creating the new Makefiles.
@@ -1223,9 +1223,9 @@ android {
     for (abi, ANDROID_ABIS) {
         DISTCLEAN_DIRS += debug-$${abi} release-$${abi}
     }
-    DISTCLEAN_DIRS += ui .qm
+    DISTCLEAN_DIRS += $$UI_DIR .qm
 } else {
-    DISTCLEAN_DIRS += debug release ui .qm
+    DISTCLEAN_DIRS += debug release $$UI_DIR .qm
 }
 
 win32 {

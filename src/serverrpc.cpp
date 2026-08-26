@@ -384,6 +384,92 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
         response["result"] = "acknowledged";
         Q_UNUSED ( params );
     } );
+
+    /// @rpc_method jamulusdirectory/getServerList
+    /// @brief Returns the list of registered servers along with details about them.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {number} result.numservers - The number of registered servers.
+    /// @result {array}  result.servers - The list of registered servers.
+    /// @result {number} result.servers[*].id - The server's index.
+    /// @result {string} result.servers[*].name - The server's name.
+    /// @result {string} result.servers[*].countryName - The text name of the country specified by the user for this channel (see
+    /// QLocale::Country).
+    /// @result {string} result.servers[*].city - The city name provided by the operator of this server.
+    /// @result {number} result.servers[*].maxClients - The max number of clients supported by the server.
+    /// @result {bool}   result.servers[*].permanent - The permanent status of the server.
+    /// @result {string} result.servers[*].ipv4addr - The IPv4 address the server registered from (ip:port)
+    /// @result {string} result.servers[*].ipv4addrLocal - The local IPv4 address provided by the server (ip:port)
+    /// @result {string} result.servers[*].ipv6addr - The IPv6 address the server registered from ([ipv6]:port)
+    /// @result {string} result.servers[*].ipv6addrLocal - The local IPv6 address provided by the server ([ipv6]:port)
+    pRpcServer->HandleMethod ( "jamulusdirectory/getServerList", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        QJsonArray           servers;
+        CVector<CServerInfo> vecServerInfo;
+
+        int isDirectory = pServer->GetDirectoryServerList ( vecServerInfo );
+
+        if ( !isDirectory )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Server is not a directory" );
+            return;
+        }
+
+        const int iNumServers = vecServerInfo.Size();
+
+        // fill list with connected clients
+        for ( int i = 0; i < iNumServers; i++ )
+        {
+
+            // name of the server
+            // QString strName;
+
+            // country in which the server is located
+            // QLocale::Country eCountry;
+
+            // city in which the server is located
+            // QString strCity;
+
+            // maximum number of clients which can connect to the server at the same
+            // time
+            // int iMaxNumClients;
+
+            // is the server permanently online or not (flag)
+            // bool bPermanentOnline;
+
+            // IPv4 address of the server
+            // CHostAddress HostAddr4;
+
+            // IPv4 internal address of the server
+            // CHostAddress LHostAddr4;
+
+            // IPv6 address of the server
+            // CHostAddress HostAddr6;
+
+            // IPv6 internal address of the server
+            // CHostAddress LHostAddr6;
+
+            QJsonObject server{
+                { "id", i },
+                { "name", vecServerInfo[i].strName },
+                { "countryName", QLocale::countryToString ( vecServerInfo[i].eCountry ) },
+                { "city", vecServerInfo[i].strCity },
+                { "maxClients", vecServerInfo[i].iMaxNumClients },
+                { "permanent", vecServerInfo[i].bPermanentOnline },
+                { "ipv4addr", vecServerInfo[i].HostAddr4.toString() },
+                { "ipv4addrLocal", vecServerInfo[i].LHostAddr4.toString() },
+                { "ipv6addr", vecServerInfo[i].HostAddr6.toString() },
+                { "ipv6addrLocal", vecServerInfo[i].LHostAddr6.toString() },
+            };
+            servers.append ( server );
+        }
+
+        // create result object
+        QJsonObject result{
+            { "numservers", iNumServers },
+            { "servers", servers },
+        };
+        response["result"] = result;
+        Q_UNUSED ( params );
+    } );
 }
 
 #if defined( Q_OS_MACOS ) && QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )

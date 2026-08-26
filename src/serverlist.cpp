@@ -749,6 +749,31 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
     }
 }
 
+// fetch copy of registered server list for use by JSON-RPC
+// return false if not a directory
+bool CServerListManager::GetDirectoryServerList ( CVector<CServerInfo>& vecServerInfo )
+{
+    QMutexLocker locker ( &Mutex );
+
+    if ( !bIsDirectory )
+    {
+        return false;
+    }
+
+    const ushort iCurServerListSize = static_cast<ushort> ( ServerList.size() );
+
+    // allocate memory for the entire list
+    vecServerInfo.Init ( iCurServerListSize );
+
+    // copy the list
+    for ( int iIdx = 0; iIdx < iCurServerListSize; iIdx++ )
+    {
+        vecServerInfo[iIdx] = ServerList[iIdx];
+    }
+
+    return true;
+}
+
 int CServerListManager::IndexOf ( const CHostAddress& haSearchTerm )
 {
     // Called with lock set.

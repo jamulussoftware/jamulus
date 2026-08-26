@@ -195,6 +195,8 @@ public:
     void Remove ( const CHostAddress& InetAddr );
     void RetrieveAll ( const CHostAddress& InetAddr );
 
+    bool GetDirectoryServerList ( CVector<CServerInfo>& vecServerInfo );
+
     void StoreRegistrationResult ( ESvrRegResult eStatus );
 
     QString GetServerListFileName() { return ServerListFileName; }

@@ -1789,7 +1789,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation type="unfinished"></translation>
+        <translation>Beliebiges Genre Asien</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>
@@ -3606,7 +3606,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../util.cpp" line="1590"/>
         <source>Released under the GNU Affero General Public License 3.0 (or any later version)</source>
-        <translation type="unfinished"></translation>
+        <translation>Veröffentlicht unter der GNU Affero General Public License 3.0 (oder einer späteren Version)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1658"/>

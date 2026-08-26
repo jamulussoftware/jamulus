@@ -110,15 +110,9 @@ QJsonObject CRpcServer::CreateJsonRpcErrorReply ( int code, QString message )
     return object;
 }
 
-// Maximum size of a single JSON-RPC request line. An unauthenticated client that
-// sends data without a terminating newline is only ever consumed on a complete line
-// (canReadLine()), so without a bound the received bytes accumulate in the socket read
-// buffer without limit until the process is killed by the allocator. Requests larger
-// than this, or unterminated data that fills the buffer, are rejected instead of held.
-// The largest single request is a welcome or chat message, which CServer truncates to
-// MAX_LEN_CHAT_TEXT (1600) characters and which is 9698 bytes as a compact JSON line
-// when every character is escaped as \uXXXX; 16 KiB leaves 1.7x that, or room for a
-// batch of 221 ordinary calls.
+// Maximum size of a single JSON-RPC request line. The largest legitimate request is a
+// MAX_LEN_CHAT_TEXT (1600) character welcome or chat message, 9698 bytes on the wire
+// when every character is JSON-escaped as \uXXXX; 16 KiB leaves 1.7x that.
 static constexpr int MAX_JSON_RPC_REQUEST_BYTES = 16 * 1024;
 
 void CRpcServer::OnNewConnection()

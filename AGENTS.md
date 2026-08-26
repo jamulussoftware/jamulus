@@ -14,7 +14,7 @@ Linux: `qmake && make` (use `qmake-qt5` on Fedora). Headless server: `qmake "CON
 
 macOS: `qmake QMAKE_APPLE_DEVICE_ARCHS=arm64 QT_ARCH=arm64 -spec macx-xcode Jamulus.pro` (Use `x86_64` on Intel Macs; `macx-clang` if using `make`). Then `xcodebuild build`, and `macdeployqt ./{Debug,Release}/Jamulus.app`.
 
-**Testing:** run headless server (args `-s -n`), connect a client (e.g. via: `-n -c localhost`; may need jackd running on Linux. Run dummy Jack via: `jackd -d dummy`), exercise the change; use the JSON-RPC API (`docs/JSON-RPC.md`) where possible. Connecting a client needs the plain `qmake && make` build — a `serveronly` binary rejects `-c`. State what you tested in the PR with evidence. GitHub Actions builds multiple platforms — on failure read the failing step's log.
+**Testing:** run headless server (args `-s -n`), connect a client (e.g. via: `-n -c localhost`; may need jackd running on Linux. Run dummy Jack via: `jackd -d dummy`), exercise the change; use the JSON-RPC API (`docs/JSON-RPC.md`) where possible. Connecting a client needs `qmake && make` build ; `serveronly` rejects `-c`. State what you tested in the PR with evidence. GitHub Actions builds multiple platforms — on failure read the failing step's log.
 
 ## Never Do
 

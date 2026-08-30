@@ -239,7 +239,7 @@ protected:
 
     std::atomic<bool> bIsEnabled;
     bool              bIsServer;
-    bool              bIsIdentified;
+    std::atomic<bool> bIsIdentified;
 
     int iNetwFrameSizeFact;
     int iNetwFrameSize;

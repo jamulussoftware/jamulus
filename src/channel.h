@@ -109,14 +109,10 @@ public:
     void                SetAddress ( const CHostAddress& NAddr ) { InetAddr = NAddr; }
     const CHostAddress& GetAddress() const { return InetAddr; }
 
-    void ResetInfo()
-    {
-        bIsIdentified = false;
-        ChannelInfo   = CChannelCoreInfo();
-    } // reset does not emit a message
-    QString           GetName();
-    void              SetChanInfo ( const CChannelCoreInfo& NChanInf );
-    CChannelCoreInfo& GetChanInfo() { return ChannelInfo; }
+    void             ResetInfo(); // reset does not emit a message
+    QString          GetName();
+    void             SetChanInfo ( const CChannelCoreInfo& NChanInf );
+    CChannelCoreInfo GetChanInfo();
 
     void SetRemoteInfo ( const CChannelCoreInfo ChInfo ) { Protocol.CreateChanInfoMes ( ChInfo ); }
 
@@ -239,7 +235,7 @@ protected:
 
     std::atomic<bool> bIsEnabled;
     bool              bIsServer;
-    bool              bIsIdentified;
+    std::atomic<bool> bIsIdentified;
 
     int iNetwFrameSizeFact;
     int iNetwFrameSize;

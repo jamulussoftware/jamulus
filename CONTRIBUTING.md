@@ -105,7 +105,7 @@ Have a look at our [guide for translators](docs/TRANSLATING.md) - especially rea
 
 ### Testing
 
-To check that there are no errors, please run a local (build/feature) test. It is good practice to briefly explain what and how you tested your work - for AI contributions specifically, you should provide strong testing and proof. This may include logs, screenshots, small testing scripts or similar depending on your change.
+To check that there are no errors, please run a local (build/feature) test. Briefly explain in the PR what and how you tested your work and attach evidence - logs, screenshots, small testing scripts or similar depending on your change.
 Keep an eye on the CI checks for quality or compile issues after opening a pull request and fix them as needed. You can also test the build on your repository by naming your branch `autobuild/<branchName>` which will start the building process on your repo.
 
 ### Ownership

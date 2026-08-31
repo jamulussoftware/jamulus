@@ -102,11 +102,13 @@ find_or_add_missing_entries() {
     local milestone
     for id in $(git log "${prev_release_tag}..${target_ref}" | grep -oP '#\K(\d+)'); do
         gh pr view "${id}" --json title &> /dev/null || continue # Skip non-PRs
-        milestone=$(gh pr view "${id}" --json milestone --jq .milestone.title)
-        #if [[ "${milestone}" =~ "Release " ]] && [[ "${milestone}" != "Release ${target_release}" ]]; then
-        #    echo "-> Ignoring PR #${id}, which was mentioned in 'git log ${prev_release_tag}..${target_ref}', but already has milestone '${milestone}'"
-        #    continue
-        #fi
+        if [[ "$branch" != "main" ]]; then
+            milestone=$(gh pr view "${id}" --json milestone --jq .milestone.title)
+            if [[ "${milestone}" =~ "Release " ]] && [[ "${milestone}" != "Release ${target_release}" ]]; then
+                echo "-> Ignoring PR #${id}, which was mentioned in 'git log ${prev_release_tag}..${target_ref}', but already has milestone '${milestone}'"
+                continue
+            fi
+        fi
         check_or_add_pr "${id}"
     done
 

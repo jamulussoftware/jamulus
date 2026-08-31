@@ -1,5 +1,7 @@
 ### 3.12.4dev <- NOTE: the release version number will be 3.12.5 ###
 
+### 3.12.4 (2026-08-09) ###
+
 - Bug: Make cross-thread run/status flags std::atomic (#3798 batches A/B) (#3800).
   (contributed by @mcfnord)
 

@@ -1,3 +1,6 @@
+### 3.12.5dev <- NOTE: the release version number will be 3.12.6 ###
+
+
 ### 3.12.5 (2026-08-31) ###
 
 - Bugfix: Ensure correct bounds for panning (#3899).

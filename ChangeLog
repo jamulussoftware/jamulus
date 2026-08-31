@@ -1,4 +1,16 @@
-### 3.12.4dev <- NOTE: the release version number will be 3.12.5 ###
+### 3.12.5 (2026-08-31) ###
+
+- Bugfix: Ensure correct bounds for panning (#3899).
+  (contributed by @ann0see)
+
+- Bugfix: Removed potential server crash when recording (#3909).
+  (contributed by @pljones)
+
+- Bugfix: Ensure ChannelInfo mutex taken (#3930).
+  (contributed by @pljones)
+
+- Bugfix: Client: Fixed a startup crash caused by an out-of-range custom directory index in the settings file (#3931).
+  (contributed by @mcfnord)
 
 ### 3.12.4 (2026-08-09) ###
 

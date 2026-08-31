@@ -49,7 +49,7 @@ and note the [Editorconfig file](.editorconfig) in the project too.
 
 ### Using AI
 
-Use AI responsibly: If you choose to use AI, judge its outputs and review it for any kind of issues before submitting. Do not answer every comment with AI. Judge if AI use is beneficial for your usecase.
+- When you use AI as part of your work, remember that it is a tool that you choose to use and your code will be judged in the same way as any other submission.  However, we encourage you to share your AI experiences, as it is an emerging technology, by highlighting how you used AI and give your own review of its performance.
 
 AI assisted contributions **must** follow the same standards as every other contribution. The submitter remains the author and is expected to understand and stand behind every submitted line. [AGENTS.md](AGENTS.md) is the entry point into this repository for AI Agents. Low-effort contributions might be closed without comment.
 

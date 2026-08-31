@@ -1,4 +1,4 @@
-### 4.0.0beta3 (2026-08-31) ###
+### 3.12.5dev <- NOTE: the release version number will be 4.0.0 ###
 
 - Client: removed double ping from Connect Dialog, improving accuracy of initial ping times displayed (#3847).
   (contributed by @softins)

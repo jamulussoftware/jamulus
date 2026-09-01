@@ -334,11 +334,8 @@ void CSocket::Init ( const quint16  iNewPortNumber,
             // only try to bind the IPv6 socket if IPv4 has succeeded and IPv6 socket is open
             if ( bSuccess && UdpSocket6 != INVALID_SOCKET )
             {
-                if ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) != -1 )
-                {
-                    // note that IPv6 is available
-                    bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
-                }
+                // note whether IPv6 is available - this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
+                bIPv6Available = ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) != -1 );
             }
         }
         else
@@ -376,11 +373,9 @@ void CSocket::Init ( const quint16  iNewPortNumber,
                 if ( bSuccess && UdpSocket6 != INVALID_SOCKET && !bIPv6Available )
                 {
                     sa6.sin6_port = htons ( port );
-                    if ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) != -1 )
-                    {
-                        // note that IPv6 is available
-                        bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
-                    }
+
+                    // note whether IPv6 is available - this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
+                    bIPv6Available = ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) != -1 );
                 }
 
                 if ( bSuccess && ( bIPv6Available || UdpSocket6 == INVALID_SOCKET ) )
@@ -403,11 +398,8 @@ void CSocket::Init ( const quint16  iNewPortNumber,
         // only try to bind the IPv6 socket if IPv4 has succeeded and IPv6 socket is open
         if ( bSuccess && UdpSocket6 != INVALID_SOCKET )
         {
-            if ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) != -1 )
-            {
-                // note that IPv6 is available
-                bIPv6Available = true; // this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
-            }
+            // note whether IPv6 is available - this is a reference to CClient::bIPv6Available or CServer::bIPv6Available
+            bIPv6Available = ( ::bind ( UdpSocket6, (struct sockaddr*) &sa6, sa6len ) != -1 );
         }
     }
 

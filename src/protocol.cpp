@@ -484,6 +484,14 @@ CONNECTION LESS MESSAGES
 
     note: does not have any data -> n = 0
 
+
+- PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST: Request the channel level list
+
+    note: does not have any data -> n = 0
+
+    the server replies with one PROTMESSID_CLM_CHANNEL_LEVEL_LIST to the
+    requesting address
+
 */
 
 #include "protocol.h"

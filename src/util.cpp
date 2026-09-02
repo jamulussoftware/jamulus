@@ -922,7 +922,7 @@ bool NetworkUtil::ParseNetworkAddressSrv ( QString strAddress, CHostAddress& Hos
         // need further testing to confirm.
         // End processing here (= return true), but pass back an
         // invalid HostAddress to let the connect logic fail properly.
-        HostAddress = CHostAddress ( QHostAddress ( "." ), 0 );
+        HostAddress = CHostAddress ( QHostAddress(), 0 );
         return true;
     }
     qDebug() << qUtf8Printable (

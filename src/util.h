@@ -804,7 +804,7 @@ public:
         SM_IP_NO_LAST_BYTE_PORT
     };
 
-    CHostAddress() : InetAddr ( static_cast<quint32> ( 0 ) ), iPort ( 0 ) {}
+    CHostAddress() : InetAddr(), iPort ( 0 ) {}
 
     CHostAddress ( const QHostAddress& NInetAddr, const quint16 iNPort ) : InetAddr ( NInetAddr ), iPort ( iNPort ) {}
 

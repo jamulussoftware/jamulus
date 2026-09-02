@@ -319,10 +319,7 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
             return;
         }
 
-        // Check the decoded string, not the request bytes: \uXXXX escapes and multi-byte
-        // UTF-8 both make the encoded form longer than the string it produces. The bound is
-        // MAX_LEN_CHAT_TEXT because that is what CServer::SetWelcomeMessage truncates to;
-        // accepting more here would report success and then silently discard the excess.
+        // reject what CServer::SetWelcomeMessage would otherwise silently truncate
         const QString strWelcomeMessage = jsonWelcomeMessage.toString();
 
         if ( strWelcomeMessage.length() > MAX_LEN_CHAT_TEXT )

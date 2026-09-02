@@ -1187,35 +1187,39 @@ QString CHostAddress::toString ( const EStringMode eStringMode ) const
 {
     QString strReturn = InetAddr.toString();
 
-    // special case: for local host address, we do not replace the last byte
-    if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
-         ( InetAddr != QHostAddress ( QHostAddress::LocalHost ) ) && ( InetAddr != QHostAddress ( QHostAddress::LocalHostIPv6 ) ) )
+    switch ( InetAddr.protocol() )
     {
-        // replace last part by an "x"
-        if ( strReturn.contains ( "." ) )
+    case QAbstractSocket::IPv4Protocol:
+        if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
+             InetAddr != QHostAddress ( QHostAddress::LocalHost ) )
         {
-            // IPv4 or IPv4-mapped:
+            // replace last part by an "x"
             strReturn = strReturn.section ( ".", 0, -2 ) + ".x";
         }
-        else
+        if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
         {
-            // IPv6
+            // add port
+            strReturn = QString ( "%1:%2" ).arg ( strReturn ).arg ( iPort );
+        }
+        break;
+
+    case QAbstractSocket::IPv6Protocol:
+        if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
+             InetAddr != QHostAddress ( QHostAddress::LocalHostIPv6 ) )
+        {
+            // replace last part by an "x"
             strReturn = strReturn.section ( ":", 0, -2 ) + ":x";
         }
-    }
-
-    if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
-    {
-        // add port number after a colon
-        if ( strReturn.contains ( "." ) )
-        {
-            strReturn += ":" + QString().setNum ( iPort );
-        }
-        else
+        if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
         {
             // enclose pure IPv6 address in [ ] before adding port, to avoid ambiguity
-            strReturn = "[" + strReturn + "]:" + QString().setNum ( iPort );
+            strReturn = QString ( "[%1]:%2" ).arg ( strReturn ).arg ( iPort );
         }
+        break;
+
+    default:
+        // do not append port to an invalid address
+        break;
     }
 
     return strReturn;

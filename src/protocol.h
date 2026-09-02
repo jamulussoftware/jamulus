@@ -106,11 +106,11 @@
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
 #define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
-#define PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST 1028 // request channel level list (connectionless)
 #define PROTMESSID_CLM_SERVER_FEATURES        1019 // server features message
 #define PROTMESSID_CLM_REQ_SERVER_FEATURES    1020 // request server features
 #define PROTMESSID_CLM_WELCOME_MESSAGE        1021 // server welcome message
 #define PROTMESSID_CLM_REQ_WELCOME_MESSAGE    1022 // request server welcome message
+#define PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST 1025 // request channel level list (connectionless)
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE 2001 // a container for split messages

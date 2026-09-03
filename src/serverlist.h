@@ -106,18 +106,6 @@ class CServerListEntry : public CServerInfo
 public:
     CServerListEntry() : CServerInfo ( CHostAddress(), CHostAddress(), "", QLocale::AnyCountry, "", 0, false ) { UpdateRegistration(); }
 
-    CServerListEntry ( const CHostAddress&     NHAddr,
-                       const CHostAddress&     NLHAddr,
-                       const QString&          NsName,
-                       const QLocale::Country& NeCountry,
-                       const QString&          NsCity,
-                       const int               NiMaxNumClients,
-                       const bool              NbPermOnline ) :
-        CServerInfo ( NHAddr, NLHAddr, NsName, NeCountry, NsCity, NiMaxNumClients, NbPermOnline )
-    {
-        UpdateRegistration();
-    }
-
     CServerListEntry ( const CHostAddress& NHAddr, const CHostAddress& NLHAddr, const CServerCoreInfo& NewCoreServerInfo ) :
         CServerInfo ( NHAddr,
                       NLHAddr,

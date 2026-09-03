@@ -212,7 +212,9 @@ CServerListManager::CServerListManager ( CServer*       pServer,
      *
      * If we are a directory, we assume that we are a permanent server.
      */
-    CServerListEntry ThisServerListEntry ( haServerAddr, ServerPublicIP, "", QLocale::system().country(), "", iNumChannels, bIsDirectory );
+    CServerListEntry ThisServerListEntry ( haServerAddr,
+                                           ServerPublicIP,
+                                           CServerCoreInfo ( "", QLocale::system().country(), "", iNumChannels, bIsDirectory ) );
 
     // parse the server info string according to definition:
     // [this server name];[this server city];[this server country as QLocale ID] (; ... ignored)

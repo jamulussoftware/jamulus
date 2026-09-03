@@ -319,7 +319,18 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
             return;
         }
 
-        pServer->SetWelcomeMessage ( jsonWelcomeMessage.toString() );
+        // reject what CServer::SetWelcomeMessage would otherwise silently truncate
+        const QString strWelcomeMessage = jsonWelcomeMessage.toString();
+
+        if ( strWelcomeMessage.length() > MAX_LEN_CHAT_TEXT )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError (
+                CRpcServer::iErrInvalidParams,
+                QString ( "Invalid params: welcomeMessage exceeds maximum length of %1 characters" ).arg ( MAX_LEN_CHAT_TEXT ) );
+            return;
+        }
+
+        pServer->SetWelcomeMessage ( strWelcomeMessage );
         response["result"] = "ok";
     } );
 

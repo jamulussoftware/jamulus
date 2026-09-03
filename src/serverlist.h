@@ -104,19 +104,8 @@ class CServer;
 class CServerListEntry : public CServerInfo
 {
 public:
-    CServerListEntry() : CServerInfo ( CHostAddress(), CHostAddress(), "", QLocale::AnyCountry, "", 0, false ) { UpdateRegistration(); }
-
-    CServerListEntry ( const CHostAddress& NHAddr, const CHostAddress& NLHAddr, const CServerCoreInfo& NewCoreServerInfo ) :
-        CServerInfo ( NHAddr,
-                      NLHAddr,
-                      NewCoreServerInfo.strName,
-                      NewCoreServerInfo.eCountry,
-                      NewCoreServerInfo.strCity,
-                      NewCoreServerInfo.iMaxNumClients,
-                      NewCoreServerInfo.bPermanentOnline )
-    {
-        UpdateRegistration();
-    }
+    CServerListEntry();
+    CServerListEntry ( const CHostAddress& NHAddr, const CHostAddress& NLHAddr, const CServerCoreInfo& NewCoreServerInfo );
 
     void UpdateRegistration() { RegisterTime.start(); }
 

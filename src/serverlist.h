@@ -89,6 +89,7 @@ Note: this mechanism will not work in a private network.
 #include <QLocale>
 #include <QList>
 #include <QElapsedTimer>
+#include <QRandomGenerator>
 #include <QMutex>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
@@ -128,6 +129,8 @@ protected:
     static QString    ToBase64 ( const QString strIn ) { return ToBase64 ( strIn.toUtf8() ); }
     static QByteArray FromBase64ToByteArray ( const QString strIn ) { return QByteArray::fromBase64 ( strIn.toLatin1() ); }
     static QString    FromBase64ToString ( const QString strIn ) { return QString::fromUtf8 ( FromBase64ToByteArray ( strIn ) ); }
+
+    quint32 token;
 };
 
 class CServerListManager : public QObject

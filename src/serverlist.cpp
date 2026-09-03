@@ -86,7 +86,8 @@ CServerListEntry::CServerListEntry ( const CHostAddress& NHAddr, const CHostAddr
                   NewCoreServerInfo.eCountry,
                   NewCoreServerInfo.strCity,
                   NewCoreServerInfo.iMaxNumClients,
-                  NewCoreServerInfo.bPermanentOnline )
+                  NewCoreServerInfo.bPermanentOnline ),
+    token ( QRandomGenerator::system()->generate() )
 {
     UpdateRegistration();
 }

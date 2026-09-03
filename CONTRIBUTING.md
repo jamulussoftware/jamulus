@@ -110,7 +110,7 @@ Keep an eye on the CI checks for quality or compile issues after opening a pull 
 
 ### Ownership
 
-The submitter of an issue or a Pull Request is responsible for its care and feeding (this also holds for AI contributions), answering all questions directed at them, and making agreed changes if necessary. In case you use AI and do not understand some outputs, clearly state this and ask - either AI or humans.
+The submitter of an Issue or a Pull Request is responsible for its care and feeding (this also holds for contributions that were assisted by AI), answering all questions directed at them, and making agreed changes if necessary. In case you use AI and do not understand some outputs, clarify before submission if possible (for example, by asking the project team or an AI agent) or else clearly state this.
 
 Authors are strongly encouraged to update their initial posts/PR descriptions or title to reflect the current state of play, amends, enhancements, outstanding issues, etc., to reduce effort for others in understanding a PR or an Issue.
 Admins reserve the right to do this as they see fit.

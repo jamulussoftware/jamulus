@@ -799,7 +799,11 @@ int CServerListManager::IndexOf ( const CHostAddress& haSearchTerm )
     // (i.e., this server).
     for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
     {
-        if ( ServerList[iIdx].HostAddr4 == haSearchTerm )
+        if ( haSearchTerm.InetAddr.protocol() == QAbstractSocket::IPv4Protocol && ServerList[iIdx].HostAddr4 == haSearchTerm )
+        {
+            return iIdx;
+        }
+        if ( haSearchTerm.InetAddr.protocol() == QAbstractSocket::IPv6Protocol && ServerList[iIdx].HostAddr6 == haSearchTerm )
         {
             return iIdx;
         }

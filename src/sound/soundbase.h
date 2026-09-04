@@ -84,6 +84,15 @@ public:
     int          iChannel;
 };
 
+// name of a device which could not be initialized together with the reason why
+class CDriverInitError
+{
+public:
+    CDriverInitError ( const QString& strNDevName = "", const QString& strNError = "" ) : strDevName ( strNDevName ), strError ( strNError ) {}
+    QString strDevName;
+    QString strError;
+};
+
 /* Classes ********************************************************************/
 class CSoundBase : public QThread
 {
@@ -109,6 +118,19 @@ public:
         QMutexLocker locker ( &MutexDevProperties );
         return strCurDevName;
     }
+
+    // Separate input/output device selection: sound APIs which handle the input
+    // and the output device independently of each other (i.e. CoreAudio on macOS)
+    // return true here and offer one device list per direction. For all other
+    // APIs a device is a single entity and the combined list above is used.
+    // Note that even with separate lists the selected device is still identified
+    // by one single (combined) device name, see GetDev()/SetDev().
+    virtual bool        IsInOutDevSelectionSeparate() const { return false; }
+    virtual QStringList GetInputDevNames() { return QStringList(); }
+    virtual QStringList GetOutputDevNames() { return QStringList(); }
+    virtual QString     GetInputDev() { return QString(); }
+    virtual QString     GetOutputDev() { return QString(); }
+    virtual QString     SetInOutDev ( const QString& /* strInDevName */, const QString& /* strOutDevName */ ) { return QString(); }
 
     virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
@@ -157,11 +179,15 @@ public:
                                     int iMuteMyselfCC );
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
-    virtual void     UnloadCurrentDriver() {}
-    QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
-    void             ParseCommandLineArgument ( const QString& strMIDISetup );
-    QString          GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
+    virtual QString LoadAndInitializeDriver ( QString, bool ) { return ""; }
+    virtual void    UnloadCurrentDriver() {}
+
+    // returns an empty list if a driver could be initialized, otherwise the
+    // error message of each driver which was tried
+    virtual QVector<CDriverInitError> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
+
+    void    ParseCommandLineArgument ( const QString& strMIDISetup );
+    QString GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
 
     static void GetSelCHAndAddCH ( const int iSelCH, const int iNumInChan, int& iSelCHOut, int& iSelAddCHOut )
     {

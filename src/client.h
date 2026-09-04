@@ -244,6 +244,14 @@ public:
     QString GetSndCrdDev() { return Sound.GetDev(); }
     void    OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
 
+    // separate input/output device selection (only supported by some sound APIs)
+    bool        GetSndCrdInOutDevSelectionSeparate() { return Sound.IsInOutDevSelectionSeparate(); }
+    QStringList GetSndCrdInputDevNames() { return Sound.GetInputDevNames(); }
+    QStringList GetSndCrdOutputDevNames() { return Sound.GetOutputDevNames(); }
+    QString     GetSndCrdInputDev() { return Sound.GetInputDev(); }
+    QString     GetSndCrdOutputDev() { return Sound.GetOutputDev(); }
+    QString     SetSndCrdInOutDev ( const QString& strNewInDev, const QString& strNewOutDev );
+
     // sound card channel selection
     int     GetSndCrdNumInputChannels() { return Sound.GetNumInputChannels(); }
     QString GetSndCrdInputChannelName ( const int iDiD ) { return Sound.GetInputChannelName ( iDiD ); }
@@ -363,7 +371,9 @@ protected:
     void Start();
     void Stop();
 
-    void Init();
+    void    Init();
+    QString ChangeSndCrdDev ( const QString& strNewDev, const QString& strNewOutDev, const bool bSeparateInOutDev );
+
     void ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
     void ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
 

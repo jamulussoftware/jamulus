@@ -1,10 +1,9 @@
+<!--
 ### Copyright (c) 2026
 
 Author(s):
 * mcfnord
 * The Jamulus Development Team
-
----
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -17,9 +16,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see [<https://www.gnu.org/licenses/>](https://www.gnu.org/licenses/).
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
 
-# Where things live
+# Main Jamulus codebase
+
+Licensed under the AGPL 3.0 or any later version; full text in [../COPYING](../COPYING).
+
+This directory contains the main code of Jamulus.
 
 Code used by both client and server:
 
@@ -27,7 +31,7 @@ Code used by both client and server:
 - [protocol.cpp](protocol.cpp) — `CProtocol`: message framing, acknowledgement and
   retransmission. Wire format: [../docs/JAMULUS_PROTOCOL.md](../docs/JAMULUS_PROTOCOL.md).
 - [channel.cpp](channel.cpp) — `CChannel`: the connection and its receive jitter buffer, used by
-  both client and server. The client has one; the server an array of `MAX_NUM_CHANNELS`.
+  both client and server.
 - [socket.cpp](socket.cpp) — `CSocket` and `CHighPrioSocket`: the UDP socket shared by all
   sending and receiving, with its receive thread.
 - [buffer.h](buffer.h) — `CNetBuf` and `CNetBufWithStats`: the jitter buffer, including the
@@ -56,14 +60,21 @@ Server only:
 The JSON-RPC API ([rpcserver.cpp](rpcserver.cpp), [clientrpc.cpp](clientrpc.cpp),
 [serverrpc.cpp](serverrpc.cpp)) is documented in [../docs/JSON-RPC.md](../docs/JSON-RPC.md).
 
-## Threads
+## Jamulus Architecture
+
+Jamulus is a client/server system: each client encodes the audio from its sound device and sends
+it to the server over UDP, and the server decodes every client's stream, builds a separate mix for
+each connected client from that client's own fader gains, re-encodes it and sends it back to be
+decoded and played out. Each receiving end holds arriving packets in a jitter buffer first.
+
+### Threading
 
 | thread | exists | started from | what runs on it |
 |---|---|---|---|
 | Qt main thread | always | — | the GUI; every protocol message body, parsed and created, on client and server; directory registration; JSON-RPC; and the server's complete frame cycle (see below) |
 | `CSocketThread` | always | `CHighPrioSocket::Start()`, at `QThread::TimeCriticalPriority` | a blocking UDP receive loop. Audio packets are decoded into the jitter buffer synchronously, in `CChannel::PutAudioData` (client) or `CServer::PutAudioData` (server). Protocol messages are split across the two threads: `CProtocol::ParseMessageFrame` validates the frame here, then the body is re-emitted as a queued signal and `ParseMessageBody` runs it on the main thread. |
 | audio driver threads | client | the sound driver | the backend callback, which runs `CClient::AudioCallback`: Opus decode of the received stream, Opus encode of the sound card input, and the UDP send of the encoded packet |
-| `CHighPrecisionT…` | server, except on Windows | `CHighPrecisionTimer::Start()`, at `QThread::TimeCriticalPriority` | only `emit timeout()` once per frame, plus the absolute-time sleep that paces it |
+| `CHighPrecisionTimer` | server, except on Windows | `CHighPrecisionTimer::Start()`, at `QThread::TimeCriticalPriority` | only `emit timeout()` once per frame, plus the absolute-time sleep that paces it |
 | `CThreadPool` workers | server with `--multithreading`, on more than one core | `CServer`'s constructor | Opus decode and mix/encode/send work, in per-block chunks handed out by `CServer::OnTimer` |
 | recorder thread | server with recording | `CJamController` | `CJamRecorder`, fed by queued `AudioFrame` signals from the frame cycle |
 | `QThreadPool` global pool | client GUI | the connect dialog | one task per listed server for the ping/info fan-out (`QtConcurrent::run`) |
@@ -76,7 +87,7 @@ plain `QTimer`, also main thread. With `--multithreading` the heavy blocks go to
 `OnTimer` waits for them — and on a machine reporting one core, `CServer`'s constructor turns the
 option back off, so no pool thread is created at all.
 
-## Locks
+### Locks
 
 The locks taken from more than one thread:
 
@@ -99,13 +110,3 @@ The locks taken from more than one thread:
 - `CClient::MutexGainOrPan` — gain/pan message rate limiter
 - `CClient::MutexDriverReinit` — serializes sound device re-initialization
 - Sound layer locks (`MutexAudioProcessCallback`, `MutexDevProperties`, per-backend) — see [sound/README.md](sound/README.md)
-
-## Not yet documented
-
-- the jitter buffer's automatic size algorithm (`CNetBufWithStats`)
-- the connection lifecycle: how a channel goes from first packet to connected to timed out
-- the directory: registration, the server list, and the split of
-  [serverlist.cpp](serverlist.cpp) between the directory role and the registered-server role
-- the recorder
-- [serverlogging.cpp](serverlogging.cpp), [signalhandler.cpp](signalhandler.cpp), the GUI
-  classes, and translation loading

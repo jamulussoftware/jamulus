@@ -48,6 +48,7 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
+    pTcpConnection ( nullptr ),
     vecfGains ( MAX_NUM_CHANNELS, 1.0f ),
     vecfPannings ( MAX_NUM_CHANNELS, 0.5f ),
     iCurSockBufNumFrames ( INVALID_INDEX ),
@@ -59,6 +60,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     bIsEnabled ( false ),
     bIsServer ( bNIsServer ),
     bIsIdentified ( false ),
+    iChannelToken ( 0 ),
     iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
     SignalLevelMeter ( false, 0.5 ) // server mode with mono out and faster smoothing
 {
@@ -103,7 +105,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
     QObject::connect ( &Protocol, &CProtocol::ChangeChanPan, this, &CChannel::OnChangeChanPan );
 
-    QObject::connect ( &Protocol, &CProtocol::ClientIDReceived, this, &CChannel::ClientIDReceived );
+    QObject::connect ( &Protocol, &CProtocol::ClientIDReceived, this, &CChannel::OnClientIDReceived );
 
     QObject::connect ( &Protocol, &CProtocol::RawAudioSupported, this, &CChannel::RawAudioSupported );
 
@@ -763,4 +765,29 @@ void CChannel::UpdateSocketBufferSize()
         // buffer memory since we just adjust the size here
         SetSockBufNumFrames ( SockBuf.GetAutoSetting(), true );
     }
+}
+
+void CChannel::OnClientIDReceived ( int iChanID ) { emit ClientIDReceived ( iChanID ); }
+
+void CChannel::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo, CProtocol& ConnLessProtocol )
+{
+    if ( pTcpConnection )
+    {
+        ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, vecChanInfo, pTcpConnection );
+    }
+    else
+    {
+        Protocol.CreateConClientListMes ( vecChanInfo );
+    }
+}
+
+void CChannel::SetTcpConnection ( CTcpConnection* pConnection )
+{
+    if ( pTcpConnection )
+    {
+        // this should never happen, but handle it if it does
+        pTcpConnection->disconnectFromHost();
+    }
+
+    pTcpConnection = pConnection;
 }

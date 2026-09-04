@@ -7,8 +7,7 @@ We’d really appreciate your support! Please ensure that you understand the fol
 - Otherwise, please [post on the GitHub Discussions](https://github.com/jamulussoftware/jamulus/discussions) and say that you are planning to do some coding and explain why. Then we can discuss the specification.
 - Please begin coding only after we have agreed on a specification to avoid putting a lot of effort into something that may not be accepted later.
 
-If you work with an AI coding agent, [AGENTS.md](AGENTS.md) is its entry point into this repository. Everything in this document applies to agent-assisted contributions without exception: you remain the author, and you are expected to understand and stand behind every line you submit.
-
+- Keep commits and Pull Requests focussed on one logical change only. In case you implement multiple features, open multiple smaller PRs instead of large one. Large PRs may become stale since they are not reviewable and be closed after a long time of inactivity.
 
 ## Jamulus project/source code general principles
 
@@ -47,6 +46,12 @@ Please see the [.clang_format file](https://github.com/jamulussoftware/jamulus/b
 Please install and use [pylint](https://pylint.org/) to scan any Python code.
 There is a configuration file that defines some overrides,
 and note the [Editorconfig file](.editorconfig) in the project too.
+
+### Using AI
+
+- When you use AI as part of your work, remember that it is a tool that you choose to use and your code will be judged in the same way as any other submission.  However, we encourage you to share your AI experiences, as it is an emerging technology, by highlighting how you used AI and give your own review of its performance.
+
+AI assisted contributions **must** follow the same standards as every other contribution. The submitter remains the author and is expected to understand and stand behind every submitted line. [AGENTS.md](AGENTS.md) is the entry point into this repository for AI Agents. Low-effort contributions might be closed without comment.
 
 ### Licensing
 
@@ -100,11 +105,12 @@ Have a look at our [guide for translators](docs/TRANSLATING.md) - especially rea
 
 ### Testing
 
-To check that there are no errors, please run a local (build/feature) test. Keep an eye on the CI checks for quality or compile issues after opening a pull request and fix them as needed. You can also test the build on your repository by naming your branch `autobuild/<branchName>` which will start the building process on your repo.
+To check that there are no errors, please run a local (build/feature) test. Briefly explain in the PR what and how you tested your work and attach evidence - logs, screenshots, small testing scripts or similar depending on your change.
+Keep an eye on the CI checks for quality or compile issues after opening a pull request and fix them as needed. You can also test the build on your repository by naming your branch `autobuild/<branchName>` which will start the building process on your repo.
 
 ### Ownership
 
-The submitter of an Issue or a PR is responsible for its care and feeding, answering all questions directed at them, and making agreed changes if necessary.
+The submitter of an Issue or a Pull Request is responsible for its care and feeding (this also holds for contributions that were assisted by AI), answering all questions directed at them, and making agreed changes if necessary. In case you use AI and do not understand some outputs, clarify before submission if possible (for example, by asking the project team or an AI agent) or else clearly state this.
 
 Authors are strongly encouraged to update their initial posts/PR descriptions or title to reflect the current state of play, amends, enhancements, outstanding issues, etc., to reduce effort for others in understanding a PR or an Issue.
 Admins reserve the right to do this as they see fit.

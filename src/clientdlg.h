@@ -201,13 +201,13 @@ public slots:
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
-
+#ifndef NO_REVERB
     void OnAudioReverbValueChanged ( int value ) { pClient->SetReverbLevel ( value ); }
 
     void OnReverbSelLClicked() { pClient->SetReverbOnLeftChan ( true ); }
 
     void OnReverbSelRClicked() { pClient->SetReverbOnLeftChan ( false ); }
-
+#endif
     void OnFeedbackDetectionChanged ( int state ) { ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked ); }
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

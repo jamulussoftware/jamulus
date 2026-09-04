@@ -379,7 +379,20 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     lblInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
-
+#ifndef NO_REVERB
+    // reverb preset
+    QString strReverbPreset = "<b>" + tr ( "Reverb Preset" ) + ":</b> " +
+                              tr ( "Jamulus uses MVerb by Martin Eastwood for reverberation. "
+                                   "MVerb comes with a set of presets you can select here. "
+                                   "Available Presets: Subtle, Stadium, Cupboard, Dark, Halves, Drum Room, Club " );
+    lblReverbPreset->setWhatsThis ( strReverbPreset );
+    cbxReverbPreset->setWhatsThis ( strReverbPreset );
+    cbxReverbPreset->setAccessibleName ( tr ( "Reverb Preset combo box" ) );
+#else
+    lblReverbPreset->setVisible ( false );
+    cbxReverbPreset->setVisible ( false );
+    verticalSpacer_13->changeSize ( 0, 0 );
+#endif
     // custom directories
     QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
                                    tr ( "If you need to add additional directories to the Connect dialog Directory drop down, "
@@ -554,7 +567,18 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     }
     // factor is 1-based while index is 0-based:
     cbxInputBoost->setCurrentIndex ( pSettings->iInputBoost - 1 );
-
+#ifndef NO_REVERB
+    // Rever Preset combo box
+    cbxReverbPreset->clear();
+    cbxReverbPreset->addItem ( "Subtle" );
+    cbxReverbPreset->addItem ( "Stadium" );
+    cbxReverbPreset->addItem ( "Cupboard" );
+    cbxReverbPreset->addItem ( "Dark" );
+    cbxReverbPreset->addItem ( "Halves" );
+    cbxReverbPreset->addItem ( "Drum Room" );
+    cbxReverbPreset->addItem ( "Club" );
+    cbxReverbPreset->setCurrentIndex ( pClient->GetReverbPreset() );
+#endif
     // init number of mixer rows
     spnMixerRows->setValue ( pSettings->iNumMixerPanelRows );
 
@@ -785,7 +809,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
                        &CClientSettingsDlg::OnInputBoostChanged );
-
+#ifndef NO_REVERB
+    QObject::connect ( cbxReverbPreset,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                       this,
+                       &CClientSettingsDlg::OnReverbPresetChanged );
+#endif
     // buttons
 #if defined( _WIN32 ) && !defined( WITH_JACK )
     // Driver Setup button is only available for Windows when JACK is not used
@@ -1388,7 +1417,9 @@ void CClientSettingsDlg::OnInputBoostChanged()
     pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
     pClient->SetInputBoost ( pSettings->iInputBoost );
 }
-
+#ifndef NO_REVERB
+void CClientSettingsDlg::OnReverbPresetChanged() { pClient->SetReverbPreset ( cbxReverbPreset->currentIndex() ); }
+#endif
 void CClientSettingsDlg::OnAliasTextChanged ( const QString& strNewName )
 {
     // check length

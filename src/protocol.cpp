@@ -977,10 +977,6 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
         EvaluateCLChannelLevelListMes ( InetAddr, vecbyMesBodyData );
         break;
 
-    case PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST:
-        EvaluateCLReqChannelLevelListMes ( InetAddr );
-        break;
-
     case PROTMESSID_CLM_REGISTER_SERVER_RESP:
         EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
         break;
@@ -991,6 +987,10 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
 
     case PROTMESSID_CLM_REQ_WELCOME_MESSAGE:
         EvaluateCLReqWelcomeMessageMes ( InetAddr );
+        break;
+
+    case PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST:
+        EvaluateCLReqChannelLevelListMes ( InetAddr );
         break;
     }
 }
@@ -2630,13 +2630,6 @@ bool CProtocol::EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, co
     return false; // no error
 }
 
-bool CProtocol::EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr )
-{
-    emit CLReqChannelLevelList ( InetAddr );
-
-    return false; // no error
-}
-
 void CProtocol::CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult )
 {
     int              iPos = 0; // init position pointer
@@ -2717,6 +2710,14 @@ void CProtocol::CreateCLWelcomeMessageMes ( const CHostAddress& InetAddr, const 
     PutStringUTF8OnStream ( vecData, iPos, strUTF8WelcomeMessage );
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_WELCOME_MESSAGE, vecData, InetAddr );
+}
+
+bool CProtocol::EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLReqChannelLevelList ( InetAddr );
+
+    return false; // no error
 }
 
 /******************************************************************************\

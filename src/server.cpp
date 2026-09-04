@@ -292,10 +292,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqConnClientsList, this, &CServer::OnCLReqConnClientsList );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqChannelLevelList, this, &CServer::OnCLReqChannelLevelList );
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqServerFeatures, this, &CServer::OnCLReqServerFeatures );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqWelcomeMessage, this, &CServer::OnCLReqWelcomeMessage );
+
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqChannelLevelList, this, &CServer::OnCLReqChannelLevelList );
 
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged, this, &CServer::SvrRegStatusChanged );
 

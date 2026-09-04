@@ -310,10 +310,10 @@ protected:
     bool EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
     bool EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr );
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerFeaturesMes ( const CHostAddress& InetAddr );
     bool EvaluateCLReqWelcomeMessageMes ( const CHostAddress& InetAddr );
+    bool EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr );
 
     int iOldRecID;
     int iOldRecCnt;
@@ -380,8 +380,8 @@ signals:
     void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
     void CLReqConnClientsList ( CHostAddress InetAddr );
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
-    void CLReqChannelLevelList ( CHostAddress InetAddr );
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
     void CLReqServerFeatures ( CHostAddress InetAddr );
     void CLReqWelcomeMessage ( CHostAddress InetAddr );
+    void CLReqChannelLevelList ( CHostAddress InetAddr );
 };

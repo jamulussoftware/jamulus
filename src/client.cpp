@@ -1441,6 +1441,8 @@ void CClient::Init()
         }
     }
 
+    Channel.SetAudioCodingArg ( eAudioQuality );
+
     // calculate stereo (two channels) buffer size
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 

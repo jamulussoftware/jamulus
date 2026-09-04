@@ -49,6 +49,7 @@
 #include <QObject>
 #include <QThread>
 #include <QMutex>
+#include <QRandomGenerator>
 #include <vector>
 #include <atomic>
 #include "global.h"

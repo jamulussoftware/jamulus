@@ -1789,7 +1789,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation>Beliebiges Genre Asien</translation>
+        <translation>Alle Genres Asien</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>

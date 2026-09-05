@@ -36,51 +36,50 @@ jobs:
       fail-fast: false
       matrix:
         components:
+
           - name: aqt
             # not Changelog-worthy
             get_upstream_version: GH_REPO=miurahr/aqtinstall gh release view --json tagName --jq .tagName | sed -re 's/^v//'
-            # The following regexps capture both the *nix and the Windows variable syntax (different case, underscore):
-            local_version_regex: (.*AQTINSTALL_?VERSION\s*=\s*"?)([0-9.]*)("?.*)
+            # Capture the POSIX-style and PowerShell assignments used by the dependency files.
+            local_version_regex: ^(AQTINSTALL_VERSION=|\$AqtinstallVersion = \")([0-9.]+)(|\")$
+
           - name: create-dmg
             changelog_name: create-dmg (macOS)
             get_upstream_version: GH_REPO=create-dmg/create-dmg gh release view --json tagName --jq .tagName | sed -re 's/^v//'
-            local_version_regex: (.*CREATEDMG_VERSION\s*=\s*"?)([0-9.]*)("?.*)
+            local_version_regex: ^(CREATEDMG_VERSION=)([0-9.]+)()$
+
           - name: Qt6
             changelog_name: bundled Qt6
             get_upstream_version: |
               latest_minor="$(curl -s https://download.qt.io/official_releases/qt/ | grep -oP 'href="\K[0-9.]+(?=/")' | sort --reverse --version-sort | head -n1)";
               curl -s https://download.qt.io/official_releases/qt/"${latest_minor}"/ | grep -oP 'href="\K[0-9.]+(?=/")' | sort --reverse --version-sort | head -n1
-            # The following regex captures both the *nix and the Windows variable syntax (different case, underscore):
-            local_version_regex: (.*QT[0-9_]+VERSION\s*=\s*"?)(6\.[0-9.]+)("?.*)
+            local_version_regex: ^(QT_VERSION=|\$Qt64Version = \")(6\.[0-9.]+)(|\")$
 
           - name: jack
             changelog_name: bundled JACK (Windows-only)
             get_upstream_version: GH_REPO=jackaudio/jack2-releases gh release view --json tagName --jq .tagName | sed -re 's/^v//'
-            local_version_regex: (.*JackVersion\s*=\s*"?)([0-9.]+)("?.*)
+            local_version_regex: ^(\$JackVersion = \")([^"]+)(\")$
 
           - name: choco-jom
             # not Changelog-worthy
             get_upstream_version: |
               curl -sL "https://community.chocolatey.org/api/v2/FindPackagesById()?id='jom'" |
                 grep -oP '(?<=<d:Version>)[^<]+' | sort --version-sort | tail -n1
-            local_version_regex: (.*JomVersion\s*=\s*"?)([0-9.]+)("?.*)
+            local_version_regex: ^(\$JomVersion = \")([^"]+)(\")$
 
           - name: NSIS
             changelog_name: Windows Installer base (NSIS)
             get_upstream_version: |
               curl -s -o /dev/null --location --range 0-5 --write-out '%{url_effective}' https://sourceforge.net/projects/nsis/files/latest/download |
                 grep -oP '.*/nsis-\K[0-9.]+(?=-setup\.)'
-            # This pattern is a bit special as it has to match twice in a single line.
-            # Therefore, we have to be very careful to avoid consuming too much pattern space.
-            # This is why a positive lookahead is used instead of direct matching:
-            local_version_regex: (.*"nsis-|.*\/NSIS.20.\/|\/nsis-)([0-9.]+)(".*|(?=\/nsis-)|\.zip.*)
+            local_version_regex: ^(\$NsisVersion = \")([^"]+)(\")$
 
           - name: ASIO-SDK
             changelog_name: ASIO SDK (Windows-only)
             get_upstream_version: |
               curl -s -o /dev/null --location --range 0-5 --write-out '%{url_effective}' https://www.steinberg.net/asiosdk |
                 grep -oP '.*\K(?:ASIO-SDK|asiosdk)_.*(?=\.zip)'
-            local_version_regex: (.*["\/])((?:ASIO-SDK|asiosdk)_[^"]+?)(".*|\.zip.*)
+            local_version_regex: ^(\$AsioSDKVersion = \")([^"]+)(\")$
 
     steps:
       - uses: actions/checkout@v7
@@ -91,9 +90,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -eu
-          files=( .github/{autobuild,workflows}/* windows/*.ps1 mac/*.sh )
+          files=( .github/autobuild/*-dependencies{,_qt[56]}.* )
+          echo "files: (${files[@]})"
           upstream_version="$(${{ matrix.components.get_upstream_version }})"
-          local_version="$(perl -nle 'print "$2" if /${{ matrix.components.local_version_regex }}/i' "${files[@]}" | sort --reverse --version-sort | head -n1)"
+          echo "upstream version: {${upstream_version}}"
+          local_version="$(perl -nle 'print "$2" if /${{ matrix.components.local_version_regex }}/' "${files[@]}" | sort --reverse --version-sort | head -n1)"
+          echo "local version: {${local_version}}"
           if [[ -z "$upstream_version" ]]; then
             echo "failed to extract upstream version"
             exit 1
@@ -106,13 +108,12 @@ jobs:
             echo "upstream ${{ matrix.components.name }} (${upstream_version}) matches local ${{ matrix.components.name }} (${local_version})"
             exit 0
           fi
-          echo "upstream ${{ matrix.components.name }} (${upstream_version}) is different than local ${{ matrix.components.name }} (${local_version}), creating PR"
+          echo "upstream ${{ matrix.components.name }} (${upstream_version}) does not match local ${{ matrix.components.name }} (${local_version}), creating PR"
           git config --global user.email "actions@github.com"
           git config --global user.name "github-actions[bot]"
           pr_branch=ci/bump-dependencies/${{ matrix.components.name }}
           git checkout -b "${pr_branch}"
-          # sed does not support replacements with overlapping or lookahead patterns as is the case with NSIS.
-          # Therefore, use perl instead:
+          # Use Perl so the replacement can preserve the prefix and suffix captured by each component regex.
           perl -pe 's/${{ matrix.components.local_version_regex }}/${1}'"${upstream_version}"'${3}/gi' -i "${files[@]}"
           git add .
           title="Build: Bump ${{ matrix.components.name }} from ${local_version} to ${upstream_version}"

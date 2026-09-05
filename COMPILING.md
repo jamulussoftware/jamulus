@@ -78,7 +78,7 @@ Download and install Qt e.g via the [official open source installer](https://www
 
 **Note:**
 - Use the free GPLv2 license for Open Source development, not the commercial "universal installer"
-- Select Components during installation: Expand the Qt section, find the matching version.  To match the Github builds, you will need to check the versions in `windows/deploy_windows.ps2`.  This gives both the Qt and MSVC versions (e.g. 6.8.1 and msvc2022_64 for a 64bit release).
+- Select Components during installation: Expand the Qt section and find the matching version. To match the GitHub builds, check `.github/autobuild/windows-dependencies.ps1`, which gives both the Qt and MSVC versions (e.g. 6.10.2 and msvc2022_64 for a 64-bit release).
 
 If you build with *JACK* support, install JACK via choco: `choco install --no-progress -y jack`
 
@@ -89,7 +89,8 @@ If you build with *ASIO* support, you'll need the [ASIO development files](https
 1. Open PowerShell
 1. Navigate to the `jamulus` directory
 1. To allow unsigned scripts, right-click on the `windows\deploy_windows.ps1` script, select properties and allow the execution of this script. You can also run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. (You can revert this after having run this script. For more information see the [Microsoft PowerShell documentation page](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy)).
-1. Run the Jamulus compilation and installer script in PowerShell: `.\windows\deploy_windows.ps1 "C:\Qt\<pathToQt32BitVersion>" "C:\Qt\<pathToQt64BitVersion>"`.
+1. Run the Jamulus compilation and installer script in PowerShell: `.\windows\deploy_windows.ps1`.
+    The script reads the Qt, ASIO SDK, and NSIS versions from `.github/autobuild/windows-dependencies.ps1`.
 1. You can now find the Jamulus installer in the `.\deploy` directory.
 
 ### Compiling only
@@ -110,16 +111,17 @@ You will need Xcode and Qt.
 
 First, install [Xcode from the Mac AppStore](https://apps.apple.com/us/app/xcode/id497799835?mt=12). Then [install homebrew](https://brew.sh/).
 
-After that you can install Qt via homebrew:
+After that you can install Qt via homebrew. The GitHub build uses Qt 6 by default; for the exact versions, check `.github/autobuild/mac-dependencies_qt5.sh` or `.github/autobuild/mac-dependencies_qt6.sh`.
 
 ```shell
-brew install Qt@5
-brew link Qt@5 --force
+brew install qt
 ```
+
+To use Qt 5, install the Qt 5 version listed in `.github/autobuild/mac-dependencies_qt5.sh` instead.
 
 ### Generate Xcode Project file
 
-`qmake QMAKE_APPLE_DEVICE_ARCHS=arm64 QT_ARCH=arm64 -spec macx-xcode Jamulus.pro`
+`/path/to/qt/<QtVersion>/macos/bin/qmake QMAKE_APPLE_DEVICE_ARCHS=arm64 QT_ARCH=arm64 -spec macx-xcode Jamulus.pro`
 **Note:** if you still build on x86_64, not Apple Silicon, you must replace `arm64` with `x86_64`.
 
 ### Print build targets and configuration in console
@@ -152,15 +154,15 @@ Schemes:
 Will build the file and make it available in `./Release/Jamulus.app`
 In order to run the application, you need to run `macdeployqt ./Release/Jamulus.app` once to set up all required libraries and frameworks.
 
-If you want to build the installer, please run the `deploy_mac.sh` script: `./mac/deploy_mac.sh`. You'll find the installer in the deploy/ folder.
+If you want to build the installer, please run the `deploy_mac.sh` script: `./mac/deploy_mac.sh` (Qt 6) or `QT=5 ./mac/deploy_mac.sh` (Qt 5). You'll find the installer in the deploy/ folder.
 
 ---
 
 ## iOS
 
 1. Install [Xcode from the Mac AppStore](https://apps.apple.com/us/app/xcode/id497799835?mt=12)
-2. [Download and install Qt5 with the Qt Installer](https://www.qt.io/download) (not homebrew, Qt6 is found to be buggy). Explicitly select iOS when choosing the Qt version
-3. Go to the folder of the Jamulus source code via terminal and run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro` to generate an .xcodeproject file
+2. [Download and install Qt5 with the Qt Installer](https://www.qt.io/download) (not homebrew, Qt6 is found to be buggy). Explicitly select iOS when choosing the Qt version. For the version matching the GitHub build, check `.github/autobuild/ios-dependencies.sh`.
+3. Go to the folder of the Jamulus source code via terminal and run `/path/to/qt/<QtVersion>/ios/bin/qmake -spec macx-xcode Jamulus.pro` to generate an .xcodeproject file
 4. Open the generated .xcodeproject in Xcode
 5. Go to the Signing & Capabilities tab and fix signing errors by setting a team. Xcode will tell you what you need to change.
 

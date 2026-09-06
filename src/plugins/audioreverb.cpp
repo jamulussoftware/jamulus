@@ -19,7 +19,7 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf, const int iNSte
     numFrames = iStereoBlockSizeSam / 2;
 
     // These buffers get filled with dry signal and are then passed to mverb
-    // They need to be vectors as the windows builds fail when arrays are used
+    // They need to be vectors as the Windows builds fail when arrays are used
     bufL.resize ( numFrames );
     bufR.resize ( numFrames );
 

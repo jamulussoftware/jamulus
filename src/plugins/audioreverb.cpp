@@ -15,8 +15,8 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf, const int iNSte
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
     // Jamulus uses interleaved stereo, mverb operates on a 2-dimensional array instead
-    // Calculate the number of frames for each channel ( iStereoBlockSizeSam / 2 )
-    numFrames = iStereoBlockSizeSam >> 1;
+    // Calculate the number of frames for each channel
+    numFrames = iStereoBlockSizeSam / 2;
 
     // These buffers get filled with dry signal and are then passed to mverb
     // They need to be vectors as the windows builds fail when arrays are used

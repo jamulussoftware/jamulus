@@ -21,7 +21,7 @@ public:
     void Clear();
     void Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fReverbGain );
     void setPreset ( const int iNPreset );
-    int getPreset() const { return iPreset; };
+    int  getPreset() const { return iPreset; };
 
 protected:
     std::unique_ptr<MVerb<float>> mverb;

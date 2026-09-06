@@ -12,7 +12,7 @@
 CAudioReverb::CAudioReverb()
 {
     fMaxShort = static_cast<float> ( _MAXSHORT );
-    iPreset   = STADIUM;
+    iPreset   = RP_STADIUM;
 
     // Create MVerb on the heap
     mverb = std::unique_ptr<MVerb<float>> ( new MVerb<float>() );
@@ -49,7 +49,7 @@ void CAudioReverb::loadPreset()
 void CAudioReverb::setPreset ( const int iNPreset )
 {
     // silently fail if preset doesn't exist
-    if ( MathUtils::InRange<int> ( iNPreset, 0, NUM_REV_PRESETS ) )
+    if ( MathUtils::InRange<int> ( iNPreset, 0, RP_NUM_REV_PRESETS ) )
     {
         iPreset = iNPreset;
         loadPreset();

@@ -508,8 +508,8 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetReverbOnLeftChan ( bValue );
     }
 
-    // reverb preset
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "revpreset", 0, 4, iValue ) )
+    // reverb preset (7 presets, set range accordingly)
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "revpreset", 0, 6, iValue ) )
     {
         pClient->SetReverbPreset ( iValue );
     }

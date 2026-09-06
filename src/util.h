@@ -638,7 +638,7 @@ enum EFeatureSet
     FS_HAS_GUI             = 11,
     FS_RPC_ENABLED         = 12
 };
-
+#ifndef NO_REVERB
 // Reverb presets
 enum EReverbPresets
 {
@@ -651,7 +651,7 @@ enum EReverbPresets
     RP_CLUB            = 6,
     RP_NUM_REV_PRESETS = 7
 };
-
+#endif
 inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
 {
     switch ( eAddrType )

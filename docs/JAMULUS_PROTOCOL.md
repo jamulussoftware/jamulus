@@ -48,7 +48,7 @@ Jamulus uses UDP to communicate between the Client and Server, and additionally 
 
 UDP offers no delivery guarantee and no notion of a connection, so Jamulus layers its own session and reliability semantics on top of it. A Client and Server count as *connected* once the Client is sending valid audio packets and the Server has assigned it a channel. The two message classes below are named relative to that session, not to anything at the transport level.
 
-Messages with an ID below 1000 are connection-based: they apply to an established session, and each is acknowledged by an `ACKN (1)` message carrying the same sequence counter. Until that acknowledgement arrives, the sender retransmits the message every `SEND_MESS_TIMEOUT_MS` (400) ms. The protocol layer sets no retry limit: retransmission ends when the message is acknowledged, or when the channel clears the send queue via `CProtocol::Reset()` — on disconnect, on channel time-out, or when the protocol is disabled.
+Messages with an ID below 1000 are connection-based: they apply to an established session, and each is acknowledged by an `ACKN (1)` message carrying the same sequence counter. Until that acknowledgement arrives, the sender retransmits the message every `SEND_MESS_TIMEOUT_MS` (400) ms. The protocol layer sets no retry limit: retransmission ends when the message is acknowledged, or when the channel clears the send queue via `CProtocol::Reset()` — on disconnect, on channel time-out, or when the protocol is disabled. `ACKN` itself is the one exception in this range: it is sent immediately, never queued, and is neither acknowledged nor retransmitted.
 
 Messages with an ID from 1000 to 1999 (`CLM_*`) are connectionless: they need no established session and are never acknowledged.
 
@@ -98,7 +98,7 @@ Connection-based messages (acknowledged; `PROTMESSID_` prefix omitted). Full pay
 
 | ID | Name | Purpose |
 |---|---|---|
-| 1 | `ACKN` | Acknowledges the message ID/counter it carries |
+| 1 | `ACKN` | Acknowledges the message ID/counter it carries; not itself acknowledged or retransmitted |
 | 10 | `JITT_BUF_SIZE` | Set Jitter Buffer size |
 | 11 | `REQ_JITT_BUF_SIZE` | Request Jitter Buffer size |
 | 13 | `CHANNEL_GAIN` | Set a Channel's gain in your mix |
@@ -160,9 +160,9 @@ The Server on a new Client connection will:
 
 - Tell the Client connection its ID, with a `CLIENT_ID (32, 0x2000)` message.
 - Send the Client an empty connected Client list with a `CONN_CLIENTS_LIST (24, 0x1800)` message.
-- Determine if the Client supports split messages, with a `REQ_SPLIT_MESSAGE_SUPPORT (34, 0x2200)` message.
+- Determine if the Client supports split messages, with a `REQ_SPLIT_MESS_SUPPORT (34, 0x2200)` message.
 - Request the details of the audio packets from the Client with a `REQ_NETW_TRANSPORT_PROPS (21, 0x1500)` message,
-- Request the Jitter Buffer value to use, with a `REQ_JITT_BUF_SIZE (11, 0x0B00)` message.
+- Request the Jitter Buffer value to use, with a `REQ_JITT_BUF_SIZE (11, 0x0b00)` message.
 - Request the details of the Channel info, with a `REQ_CHANNEL_INFOS (23, 0x1700)` message.
 - Send the version and OS of the Server, with a `VERSION_AND_OS (29, 0x1d00)` message.
 
@@ -191,9 +191,9 @@ A typical flow would be:
       <------------------------------------ CONN_CLIENTS_LIST (24, 0x1800) (Reset to zero)
   ACK(CONN_CLIENTS_LIST) ---------------->
 
-      <------------------------------------ REQ_SPLIT_MESSAGE_SUPPORT (34, 0x2200)
+      <------------------------------------ REQ_SPLIT_MESS_SUPPORT (34, 0x2200)
   SPLIT_MESS_SUPPORTED (35, 0x2300) --------->
-  ACK(REQ_SPLIT_MESSAGE_SUPPORT) -------->
+  ACK(REQ_SPLIT_MESS_SUPPORT) ----------->
       <------------------------------------ ACK(SPLIT_MESS_SUPPORTED)
 
       <------------------------------------ REQ_NETW_TRANSPORT_PROPS (21, 0x1500)
@@ -201,14 +201,14 @@ A typical flow would be:
   ACK(REQ_NETW_TRANSPORT_PROPS) --------->
       <------------------------------------ ACK(NETW_TRANSPORT_PROPS)
 
-      <------------------------------------ REQ_JITT_BUF_SIZE (11, 0x0B00)
+      <------------------------------------ REQ_JITT_BUF_SIZE (11, 0x0b00)
   JITT_BUF_SIZE (10, 0x0a00) ---------------->
   ACK(REQ_JITT_BUF_SIZE) ---------------->
       <------------------------------------ ACK(JITT_BUF_SIZE)
 
-      <------------------------------------ REQ_CHANNELS_INFOS (23, 0x1700)
+      <------------------------------------ REQ_CHANNEL_INFOS (23, 0x1700)
   CHANNEL_INFOS (25, 0x1900) ---------------->
-  ACK(REQ_CHANNELS_INFOS) --------------->
+  ACK(REQ_CHANNEL_INFOS) ---------------->
       <------------------------------------ ACK(CHANNEL_INFOS)
 
 (Optional welcome message)

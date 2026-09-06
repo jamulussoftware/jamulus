@@ -9,7 +9,7 @@
 
 #include "audioreverb.h"
 
-CAudioReverb::CAudioReverb()
+CAudioReverb::CAudioReverb() : bPresetChangeQueued ( false )
 {
     fMaxShort = static_cast<float> ( _MAXSHORT );
     iPreset   = RP_STADIUM;
@@ -44,6 +44,7 @@ void CAudioReverb::loadPreset()
     {
         mverb->setParameter ( i, presets[iPreset][i] );
     }
+    bPresetChangeQueued = false;
 }
 
 void CAudioReverb::setPreset ( const int iNPreset )
@@ -51,13 +52,16 @@ void CAudioReverb::setPreset ( const int iNPreset )
     // silently fail if preset doesn't exist
     if ( MathUtils::InRange<int> ( iNPreset, 0, RP_NUM_REV_PRESETS ) )
     {
-        iPreset = iNPreset;
-        loadPreset();
+        iPreset             = iNPreset;
+        bPresetChangeQueued = true;
     }
 };
 
 void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fReverbGain )
 {
+    // This is called from the audio thread so a preset change must only be carried out on the audio block boundaries to avoid a race condition
+    if ( bPresetChangeQueued )
+        loadPreset();
 
     // One buffer to pass to mverb's process function
     float* fInput[2] = { bufL.data(), bufR.data() };

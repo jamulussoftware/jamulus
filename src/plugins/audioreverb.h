@@ -31,6 +31,7 @@ protected:
     int          iStereoBlockSizeSam;
     float        fMaxShort;
     int          iPreset;
+    bool         bPresetChangeQueued;
 
     int                numFrames;
     std::vector<float> bufL;

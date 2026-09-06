@@ -14,30 +14,13 @@
 class CAudioReverb
 {
 public:
-    CAudioReverb()
-    {
-        fMaxShort = static_cast<float> ( _MAXSHORT );
-        iPreset   = STADIUM;
-
-        // Create MVerb on the heap
-        mverb = std::unique_ptr<MVerb<float>> ( new MVerb<float>() );
-        mverb->setSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
-        loadPreset();
-    }
+    CAudioReverb();
 
     void Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam );
 
     void Clear();
     void Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fReverbGain );
-    void setPreset ( const int iNPreset )
-    {
-        // silently fail if preset doesn't exist
-        if ( MathUtils::InRange<int> ( iNPreset, 0, NUM_REV_PRESETS ) )
-        {
-            iPreset = iNPreset;
-            loadPreset();
-        }
-    };
+    void setPreset ( const int iNPreset );
     int getPreset() const { return iPreset; };
 
 protected:

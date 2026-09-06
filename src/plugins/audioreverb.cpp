@@ -9,6 +9,17 @@
 
 #include "audioreverb.h"
 
+CAudioReverb::CAudioReverb()
+{
+    fMaxShort = static_cast<float> ( _MAXSHORT );
+    iPreset   = STADIUM;
+
+    // Create MVerb on the heap
+    mverb = std::unique_ptr<MVerb<float>> ( new MVerb<float>() );
+    mverb->setSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
+    loadPreset();
+}
+
 void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam )
 {
     eAudioChannelConf   = eNAudioChannelConf;
@@ -34,6 +45,16 @@ void CAudioReverb::loadPreset()
         mverb->setParameter ( i, presets[iPreset][i] );
     }
 }
+
+void CAudioReverb::setPreset ( const int iNPreset )
+{
+    // silently fail if preset doesn't exist
+    if ( MathUtils::InRange<int> ( iNPreset, 0, NUM_REV_PRESETS ) )
+    {
+        iPreset = iNPreset;
+        loadPreset();
+    }
+};
 
 void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fReverbGain )
 {

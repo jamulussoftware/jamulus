@@ -520,7 +520,11 @@ protected slots:
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
     void OnCLTcpOfferedReceived ( CHostAddress InetAddr, int iID, quint32 token );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
+    void OnSendCLProtMessage ( int              iID,
+                               CHostAddress     InetAddr,
+                               CVector<uint8_t> vecMessage,
+                               CTcpConnection*  pTcpConnection,
+                               enum EProtoMode  eProtoMode );
 
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr, int iMs, int iNumClients );
 

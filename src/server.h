@@ -369,7 +369,11 @@ public slots:
 
     void OnServerFull ( CHostAddress RecHostAddr );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
+    void OnSendCLProtMessage ( int              iID,
+                               CHostAddress     InetAddr,
+                               CVector<uint8_t> vecMessage,
+                               CTcpConnection*  pTcpConnection,
+                               enum EProtoMode  eProtoMode );
 
     void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr, CTcpConnection* pTcpConnection );
 

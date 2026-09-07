@@ -358,7 +358,11 @@ public slots:
 signals:
     // transmitting
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
-    void CLMessReadyForSending ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode );
+    void CLMessReadyForSending ( int              iID,
+                                 CHostAddress     InetAddr,
+                                 CVector<uint8_t> vecMessage,
+                                 CTcpConnection*  pTcpConnection,
+                                 enum EProtoMode  eProtoMode );
 
     // receiving
     void ChangeJittBufSize ( int iNewJitBufSize );

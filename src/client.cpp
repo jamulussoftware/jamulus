@@ -280,7 +280,11 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
 }
 
-void CClient::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode )
+void CClient::OnSendCLProtMessage ( int              iID,
+                                    CHostAddress     InetAddr,
+                                    CVector<uint8_t> vecMessage,
+                                    CTcpConnection*  pTcpConnection,
+                                    enum EProtoMode  eProtoMode )
 {
     if ( pTcpConnection )
     {

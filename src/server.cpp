@@ -572,7 +572,11 @@ void CServer::OnServerFull ( CHostAddress RecHostAddr )
     ConnLessProtocol.CreateCLServerFullMes ( RecHostAddr );
 }
 
-void CServer::OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage, CTcpConnection* pTcpConnection, enum EProtoMode eProtoMode )
+void CServer::OnSendCLProtMessage ( int,
+                                    CHostAddress     InetAddr,
+                                    CVector<uint8_t> vecMessage,
+                                    CTcpConnection*  pTcpConnection,
+                                    enum EProtoMode  eProtoMode )
 {
     if ( eProtoMode != PROTO_UDP )
     {

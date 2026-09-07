@@ -297,6 +297,17 @@ void CClient::OnSendCLProtMessage ( int              iID,
     // send it through the network
     if ( eProtoMode != PROTO_UDP )
     {
+        QHash<CHostAddress, enum EFetchMode>* pendingList = nullptr;
+        switch ( iID )
+        {
+        case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
+            pendingList = &pendingClientList;
+            break;
+        case PROTMESSID_CLM_REQ_SERVER_LIST:
+            pendingList = &pendingServerList;
+            break;
+        }
+
         // create a TCP client connection and send message
         QTcpSocket* pSocket = new QTcpSocket ( this );
 
@@ -305,9 +316,15 @@ void CClient::OnSendCLProtMessage ( int              iID,
         QTimer* pTimer = new QTimer ( this );
         pTimer->setSingleShot ( true );
 
-        connect ( pTimer, &QTimer::timeout, this, [pSocket, pTimer, InetAddr]() {
+        connect ( pTimer, &QTimer::timeout, this, [pSocket, pTimer, pendingList, InetAddr]() {
             if ( pSocket->state() != QAbstractSocket::ConnectedState )
             {
+                if ( pendingList )
+                {
+                    // TCP failed - remove pending request and revert to UDP
+                    pendingList->remove ( InetAddr );
+                }
+
                 pSocket->abort();
                 pSocket->deleteLater();
                 qWarning() << "- Jamulus-TCP: timeout connecting to" << InetAddr.toString();
@@ -321,16 +338,24 @@ void CClient::OnSendCLProtMessage ( int              iID,
 #    define ERRORSIGNAL QOverload<QAbstractSocket::SocketError>::of ( &QAbstractSocket::error )
 #endif
         // keep a reference to this connection so we can disconnect it when handing off to the CTcpConnection
-        QMetaObject::Connection errConn = connect ( pSocket, ERRORSIGNAL, this, [pSocket, pTimer] ( QAbstractSocket::SocketError err ) {
-            Q_UNUSED ( err );
+        QMetaObject::Connection errConn =
+            connect ( pSocket, ERRORSIGNAL, this, [pSocket, pTimer, pendingList, InetAddr] ( QAbstractSocket::SocketError err ) {
+                Q_UNUSED ( err );
 
-            pTimer->stop();
-            pTimer->deleteLater();
+                pTimer->stop();
+                pTimer->deleteLater();
 
-            qWarning() << "- TCP connection error:" << pSocket->errorString();
-            // may want to specifically handle ConnectionRefusedError?
-            pSocket->deleteLater();
-        } );
+                qWarning() << "- TCP connection error:" << pSocket->errorString();
+                // may want to specifically handle ConnectionRefusedError?
+
+                if ( pendingList )
+                {
+                    // TCP failed - remove pending request and revert to UDP
+                    pendingList->remove ( InetAddr );
+                }
+
+                pSocket->deleteLater();
+            } );
 
         connect ( pSocket, &QTcpSocket::connected, this, [this, pSocket, pTimer, errConn, InetAddr, vecMessage, eProtoMode]() {
             pTimer->stop();
@@ -378,9 +403,8 @@ void CClient::CreateCLServerListReqConnClientsListMes ( const CHostAddress& Inet
             ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_UDP );
             break;
         case CFM_TCP_REQUEST:
-            qWarning() << "Unsatisfied Client List request via TCP for" << InetAddr.toString() << "(switching back to UDP)";
-            pendingClientList.insert ( InetAddr, CFM_UDP_REQUEST );
-            ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_UDP );
+            // ignore timer if TCP is still pending
+            // reversion to UDP will be handled by TCP connection error or timeout
             break;
         case CFM_TCP_RESULT:
             // we know TCP has succeeded, so keep using it
@@ -413,9 +437,8 @@ void CClient::CreateCLReqServerListMes ( const CHostAddress& InetAddr )
             ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, PROTO_UDP );
             break;
         case CFM_TCP_REQUEST:
-            qWarning() << "Unsatisfied Server List request via TCP for" << InetAddr.toString() << "(switching back to UDP)";
-            pendingServerList.insert ( InetAddr, CFM_UDP_REQUEST );
-            ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, PROTO_UDP );
+            // ignore timer if TCP is still pending
+            // reversion to UDP will be handled by TCP connection error or timeout
             break;
         case CFM_TCP_RESULT:
             // we know TCP has succeeded, so keep using it

@@ -20,11 +20,11 @@ The IPv6 limitation means that resolving this issue is a prerequisite to impleme
 
 ## CONNECTIONLESS MODE - CLIENT CONNECT DIALOG
 
-The basic summary is that TCP need only be used as a fallback when it is determined that a UDP message from a directory or server failed to reach the client, probably due to fragmentation, _and_ that the directory or server explicitly supports TCP.
+The basic summary is that TCP need only be used as a fallback when it is determined that a UDP message from a directory or server failed to reach the client, probably due to fragmentation, _and_ that the directory or server explicitly offers TCP to the client.
 
 ### Current operation when client opens Connect dialog
 
-1. Client sends `CLM_REQ_SERVER_LIST` to the selected directory server to ask for a list of registered servers. It then starts a 2.5 sec re-request timer.
+1. Client sends `CLM_REQ_SERVER_LIST` to the selected directory server to ask for a list of registered servers. It then starts a 2 sec re-request timer.
 
 2. Directory server fetches its internal list of registered servers, and sends a `CLM_SEND_EMPTY_MESSAGE` to each listed server, with the IP and UDP port of the requesting client as parameters.
 
@@ -36,7 +36,7 @@ The basic summary is that TCP need only be used as a fallback when it is determi
 
 4. Directory server sends `CLM_SERVER_LIST` to client. It does this immediately after sending the reduced list above.
 
-   a. If/when the client receives `CLM_SERVER_LIST`, it populates its list of servers with the full info, replacing any existing list that contained reduced info. It then stops the 2.5 sec re-request timer mentioned above, so that the server list is not requested again.
+   a. If/when the client receives `CLM_SERVER_LIST`, it populates its list of servers with the full info, replacing any existing list that contained reduced info. It then stops the 2 sec re-request timer mentioned above, so that the server list is not requested again.
 
    b. If the list is large and fragmented, and the path does not correctly pass fragments, the client will not receive the list, and the request timer will be left running to retry.
 
@@ -44,7 +44,7 @@ The basic summary is that TCP need only be used as a fallback when it is determi
 
 6. Each pinged server, when it receives the ping, will create a `CLM_PING_MS_WITHNUMCLIENTS` in reply, containing a copy of the received timestamp, and the number of clients currently connected to that server.
 
-7. When the client receives the reply, it can calculate the round-trip time from the received timestamp and the current time.
+7. When the client receives the reply, it can calculate the round-trip time from the returned timestamp and the current time.
 
 8. If the number of connected clients returned is different from the previously received number for that server, the client sends a `CLM_REQ_CONN_CLIENTS_LIST` to the server.
 
@@ -76,7 +76,7 @@ The basic summary is that TCP need only be used as a fallback when it is determi
 
    b. There is no need for the directory to send `CLM_RED_SERVER_LIST` to the client, since the TCP connection is reliable, so the directory server just sends the `CLM_SERVER_LIST` over the TCP connection.
 
-4. When the client has received the `CLM_SERVER_LIST` over TCP, it closes the TCP connection, populates its list of servers in the connect dialog in the normal way and stops the 2.5 sec re-request timer.
+4. When the client has received the `CLM_SERVER_LIST` over TCP, it closes the TCP connection, populates its list of servers in the connect dialog in the normal way and stops the 2 sec re-request timer. It will note for that directory that TCP is needed (using `CFM_TCP_RESULT`), and if the server list were re-fetched from the same directory in the current connect dialog, it would immediately request the list via TCP instead of UDP. However, in the current implementation, the server list is only fetched once per connect dialog session, and the list of pending request modes is cleared each time the connect dialog is opened.
 
 5. The client starts pinging each listed server as normal, using UDP, and the server responds with a ping including the timestamp and number of clients, as described above.
 
@@ -94,8 +94,11 @@ The basic summary is that TCP need only be used as a fallback when it is determi
 
 8. If the server accepts a TCP connection and receives a `CLM_REQ_CONN_CLIENTS_LIST` over it, it will process the request in the same way as for a UDP request, but will send the reply over the TCP connection.
 
-9. When the client has received the `CLM_CONN_CLIENTS_LIST` over TCP, it closes the TCP connection and updates the list of clients for that server in the GUI. However, it will note for that server that TCP is needed, and if/when the number of connected clients next changes while the connect dialog is still open, it will immediately request the updated list via TCP instead of UDP.
+9. When the client has received the `CLM_CONN_CLIENTS_LIST` over TCP, it closes the TCP connection and updates the list of clients for that server in the GUI. However, it will note for that server that TCP is needed (using `CFM_TCP_RESULT`), and if/when the number of connected clients next changes while the connect dialog is still open, it will immediately request the updated list via TCP instead of UDP.
 
+10. If an attempted TCP connection fails or times out, the pending request mode will be removed for that host, causing the client to revert to normal UDP mode for the request.
+
+11. If a TCP request is still outstanding when the 2 sec re-request timer fires, the occurrence will be ignored until the next timer interval. This prevents premature reversion to UDP when a successful TCP request takes longer than the 2 sec timer to complete.
 
 ### Summary
 

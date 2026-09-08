@@ -458,6 +458,40 @@ void CClient::CreateCLReqServerListMes ( const CHostAddress& InetAddr )
     }
 }
 
+void CClient::OnTcpDisconnected ( CHostAddress InetAddr )
+{
+    // not sure whether it was a server list or client list request, so check both,
+    // as they won't both be active at the same time
+
+    qDebug() << Q_FUNC_INFO << InetAddr.toString();
+
+    if ( pendingClientList.contains ( InetAddr ) )
+    {
+        enum EFetchMode eFetchMode = pendingClientList.value ( InetAddr );
+
+        if ( eFetchMode == CFM_TCP_REQUEST )
+        {
+            // disconnected before request was satisfied - revert to UDP
+            pendingClientList.remove ( InetAddr );
+
+            qDebug() << "removed from pendingClientList";
+        }
+    }
+
+    if ( pendingServerList.contains ( InetAddr ) )
+    {
+        enum EFetchMode eFetchMode = pendingServerList.value ( InetAddr );
+
+        if ( eFetchMode == CFM_TCP_REQUEST )
+        {
+            // disconnected before request was satisfied - revert to UDP
+            pendingServerList.remove ( InetAddr );
+
+            qDebug() << "removed from pendingServerList";
+        }
+    }
+}
+
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
 {
     // message could not be parsed, check if the packet comes

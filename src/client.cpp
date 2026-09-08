@@ -399,7 +399,7 @@ void CClient::CreateCLServerListReqConnClientsListMes ( const CHostAddress& Inet
         switch ( eFetchMode )
         {
         case CFM_UDP_REQUEST:
-            qWarning() << "Unsatisfied Client List request via UDP for" << InetAddr.toString();
+            // this is a retry
             ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr, PROTO_UDP );
             break;
         case CFM_TCP_REQUEST:
@@ -433,7 +433,7 @@ void CClient::CreateCLReqServerListMes ( const CHostAddress& InetAddr )
         switch ( eFetchMode )
         {
         case CFM_UDP_REQUEST:
-            qWarning() << "Unsatisfied Server List request via UDP for" << InetAddr.toString();
+            // this is a retry
             ConnLessProtocol.CreateCLReqServerListMes ( InetAddr, PROTO_UDP );
             break;
         case CFM_TCP_REQUEST:

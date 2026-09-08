@@ -305,6 +305,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         {
             pClient->ChannelInfo.eSkillLevel = SL_NOT_SET;
             pClient->SetRemoteInfo();
+            response["result"] = "ok";
             return;
         }
 

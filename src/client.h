@@ -546,6 +546,7 @@ public slots:
     {
         ConnLessProtocol.CreateCLEmptyMes ( InetAddr, pTcpConnection );
     }
+    void OnTcpDisconnected ( CHostAddress InetAddr );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

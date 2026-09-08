@@ -82,6 +82,7 @@ private:
 signals:
     void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr, CTcpConnection* pTcpConnection );
     void CLSendEmptyMes ( CHostAddress InetAddr, CTcpConnection* pTcpConnection );
+    void TcpDisconnected ( CHostAddress InetAddr );
 
 private slots:
     void OnDisconnected();

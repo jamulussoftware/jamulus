@@ -53,6 +53,8 @@ CTcpConnection::CTcpConnection ( QTcpSocket* pTcpSocket, const CHostAddress& tcp
         connect ( &TimerKeepalive, &QTimer::timeout, this, &CTcpConnection::OnTimerKeepalive );
         TimerKeepalive.start ( TCP_KEEPALIVE_INTERVAL_MS );
     }
+
+    connect ( this, &CTcpConnection::TcpDisconnected, pClient, &CClient::OnTcpDisconnected );
 }
 #endif
 
@@ -88,6 +90,9 @@ void CTcpConnection::OnDisconnected()
     {
         pChannel->SetTcpConnection ( nullptr ); // unlink from channel
     }
+
+    emit TcpDisconnected ( tcpAddress ); // inform client or server of disconnection
+
     deleteLater(); // delete this object in the next event loop
 }
 

@@ -490,7 +490,6 @@ protected:
     enum EFetchMode
     {
         CFM_UDP_REQUEST, // set when sending request by UDP
-        CFM_UDP_RESULT,  // set when received a client list by UDP
         CFM_TCP_REQUEST, // set when "TCP Offered" message arrives but requested list has not arrived - re-request using TCP and remain in TCP mode
         CFM_TCP_RESULT   // set when requested message received by TCP
     };

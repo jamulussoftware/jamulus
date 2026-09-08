@@ -1349,8 +1349,9 @@ void CClient::Start()
     Init();
 
     // clear TCP info
-    iClientID   = INVALID_INDEX;
-    bTcpOffered = false;
+    iClientID     = INVALID_INDEX;
+    bTcpOffered   = false;
+    iChannelToken = 0;
 
     // initialise client channels
     ClearClientChannels();
@@ -1390,6 +1391,11 @@ void CClient::Stop()
         Channel.SetTcpConnection ( nullptr );
         pTcpConnection->disconnectFromHost();
     }
+
+    // clear TCP info
+    iClientID     = INVALID_INDEX;
+    bTcpOffered   = false;
+    iChannelToken = 0;
 
     // disable channel
     Channel.SetEnable ( false );

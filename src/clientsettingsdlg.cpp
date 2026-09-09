@@ -142,18 +142,24 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
 #if !defined( WITH_JACK )
     // sound card device
-    lblSoundcardDevice->setWhatsThis ( "<b>" + tr ( "Audio Device" ) + ":</b> " +
-                                       tr ( "Under the Windows operating system the ASIO driver (sound card) can be "
-                                            "selected using %1. If the selected ASIO driver is not valid an error "
-                                            "message is shown and the previous valid driver is selected. "
-                                            "Under macOS the input and output hardware can be selected." )
-                                           .arg ( APP_NAME ) +
-                                       "<br>" +
-                                       tr ( "If the driver is selected during an active connection, the connection "
-                                            "is stopped, the driver is changed and the connection is started again "
-                                            "automatically." ) );
+    const QString strAudioDevice = "<b>" + tr ( "Audio Device" ) + ":</b> " +
+                                   tr ( "Under the Windows operating system the ASIO driver (sound card) can be "
+                                        "selected using %1. If the selected ASIO driver is not valid an error "
+                                        "message is shown and the previous valid driver is selected. "
+                                        "Under macOS the input and output hardware can be selected." )
+                                       .arg ( APP_NAME ) +
+                                   "<br>" +
+                                   tr ( "If the driver is selected during an active connection, the connection "
+                                        "is stopped, the driver is changed and the connection is started again "
+                                        "automatically." );
+
+    lblSoundcardDevice->setWhatsThis ( strAudioDevice );
+    lblInputDevice->setWhatsThis ( strAudioDevice );
+    lblOutputDevice->setWhatsThis ( strAudioDevice );
 
     cbxSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
+    cbxInputDevice->setAccessibleName ( tr ( "Audio input device selector combo box" ) );
+    cbxOutputDevice->setAccessibleName ( tr ( "Audio output device selector combo box" ) );
 
 #    if defined( _WIN32 )
     // set Windows specific tool tip
@@ -735,6 +741,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        this,
                        &CClientSettingsDlg::OnSoundcardActivated );
 
+    QObject::connect ( cbxInputDevice,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                       this,
+                       &CClientSettingsDlg::OnInputDeviceActivated );
+
+    QObject::connect ( cbxOutputDevice,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                       this,
+                       &CClientSettingsDlg::OnOutputDeviceActivated );
+
     QObject::connect ( cbxLInChan,
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
@@ -1126,18 +1142,44 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     }
 }
 
+void CClientSettingsDlg::UpdateSoundDeviceSelection()
+{
+    // Sound APIs which handle the input and the output device independently of
+    // each other (i.e. CoreAudio on macOS) get one combo box per direction. All
+    // other APIs get the single combo box containing the available devices.
+    const bool bSeparateInOutDev = pClient->GetSndCrdInOutDevSelectionSeparate();
+
+    lblSoundcardDevice->setVisible ( !bSeparateInOutDev );
+    cbxSoundcard->setVisible ( !bSeparateInOutDev );
+    lblInputDevice->setVisible ( bSeparateInOutDev );
+    cbxInputDevice->setVisible ( bSeparateInOutDev );
+    lblOutputDevice->setVisible ( bSeparateInOutDev );
+    cbxOutputDevice->setVisible ( bSeparateInOutDev );
+
+    if ( bSeparateInOutDev )
+    {
+        // update combo boxes containing the available input and output devices
+        cbxInputDevice->clear();
+        cbxInputDevice->addItems ( pClient->GetSndCrdInputDevNames() );
+        cbxInputDevice->setCurrentText ( pClient->GetSndCrdInputDev() );
+
+        cbxOutputDevice->clear();
+        cbxOutputDevice->addItems ( pClient->GetSndCrdOutputDevNames() );
+        cbxOutputDevice->setCurrentText ( pClient->GetSndCrdOutputDev() );
+    }
+    else
+    {
+        // update combo box containing all available sound cards in the system
+        cbxSoundcard->clear();
+        cbxSoundcard->addItems ( pClient->GetSndCrdDevNames() );
+        cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
+    }
+}
+
 void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
 {
-    // update combo box containing all available sound cards in the system
-    QStringList slSndCrdDevNames = pClient->GetSndCrdDevNames();
-    cbxSoundcard->clear();
-
-    foreach ( QString strDevName, slSndCrdDevNames )
-    {
-        cbxSoundcard->addItem ( strDevName );
-    }
-
-    cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
+    // update the sound device selection combo box(es)
+    UpdateSoundDeviceSelection();
 
     // update input/output channel selection
 #if defined( _WIN32 ) || defined( __APPLE__ ) || defined( __MACOSX )
@@ -1217,6 +1259,26 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
 void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
 {
     pClient->SetSndCrdDev ( cbxSoundcard->itemText ( iSndDevIdx ) );
+
+    UpdateSoundDeviceChannelSelectionFrame();
+    UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnInputDeviceActivated ( int iSndDevIdx )
+{
+    // The device of the other direction is taken from its combo box and not from
+    // the sound API: if no device could be initialized at all, the sound API has
+    // no current device and we would compose an unusable device name from it.
+    pClient->SetSndCrdInOutDev ( cbxInputDevice->itemText ( iSndDevIdx ), cbxOutputDevice->currentText() );
+
+    UpdateSoundDeviceChannelSelectionFrame();
+    UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnOutputDeviceActivated ( int iSndDevIdx )
+{
+    // the device of the other direction is taken from its combo box, see above
+    pClient->SetSndCrdInOutDev ( cbxInputDevice->currentText(), cbxOutputDevice->itemText ( iSndDevIdx ) );
 
     UpdateSoundDeviceChannelSelectionFrame();
     UpdateDisplay();

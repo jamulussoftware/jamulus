@@ -205,8 +205,11 @@ LED bar:      lbr
 // maximum number of fader groups (must be consistent to audiomixerboard implementation)
 #define MAX_NUM_FADER_GROUPS 8
 
-// maximum number of recognized sound cards installed in the system
-#define MAX_NUMBER_SOUND_CARDS 129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)
+// maximum number of recognized sound cards installed in the system, i.e. the
+// number of available ASIO drivers on Windows. On macOS the input and the
+// output devices are enumerated separately, so the limit applies to each
+// direction on its own (including the system default entry)
+#define MAX_NUMBER_SOUND_CARDS 129
 
 // define the maximum number of audio channel for input/output we can store
 // channel infos for (and therefore this is the maximum number of entries in

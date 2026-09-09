@@ -867,7 +867,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="424"/>
         <source>&amp;MIDI Control Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIDI 제어 설정...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="812"/>
@@ -1481,7 +1481,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="415"/>
         <source>Feedback Protection check box</source>
-        <translation>피드백 보호 체크 박스</translation>
+        <translation>피드백 보호 확인란</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="418"/>
@@ -1501,52 +1501,52 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="424"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 입력 포트 켜기/끄기</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="425"/>
         <source>MIDI-in port check box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 입력 포트 확인란</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="427"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>픽업 모드</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="428"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 기능을 켜면 MIDI 페이더 및 팬 컨트롤은 물리 컨트롤러 위치와 현재 소프트웨어 값이 일치할 때까지 기다린 뒤 반응합니다. 이를 통해 물리 컨트롤러와 소프트웨어의 싱크가 어긋났을 때 발생하는 갑작스러운 변동을 방지할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="431"/>
         <source>Pick-up Mode check box</source>
-        <translation type="unfinished"></translation>
+        <translation>픽업 모드 확인란</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="434"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>연결할 MIDI 출력 포트를 선택하십시오. 활성화 시 Jamulus의 MIDI 입력 포트를 선택한 장치에 자동으로 연결합니다. 연결 관리자에서 연결을 수동으로 변경할 수도 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="438"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>연결할 MIDI 소스를 선택하십시오. 활성화 시 Jamulus의 MIDI 입력 포트를 선택한 장치에 자동으로 연결합니다. 오디오 MIDI 설정에서 연결을 수동으로 변경할 수도 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="442"/>
         <source>Select which MIDI input device(s) Jamulus should listen to. Select &apos;All Devices&apos; to receive MIDI from all connected devices, or choose a specific device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jamulus가 수신할 MIDI 입력 장치를 선택하십시오. &apos;모든 장치&apos;를 선택하여 연결된 모든 장치에서 MIDI를 수신하거나, 특정 장치를 선택할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="445"/>
         <source>MIDI input device combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 입력 장치 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>MIDI controller settings</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 컨트롤러 설정</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
@@ -1556,62 +1556,62 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="457"/>
         <source>You can either type in the MIDI CC values or use the &quot;Learn&quot; button: click on &quot;Learn&quot;, actuate the fader/knob/button on your MIDI controller, and the MIDI CC number will be detected and saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI CC 값을 직접 입력하거나 &quot;학습&quot; 버튼을 이용할 수 있습니다. &quot;학습&quot;을 클릭한 뒤 MIDI 컨트롤러의 페이더/노브/버튼을 만지면, MIDI CC 번호가 감지되어 저장됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="468"/>
         <source>MIDI channel combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 채널 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="469"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>스스로 음소거 MIDI CC 숫자 스핀 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="470"/>
         <source>Fader offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>페이더 오프셋 스핀 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="471"/>
         <source>Pan offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>팬 오프셋 스핀 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="472"/>
         <source>Solo offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>솔로 오프셋 스핀 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="473"/>
         <source>Mute offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>음소거 오프셋 스핀 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="474"/>
         <source>Mute Myself MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>스스로 음소거 MIDI 학습 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="475"/>
         <source>Fader offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>페이더 오프셋 MIDI 학습 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="476"/>
         <source>Pan offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>팬 오프셋 MIDI 학습 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="477"/>
         <source>Solo offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>솔로 오프셋 MIDI 학습 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="478"/>
         <source>Mute offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>음소거 오프셋 MIDI 학습 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="482"/>
@@ -1637,7 +1637,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>
@@ -1701,17 +1701,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="912"/>
         <location filename="../clientsettingsdlg.cpp" line="919"/>
         <source>Could not open MIDI port</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 포트를 열 수 없음</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="913"/>
         <source>No MIDI devices found. Please connect a MIDI device and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 장치를 찾을 수 없습니다. MIDI 장치를 연결하고 다시 시도하십시오.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="919"/>
         <source>Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>운영체제 설정을 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1474"/>
@@ -1726,55 +1726,55 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1506"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>학습</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1541"/>
         <location filename="../clientsettingsdlg.cpp" line="1628"/>
         <source>All Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>모든 장치</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1544"/>
         <source>No device connected</source>
-        <translation type="unfinished"></translation>
+        <translation>연결된 장치 없음</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1572"/>
         <location filename="../clientsettingsdlg.cpp" line="1578"/>
         <source>MIDI Device Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 장치 찾을 수 없음</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1573"/>
         <source>The MIDI device &quot;%1&quot; could not be found. Using all available devices instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; MIDI 장치를 찾을 수 없습니다. 대신 이용할 수 있는 모든 장치를 사용해 보십시오.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1579"/>
         <source>The MIDI device &quot;%1&quot; is not currently available. Select a different device from the dropdown to connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 &quot;%1&quot; MIDI 장치를 이용할 수 없습니다. 드롭다운에서 다른 장치를 선택하여 연결하십시오.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1626"/>
         <location filename="../clientsettingsdlg.cpp" line="1632"/>
         <source>MIDI Device Connection Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 장치 연결 실패</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1627"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; MIDI 장치에 연결할 수 없습니다. 운영체제 설정을 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1633"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check that the device is available.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; MIDI 장치에 연결할 수 없습니다. 장치를 이용할 수 있는지 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1654"/>
         <source>Listening...</source>
-        <translation type="unfinished"></translation>
+        <translation>듣는 중...</translation>
     </message>
     <message>
         <location filename="../util.h" line="665"/>
@@ -1789,7 +1789,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation type="unfinished"></translation>
+        <translation>모든 장르 아시아</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>
@@ -2302,117 +2302,117 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1341"/>
         <source>MIDI Control</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 제어</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1365"/>
         <source>MIDI-in</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 입력</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1391"/>
         <source>MIDI Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 채널</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1417"/>
         <source>0 (all)</source>
-        <translation type="unfinished"></translation>
+        <translation>0 (모두)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1422"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1427"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1432"/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1437"/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1442"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1447"/>
         <source>6</source>
-        <translation type="unfinished"></translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1452"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation>7</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1457"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1462"/>
         <source>9</source>
-        <translation type="unfinished"></translation>
+        <translation>9</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1467"/>
         <source>10</source>
-        <translation type="unfinished"></translation>
+        <translation>10</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1472"/>
         <source>11</source>
-        <translation type="unfinished"></translation>
+        <translation>11</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1477"/>
         <source>12</source>
-        <translation type="unfinished"></translation>
+        <translation>12</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1482"/>
         <source>13</source>
-        <translation type="unfinished"></translation>
+        <translation>13</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1487"/>
         <source>14</source>
-        <translation type="unfinished"></translation>
+        <translation>14</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1492"/>
         <source>15</source>
-        <translation type="unfinished"></translation>
+        <translation>15</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1497"/>
         <source>16</source>
-        <translation type="unfinished"></translation>
+        <translation>16</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1518"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>픽업 모드</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1546"/>
         <source>Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>스스로 음소거</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1569"/>
         <source>MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1604"/>
@@ -2421,12 +2421,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="1995"/>
         <location filename="../clientsettingsdlgbase.ui" line="2119"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>학습</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1679"/>
         <source>Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>페이더</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1702"/>
@@ -2434,7 +2434,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="1963"/>
         <location filename="../clientsettingsdlgbase.ui" line="2087"/>
         <source>First MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>첫 MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1763"/>
@@ -2442,22 +2442,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="2024"/>
         <location filename="../clientsettingsdlgbase.ui" line="2148"/>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>개수</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1803"/>
         <source>Mute</source>
-        <translation type="unfinished">음소거</translation>
+        <translation>음소거</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1940"/>
         <source>Solo</source>
-        <translation type="unfinished">솔로</translation>
+        <translation>솔로</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="2199"/>
         <source>MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 장치</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="623"/>
@@ -2595,7 +2595,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="1185"/>
         <source>Ping</source>
-        <translation type="unfinished">Ping</translation>
+        <translation>핑</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="193"/>
@@ -2620,7 +2620,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="168"/>
         <source>Show all musicians check box</source>
-        <translation>모든 뮤지션 보기 체크 박스</translation>
+        <translation>모든 뮤지션 보기 확인란</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="257"/>
@@ -2717,7 +2717,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="679"/>
         <source>P&amp;rivacy policy...</source>
-        <translation>개인정보 정책...</translation>
+        <translation>개인정보 정책(&amp;R)...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="681"/>
@@ -2975,7 +2975,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="143"/>
         <source>Checkbox to turn on or off server recording</source>
-        <translation>서버 녹화를 켜거나 끄는 체크박스</translation>
+        <translation>서버 녹화를 켜거나 끄는 확인란</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -3606,7 +3606,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1590"/>
         <source>Released under the GNU Affero General Public License 3.0 (or any later version)</source>
-        <translation type="unfinished"></translation>
+        <translation>GNU 아페로 일반 공중 사용 허가서 3.0 (혹은 아무 이후 버전) 하에 배포됨</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1658"/>

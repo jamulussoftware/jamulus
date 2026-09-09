@@ -463,8 +463,6 @@ void CClient::OnTcpDisconnected ( CHostAddress InetAddr )
     // not sure whether it was a server list or client list request, so check both,
     // as they won't both be active at the same time
 
-    qDebug() << Q_FUNC_INFO << InetAddr.toString();
-
     if ( pendingClientList.contains ( InetAddr ) )
     {
         enum EFetchMode eFetchMode = pendingClientList.value ( InetAddr );
@@ -473,8 +471,6 @@ void CClient::OnTcpDisconnected ( CHostAddress InetAddr )
         {
             // disconnected before request was satisfied - revert to UDP
             pendingClientList.remove ( InetAddr );
-
-            qDebug() << "removed from pendingClientList";
         }
     }
 
@@ -486,8 +482,6 @@ void CClient::OnTcpDisconnected ( CHostAddress InetAddr )
         {
             // disconnected before request was satisfied - revert to UDP
             pendingServerList.remove ( InetAddr );
-
-            qDebug() << "removed from pendingServerList";
         }
     }
 }

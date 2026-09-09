@@ -83,10 +83,15 @@ $JackBaseUrl = "https://github.com/jackaudio/jack2-releases/releases/download/v$
 $Jack64Url = $JackBaseUrl + "64-v${JackVersion}.exe"
 $Jack32Url = $JackBaseUrl + "32-v${JackVersion}.exe"
 
-$JamulusVersion = $Env:JAMULUS_BUILD_VERSION
-if ( $JamulusVersion -notmatch '^\d+\.\d+\.\d+.*' )
+# Only stages that actually consume JAMULUS_BUILD_VERSION need to validate it;
+# call this from within those (currently just get-artifacts) so "-Stage setup"
+# can run without it being set.
+Function Validate-Build-Version
 {
-    throw "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
+    if ( $Env:JAMULUS_BUILD_VERSION -notmatch '^\d+\.\d+\.\d+.*' )
+    {
+        throw "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
+    }
 }
 
 # Download dependency to cache directory
@@ -247,6 +252,9 @@ Function Build-App-With-Installer
 
 Function Pass-Artifact-to-Job
 {
+    Validate-Build-Version
+    $JamulusVersion = $Env:JAMULUS_BUILD_VERSION
+
     # Add $BuildOption as artifact file name suffix. Shorten "jackonwindows" to just "jack":
     $ArtifactSuffix = switch -Regex ( $BuildOption )
     {

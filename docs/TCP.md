@@ -2,9 +2,9 @@
 
 ## THE PROBLEM BEING SOLVED
 
-All Jamulus protocol (non-audio) messages are currently delivered over the same UDP channel as the audio. For most protocol messages, this is fine, but those that send a list of servers from a directory, or a list of clients from a server, can generate a UDP datagram that is too large to fit into a single physical packet. Physical packets are constrained by the MTU of the Ethernet interface (normally 1500 bytes or less), and further by any limitations in links between hops on the internet. Neither the client nor the server has any control over these limitation. It's also possible a large welcome message could require fragmentation.
+All Jamulus protocol (non-audio) messages are currently delivered over the same UDP channel as the audio. For most protocol messages, this is fine, but those that send a list of servers from a directory, or a list of clients from a server, can generate a UDP datagram that is too large to fit into a single physical packet. Physical packets are constrained by the MTU of the Ethernet interface (normally 1500 bytes or less), and further by any limitations in links between hops on the internet. Neither the client nor the server has any control over these limitations. It's also possible a large welcome message could require fragmentation.
 
-The UDP protocol itself allows datagrams up to be up to nearly 65535 bytes in size, minus any protocol overhead. IPv4 will allow nearly all of this size to be used, in theory. If the IPv4 datagram being sent by a node (host or router) is too large to fit into a single packet on the outgoing interface, the IP protocol will fragment the packet into pieces that do fit, with IP headers that contain the information needed to order and reassemble the fragments into a single datagram at the receiving end. Normally intermediate hops do not perform any reassembly, but will further fragment an IP packet if it will not fit the MTU of the outgoing interface.
+The UDP protocol itself allows datagrams to be up to nearly 65535 bytes in size, minus any protocol overhead. IPv4 will allow nearly all of this size to be used, in theory. If the IPv4 datagram being sent by a node (host or router) is too large to fit into a single packet on the outgoing interface, the IP protocol will fragment the packet into pieces that do fit, with IP headers that contain the information needed to order and reassemble the fragments into a single datagram at the receiving end. Normally intermediate hops do not perform any reassembly, but will further fragment an IP packet if it will not fit the MTU of the outgoing interface.
 
 The receiving end's IP stack needs to store all the received fragments as they arrive and can only reassemble them into the original datagram once all fragments have been received. The loss of even one fragment renders the whole datagram lost, and the remaining received fragments consume resources until they time out and are discarded. There are also possibilities for a denial of service attack if an attacker deliberately sends lots of fragments with one or more missing.
 
@@ -86,7 +86,7 @@ The basic summary is that TCP need only be used as a fallback when it is determi
 
    a. An older version of client that does not support TCP will ignore the `CLM_TCP_OFFERED` message and continue operating in the normal way just on UDP.
 
-   b. A newer client that supports TCP should received the `CLM_TCP_OFFERED` message *after* it has received and processed the UDP client list, unless fragmentation (or another cause) prevented the list from arriving.
+   b. A newer client that supports TCP should receive the `CLM_TCP_OFFERED` message *after* it has received and processed the UDP client list, unless fragmentation (or another cause) prevented the list from arriving.
 
    c. If such a client has already processed a client list from `CLM_CONN_CLIENTS_LIST`, it will have no need to open a TCP connection to the server, so this will be skipped.
 
@@ -128,23 +128,23 @@ All these steps use UDP only.
 
 7. Client sends back `SPLIT_MESS_SUPPORTED` immediately.
 
-7. Server sends `REQ_NETW_TRANSPORT_PROPS` to ask for the clients network transport parameters.
+8. Server sends `REQ_NETW_TRANSPORT_PROPS` to ask for the client's network transport parameters.
 
-8. Client sends `NETW_TRANSPORT_PROPS` containing the codec, packet size, number of channels, bitrate, etc.
+9. Client sends `NETW_TRANSPORT_PROPS` containing the codec, packet size, number of channels, bitrate, etc.
 
-9. Server sends `REQ_JITT_BUF_SIZE` to ask for the client's required jitter buffer sizes.
+10. Server sends `REQ_JITT_BUF_SIZE` to ask for the client's required jitter buffer sizes.
 
-10. Client sends `JIT_BUF_SIZE`, containing the positions of the "server" jitter buffer slider in the Settings dialog. This is telling the server what size jitter buffer to use for receiving audio data from the client. (The position of the "client" jitter buffer slider is not needed by the server, as it is only used locally in the client).
+11. Client sends `JIT_BUF_SIZE`, containing the positions of the "server" jitter buffer slider in the Settings dialog. This is telling the server what size jitter buffer to use for receiving audio data from the client. (The position of the "client" jitter buffer slider is not needed by the server, as it is only used locally in the client).
 
-11. Server sends `REQ_CHANNEL_INFOS` to ask for the identity information for the channel.
+12. Server sends `REQ_CHANNEL_INFOS` to ask for the identity information for the channel.
 
-12. Client sends `CHANNEL_INFOS` containing the identity information from the user's profile settings in the client (country, instrument, skill level, name, city).
+13. Client sends `CHANNEL_INFOS` containing the identity information from the user's profile settings in the client (country, instrument, skill level, name, city).
 
-13. Now that the server has received the `CHANNEL_INFOS` from the client, it starts to send the mixed audio stream to the client.
+14. Now that the server has received the `CHANNEL_INFOS` from the client, it starts to send the mixed audio stream to the client.
 
-14. Server sends `CHAT_TEXT` containing the server welcome message, if any. If there is none, this message is skipped.
+15. Server sends `CHAT_TEXT` containing the server welcome message, if any. If there is none, this message is skipped.
 
-15. Server sends `VERSION_AND_OS` to tell the client the version of Jamulus on the server and the server platform.
+16. Server sends `VERSION_AND_OS` to tell the client the version of Jamulus on the server and the server platform.
 
 After this, messages are sent by either side when there is something to notify:
 
@@ -217,4 +217,4 @@ If a server were to offer TCP to the client, but the server's firewall didn't al
 
 This has to be the responsibility of the server/directory operator, and is why TCP operation must be controlled by a command-line option, rather than always enabled. The operator should only enable TCP in the Jamulus server if they know their environment has been configured to support it.
 
-Most operators of small servers of directories will not need to be concerned with TCP at all. _The only server operators who will need to enable TCP support are those running large directories (e.g. Volker, Peter) or those running a large server designed to support many simultaneous client connections._
+Most operators of small servers or directories will not need to be concerned with TCP at all. _The only server operators who will need to enable TCP support are those running large directories (e.g. Volker, Peter) or those running a large server designed to support many simultaneous client connections._

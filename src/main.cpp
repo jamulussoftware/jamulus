@@ -121,6 +121,7 @@ int main ( int argc, char** argv )
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
     bool         bDisableIPv6                = false;
+    bool         bEnableTcp                  = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     int          iJsonRpcPortNumber          = INVALID_PORT;
@@ -283,6 +284,16 @@ int main ( int argc, char** argv )
         }
 
         // Server only:
+
+        // Enable TCP server ---------------------------------------------------
+        if ( GetFlagArgument ( argv, i, "--enabletcp", "--enabletcp" ) )
+        {
+            bEnableTcp = true;
+            qInfo() << "- TCP server enabled";
+            CommandLineOptions << "--enabletcp";
+            ServerOnlyOptions << "--enabletcp";
+            continue;
+        }
 
         // Disconnect all clients on quit --------------------------------------
         if ( GetFlagArgument ( argv, i, "-d", "--discononquit" ) )
@@ -1060,6 +1071,7 @@ int main ( int argc, char** argv )
                              bDisableRecording,
                              bDelayPan,
                              bDisableIPv6,
+                             bEnableTcp,
                              eLicenceType );
 
 #ifndef NO_JSON_RPC
@@ -1186,6 +1198,7 @@ QString UsageArguments ( char** argv )
            "  -s, --server            start Server\n"
            "      --serverbindip4     IPv4 address the Server will bind to (rather than all)\n"
            "      --serverbindip6     IPv6 address the Server will bind to (rather than all)\n"
+           "      --enabletcp         enable TCP server for Jamulus protocol\n"
            "  -T, --multithreading    use multithreading to make better use of\n"
            "                          multi-core CPUs and support more Clients\n"
            "  -u, --numchannels       maximum number of channels\n"

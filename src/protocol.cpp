@@ -2109,11 +2109,11 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress& InetAddr, const CVec
 
         // IP address (4 bytes)
         // note the Server List manager has put the internal details in HostAddr where required
-        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr.InetAddr.toIPv4Address() ), 4 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr4.InetAddr.toIPv4Address() ), 4 );
 
         // port number (2 bytes)
         // note the Server List manager has put the internal details in HostAddr where required
-        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr.iPort ), 2 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr4.iPort ), 2 );
 
         // country (2 bytes)
         PutCountryOnStream ( vecData, iPos, vecServerInfo[i].eCountry );
@@ -2232,11 +2232,11 @@ void CProtocol::CreateCLRedServerListMes ( const CHostAddress& InetAddr, const C
 
         // IP address (4 bytes)
         // note the Server List manager has put the internal details in HostAddr where required
-        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr.InetAddr.toIPv4Address() ), 4 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr4.InetAddr.toIPv4Address() ), 4 );
 
         // port number (2 bytes)
         // note the Server List manager has put the internal details in HostAddr where required
-        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr.iPort ), 2 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecServerInfo[i].HostAddr4.iPort ), 2 );
 
         // name (note that the string length indicator is 1 in this special case)
         PutStringUTF8OnStream ( vecData, iPos, strUTF8Name, 1 );

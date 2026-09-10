@@ -804,7 +804,7 @@ public:
         SM_IP_NO_LAST_BYTE_PORT
     };
 
-    CHostAddress() : InetAddr ( static_cast<quint32> ( 0 ) ), iPort ( 0 ) {}
+    CHostAddress() : InetAddr(), iPort ( 0 ) {}
 
     CHostAddress ( const QHostAddress& NInetAddr, const quint16 iNPort ) : InetAddr ( NInetAddr ), iPort ( iNPort ) {}
 
@@ -1038,7 +1038,7 @@ public:
 class CServerInfo : public CServerCoreInfo
 {
 public:
-    CServerInfo() : HostAddr ( CHostAddress() ), LHostAddr ( CHostAddress() ) {}
+    CServerInfo() : HostAddr4 ( CHostAddress() ), LHostAddr4 ( CHostAddress() ), HostAddr6 ( CHostAddress() ), LHostAddr6 ( CHostAddress() ) {}
 
     CServerInfo ( const CHostAddress&     NHAddr,
                   const CHostAddress&     NLAddr,
@@ -1047,16 +1047,40 @@ public:
                   const QString&          NsCity,
                   const int               NiMaxNumClients,
                   const bool              NbPermOnline ) :
-        CServerCoreInfo ( NsName, NeCountry, NsCity, NiMaxNumClients, NbPermOnline ),
-        HostAddr ( NHAddr ),
-        LHostAddr ( NLAddr )
-    {}
+        CServerCoreInfo ( NsName, NeCountry, NsCity, NiMaxNumClients, NbPermOnline )
+    {
+        if ( NHAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
+        {
+            HostAddr4 = NHAddr;
+        }
 
-    // internet address of the server
-    CHostAddress HostAddr;
+        if ( NLAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
+        {
+            LHostAddr4 = NLAddr;
+        }
 
-    // server internal address
-    CHostAddress LHostAddr;
+        if ( NHAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
+        {
+            HostAddr6 = NHAddr;
+        }
+
+        if ( NLAddr.InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
+        {
+            LHostAddr6 = NLAddr;
+        }
+    }
+
+    // IPv4 address of the server
+    CHostAddress HostAddr4;
+
+    // IPv4 internal address of the server
+    CHostAddress LHostAddr4;
+
+    // IPv6 address of the server
+    CHostAddress HostAddr6;
+
+    // IPv6 internal address of the server
+    CHostAddress LHostAddr6;
 };
 
 // Network transport properties ------------------------------------------------

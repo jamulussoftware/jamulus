@@ -376,6 +376,34 @@ Results:
 | result | string | Always "ok". |
 
 
+### jamulusdirectory/getServerList
+
+Returns the list of registered servers along with details about them.
+
+Parameters:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| params | object | No parameters (empty object). |
+
+Results:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| result.numservers | number | The number of registered servers. |
+| result.servers | array | The list of registered servers. |
+| result.servers[*].id | number | The server's index. |
+| result.servers[*].name | string | The server's name. |
+| result.servers[*].countryName | string | The text name of the country specified by the user for this channel (see QLocale::Country). |
+| result.servers[*].city | string | The city name provided by the operator of this server. |
+| result.servers[*].maxClients | number | The max number of clients supported by the server. |
+| result.servers[*].permanent | bool | The permanent status of the server. |
+| result.servers[*].ipv4addr | string | The IPv4 address the server registered from (ip:port) |
+| result.servers[*].ipv4addrLocal | string | The local IPv4 address provided by the server (ip:port) |
+| result.servers[*].ipv6addr | string | The IPv6 address the server registered from ([ipv6]:port) |
+| result.servers[*].ipv6addrLocal | string | The local IPv6 address provided by the server ([ipv6]:port) |
+
+
 ### jamulusserver/broadcastChatMessage
 
 Sends a message (as the server) to all connected clients. This can be used to broadcast messages from external sources (e.g. scripts or monitoring tools).

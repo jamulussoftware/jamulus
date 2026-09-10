@@ -110,7 +110,9 @@ You will need Xcode and Qt.
 
 First, install [Xcode from the Mac AppStore](https://apps.apple.com/us/app/xcode/id497799835?mt=12). Then [install homebrew](https://brew.sh/).
 
-After that you can install Qt via homebrew:
+**Note** the official Jamulus build uses Qt6. Download and install Qt6, e.g, via the [official open source installer](https://www.qt.io/download-qt-installer). We use Qt5 here as it is easier to set up.
+
+You can install Qt5 via homebrew:
 
 ```shell
 brew install Qt@5
@@ -120,6 +122,7 @@ brew link Qt@5 --force
 ### Generate Xcode Project file
 
 `qmake QMAKE_APPLE_DEVICE_ARCHS=arm64 QT_ARCH=arm64 -spec macx-xcode Jamulus.pro`
+
 **Note:** if you still build on x86_64, not Apple Silicon, you must replace `arm64` with `x86_64`.
 
 ### Print build targets and configuration in console
@@ -149,8 +152,9 @@ Schemes:
 
 `xcodebuild build`
 
-Will build the file and make it available in `./Release/Jamulus.app`
-In order to run the application, you need to run `macdeployqt ./Release/Jamulus.app` once to set up all required libraries and frameworks.
+Will build the file and make it available in `./Release/Jamulus.app`.
+
+**Note**: To run the application, you need to run `macdeployqt ./Release/Jamulus.app` once to set up all required libraries and frameworks.
 
 If you want to build the installer, please run the `deploy_mac.sh` script: `./mac/deploy_mac.sh`. You'll find the installer in the deploy/ folder.
 
@@ -184,7 +188,7 @@ If you want to build the installer, please run the `deploy_mac.sh` script: `./ma
 
 - Install Qt, including the Android support from the Qt installer
 - Follow Qt's [Getting Started with Qt for Android](https://doc.qt.io/qt-5/android-getting-started.html) instructions
-- Make sure Jamulus submodules are present, notably oboe:
+- **Important**: Make sure Jamulus submodules are present, notably oboe:
   `git submodule update --init`
 - Open Jamulus.pro in Qt Creator
 - Now you should be able to Build & Run for Android.

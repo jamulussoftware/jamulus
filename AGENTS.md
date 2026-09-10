@@ -1,6 +1,6 @@
 # Jamulus — Agent Instructions
 
-Real-time networked music jamming app. Qt/C++ qmake project. Client and server share one codebase; entry point: `src/main.cpp`. Configure `CONFIG` flags in `Jamulus.pro`.
+Real-time networked music jamming app. Qt/C++ qmake project. Client and server share one codebase; entry point: `src/main.cpp`. Qt project configuration in `Jamulus.pro`.
 
 **Make the smallest possible change. One logical change per PR. Never mix refactoring with fixes/features.**
 
@@ -8,13 +8,11 @@ Priority order: Stability > Low latency / real-time safety > Backwards compatibi
 
 ---
 
-## Build
+## Build and Test
 
-Linux: `qmake && make` (use `qmake-qt5` on Fedora). Headless server: `qmake "CONFIG+=headless serveronly" && make`. First run: `git submodule update --init` (oboe for Android). Run `make distclean` before re-running `qmake` with different `CONFIG` flags. Full per-platform table: `COMPILING.md`.
+**Before running a build**, read `COMPILING.md` for your compile target. It includes build commands, platform-specific dependencies and `CONFIG` flags. `.github/autobuild` contains the build scripts for the GitHub Actions workflow. Read these files if you are stuck and need an example.
 
-macOS: `qmake QMAKE_APPLE_DEVICE_ARCHS=arm64 QT_ARCH=arm64 -spec macx-xcode Jamulus.pro` (Use `x86_64` on Intel Macs; `macx-clang` if using `make`). Then `xcodebuild build`, and `macdeployqt ./{Debug,Release}/Jamulus.app`.
-
-**Testing:** run headless server (args `-s -n`), connect a client (e.g. via: `-n -c localhost`; may need jackd running on Linux. Run dummy Jack via: `jackd -d dummy`), exercise the change; use the JSON-RPC API (`docs/JSON-RPC.md`) where possible. Connecting a client needs a non-`serveronly` build (Build section above); `serveronly` rejects `-c`. State what you tested in the PR with evidence. GitHub Actions builds multiple platforms — on failure read the failing step's log.
+**Testing:** run headless server (args `-s -n`), connect a client (e.g. via: `-n -c localhost`; may need jackd running on Linux. Run dummy Jack via: `jackd -d dummy`), exercise the change; use the JSON-RPC API (`docs/JSON-RPC.md`) where possible. Connecting a client needs a non-`serveronly` build (Build paragraph above); `serveronly` rejects `-c`. State what you tested in the PR with evidence. GitHub Actions builds multiple platforms — on failure read the failing step's log.
 
 ## Never Do
 

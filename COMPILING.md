@@ -205,3 +205,4 @@ During compile time some CONFIG arguments can be given to enable or disable spec
 | `disable_version_check` | Skip checks for version updates                                         |
 | `noupcasename`          | Compile Jamulus binary as lower case "jamulus" instead of "Jamulus"     |
 | `raspijamulus`          | Use raspijamulus.sh specific enhancements for build on Raspberry Pi     |
+| `noreverb`              | Don't build the internal reverb and disable all related GUI elements    |

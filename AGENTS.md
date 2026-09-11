@@ -4,6 +4,10 @@ Real-time networked music jamming app. Qt/C++ qmake project. Client and server s
 
 **[`CONTRIBUTING.md`](CONTRIBUTING.md) is the source of truth for everything this project requires of a contribution; this file does not restate those requirements, and defers to it if the two ever disagree.** Read it before changing code, and before opening or commenting on an issue, Pull Request or discussion here.
 
+**Make the smallest possible change. One logical change per PR. Never mix refactoring with fixes/features.**
+
+Priority order: Stability > Low latency / real-time safety > Backwards compatibility > Maintainability > New features. This order resolves conflicts only — new features are welcome.
+
 What is below is orientation only: where things are, and how to build and run them.
 
 ---
@@ -37,10 +41,6 @@ A plain build gives one binary that is both client and server. Run the server he
 | open a Pull Request | [Submitting code](CONTRIBUTING.md#submitting-code-and-getting-started), [Testing](CONTRIBUTING.md#testing), [Ownership](CONTRIBUTING.md#ownership) |
 | post a comment or a review | [Commenting and reviewing](CONTRIBUTING.md#commenting-and-reviewing), and `docs/agents/COMMENTING.md` |
 | write a `CHANGELOG:` line | [Documentation/Acknowledgements](CONTRIBUTING.md#documentationacknowledgements) |
-
-## Read when relevant
-
-- `COMPILING.md` — full build per platform, CONFIG flags table
-- `docs/JAMULUS_PROTOCOL.md` — network protocol, packet IDs, ack rules
-- `docs/agents/COMMENTING.md` — commenting on GitHub
-- `SECURITY.md` — security reporting
+| build for a platform other than the two above | [`COMPILING.md`](COMPILING.md) |
+| change how clients, servers and directories talk to each other | [`docs/JAMULUS_PROTOCOL.md`](docs/JAMULUS_PROTOCOL.md) |
+| report a security vulnerability — never as an issue | [`SECURITY.md`](SECURITY.md) |

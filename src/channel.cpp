@@ -472,6 +472,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             iNetwFrameSizeFact    = NetworkTransportProps.iBlockSizeFact;
             iNetwFrameSize        = static_cast<int> ( NetworkTransportProps.iBaseNetworkPacketSize );
             bUseSequenceNumber    = ( NetworkTransportProps.eFlags == NF_WITH_COUNTER );
+            iAudioCodingArg       = NetworkTransportProps.iAudioCodingArg;
 
             if ( bUseSequenceNumber )
             {
@@ -550,7 +551,7 @@ CNetworkTransportProps CChannel::GetNetworkTransportPropsFromCurrentSettings()
                                     SYSTEM_SAMPLE_RATE_HZ,
                                     eAudioCompressionType,
                                     eFlags,
-                                    0 );
+                                    iAudioCodingArg );
 }
 
 void CChannel::Disconnect()

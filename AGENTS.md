@@ -34,7 +34,7 @@ A plain build gives one binary that is both client and server. Run the server he
 | format code | [Source code consistency](CONTRIBUTING.md#source-code-consistency) |
 | edit a generated file or `libs/` | [Files not to edit by hand](CONTRIBUTING.md#files-not-to-edit-by-hand) |
 | use AI for any part of the work | [Using AI](CONTRIBUTING.md#using-ai) |
-| add a file, or copy code in | [Licensing](CONTRIBUTING.md#licensing) |
+| add a file, or copy code from elsewhere | [Licensing](CONTRIBUTING.md#licensing) |
 | use a Qt or C++ feature that may be too new | [Supported platforms](CONTRIBUTING.md#supported-platforms) |
 | add a dependency | [Dependencies](CONTRIBUTING.md#dependencies) |
 | write user-facing text | [User experience](CONTRIBUTING.md#user-experience) |

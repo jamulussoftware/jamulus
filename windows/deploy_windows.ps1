@@ -59,7 +59,9 @@ param (
     # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/ASIO-SDK_2.3.4_2025-10-15.zip",
     [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.12/nsis-3.12.zip",
-    [string] $BuildOption = ""
+    [string] $BuildOption = "",
+    # Toggles for debugging and targeted builds
+    [switch] $DebugMode
 )
 
 # Fail early on all errors
@@ -79,18 +81,74 @@ $DeployPath = "$RootPath\deploy"
 $WindowsPath ="$RootPath\windows"
 $AppName = "Jamulus"
 
+Function Write-Log {
+    param(
+        [Parameter(Position=0)]
+        [ValidateSet("INFO","WARN","ERROR","STEP","DEBUG","NATIVE","NATIVE-ERR")]
+        [string] $Level = "INFO",
+
+        [Parameter(Position=1, Mandatory=$true)]
+        [AllowNull()]
+        [AllowEmptyString()]
+        [string] $Message
+    )
+
+    if ($null -eq $Message) { $Message = "" }
+    $Stamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    $Log = "[$Stamp] [$Level] $Message"
+
+    switch ($Level) {
+        "INFO"       { Write-Host $Log }
+        "STEP"       { Write-Host "`n>>> [$Stamp] $Message" -ForegroundColor Cyan }
+        "WARN"       { Write-Host $Log -ForegroundColor Yellow }
+        "ERROR"      { Write-Host $Log -ForegroundColor Red }
+        "DEBUG"      { if ($DebugMode) { Write-Host $Log -ForegroundColor DarkGray } }
+        "NATIVE"     { Write-Host "    $Message" -ForegroundColor DarkGray }
+        "NATIVE-ERR" { Write-Host "    $Message" -ForegroundColor DarkYellow }
+    }
+}
+
 # Execute native command with errorlevel handling
 Function Invoke-Native-Command {
     param(
         [string] $Command,
-        [string[]] $Arguments
+        [string[]] $Arguments,
+        [switch] $SuppressStdErr
     )
 
-    & "$Command" @Arguments
+    Write-Log "DEBUG" "Executing: $Command $($Arguments -join ' ')"
+    $Out = [Collections.Generic.List[string]]::new()
 
-    if ($LastExitCode -Ne 0)
-    {
-        Throw "Native command $Command returned with exit code $LastExitCode"
+    $PrevEA = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+
+    try {
+        & "$Command" @Arguments 2>&1 | ForEach-Object {
+            $IsErr = $_ -is [Management.Automation.ErrorRecord]
+            if ($IsErr -and $SuppressStdErr) { return }
+
+            $Line = if ($IsErr) { $_.TargetObject -as [string] } else { $_.ToString() }
+            if ([string]::IsNullOrWhiteSpace($Line)) { return }
+
+            $Out.Add($Line)
+
+            if ($IsErr) {
+                Write-Log "NATIVE-ERR" $Line
+            } else {
+                Write-Log "NATIVE" $Line
+            }
+        }
+    } finally {
+        $ErrorActionPreference = $PrevEA
+    }
+
+    if ($LastExitCode -Ne 0) {
+        $Err = "Native command $Command returned with exit code $LastExitCode"
+        Write-Log "ERROR" $Err
+        if (-not $DebugMode) {
+            $Out.ForEach({ Write-Log "ERROR" $_ })
+        }
+        Throw $Err
     }
 }
 
@@ -124,13 +182,13 @@ Function Get-RedirectedUrl {
             return
         } catch {
             if ($attempt -lt $numAttempts) {
-                Write-Warning "Caught error: $_"
-                Write-Warning "Get-RedirectedUrl: Fetch attempt #${attempt}/${numAttempts} for $url failed, trying again in ${sleepTime}s"
+                Write-Log "WARN" "Caught error: $_"
+                Write-Log "WARN" "Get-RedirectedUrl: Fetch attempt #${attempt}/${numAttempts} for $url failed, trying again in ${sleepTime}s"
                 Start-Sleep -Seconds $sleepTime
                 $sleepTime = [Math]::Min($sleepTime * 2, $maxSleepTime)
                 continue
             }
-            Write-Error "Get-RedirectedUrl: All ${numAttempts} fetch attempts for $url failed, failing whole call"
+            Write-Log "ERROR" "Get-RedirectedUrl: All ${numAttempts} fetch attempts for $url failed, failing whole call"
             throw
         }
     }
@@ -140,7 +198,7 @@ function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/5169240
 
     # If module is imported say that and do nothing
     if (Get-Module | Where-Object {$_.Name -eq $m}) {
-        Write-Output "Module $m is already imported."
+        Write-Log "INFO" "Module $m is already imported."
     }
     else {
 
@@ -158,7 +216,7 @@ function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/5169240
             else {
 
                 # If module is not imported, not available and not in online gallery then abort
-                Write-Output "Module $m not imported, not available and not in online gallery, exiting."
+                Write-Log "ERROR" "Module $m not imported, not available and not in online gallery, exiting."
                 EXIT 1
             }
         }
@@ -177,7 +235,7 @@ Function Install-Dependency
 
     if (Test-Path -Path "$WindowsPath\$Destination")
     {
-        echo "Using ${WindowsPath}\${Destination} from previous run (e.g. actions/cache)"
+        Write-Log "INFO" "Using ${WindowsPath}\${Destination} from previous run (e.g. actions/cache)"
         return
     }
 
@@ -193,10 +251,12 @@ Function Install-Dependency
       $Uri = Get-RedirectedUrl -URL $Uri
     }
 
+    Write-Log "INFO" "Downloading $Uri..."
     Invoke-WebRequest -Uri $Uri -OutFile $TempFileName
-    echo $TempFileName
+    Write-Log "DEBUG" "Saved to: $TempFileName"
     Expand-Archive -Path $TempFileName -DestinationPath $TempDir -Force
-    echo $WindowsPath\$Destination
+    Write-Log "DEBUG" "Extracting to: $WindowsPath\$Destination"
+
     # Because we unpacked into a new directory, we can use * for the directory in the archive,
     # so that we do not need to know the directory name the archive was packed from.
     Move-Item -Path "$TempDir\*" -Destination "$WindowsPath\$Destination" -Force
@@ -207,6 +267,7 @@ Function Install-Dependency
 # Install VSSetup (Visual Studio detection), ASIO SDK and NSIS Installer
 Function Install-Dependencies
 {
+    Write-Log "STEP" "Installing Dependencies..."
     if (-not (Get-PackageProvider -Name nuget).Name -eq "nuget") {
       Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
     }
@@ -217,6 +278,8 @@ Function Install-Dependencies
         # Don't download ASIO SDK on Jamulus JACK builds to save
         # resources and to be extra-sure license-wise.
         Install-Dependency -Uri $AsioSDKUrl -Destination "..\libs\ASIOSDK2"
+    } else {
+        Write-Log "INFO" "Skipping ASIO SDK (JACK build detected)."
     }
 }
 
@@ -273,6 +336,39 @@ Function Initialize-Build-Environment
     Remove-Item -Path $EnvDump -Force
 }
 
+# Resolve Qt path by falling back to Registry lookups if the default path is missing
+Function Resolve-Qt-Path
+{
+    param(
+        [Parameter(Mandatory=$true)]
+        [string] $DefaultPath
+    )
+
+    if (Test-Path -Path $DefaultPath) { return $DefaultPath }
+
+    Write-Log "DEBUG" "Qt path '$DefaultPath' not found. Searching registry..."
+    $QtVer = Split-Path $DefaultPath -Leaf
+    $RegPaths = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*",
+                "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
+                "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
+
+    foreach ($Reg in $RegPaths)
+    {
+        $Installs = Get-ItemProperty $Reg -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -match "Qt" -and $_.InstallLocation }
+        foreach ($Inst in $Installs)
+        {
+            $TryPath = Join-Path $Inst.InstallLocation $QtVer
+            if (Test-Path -Path $TryPath)
+            {
+                Write-Log "INFO" "Discovered Qt at: $TryPath"
+                return $TryPath
+            }
+        }
+    }
+
+    return $DefaultPath
+}
+
 # Setup Qt environment variables and build tool paths
 Function Initialize-Qt-Build-Environment
 {
@@ -288,6 +384,31 @@ Function Initialize-Qt-Build-Environment
     # Setup Qt executables paths for later calls
     Set-Item Env:QtQmakePath "$QtMsvcSpecPath\qmake.exe"
     Set-Item Env:QtWinDeployPath "$QtMsvcSpecPath\windeployqt.exe"
+
+    # Check if jom.exe (Qt's clone of nmake that supports parallel execution) is
+    # available in the system PATH. This speeds up the build process significantly.
+    if (Get-Command "jom.exe" -ErrorAction SilentlyContinue)
+    {
+        Set-Item Env:QtJomPath "jom.exe"
+    }
+    else
+    {
+        $QtRoot = Split-Path $QtInstallPath -Parent
+        $JomExes = "$QtRoot\Tools\QtCreator\bin\jom\jom.exe",
+                   "$QtRoot\Tools\jom\jom.exe",
+                   "C:\Qt\Tools\QtCreator\bin\jom\jom.exe",
+                   "D:\Qt\Tools\QtCreator\bin\jom\jom.exe"
+
+        $FoundJom = $JomExes | Where-Object { Test-Path -Path $_ } | Select-Object -First 1
+        if ($FoundJom)
+        {
+            Set-Item Env:QtJomPath $FoundJom
+        }
+        else
+        {
+            Set-Item Env:QtJomPath ""
+        }
+    }
 
     "**********************************************************************"
     "Using Qt binaries for Visual C++ located at"
@@ -313,27 +434,36 @@ Function Build-App
         [string] $BuildArch
     )
 
+    $QmkCfg = "CONFIG+=$BuildConfig $BuildArch $BuildOption"
+
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
-        -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch $BuildOption", `
-        "-o", "$BuildPath\Makefile")
+        -Arguments ("$RootPath\$AppName.pro", $QmkCfg, "-o", "$BuildPath\Makefile")
 
     Set-Location -Path $BuildPath
-    if (Get-Command "jom.exe" -ErrorAction SilentlyContinue)
+
+    $MkArgs = @("/NOLOGO", $BuildConfig)
+
+    if ($Env:QtJomPath)
     {
-        echo "Building with jom /J ${Env:NUMBER_OF_PROCESSORS}"
-        Invoke-Native-Command -Command "jom" -Arguments ("/J", "${Env:NUMBER_OF_PROCESSORS}", "$BuildConfig")
+        $Cores = [Math]::Max(1, [Math]::Floor([int]$Env:NUMBER_OF_PROCESSORS / 2))
+        Write-Log "INFO" "Building with jom /J $Cores (half of $Env:NUMBER_OF_PROCESSORS cores)"
+        Invoke-Native-Command -Command "$Env:QtJomPath" -Arguments (@("/J", "$Cores") + $MkArgs)
     }
     else
     {
-        echo "Building with nmake (install Qt jom if you want parallel builds)"
-        Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+        Write-Log "INFO" "Building with nmake (install Qt jom if you want parallel builds)"
+        Invoke-Native-Command -Command "nmake" -Arguments $MkArgs
     }
+
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--compiler-runtime", "--dir=$DeployPath\$BuildArch",
         "$BuildPath\$BuildConfig\$AppName.exe")
 
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
-    Invoke-Native-Command -Command "nmake" -Arguments ("clean")
+
+    $CleanArgs = @("clean", "/NOLOGO")
+    Invoke-Native-Command -Command "nmake" -Arguments $CleanArgs -SuppressStdErr
+
     Set-Location -Path $RootPath
 }
 
@@ -346,12 +476,12 @@ function Build-App-Variants
         if ($_ -eq "x86")
         {
             Initialize-Build-Environment -BuildArch $_
-            Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath32 -QtCompile $QtCompile32
+            Initialize-Qt-Build-Environment -QtInstallPath (Resolve-Qt-Path -DefaultPath $QtInstallPath32) -QtCompile $QtCompile32
         }
         else
         {
             Initialize-Build-Environment -BuildArch $_
-            Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath64 -QtCompile $QtCompile64
+            Initialize-Qt-Build-Environment -QtInstallPath (Resolve-Qt-Path -DefaultPath $QtInstallPath64) -QtCompile $QtCompile64
         }
         Build-App -BuildConfig "release" -BuildArch $_
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
@@ -365,6 +495,14 @@ Function Build-Installer
         [string] $BuildOption
     )
 
+    # --- SAFETY GATE: Do not build if no executables were generated ---
+    $Has64 = Test-Path -Path "$DeployPath\x86_64\$AppName.exe"
+    $Has32 = Test-Path -Path "$DeployPath\x86\$AppName.exe"
+
+    if (-not $Has64 -and -not $Has32) {
+        Throw "Installer build aborted: No application binaries found."
+    }
+
     foreach ($_ in Get-Content -Path "$RootPath\$AppName.pro")
     {
         if ($_ -Match "^VERSION *= *(.*)$")
@@ -374,10 +512,12 @@ Function Build-Installer
         }
     }
 
+    $NsisVerb = if ($DebugMode) { "/v4" } else { "/v2" }
+
     if ($BuildOption -ne "")
     {
         Invoke-Native-Command -Command "$RootPath\libs\NSIS\NSIS-source\makensis" `
-            -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
+            -Arguments ($NsisVerb, "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
             "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
             "/DBUILD_OPTION=$BuildOption", `
             "$WindowsPath\installer.nsi")
@@ -385,7 +525,7 @@ Function Build-Installer
     else
     {
         Invoke-Native-Command -Command "$RootPath\libs\NSIS\NSIS-source\makensis" `
-            -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
+            -Arguments ($NsisVerb, "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
             "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
             "$WindowsPath\installer.nsi")
     }
@@ -396,7 +536,7 @@ Function Build-NSProcess
 {
     if (!(Test-Path -path "$RootPath\libs\NSIS\nsProcess.dll")) {
 
-        echo "Building nsProcess..."
+        Write-Log "INFO" "Building nsProcess..."
 
         $OriginalEnv = Get-ChildItem Env:
         Initialize-Build-Environment -BuildArch "x86"
@@ -416,3 +556,4 @@ Install-Dependencies
 Build-App-Variants
 Build-NSProcess
 Build-Installer -BuildOption $BuildOption
+Write-Log "STEP" "Build process completed successfully."

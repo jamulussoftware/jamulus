@@ -11,7 +11,7 @@ We’d really appreciate your support! Please ensure that you understand the fol
 
 ## Jamulus project/source code general principles
 
-Where these principles pull against each other, resolve the conflict in this order: **stability > low latency and real-time safety > backwards compatibility > maintainability > new features.** This order settles conflicts only - new features are welcome.
+Where these principles pull against each other, resolve the conflict in this order: **stability > low latency and real-time safety > backwards compatibility > maintainability > new features.** This order settles conflicts only - new features are welcome (but read item 2 below first).
 
 ### 1. Stability
 

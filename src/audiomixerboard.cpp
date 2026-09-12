@@ -118,7 +118,8 @@ static bool midiPickupTryApply ( int midiValue, int currentValue, int tolerance,
 
         if ( !midiPickupShouldApply ( midiValue, currentValue, tolerance, tempPickup ) )
         {
-            // keep this value: the next message needs it to detect a crossing
+            // still waiting: keep this value in the channel's recentFader/recentPan
+            // history so the next message can detect a crossing
             pickupBuffer = tempPickup;
             return true; // Still waiting for pickup
         }

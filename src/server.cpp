@@ -184,6 +184,20 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecUseDoubleSysFraSizeConvBuf.Init ( iMaxNumChannels );
     vecAudioComprType.Init ( iMaxNumChannels );
 
+    // initialize the bitrate caches to a value which cannot be a valid bitrate
+    // (-1) so that the first encode of every connection sets the encoder bitrate
+    veciLastSetBitRateMono.Init ( iMaxNumChannels );
+    veciLastSetBitRateStereo.Init ( iMaxNumChannels );
+    veciLastSetBitRate64Mono.Init ( iMaxNumChannels );
+    veciLastSetBitRate64Stereo.Init ( iMaxNumChannels );
+    for ( i = 0; i < iMaxNumChannels; i++ )
+    {
+        veciLastSetBitRateMono[i]     = -1;
+        veciLastSetBitRateStereo[i]   = -1;
+        veciLastSetBitRate64Mono[i]   = -1;
+        veciLastSetBitRate64Stereo[i] = -1;
+    }
+
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
         // init vectors storing information of all channels
@@ -1268,12 +1282,43 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
             // OPUS encoding
             if ( CurOpusEncoder != nullptr )
             {
-                //### TODO: BEGIN ###//
-                // find a better place than this: the setting does not change all the time so for speed
-                // optimization it would be better to set it only if the network frame size is changed
-                opus_custom_encoder_ctl ( CurOpusEncoder,
-                                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
-                //### TODO: END ###//
+                // Set the encoder bitrate only when the network frame size (and
+                // with it the coded byte count) has actually changed, instead of
+                // once per frame. The bitrate is a pure function of (coded bytes,
+                // frame size) which the client only changes via its network
+                // transport properties. The cache is kept per encoder instance to
+                // avoid an unset encoder when mono/stereo selections change.
+                const int iBitRate = CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples );
+
+                CVector<int>* pveciLastSetBitRate = nullptr;
+                if ( vecAudioComprType[iChanCnt] == CT_OPUS )
+                {
+                    if ( vecNumAudioChannels[iChanCnt] == 1 )
+                    {
+                        pveciLastSetBitRate = &veciLastSetBitRateMono;
+                    }
+                    else
+                    {
+                        pveciLastSetBitRate = &veciLastSetBitRateStereo;
+                    }
+                }
+                else // CT_OPUS64
+                {
+                    if ( vecNumAudioChannels[iChanCnt] == 1 )
+                    {
+                        pveciLastSetBitRate = &veciLastSetBitRate64Mono;
+                    }
+                    else
+                    {
+                        pveciLastSetBitRate = &veciLastSetBitRate64Stereo;
+                    }
+                }
+
+                if ( ( *pveciLastSetBitRate )[iCurChanID] != iBitRate )
+                {
+                    opus_custom_encoder_ctl ( CurOpusEncoder, OPUS_SET_BITRATE ( iBitRate ) );
+                    ( *pveciLastSetBitRate )[iCurChanID] = iBitRate;
+                }
 
                 for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
                 {

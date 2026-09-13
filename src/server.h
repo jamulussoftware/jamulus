@@ -289,6 +289,14 @@ protected:
     CVector<CVector<float>>   vecvecfIntermediateProcBuf;
     CVector<CVector<uint8_t>> vecvecbyCodedData;
 
+    // cache of the last set Opus encoder bitrate (bits per second) for each
+    // encoder instance, indexed by channel ID; used to avoid setting the
+    // bitrate once per frame in the real-time path (see MixEncodeTransmitData)
+    CVector<int> veciLastSetBitRateMono;
+    CVector<int> veciLastSetBitRateStereo;
+    CVector<int> veciLastSetBitRate64Mono;
+    CVector<int> veciLastSetBitRate64Stereo;
+
     // Channel levels
     CVector<uint16_t> vecChannelLevels;
 

@@ -76,8 +76,10 @@ CClient::CClient ( const quint16  iPortNumber,
     Socket ( &Channel, iPortNumber, iQosNumber, "", "", bNDisableIPv6, bIPv6Available ),
     Sound ( AudioCallback, this, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
+#ifndef NO_REVERB
     bReverbOnLeftChan ( false ),
     iReverbLevel ( 0 ),
+#endif
     iInputBoost ( 1 ),
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
@@ -1460,10 +1462,10 @@ void CClient::Init()
 
     // set the channel network properties
     Channel.SetAudioStreamProperties ( eAudioCompressionType, iCeltNumCodedBytes, iSndCrdFrameSizeFactor, iNumAudioChannels );
-
+#ifndef NO_REVERB
     // init reverberation
-    AudioReverb.Init ( eAudioChannelConf, iStereoBlockSizeSam, SYSTEM_SAMPLE_RATE_HZ );
-
+    AudioReverb.Init ( eAudioChannelConf, iStereoBlockSizeSam );
+#endif
     // init the sound card conversion buffers
     if ( bSndCrdConversionBufferRequired )
     {
@@ -1555,13 +1557,13 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 #ifndef HEADLESS
     SignalLevelMeter.Update ( vecsStereoSndCrd, iMonoBlockSizeSam, true );
 #endif
-
+#ifndef NO_REVERB
     // add reverberation effect if activated
     if ( iReverbLevel != 0 )
     {
         AudioReverb.Process ( vecsStereoSndCrd, bReverbOnLeftChan, static_cast<float> ( iReverbLevel ) / AUD_REVERB_MAX / 4 );
     }
-
+#endif
     // apply pan (audio fader) and mix mono signals
     if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf == CC_STEREO ) ) )
     {

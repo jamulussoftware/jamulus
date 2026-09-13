@@ -48,7 +48,7 @@ Jamulus uses UDP to communicate between the Client and Server, and additionally 
 
 UDP offers no delivery guarantee and no notion of a connection, so Jamulus layers its own session and reliability semantics on top of it. A Client and Server count as *connected* once the Client is sending valid audio packets and the Server has assigned it a channel. The two message classes below are named relative to that session, not to anything at the transport level.
 
-Messages with an ID below 1000 are connection-based: they apply to an established session, and each is acknowledged by an `ACKN (1)` message carrying the same sequence counter. Until that acknowledgement arrives, the sender retransmits the message every `SEND_MESS_TIMEOUT_MS` (400) ms. The protocol layer sets no retry limit: retransmission ends when the message is acknowledged, or when the channel clears the send queue via `CProtocol::Reset()` — on disconnect, on channel time-out, or when the protocol is disabled. `ACKN` itself is the one exception in this range: it is sent immediately, never queued, and is neither acknowledged nor retransmitted.
+Messages with an ID below 1000 are connection-based: they apply to an established session, and each is acknowledged by an `ACKN (1)` message carrying the same sequence counter. Until that acknowledgement arrives, the sender retransmits the message every `SEND_MESS_TIMEOUT_MS` (400) ms. The protocol layer sets no retry limit: retransmission ends when the message is acknowledged, or when the channel clears the send queue via `CProtocol::Reset()` — on disconnect, on channel time-out, or when the protocol is disabled. `ACKN` itself is the one exception in this range: `CProtocol::CreateAndImmSendAcknMess()` emits it directly instead of putting it on the send queue, so none of the above applies to it.
 
 Messages with an ID from 1000 to 1999 (`CLM_*`) are connectionless: they need no established session and are never acknowledged.
 
@@ -276,7 +276,7 @@ Some typical messages could be:
 
 ## Directory registration and Server lists
 
-A Directory is a Jamulus Server acting as a registry (implemented in `src/serverlist.cpp`, both roles). All Directory traffic uses connectionless messages:
+A Directory is a Jamulus Server acting as a registry. Both ends of that relationship are one class, `CServerListManager` in `src/serverlist.cpp`: its `bIsDirectory` flag decides whether an instance keeps the list of registered Servers or registers itself with a Directory, and `Register()`, `Unregister()`, `Append()`, `Remove()` and `RetrieveAll()` each branch on it. All Directory traffic uses connectionless messages:
 
 - A Server registers with `CLM_REGISTER_SERVER_EX (1017)` (older versions: `CLM_REGISTER_SERVER (1004)`) and receives `CLM_REGISTER_SERVER_RESP (1016)` carrying the result (registered, list full, version too old, requirements not fulfilled). If no response arrives, registration is retried every 500 ms, up to 5 times.
 - Registration is refreshed every 15 minutes; the Directory drops a Server it has not heard from for 33 minutes. `CLM_UNREGISTER_SERVER (1005)` removes the entry immediately at Server shutdown or when changing Directory through the Server UI.

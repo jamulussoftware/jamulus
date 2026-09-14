@@ -315,21 +315,6 @@ void CChannel::SetGain ( const int iChanID, const float fNewGain )
     }
 }
 
-float CChannel::GetGain ( const int iChanID )
-{
-    QMutexLocker locker ( &Mutex );
-
-    // get value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
-    {
-        return vecfGains[iChanID];
-    }
-    else
-    {
-        return 0;
-    }
-}
-
 void CChannel::SetPan ( const int iChanID, const float fNewPan )
 {
     QMutexLocker locker ( &Mutex );
@@ -342,18 +327,31 @@ void CChannel::SetPan ( const int iChanID, const float fNewPan )
     }
 }
 
-float CChannel::GetPan ( const int iChanID )
+/// @brief Copies a consistent snapshot of gain and panning settings for the requested channel IDs under Mutex.
+/// @param vecChanIDs Channel IDs to read, in the order used for the output vectors.
+/// @param iNumClients Number of leading entries to read and populate. All three vectors must contain at least this many entries.
+/// @param vecGains Receives each requested channel's gain, or zero for an out-of-range channel ID.
+/// @param vecPannings Receives each requested channel's panning, or zero for an out-of-range channel ID.
+void CChannel::GetGainsAndPannings ( const CVector<int>& vecChanIDs, const int iNumClients, CVector<float>& vecGains, CVector<float>& vecPannings )
 {
     QMutexLocker locker ( &Mutex );
 
-    // get value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    // copy the gain and pan values of the connected channels
+    for ( int j = 0; j < iNumClients; j++ )
     {
-        return vecfPannings[iChanID];
-    }
-    else
-    {
-        return 0;
+        const int iChanID = vecChanIDs[j];
+
+        if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+        {
+            vecGains[j]    = vecfGains[iChanID];
+            vecPannings[j] = vecfPannings[iChanID];
+        }
+        else
+        {
+            // should not happen
+            vecGains[j]    = 0;
+            vecPannings[j] = 0;
+        }
     }
 }
 

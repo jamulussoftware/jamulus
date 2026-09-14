@@ -5,13 +5,17 @@ on:
   pull_request:
     paths:
       - "src/translation/wininstaller/**"
+      - "src/translation/*.ts"
       - "tools/check-wininstaller-translations.sh"
+      - "tools/check-translations.py"
       - ".github/workflows/translation-check.yml"
   push:
     paths:
-      - "src/translation/wininstaller/**"
-      - "tools/check-wininstaller-translations.sh"
-      - ".github/workflows/translation-check.yml"
+      - 'src/translation/wininstaller/**'
+      - 'src/translation/*.ts'
+      - 'tools/check-wininstaller-translations.sh'
+      - 'tools/check-translations.py'
+      - '.github/workflows/translation-check.yml'
 
 jobs:
   translation-check:
@@ -26,3 +30,5 @@ jobs:
         run: ./tools/check-wininstaller-translations.sh
       - name: "Check for duplicate hotkeys (will not fail)"
         run: perl ./tools/checkkeys.pl
+      - name: "Check application translations"
+        run: ./tools/check-translations.py --ts-dir src/translation

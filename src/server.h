@@ -285,6 +285,7 @@ protected:
     CVector<int>              vecNumFrameSizeConvBlocks;
     CVector<int>              vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>    vecAudioComprType;
+    CVector<int>              vecAudioCodingArg;
     CVector<CVector<int16_t>> vecvecsSendData;
     CVector<CVector<float>>   vecvecfIntermediateProcBuf;
     CVector<CVector<uint8_t>> vecvecbyCodedData;

@@ -16,9 +16,7 @@ What is below is orientation only: where things are, and how to build and run th
 
 **Before running a build**, read `COMPILING.md` for your compile target. It includes build commands, platform-specific dependencies and `CONFIG` flags. `.github/autobuild` contains the build scripts for the GitHub Actions workflow. Read these files if you are stuck and need an example.
 
-## Run it
-
-A plain build gives one binary that is both client and server. Run the server headless with `-s -n`; connect a client with `-n -c localhost` (on Linux this may need jackd — `jackd -d dummy`). A `CONFIG+=serveronly` binary rejects `-c`. Drive it through the JSON-RPC API where that is possible: it needs `--jsonrpcport` and `--jsonrpcsecretfile`; see `docs/JSON-RPC.md`. GitHub Actions builds several platforms; on failure, read the failing step's log.
+**Testing:** run headless server (args `-s -n`), connect a client (e.g. via: `-n -c localhost`; may need jackd running on Linux. Run dummy Jack via: `jackd -d dummy`), exercise the change; use the JSON-RPC API (`docs/JSON-RPC.md`, enabled with `--jsonrpcport` and `--jsonrpcsecretfile`) where possible. Connecting a client needs a build without `serveronly` (`COMPILING.md`, "Compile time arguments"); `serveronly` rejects `-c`. State what you tested in the PR with evidence. GitHub Actions builds multiple platforms — on failure read the failing step's log.
 
 ## Where the rules are
 
@@ -39,6 +37,6 @@ A plain build gives one binary that is both client and server. Run the server he
 | open a Pull Request | [Submitting code](CONTRIBUTING.md#submitting-code-and-getting-started), [Testing](CONTRIBUTING.md#testing), [Ownership](CONTRIBUTING.md#ownership) |
 | post a comment or a review | [Commenting and reviewing](CONTRIBUTING.md#commenting-and-reviewing), and `docs/agents/COMMENTING.md` |
 | write a `CHANGELOG:` line | [Documentation/Acknowledgements](CONTRIBUTING.md#documentationacknowledgements) |
-| build for a platform other than the two above | [`COMPILING.md`](COMPILING.md) |
+| build for any platform | [`COMPILING.md`](COMPILING.md) |
 | change how clients, servers and directories talk to each other | [`docs/JAMULUS_PROTOCOL.md`](docs/JAMULUS_PROTOCOL.md) |
 | report a security vulnerability — never as an issue | [`SECURITY.md`](SECURITY.md) |

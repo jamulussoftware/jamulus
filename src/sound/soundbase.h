@@ -120,7 +120,7 @@ public:
     }
 
     // Separate input/output device selection: sound APIs which handle the input
-    // and the output device independently of each other (i.e. CoreAudio on macOS)
+    // and the output device independently of each other (e.g. CoreAudio on macOS)
     // return true here and offer one device list per direction. For all other
     // APIs a device is a single entity and the combined list above is used.
     // Note that even with separate lists the selected device is still identified

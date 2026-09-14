@@ -47,11 +47,13 @@
 #include "sound.h"
 
 /* Definitions ****************************************************************/
-// Names of the entries which follow the device selected as system default. Note
-// that these names are stored in the settings file and are therefore not
-// translated. The combined name of the "both directions are system default"
-// case is the one which was used when input and output were selected together
-// so that settings written by previous versions are still valid.
+// Names of the entries which select the device chosen as system default. These
+// are our own names, not names reported by CoreAudio: they are shown in the
+// device lists and are also stored in the settings file, which is why they are
+// not translated. Every other entry is the device name as CoreAudio reports it.
+// The combined name of the "both directions are system default" case is the one
+// which was used when input and output were selected together so that settings
+// written by any version since 3.4.3 are still valid.
 static const QString strSystemDefaultInDevName    = "System Default In Device";
 static const QString strSystemDefaultOutDevName   = "System Default Out Device";
 static const QString strSystemDefaultInOutDevName = "System Default In/Out Devices";
@@ -82,7 +84,7 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
     // initial query for available input/output sound devices in the system
     GetAvailableInOutDevices();
 
-    // init device IDs as not initialized (invalid)
+    // init device IDs as unknown
     CurrentAudioInputDeviceID  = 0;
     CurrentAudioOutputDeviceID = 0;
     iNumInChan                 = 0;
@@ -239,8 +241,8 @@ QString CSound::SetInOutDev ( const QString& strInDevName, const QString& strOut
 
 QString CSound::ComposeDevName ( const QString& strInDevName, const QString& strOutDevName )
 {
-    // if both directions use the system default device, use the legacy name of
-    // the combined entry so that the settings stay compatible
+    // if both directions use the system default device, use the legacy combined
+    // name ("System Default In/Out Devices") so that the settings stay compatible
     if ( ( strInDevName.compare ( strSystemDefaultInDevName ) == 0 ) && ( strOutDevName.compare ( strSystemDefaultOutDevName ) == 0 ) )
     {
         return strSystemDefaultInOutDevName;
@@ -410,7 +412,9 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
         return tr ( "The currently selected audio device is no longer present. Please check your audio device." );
     }
 
-    // check device capabilities if they fulfill our requirements
+    // check device capabilities if they fulfill our requirements: the output
+    // device is only checked if the input device check passed and the selection
+    // is only applied if both passed, so that the first error is the one reported
     QString strStat = CheckInputDeviceCapabilities ( iInDevIdx );
 
     if ( strStat.isEmpty() )

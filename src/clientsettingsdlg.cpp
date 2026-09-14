@@ -1145,7 +1145,7 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
 void CClientSettingsDlg::UpdateSoundDeviceSelection()
 {
     // Sound APIs which handle the input and the output device independently of
-    // each other (i.e. CoreAudio on macOS) get one combo box per direction. All
+    // each other (e.g. CoreAudio on macOS) get one combo box per direction. All
     // other APIs get the single combo box containing the available devices.
     const bool bSeparateInOutDev = pClient->GetSndCrdInOutDevSelectionSeparate();
 

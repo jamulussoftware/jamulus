@@ -898,7 +898,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
 
     // get gains and pannings of all connected channels, compacted to the
     // order of "vecChanIDsCurConChan".
-    // The second index of "vecvecdGains" does not represent
+    // The second index of "vecvecfGains" does not represent
     // the channel ID! Therefore we have to use
     // "vecChanIDsCurConChan" to query the IDs of the currently
     // connected channels

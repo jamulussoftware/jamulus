@@ -159,6 +159,7 @@ When a Client starts a session with a Server, it sends valid audio packets to th
 The Server on a new Client connection will:
 
 - Tell the Client connection its ID, with a `CLIENT_ID (32, 0x2000)` message.
+- Unless the Server was started with `--noraw`, tell the Client that raw (uncompressed) audio is accepted, with a `RAWAUDIO_SUPPORTED (36, 0x2400)` message.
 - Send the Client an empty connected Client list with a `CONN_CLIENTS_LIST (24, 0x1800)` message.
 - Determine if the Client supports split messages, with a `REQ_SPLIT_MESS_SUPPORT (34, 0x2200)` message.
 - Request the details of the audio packets from the Client with a `REQ_NETW_TRANSPORT_PROPS (21, 0x1500)` message,
@@ -281,7 +282,7 @@ A Directory is a Jamulus Server acting as a registry. Both ends of that relation
 - A Server registers with `CLM_REGISTER_SERVER_EX (1017)` (older versions: `CLM_REGISTER_SERVER (1004)`) and receives `CLM_REGISTER_SERVER_RESP (1016)` carrying the result (registered, list full, version too old, requirements not fulfilled). If no response arrives, registration is retried every 500 ms, up to 5 times.
 - Registration is refreshed every 15 minutes; the Directory drops a Server it has not heard from for 33 minutes. `CLM_UNREGISTER_SERVER (1005)` removes the entry immediately at Server shutdown or when changing Directory through the Server UI.
 - A Client requests the server list with `CLM_REQ_SERVER_LIST (1007)`. The Directory answers with both `CLM_RED_SERVER_LIST (1018)` (a shorter form that reduces UDP fragmentation) and `CLM_SERVER_LIST (1006)` (the full information). The Client then pings each listed Server with `CLM_PING_MS_WITHNUMCLIENTS (1002)` to display latency and occupancy.
-- NAT hole punching: when it answers a server list request, the Directory also sends every registered Server a `CLM_SEND_EMPTY_MESSAGE (1008)` carrying the Client's public address; each Server responds by sending `CLM_EMPTY_MESSAGE (1009)` to that address, in order to open its own NAT/firewall for the Client's subsequent packets. It doesn't matter whether the Client receives this message, as it will ignore it. The Directory and its registered Servers also ping each other about once a minute to keep their NAT mappings alive.
+- NAT hole punching: when it answers a server list request, the Directory also sends a `CLM_SEND_EMPTY_MESSAGE (1008)` carrying the Client's public address to each registered Server whose registered address is not a private-network one — `RetrieveAll()` skips the rest, treating them as local to the Directory and so not in need of a hole punch; each Server that is told responds by sending `CLM_EMPTY_MESSAGE (1009)` to that address, in order to open its own NAT/firewall for the Client's subsequent packets. It doesn't matter whether the Client receives this message, as it will ignore it. The Directory and its registered Servers also ping each other about once a minute to keep their NAT mappings alive.
 
 ---
 

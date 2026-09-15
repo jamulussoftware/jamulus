@@ -47,10 +47,13 @@
 ##############################################################################
 set -eu -o pipefail
 
-# Dependency versions
-CREATEDMG_VERSION="1.3.0"
-
 root_path=$(pwd)
+
+QT=${QT:-6}
+# Dependency versions
+# shellcheck disable=SC1090
+source "${root_path}/.github/autobuild/mac-dependencies_qt${QT}.sh"
+
 project_path="${root_path}/Jamulus.pro"
 resources_path="${root_path}/src/res"
 raw_path="${root_path}/rawbuild" # Path for raw, not yet runnable or signed binaries.

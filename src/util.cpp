@@ -944,7 +944,9 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
     // Try SRV-based discovery first:
     if ( ParseNetworkAddressSrv ( strAddress, HostAddress, bIPv6Available ) )
     {
-        return true;
+        // an SRV target of "." means the service is not offered: fail here
+        // rather than falling back to a host lookup
+        return !HostAddress.InetAddr.isNull();
     }
 #endif
     // Try regular connect via plain IP or host name lookup (A/AAAA):

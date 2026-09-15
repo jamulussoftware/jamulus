@@ -45,6 +45,7 @@
 \******************************************************************************/
 
 #include "client.h"
+#include <QThread>
 #include "settings.h"
 #include "util.h"
 
@@ -619,25 +620,6 @@ void CClient::SetRemoteChanPan ( const int iId, const float fPan )
     StartTimerGainOrPan();
 }
 
-bool CClient::SetServerAddr ( QString strNAddr )
-{
-    CHostAddress HostAddress;
-    if ( NetworkUtil::ParseNetworkAddress ( strNAddr, HostAddress, bIPv6Available ) )
-    {
-        // apply address to the channel
-        Channel.SetAddress ( HostAddress );
-
-        // By default, set server name to HostAddress. If using the Connect() method, this may be overwritten
-        SetConnectedServerName ( HostAddress.toString() );
-
-        return true;
-    }
-    else
-    {
-        return false; // invalid address
-    }
-}
-
 bool CClient::GetAndResetbJitterBufferOKFlag()
 {
     // get the socket buffer put status flag and reset it
@@ -1108,19 +1090,12 @@ void CClient::Stop()
         qWarning() << "Could not reinitialise the sound device while disconnecting:" << generr.GetErrorText();
     }
 
-    // wait for approx. 100 ms to make sure no audio packet is still in the
-    // network queue causing the channel to be reconnected right after having
-    // received the disconnect message (seems not to gain much, disconnect is
-    // still not working reliably)
-    QTime DieTime = QTime::currentTime().addMSecs ( 100 );
-    while ( QTime::currentTime() < DieTime )
-    {
-        // exclude user input events because if we use AllEvents, it happens
-        // that if the user initiates a connection and disconnection quickly
-        // (e.g. quickly pressing enter five times), the software can get into
-        // an unknown state
-        QCoreApplication::processEvents ( QEventLoop::ExcludeUserInputEvents, 100 );
-    }
+    // Wait ~100 ms so no audio packet is still in the network queue causing the
+    // channel to be reconnected right after the disconnect message. We must NOT
+    // run the event loop to do this: pumping events here re-entered the JSON-RPC
+    // read handler and freed a socket still being written to (use-after-free). A
+    // plain sleep keeps the settle without re-entrancy.
+    QThread::msleep ( 100 );
 
     // Send disconnect message to server (Since we disable our protocol
     // receive mechanism with the next command, we do not evaluate any
@@ -1162,7 +1137,7 @@ void CClient::Disconnect()
 /// @method
 /// @brief Connects to strServerAddress. If a connection is currently requested
 ///        or established, that connection is terminated first.
-/// @emit Connecting (strServerName) if SetServerAddr was valid. emit happens through Start().
+/// @emit Connecting (strServerName) if the address resolved. emit happens through Start().
 ///       Use to set CClientDlg to show being connected
 /// @emit ConnectingFailed (error) if an error occurred
 ///       Use to display error message in CClientDlg
@@ -1170,22 +1145,30 @@ void CClient::Disconnect()
 /// @param strServerName - the human readable server name passed to Connecting()
 void CClient::Connect ( const QString& strServerAddress, const QString& strServerName )
 {
+    // resolve before touching the current connection, so that an invalid
+    // address leaves it in place
+    CHostAddress HostAddress;
+
+    if ( !NetworkUtil::ParseNetworkAddress ( strServerAddress, HostAddress, bIPv6Available ) )
+    {
+        emit ConnectingFailed ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
+        return;
+    }
+
+    Connect ( HostAddress, strServerName );
+}
+
+void CClient::Connect ( const CHostAddress& HostAddress, const QString& strServerName )
+{
     try
     {
         // disconnect from any current server first so that connecting to a
         // different server while connected behaves as a reconnect
         Disconnect();
 
-        // Set server address and connect if valid address was supplied
-        if ( SetServerAddr ( strServerAddress ) )
-        {
-            SetConnectedServerName ( strServerName );
-            Start();
-        }
-        else
-        {
-            throw CGenErr ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
-        }
+        Channel.SetAddress ( HostAddress );
+        SetConnectedServerName ( strServerName );
+        Start();
     }
     catch ( const CGenErr& generr )
     {

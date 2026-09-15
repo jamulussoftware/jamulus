@@ -53,7 +53,7 @@ echo "Updating global copyright strings..."
 sed -re 's/(Copyright.*2[0-9]{3}-)[0-9]{4}/\1'"${YEAR}"'/g' -i src/translation/*.ts src/util.cpp src/aboutdlgbase.ui
 
 echo "Updating copyright comment headers..."
-find android ios linux mac src windows tools .github -regex '.*\.\(cpp\|h\|mm\|sh\|py\|pl\)' -not -regex '\./\(\.git\|libs/\|moc_\|ui_\).*' | while read -r file; do
+find android ios linux mac src test windows tools .github -regex '.*\.\(cpp\|h\|mm\|sh\|py\|pl\)' -not -regex '\./\(\.git\|libs/\|moc_\|ui_\).*' | while read -r file; do
     sed -re 's/((\*|#).*Copyright.*[^-][0-9]{4})(\s*-\s*\b[0-9]{4})?\s*$/\1-'"${YEAR}"'/' -i "${file}"
 done
 

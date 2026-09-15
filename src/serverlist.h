@@ -89,6 +89,7 @@ Note: this mechanism will not work in a private network.
 #include <QLocale>
 #include <QList>
 #include <QElapsedTimer>
+#include <QRandomGenerator>
 #include <QMutex>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
@@ -104,31 +105,8 @@ class CServer;
 class CServerListEntry : public CServerInfo
 {
 public:
-    CServerListEntry() : CServerInfo ( CHostAddress(), CHostAddress(), "", QLocale::AnyCountry, "", 0, false ) { UpdateRegistration(); }
-
-    CServerListEntry ( const CHostAddress&     NHAddr,
-                       const CHostAddress&     NLHAddr,
-                       const QString&          NsName,
-                       const QLocale::Country& NeCountry,
-                       const QString&          NsCity,
-                       const int               NiMaxNumClients,
-                       const bool              NbPermOnline ) :
-        CServerInfo ( NHAddr, NLHAddr, NsName, NeCountry, NsCity, NiMaxNumClients, NbPermOnline )
-    {
-        UpdateRegistration();
-    }
-
-    CServerListEntry ( const CHostAddress& NHAddr, const CHostAddress& NLHAddr, const CServerCoreInfo& NewCoreServerInfo ) :
-        CServerInfo ( NHAddr,
-                      NLHAddr,
-                      NewCoreServerInfo.strName,
-                      NewCoreServerInfo.eCountry,
-                      NewCoreServerInfo.strCity,
-                      NewCoreServerInfo.iMaxNumClients,
-                      NewCoreServerInfo.bPermanentOnline )
-    {
-        UpdateRegistration();
-    }
+    CServerListEntry();
+    CServerListEntry ( const CHostAddress& NHAddr, const CHostAddress& NLHAddr, const CServerCoreInfo& NewCoreServerInfo );
 
     void UpdateRegistration() { RegisterTime.start(); }
 
@@ -139,7 +117,7 @@ public:
                                     QString strCountry,
                                     QString strNumClients,
                                     bool    isPermanent,
-                                    bool    bEnableIPv6 );
+                                    bool    bIPv6Available );
     QString                 toCSV();
 
     // time on which the entry was registered
@@ -151,6 +129,8 @@ protected:
     static QString    ToBase64 ( const QString strIn ) { return ToBase64 ( strIn.toUtf8() ); }
     static QByteArray FromBase64ToByteArray ( const QString strIn ) { return QByteArray::fromBase64 ( strIn.toLatin1() ); }
     static QString    FromBase64ToString ( const QString strIn ) { return QString::fromUtf8 ( FromBase64ToByteArray ( strIn ) ); }
+
+    quint32 token;
 };
 
 class CServerListManager : public QObject
@@ -194,6 +174,8 @@ public:
     void Append ( const CHostAddress& InetAddr, const CHostAddress& LInetAddr, const CServerCoreInfo& ServerInfo, const QString strVersion = "" );
     void Remove ( const CHostAddress& InetAddr );
     void RetrieveAll ( const CHostAddress& InetAddr );
+
+    bool GetDirectoryServerList ( CVector<CServerInfo>& vecServerInfo );
 
     void StoreRegistrationResult ( ESvrRegResult eStatus );
 

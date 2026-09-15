@@ -45,20 +45,6 @@
 #
 ##############################################################################
 param (
-    # Replace default path with system Qt installation folder if necessary
-    [string] $QtInstallPath32 = "C:\Qt\5.15.2",
-    [string] $QtInstallPath64 = "C:\Qt\6.8.1",
-    [string] $QtCompile32 = "msvc2019",
-    [string] $QtCompile64 = "msvc2022_64",
-    # Important:
-    # - Do not update ASIO SDK without checking for license-related changes.
-    # - Do not copy (parts of) the ASIO SDK into the Jamulus source tree without
-    #   further consideration as it would make the license situation more complicated.
-    #
-    # The following version pinnings are semi-automatically checked for
-    # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-    [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/ASIO-SDK_2.3.4_2025-10-15.zip",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.12/nsis-3.12.zip",
     [string] $BuildOption = ""
 )
 
@@ -78,6 +64,16 @@ $BuildPath = "$RootPath\build"
 $DeployPath = "$RootPath\deploy"
 $WindowsPath ="$RootPath\windows"
 $AppName = "Jamulus"
+
+. "$RootPath\.github\autobuild\windows-dependencies.ps1"
+
+# Replace default path with system Qt installation folder if necessary
+$QtInstallPath32 = "C:\Qt\${Qt32Version}"
+$QtInstallPath64 = "C:\Qt\${Qt64Version}"
+
+# Verify .github/workflows/bump-dependencies.yml when changing these:
+$AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/${AsioSDKVersion}.zip"
+$NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/${NsisVersion}/nsis-${NsisVersion}.zip"
 
 # Execute native command with errorlevel handling
 Function Invoke-Native-Command {
@@ -351,7 +347,7 @@ function Build-App-Variants
         else
         {
             Initialize-Build-Environment -BuildArch $_
-            Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath64 -QtCompile $QtCompile64
+            Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath64 -QtCompile ${QtCompile64}_64
         }
         Build-App -BuildConfig "release" -BuildArch $_
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }

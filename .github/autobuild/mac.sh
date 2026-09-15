@@ -48,10 +48,13 @@
 
 set -eu
 
+QT=${QT:-6}
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+readonly PROJECT_DIR
+# shellcheck disable=SC1090
+source "${PROJECT_DIR}/.github/autobuild/mac-dependencies_qt${QT}.sh"
+
 QT_DIR=~/qt
-# The following version pinnings are semi-automatically checked for
-# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-AQTINSTALL_VERSION=3.3.0
 
 TARGET_ARCHS="${TARGET_ARCHS:-}"
 
@@ -65,7 +68,8 @@ if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 fi
 
 setup() {
-    if [[ -d "${QT_DIR}" ]]; then
+    if [[ -x "${QT_DIR}/${QT_VERSION}/macos/bin/qmake" &&
+        -x "${QT_DIR}/${QT_VERSION}/macos/bin/macdeployqt" ]]; then
         echo "Using Qt installation from previous run (actions/cache)"
     else
         echo "Installing Qt..."
@@ -194,7 +198,7 @@ build_app_as_dmg_installer() {
     if prepare_signing; then
         BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_DEV_ID_APPLICATION_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MACOS_CERTIFICATE_INST_DISTRIBUTION_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
-    TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
+    QT=${QT} TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
 
 pass_artifact_to_job() {

@@ -484,6 +484,14 @@ CONNECTION LESS MESSAGES
 
     note: does not have any data -> n = 0
 
+
+- PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST: Request the channel level list
+
+    note: does not have any data -> n = 0
+
+    the server replies with one PROTMESSID_CLM_CHANNEL_LEVEL_LIST to the
+    requesting address
+
 */
 
 #include "protocol.h"
@@ -979,6 +987,10 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
 
     case PROTMESSID_CLM_REQ_WELCOME_MESSAGE:
         EvaluateCLReqWelcomeMessageMes ( InetAddr );
+        break;
+
+    case PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST:
+        EvaluateCLReqChannelLevelListMes ( InetAddr );
         break;
     }
 }
@@ -2698,6 +2710,14 @@ void CProtocol::CreateCLWelcomeMessageMes ( const CHostAddress& InetAddr, const 
     PutStringUTF8OnStream ( vecData, iPos, strUTF8WelcomeMessage );
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_WELCOME_MESSAGE, vecData, InetAddr );
+}
+
+bool CProtocol::EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLReqChannelLevelList ( InetAddr );
+
+    return false; // no error
 }
 
 /******************************************************************************\

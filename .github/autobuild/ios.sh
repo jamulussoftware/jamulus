@@ -48,10 +48,12 @@
 
 set -eu
 
-QT_DIR=/opt/qt
-# The following version pinnings are semi-automatically checked for
-# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-AQTINSTALL_VERSION=3.3.0
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+readonly PROJECT_DIR
+# shellcheck disable=SC1091
+source "${PROJECT_DIR}/.github/autobuild/ios-dependencies.sh"
+
+QT_DIR=${HOME}/qt
 
 if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
@@ -63,13 +65,13 @@ if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 fi
 
 setup() {
-    if [[ -d "${QT_DIR}" ]]; then
+    # We may need to create the Qt installation directory and chown it to the runner user to fix permissions
+    sudo mkdir -p "${QT_DIR}"
+    sudo chown -R "$(whoami)" "${QT_DIR}"
+    if [[ -x "${QT_DIR}/${QT_VERSION}/ios/bin/qmake" ]]; then
         echo "Using Qt installation from previous run (actions/cache)"
     else
         echo "Installing Qt"
-        # We may need to create the Qt installation directory and chown it to the runner user to fix permissions
-        sudo mkdir -p "${QT_DIR}"
-        sudo chown "$(whoami)" "${QT_DIR}"
         # Create and enter virtual environment
         python3 -m venv venv
         # Must hide directory as it just gets created during execution of the previous command and cannot be found by shellcheck

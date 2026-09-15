@@ -27,45 +27,47 @@ This directory contains the main code of Jamulus.
 
 Code used by both client and server:
 
-- [main.cpp](main.cpp) parses the command line and constructs a `CClient` or a `CServer`.
-- [protocol.cpp](protocol.cpp) — `CProtocol`: message framing, acknowledgement and
+- [main.cpp](main.cpp) parses the command line and constructs a `CClient` or a `CServer`. The entrypoint of the application.
+- [protocol.cpp](protocol.cpp) — Programmatic specification of the protocol. `CProtocol` contains message framing, acknowledgement and
   retransmission. Wire format: [../docs/JAMULUS_PROTOCOL.md](../docs/JAMULUS_PROTOCOL.md).
-- [channel.cpp](channel.cpp) — `CChannel`: the connection and its receive jitter buffer, used by
-  both client and server.
-- [socket.cpp](socket.cpp) — `CSocket` and `CHighPrioSocket`: the UDP socket shared by all
-  sending and receiving, with its receive thread.
-- [buffer.h](buffer.h) — `CNetBuf` and `CNetBufWithStats`: the jitter buffer, including the
-  automatic size decision.
-- [util.h](util.h) / [util.cpp](util.cpp) — `CHighPrecisionTimer`, the server's frame clock, and
-  assorted helpers.
+- [channel.cpp](channel.cpp) — One connection to a peer, used by both client and server. `CChannel` holds the connection state and its
+  receive jitter buffer.
+- [socket.cpp](socket.cpp) — The UDP socket shared by all sending and receiving. `CSocket`, `CHighPrioSocket` and the receive thread.
+- [buffer.h](buffer.h) — The jitter buffer. `CNetBuf` and `CNetBufWithStats`, including the automatic size decision.
+- [settings.cpp](settings.cpp) — Reads and writes the settings XML file. `CSettings`, specialised as `CClientSettings` and `CServerSettings`.
+- [util.h](util.h) / [util.cpp](util.cpp) — Shared helpers. `CHighPrecisionTimer` (the server's frame clock) among others.
 
 Client only:
 
-- [client.cpp](client.cpp) — `CClient`: the client's audio path and its one channel.
-- [sound/](sound/) — the sound layer, one backend per platform. See [sound/README.md](sound/README.md).
+- [client.cpp](client.cpp) — The client's audio path. `CClient` and its single channel.
+- [sound/](sound/) — The sound layer, one backend per platform. See [sound/README.md](sound/README.md).
+- [plugins/audioreverb.cpp](plugins/audioreverb.cpp) — The reverb effect. `CAudioReverb`.
 - [clientdlg.cpp](clientdlg.cpp), [clientsettingsdlg.cpp](clientsettingsdlg.cpp),
   [audiomixerboard.cpp](audiomixerboard.cpp), [connectdlg.cpp](connectdlg.cpp),
-  [chatdlg.cpp](chatdlg.cpp) — the GUI.
-- [clientrpc.cpp](clientrpc.cpp) — the client half of the JSON-RPC API.
+  [chatdlg.cpp](chatdlg.cpp) — The GUI.
+- [clientrpc.cpp](clientrpc.cpp) — The client half of the JSON-RPC API.
 
 Server only:
 
-- [server.cpp](server.cpp) — `CServer`: the channels and the mix.
-- [serverlist.cpp](serverlist.cpp) — directory registration and the server list.
-- [recorder/](recorder/) — `CJamController` and `CJamRecorder`.
-- [serverlogging.cpp](serverlogging.cpp) — the connection log.
-- [serverrpc.cpp](serverrpc.cpp) — the server half of the JSON-RPC API.
-- [serverdlg.cpp](serverdlg.cpp) — the server GUI.
+- [server.cpp](server.cpp) — The server's frame cycle. `CServer` holds the channels and builds each client's mix.
+- [serverlist.cpp](serverlist.cpp) — Directory registration and the server list.
+- [recorder/](recorder/) — Recording of a session. `CJamController` and `CJamRecorder`.
+- [serverlogging.cpp](serverlogging.cpp) — The connection log.
+- [serverrpc.cpp](serverrpc.cpp) — The server half of the JSON-RPC API.
+- [serverdlg.cpp](serverdlg.cpp) — The server GUI.
 
 The JSON-RPC API ([rpcserver.cpp](rpcserver.cpp), [clientrpc.cpp](clientrpc.cpp),
 [serverrpc.cpp](serverrpc.cpp)) is documented in [../docs/JSON-RPC.md](../docs/JSON-RPC.md).
 
 ## Jamulus Architecture
 
-Jamulus is a client/server system: each client encodes the audio from its sound device and sends
-it to the server over UDP, and the server decodes every client's stream, builds a separate mix for
-each connected client from that client's own fader gains, re-encodes it and sends it back to be
-decoded and played out. Each receiving end holds arriving packets in a jitter buffer first.
+Jamulus is a client/server system. Each client encodes the audio from its sound device and sends it
+to the server over UDP. The server decodes every client's stream and builds a separate mix for each
+connected client, using that client's own fader gains, then re-encodes it and sends it back to be
+decoded and played out. At both ends, arriving packets go through a jitter buffer first.
+
+Background: [Performing Band Rehearsals on the Internet with Jamulus](https://jamulus.app/PerformingBandRehearsalsontheInternetWithJamulus.pdf),
+Volker Fischer's case study, based on three years of weekly online rehearsals.
 
 ### Threading
 
@@ -80,14 +82,14 @@ decoded and played out. Each receiving end holds arriving packets in a jitter bu
 | `QThreadPool` global pool | client GUI | the connect dialog | one task per listed server for the ping/info fan-out (`QtConcurrent::run`) |
 
 **The server's frame cycle runs on the main thread.** The `CHighPrecisionTimer` thread only
-emits `timeout()`; the slot behind that queued connection, `CServer::OnTimer`, does the jitter
-buffer drain, decode, mix, encode and transmit — on the main thread. The TODO in
+emits `timeout()`. Its queued slot, `CServer::OnTimer`, does the jitter buffer drain, decode,
+mix, encode and transmit — on the main thread. The TODO in
 [util.cpp](util.cpp) notes the same escape from the timer thread. On Windows the pacer is a
 plain `QTimer`, also main thread. With `--multithreading` the heavy blocks go to the pool, but
-`OnTimer` waits for them — and on a machine reporting one core, `CServer`'s constructor turns the
+`OnTimer` waits for them. On a machine reporting one core, `CServer`'s constructor turns the
 option back off, so no pool thread is created at all.
 
-### Locks
+#### Locks
 
 The locks taken from more than one thread:
 
@@ -103,9 +105,9 @@ The locks taken from more than one thread:
 
 - `CProtocol::Mutex` — queue of sent but not yet acknowledged messages
 - `CServer::MutexChanOrder` — channel allocation in `FindChannel` and `FreeChannel`
-- `CServer::MutexWelcomeMessage` — the welcome message string. Taken in `OnNewConnection` and
-  `SetWelcomeMessage` only; the other readers (`OnCLReqServerFeatures`, `OnCLReqWelcomeMessage`,
-  `GetWelcomeMessage`) do not take it, and every one of them is reached on the main thread.
+- `CServer::MutexWelcomeMessage` — the welcome message string. Only `OnNewConnection` and
+  `SetWelcomeMessage` lock it. `OnCLReqServerFeatures`, `OnCLReqWelcomeMessage` and
+  `GetWelcomeMessage` read it without the lock, and all three run on the main thread.
 - `CClient::MutexChannels` — client-side channel number map
 - `CClient::MutexGainOrPan` — gain/pan message rate limiter
 - `CClient::MutexDriverReinit` — serializes sound device re-initialization

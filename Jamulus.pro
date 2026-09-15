@@ -412,6 +412,8 @@ HEADERS += src/plugins/audioreverb.h \
     src/serverlogging.h \
     src/settings.h \
     src/socket.h \
+    src/tcpserver.h \
+    src/tcpconnection.h \
     src/util.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
@@ -520,6 +522,8 @@ SOURCES += src/plugins/audioreverb.cpp \
     src/settings.cpp \
     src/signalhandler.cpp \
     src/socket.cpp \
+    src/tcpserver.cpp \
+    src/tcpconnection.cpp \
     src/util.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
@@ -725,6 +729,7 @@ DISTFILES += ChangeLog \
     docs/JAMULUS_PROTOCOL.md \
     docs/JSON-RPC.md \
     docs/README.md \
+    docs/TCP.md \
     docs/TRANSLATING.md \
     linux/jamulus.desktop.in \
     linux/jamulus-server.desktop.in \

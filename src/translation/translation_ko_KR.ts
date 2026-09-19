@@ -912,7 +912,7 @@
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
         <translation>오디오 피드백 또는 큰 신호가 감지되었습니다.
 
-채널을 음소거하고 &apos;직접 음소거&apos;를 활성화했습니다. 피드백 문제를 먼저 해결하고 나중에 음소거를 해제하세요.</translation>
+채널을 음소거하고 &apos;스스로 음소거&apos;를 활성화했습니다. 피드백 문제를 먼저 해결하고 나중에 음소거를 해제하세요.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1196"/>
@@ -966,7 +966,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
-        <translation>직접 음소거(&amp;M)</translation>
+        <translation>스스로 음소거(&amp;M)</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="505"/>
@@ -1551,7 +1551,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>전역 MIDI 채널 매개변수(0-16) 하나와, 제어할 항목마다 설정할 수 있는 두 매개변수(첫 MIDI CC 및 연속 CC 번호 개수)가 있습니다. 먼저 Jamulus가 수신할 채널을 설정합니다(0으로 설정하면 모든 채널). 그런 다음 제어할 각 항목(음량 페이더, 팬, 솔로, 뮤트)에 대해 첫 MIDI CC(시작할 CC 번호)와 연속 CC 번호 개수를 설정합니다. &quot;스스로 음소거&quot; 매개변수는 유일하게 연속된 CC 번호를 설정하지 않아도 되는데, 이 기능은 사용자 본인의 오디오 스트림에만 적용되므로 CC 번호가 단 하나만 필요합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="457"/>

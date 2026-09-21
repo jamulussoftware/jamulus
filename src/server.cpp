@@ -172,6 +172,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init ( iMaxNumChannels );
+    vecfFadeInGains.Init ( iMaxNumChannels );
     vecvecfGains.Init ( iMaxNumChannels );
     vecvecfPannings.Init ( iMaxNumChannels );
     vecvecsData.Init ( iMaxNumChannels );
@@ -678,6 +679,12 @@ void CServer::OnTimer()
                 // connected clients is less, only a subset of elements of this
                 // vector are actually used and the others are dummy elements)
                 vecChanIDsCurConChan[iNumClients] = i;
+
+                // read the fade-in gain of the channel once per frame for use in
+                // DecodeReceiveData() (the fade-in counters are only written under
+                // the server mutex, which is held here and for the whole decode phase)
+                vecfFadeInGains[iNumClients] = vecChannels[i].GetFadeInGain();
+
                 iNumClients++;
             }
         }
@@ -896,24 +903,24 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
         CurOpusDecoder = nullptr;
     }
 
-    // get gains and pannings of all connected channels, compacted to the
-    // order of "vecChanIDsCurConChan".
-    // The second index of "vecvecfGains" does not represent
-    // the channel ID! Therefore we have to use
-    // "vecChanIDsCurConChan" to query the IDs of the currently
-    // connected channels
+    // get gains and pannings of all connected channels, compacted to the order of
+    // "vecChanIDsCurConChan" (the second index of "vecvecfGains" does not represent the
+    // channel ID but the position in "vecChanIDsCurConChan")
     vecChannels[iCurChanID].GetGainsAndPannings ( vecChanIDsCurConChan, iNumClients, vecvecfGains[iChanCnt], vecvecfPannings[iChanCnt] );
+
+    // apply the audio fade-in: each connected channel fades in with its own fade-in gain,
+    // and the fade-in gain of the current channel is applied to all other channels as well
+    // to avoid the client volumes being at 100% when joining a server (#628); the fade-in
+    // gains were read once per frame into "vecfFadeInGains" in the same order
+    const float fCurChanFadeInGain = vecfFadeInGains[iChanCnt];
 
     for ( int j = 0; j < iNumClients; j++ )
     {
-        // consider audio fade-in
-        vecvecfGains[iChanCnt][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+        vecvecfGains[iChanCnt][j] *= vecfFadeInGains[j];
 
-        // use the fade in of the current channel for all other connected clients
-        // as well to avoid the client volumes are at 100% when joining a server (#628)
         if ( j != iChanCnt )
         {
-            vecvecfGains[iChanCnt][j] *= vecChannels[iCurChanID].GetFadeInGain();
+            vecvecfGains[iChanCnt][j] *= fCurChanFadeInGain;
         }
     }
 

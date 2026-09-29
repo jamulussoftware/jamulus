@@ -251,8 +251,7 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
 
     /// @rpc_method jamulusserver/setDirectory
     /// @brief Set the directory type and, for custom, the directory address.
-    /// @param {string} params.directoryType - The directory type as a string. One of: none, any_genre_1, any_genre_2,
-    /// any_genre_asia, genre_rock, genre_jazz, genre_classical_folk, genre_choral_barbershop, custom.
+    /// @param {string} params.directoryType - The directory type as a string.
     /// The value is matched exactly: it is case-sensitive and is not trimmed. An unrecognised value is rejected.
     /// @param {string} [params.directoryAddress] - (optional) The directory address, required if `directoryType` is "custom".
     /// @result {string} result - "ok" on success. An unrecognised `directoryType` returns error -32602 and leaves the

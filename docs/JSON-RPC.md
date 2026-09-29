@@ -507,7 +507,7 @@ Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params.directoryType | string | The directory type as a string. One of: none, any_genre_1, any_genre_2, any_genre_asia, genre_rock, genre_jazz, genre_classical_folk, genre_choral_barbershop, custom. The value is matched exactly: it is case-sensitive and is not trimmed. An unrecognised value is rejected. |
+| params.directoryType | string | The directory type as a string. The value is matched exactly: it is case-sensitive and is not trimmed. An unrecognised value is rejected. |
 | [params.directoryAddress] | string | (optional) The directory address, required if `directoryType` is "custom". |
 
 Results:

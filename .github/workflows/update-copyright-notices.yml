@@ -14,7 +14,7 @@ jobs:
     if: >-
       github.repository_owner == 'jamulussoftware' &&
       github.event_name == 'push'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     permissions:
       pull-requests: write
       contents: write

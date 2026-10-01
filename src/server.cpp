@@ -896,15 +896,16 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
         CurOpusDecoder = nullptr;
     }
 
-    // get gains of all connected channels
+    // get gains and pannings of all connected channels, compacted to the
+    // order of "vecChanIDsCurConChan".
+    // The second index of "vecvecfGains" does not represent
+    // the channel ID! Therefore we have to use
+    // "vecChanIDsCurConChan" to query the IDs of the currently
+    // connected channels
+    vecChannels[iCurChanID].GetGainsAndPannings ( vecChanIDsCurConChan, iNumClients, vecvecfGains[iChanCnt], vecvecfPannings[iChanCnt] );
+
     for ( int j = 0; j < iNumClients; j++ )
     {
-        // The second index of "vecvecdGains" does not represent
-        // the channel ID! Therefore we have to use
-        // "vecChanIDsCurConChan" to query the IDs of the currently
-        // connected channels
-        vecvecfGains[iChanCnt][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
-
         // consider audio fade-in
         vecvecfGains[iChanCnt][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
 
@@ -914,9 +915,6 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
         {
             vecvecfGains[iChanCnt][j] *= vecChannels[iCurChanID].GetFadeInGain();
         }
-
-        // panning
-        vecvecfPannings[iChanCnt][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
     }
 
     // If the server frame size is smaller than the received OPUS frame size, we need a conversion

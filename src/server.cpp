@@ -297,6 +297,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqWelcomeMessage, this, &CServer::OnCLReqWelcomeMessage );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqChannelLevelList, this, &CServer::OnCLReqChannelLevelList );
+
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged, this, &CServer::SvrRegStatusChanged );
 
     QObject::connect ( &JamController, &recorder::CJamController::RestartRecorder, this, &CServer::RestartRecorder );

@@ -404,6 +404,11 @@ public slots:
 
     void OnCLReqWelcomeMessage ( CHostAddress InetAddr );
 
+    void OnCLReqChannelLevelList ( CHostAddress InetAddr )
+    {
+        ConnLessProtocol.CreateCLChannelLevelListMes ( InetAddr, vecChannelLevels, GetNumberOfConnectedClients() );
+    }
+
     void OnCLDisconnection ( CHostAddress InetAddr );
 
     void OnAboutToQuit();

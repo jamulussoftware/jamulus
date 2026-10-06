@@ -110,6 +110,7 @@
 #define PROTMESSID_CLM_REQ_SERVER_FEATURES    1020 // request server features
 #define PROTMESSID_CLM_WELCOME_MESSAGE        1021 // server welcome message
 #define PROTMESSID_CLM_REQ_WELCOME_MESSAGE    1022 // request server welcome message
+#define PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST 1025 // request channel level list (connectionless)
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE 2001 // a container for split messages
@@ -312,6 +313,7 @@ protected:
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerFeaturesMes ( const CHostAddress& InetAddr );
     bool EvaluateCLReqWelcomeMessageMes ( const CHostAddress& InetAddr );
+    bool EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr );
 
     int iOldRecID;
     int iOldRecCnt;
@@ -381,4 +383,5 @@ signals:
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
     void CLReqServerFeatures ( CHostAddress InetAddr );
     void CLReqWelcomeMessage ( CHostAddress InetAddr );
+    void CLReqChannelLevelList ( CHostAddress InetAddr );
 };

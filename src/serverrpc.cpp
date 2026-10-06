@@ -251,9 +251,11 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
 
     /// @rpc_method jamulusserver/setDirectory
     /// @brief Set the directory type and, for custom, the directory address.
-    /// @param {string} params.directoryType - The directory type as a string (see EDirectoryType and DeserializeDirectoryType).
+    /// @param {string} params.directoryType - The directory type as a string.
+    /// The value is matched exactly: it is case-sensitive and is not trimmed. An unrecognised value is rejected.
     /// @param {string} [params.directoryAddress] - (optional) The directory address, required if `directoryType` is "custom".
-    /// @result {string} result - Always "ok".
+    /// @result {string} result - "ok" on success. An unrecognised `directoryType` returns error -32602 and leaves the
+    /// directory setting unchanged.
     pRpcServer->HandleMethod ( "jamulusserver/setDirectory", [=] ( const QJsonObject& params, QJsonObject& response ) {
         auto           jsonDirectoryType = params["directoryType"];
         auto           directoryAddress  = params["directoryAddress"];
@@ -264,9 +266,15 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
             response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory type is not a string" );
             return;
         }
-        else
+
+        const QString strDirectoryType = jsonDirectoryType.toString();
+
+        if ( !DeserializeDirectoryType ( strDirectoryType.toStdString(), directoryType ) )
         {
-            directoryType = DeserializeDirectoryType ( jsonDirectoryType.toString().toStdString() );
+            response["error"] =
+                CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams,
+                                                 QString ( "Invalid params: unrecognised directoryType \"%1\"" ).arg ( strDirectoryType ) );
+            return;
         }
 
         if ( !directoryAddress.isUndefined() )
@@ -424,13 +432,14 @@ const std::unordered_map<std::string, EDirectoryType> CServerRpc::sumStringToDir
     { "custom", EDirectoryType::AT_CUSTOM },
 };
 
-inline EDirectoryType CServerRpc::DeserializeDirectoryType ( std::string sAddrType )
+inline bool CServerRpc::DeserializeDirectoryType ( const std::string& sAddrType, EDirectoryType& eAddrType )
 {
     auto found = sumStringToDirectoryType.find ( sAddrType );
     if ( found == sumStringToDirectoryType.end() )
-        return AT_DEFAULT;
+        return false;
 
-    return found->second;
+    eAddrType = found->second;
+    return true;
 }
 
 #if defined( Q_OS_MACOS ) && QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )

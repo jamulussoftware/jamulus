@@ -1,3 +1,6 @@
 [submodule "libs/oboe"]
 	path = libs/oboe
 	url = ../../google/oboe.git
+[submodule "libs/mverb"]
+	path = libs/mverb
+	url = https://github.com/martineastwood/mverb.git

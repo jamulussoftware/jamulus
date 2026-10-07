@@ -158,6 +158,8 @@ public:
 
     EAudComprType GetAudioCompressionType() { return eAudioCompressionType; }
     int           GetNumAudioChannels() const { return iNumAudioChannels; }
+    int           GetAudioCodingArg() const { return iAudioCodingArg; }
+    void          SetAudioCodingArg ( int iNAudioCodingArg ) { iAudioCodingArg = iNAudioCodingArg; }
 
     // network protocol interface
     void CreateJitBufMes ( const int iJitBufSize )
@@ -241,6 +243,7 @@ protected:
     int iNetwFrameSize;
     int iCeltNumCodedBytes;
     int iAudioFrameSizeSamples;
+    int iAudioCodingArg;
 
     EAudComprType eAudioCompressionType;
     int           iNumAudioChannels;

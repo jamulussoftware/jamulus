@@ -895,10 +895,8 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
     {
         CurOpusDecoder = nullptr;
 
-        // the codec of this channel is not known yet (the new client has not sent its audio
-        // properties so far), so nothing below writes this buffer: clear it, otherwise the last
-        // audio decoded at this position, e.g. by the previous client in a reused channel, would
-        // be recorded as this client's audio (#3901)
+        // no codec yet, so nothing below overwrites these buffers: clear them so that a new client
+        // does not inherit the audio of this channel's previous client (#3901)
         vecvecsData[iChanCnt].Reset ( 0 );
         vecvecsData2[iChanCnt].Reset ( 0 );
     }
@@ -947,8 +945,8 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             {
                 emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
 
-                // reset the decoders of this channel so that the next client using it starts from
-                // a clean state instead of continuing the previous client's audio (#3901)
+                // reset the decoders so that the next client in this channel does not continue
+                // the previous client's audio (#3901)
                 opus_custom_decoder_ctl ( OpusDecoderMono[iCurChanID], OPUS_RESET_STATE );
                 opus_custom_decoder_ctl ( OpusDecoderStereo[iCurChanID], OPUS_RESET_STATE );
                 opus_custom_decoder_ctl ( Opus64DecoderMono[iCurChanID], OPUS_RESET_STATE );

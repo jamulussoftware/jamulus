@@ -1056,6 +1056,11 @@ bool CProtocol::EvaluateClientIDMes ( const CVector<uint8_t>& vecData )
     // channel ID
     const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
+    if ( iCurID >= MAX_NUM_CHANNELS )
+    {
+        return true; // return error code
+    }
+
     // invoke message action
     emit ClientIDReceived ( iCurID );
 

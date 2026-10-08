@@ -900,6 +900,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
         // audio decoded at this position, e.g. by the previous client in a reused channel, would
         // be recorded as this client's audio (#3901)
         vecvecsData[iChanCnt].Reset ( 0 );
+        vecvecsData2[iChanCnt].Reset ( 0 );
     }
 
     // get gains and pannings of all connected channels, compacted to the

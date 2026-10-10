@@ -894,6 +894,11 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
     else
     {
         CurOpusDecoder = nullptr;
+
+        // no codec yet, so nothing below overwrites these buffers: clear them so that a new client
+        // does not inherit the audio of this channel's previous client (#3901)
+        vecvecsData[iChanCnt].Reset ( 0 );
+        vecvecsData2[iChanCnt].Reset ( 0 );
     }
 
     // get gains and pannings of all connected channels, compacted to the
@@ -939,6 +944,13 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
             {
                 emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
+
+                // reset the decoders so that the next client in this channel does not continue
+                // the previous client's audio (#3901)
+                opus_custom_decoder_ctl ( OpusDecoderMono[iCurChanID], OPUS_RESET_STATE );
+                opus_custom_decoder_ctl ( OpusDecoderStereo[iCurChanID], OPUS_RESET_STATE );
+                opus_custom_decoder_ctl ( Opus64DecoderMono[iCurChanID], OPUS_RESET_STATE );
+                opus_custom_decoder_ctl ( Opus64DecoderStereo[iCurChanID], OPUS_RESET_STATE );
 
                 FreeChannel ( iCurChanID ); // note that the channel is now not in use
 

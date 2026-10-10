@@ -68,15 +68,11 @@ $ProgressPreference = 'SilentlyContinue'
 $QtDir = 'C:\Qt'
 $ChocoCacheDir = 'C:\ChocoCache'
 $DownloadCacheDir = 'C:\AutobuildCache'
-# The following version pinnings are semi-automatically checked for
-# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-$Qt32Version = "5.15.2"
-$Qt64Version = "6.10.2"
-$AqtinstallVersion = "3.3.0"
-$JackVersion = "1.9.22"
-$Msvc32Version = "win32_msvc2019"
-$Msvc64Version = "win64_msvc2022_64"
-$JomVersion = "1.1.2"
+$DependencySuffix = ''
+. "$PSScriptRoot\windows-dependencies.ps1"
+
+$Msvc32Version = "${QtCompile32}"
+$Msvc64Version = "${QtCompile64}_64"
 
 # Compose JACK download urls
 $JackBaseUrl = "https://github.com/jackaudio/jack2-releases/releases/download/v${JackVersion}/jack2-win"
@@ -150,7 +146,8 @@ Function Install-Qt
 
 Function Ensure-Qt
 {
-    if ( Test-Path -Path $QtDir )
+    if ( (Test-Path -Path "$QtDir\$Qt32Version\${Msvc32Version}\bin\qmake.exe" -PathType Leaf) -and
+         (Test-Path -Path "$QtDir\$Qt64Version\${Msvc64Version}\bin\qmake.exe" -PathType Leaf) )
     {
         echo "Using Qt installation from previous run (actions/cache)"
         return
@@ -165,10 +162,10 @@ Function Ensure-Qt
     }
 
     echo "Get Qt 64 bit..."
-    Install-Qt "${Qt64Version}" "${Msvc64Version}"
+    Install-Qt "${Qt64Version}" "win64_${Msvc64Version}"
 
     echo "Get Qt 32 bit..."
-    Install-Qt "${Qt32Version}" "${Msvc32Version}"
+    Install-Qt "${Qt32Version}" "win32_${Msvc32Version}"
 }
 
 Function Ensure-jom
@@ -238,7 +235,7 @@ Function Build-App-With-Installer
     {
         $ExtraArgs += ("-BuildOption", $BuildOption)
     }
-    powershell ".\windows\deploy_windows.ps1" "C:\Qt\${Qt32Version}" "C:\Qt\${Qt64Version}" @ExtraArgs
+    powershell ".\windows\deploy_windows.ps1" @ExtraArgs
     if ( !$? )
     {
         throw "deploy_windows.ps1 failed with exit code $LastExitCode"

@@ -49,7 +49,7 @@
 set -eu
 
 # Some of the following version pinnings are semi-automatically checked for
-# updates. Update .github/workflows/bump-dependencies.yaml when renaming those:
+# updates. Update .github/workflows/bump-dependencies.yml when renaming those:
 COMMANDLINETOOLS_VERSION=6858069
 ANDROID_NDK_VERSION=r21d
 ANDROID_PLATFORM=android-30

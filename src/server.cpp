@@ -899,7 +899,6 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
         // does not inherit the audio of this channel's previous client (#3901)
         vecvecsData[iChanCnt].Reset ( 0 );
         vecvecsData2[iChanCnt].Reset ( 0 );
-        vecvecsData2[iChanCnt].Reset ( 0 );
     }
 
     // get gains and pannings of all connected channels, compacted to the

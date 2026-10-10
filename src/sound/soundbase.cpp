@@ -168,17 +168,17 @@ QString CSoundBase::SetDev ( const QString strDevName )
         }
 
         // try to load and initialize any valid driver
-        QVector<QString> vsErrorList = LoadAndInitializeFirstValidDriver();
+        QVector<CDriverInitError> vErrorList = LoadAndInitializeFirstValidDriver();
 
-        if ( !vsErrorList.isEmpty() )
+        if ( !vErrorList.isEmpty() )
         {
             // create error message with all details
             QString sErrorMessage =
                 tr ( "<b>%1 couldn't find a usable %2 audio device.</b><br><br>" ).arg ( APP_NAME ).arg ( strSystemDriverTechniqueName );
 
-            for ( int i = 0; i < lNumDevs; i++ )
+            for ( const CDriverInitError& DriverInitError : vErrorList )
             {
-                sErrorMessage += "<b>" + GetDeviceName ( i ) + "</b>: " + vsErrorList[i] + "<br><br>";
+                sErrorMessage += "<b>" + DriverInitError.strDevName + "</b>: " + DriverInitError.strError + "<br><br>";
             }
 
 #if defined( _WIN32 ) && !defined( WITH_JACK )
@@ -202,9 +202,9 @@ QString CSoundBase::SetDev ( const QString strDevName )
     return strReturn;
 }
 
-QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup )
+QVector<CDriverInitError> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup )
 {
-    QVector<QString> vsErrorList;
+    QVector<CDriverInitError> vErrorList;
 
     // load and initialize first valid ASIO driver
     bool bValidDriverDetected = false;
@@ -216,7 +216,7 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
         // try to load and initialize current driver, store error message
         const QString strCurError = LoadAndInitializeDriver ( GetDeviceName ( iDriverCnt ), bOpenDriverSetup );
 
-        vsErrorList.append ( strCurError );
+        vErrorList.append ( CDriverInitError ( GetDeviceName ( iDriverCnt ), strCurError ) );
 
         if ( strCurError.isEmpty() )
         {
@@ -227,14 +227,14 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
             strCurDevName = GetDeviceName ( iDriverCnt );
 
             // empty error list shows that init was successful
-            vsErrorList.clear();
+            vErrorList.clear();
         }
 
         // try next driver
         iDriverCnt++;
     }
 
-    return vsErrorList;
+    return vErrorList;
 }
 
 /******************************************************************************\

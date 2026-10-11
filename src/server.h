@@ -276,6 +276,7 @@ protected:
 
     CVector<QString> vstrChatColors;
     CVector<int>     vecChanIDsCurConChan;
+    CVector<float>   vecfFadeInGains;
 
     CVector<CVector<float>>   vecvecfGains;
     CVector<CVector<float>>   vecvecfPannings;

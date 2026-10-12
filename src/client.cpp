@@ -746,7 +746,14 @@ void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
     }
 }
 
-QString CClient::SetSndCrdDev ( const QString strNewDev )
+QString CClient::SetSndCrdDev ( const QString strNewDev ) { return ChangeSndCrdDev ( strNewDev, QString(), false ); }
+
+QString CClient::SetSndCrdInOutDev ( const QString& strNewInDev, const QString& strNewOutDev )
+{
+    return ChangeSndCrdDev ( strNewInDev, strNewOutDev, true );
+}
+
+QString CClient::ChangeSndCrdDev ( const QString& strNewDev, const QString& strNewOutDev, const bool bSeparateInOutDev )
 {
     QString strError = "";
 
@@ -762,7 +769,8 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
     // on error condition. Catch it here as exceptions must not escape from a Qt slot.
     try
     {
-        strError = Sound.SetDev ( strNewDev );
+        // for a separate selection the first parameter is the input device name
+        strError = bSeparateInOutDev ? Sound.SetInOutDev ( strNewDev, strNewOutDev ) : Sound.SetDev ( strNewDev );
 
         // init again because the sound card actual buffer size might
         // be changed on new device

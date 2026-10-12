@@ -82,6 +82,11 @@ jobs:
                 grep -oP '.*\K(?:ASIO-SDK|asiosdk)_.*(?=\.zip)'
             local_version_regex: (.*["\/])((?:ASIO-SDK|asiosdk)_[^"]+?)(".*|\.zip.*)
 
+          - name: gcovr
+            # not Changelog-worthy
+            get_upstream_version: GH_REPO=gcovr/gcovr gh release view --json tagName --jq .tagName | sed -re 's/^v//'
+            local_version_regex: (.*GCOVR_VERSION:\s*)([0-9.]+)(.*)
+
     steps:
       - uses: actions/checkout@v7
         with:

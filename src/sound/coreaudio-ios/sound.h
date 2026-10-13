@@ -63,6 +63,14 @@ public:
     virtual void Stop();
     virtual void processBufferList ( AudioBufferList*, CSound* );
 
+    // channel selection (for multichannel input devices)
+    virtual int     GetNumInputChannels() override { return iNumInChan; }
+    virtual QString GetInputChannelName ( const int iDiD ) override { return sChannelNamesInput[iDiD]; }
+    virtual void    SetLeftInputChannel ( const int iNewChan ) override;
+    virtual void    SetRightInputChannel ( const int iNewChan ) override;
+    virtual int     GetLeftInputChannel() override { return iSelInputLeftChannel; }
+    virtual int     GetRightInputChannel() override { return iSelInputRightChannel; }
+
     AudioUnit audioUnit;
 
     // these variables/functions should be protected but cannot since we want
@@ -71,11 +79,16 @@ public:
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
     bool           isInitialized;
+    int            iNumInChan;
+    int            iSelInputLeftChannel;
+    int            iSelInputRightChannel;
+    QString        sChannelNamesInput[MAX_NUM_IN_OUT_CHANNELS];
 
 protected:
     virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
     void            GetAvailableInOutDevices();
     void            SwitchDevice ( QString strDriverName );
+    void            UpdateInputChannelInfo();
 
     AudioBuffer     buffer;
     AudioBufferList bufferList;

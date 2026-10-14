@@ -48,10 +48,22 @@
 
 set -eu
 
+QT=${QT:-6}
+case "${QT}" in
+    5) QT_PLATFORM=clang_64 ;;
+    6) QT_PLATFORM=macos ;;
+    *)
+        echo "Unsupported macOS Qt selector: ${QT} (expected 5 or 6)" >&2
+        exit 1
+        ;;
+esac
+readonly QT_PLATFORM
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+readonly PROJECT_DIR
+# shellcheck disable=SC1090
+source "${PROJECT_DIR}/.github/autobuild/mac-dependencies_qt${QT}.sh"
+
 QT_DIR=~/qt
-# The following version pinnings are semi-automatically checked for
-# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
-AQTINSTALL_VERSION=3.3.0
 
 TARGET_ARCHS="${TARGET_ARCHS:-}"
 
@@ -65,31 +77,33 @@ if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 fi
 
 setup() {
-    if [[ -d "${QT_DIR}" ]]; then
+    if [[ -x "${QT_DIR}/${QT_VERSION}/${QT_PLATFORM}/bin/qmake" &&
+        -x "${QT_DIR}/${QT_VERSION}/${QT_PLATFORM}/bin/macdeployqt" ]]; then
         echo "Using Qt installation from previous run (actions/cache)"
-    else
-        echo "Installing Qt..."
-        # We may need to create the Qt installation directory and chown it to the runner user to fix permissions
-        sudo mkdir -p "${QT_DIR}"
-        sudo chown "$(whoami)" "${QT_DIR}"
-        # Create and enter virtual environment
-        python3 -m venv venv
-        # Must hide directory as it just gets created during execution of the previous command and cannot be found by shellcheck
-        # shellcheck source=/dev/null
-        source venv/bin/activate
-        pip install "aqtinstall==${AQTINSTALL_VERSION}"
-        local qtmultimedia=()
-        if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+ ]]; then
-            # From Qt6 onwards, qtmultimedia is a module and cannot be installed
-            # as an archive anymore.
-            qtmultimedia=("--modules")
-        fi
-        qtmultimedia+=("qtmultimedia")
-        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations "${qtmultimedia[@]}"
-        # deactivate and remove venv as aqt is no longer needed from here on
-        deactivate
-        rm -rf venv
+        return
     fi
+
+    echo "Installing Qt..."
+    # We may need to create the Qt installation directory and chown it to the runner user to fix permissions
+    sudo mkdir -p "${QT_DIR}"
+    sudo chown "$(whoami)" "${QT_DIR}"
+    # Create and enter virtual environment
+    python3 -m venv venv
+    # Must hide directory as it just gets created during execution of the previous command and cannot be found by shellcheck
+    # shellcheck source=/dev/null
+    source venv/bin/activate
+    pip install "aqtinstall==${AQTINSTALL_VERSION}"
+    local qtmultimedia=()
+    if [[ ! "${QT_VERSION}" =~ 5\.[0-9]+\.[0-9]+ ]]; then
+        # From Qt6 onwards, qtmultimedia is a module and cannot be installed
+        # as an archive anymore.
+        qtmultimedia=("--modules")
+    fi
+    qtmultimedia+=("qtmultimedia")
+    python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations "${qtmultimedia[@]}"
+    # deactivate and remove venv as aqt is no longer needed from here on
+    deactivate
+    rm -rf venv
 }
 
 prepare_signing() {
@@ -194,7 +208,7 @@ build_app_as_dmg_installer() {
     if prepare_signing; then
         BUILD_ARGS=("-s" "${MACOS_CERTIFICATE_DEV_ID_APPLICATION_ID}" "-a" "${MAC_STORE_APP_CERT_ID}" "-i" "${MACOS_CERTIFICATE_INST_DISTRIBUTION_ID}" "-k" "${KEYCHAIN_PASSWORD}")
     fi
-    TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
+    QT=${QT} TARGET_ARCHS="${TARGET_ARCHS}" ./mac/deploy_mac.sh "${BUILD_ARGS[@]}"
 }
 
 pass_artifact_to_job() {

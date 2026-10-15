@@ -166,6 +166,8 @@ public:
     void             SetServerCountry ( const QLocale::Country eNewCountry ) { ServerListManager.SetServerCountry ( eNewCountry ); }
     QLocale::Country GetServerCountry() { return ServerListManager.GetServerCountry(); }
 
+    bool GetDirectoryServerList ( CVector<CServerInfo>& vecServerInfo ) { return ServerListManager.GetDirectoryServerList ( vecServerInfo ); }
+
     bool    GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     void    SetEnableRecording ( bool bNewEnableRecording );
     bool    GetDisableRecording() { return bDisableRecording; }

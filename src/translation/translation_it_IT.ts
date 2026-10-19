@@ -21,7 +21,7 @@
     <message>
         <location filename="../util.cpp" line="449"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation>Codice riverbero audio sviluppato da Perry R. Cook and Gary P. Scavone</translation>
+        <translation>Codice riverbero audio sviluppato da Perry R. Cook e Gary P. Scavone</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="391"/>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../util.cpp" line="543"/>
         <source>For details on the contributions check out the %1</source>
-        <translation>Per maggiorni dettagli su chi contribuisce al progetto visitare %1</translation>
+        <translation>Per maggiori dettagli su chi contribuisce al progetto visitare %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="544"/>
@@ -126,7 +126,7 @@
     <message>
         <location filename="../util.cpp" line="602"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Giapponese</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="610"/>
@@ -200,7 +200,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="1012"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation>Quando connessi i fader permettono di regolare i volumi in locale senza influenzare l&apos;ascolto degli altri utenti. L&apos;intestazione mostra il nome de server, se valorizzato, e le informazioni sullo stato della sessione di registrazione se attiva.</translation>
+        <translation>Quando connessi i fader permettono di regolare i volumi in locale senza influenzare l&apos;ascolto degli altri utenti. L&apos;intestazione mostra il nome del server, se valorizzato, e le informazioni sullo stato della sessione di registrazione se attiva.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="1085"/>
@@ -259,7 +259,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="287"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation>Il fader identifica il client connesso. Il nikname, un&apos;immagine del tuo strumento e la bandiera del tuo paese, possono essere impostati nella finestra principale.</translation>
+        <translation>L&apos;etichetta del fader identifica il client connesso. Il nickname, un&apos;immagine del tuo strumento e la bandiera del tuo paese possono essere impostati nella finestra principale.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="296"/>
@@ -314,7 +314,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="268"/>
         <source>Local panning position of the current audio channel at the server</source>
-        <translation>Bilancimento locale del canale audio corrente sul server</translation>
+        <translation>Bilanciamento locale del canale audio corrente sul server</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="270"/>
@@ -344,12 +344,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="254"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
-        <translation>Regola il livello audio di questo canale. A tutti i client connessi sarà assegnatu un fader per regolare il mix audio locale.</translation>
+        <translation>Regola il livello audio di questo canale. A tutti i client connessi sarà assegnato un fader per regolare il mix audio locale.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="262"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
-        <translation>Altoparlate con il segnale rosso: indica che un altro client ha messo il tuo canale in mute.</translation>
+        <translation>Altoparlante con il segnale rosso: indica che un altro client ha messo il tuo canale in mute.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="266"/>
@@ -359,7 +359,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="274"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation>Se selezionato il pulsate &quot;Solo&quot;, il canale audio sarà settato nella modalità di &quot;Solo&quot; ovvero tutti i canali saranno mutati ad eccezione di quelli in modalità &quot;Solo&quot;.</translation>
+        <translation>Se selezionato il pulsante &quot;Solo&quot;, il canale audio sarà settato nella modalità di &quot;Solo&quot; ovvero tutti i canali saranno mutati ad eccezione di quelli in modalità &quot;Solo&quot;. È possibile mettere in modalità &quot;Solo&quot; più di un canale.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="280"/>
@@ -369,7 +369,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="281"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation>Con il comando Rag, può essere definito un gruppo di canali. Tutti i canali raggruppati possono essere modificati in modo proporzionale muovendo uno dei fader del gruppo.</translation>
+        <translation>Con il comando Grp, può essere definito un gruppo di canali. Tutti i canali raggruppati possono essere modificati in modo proporzionale muovendo uno dei fader del gruppo.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="284"/>
@@ -504,7 +504,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="76"/>
         <source>Type a message here</source>
-        <translation>Inserisi un messaggio qui</translation>
+        <translation>Inserisci un messaggio qui</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="80"/>
@@ -596,12 +596,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="82"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation>Se il programma è connesso ad un server e voi state suonando o cantando, il VU-Meter sarà in funzione. Se ciò non accade probabilemnte avete settato un ingresso errato oppure il livello di input è troppo basso.</translation>
+        <translation>Se il programma è connesso ad un server e voi state suonando o cantando, il VU-Meter sarà in funzione. Se ciò non accade probabilmente avete settato un ingresso errato oppure il livello di input è troppo basso.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="90"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation>Per un corretto utilizzo dell&apos;applicazione, non è possibile ascoltare il canto o lo strumento attraverso l&apos;altoparlante o le cuffie quando il programma non è collegato. Basta disattivare l&apos;audio del canale di ingresso nel mixer di riproduzione (non nel mixer di registrazione!).</translation>
+        <translation>Per un corretto utilizzo dell&apos;applicazione, non dovresti sentire il tuo canto o il tuo strumento attraverso l&apos;altoparlante o le cuffie quando il programma non è collegato. Basta disattivare l&apos;audio del canale di ingresso nel mixer di riproduzione (non nel mixer di registrazione!).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="122"/>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="198"/>
         <source>The CPU of the client or server is at 100%.</source>
-        <translation>La CPU del client è satura al 100%.</translation>
+        <translation>La CPU del client o del server è al 100%.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="212"/>
@@ -752,7 +752,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="321"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation>&amp;Riprisitna tutti gli stati salvati di SOLO e MUTE</translation>
+        <translation>&amp;Ripristina tutti gli stati salvati di SOLO e MUTE</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="328"/>
@@ -798,7 +798,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="181"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation>Il led di stato del Jitter Locale indica lo stato dello strem audio. Se diventa rosso l&apos;audio risulta scadente. Questo è dovuto a diversi problemi:</translation>
+        <translation>Il LED di stato del jitter buffer locale indica lo stato dello stream audio. Se diventa rosso, lo stream audio è interrotto. Ciò è dovuto a uno dei seguenti problemi:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="208"/>
@@ -863,12 +863,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="351"/>
         <source>Sort Users by &amp;Group</source>
-        <translation>Ordina Canali per Nome &amp;Utente</translation>
+        <translation>Ordina canali per &amp;Gruppo</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="424"/>
         <source>&amp;MIDI Control Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni controllo &amp;MIDI...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="812"/>
@@ -913,12 +913,12 @@
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
         <translation>Feedback audio o segnale forte rilevato.
 
-E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disattiva Inputt&quot;. Si prega di risolvere prima il problema dei larsen e dei ritorni e successivamente riattivare l&apos;audio.</translation>
+E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disattiva Input&quot;. Si prega di risolvere prima il problema dei larsen e dei ritorni e successivamente riattivare l&apos;audio.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1196"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation>Se la tua interfaccia non funziona correttamente, apri la schermata dei settaggi e controlla se è stata selezionata l&apos;interfaccia corretta ed il suo relativo driver.</translation>
+        <translation>La tua scheda audio non funziona correttamente. Apri la finestra delle impostazioni e controlla il dispositivo selezionato e le impostazioni del driver.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1267"/>
@@ -1020,7 +1020,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="98"/>
         <source>Jitter Buffer Size</source>
-        <translation>Dimensione Jitter Bufer</translation>
+        <translation>Dimensione Jitter Buffer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="110"/>
@@ -1216,12 +1216,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="99"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation>Il Jitter Buffer compensa i ritardi della rete e della scheda audio. La dimensione del buffer influenza quindi la qualità del flusso audio (quando si verificano i dropout) e il ritardo complessivo (più è alto il buffer, maggiore è il ritardo).</translation>
+        <translation>Il Jitter Buffer compensa i ritardi della rete e della scheda audio. La dimensione del buffer influenza quindi la qualità del flusso audio (quanti dropout si verificano) e il ritardo complessivo (più è alto il buffer, maggiore è il ritardo).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="104"/>
         <source>You can set the jitter buffer size manually for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.</source>
-        <translation>È possibile impostare manualmente la dimensione delJitter Buffer per il client locale e il server remoto. Per il Jitter Buffer locale, i dropout nel flusso audio sono indicati dalla luce sotto i fader del Jitter Buffer. Se la luce diventa rossa, si è verificato un sovraccarico / underrun del buffer e il flusso audio viene interrotto.</translation>
+        <translation>È possibile impostare manualmente la dimensione del Jitter Buffer per il client locale e il server remoto. Per il Jitter Buffer locale, i dropout nel flusso audio sono indicati dalla luce sotto i fader del Jitter Buffer. Se la luce diventa rossa, si è verificato un sovraccarico / underrun del buffer e il flusso audio viene interrotto.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="113"/>
@@ -1256,7 +1256,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="289"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation>Selezione la vista da applicare alla finestra principale.</translation>
+        <translation>Seleziona la vista da applicare alla finestra principale.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
@@ -1266,7 +1266,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="295"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation>Selezionare lo stile del Meter da utilizzare per i livelli audio. L&apos;opzione &quot;Barra LED stretta e LED piccoli si applicano solo al mixer. Quando si seleziona &quot;Barre Strette&quot;, gli indicatori di input sono impostati su Barre. Quando si seleziona LED Piccoli, gli indicatori di ingresso sono impostati su LED rotondi. Le restanti opzioni si applicano all mixer ed ai Meter delgli input.</translation>
+        <translation>Seleziona lo stile dei Meter da utilizzare per i livelli audio. Le opzioni &quot;Barre (Sottili)&quot; e &quot;LED (Piccoli, rotondi)&quot; si applicano solo al mixer. Quando si seleziona &quot;Barre (Sottili)&quot;, gli indicatori di ingresso sono impostati su &quot;Barre (larghe)&quot;. Quando si seleziona &quot;LED (Piccoli, rotondi)&quot;, gli indicatori di ingresso sono impostati su &quot;LED (Rotondi, grandi)&quot;. Le restanti opzioni si applicano al mixer e ai Meter degli ingressi.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="304"/>
@@ -1291,7 +1291,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="316"/>
         <source>These modes use one and two audio channels respectively.</source>
-        <translation>Questa modalità usa rispettivamente uno o due canali audio.</translation>
+        <translation>Queste modalità usano rispettivamente uno e due canali audio.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="321"/>
@@ -1321,7 +1321,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="356"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
-        <translation>Questa impostazione definisce il livello di dissolvenza di un client appena connesso in percentuale. Se un nuovo client si connette al server corrente, otterrà il livello di fader iniziale specificato se nessun altro livello di fader da una precedente connessione di quel client era già memorizzato.</translation>
+        <translation>Questa impostazione definisce in percentuale il livello del fader di un client appena connesso. Se un nuovo client si connette al server corrente, otterrà il livello di fader iniziale specificato se nessun altro livello di fader da una precedente connessione di quel client era già memorizzato.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="367"/>
@@ -1331,7 +1331,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="368"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation>Questa impostazione consente di aumentare il livello del segnale in ingresso tramite fattori di moltiplicazione di guadagno fino a 10 (ovvero + 20dB). Se il suono è troppo basso provare, prima ad aumentare il guadagno, di avvicinarsi al microfono, regolare i livelli della scheda audio o regolare i livelli nelle impostazioni di input del sistema. Se non si riesce ad ottenere un livello di ingresso soddisfacente, impostare un fattore di guadagno adeguato. Se il suono è gia troppo forte risulterà distorto ed in clipping, questa opzione in questo caso non ti sarà utile. In questi casi dovrai diminuire il livello di ingresso: allontanati dal microfono, regola la scheda audio o regola i livelli delle impostazioni di ingresso del sistema operativo.</translation>
+        <translation>Questa impostazione consente di aumentare il livello del segnale in ingresso con un fattore fino a 10 (+20dB). Se il suono è troppo basso, prova prima ad aumentare il livello avvicinandoti al microfono, regolando la tua attrezzatura audio o alzando i livelli nelle impostazioni di ingresso del sistema operativo. Imposta un fattore qui solo se questo non basta. Se il suono è troppo forte, distorto o in clipping, questa opzione non ti sarà utile: non usarla, la distorsione resterebbe. Diminuisci invece il livello di ingresso: allontanati dal microfono, regola la tua attrezzatura audio o abbassa i livelli nelle impostazioni di ingresso del sistema operativo.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="381"/>
@@ -1341,7 +1341,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="177"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation>Per ciascun %1 input/output (canali sinistro e destro) può essere selezionata una scheda audio diversa.</translation>
+        <translation>Per ciascun canale di ingresso/uscita di %1 (canale sinistro e destro) può essere selezionato un diverso canale effettivo della scheda audio.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="197"/>
@@ -1366,7 +1366,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="82"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
-        <translation>Controlla i livelli dei canali audio della scheda sinistro e destro. Per un segnale mono funge da mixer tra i due canali. Ad esempio, se un microfono è collegato al canale di ingresso destro e uno strumento è collegato al canale di ingresso sinistro che è molto più forte del microfono, spostare il fader audio per bilanciare gli ingressi, l&apos;etichetta sopra il fader mostra %1, dove %2 è l&apos;indicatore di attenuazione.</translation>
+        <translation>Controlla i livelli relativi dei canali audio locali sinistro e destro. Per un segnale mono funge da bilanciamento tra i due canali. Ad esempio, se un microfono è collegato al canale di ingresso destro e uno strumento molto più forte del microfono è collegato al canale di ingresso sinistro, sposta il fader audio nella direzione in cui l&apos;etichetta sopra il fader mostra %1, dove %2 è l&apos;indicatore di attenuazione corrente.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="145"/>
@@ -1381,7 +1381,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="211"/>
         <source>Three buffer sizes can be selected</source>
-        <translation>È possibile sceliere tra tre possibilità di dimensioni del buffer</translation>
+        <translation>È possibile scegliere tra tre possibilità di dimensioni del buffer</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="214"/>
@@ -1422,12 +1422,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="384"/>
         <source>Custom Directories</source>
-        <translation>Cartella predefinita</translation>
+        <translation>Cartelle personalizzate</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="390"/>
         <source>Custom Directories combo box</source>
-        <translation>Combo box della Cartella Predefinita</translation>
+        <translation>Box di selezione cartelle personalizzate</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="392"/>
@@ -1482,7 +1482,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="415"/>
         <source>Feedback Protection check box</source>
-        <translation>Casella Protezione dai Larser</translation>
+        <translation>Casella Protezione dai Larsen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="418"/>
@@ -1492,7 +1492,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="419"/>
         <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation>Abilita gli avvisi audio quando ricevi un messaggio in chat e quando un nuovo utente entra nella sessione. Sarà necessario un secondo device audio per ascoltare questi avvisi.</translation>
+        <translation>Abilita gli avvisi audio quando ricevi un messaggio in chat e quando un nuovo utente entra nella sessione. Potrebbe essere necessario un secondo dispositivo audio per ascoltare questi avvisi.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="421"/>
@@ -1502,122 +1502,122 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="424"/>
         <source>Enable/disable MIDI-in port</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita/disabilita la porta MIDI-in</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="425"/>
         <source>MIDI-in port check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Casella porta MIDI-in</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="427"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità pick-up</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="428"/>
         <source>When enabled, MIDI fader and pan controls will wait until the physical controller position matches the current software value before responding. This prevents sudden jumps when your physical controller is out of sync with the software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se attivata, i controlli MIDI di fader e bilanciamento attendono che la posizione del controller fisico corrisponda al valore attuale nel software prima di rispondere. Così si evitano salti improvvisi quando il controller fisico non è allineato con il software.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="431"/>
         <source>Pick-up Mode check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Casella modalità pick-up</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="434"/>
         <source>Select which MIDI output port to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use your connection manager of choice to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona la porta di uscita MIDI a cui connettersi. Se attivato, Jamulus collegherà automaticamente la propria porta di ingresso MIDI al dispositivo selezionato. Puoi anche usare il gestore di connessioni che preferisci per modificare manualmente i collegamenti.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="438"/>
         <source>Select which MIDI source to connect to. Jamulus will automatically connect its MIDI input port to the selected device when enabled.You can also use Audio MIDI Setup to manually change connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona la sorgente MIDI a cui connettersi. Se attivato, Jamulus collegherà automaticamente la propria porta di ingresso MIDI al dispositivo selezionato. Puoi anche usare Configurazione MIDI Audio per modificare manualmente i collegamenti.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="442"/>
         <source>Select which MIDI input device(s) Jamulus should listen to. Select &apos;All Devices&apos; to receive MIDI from all connected devices, or choose a specific device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona i dispositivi di ingresso MIDI che Jamulus deve ascoltare. Seleziona &apos;Tutti i dispositivi&apos; per ricevere il MIDI da tutti i dispositivi collegati, oppure scegli un dispositivo specifico.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="445"/>
         <source>MIDI input device combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box di selezione dispositivo di ingresso MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>MIDI controller settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni del controller MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="448"/>
         <source>There is one global MIDI channel parameter (0-16) and two parameters you can set for each item controlled: First MIDI CC and consecutive CC numbers (count). First set the channel you want Jamulus to listen on (0 for all channels). Then, for each item you want to control (volume fader, pan, solo, mute), set the first MIDI CC (CC number to start from) and number of consecutive CC numbers (count). There is one exception that does not require establishing consecutive CC numbers which is the “Mute Myself” parameter - it only requires a single CC number as it is only applied to one’s own audio stream.</source>
-        <translation type="unfinished"></translation>
+        <translation>C&apos;è un parametro globale per il canale MIDI (0-16) e due parametri da impostare per ogni elemento controllato: primo MIDI CC e numero di CC consecutivi (quantità). Per prima cosa imposta il canale su cui Jamulus deve restare in ascolto (0 per tutti i canali). Poi, per ogni elemento che vuoi controllare (fader del volume, bilanciamento, solo, muto), imposta il primo MIDI CC (il numero CC da cui partire) e la quantità di numeri CC consecutivi. Fa eccezione il parametro “Disattiva Input”, che non richiede numeri CC consecutivi: basta un solo numero CC perché si applica soltanto al proprio flusso audio.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="457"/>
         <source>You can either type in the MIDI CC values or use the &quot;Learn&quot; button: click on &quot;Learn&quot;, actuate the fader/knob/button on your MIDI controller, and the MIDI CC number will be detected and saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Puoi digitare i valori MIDI CC oppure usare il pulsante &quot;Apprendi&quot;: fai clic su &quot;Apprendi&quot;, muovi il fader, la manopola o il pulsante del controller MIDI e il numero MIDI CC verrà rilevato e salvato.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="468"/>
         <source>MIDI channel combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box di selezione canale MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="469"/>
         <source>Mute Myself MIDI CC number spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box numero MIDI CC per Disattiva Input</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="470"/>
         <source>Fader offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box offset fader</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="471"/>
         <source>Pan offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box offset bilanciamento</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="472"/>
         <source>Solo offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box offset solo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="473"/>
         <source>Mute offset spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box offset muto</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="474"/>
         <source>Mute Myself MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsante Apprendi MIDI per Disattiva Input</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="475"/>
         <source>Fader offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsante Apprendi MIDI per offset fader</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="476"/>
         <source>Pan offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsante Apprendi MIDI per offset bilanciamento</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="477"/>
         <source>Solo offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsante Apprendi MIDI per offset solo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="478"/>
         <source>Mute offset MIDI learn button</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsante Apprendi MIDI per offset muto</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="482"/>
         <source>ASIO Device Settings</source>
-        <translation>Configurasione driver ASIO</translation>
+        <translation>Configurazione driver ASIO</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="516"/>
@@ -1638,7 +1638,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>
@@ -1696,55 +1696,55 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1506"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Apprendi</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1541"/>
         <location filename="../clientsettingsdlg.cpp" line="1628"/>
         <source>All Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutti i dispositivi</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1544"/>
         <source>No device connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun dispositivo connesso</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1572"/>
         <location filename="../clientsettingsdlg.cpp" line="1578"/>
         <source>MIDI Device Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo MIDI non trovato</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1573"/>
         <source>The MIDI device &quot;%1&quot; could not be found. Using all available devices instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile trovare il dispositivo MIDI &quot;%1&quot;. Verranno usati tutti i dispositivi disponibili.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1579"/>
         <source>The MIDI device &quot;%1&quot; is not currently available. Select a different device from the dropdown to connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il dispositivo MIDI &quot;%1&quot; non è al momento disponibile. Seleziona un altro dispositivo dall&apos;elenco a discesa per connetterti.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1626"/>
         <location filename="../clientsettingsdlg.cpp" line="1632"/>
         <source>MIDI Device Connection Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione al dispositivo MIDI non riuscita</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1627"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile connettersi al dispositivo MIDI &quot;%1&quot;. Controlla la configurazione del sistema operativo.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1633"/>
         <source>Could not connect to MIDI device &quot;%1&quot;. Please check that the device is available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile connettersi al dispositivo MIDI &quot;%1&quot;. Verifica che il dispositivo sia disponibile.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1654"/>
         <source>Listening...</source>
-        <translation type="unfinished"></translation>
+        <translation>In ascolto...</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="586"/>
@@ -1795,23 +1795,23 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../clientsettingsdlg.cpp" line="912"/>
         <location filename="../clientsettingsdlg.cpp" line="919"/>
         <source>Could not open MIDI port</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile aprire la porta MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="913"/>
         <source>No MIDI devices found. Please connect a MIDI device and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun dispositivo MIDI trovato. Collega un dispositivo MIDI e riprova.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="919"/>
         <source>Please check your OS configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlla la configurazione del sistema operativo.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1061"/>
         <location filename="../clientsettingsdlg.cpp" line="1065"/>
         <source>Size: </source>
-        <translation>Livello: </translation>
+        <translation>Dimensione: </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1120"/>
@@ -1846,7 +1846,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutti i Generi Asia</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>
@@ -1986,7 +1986,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1229"/>
         <source>Recorder</source>
-        <translation>Registratore</translation>
+        <translation>Flauto dolce</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1232"/>
@@ -2116,7 +2116,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1307"/>
         <source>Conductor</source>
-        <translation>Conduttore</translation>
+        <translation>Direttore d&apos;orchestra</translation>
     </message>
 </context>
 <context>
@@ -2277,7 +2277,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1034"/>
         <source>Custom Directories:</source>
-        <translation>Directory personalizzata:</translation>
+        <translation>Cartelle personalizzate:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1108"/>
@@ -2308,117 +2308,117 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1341"/>
         <source>MIDI Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Controllo MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1365"/>
         <source>MIDI-in</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-in</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1391"/>
         <source>MIDI Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canale MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1417"/>
         <source>0 (all)</source>
-        <translation type="unfinished"></translation>
+        <translation>0 (tutti)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1422"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1427"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1432"/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1437"/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1442"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1447"/>
         <source>6</source>
-        <translation type="unfinished"></translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1452"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation>7</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1457"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1462"/>
         <source>9</source>
-        <translation type="unfinished"></translation>
+        <translation>9</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1467"/>
         <source>10</source>
-        <translation type="unfinished"></translation>
+        <translation>10</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1472"/>
         <source>11</source>
-        <translation type="unfinished"></translation>
+        <translation>11</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1477"/>
         <source>12</source>
-        <translation type="unfinished"></translation>
+        <translation>12</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1482"/>
         <source>13</source>
-        <translation type="unfinished"></translation>
+        <translation>13</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1487"/>
         <source>14</source>
-        <translation type="unfinished"></translation>
+        <translation>14</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1492"/>
         <source>15</source>
-        <translation type="unfinished"></translation>
+        <translation>15</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1497"/>
         <source>16</source>
-        <translation type="unfinished"></translation>
+        <translation>16</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1518"/>
         <source>Pick-up Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità pick-up</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1546"/>
         <source>Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>Disattiva Input</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1569"/>
         <source>MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1604"/>
@@ -2427,12 +2427,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../clientsettingsdlgbase.ui" line="1995"/>
         <location filename="../clientsettingsdlgbase.ui" line="2119"/>
         <source>Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Apprendi</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1679"/>
         <source>Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Fader</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1702"/>
@@ -2440,7 +2440,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../clientsettingsdlgbase.ui" line="1963"/>
         <location filename="../clientsettingsdlgbase.ui" line="2087"/>
         <source>First MIDI CC</source>
-        <translation type="unfinished"></translation>
+        <translation>Primo MIDI CC</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1763"/>
@@ -2448,22 +2448,22 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../clientsettingsdlgbase.ui" line="2024"/>
         <location filename="../clientsettingsdlgbase.ui" line="2148"/>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantità</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1803"/>
         <source>Mute</source>
-        <translation type="unfinished">Muto</translation>
+        <translation>Muto</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1940"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="2199"/>
         <source>MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo MIDI</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="623"/>
@@ -2546,7 +2546,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlg.cpp" line="172"/>
         <source>The Connection Setup window lists the available servers registered with the selected directory. Use the Directory dropdown to change the directory, find the server you want to join in the server list, click on it, and then click the Connect button to connect. Alternatively, double click on the server name to connect.</source>
-        <translation>La finestra Configurazione connessione elenca i server disponibili registrati con la cartella selezionata. Utilizzare il menu a discesa &quot;Directory&quot; per modificare la cartella, trovare il server a cui connettersi nell&apos;elenco dei server, fare clic su di esso, quindi fare clic sul pulsante Connetti. In alternativa, fare doppio clic sul nome del server per connettersi.</translation>
+        <translation>La finestra Configurazione connessione elenca i server disponibili registrati con la cartella selezionata. Utilizzare il menu a discesa &quot;Cartella&quot; per modificare la cartella, trovare il server a cui connettersi nell&apos;elenco dei server, fare clic su di esso, quindi fare clic sul pulsante Connetti. In alternativa, fare doppio clic sul nome del server per connettersi.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="177"/>
@@ -2596,7 +2596,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlg.cpp" line="1185"/>
         <source>Ping</source>
-        <translation type="unfinished">Ping</translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="193"/>
@@ -2639,7 +2639,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation>Directory</translation>
+        <translation>Cartella</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="45"/>
@@ -2684,7 +2684,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlgbase.ui" line="138"/>
         <source>C&amp;ancel</source>
-        <translation>C&amp;ancella</translation>
+        <translation>&amp;Annulla</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="145"/>
@@ -2718,7 +2718,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="679"/>
         <source>P&amp;rivacy policy...</source>
-        <translation type="unfinished"></translation>
+        <translation>Informativa sulla p&amp;rivacy...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="681"/>
@@ -2746,7 +2746,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="746"/>
         <source>Please restart the application for the language change to take effect.</source>
-        <translation>Perfavore Riavvia il programma oer rendere effettive le modifiche.</translation>
+        <translation>Riavvia il programma per rendere effettive le modifiche.</translation>
     </message>
 </context>
 <context>
@@ -2818,12 +2818,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
         <source>Directory Type combo box</source>
-        <translation>ComboBox della categoria della Rubrica</translation>
+        <translation>Box di selezione tipo di cartella</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="105"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation>Quando viene scelto un valore diverso da &quot;%1&quot; per la rubrica, verrà mostrato se la registrazione è andata a buon fine. Se la registrazione non è riuscita, scegli una rubrica diversa.</translation>
+        <translation>Quando viene scelto un valore diverso da &quot;%1&quot; per la cartella, verrà mostrato se la registrazione è andata a buon fine. Se la registrazione non è riuscita, scegli una cartella diversa.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
@@ -2848,27 +2848,27 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="168"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
-        <translation>Se la cartella di registrazione non è disponibile, il problema verrà visualizzato al posto della directory di sessione.</translation>
+        <translation>Se la cartella di registrazione non è disponibile, il problema verrà visualizzato al posto della cartella della sessione.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="199"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation>Fare clic sul pulsante per aprire la finestra di dialogo che consente di selezionare la cartella di registrazione principale. Il percorso scelto deve esistere e deve avere i permessi di lattura/scrittura (consenti la creazione di sottodirectory da parte dell&apos;utente %1 in esecuzione).</translation>
+        <translation>Fare clic sul pulsante per aprire la finestra di dialogo che consente di selezionare la cartella di registrazione principale. Il percorso scelto deve esistere e deve avere i permessi di lettura/scrittura (consenti la creazione di sottocartelle da parte dell&apos;utente con cui è in esecuzione %1).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation>Il valore corrente della cartella di registrazione principale. Il valore scelto deve esistere ed avere i permessi di lettura/scrittura (consenti la creazione di sottodirectory da parte dell&apos;utente %1 in esecuzione). Fare clic sul pulsante per aprire la finestra di dialogo che consente di selezionare la cartella di registrazione principale.</translation>
+        <translation>Il valore corrente della cartella di registrazione principale. Il valore scelto deve esistere ed avere i permessi di lettura/scrittura (consenti la creazione di sottocartelle da parte dell&apos;utente con cui è in esecuzione %1). Fare clic sul pulsante per aprire la finestra di dialogo che consente di selezionare la cartella di registrazione principale.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="218"/>
         <source>Custom Directory address</source>
-        <translation>Indirizzo della Rubrica personalizzata</translation>
+        <translation>Indirizzo della cartella personalizzata</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="219"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation>L&apos;indirizzo della rubrica personalizzato è l&apos;indirizzo della Rubrica contenente l&apos;elenco dei server a cui questo server deve essere aggiunto.</translation>
+        <translation>L&apos;indirizzo della cartella personalizzata è l&apos;indirizzo della cartella contenente l&apos;elenco dei server a cui questo server deve essere aggiunto.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="227"/>
@@ -2884,7 +2884,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="229"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation>Fare clic sul pulsante per aprire la finestra di dialogo che consente di impostare il nome del file di persistenza dell&apos;elenco dei server. L&apos;utente %1 è in esecuzione poiché deve essere in grado di creare il file specificato anche se potrebbe già esistere (verrà sovrascritto al salvataggio).</translation>
+        <translation>Fare clic sul pulsante per aprire la finestra di dialogo che consente di impostare il nome del file di persistenza dell&apos;elenco dei server. L&apos;utente con cui è in esecuzione %1 deve poter creare il file specificato, anche se potrebbe già esistere (verrà sovrascritto al salvataggio).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="235"/>
@@ -2894,7 +2894,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="237"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation>Il nome del file di dell&apos;elenco dei server. L&apos;utente %1 è in esecuzione poiché deve essere in grado di creare file specificato anche se potrebbe già esistere (verrà sovrascritto al salvataggio). Fare clic sul pulsante per aprire la finestra di dialogo che consente di impostare il nome del file dell&apos;elenco dei server.</translation>
+        <translation>Il nome corrente del file di persistenza dell&apos;elenco dei server. L&apos;utente con cui è in esecuzione %1 deve poter creare il file specificato, anche se potrebbe già esistere (verrà sovrascritto al salvataggio). Fare clic sul pulsante per aprire la finestra di dialogo che consente di impostare il nome del file dell&apos;elenco dei server.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="244"/>
@@ -2909,7 +2909,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="246"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
-        <translation>Usare il bottone per canellare la lista dei server selezionata. Questo impedirà la persistenza dell&apos;elenco dei server fino a quando non viene selezionato un nuovo valore.</translation>
+        <translation>Usare il pulsante per cancellare il nome del file della lista dei server selezionato. Questo impedirà la persistenza dell&apos;elenco dei server fino a quando non viene selezionato un nuovo valore.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="250"/>
@@ -2919,7 +2919,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="761"/>
         <source>Now a directory</source>
-        <translation>Ora una rubrica</translation>
+        <translation>Ora una cartella</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="104"/>
@@ -2929,7 +2929,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="251"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation>Se la casella di controllo &quot;Avvia ridotto a icona&quot; all&apos;avvio del sistema operativo è selezionata, il server verrà avviato all&apos;avvio del sistema operativo e verrà automaticamente ridotto a icona a icona nella barra delle attività del sistema.</translation>
+        <translation>Se la casella di controllo &quot;Avvia ridotto a icona all&apos;avvio del sistema operativo&quot; è selezionata, il server verrà avviato all&apos;avvio del sistema operativo e verrà automaticamente ridotto a icona nella barra delle attività del sistema.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="111"/>
@@ -2959,7 +2959,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="129"/>
         <source>City where the server is located line edit</source>
-        <translation>Citta del Server</translation>
+        <translation>Città del server</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="132"/>
@@ -2979,7 +2979,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="197"/>
         <source>Display dialog to select recording directory button</source>
-        <translation>Visualizza la finestra di dialogo per selezionare il pulsante della directory di registrazione</translation>
+        <translation>Pulsante per aprire la finestra di selezione della cartella di registrazione</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="198"/>
@@ -2995,7 +2995,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="212"/>
         <source>Clear the recording directory button</source>
-        <translation>Bottone per cancellare il contenuto della cartella di registrazione</translation>
+        <translation>Pulsante per azzerare la cartella di registrazione impostata</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="213"/>
@@ -3030,7 +3030,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
-        <translation>Abilitato durante la registrazione e imposta la directory della sessione di registrazione. Disabilitato dopo la registrazione o quando il registratore non è abilitato.</translation>
+        <translation>Abilitato durante la registrazione, contiene la cartella della sessione di registrazione corrente. Disabilitato dopo la registrazione o quando il registratore non è abilitato.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="153"/>
@@ -3041,7 +3041,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../serverdlg.cpp" line="85"/>
         <source>&lt;b&gt;Directory:&lt;/b&gt; Select &apos;%1&apos; not to register your server with a directory.&lt;br&gt;Or select one of the genres to register with that directory.&lt;br&gt;Or select &apos;%2&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.&lt;br&gt;&lt;br&gt;For any value except &apos;%1&apos;, this server registers with a directory so that a %3 user can select this server in the client connect dialog server list when they choose that directory.&lt;br&gt;&lt;br&gt;The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <comment>%1: directory type NONE; %2: directory type CUSTOM; %3 app name, Jamulus</comment>
-        <translation>&lt;b&gt;Directory:&lt;/b&gt; Seleziona &apos;%1&apos; per non registrare il tuo server con una directory.&lt;br&gt;Oppure seleziona uno dei generi per registrarti con quella directory.&lt;br&gt;Oppure seleziona &apos;%2&apos; e specifica un Indirizzo della directory personalizzata nella scheda Opzioni per registrarsi con una directory personalizzata.&lt;br&gt;&lt;br&gt;Per qualsiasi valore tranne &apos;%1&apos;, questo server si registra con una directory in modo che un utente %3 possa selezionare questo server nella finestra di dialogo di connessione del client elenco dei server quando scelgono quella directory.&lt;br&gt;&lt;br&gt;La registrazione del server viene rinnovata periodicamente per assicurarsi che tutti i server nell&apos;elenco dei server della finestra di connessione siano effettivamente disponibili.</translation>
+        <translation>&lt;b&gt;Cartella:&lt;/b&gt; Seleziona &apos;%1&apos; per non registrare il tuo server in una cartella.&lt;br&gt;Oppure seleziona uno dei generi per registrarlo nella cartella corrispondente.&lt;br&gt;Oppure seleziona &apos;%2&apos; e specifica un indirizzo della cartella personalizzata nella scheda Opzioni per registrarlo in una cartella personalizzata.&lt;br&gt;&lt;br&gt;Per qualsiasi valore tranne &apos;%1&apos;, questo server si registra in una cartella, in modo che un utente di %3 possa selezionarlo nell&apos;elenco dei server della finestra di connessione del client quando sceglie quella cartella.&lt;br&gt;&lt;br&gt;La registrazione del server viene rinnovata periodicamente per assicurarsi che tutti i server nell&apos;elenco della finestra di connessione siano effettivamente disponibili.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="155"/>
@@ -3061,7 +3061,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="166"/>
         <source>The performers are being recorded to the specified session directory.</source>
-        <translation>Gli artisti vengono registrati nella directory della sessione specificata.</translation>
+        <translation>Gli artisti vengono registrati nella cartella della sessione specificata.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="167"/>
@@ -3169,7 +3169,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="627"/>
         <source>Select Main Recording Directory</source>
-        <translation>Seleziona la directory di registrazione principale</translation>
+        <translation>Seleziona la cartella di registrazione principale</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="78"/>
@@ -3184,7 +3184,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.h" line="75"/>
         <source>Not initialised</source>
-        <translation>Non inizializato</translation>
+        <translation>Non inizializzato</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="76"/>
@@ -3229,7 +3229,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.h" line="709"/>
         <source>Server list full at directory</source>
-        <translation>Elenco server completo nella directory</translation>
+        <translation>Elenco server completo nella cartella</translation>
     </message>
     <message>
         <location filename="../util.h" line="712"/>
@@ -3288,7 +3288,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation>Finesta Chat Messaggio di Benvenuto (Supporta HTML/CSS)</translation>
+        <translation>Finestra Chat Messaggio di Benvenuto (Supporta HTML/CSS)</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="224"/>
@@ -3298,7 +3298,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation>Indirizzo personalizzato Rubrica</translation>
+        <translation>Indirizzo cartella personalizzata</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
@@ -3329,7 +3329,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlgbase.ui" line="253"/>
         <source>Recording Directory</source>
-        <translation>Directory di Registrazione</translation>
+        <translation>Cartella di registrazione</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
@@ -3368,12 +3368,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverlist.cpp" line="437"/>
         <source>Now a directory</source>
-        <translation>Ora una directory</translation>
+        <translation>Ora una cartella</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="443"/>
         <source>No longer a directory</source>
-        <translation>Non è più una directory</translation>
+        <translation>Non è più una cartella</translation>
     </message>
     <message>
         <location filename="../serverlist.cpp" line="802"/>
@@ -3496,7 +3496,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="403"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
-        <translation>Il dispositivo audio attualmente selezionato non è più presente. Controlla le connessioni sul tuo dispositivo audio.</translation>
+        <translation>Il dispositivo di ingresso audio non è più disponibile. Verifica che il dispositivo di ingresso sia collegato correttamente.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="412"/>
@@ -3539,17 +3539,17 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../sound/soundbase.cpp" line="164"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
-        <translation>Il dispositivo audio selezionato in precedenza non è più disponibile o il driver è passato a uno stato incompatibile. Cercheremo di trovare un dispositivo audio valido. Prima di connetterti a un server, controlla le connessioni sul tuo dispositivo audio dalle impostazioni.</translation>
+        <translation>Il dispositivo audio selezionato in precedenza non è più disponibile o il driver è passato a uno stato incompatibile. Cercheremo di trovare un dispositivo audio valido, ma questo nuovo dispositivo potrebbe causare larsen. Prima di connetterti a un server, controlla le impostazioni del tuo dispositivo audio.</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="177"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation>&lt;b&gt;%1 Impossibile trovare una valida %2 scheda audio.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
+        <translation>&lt;b&gt;%1 non ha trovato un dispositivo audio %2 utilizzabile.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="188"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translation>Puoi risolvare il problema aprendo il software del driver. Vuoi aprire la schermata dei settaggi adesso?</translation>
+        <translation>Puoi risolvere il problema aprendo il software del driver. Vuoi aprire la schermata dei settaggi adesso?</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="195"/>
@@ -3602,17 +3602,17 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.cpp" line="1651"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation>Audio reverberation sviluppato da Perry R. Cook and Gary P. Scavone</translation>
+        <translation>Codice riverbero audio sviluppato da Perry R. Cook e Gary P. Scavone</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1590"/>
         <source>Released under the GNU Affero General Public License 3.0 (or any later version)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rilasciato con licenza GNU Affero General Public License 3.0 (o qualsiasi versione successiva)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1658"/>
         <source>Flag icons by Mark James</source>
-        <translation>Iconde delle Bandiere di Mark James</translation>
+        <translation>Icone delle bandiere di Mark James</translation>
     </message>
 </context>
 <context>

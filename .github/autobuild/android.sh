@@ -58,8 +58,21 @@ fi
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 readonly PROJECT_DIR
 
-ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_qt5.sh"
-DEFAULT_ARTIFACT_SUFFIX="_qt5"
+JAMULUS_ANDROID_STREAM="${JAMULUS_ANDROID_STREAM:-qt5}"
+case "$JAMULUS_ANDROID_STREAM" in
+    qt5)
+        ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_qt5.sh"
+        DEFAULT_ARTIFACT_SUFFIX="_qt5"
+        ;;
+    qt6)
+        ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_qt6.sh"
+        DEFAULT_ARTIFACT_SUFFIX="_qt6"
+        ;;
+    *)
+        echo "Unsupported Android build stream: $JAMULUS_ANDROID_STREAM" >&2
+        exit 1
+        ;;
+esac
 
 # Save environment before sourcing the dependencies file, so we can restore overrides.
 EXPLICIT_COMMANDLINETOOLS_VERSION="${COMMANDLINETOOLS_VERSION:-}"
@@ -102,19 +115,35 @@ if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     exit 1
 fi
 
-[[ "${QT_VERSION}" =~ ^5\..* ]] || {
-    echo "The Qt 5 Android build requires Qt 5; received ${QT_VERSION}" >&2
+if [[ "$JAMULUS_ANDROID_STREAM" == qt5 && ! "${QT_VERSION}" =~ ^5\..* ]] ||
+    [[ "$JAMULUS_ANDROID_STREAM" == qt6 && ! "${QT_VERSION}" =~ ^6\..* ]]; then
+    echo "Android stream ${JAMULUS_ANDROID_STREAM} is incompatible with Qt ${QT_VERSION}" >&2
     exit 1
-}
-QT_ANDROID_DIR="${QT_DIR}/${QT_VERSION}/android"
-QT_ANDROIDDEPLOYQT="${QT_ANDROID_DIR}/bin/androiddeployqt"
+fi
+if [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]]; then
+    QT_ANDROID_DIR="${QT_DIR}/${QT_VERSION}/android"
+    QT_ANDROIDDEPLOYQT="${QT_ANDROID_DIR}/bin/androiddeployqt"
+    QT_HOST_PATH="${QT_ANDROID_DIR}"
+    QT_QMAKE="${QT_ANDROID_DIR}/bin/qmake"
+else
+    QT_ANDROID_DIR="${QT_DIR}/${QT_VERSION}"
+    QT_ANDROIDDEPLOYQT="${QT_ANDROID_DIR}/gcc_64/bin/androiddeployqt"
+    QT_HOST_PATH="${QT_ANDROID_DIR}/gcc_64"
+    QT_QMAKE=""
+fi
 readonly QT_ANDROID_DIR
 readonly QT_ANDROIDDEPLOYQT
+export QT_HOST_PATH
 
 export QT_SELECT
-QT_SELECT="${QT_VERSION}-$(basename "${QT_ANDROID_DIR}")"
-export QTTOOLDIR="${QT_ANDROID_DIR}/bin"
-export QTLIBDIR="${QT_ANDROID_DIR}/lib"
+QT_SELECT="${QT_VERSION}-android"
+if [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]]; then
+    export QTTOOLDIR="${QT_ANDROID_DIR}/bin"
+    export QTLIBDIR="${QT_ANDROID_DIR}/lib"
+else
+    export QTTOOLDIR="${QT_HOST_PATH}/bin"
+    export QTLIBDIR="${QT_HOST_PATH}/lib"
+fi
 
 # Only variables which are really needed by sub-commands are exported.
 # Definitions have to stay in a specific order due to dependencies.
@@ -128,8 +157,6 @@ done
 for var in JAMULUS_ANDROID_KEY_ALIAS JAMULUS_ANDROID_KEY_PASSWORD JAMULUS_ANDROID_KEYSTORE JAMULUS_ANDROID_KEYSTORE_BASE64 JAMULUS_ANDROID_KEYSTORE_PASSWORD; do
     if [[ -n "${!var:-}" ]]; then echo $var='****'; fi
 done
-
-readonly QT_QMAKE="${QT_ANDROID_DIR}/bin/qmake"
 
 # shellcheck disable=SC1090
 source "${PROJECT_DIR}/.github/autobuild/android-output-paths.sh"
@@ -256,16 +283,42 @@ setup_android_ndk() {
     echo "${ANDROID_NDK_VERSION}" > "$ndk_version_marker"
 }
 
+qt_android_arch() {
+    case "$1" in
+        armeabi-v7a) printf '%s' android_armv7 ;;
+        arm64-v8a) printf '%s' android_arm64_v8a ;;
+        x86) printf '%s' android_x86 ;;
+        x86_64) printf '%s' android_x86_64 ;;
+        *)
+            echo "Unsupported Android ABI: $1" >&2
+            return 1
+            ;;
+    esac
+}
+
 setup_qt() {
+    local target_arch
+    local qt_arch
+
     # We may need to create the Qt installation directory and chown it to the runner user to fix permissions
     # (even after cache recovery)
     sudo mkdir -p "${QT_DIR}"
     sudo chown -R "$(whoami)" "${QT_DIR}"
 
-    # QT_QMAKE and QT_ANDROIDDEPLOYQT are under a version-named directory.
-    if [[ -x "${QT_QMAKE}" && -x "${QT_ANDROIDDEPLOYQT}" ]]; then
-        echo "Using Qt ${QT_VERSION} installation from previous run (actions/cache)"
-        return
+    if [[ -x "${QT_ANDROIDDEPLOYQT}" ]]; then
+        if [[ "$JAMULUS_ANDROID_STREAM" == qt5 && -x "${QT_QMAKE}" ]]; then
+            echo "Using Qt ${QT_VERSION} installation from previous run (actions/cache)"
+            return
+        elif [[ "$JAMULUS_ANDROID_STREAM" == qt6 ]]; then
+            for target_arch in $TARGET_ARCHS; do
+                qt_arch="$(qt_android_arch "$target_arch")"
+                [[ -x "${QT_DIR}/${QT_VERSION}/${qt_arch}/bin/qmake" ]] || break
+            done
+            if [[ -x "${QT_DIR}/${QT_VERSION}/${qt_arch}/bin/qmake" ]]; then
+                echo "Using Qt ${QT_VERSION} installation for ${TARGET_ARCHS} from previous run (actions/cache)"
+                return
+            fi
+        fi
     fi
 
     echo "Installing Qt"
@@ -283,14 +336,32 @@ setup_qt() {
     pip install "aqtinstall==${AQTINSTALL_VERSION}"
 
     # Install actual Android Qt:
-    local qt_archives=(qtbase qttools qttranslations qtandroidextras qtmultimedia)
-    python3 -m aqt install-qt --outputdir "${QT_DIR}" linux android "${QT_VERSION}" \
-        --archives "${qt_archives[@]}"
+    local qt_archives=(qtbase qttools qttranslations)
+    if [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]]; then
+        qt_archives+=(qtandroidextras qtmultimedia)
+        python3 -m aqt install-qt --outputdir "${QT_DIR}" linux android "${QT_VERSION}" \
+            --archives "${qt_archives[@]}"
+    else
+        qt_archives+=(icu)
+        for target_arch in $TARGET_ARCHS; do
+            qt_arch="$(qt_android_arch "$target_arch")"
+            python3 -m aqt install-qt --outputdir "${QT_DIR}" linux android "${QT_VERSION}" "$qt_arch" \
+                --autodesktop --archives "${qt_archives[@]}" --modules qtmultimedia
+        done
+    fi
 
     # Delete libraries, which we don't use, but which bloat the resulting package and might introduce unwanted dependencies.
     # iOS does not do this - leave for now, fix across all later.
-    find "$QT_ANDROID_DIR" -name 'libQt*Quick*.so' -delete
-    rm -rf "$QT_ANDROID_DIR/qml/"
+    if [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]]; then
+        find "$QT_ANDROID_DIR" -name 'libQt*Quick*.so' -delete
+        rm -rf "$QT_ANDROID_DIR/qml/"
+    else
+        for target_arch in $TARGET_ARCHS; do
+            qt_arch="$(qt_android_arch "$target_arch")"
+            find "${QT_DIR}/${QT_VERSION}/${qt_arch}" -name 'libQt*Quick*.so' -delete
+            rm -rf "${QT_DIR}/${QT_VERSION}/${qt_arch}/qml/"
+        done
+    fi
 
     # deactivate and remove venv as aqt is no longer needed from here on
     deactivate
@@ -332,6 +403,8 @@ validate_android_toolchain() {
 
 validate_signing() {
     local signing_setting
+
+    [[ " $BUILD_MODES " == *" release "* ]] || return 0
     [[ -z "${JAMULUS_ANDROID_KEYSTORE:-}" ]] && echo "No Android keystore file specified" >&2
     [[ -z "${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]] && echo "No Android keystore base64 specified" >&2
     [[ -z "${JAMULUS_ANDROID_KEY_ALIAS:-}" ]] && echo "No Android keystore alias specified" >&2
@@ -361,7 +434,23 @@ validate_signing() {
             exit 1
         }
     fi
+
     validate_android_output_paths
+}
+
+cleanup_signing_for_mode() {
+    if [[ -n "${ANDROID_KEYSTORE_CLEANUP_FILE:-}" ]]; then
+        rm -f -- "$ANDROID_KEYSTORE_CLEANUP_FILE"
+        unset ANDROID_KEYSTORE_CLEANUP_FILE
+    fi
+    trap - EXIT
+    unset ANDROID_KEYSTORE_FILE
+}
+
+prepare_signing_for_mode() {
+    local build_mode="$1"
+    cleanup_signing_for_mode
+    [[ "$build_mode" == release ]] || return 0
 
     if [[ -n "${JAMULUS_ANDROID_KEYSTORE:-}" || -n "${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]]; then
         prepare_keystore
@@ -386,8 +475,16 @@ prepare_keystore() {
             exit 1
         fi
         trap 'rm -f -- "$ANDROID_KEYSTORE_FILE"' EXIT
+        local original_umask
+        original_umask="$(umask)"
+        umask 077
+        if ! printf '%s' "$JAMULUS_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$ANDROID_KEYSTORE_FILE"; then
+            umask "$original_umask"
+            echo "Failed to decode Android keystore" >&2
+            exit 1
+        fi
         chmod 600 "$ANDROID_KEYSTORE_FILE"
-        printf '%s' "$JAMULUS_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$ANDROID_KEYSTORE_FILE"
+        umask "$original_umask"
     fi
 }
 
@@ -410,6 +507,8 @@ prepare_debug_keystore() {
                 echo "Invalid Android debug keystore: $ANDROID_KEYSTORE_FILE" >&2
                 exit 1
             fi
+        else
+            mkdir -p "$(dirname "${ANDROID_KEYSTORE_FILE}")"
         fi
     else
         if ! ANDROID_KEYSTORE_TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/jamulus-android-debug-signing.XXXXXX")"; then
@@ -474,6 +573,72 @@ qmake5_qmake_make() {
     popd > /dev/null
 }
 
+android_abi_apk_name() {
+    local build_mode="$1"
+    local target_arch="$2"
+    printf 'jamulus_%s_android_%s%s_%s.apk' \
+        "$JAMULUS_BUILD_VERSION" "$build_mode" "$ARTIFACT_SUFFIX" "$target_arch"
+}
+
+qmake6_qmake_make() {
+    local build_mode="$1"
+    shift
+    local build_dir="$1"
+    shift
+    local -n _p="$1"
+    shift
+    local qmake_config=("$@")
+    local -a target_archs
+    local target_arch
+    local qt_arch
+    local qmake6_qmake
+    local arch_build_dir
+    local apk_path
+    local apk_name
+    local -a apk_paths
+    local -a package_args=("${_p[@]}")
+
+    read -r -a target_archs <<< "${TARGET_ARCHS}"
+    for target_arch in "${target_archs[@]}"; do
+        qt_arch="$(qt_android_arch "$target_arch")"
+        qmake6_qmake="${QT_DIR}/${QT_VERSION}/${qt_arch}/bin/qmake"
+        [[ -x "$qmake6_qmake" ]] || {
+            echo "Qt 6 qmake not found for target ABI ${target_arch}: ${qmake6_qmake}" >&2
+            exit 1
+        }
+
+        arch_build_dir="${build_dir}/${target_arch}"
+        mkdir -p "$arch_build_dir"
+        pushd "$arch_build_dir" > /dev/null
+        "$qmake6_qmake" "${PROJECT_DIR}/Jamulus.pro" -spec android-clang "${qmake_config[@]}" \
+            ANDROID_ABIS="${target_arch}" ANDROID_TARGET_SDK_VERSION="${ANDROID_PLATFORM#android-}"
+        "${ANDROID_NDK_MAKE}" -j "$MAKE_JOBS"
+        "${ANDROID_NDK_MAKE}" INSTALL_ROOT="${arch_build_dir}" install
+
+        if [[ "$build_mode" == release && -n "${ANDROID_KEYSTORE_FILE:-}" ]]; then
+            export QT_ANDROID_KEYSTORE_PATH="${ANDROID_KEYSTORE_FILE}"
+            export QT_ANDROID_KEYSTORE_ALIAS="${JAMULUS_ANDROID_KEY_ALIAS}"
+            export QT_ANDROID_KEYSTORE_STORE_PASS="${JAMULUS_ANDROID_KEYSTORE_PASSWORD}"
+            export QT_ANDROID_KEYSTORE_KEY_PASS="${JAMULUS_ANDROID_KEY_PASSWORD:-}"
+            package_args+=(--sign)
+        fi
+        "${QT_ANDROIDDEPLOYQT}" --verbose --input android-Jamulus-deployment-settings.json \
+            --output "$arch_build_dir" "${package_args[@]}"
+        unset QT_ANDROID_KEYSTORE_PATH QT_ANDROID_KEYSTORE_ALIAS QT_ANDROID_KEYSTORE_STORE_PASS QT_ANDROID_KEYSTORE_KEY_PASS
+
+        mapfile -t apk_paths < <(find "${arch_build_dir}/build/outputs" -type f -name '*.apk' -print)
+        if [[ ${#apk_paths[@]} -ne 1 ]]; then
+            echo "Expected one Android APK for ${build_mode}/${target_arch}, found ${#apk_paths[@]}" >&2
+            exit 1
+        fi
+        apk_path="${apk_paths[0]}"
+        mkdir -p "${build_dir}/abi-apks"
+        apk_name="$(android_abi_apk_name "$build_mode" "$target_arch")"
+        mv "$apk_path" "${build_dir}/abi-apks/${apk_name}"
+        popd > /dev/null
+    done
+}
+
 build_app() {
     local build_mode="$1"
     local build_dir="${BUILD_ROOT}/${build_mode}"
@@ -489,16 +654,16 @@ build_app() {
     package_args+=(--android-platform "${ANDROID_PLATFORM}" --jdk "${JAVA_HOME}")
     if [[ "$build_mode" == release ]]; then
         package_args+=(--release)
-        if [[ -n "${ANDROID_KEYSTORE_FILE:-}" ]]; then
-            local detected_keystore_type
-            detected_keystore_type="$(keystore_type "${ANDROID_KEYSTORE_FILE}" "${JAMULUS_ANDROID_KEYSTORE_PASSWORD}")" || detected_keystore_type="unknown"
+    fi
+    if [[ "$build_mode" == release && -n "${ANDROID_KEYSTORE_FILE:-}" ]]; then
+        local detected_keystore_type
+        detected_keystore_type="$(keystore_type "${ANDROID_KEYSTORE_FILE}" "${JAMULUS_ANDROID_KEYSTORE_PASSWORD}")" || detected_keystore_type="unknown"
 
-            if [[ "$detected_keystore_type" == "PKCS12" ]]; then
-                package_args+=(--storetype PKCS12)
-                echo "Android release signing: forcing --storetype PKCS12 for PKCS12 keystore"
-            else
-                echo "Android release signing: leaving keystore type unspecified for ${detected_keystore_type} keystore"
-            fi
+        if [[ "$detected_keystore_type" == "PKCS12" ]]; then
+            package_args+=(--storetype PKCS12)
+            echo "Android release signing: forcing --storetype PKCS12 for PKCS12 keystore"
+        else
+            echo "Android release signing: leaving keystore type unspecified for ${detected_keystore_type} keystore"
         fi
     fi
 
@@ -513,7 +678,11 @@ build_app() {
     rm -rf "${build_dir}"
     mkdir -p "${build_dir}"
 
-    qmake5_qmake_make "$build_mode" "${build_dir}" package_args "${qmake_config[@]}"
+    if [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]]; then
+        qmake5_qmake_make "$build_mode" "${build_dir}" package_args "${qmake_config[@]}"
+    else
+        qmake6_qmake_make "$build_mode" "${build_dir}" package_args "${qmake_config[@]}"
+    fi
 }
 
 pass_artifact_to_job() {
@@ -528,21 +697,44 @@ pass_artifact_to_job() {
     mkdir -p "${DEPLOY_DIR}"
     local artifact_number=1
     local build_mode
+    local target_arch
     local artifact
     local package_path
+    local -a target_archs
+    local -a apk_paths
 
     for build_mode in $BUILD_MODES; do
-        artifact="jamulus_${JAMULUS_BUILD_VERSION}_android_${build_mode}${ARTIFACT_SUFFIX}.apk"
-        if [[ "$build_mode" == debug ]]; then
-            package_path="$(find "${BUILD_ROOT}/${build_mode}/build/outputs" -type f -name '*-debug.apk' -print -quit)"
+        if [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]]; then
+            artifact="jamulus_${JAMULUS_BUILD_VERSION}_android_${build_mode}${ARTIFACT_SUFFIX}.apk"
+            if [[ "$build_mode" == debug ]]; then
+                package_path="$(find "${BUILD_ROOT}/${build_mode}/build/outputs" -type f -name '*-debug.apk' -print -quit)"
+            else
+                package_path="$(find "${BUILD_ROOT}/${build_mode}/build/outputs" -type f -name '*-signed.apk' -print -quit)"
+            fi
+            [[ -n "$package_path" ]] || {
+                echo "No Android APK was produced for ${build_mode}" >&2
+                exit 1
+            }
+            mv "$package_path" "${DEPLOY_DIR}/${artifact}"
         else
-            package_path="$(find "${BUILD_ROOT}/${build_mode}/build/outputs" -type f -name '*-signed.apk' -print -quit)"
+            artifact="jamulus_${JAMULUS_BUILD_VERSION}_android_${build_mode}${ARTIFACT_SUFFIX}.zip"
+            read -r -a target_archs <<< "${TARGET_ARCHS}"
+            apk_paths=()
+            for target_arch in "${target_archs[@]}"; do
+                package_path="${BUILD_ROOT}/${build_mode}/abi-apks/$(android_abi_apk_name "$build_mode" "$target_arch")"
+                [[ -f "$package_path" ]] || {
+                    echo "Missing Android APK for ${build_mode}/${target_arch}" >&2
+                    exit 1
+                }
+                apk_paths+=("$package_path")
+            done
+            [[ ${#apk_paths[@]} -eq ${#target_archs[@]} ]] || {
+                echo "Expected one APK per selected ABI for ${build_mode}" >&2
+                exit 1
+            }
+            rm -f "${DEPLOY_DIR}/${artifact}"
+            zip -q -j "${DEPLOY_DIR}/${artifact}" "${apk_paths[@]}"
         fi
-        [[ -n "$package_path" ]] || {
-            echo "No Android APK was produced for ${build_mode}" >&2
-            exit 1
-        }
-        mv "$package_path" "${DEPLOY_DIR}/${artifact}"
         if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
             echo "artifact_${artifact_number}=${artifact}" >> "$GITHUB_OUTPUT"
         else
@@ -564,7 +756,9 @@ case "${1:-}" in
         validate_android_toolchain
         validate_signing
         for build_mode in $BUILD_MODES; do
+            prepare_signing_for_mode "$build_mode"
             build_app "$build_mode"
+            cleanup_signing_for_mode
         done
         ;;
     get-artifacts)

@@ -206,6 +206,14 @@ jobs:
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
+          - config_name:            Android Qt6 ABI APK ZIPs (experimental)
+            target_os:              android
+            building_on_os:         ubuntu-22.04
+            base_command:           JAVA_HOME= QT_DIR= ANDROID_NDK_ROOT= ANDROID_SDK_ROOT= JAMULUS_ANDROID_STREAM=qt6 ./.github/autobuild/android.sh
+            run_codeql:             false
+            dependency_cache_key:   qt6
+            checkout_fetch_depth:   '0'
+
           - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-22.04
@@ -346,6 +354,16 @@ jobs:
             ~/android-sdk
             ~/android-ndk
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/autobuild/android-dependencies_qt5.sh') }}-${{ matrix.config.dependency_cache_key }}
+
+      - name:                       Cache Android Qt6 dependencies
+        if:                         matrix.config.target_os == 'android' && matrix.config.dependency_cache_key == 'qt6'
+        uses:                       actions/cache@v6
+        with:
+          path: |
+            ~/qt
+            ~/android-sdk
+            ~/android-ndk
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/autobuild/android-dependencies_qt6.sh') }}-${{ matrix.config.dependency_cache_key }}
 
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
         run:                        ${{ matrix.config.base_command }} setup

@@ -48,6 +48,7 @@ MANAGED_VARS=(
     TARGET_ARCHS
     JAMULUS_ANDROID_QMAKE_CONFIG
     JAMULUS_ANDROID_MAKE_JOBS
+    JAMULUS_ANDROID_STREAM
     JAMULUS_ANDROID_ARTIFACT_SUFFIX
     JAMULUS_ANDROID_VERSION_CODE
     JAMULUS_ANDROID_BUILD_DIR
@@ -68,9 +69,13 @@ apply_local_defaults() {
     # paths after android.sh setup.
     : "${JAVA_HOME:=/usr/lib/jvm/java-${ANDROID_JAVA_VERSION:-11}-openjdk-amd64}"
     : "${ANDROID_SDK_ROOT:=/opt/android-sdk}"
-    : "${ANDROID_NDK_ROOT:=${ANDROID_SDK_ROOT}/ndk/21.0.6113669}"
+    if [[ "$JAMULUS_ANDROID_STREAM" == qt6 ]]; then
+        : "${ANDROID_NDK_ROOT:=${ANDROID_SDK_ROOT}/ndk/27.3.13750724}"
+    else
+        : "${ANDROID_NDK_ROOT:=${ANDROID_SDK_ROOT}/ndk/21.0.6113669}"
+    fi
     : "${ANDROID_BUILD_TOOLS:=}"
-    export QT_SELECT="${QT_VERSION}-android"
+    export QT_SELECT="${QT_SELECT:-${QT_VERSION}-android}"
     # android.sh derives QT_ANDROID_DIR itself as "${QT_DIR}/${QT_VERSION}/android"
     : "${QT_DIR:=/opt/Qt}"
     : "${BUILD_MODES:=debug release}"
@@ -194,7 +199,7 @@ resolve_settings_file() {
         printf '%s' "$JAMULUS_ANDROID_SETTINGS"
         return
     fi
-    local default_settings_file="${PROJECT_DIR}/android-build_qt5.settings"
+    local default_settings_file="${PROJECT_DIR}/android-build_${JAMULUS_ANDROID_STREAM}.settings"
     if [[ -f "$default_settings_file" ]]; then
         printf '%s' "$default_settings_file"
         return
@@ -221,7 +226,7 @@ Stages:
 Options:
     -h, --help             Show this help
     --settings FILE        Override file (default: android-build_qtVERSION.settings if present)
-    --stream STREAM        Select the Qt 5 build (default: qt5)
+    --stream STREAM        Select the Qt 5 or Qt 6 build (default: qt5)
     --log FILE             Also write combined stdout/stderr to FILE
     --print-env            Print the resolved environment and exit
     --build-modes "MODES"  Override BUILD_MODES (default: "debug release")
@@ -229,7 +234,7 @@ Options:
     --jobs JOBS             Limit parallel compiler jobs (default: nproc)
 
 Precedence: command-line options > settings file > existing environment > documented local defaults.
-See tools/android-build_qt5.settings.example.
+See the matching tools/android-build_qtVERSION.settings.example.
 EOF
 }
 
@@ -305,9 +310,9 @@ cd "$PROJECT_DIR"
 [[ -x "$ANDROID_SH" || -f "$ANDROID_SH" ]] || error "cannot find $ANDROID_SH"
 
 JAMULUS_ANDROID_STREAM="${OPTION_STREAM:-${JAMULUS_ANDROID_STREAM:-qt5}}"
-[[ "$JAMULUS_ANDROID_STREAM" == qt5 ]] ||
+[[ "$JAMULUS_ANDROID_STREAM" == qt5 || "$JAMULUS_ANDROID_STREAM" == qt6 ]] ||
     error "unsupported Android build stream: $JAMULUS_ANDROID_STREAM"
-ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_qt5.sh"
+ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_${JAMULUS_ANDROID_STREAM}.sh"
 EXPLICIT_COMMANDLINETOOLS_VERSION="${COMMANDLINETOOLS_VERSION:-}"
 EXPLICIT_ANDROID_NDK_VERSION="${ANDROID_NDK_VERSION:-}"
 EXPLICIT_ANDROID_PLATFORM="${ANDROID_PLATFORM:-}"

@@ -275,7 +275,9 @@ win32 {
     # liboboe requires C++17 for std::timed_mutex
     CONFIG += c++17
 
-    QT += androidextras
+    versionAtMost(QT_VERSION, 5.99.99) {
+        QT += androidextras
+    }
 
     # enabled only for debugging on android devices
     DEFINES += ANDROIDDEBUG
@@ -290,8 +292,13 @@ win32 {
 
     LIBS += -lOpenSLES
     QMAKE_LFLAGS += -Wl,-z,max-page-size=16384
-    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-    DISTFILES += android/AndroidManifest.xml
+    greaterThan(QT_MAJOR_VERSION, 5) {
+        ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android/qt6
+        DISTFILES += android/qt6/AndroidManifest.xml
+    } else {
+        ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+        DISTFILES += android/AndroidManifest.xml
+    }
 
     # if compiling for android you need to use Oboe library which is included as a git submodule
     # make sure you git pull with submodules to pull the latest Oboe library

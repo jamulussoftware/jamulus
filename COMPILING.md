@@ -192,41 +192,49 @@ If you want to build the installer, please run the `deploy_mac.sh` script: `./ma
 
 ## Android
 
-Jamulus's Android side-load build uses Qt 5 and produces an APK:
+Android builds are available in two independent streams:
 
-| Qt | Package | Java | NDK | Build Tools | Compile platform / target SDK |
-| -- | ------- | ---- | --- | ----------- | ----------------------------- |
-| 5.15.2 | APK | 8 | r21d (21.0.6113669) | 30.0.2 | Android 11 / API 30 |
-
-The APK supports devices from Android 5.0/API 21.
-
-- Install Qt 5.15.2 with `qtbase`, `qttools`, `qttranslations`,
-    `qtandroidextras`, and `qtmultimedia`, plus JDK 8, Android NDK r21d,
-    Android SDK Platform 30, and Build Tools 30.0.2. The GitHub workflow installs
-    these dependencies on its runner; local builds use the installed toolchain.
+| Stream | Qt | Package | Java | NDK | Build Tools | Compile / target SDK |
+| ------ | -- | ------- | ---- | --- | ----------- | ------------------- | ------------------------- |
+| `qt5` | 5.15.2 | Multi-ABI APK | 8 | r21d (21.0.6113669) | 30.0.2 | Android 11 / API 30 | API 21-31 |
+| `qt6` | 6.10.2 | One APK per ABI, ZIPped | 17 | r27d (27.3.13750724) | 36.0.0 | Android 16 / API 36 |
 
 As of Jamulus 4.0.0, the Android package ID is `app.jamulus.jamulus`.
 Prior installation using the former `com.github.jamulussoftware.jamulus` ID will not be upgraded in-place.
 (Users must uninstall the former package before installing the new one, losing their settings).
+
+The compile/target SDK is the SDK level used to build and target the app, not
+the full Android compatibility range supported by Qt:
+- Qt 5 targets API 30 within its Android 5.0-12 / API 21-31 range.
+- Qt 6 targets API 36 within its Android 9-16 / API 28-36 range.
+
+- Install the Qt, Android SDK, NDK, and JDK versions for the selected stream.
+    The GitHub workflow installs these dependencies on its runner; local builds
+    use the installed toolchain. Qt 5 needs `qtbase`, `qttools`,
+    `qttranslations`, `qtandroidextras`, and `qtmultimedia`. Qt 6 needs
+    `qtbase`, `qttools`, `qttranslations`, and the `qtmultimedia` module, with
+    Android kits for each selected ABI and a `gcc_64` host kit.
 - Make sure the Jamulus submodules are present, notably oboe:
     `git submodule update --init --recursive`
 
 ### Local builds
 
 Use `tools/android-build.sh` for local builds. It selects the toolchain for the
-Qt 5 profile, loads optional machine-specific overrides, sets
+selected profile, loads optional machine-specific overrides, sets
 `JAMULUS_BUILD_VERSION` from `Jamulus.pro` (and the git hash for development
 versions), and passes the same environment to every `android.sh` stage.
 
-Create an ignored settings file for local toolchain overrides:
+Create an ignored settings file for each stream you plan to use:
 
 ```bash
 cp tools/android-build_qt5.settings.example android-build_qt5.settings
+cp tools/android-build_qt6.settings.example android-build_qt6.settings
 ```
 
-The Qt 5 wrapper loads `android-build_qt5.settings` by default. Set
-machine-specific toolchain paths and ABI/mode subsets there. Inspect the
-resolved environment with `--print-env`.
+The wrapper loads `android-build_qt5.settings` or
+`android-build_qt6.settings` by default. Set machine-specific toolchain paths
+and ABI/mode subsets in the matching file. Inspect resolved values with
+`--print-env`.
 
 Build Qt 5 APKs, which are suitable for temporary or release side-loading:
 
@@ -234,12 +242,19 @@ Build Qt 5 APKs, which are suitable for temporary or release side-loading:
 tools/android-build.sh --stream qt5 --log android-qt5.log
 ```
 
+Build experimental Qt 6 APK ZIPs with:
+
+```bash
+tools/android-build.sh --stream qt6 --log android-qt6.log
+```
+
 ### Build options
 
-- The Android driver defaults to all four ABIs and both debug and release modes.
-    Build outputs are written below
-    `android-build/debug/` and `android-build/release/`; running `get-artifacts`
-    moves them to `deploy/`. Artifacts use the `_qt5` suffix.
+- Both streams default to all four ABIs and debug and release modes. Qt 5
+    artifacts are multi-ABI APKs with the `_qt5.apk` suffix. Qt 6 builds a
+    standalone APK for each ABI and exports one `_qt6.zip` per mode; each ZIP
+    contains exactly the selected ABIs. Build outputs are under
+    `android-build/<mode>/`, and `get-artifacts` places final files in `deploy/`.
 - Remove all generated Android build and deployment outputs with:
 
     ```bash
@@ -253,9 +268,8 @@ tools/android-build.sh --stream qt5 --log android-qt5.log
     Select a subset of architectures with `TARGET_ARCHS`:
 
     ```bash
-    BUILD_MODES=release \
-    TARGET_ARCHS="arm64-v8a x86_64" \
-    tools/android-build.sh build get-artifacts
+    tools/android-build.sh --stream qt6 --build-modes release \
+        --archs "arm64-v8a x86_64" build get-artifacts
     ```
 
     Add qmake configuration values with `JAMULUS_ANDROID_QMAKE_CONFIG`:
@@ -266,7 +280,8 @@ tools/android-build.sh --stream qt5 --log android-qt5.log
     ```
 
     Set `ANDROID_NDK_ROOT` or `QT_DIR` to use different installed toolchains.
-    Set `ANDROID_PLATFORM` to select the Android SDK platform.
+    Set `ANDROID_PLATFORM` to select the Android SDK platform. `BUILD_MODES`
+    and `TARGET_ARCHS` can also be set in the stream's settings file.
 - Debug builds are packaged as debuggable APKs. Local release builds use a
     temporary debug keystore by default; it is deleted after the build. Set
     `JAMULUS_ANDROID_DEBUG_KEYSTORE` to retain and reuse a debug keystore. An
@@ -277,7 +292,12 @@ tools/android-build.sh --stream qt5 --log android-qt5.log
     version code for non-development versions. Development builds default to
     version code `1`. Set `JAMULUS_ANDROID_VERSION_CODE` when a build needs an
     explicit positive version code.
-- An APK can be installed directly with `adb`.
+- Release builds use supplied Android keystore credentials when configured;
+    debug builds ignore them and use normal debug signing. Without a supplied
+    key, release builds use a temporary debug key and are not suitable for
+    updating a retained production installation.
+- Qt 5 APKs can be installed directly with `adb`. Extract a Qt 6 ABI APK from
+    its ZIP before installing it.
 
 ## Compile time arguments
 

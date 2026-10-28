@@ -250,11 +250,26 @@ win32 {
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {
+    CONFIG -= debug_and_release
     isEmpty(ANDROID_ABIS) {
         ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
     }
     ANDROID_VERSION_NAME = $$VERSION
-    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    ANDROID_VERSION_CODE = 1
+
+    JAMULUS_ANDROID_VERSION_CODE = $$(JAMULUS_ANDROID_VERSION_CODE)
+    !isEmpty(JAMULUS_ANDROID_VERSION_CODE) {
+        ANDROID_VERSION_CODE = $$JAMULUS_ANDROID_VERSION_CODE
+    } else:!contains(VERSION, .*dev.*) {
+        GIT_IS_WORK_TREE = $$system(git rev-parse --is-inside-work-tree 2>/dev/null)
+        GIT_IS_SHALLOW = $$system(git rev-parse --is-shallow-repository 2>/dev/null)
+        equals(GIT_IS_WORK_TREE, true):equals(GIT_IS_SHALLOW, false) {
+            GIT_REVISION_COUNT = $$system(git rev-list --count HEAD 2>/dev/null)
+            !isEmpty(GIT_REVISION_COUNT) {
+                ANDROID_VERSION_CODE = $$GIT_REVISION_COUNT
+            }
+        }
+    }
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
     # liboboe requires C++17 for std::timed_mutex
@@ -274,6 +289,7 @@ win32 {
         src/android/androiddebug.cpp
 
     LIBS += -lOpenSLES
+    QMAKE_LFLAGS += -Wl,-z,max-page-size=16384
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
     DISTFILES += android/AndroidManifest.xml
 

@@ -195,12 +195,14 @@ jobs:
         # Think of this like a foreach loop. Basically runs the steps with every combination of
         # the contents of this.
         config:
-          - config_name:            Android .apk (artifact+codeQL)
+          - config_name:            Android Qt5 .apk (artifact+codeQL)
             target_os:              android
             building_on_os:         ubuntu-22.04
-            base_command:           ./.github/autobuild/android.sh
+            # override runner environment variables to avoid picking up any pre-installed Android SDK/NDK/Qt versions
+            base_command:           JAVA_HOME= QT_DIR= ANDROID_NDK_ROOT= ANDROID_SDK_ROOT= JAMULUS_ANDROID_STREAM=qt5 ./.github/autobuild/android.sh
             run_codeql:             true
             is_main_build_target:   true
+            dependency_cache_key:   qt5
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
@@ -336,14 +338,14 @@ jobs:
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/autobuild/windows-dependencies.ps1') }}-${{ matrix.config.dependency_cache_key }}
 
       - name:                       Cache Android dependencies
-        if:                         matrix.config.target_os == 'android'
+        if:                         matrix.config.target_os == 'android' && matrix.config.dependency_cache_key == 'qt5'
         uses:                       actions/cache@v6
         with:
           path: |
-            /opt/Qt
-            /opt/android/android-sdk
-            /opt/android/android-ndk
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/android.sh') }}-${{ matrix.config.base_command }}
+            ~/qt
+            ~/android-sdk
+            ~/android-ndk
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/autobuild/android-dependencies_qt5.sh') }}-${{ matrix.config.dependency_cache_key }}
 
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
         run:                        ${{ matrix.config.base_command }} setup

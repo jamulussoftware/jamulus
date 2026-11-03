@@ -46,6 +46,8 @@
 
 #include "connectdlg.h"
 
+#include <QFocusEvent>
+
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 8, 0 )
 #    include <QAccessible>
 #    include <QAccessibleAnnouncementEvent>
@@ -1213,9 +1215,10 @@ bool CConnectDlg::eventFilter ( QObject* obj, QEvent* event )
             lvwServers->setCurrentItem ( savedServer );
             savedServer = nullptr;
         }
-        else if ( lvwServers->topLevelItemCount() > 0 )
+        else if ( static_cast<QFocusEvent*> ( event )->reason() != Qt::MouseFocusReason && !lvwServers->currentItem() &&
+                  lvwServers->topLevelItemCount() > 0 )
         {
-            // no saved server: select first item in list for keyboard navigation
+            // no saved server and no current item: select first item in list for keyboard navigation
             lvwServers->setCurrentItem ( lvwServers->topLevelItem ( 0 ) );
         }
     }

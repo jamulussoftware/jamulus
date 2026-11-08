@@ -1,4 +1,7 @@
-### 3.12.5dev <- NOTE: the release version number will be 4.0.0 ###
+### r4_0_0beta4 (2026-11-08) ###
+
+- Client: Build opus with NEON intrinsics on ARM (Android ABIs included) (#3833).
+  (contributed by @mcfnord)
 
 - Client: removed double ping from Connect Dialog, improving accuracy of initial ping times displayed (#3847).
   (contributed by @softins)
@@ -18,6 +21,12 @@
 - Client: Ensure INI file settings are loaded before doing -c/--connect startup (#3738).
   (contributed by @seanogdelaney)
 
+- Client/Server: Improved performance of getting gain and pan by using one time snapshot (#3948).
+  (contributed by @ann0see)
+
+- Client/Server: reworked and improved UDP socket opening logic (#3893).
+  (contributed by @softins)
+
 - Client/Server: Improved handling of IPv6 by using separate sockets (#3774).
   (contributed by @softins)
 
@@ -36,6 +45,15 @@
 - Client/Server: Move internal domains from jamulus.io to jamulus.app as .io domains have an unclear future (#3701).
   (contributed by @ann0see)
 
+- Server: `jamulusserver/setDirectory` rejects an unrecognised `directoryType` instead of silently registering the server with the default public directory (#3963).
+  (contributed by @mcfnord)
+
+- Server: Fixed the start of a new client's recording containing audio from the previous client in the same channel (#3969).
+  (contributed by @mcfnord)
+
+- Server: Reduced the mixing cost per frame by computing each channel's fade-in gain once per frame instead of once per channel pair (#3959).
+  (contributed by @mcfnord)
+
 - Server: fix occasional crash seen when clients < 3.6 change jitter buffer size (#3751).
   (contributed by @softins)
 
@@ -53,6 +71,12 @@
 
 - Server: Removed HTML status file support and -m/--htmlstatus option (#3721).
   (contributed by @softins)
+
+- JSON-RPC: `jamulusclient/setSkillLevel` now returns `"ok"` when called with `null`, instead of a JSON-RPC response with neither `result` nor `error` (#3943).
+  (contributed by @mcfnord)
+
+- JSON-RPC: bound the per-connection read buffer so unterminated input cannot exhaust memory (#3861).
+  (contributed by @mcfnord)
 
 - JSONRPC: Added jamulusclient/setInstrumentCode JSONRPC method (#3772).
   (contributed by @dingodoppelt)
@@ -102,6 +126,12 @@
 - Refactor: Added missing override specifiers for virtual methods (#3888).
   (contributed by @softins)
 
+- Bugfix: Client: Handle first mouse click inside Connect Dialog box (#3980).
+  (contributed by @pljones)
+
+- Bugfix: Client: Input Boost now clips instead of wrapping around when the boosted signal exceeds full scale (#3834).
+  (contributed by @mcfnord)
+
 - Bugfix: Fix connection to ClientDisconnected signal (#3760).
   (contributed by @dingodoppelt)
 
@@ -147,6 +177,9 @@
 - Updated copyright to incorporate AGPL3.0+ (#3712).
   (contributed by @pljones)
 
+- Added AI guidance for contributing documentation (#3910).
+  (contributed by @ann0see)
+
 - Docs: fix Fedora dependency list to build the GUI (qt5-qtmultimedia-devel) (#3852).
   (contributed by @mcfnord)
 
@@ -171,22 +204,16 @@
 - Build: improved make distclean to remove leftover files and directories (#3886).
   (contributed by @softins)
 
-- Build: Bump github/codeql-action from 4.37.4 to 4.37.6 (#3887).
-  (contributed by @app/dependabot)
-
-- Build: Bump github/codeql-action from 4.37.6 to 4.37.7 (#3920).
-  (contributed by @app/dependabot)
-
 - Build: Use a separate ui directory for generated ui header files (#3921).
   (contributed by @softins)
 
 - Build: Windows: Updated Windows build environment to Windows Server 2025 (#3763).
   (contributed by @ann0see)
 
-- Build: Bump actions/cache from 5 to 6 (#3759).
+- Build: Bump github/codeql-action from 4 (to 4.37.[46789]) to 4.38.1 (#3860, #3887, #3920, #3928, #3936, #3962).
   (contributed by @app/dependabot)
 
-- Build: Bump github/codeql-action from 4 to 4.37.4 (#3860).
+- Build: Bump actions/cache from 5 to 6 (#3759).
   (contributed by @app/dependabot)
 
 - Build: Bump actions/checkout from 6 to 7 (#3749).

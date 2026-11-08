@@ -1,3 +1,5 @@
+### 3.12.6dev <- NOTE: the release version number will be 3.12.7 ###
+
 ### 3.12.6 (2026-11-08) ###
 
 - Backport #3810: bounds check iChanID before array access (#3840).

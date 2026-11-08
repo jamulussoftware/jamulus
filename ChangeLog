@@ -1,4 +1,13 @@
-### 3.12.5dev <- NOTE: the release version number will be 3.12.6 ###
+### 3.12.6 (2026-11-08) ###
+
+- Backport #3810: bounds check iChanID before array access (#3840).
+  (contributed by @mcfnord)
+
+- JSON-RPC: bound the per-connection read buffer so unterminated input cannot exhaust memory (#3861).
+  (contributed by @mcfnord)
+
+- Handle first mouse click inside Connect Dialog box (#3980).
+  (contributed by @pljones)
 
 
 ### 3.12.5 (2026-08-31) ###

@@ -41,13 +41,16 @@ if [[ ${APT_MAJOR} -lt 2 || (${APT_MAJOR} -eq 2 && ${APT_MINOR} -lt 2)   ]]; the
     done
 fi
 
-REPO_FILE=/etc/apt/sources.list.d/jamulus.list
-KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc
+REPO_FILE=/etc/apt/sources.list.d/jamulus.sources
+KEY_DIR=/etc/apt/keyrings
+KEY_FILE=${KEY_DIR}/jamulus.asc
+# Files written by earlier versions of this script
+OLD_REPO_FILE=/etc/apt/sources.list.d/jamulus.list
+OLD_KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc
 GITHUB_REPOSITORY="jamulussoftware/jamulus"
 
-echo "Setting up Jamulus repo at ${REPO_FILE}..."
-echo "deb https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/ ./" > ${REPO_FILE}
 echo "Installing Jamulus GPG key at ${KEY_FILE}..."
+install -d -m 0755 "${KEY_DIR}"
 curl --fail --show-error -sLo "${KEY_FILE}" https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/key.asc
 
 CURL_EXITCODE=$?
@@ -55,6 +58,22 @@ if [[ ${CURL_EXITCODE} -ne 0 ]]; then
     echo "Error: Download of gpg key failed. Please try again later."
     exit ${CURL_EXITCODE}
 fi
+chmod 0644 "${KEY_FILE}"
+
+for OLD_FILE in "${OLD_REPO_FILE}" "${OLD_KEY_FILE}"; do
+    if [[ -e ${OLD_FILE} ]]; then
+        echo "Removing old ${OLD_FILE}..."
+        rm -f "${OLD_FILE}"
+    fi
+done
+
+echo "Setting up Jamulus repo at ${REPO_FILE}..."
+cat > "${REPO_FILE}" << EOF
+Types: deb
+URIs: https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/
+Suites: ./
+Signed-By: ${KEY_FILE}
+EOF
 
 echo "Running apt update..."
 apt -qq update

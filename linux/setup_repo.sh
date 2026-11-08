@@ -60,20 +60,28 @@ if [[ ${CURL_EXITCODE} -ne 0 ]]; then
 fi
 chmod 0644 "${KEY_FILE}"
 
+echo "Setting up Jamulus repo at ${REPO_FILE}..."
+TMP_REPO_FILE=$(mktemp) || exit 1
+cat > "${TMP_REPO_FILE}" << EOF
+Types: deb
+URIs: https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/
+Suites: ./
+Signed-By: ${KEY_FILE}
+EOF
+if ! install -m 0644 "${TMP_REPO_FILE}" "${REPO_FILE}"; then
+    rm -f "${TMP_REPO_FILE}"
+    echo "Error: Could not write ${REPO_FILE}. The previous setup was left in place."
+    exit 1
+fi
+rm -f "${TMP_REPO_FILE}"
+
+# Only now that the new source is in place, remove what earlier versions wrote
 for OLD_FILE in "${OLD_REPO_FILE}" "${OLD_KEY_FILE}"; do
     if [[ -e ${OLD_FILE} ]]; then
         echo "Removing old ${OLD_FILE}..."
         rm -f "${OLD_FILE}"
     fi
 done
-
-echo "Setting up Jamulus repo at ${REPO_FILE}..."
-cat > "${REPO_FILE}" << EOF
-Types: deb
-URIs: https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/
-Suites: ./
-Signed-By: ${KEY_FILE}
-EOF
 
 echo "Running apt update..."
 apt -qq update

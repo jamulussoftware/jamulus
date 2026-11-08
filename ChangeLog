@@ -1,4 +1,4 @@
-### r4_0_0beta4 (2026-11-08) ###
+### 3.12.6dev <- NOTE: the release version number will be 4.0.0 ###
 
 - Client: Build opus with NEON intrinsics on ARM (Android ABIs included) (#3833).
   (contributed by @mcfnord)

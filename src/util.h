@@ -48,6 +48,7 @@
 #include <vector>
 #include <algorithm>
 #include <atomic>
+#include <functional>
 #ifdef _WIN32
 #    include <winsock2.h>
 #    include <ws2tcpip.h>
@@ -1102,13 +1103,38 @@ public:
 class NetworkUtil
 {
 public:
-    static bool ParseNetworkAddressString ( QString strAddress, QHostAddress& InetAddr, const bool bIPv6Available );
+    // parse literal address and optional port with no hostname lookup and address returned directly
+    static bool ParseAddressLiteral ( const QString& strAddress, const bool bIPv6Available, CHostAddress& haHostAddress );
 
-#ifndef DISABLE_SRV_DNS
-    static bool ParseNetworkAddressSrv ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available );
-#endif
-    static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available );
-    static bool ParseNetworkAddressBare ( QString strAddress, CHostAddress& HostAddress, const bool bIPv6Available );
+    // resolve address and optional port with possible hostname and/or SRC lookup,
+    // with resolved address(es) returned asynchronously in a slot function
+
+    // ResolveAddress() with object method as slot
+    template<typename T>
+    static bool ResolveAddress ( const QString& strAddress,
+                                 const bool     bIPv6Available,
+                                 T*             context,
+                                 void ( T::*slot ) ( const QHostInfo& info, quint16 port ),
+                                 const bool allowHostname = false,
+                                 const bool allowSrv      = false )
+    {
+        // this is not a recursive call, as the parameter types are different
+        return ResolveAddress (
+            strAddress,
+            bIPv6Available,
+            context,
+            [context, slot] ( const QHostInfo& info, quint16 port ) { ( context->*slot ) ( info, port ); },
+            allowHostname,
+            allowSrv );
+    }
+
+    // ResolveAddress() with static method or function as slot
+    static bool ResolveAddress ( const QString&                                              strAddress,
+                                 const bool                                                  bIPv6Available,
+                                 QObject*                                                    context,
+                                 std::function<void ( const QHostInfo& info, quint16 port )> slot,
+                                 const bool                                                  allowHostname = false,
+                                 const bool                                                  allowSrv      = false );
 
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();

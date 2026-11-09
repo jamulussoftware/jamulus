@@ -180,7 +180,6 @@ public:
 
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
-    bool SetServerAddr ( QString strNAddr );
 
     // IPv6 Available
     bool IsIPv6Available() { return bIPv6Available; }
@@ -514,6 +513,7 @@ protected slots:
     void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
     void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void OnHostResolved ( const QHostInfo& info, quint16 port );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

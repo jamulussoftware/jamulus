@@ -256,6 +256,9 @@ public slots:
 
     void OnAboutToQuit();
 
+    // From ResolveAddress()
+    void OnHostResolved ( const QHostInfo& info, quint16 port );
+
 signals:
     void SvrRegStatusChanged();
 };

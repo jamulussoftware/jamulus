@@ -260,6 +260,7 @@ public slots:
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
+    void OnHostResolved ( const QHostInfo& info, quint16 port );
 
     void accept() { close(); } // introduced by pljones
 

@@ -1106,7 +1106,7 @@ public:
     // parse literal address and optional port with no hostname lookup and address returned directly
     static bool ParseAddressLiteral ( const QString& strAddress, const bool bIPv6Available, CHostAddress& haHostAddress );
 
-    // resolve address and optional port with possible hostname and/or SRC lookup,
+    // resolve address and optional port with possible hostname and/or SRV lookup,
     // with resolved address(es) returned asynchronously in a slot function
 
     // ResolveAddress() with object method as slot

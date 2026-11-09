@@ -312,24 +312,48 @@ void CConnectDlg::RequestServerList()
     }
     cbxDirectory->blockSignals ( false );
 
-    // Get the IP address of the directory server (using the ParseNetworkAddress
+    // Get the IP address of the directory server (using the async ResolveAddress
     // function) when the connect dialog is opened, this seems to be the correct
     // time to do it. Note that in case of custom directories we
     // use iCustomDirectoryIndex as an index into the vector.
 
-    // Allow IPv4 only for communicating with Directories
-    if ( NetworkUtil::ParseNetworkAddress (
-             NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
-             haDirectoryAddress,
-             false ) )
-    {
-        // send the request for the server list
-        emit ReqServerListQuery ( haDirectoryAddress );
+    // Currently allow only IPv4 for communicating with Directories
 
-        // start timer, if this message did not get any respond to retransmit
-        // the server list request message
-        TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
-        TimerInitialSort.start ( SERV_LIST_REQ_UPDATE_TIME_MS ); // reuse the time value
+    const QString strDirectoryAddress =
+        NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] );
+
+    if ( !NetworkUtil::ResolveAddress ( strDirectoryAddress, pClient->IsIPv6Available(), this, &CConnectDlg::OnHostResolved, true, true ) )
+    {
+        qWarning() << "Cannot start directory fetch from" << strDirectoryAddress;
+    }
+}
+
+void CConnectDlg::OnHostResolved ( const QHostInfo& info, quint16 port )
+{
+    if ( info.error() != QHostInfo::NoError )
+    {
+        qWarning() << "Directory lookup failed:" << info.errorString();
+        return;
+    }
+
+    for ( const QHostAddress& HostAddr : info.addresses() )
+    {
+        // qInfo() << "Resolved network address to" << HostAddr << "for proto" << HostAddr.protocol();
+        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol /* ||
+             ( HostAddr.protocol() == QAbstractSocket::IPv6Protocol && pClient->IsIPv6Available() ) */ )
+        {
+            haDirectoryAddress = CHostAddress ( HostAddr, port );
+
+            // send the request for the server list
+            emit ReqServerListQuery ( haDirectoryAddress );
+
+            // start timer, if this message did not get any respond to retransmit
+            // the server list request message
+            TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
+            TimerInitialSort.start ( SERV_LIST_REQ_UPDATE_TIME_MS ); // reuse the time value
+
+            return;
+        }
     }
 }
 
@@ -855,10 +879,10 @@ void CConnectDlg::OnTimerPing()
 
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
-        // the data to be parsed is just IP:port, so no SRV discovery is needed
-        if ( NetworkUtil::ParseNetworkAddressBare ( pCurListViewItem->data ( LVC_NAME, Qt::UserRole ).toString(),
-                                                    haServerAddress,
-                                                    pClient->IsIPv6Available() ) )
+        // the data to be parsed is just IP:port, so no hostname lookup is needed
+        if ( NetworkUtil::ParseAddressLiteral ( pCurListViewItem->data ( LVC_NAME, Qt::UserRole ).toString(),
+                                                pClient->IsIPv6Available(),
+                                                haServerAddress ) )
         {
             // if address is valid, send ping message using a new thread
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )

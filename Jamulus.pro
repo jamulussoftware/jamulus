@@ -239,8 +239,11 @@ win32 {
     CONFIG+=add_ios_ffmpeg_libraries # QTBUG-129651
     QMAKE_ASSET_CATALOGS += src/res/iOSIcons.xcassets
     QMAKE_INFO_PLIST = ios/Info.plist
-    OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
-    HEADERS += src/ios/ios_app_delegate.h
+    # Qt 6 already ships QIOSApplicationDelegate
+    lessThan(QT_MAJOR_VERSION, 6) {
+        OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
+        HEADERS += src/ios/ios_app_delegate.h
+    }
     HEADERS += src/sound/coreaudio-ios/sound.h
     OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = app.jamulussoftware

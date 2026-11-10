@@ -33,6 +33,8 @@ Code used by both client and server:
 - [buffer.h](buffer.h) — The jitter buffer. `CNetBuf` and `CNetBufWithStats`, including the automatic size decision.
 - [settings.cpp](settings.cpp) — Reads and writes the settings XML file. `CSettings`, specialised as `CClientSettings` and `CServerSettings`.
 - [util.h](util.h) / [util.cpp](util.cpp) — Shared helpers. `CHighPrecisionTimer` (the server's frame clock) among others.
+- [rpcserver.cpp](rpcserver.cpp) — The JSON-RPC transport. `CRpcServer` accepts TCP connections, checks the secret, and
+  dispatches each method to the handlers that the client or server half registers.
 
 Client only:
 

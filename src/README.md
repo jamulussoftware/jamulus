@@ -10,7 +10,7 @@ Author(s):
 
 Licensed under the AGPL 3.0 or any later version; full text in [../COPYING](../COPYING).
 
-## What this code does
+## Code overview
 
 Jamulus is a client/server system. Each client encodes the audio from its sound device and sends it
 to the server over UDP. The server decodes every client's stream and builds a separate mix for each
@@ -20,7 +20,7 @@ decoded and played out. At both ends, arriving packets go through a jitter buffe
 Background: [Performing Band Rehearsals on the Internet with Jamulus](https://jamulus.app/PerformingBandRehearsalsontheInternetWithJamulus.pdf),
 Volker Fischer's case study, based on three years of weekly online rehearsals.
 
-## What this directory contains
+## Directory contents
 
 Code used by both client and server:
 

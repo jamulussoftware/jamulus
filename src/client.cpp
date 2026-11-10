@@ -93,7 +93,8 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK ( true ),
     bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
     iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
-    bRawAudioIsSupported ( false )
+    bRawAudioIsSupported ( false ),
+    iResolverSeq ( 0 )
 {
     int iOpusError;
 
@@ -1131,6 +1132,8 @@ void CClient::Stop()
 /// @emit Disconnected
 void CClient::Disconnect()
 {
+    ++iResolverSeq; // invalidate any uncompleted resolver requests
+
     // Key off the connection state, not IsRunning() (which tracks the audio
     // device): the two diverge while connecting and in headless mode, and on
     // SIGTERM we must still send the disconnect message to the server.
@@ -1157,7 +1160,21 @@ void CClient::Connect ( const QString& strServerAddress, const QString& strServe
         // different server while connected behaves as a reconnect
         Disconnect();
 
-        if ( NetworkUtil::ResolveAddress ( strServerAddress, bIPv6Available, this, &CClient::OnHostResolved, true, true ) )
+        const int seq = iResolverSeq; // for capturing the current request
+
+        if ( NetworkUtil::ResolveAddress (
+                 strServerAddress,
+                 bIPv6Available,
+                 this,
+                 [this, seq] ( const QHostInfo& info, quint16 port ) {
+                     // check that the request has not been invalidated
+                     if ( seq == iResolverSeq )
+                     {
+                         OnHostResolved ( info, port ); // handle result
+                     }
+                 },
+                 true,
+                 true ) )
         {
             SetConnectedServerName ( strServerName ); // set if resolution initiated ok
         }

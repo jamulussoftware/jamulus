@@ -477,6 +477,9 @@ protected:
     int    maxGainOrPanId;
     int    iCurPingTime;
 
+    // sequence number for asynchronous DNS resolver
+    int iResolverSeq;
+
 protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

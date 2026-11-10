@@ -11,7 +11,7 @@ on:
 
 jobs:
   check-json-rpc-docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v7
       - run: ./tools/generate_json_rpc_docs.py

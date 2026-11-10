@@ -35,6 +35,11 @@ Code used by both client and server:
 - [util.h](util.h) / [util.cpp](util.cpp) — Shared helpers. `CHighPrecisionTimer` (the server's frame clock) among others.
 - [rpcserver.cpp](rpcserver.cpp) — The JSON-RPC transport. `CRpcServer` accepts TCP connections, checks the secret, and
   dispatches each method to the handlers that the client or server half registers.
+- [global.h](global.h) — Project-wide constants (frame size, default port, channel limit) and `CGenErr`.
+- [signalhandler.cpp](signalhandler.cpp) — `CSignalHandler` turns SIGINT and SIGTERM into a clean shutdown. On the server,
+  SIGUSR1 also starts a new recording and SIGUSR2 toggles recording.
+- [testbench.h](testbench.h) — `CTestbench` sends random protocol messages to a peer. Its only instance, in `main.cpp`, is
+  commented out.
 
 Client only:
 
@@ -44,6 +49,10 @@ Client only:
 - [clientdlg.cpp](clientdlg.cpp), [clientsettingsdlg.cpp](clientsettingsdlg.cpp),
   [audiomixerboard.cpp](audiomixerboard.cpp), [connectdlg.cpp](connectdlg.cpp),
   [chatdlg.cpp](chatdlg.cpp) — The GUI.
+- [levelmeter.cpp](levelmeter.cpp) — `CLevelMeter`, the LED-bar level meter. [multicolorled.cpp](multicolorled.cpp) —
+  `CMultiColorLED`, the status lights.
+- [analyzerconsole.cpp](analyzerconsole.cpp) — `CAnalyzerConsole`, the dialog that graphs the error rate of each jitter
+  buffer size.
 - [clientrpc.cpp](clientrpc.cpp) — The client half of the JSON-RPC API.
 
 Server only:
@@ -54,6 +63,15 @@ Server only:
 - [serverlogging.cpp](serverlogging.cpp) — The connection log.
 - [serverrpc.cpp](serverrpc.cpp) — The server half of the JSON-RPC API.
 - [serverdlg.cpp](serverdlg.cpp) — The server GUI.
+- [threadpool.h](threadpool.h) — `CThreadPool`, the worker pool behind `--multithreading`.
+
+Platform code and resources:
+
+- [android/](android/) — Android debug logging.
+- [ios/](ios/) — The iOS application delegate.
+- [mac/](mac/) — `CActivity`, which stops macOS throttling the process (App Nap, sleep), and the Dock badge.
+- [res/](res/) — Images, icons, flags, instrument pictures and sounds.
+- [translation/](translation/) — The `.ts` translation files, and the Windows installer's own strings in `wininstaller/`.
 
 The JSON-RPC API ([rpcserver.cpp](rpcserver.cpp), [clientrpc.cpp](clientrpc.cpp),
 [serverrpc.cpp](serverrpc.cpp)) is documented in [../docs/JSON-RPC.md](../docs/JSON-RPC.md).

@@ -50,7 +50,7 @@ OLD_KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc
 GITHUB_REPOSITORY="jamulussoftware/jamulus"
 
 echo "Installing Jamulus GPG key at ${KEY_FILE}..."
-install -d -m 0755 "${KEY_DIR}"
+mkdir -p "${KEY_DIR}"
 curl --fail --show-error -sLo "${KEY_FILE}" https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/key.asc
 
 CURL_EXITCODE=$?
@@ -61,19 +61,20 @@ fi
 chmod 0644 "${KEY_FILE}"
 
 echo "Setting up Jamulus repo at ${REPO_FILE}..."
-TMP_REPO_FILE=$(mktemp) || exit 1
-cat > "${TMP_REPO_FILE}" << EOF
-Types: deb
-URIs: https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/
-Suites: ./
-Signed-By: ${KEY_FILE}
-EOF
-if ! install -m 0644 "${TMP_REPO_FILE}" "${REPO_FILE}"; then
+# Write the new source next to the old one and move it into place, so a failed
+# write never leaves a broken or empty source behind.
+TMP_REPO_FILE="${REPO_FILE}.tmp"
+if ! printf '%s\n' \
+    "Types: deb" \
+    "URIs: https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/" \
+    "Suites: ./" \
+    "Signed-By: ${KEY_FILE}" > "${TMP_REPO_FILE}" ||
+    ! chmod 0644 "${TMP_REPO_FILE}" ||
+    ! mv -f "${TMP_REPO_FILE}" "${REPO_FILE}"; then
     rm -f "${TMP_REPO_FILE}"
     echo "Error: Could not write ${REPO_FILE}. The previous setup was left in place."
     exit 1
 fi
-rm -f "${TMP_REPO_FILE}"
 
 # Only now that the new source is in place, remove what earlier versions wrote
 for OLD_FILE in "${OLD_REPO_FILE}" "${OLD_KEY_FILE}"; do

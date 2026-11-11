@@ -50,7 +50,10 @@ OLD_KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc
 GITHUB_REPOSITORY="jamulussoftware/jamulus"
 
 echo "Installing Jamulus GPG key at ${KEY_FILE}..."
-mkdir -p "${KEY_DIR}" && chmod 0755 "${KEY_DIR}"
+if ! mkdir -p "${KEY_DIR}" || ! chmod 0755 "${KEY_DIR}"; then
+    echo "Error: Could not prepare ${KEY_DIR}."
+    exit 1
+fi
 # Download next to the current key, so a broken download never replaces it
 TMP_KEY_FILE="${KEY_FILE}.tmp"
 curl --fail --show-error -sLo "${TMP_KEY_FILE}" https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/key.asc

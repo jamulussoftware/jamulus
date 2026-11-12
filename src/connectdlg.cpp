@@ -90,7 +90,8 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool 
     bReducedServerListReceived ( false ),
     bServerListItemWasChosen ( false ),
     bListFilterWasActive ( false ),
-    bShowAllMusicians ( true )
+    bShowAllMusicians ( true ),
+    iResolverSeq ( 0 )
 {
     setupUi ( this );
 
@@ -322,7 +323,22 @@ void CConnectDlg::RequestServerList()
     const QString strDirectoryAddress =
         NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] );
 
-    if ( !NetworkUtil::ResolveAddress ( strDirectoryAddress, pClient->IsIPv6Available(), this, &CConnectDlg::OnHostResolved, true, true ) )
+    // get a new sequence number for matching the resolved callback
+    const int seq = ++iResolverSeq;
+
+    if ( !NetworkUtil::ResolveAddress (
+             strDirectoryAddress,
+             pClient->IsIPv6Available(),
+             this,
+             [this, seq] ( const QHostInfo& info, quint16 port ) {
+                 // check that the request has not been superseded
+                 if ( seq == iResolverSeq )
+                 {
+                     OnHostResolved ( info, port ); // handle result
+                 }
+             },
+             true,
+             true ) )
     {
         qWarning() << "Cannot start directory fetch from" << strDirectoryAddress;
     }

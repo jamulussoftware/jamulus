@@ -146,6 +146,9 @@ protected:
     bool         bListFilterWasActive;
     bool         bShowAllMusicians;
 
+    // sequence number for asynchronous DNS resolver
+    int iResolverSeq;
+
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnDirectoryChanged ( int iTypeIdx );

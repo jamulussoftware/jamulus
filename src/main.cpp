@@ -982,17 +982,19 @@ int main ( int argc, char** argv )
 #ifndef SERVER_ONLY
         if ( bIsClient )
         {
-            CClient Client ( iPortNumber, iQosNumber, bNoAutoJackConnect, strClientName, bDisableIPv6, bMuteMeInPersonalMix );
+            // Allocate the client on the heap. It could otherwise be too large on iOS and corrupt Qt's state.
+            std::unique_ptr<CClient> Client (
+                new CClient ( iPortNumber, iQosNumber, bNoAutoJackConnect, strClientName, bDisableIPv6, bMuteMeInPersonalMix ) );
 
             // Create Settings with the client pointer
-            CClientSettings Settings ( &Client, strIniFileName );
+            CClientSettings Settings ( Client.get(), strIniFileName );
             Settings.Load ( CommandLineOptions );
-            Client.SetSettings ( &Settings );
+            Client->SetSettings ( &Settings );
 
 #    ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
-                new CClientRpc ( &Client, &Settings, pRpcServer, pRpcServer );
+                new CClientRpc ( Client.get(), &Settings, pRpcServer, pRpcServer );
             }
 #    endif
 
@@ -1007,7 +1009,7 @@ int main ( int argc, char** argv )
                 }
 
                 // GUI object
-                CClientDlg ClientDlg ( &Client, &Settings, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, nullptr );
+                CClientDlg ClientDlg ( Client.get(), &Settings, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, nullptr );
 
                 // show dialog
                 ClientDlg.show();
@@ -1015,7 +1017,7 @@ int main ( int argc, char** argv )
                 // Connect on startup if requested
                 if ( !strConnOnStartupAddress.isEmpty() )
                 {
-                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                    Client->Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
                 }
 
                 pApp->exec();
@@ -1029,7 +1031,7 @@ int main ( int argc, char** argv )
                 // Connect on startup if requested
                 if ( !strConnOnStartupAddress.isEmpty() )
                 {
-                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                    Client->Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
                 }
 
                 pApp->exec();
@@ -1040,32 +1042,33 @@ int main ( int argc, char** argv )
         {
             // Server:
             // actual server object
-            CServer Server ( iNumServerChannels,
-                             strLoggingFileName,
-                             strServerBindIP4,
-                             strServerBindIP6,
-                             iPortNumber,
-                             iQosNumber,
-                             strDirectoryAddress,
-                             strServerListFileName,
-                             strServerInfo,
-                             strServerPublicIP,
-                             strServerListFilter,
-                             strWelcomeMessage,
-                             strRecordingDirName,
-                             bDisconnectAllClientsOnQuit,
-                             bUseDoubleSystemFrameSize,
-                             bDisableRaw,
-                             bUseMultithreading,
-                             bDisableRecording,
-                             bDelayPan,
-                             bDisableIPv6,
-                             eLicenceType );
+            // Allocate the server on the heap due to large size
+            std::unique_ptr<CServer> Server ( new CServer ( iNumServerChannels,
+                                                            strLoggingFileName,
+                                                            strServerBindIP4,
+                                                            strServerBindIP6,
+                                                            iPortNumber,
+                                                            iQosNumber,
+                                                            strDirectoryAddress,
+                                                            strServerListFileName,
+                                                            strServerInfo,
+                                                            strServerPublicIP,
+                                                            strServerListFilter,
+                                                            strWelcomeMessage,
+                                                            strRecordingDirName,
+                                                            bDisconnectAllClientsOnQuit,
+                                                            bUseDoubleSystemFrameSize,
+                                                            bDisableRaw,
+                                                            bUseMultithreading,
+                                                            bDisableRecording,
+                                                            bDelayPan,
+                                                            bDisableIPv6,
+                                                            eLicenceType ) );
 
 #ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
-                new CServerRpc ( &Server, pRpcServer, pRpcServer );
+                new CServerRpc ( Server.get(), pRpcServer, pRpcServer );
             }
 
 #endif
@@ -1073,7 +1076,7 @@ int main ( int argc, char** argv )
             if ( bUseGUI )
             {
                 // load settings from init-file (command line options override)
-                CServerSettings Settings ( &Server, strIniFileName );
+                CServerSettings Settings ( Server.get(), strIniFileName );
                 Settings.Load ( CommandLineOptions );
 
                 // load translation
@@ -1083,7 +1086,7 @@ int main ( int argc, char** argv )
                 }
 
                 // GUI object for the server
-                CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
+                CServerDlg ServerDlg ( Server.get(), &Settings, bStartMinimized, nullptr );
 
                 // show dialog (if not the minimized flag is set)
                 if ( !bStartMinimized )
@@ -1103,7 +1106,7 @@ int main ( int argc, char** argv )
                 // strDirectoryAddress is wanted
                 if ( !strDirectoryAddress.isEmpty() )
                 {
-                    Server.SetDirectoryType ( AT_CUSTOM );
+                    Server->SetDirectoryType ( AT_CUSTOM );
                 }
 
                 pApp->exec();

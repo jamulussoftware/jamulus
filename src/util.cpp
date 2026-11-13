@@ -856,12 +856,13 @@ void PlayAudioAlert ( QUrl soundUrl )
 \******************************************************************************/
 // Network utility functions ---------------------------------------------------
 
-static void resolveHostname ( const QString&                                              strHostname,
+static bool resolveHostname ( const QString&                                              strHostname,
                               const quint16                                               port,
                               QObject*                                                    context,
                               std::function<void ( const QHostInfo& info, quint16 port )> slot )
 {
-    QHostInfo::lookupHost ( strHostname, context, [slot, port] ( const QHostInfo& info ) { slot ( info, port ); } );
+    // lookupHost returns -1 if it fails to initiate a lookup, otherwise an ID that we do not use
+    return -1 != QHostInfo::lookupHost ( strHostname, context, [slot, port] ( const QHostInfo& info ) { slot ( info, port ); } );
 }
 
 static bool validateHostnameFormat ( const QString& strHostname )
@@ -1122,9 +1123,7 @@ bool NetworkUtil::ResolveAddress ( const QString&                               
     }
 #endif
 
-    resolveHostname ( strHost, iNetPort, context, slot );
-
-    return true;
+    return resolveHostname ( strHost, iNetPort, context, slot );
 }
 
 CHostAddress NetworkUtil::GetLocalAddress()

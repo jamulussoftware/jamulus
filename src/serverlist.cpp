@@ -1015,7 +1015,10 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
         // unregister server if it is registered - regardless of success of parse
         SetSvrRegStatus ( SRS_NOT_REGISTERED );
 
-        pConnLessProtocol->CreateCLUnregisterServerMes ( DirectoryAddress );
+        if ( !( DirectoryAddress == CHostAddress() ) )
+        {
+            pConnLessProtocol->CreateCLUnregisterServerMes ( DirectoryAddress );
+        }
         return;
     }
 
@@ -1034,6 +1037,9 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
     // Use SRV DNS discovery for directory connections, fallback to A/AAAA if none.
 
     const QString strNetworkAddress = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
+
+    // invalidate current directory address until resolved
+    DirectoryAddress = CHostAddress();
 
     // get a new sequence number for matching the resolved callback
     const int seq = ++iResolverSeq;

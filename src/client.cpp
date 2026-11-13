@@ -93,7 +93,8 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK ( true ),
     bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
     iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
-    bRawAudioIsSupported ( false )
+    bRawAudioIsSupported ( false ),
+    iResolverSeq ( 0 )
 {
     int iOpusError;
 
@@ -619,25 +620,6 @@ void CClient::SetRemoteChanPan ( const int iId, const float fPan )
     StartTimerGainOrPan();
 }
 
-bool CClient::SetServerAddr ( QString strNAddr )
-{
-    CHostAddress HostAddress;
-    if ( NetworkUtil::ParseNetworkAddress ( strNAddr, HostAddress, bIPv6Available ) )
-    {
-        // apply address to the channel
-        Channel.SetAddress ( HostAddress );
-
-        // By default, set server name to HostAddress. If using the Connect() method, this may be overwritten
-        SetConnectedServerName ( HostAddress.toString() );
-
-        return true;
-    }
-    else
-    {
-        return false; // invalid address
-    }
-}
-
 bool CClient::GetAndResetbJitterBufferOKFlag()
 {
     // get the socket buffer put status flag and reset it
@@ -1150,6 +1132,8 @@ void CClient::Stop()
 /// @emit Disconnected
 void CClient::Disconnect()
 {
+    ++iResolverSeq; // invalidate any uncompleted resolver requests
+
     // Key off the connection state, not IsRunning() (which tracks the audio
     // device): the two diverge while connecting and in headless mode, and on
     // SIGTERM we must still send the disconnect message to the server.
@@ -1162,7 +1146,7 @@ void CClient::Disconnect()
 /// @method
 /// @brief Connects to strServerAddress. If a connection is currently requested
 ///        or established, that connection is terminated first.
-/// @emit Connecting (strServerName) if SetServerAddr was valid. emit happens through Start().
+/// @emit Connecting (strServerName) if address was valid. emit happens through Start().
 ///       Use to set CClientDlg to show being connected
 /// @emit ConnectingFailed (error) if an error occurred
 ///       Use to display error message in CClientDlg
@@ -1176,22 +1160,66 @@ void CClient::Connect ( const QString& strServerAddress, const QString& strServe
         // different server while connected behaves as a reconnect
         Disconnect();
 
-        // Set server address and connect if valid address was supplied
-        if ( SetServerAddr ( strServerAddress ) )
+        const int seq = iResolverSeq; // for capturing the current request
+
+        if ( NetworkUtil::ResolveAddress (
+                 strServerAddress,
+                 bIPv6Available,
+                 this,
+                 [this, seq] ( const QHostInfo& info, quint16 port ) {
+                     // check that the request has not been invalidated
+                     if ( seq == iResolverSeq )
+                     {
+                         OnHostResolved ( info, port ); // handle result
+                     }
+                 },
+                 true,    // allow hostname resolution
+                 true ) ) // allow SVR resolution
         {
-            SetConnectedServerName ( strServerName );
-            Start();
+            SetConnectedServerName ( strServerName ); // set if resolution initiated ok
         }
         else
         {
-            throw CGenErr ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
+            emit ConnectingFailed ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
         }
     }
     catch ( const CGenErr& generr )
     {
-        Stop();
+        // Stop(); // XXX: probably not needed?
         emit ConnectingFailed ( generr.GetErrorText() );
     }
+}
+
+void CClient::OnHostResolved ( const QHostInfo& info, quint16 port )
+{
+    if ( info.error() != QHostInfo::NoError )
+    {
+        emit ConnectingFailed ( "Cannot connect: " + info.errorString() );
+        return;
+    }
+
+    for ( const QHostAddress& HostAddr : info.addresses() )
+    {
+        // qInfo() << "Resolved network address to" << HostAddr << "for proto" << HostAddr.protocol();
+        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( HostAddr.protocol() == QAbstractSocket::IPv6Protocol && bIPv6Available ) )
+        {
+            CHostAddress HostAddress ( HostAddr, port );
+            Channel.SetAddress ( HostAddress );
+            // sound device start can throw an exception, which we must catch here
+            try
+            {
+                Start();
+            }
+            catch ( const CGenErr& generr )
+            {
+                Stop();
+                emit ConnectingFailed ( generr.GetErrorText() );
+            }
+            return;
+        }
+    }
+
+    emit ConnectingFailed ( "Hostname returned no usable addresses" );
 }
 
 /// @method

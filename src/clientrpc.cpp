@@ -187,18 +187,42 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
             return;
         }
 
-        CHostAddress haDirectoryAddress;
+        // Start asynchronous address resolution with lambda callback slot
+        bool accepted = NetworkUtil::ResolveAddress (
+            jsonDirectoryIp.toString(),
+            false, // Currently IPv4 only for directories
+            pClient,
+            [pClient] ( const QHostInfo& info, quint16 port ) {
+                // this callback runs later, after the RPC handler has returned
+                if ( info.error() != QHostInfo::NoError )
+                {
+                    qWarning() << "Directory lookup failed:" << info.errorString();
+                    return;
+                }
 
-        // Allow IPv4 only for communicating with Directories
-        if ( !NetworkUtil::ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, false ) )
+                // select a usable IPv4 address
+                for ( const QHostAddress& addr : info.addresses() )
+                {
+                    if ( addr.protocol() == QAbstractSocket::IPv4Protocol )
+                    {
+                        CHostAddress haDirectoryAddress ( addr, port );
+
+                        pClient->CreateCLReqServerListMes ( haDirectoryAddress );
+                        return;
+                    }
+                }
+                qWarning() << "No usable address found for directory";
+            },
+            true,   // allow hostname lookup
+            true ); // allow SRV lookup
+
+        if ( !accepted )
         {
             response["error"] =
                 CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a valid socket address" );
             return;
         }
 
-        // send the request for the server list
-        pClient->CreateCLReqServerListMes ( haDirectoryAddress );
         response["result"] = "ok";
     } );
 

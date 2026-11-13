@@ -146,6 +146,9 @@ protected:
     bool         bListFilterWasActive;
     bool         bShowAllMusicians;
 
+    // sequence number for asynchronous DNS resolver
+    int iResolverSeq;
+
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnDirectoryChanged ( int iTypeIdx );
@@ -157,6 +160,7 @@ public slots:
     void OnTimerPing();
     void OnTimerReRequestServList();
     void OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWidgetItem* previous );
+    void OnHostResolved ( const QHostInfo& info, quint16 port );
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );

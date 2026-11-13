@@ -87,15 +87,15 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
                                            bool    bIPv6Available )
 {
     CHostAddress haServerHostAddr;
-    NetworkUtil::ParseNetworkAddress ( strHAddr, haServerHostAddr, bIPv6Available );
-    if ( CHostAddress() == haServerHostAddr )
+    CHostAddress haServerLocalAddr;
+
+    if ( !NetworkUtil::ParseAddressLiteral ( strHAddr, bIPv6Available, haServerHostAddr ) ||
+         !NetworkUtil::ParseAddressLiteral ( strLHAddr, bIPv6Available, haServerLocalAddr ) || CHostAddress() == haServerHostAddr )
     {
         // do not proceed without server host address!
         return CServerListEntry();
     }
 
-    CHostAddress haServerLocalAddr;
-    NetworkUtil::ParseNetworkAddress ( strLHAddr, haServerLocalAddr, bIPv6Available );
     if ( haServerLocalAddr.iPort == 0 )
     {
         haServerLocalAddr.iPort = haServerHostAddr.iPort;
@@ -159,7 +159,8 @@ CServerListManager::CServerListManager ( CServer*       pServer,
     eSvrRegStatus ( SRS_NOT_REGISTERED ),
     strMinServerVersion ( "" ), // disable version check with empty version
     pConnLessProtocol ( pNConLProt ),
-    iSvrRegRetries ( 0 )
+    iSvrRegRetries ( 0 ),
+    iResolverSeq ( 0 )
 {
 
     CHostAddress haServerAddr ( NetworkUtil::GetLocalAddress().InetAddr, iNPortNum );
@@ -827,9 +828,13 @@ bool CServerListManager::Load()
             continue;
         }
 
-        // This uses ParseNetworkAddressBare because it is just parsing ip:host that was saved to the file.
-        // Therefore no SRV lookup is appropriate.
-        NetworkUtil::ParseNetworkAddressBare ( slLine[0], haServerHostAddr, pServer->IsIPv6Available() );
+        // This uses ParseAddressLiteral because it is just parsing ip:host that was saved to the file.
+        if ( !NetworkUtil::ParseAddressLiteral ( slLine[0], pServer->IsIPv6Available(), haServerHostAddr ) )
+        {
+            qWarning() << "Skipping invalid host entry for" << slLine[0];
+            continue;
+        }
+
         int iIdx = IndexOf ( haServerHostAddr );
         if ( iIdx != INVALID_INDEX )
         {
@@ -999,6 +1004,24 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
         return;
     }
 
+    // If we are unregistering from a directory we previously registered to,
+    // just use the saved address from registering, without address resolution.
+
+    if ( !bIsRegister )
+    {
+        // invalidate any pending address resolution for registration
+        ++iResolverSeq;
+
+        // unregister server if it is registered - regardless of success of parse
+        SetSvrRegStatus ( SRS_NOT_REGISTERED );
+
+        if ( !( DirectoryAddress == CHostAddress() ) )
+        {
+            pConnLessProtocol->CreateCLUnregisterServerMes ( DirectoryAddress );
+        }
+        return;
+    }
+
     // It is very important to unlock the Mutex before doing address resolution,
     // so that the event loop can run and any other timers that need the mutex
     // can obtain it. Otherwise there is the possibility of deadlock when doing
@@ -1009,41 +1032,73 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
     // Note that we always have to parse the server address again since if
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
-    // Allow IPv4 only for communicating with Directories
+
+    // Currently allow only IPv4 for communicating with Directories
     // Use SRV DNS discovery for directory connections, fallback to A/AAAA if none.
-    const QString strNetworkAddress      = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
-    const bool    bDirectoryAddressValid = NetworkUtil::ParseNetworkAddress ( strNetworkAddress, DirectoryAddress, false );
 
-    // lock the mutex again now that the address has been resolved.
-    locker.relock();
+    const QString strNetworkAddress = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
 
-    if ( bIsRegister )
+    // invalidate current directory address until resolved
+    DirectoryAddress = CHostAddress();
+
+    // get a new sequence number for matching the resolved callback
+    const int seq = ++iResolverSeq;
+
+    // allow hostname resolution and SRV resolution
+    const bool bDirectoryAddressValid = NetworkUtil::ResolveAddress (
+        strNetworkAddress,
+        false, // IPv4 only at present
+        this,
+        [this, seq] ( const QHostInfo& info, quint16 port ) {
+            // check that the request has not been superseded
+            if ( seq == iResolverSeq )
+            {
+                OnHostResolved ( info, port ); // handle result
+            }
+        },
+        true,   // allow hostname resolution
+        true ); // allow SVR resolution
+
+    if ( !bDirectoryAddressValid )
     {
-        if ( bDirectoryAddressValid )
-        {
-            // register server
-            SetSvrRegStatus ( SRS_REQUESTED );
+        // lock the mutex again before calling SetSvrRegStatus()
+        locker.relock();
+        SetSvrRegStatus ( SRS_BAD_ADDRESS );
+    }
+}
 
-            // For a registered server, the server properties are stored in the
-            // very first item in the server list (which is actually no server list
-            // but just one item long for the registered server).
-            pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerList[0].LHostAddr, ServerList[0] );
-        }
-        else
+void CServerListManager::OnHostResolved ( const QHostInfo& info, quint16 port )
+{
+    QMutexLocker locker ( &Mutex );
+
+    if ( info.error() == QHostInfo::NoError )
+    {
+        for ( const QHostAddress& HostAddr : info.addresses() )
         {
-            SetSvrRegStatus ( SRS_BAD_ADDRESS );
+            // qInfo() << "Resolved network address to" << HostAddr << "for proto" << HostAddr.protocol();
+            if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol /* ||
+                 ( HostAddr.protocol() == QAbstractSocket::IPv6Protocol && pServer->IsIPv6Available() ) */ )
+            {
+                DirectoryAddress = CHostAddress ( HostAddr, port );
+
+                // register server
+                SetSvrRegStatus ( SRS_REQUESTED );
+
+                // For a registered server, the server properties are stored in the
+                // very first item in the server list (which is actually no server list
+                // but just one item long for the registered server).
+                pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerList[0].LHostAddr, ServerList[0] );
+                return;
+            }
         }
+        qWarning() << "Directory lookup failed: Hostname returned no usable addresses";
     }
     else
     {
-        // unregister server if it is registered - regardless of success of parse
-        SetSvrRegStatus ( SRS_NOT_REGISTERED );
-
-        if ( bDirectoryAddressValid )
-        {
-            pConnLessProtocol->CreateCLUnregisterServerMes ( DirectoryAddress );
-        }
+        qWarning() << "Directory lookup failed:" << info.errorString();
     }
+
+    SetSvrRegStatus ( SRS_BAD_ADDRESS );
 }
 
 void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )

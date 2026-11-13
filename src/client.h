@@ -180,7 +180,6 @@ public:
 
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
-    bool SetServerAddr ( QString strNAddr );
 
     // IPv6 Available
     bool IsIPv6Available() { return bIPv6Available; }
@@ -478,6 +477,9 @@ protected:
     int    maxGainOrPanId;
     int    iCurPingTime;
 
+    // sequence number for asynchronous DNS resolver
+    int iResolverSeq;
+
 protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
@@ -514,6 +516,7 @@ protected slots:
     void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
     void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void OnHostResolved ( const QHostInfo& info, quint16 port );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

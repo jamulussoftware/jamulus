@@ -246,6 +246,9 @@ protected:
     QTimer TimerCLRegisterServerResp;
     QTimer TimerIsPermanent;
 
+    // sequence number for asynchronous DNS resolver
+    int iResolverSeq;
+
 public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();
@@ -255,6 +258,9 @@ public slots:
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
 
     void OnAboutToQuit();
+
+    // From ResolveAddress()
+    void OnHostResolved ( const QHostInfo& info, quint16 port );
 
 signals:
     void SvrRegStatusChanged();

@@ -328,7 +328,7 @@ void CConnectDlg::RequestServerList()
 
     if ( !NetworkUtil::ResolveAddress (
              strDirectoryAddress,
-             pClient->IsIPv6Available(),
+             false, // IPv4 only at present
              this,
              [this, seq] ( const QHostInfo& info, quint16 port ) {
                  // check that the request has not been superseded

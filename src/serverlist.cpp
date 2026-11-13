@@ -159,7 +159,8 @@ CServerListManager::CServerListManager ( CServer*       pServer,
     eSvrRegStatus ( SRS_NOT_REGISTERED ),
     strMinServerVersion ( "" ), // disable version check with empty version
     pConnLessProtocol ( pNConLProt ),
-    iSvrRegRetries ( 0 )
+    iSvrRegRetries ( 0 ),
+    iResolverSeq ( 0 )
 {
 
     CHostAddress haServerAddr ( NetworkUtil::GetLocalAddress().InetAddr, iNPortNum );
@@ -1008,6 +1009,9 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
 
     if ( !bIsRegister )
     {
+        // invalidate any pending address resolution for registration
+        ++iResolverSeq;
+
         // unregister server if it is registered - regardless of success of parse
         SetSvrRegStatus ( SRS_NOT_REGISTERED );
 
@@ -1025,19 +1029,34 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
     // Note that we always have to parse the server address again since if
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
-    // Allow IPv4 only for communicating with Directories
+
+    // Currently allow only IPv4 for communicating with Directories
     // Use SRV DNS discovery for directory connections, fallback to A/AAAA if none.
+
     const QString strNetworkAddress = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
 
-    // allow hostname resolution and SRV resolution
-    const bool bDirectoryAddressValid =
-        NetworkUtil::ResolveAddress ( strNetworkAddress, false, this, &CServerListManager::OnHostResolved, true, true );
+    // get a new sequence number for matching the resolved callback
+    const int seq = ++iResolverSeq;
 
-    // lock the mutex again now that the address has been resolved.
-    locker.relock();
+    // allow hostname resolution and SRV resolution
+    const bool bDirectoryAddressValid = NetworkUtil::ResolveAddress (
+        strNetworkAddress,
+        false, // IPv4 only at present
+        this,
+        [this, seq] ( const QHostInfo& info, quint16 port ) {
+            // check that the request has not been superseded
+            if ( seq == iResolverSeq )
+            {
+                OnHostResolved ( info, port ); // handle result
+            }
+        },
+        true,   // allow hostname resolution
+        true ); // allow SVR resolution
 
     if ( !bDirectoryAddressValid )
     {
+        // lock the mutex again before calling SetSvrRegStatus()
+        locker.relock();
         SetSvrRegStatus ( SRS_BAD_ADDRESS );
     }
 }

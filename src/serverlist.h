@@ -246,6 +246,9 @@ protected:
     QTimer TimerCLRegisterServerResp;
     QTimer TimerIsPermanent;
 
+    // sequence number for asynchronous DNS resolver
+    int iResolverSeq;
+
 public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();

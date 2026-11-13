@@ -337,8 +337,8 @@ void CConnectDlg::RequestServerList()
                      OnHostResolved ( info, port ); // handle result
                  }
              },
-             true,
-             true ) )
+             true,    // allow hostname resolution
+             true ) ) // allow SVR resolution
     {
         qWarning() << "Cannot start directory fetch from" << strDirectoryAddress;
     }

@@ -1173,8 +1173,8 @@ void CClient::Connect ( const QString& strServerAddress, const QString& strServe
                          OnHostResolved ( info, port ); // handle result
                      }
                  },
-                 true,
-                 true ) )
+                 true,    // allow hostname resolution
+                 true ) ) // allow SVR resolution
         {
             SetConnectedServerName ( strServerName ); // set if resolution initiated ok
         }

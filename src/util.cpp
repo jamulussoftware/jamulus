@@ -869,27 +869,29 @@ static bool validateHostnameFormat ( const QString& strHostname )
     // Validate hostname format before trying to resolve:
     // (all matches are non-greedy)
     static const QRegularExpression plainHostRegex (
-        // # beginning of string
+        // beginning of string
         "^"
-        // # doesn't contain underscore (this is so that we can use \w later on for [A-Za-z0-9])
+        // doesn't contain underscore (this is so that we can use \w later on for [A-Za-z0-9])
+        // note that \w only matches ASCII as QRegularExpression::UseUnicodePropertiesOption is not set
         "(?!.*?_)"
-        // # doesn't contain two dots in a row
+        // doesn't contain two dots in a row
         "(?!.*?\\.\\.)"
-        // # doesn't have only digits in the last element (also eliminates raw IP addresses)
-        "(?!.*\\.\\d+\\.?$)"
-        // # doesn't contain dash at the beginning of a label
-        "(?!(?:\\w+?\\.)?-[\\w\\.\\-]*?)"
-        // # doesn't contain dash at the end of a label
-        "(?!\\w+?-\\.(?:[\\w\\.\\-]+?))"
-        // # starts with an alphanumeric char
+        // doesn't have only digits in the last element (also eliminates raw IP addresses)
+        "(?!.*?\\.\\d+\\.?$)"
+        // doesn't contain dash at the beginning of a label
+        "(?!-|(?:.*?\\.-))"
+        // doesn't contain dash at the end of a label
+        "(?!.*?-\\.)"
+        "(?!.*?-$)"
+        // starts with an alphanumeric char
         "(?=\\w)"
-        // # not longer than 253 chars
-        "(?![\\w\\.\\-]{254})"
-        // # doesn't contain a label longer than 63 char
+        // not longer than 253 chars
+        "(?!.{254})"
+        // doesn't contain a label longer than 63 char
         "(?!.*?[\\w\\-]{64})"
-        // # allowed chars alphanumeric, dot and dash
+        // allowed chars alphanumeric, dot and dash
         "[\\w\\.\\-]+?"
-        // # end of string
+        // end of string
         "$" );
 
     auto match = plainHostRegex.match ( strHostname );

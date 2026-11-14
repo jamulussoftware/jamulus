@@ -1275,7 +1275,13 @@ void CClientDlg::OnConnecting ( const QString& strMixerBoardLabel )
     }
 }
 
-void CClientDlg::OnConnectingFailed ( const QString& strError ) { QMessageBox::critical ( this, APP_NAME, strError, tr ( "Close" ), nullptr ); }
+void CClientDlg::OnConnectingFailed ( const QString& strError )
+{
+    // change connect button text back to "connect"
+    butConnect->setText ( tr ( "C&onnect" ) );
+
+    QMessageBox::critical ( this, APP_NAME, strError, tr ( "Close" ), nullptr );
+}
 
 void CClientDlg::OnDisconnect()
 {

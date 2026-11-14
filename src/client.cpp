@@ -1199,6 +1199,9 @@ void CClient::OnHostResolved ( const QHostInfo& info, quint16 port )
 {
     if ( info.error() != QHostInfo::NoError )
     {
+        SetConnectionState ( CS_DISCONNECTED ); // no longer CS_RESOLVING
+
+        // emit ConnectingFailed to inform UI
         emit ConnectingFailed ( "Cannot connect: " + info.errorString() );
         return;
     }

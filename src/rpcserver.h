@@ -94,6 +94,7 @@ private:
     // A map from method name to handler functions
     QMap<QString, CRpcHandler> mapMethodHandlers;
     QMap<QTcpSocket*, bool>    isAuthenticated;
+    QMap<QTcpSocket*, bool>    isDiscardingLine;
     QVector<QTcpSocket*>       vecClients;
 
     void HandleApiAuth ( QTcpSocket* pSocket, const QJsonObject& params, QJsonObject& response );

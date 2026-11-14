@@ -1102,7 +1102,18 @@ bool NetworkUtil::ResolveAddress ( const QString&                               
                         return;
                     }
 
-                    resolveHostname ( record.target(), record.port(), context, slot );
+                    if ( !resolveHostname ( record.target(), record.port(), context, slot ) )
+                    {
+                        QHostInfo info;
+                        info.setHostName ( strHost );
+                        info.setError ( QHostInfo::HostNotFound );
+                        info.setErrorString ( "Host in SRV record not found" );
+
+                        QMetaObject::invokeMethod (
+                            context,
+                            [slot, info, iNetPort]() { slot ( info, iNetPort ); },
+                            Qt::QueuedConnection );
+                    }
                     return;
                 }
                 else if ( !records.isEmpty() )
@@ -1115,7 +1126,18 @@ bool NetworkUtil::ResolveAddress ( const QString&                               
             dns->deleteLater();
 
             // SRV failed - lookup host directly
-            resolveHostname ( strHost, iNetPort, context, slot );
+            if ( !resolveHostname ( strHost, iNetPort, context, slot ) )
+            {
+                QHostInfo info;
+                info.setHostName ( strHost );
+                info.setError ( QHostInfo::HostNotFound );
+                info.setErrorString ( "Host not found" );
+
+                QMetaObject::invokeMethod (
+                    context,
+                    [slot, info, iNetPort]() { slot ( info, iNetPort ); },
+                    Qt::QueuedConnection );
+            }
         } );
 
         dns->lookup();

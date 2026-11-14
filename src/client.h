@@ -96,8 +96,9 @@ enum EConnectionState
     // stream towards the configured server and "established" once the server
     // has assigned a channel ID to the client
     CS_DISCONNECTED = 0, // no connection requested or established
-    CS_CONNECTING   = 1, // connection requested but not yet established
-    CS_CONNECTED    = 2  // connection established and current
+    CS_RESOLVING    = 1, // resolving address
+    CS_CONNECTING   = 2, // connection requested but not yet established
+    CS_CONNECTED    = 3  // connection established and current
 };
 
 // audio in fader range
@@ -541,6 +542,7 @@ signals:
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
     void ConnectionStateChanged ( EConnectionState eConnectionState );
+    void Resolving ( const QString& strServerName );
     void Connecting ( const QString& strServerName );
     void ConnectingFailed ( const QString& errorMessage );
     void Disconnected();

@@ -1160,6 +1160,11 @@ void CClient::Connect ( const QString& strServerAddress, const QString& strServe
         // different server while connected behaves as a reconnect
         Disconnect();
 
+        // note that we are resolving the address
+        SetConnectionState ( CS_RESOLVING );
+
+        emit Resolving ( GetConnectedServerName() );
+
         const int seq = iResolverSeq; // for capturing the current request
 
         if ( NetworkUtil::ResolveAddress (

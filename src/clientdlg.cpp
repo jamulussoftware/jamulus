@@ -498,6 +498,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
 
+    QObject::connect ( pClient, &CClient::Resolving, this, &CClientDlg::OnResolving );
+
     QObject::connect ( pClient, &CClient::Connecting, this, &CClientDlg::OnConnecting );
 
     QObject::connect ( pClient, &CClient::ConnectingFailed, this, &CClientDlg::OnConnectingFailed );
@@ -788,7 +790,7 @@ void CClientDlg::OnConnectDlgAccepted()
 void CClientDlg::OnConnectDisconBut()
 {
     // the connect/disconnect button implements a toggle functionality
-    if ( pClient->IsRunning() )
+    if ( pClient->GetConnectionState() != CS_DISCONNECTED )
     {
         pClient->Disconnect();
     }
@@ -1235,6 +1237,14 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int
 {
     // update connection dialog server list
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
+}
+
+void CClientDlg::OnResolving ( const QString& strMixerBoardLabel )
+{
+    Q_UNUSED ( strMixerBoardLabel ); // might want to use it in the future
+
+    // change connect button text to "disconnect" while resolving too
+    butConnect->setText ( tr ( "&Disconnect" ) );
 }
 
 void CClientDlg::OnConnecting ( const QString& strMixerBoardLabel )

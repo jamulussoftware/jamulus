@@ -145,6 +145,7 @@ protected:
     CAnalyzerConsole   AnalyzerConsole;
 
 public slots:
+    void OnResolving ( const QString& strServerName );
     void OnConnecting ( const QString& strServerName );
     void OnConnectingFailed ( const QString& strErrorText );
     void OnDisconnect();

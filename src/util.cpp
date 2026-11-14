@@ -1105,8 +1105,9 @@ bool NetworkUtil::ResolveAddress ( const QString&                               
                     resolveHostname ( record.target(), record.port(), context, slot );
                     return;
                 }
-                else
+                else if ( !records.isEmpty() )
                 {
+                    // Jamulus doesn't handle multiple SRV records, so warn if they are found
                     qWarning() << "SRV returned" << records.length() << "records";
                 }
             }

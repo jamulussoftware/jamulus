@@ -1162,8 +1162,7 @@ void CClient::Connect ( const QString& strServerAddress, const QString& strServe
 
         // note that we are resolving the address
         SetConnectionState ( CS_RESOLVING );
-
-        emit Resolving ( GetConnectedServerName() );
+        emit Resolving ( strServerAddress );
 
         const int seq = iResolverSeq; // for capturing the current request
 
@@ -1185,12 +1184,15 @@ void CClient::Connect ( const QString& strServerAddress, const QString& strServe
         }
         else
         {
+            SetConnectionState ( CS_DISCONNECTED ); // no longer CS_RESOLVING
             emit ConnectingFailed ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
         }
     }
     catch ( const CGenErr& generr )
     {
         // Stop(); // XXX: probably not needed?
+
+        SetConnectionState ( CS_DISCONNECTED ); // no longer CS_RESOLVING
         emit ConnectingFailed ( generr.GetErrorText() );
     }
 }
@@ -1200,8 +1202,6 @@ void CClient::OnHostResolved ( const QHostInfo& info, quint16 port )
     if ( info.error() != QHostInfo::NoError )
     {
         SetConnectionState ( CS_DISCONNECTED ); // no longer CS_RESOLVING
-
-        // emit ConnectingFailed to inform UI
         emit ConnectingFailed ( "Cannot connect: " + info.errorString() );
         return;
     }
@@ -1221,12 +1221,14 @@ void CClient::OnHostResolved ( const QHostInfo& info, quint16 port )
             catch ( const CGenErr& generr )
             {
                 Stop();
+                // Stop() sets the connection state to CS_DISCONNECTED
                 emit ConnectingFailed ( generr.GetErrorText() );
             }
             return;
         }
     }
 
+    SetConnectionState ( CS_DISCONNECTED ); // no longer CS_RESOLVING
     emit ConnectingFailed ( "Hostname returned no usable addresses" );
 }
 

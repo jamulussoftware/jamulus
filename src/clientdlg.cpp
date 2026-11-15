@@ -302,9 +302,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this, SLOT ( OnSaveChannelSetup() ) );
 
+#if !defined( Q_OS_IOS )
+    // iOS apps are not supposed to quit themselves, the user leaves them via the
+    // home screen or the app switcher
     pFileMenu->addSeparator();
 
     pFileMenu->addAction ( tr ( "E&xit" ), this, SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
+#endif
 
     // Edit menu  --------------------------------------------------------------
     QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );

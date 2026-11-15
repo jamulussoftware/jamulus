@@ -1034,6 +1034,15 @@ void CClientSettingsDlg::showEvent ( QShowEvent* event )
     QDialog::showEvent ( event );
 }
 
+void CClientSettingsDlg::hideEvent ( QHideEvent* event )
+{
+    // store the settings when the dialog is closed, so that they survive the
+    // application being terminated before it becomes inactive
+    pSettings->Save ( false );
+
+    QDialog::hideEvent ( event );
+}
+
 bool CClientSettingsDlg::eventFilter ( QObject* obj, QEvent* event )
 {
     // Refresh MIDI device list when user clicks on the dropdown

@@ -92,6 +92,7 @@ protected:
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
     virtual void showEvent ( QShowEvent* ) override;
+    virtual void hideEvent ( QHideEvent* ) override;
     virtual bool eventFilter ( QObject* obj, QEvent* event ) override;
 
     CClient*         pClient;

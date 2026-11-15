@@ -284,6 +284,9 @@ void CConnectDlg::RequestServerList()
     // ensure ping timer is stopped
     TimerPing.stop();
 
+    // also ensure rerequest timer is stopped
+    TimerReRequestServList.stop();
+
     // reset flags
     bServerListReceived        = false;
     bReducedServerListReceived = false;

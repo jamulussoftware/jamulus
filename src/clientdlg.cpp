@@ -465,6 +465,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     }
 
     // Connections -------------------------------------------------------------
+    // react to the chat window being hidden, see eventFilter()
+    ChatDlg.installEventFilter ( this );
+
     // push buttons
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
 
@@ -1011,6 +1014,23 @@ void CClientDlg::ShowGeneralSettings ( int iTab )
     // make sure dialog is upfront and has focus
     ClientSettingsDlg.raise();
     ClientSettingsDlg.activateWindow();
+}
+
+bool CClientDlg::eventFilter ( QObject* pObject, QEvent* pEvent )
+{
+#if defined( Q_OS_IOS )
+    // when the full screen chat window is hidden, iOS leaves the application without a key
+    // window. The palette is then resolved from the default light appearance, so this window
+    // is painted with black text on the dark background it still has until it becomes the
+    // key window again.
+    if ( pObject == &ChatDlg && pEvent->type() == QEvent::Hide )
+    {
+        raise();
+        activateWindow();
+    }
+#endif
+
+    return CBaseDlg::eventFilter ( pObject, pEvent );
 }
 
 void CClientDlg::ShowChatWindow ( const bool bForceRaise )

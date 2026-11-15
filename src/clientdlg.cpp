@@ -807,7 +807,16 @@ void CClientDlg::OnLoadChannelSetup()
 
 void CClientDlg::OnSaveChannelSetup()
 {
-    QString strFileName = QFileDialog::getSaveFileName ( this, tr ( "Select Channel Setup File" ), "", QString ( "*." ) + MIX_SETTINGS_FILE_SUFFIX );
+#if defined( Q_OS_IOS )
+    // the iOS file dialog only uses the file name as a suggestion, and the saved file
+    // must keep the suffix, otherwise the load dialog will not show it again. This is a workaround.
+    const QString strDefaultName = QString ( "MixerSetup." ) + MIX_SETTINGS_FILE_SUFFIX;
+#else
+    const QString strDefaultName = "";
+#endif
+
+    QString strFileName =
+        QFileDialog::getSaveFileName ( this, tr ( "Select Channel Setup File" ), strDefaultName, QString ( "*." ) + MIX_SETTINGS_FILE_SUFFIX );
 
     if ( !strFileName.isEmpty() )
     {

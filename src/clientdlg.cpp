@@ -807,7 +807,11 @@ void CClientDlg::OnLoadChannelSetup()
 
 void CClientDlg::OnSaveChannelSetup()
 {
-    QString strFileName = QFileDialog::getSaveFileName ( this, tr ( "Select Channel Setup File" ), "", QString ( "*." ) + MIX_SETTINGS_FILE_SUFFIX );
+    QString strFileName = QFileDialog::getSaveFileName ( this,
+                                                         tr ( "Select Channel Setup File" ),
+                                                         tr ( "ChannelSetup", "Default Channel Setup file name without suffix" ) + QString ( "." ) +
+                                                             MIX_SETTINGS_FILE_SUFFIX,
+                                                         QString ( "*." ) + MIX_SETTINGS_FILE_SUFFIX );
 
     if ( !strFileName.isEmpty() )
     {

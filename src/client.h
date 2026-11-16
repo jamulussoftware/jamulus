@@ -492,14 +492,7 @@ protected slots:
     void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
     void OnNewConnection();
-    void OnCLDisconnection ( CHostAddress InetAddr )
-    {
-        if ( InetAddr == Channel.GetAddress() )
-        {
-            // Stop client in case it received a Disconnection request
-            Stop();
-        }
-    }
+    void OnCLDisconnection ( CHostAddress InetAddr );
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
 
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );

@@ -335,6 +335,15 @@ void CClient::OnNewConnection()
     //### TODO: END ###//
 }
 
+void CClient::OnCLDisconnection ( CHostAddress InetAddr )
+{
+    if ( eConnectionState != CS_RESOLVING && InetAddr == Channel.GetAddress() )
+    {
+        // Stop client in case it received a Disconnection request
+        Stop();
+    }
+}
+
 void CClient::OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted )
 {
     // map iChanID from server channel ID to client channel ID

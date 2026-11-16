@@ -448,6 +448,9 @@ void CServerListManager::SetIsDirectory()
 // When we unregister, set the status and stop timers
 void CServerListManager::Unregister()
 {
+    // invalidate any stale registration response
+    ++iResolverSeq;
+
     // if not currently registered, nothing needs doing
     if ( DirectoryType == AT_NONE || ( DirectoryType == AT_CUSTOM && strDirectoryAddress.isEmpty() ) || eSvrRegStatus == SRS_NOT_REGISTERED )
     {

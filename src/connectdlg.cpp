@@ -287,6 +287,9 @@ void CConnectDlg::RequestServerList()
     // also ensure rerequest timer is stopped
     TimerReRequestServList.stop();
 
+    // clear current directory address to ignore any late server list
+    haDirectoryAddress = CHostAddress();
+
     // reset flags
     bServerListReceived        = false;
     bReducedServerListReceived = false;

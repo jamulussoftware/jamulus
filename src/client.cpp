@@ -1137,7 +1137,13 @@ void CClient::Disconnect()
     // Key off the connection state, not IsRunning() (which tracks the audio
     // device): the two diverge while connecting and in headless mode, and on
     // SIGTERM we must still send the disconnect message to the server.
-    if ( GetConnectionState() != CS_DISCONNECTED )
+    if ( eConnectionState == CS_RESOLVING )
+    {
+        // no need to Stop, as we haven't Started, but need to update connection state
+        SetConnectionState ( CS_DISCONNECTED );
+        emit Disconnected();
+    }
+    else if ( eConnectionState != CS_DISCONNECTED )
     {
         Stop();
     }
@@ -1154,46 +1160,36 @@ void CClient::Disconnect()
 /// @param strServerName - the human readable server name passed to Connecting()
 void CClient::Connect ( const QString& strServerAddress, const QString& strServerName )
 {
-    try
+    // disconnect from any current server first so that connecting to a
+    // different server while connected behaves as a reconnect
+    Disconnect();
+
+    // note that we are resolving the address
+    SetConnectionState ( CS_RESOLVING );
+    emit Resolving ( strServerAddress );
+
+    const int seq = iResolverSeq; // for capturing the current request
+
+    if ( NetworkUtil::ResolveAddress (
+             strServerAddress,
+             bIPv6Available,
+             this,
+             [this, seq] ( const QHostInfo& info, quint16 port ) {
+                 // check that the request has not been invalidated
+                 if ( seq == iResolverSeq )
+                 {
+                     OnHostResolved ( info, port ); // handle result
+                 }
+             },
+             true,    // allow hostname resolution
+             true ) ) // allow SVR resolution
     {
-        // disconnect from any current server first so that connecting to a
-        // different server while connected behaves as a reconnect
-        Disconnect();
-
-        // note that we are resolving the address
-        SetConnectionState ( CS_RESOLVING );
-        emit Resolving ( strServerAddress );
-
-        const int seq = iResolverSeq; // for capturing the current request
-
-        if ( NetworkUtil::ResolveAddress (
-                 strServerAddress,
-                 bIPv6Available,
-                 this,
-                 [this, seq] ( const QHostInfo& info, quint16 port ) {
-                     // check that the request has not been invalidated
-                     if ( seq == iResolverSeq )
-                     {
-                         OnHostResolved ( info, port ); // handle result
-                     }
-                 },
-                 true,    // allow hostname resolution
-                 true ) ) // allow SVR resolution
-        {
-            SetConnectedServerName ( strServerName ); // set if resolution initiated ok
-        }
-        else
-        {
-            SetConnectionState ( CS_DISCONNECTED ); // no longer CS_RESOLVING
-            emit ConnectingFailed ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
-        }
+        SetConnectedServerName ( strServerName ); // set if resolution initiated ok
     }
-    catch ( const CGenErr& generr )
+    else
     {
-        // Stop(); // XXX: probably not needed?
-
         SetConnectionState ( CS_DISCONNECTED ); // no longer CS_RESOLVING
-        emit ConnectingFailed ( generr.GetErrorText() );
+        emit ConnectingFailed ( tr ( "Received invalid server address. Please check for typos in the provided server address." ) );
     }
 }
 

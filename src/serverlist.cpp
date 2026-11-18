@@ -950,6 +950,9 @@ void CServerListManager::OnTimerCLRegisterServerResp()
         if ( iSvrRegRetries >= REGISTER_SERVER_RETRY_LIMIT )
         {
             SetSvrRegStatus ( SRS_TIME_OUT );
+
+            // reset the retry counter to zero so that a refresh tries multiple times again
+            iSvrRegRetries = 0;
         }
         else
         {

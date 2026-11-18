@@ -459,24 +459,6 @@ void CServerListManager::Unregister()
 
     // Update server registration status - sets the lock
     SetRegistered ( false );
-
-    // this is called without the lock set
-    QMutexLocker locker ( &Mutex );
-
-    // disable service -> stop timer
-    if ( bIsDirectory )
-    {
-        TimerPollList.stop();
-        TimerPingServerInList.stop();
-    }
-    else
-    {
-        TimerCLRegisterServerResp.stop();
-        TimerRefreshRegistration.stop();
-        TimerPingServers.stop();
-        TimerIsPermanent.stop();
-    }
-    ServerList[0].bPermanentOnline = false;
 }
 
 // When we register, set the status and start timers
@@ -490,49 +472,16 @@ void CServerListManager::Register()
         return;
     }
 
-    // Update server registration status - sets the lock
-    SetRegistered ( true );
-
-    // this is called without the lock set
-    QMutexLocker locker ( &Mutex );
-
-    if ( bIsDirectory )
+    if ( !bIsDirectory )
     {
-        // start timer for polling the server list if enabled
-        // 1 minute = 60 * 1000 ms
-        TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
+        QMutexLocker locker ( &Mutex );
 
-        // start timer for sending ping messages to servers in the list
-        TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
-
-        // directory is permanent
-        ServerList[0].bPermanentOnline = true;
-    }
-    else
-    {
         // reset the retry counter to zero because update was called
         iSvrRegRetries = 0;
-
-        // start timer for registration timeout - this gets restarted
-        // in OnTimerCLRegisterServerResp on failure
-        TimerCLRegisterServerResp.start();
-
-        // start timer for registering this server at the directory
-        // 1 minute = 60 * 1000 ms
-        TimerRefreshRegistration.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
-
-        // Start timer for ping the directory in short intervals to
-        // keep the port open at the NAT router.
-        // If no NAT is used, we send the messages anyway since they do
-        // not hurt (very low traffic). We also reuse the same update
-        // time as used in the directory for pinging the registered
-        // servers.
-        TimerPingServers.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
-
-        // start the one shot timer for determining if this is a
-        // permanent registered server
-        TimerIsPermanent.start();
     }
+
+    // Update server registration status - sets the lock
+    SetRegistered ( true );
 }
 
 /* Server list functionality **************************************************/
@@ -966,13 +915,7 @@ void CServerListManager::OnTimerCLRegisterServerResp()
         else
         {
             locker.unlock();
-            {
-                OnTimerRefreshRegistration();
-            }
-            locker.relock();
-
-            // re-start timer for registration timeout
-            TimerCLRegisterServerResp.start();
+            OnTimerRefreshRegistration();
         }
     }
 }
@@ -1000,13 +943,6 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
         return;
     }
 
-    if ( bIsDirectory )
-    {
-        // this IS the directory, no network message to worry about
-        SetSvrRegStatus ( bIsRegister ? SRS_REGISTERED : SRS_NOT_REGISTERED );
-        return;
-    }
-
     // If we are unregistering from a directory we previously registered to,
     // just use the saved address from registering, without address resolution.
 
@@ -1018,10 +954,46 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
         // unregister server if it is registered - regardless of success of parse
         SetSvrRegStatus ( SRS_NOT_REGISTERED );
 
-        if ( !( DirectoryAddress == CHostAddress() ) )
+        // disable service -> unregister and stop timers
+        if ( bIsDirectory )
         {
-            pConnLessProtocol->CreateCLUnregisterServerMes ( DirectoryAddress );
+            TimerPollList.stop();
+            TimerPingServerInList.stop();
         }
+        else
+        {
+            // send registration message if we are not our own directory
+            if ( !( DirectoryAddress == CHostAddress() ) )
+            {
+                pConnLessProtocol->CreateCLUnregisterServerMes ( DirectoryAddress );
+            }
+
+            TimerCLRegisterServerResp.stop();
+            TimerRefreshRegistration.stop();
+            TimerPingServers.stop();
+            TimerIsPermanent.stop();
+        }
+        ServerList[0].bPermanentOnline = false;
+
+        return;
+    }
+
+    // if we are our own directory, set status directly and start timers
+
+    if ( bIsDirectory )
+    {
+        // this IS the directory, no network message to worry about
+        SetSvrRegStatus ( SRS_REGISTERED );
+
+        // start timer for polling the server list if enabled
+        // 1 minute = 60 * 1000 ms
+        TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
+
+        // start timer for sending ping messages to servers in the list
+        TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
+
+        // directory is permanent
+        ServerList[0].bPermanentOnline = true;
         return;
     }
 
@@ -1091,6 +1063,27 @@ void CServerListManager::OnHostResolved ( const QHostInfo& info, quint16 port )
                 // very first item in the server list (which is actually no server list
                 // but just one item long for the registered server).
                 pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerList[0].LHostAddr, ServerList[0] );
+
+                // start timer for registration timeout - this gets restarted
+                // in OnTimerCLRegisterServerResp on failure
+                TimerCLRegisterServerResp.start();
+
+                // start timer for registering this server at the directory
+                // 1 minute = 60 * 1000 ms
+                TimerRefreshRegistration.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
+
+                // Start timer for ping the directory in short intervals to
+                // keep the port open at the NAT router.
+                // If no NAT is used, we send the messages anyway since they do
+                // not hurt (very low traffic). We also reuse the same update
+                // time as used in the directory for pinging the registered
+                // servers.
+                TimerPingServers.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
+
+                // start the one shot timer for determining if this is a
+                // permanent registered server
+                TimerIsPermanent.start();
+
                 return;
             }
         }

@@ -1026,9 +1026,6 @@ void CServerListManager::SetRegistered ( const bool bIsRegister )
 
     const QString strNetworkAddress = NetworkUtil::GetDirectoryAddress ( DirectoryType, strDirectoryAddress );
 
-    // invalidate current directory address until resolved
-    DirectoryAddress = CHostAddress();
-
     // get a new sequence number for matching the resolved callback
     const int seq = ++iResolverSeq;
 

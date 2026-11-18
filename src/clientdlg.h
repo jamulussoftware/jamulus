@@ -255,6 +255,7 @@ public slots:
     }
 
     void OnConnectDlgAccepted();
+    void OnConnectDlgRejected();
     void OnGUIDesignChanged();
     void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );

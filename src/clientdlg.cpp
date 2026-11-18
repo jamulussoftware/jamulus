@@ -586,6 +586,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
     QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
+    QObject::connect ( &ConnectDlg, &CConnectDlg::rejected, this, &CClientDlg::OnConnectDlgRejected );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -784,6 +785,15 @@ void CClientDlg::OnConnectDlgAccepted()
 
         // reset flag
         bConnectDlgWasShown = false;
+    }
+}
+
+void CClientDlg::OnConnectDlgRejected()
+{
+    // cancelling while resolving must invalidate the pending lookup
+    if ( pClient->GetConnectionState() == CS_RESOLVING )
+    {
+        pClient->Disconnect();
     }
 }
 

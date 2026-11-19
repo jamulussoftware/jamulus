@@ -294,6 +294,19 @@ LED bar:      lbr
 #define SETTING_TAB_AUDIONET 1
 #define SETTING_TAB_ADVANCED 2
 #define SETTING_TAB_MIDI     3
+#define SETTING_TAB_EFFECTS  4
+
+// main window level meter modes (cycled with the meter mode button)
+#define METER_MODE_INPUT  0
+#define METER_MODE_OUTPUT 1
+#define METER_MODE_BOTH   2
+
+// display of the compressor gain reduction (main window LEDs, effects tab)
+#define FX_GR_ACTIVE_DB      1.0f // below: not compressing
+#define FX_GR_STRONG_DB      6.0f // above: hard compression
+#define FX_COLOR_INACTIVE    "#5a5a5a"
+#define FX_COLOR_LIGHT_COMP  "#b5e48c"
+#define FX_COLOR_STRONG_COMP "#1b7a2e"
 
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT \

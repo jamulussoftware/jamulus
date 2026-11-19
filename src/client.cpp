@@ -76,9 +76,7 @@ CClient::CClient ( const quint16  iPortNumber,
     Socket ( &Channel, iPortNumber, iQosNumber, "", "", bNDisableIPv6, bIPv6Available ),
     Sound ( AudioCallback, this, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
-    bReverbOnLeftChan ( false ),
-    iReverbLevel ( 0 ),
-    iInputBoost ( 1 ),
+    bEffectsSeparate ( false ),
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     bSndCrdConversionBufferRequired ( false ),
@@ -96,6 +94,15 @@ CClient::CClient ( const quint16  iPortNumber,
     bRawAudioIsSupported ( false )
 {
     int iOpusError;
+
+    // default input effects: no boost, no compression, no reverb
+    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
+    {
+        iFxBoostDb[iCh]         = 0;
+        iFxCompRatioIdx[iCh]    = 0;
+        iFxCompThresholdDb[iCh] = FX_COMP_THRESHOLD_DB_DEFAULT;
+        iFxReverbLevel[iCh]     = 0;
+    }
 
     OpusMode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES, &iOpusError );
 
@@ -1132,6 +1139,7 @@ void CClient::Stop()
     // reset current signal level and LEDs
     bJitterBufferOK = true;
     SignalLevelMeter.Reset();
+    SignalLevelMeterOut.Reset();
 
 #if defined( Q_OS_WINDOWS )
     // Allow hibernation or display dimming if the app is running again (Windows)
@@ -1461,8 +1469,8 @@ void CClient::Init()
     // set the channel network properties
     Channel.SetAudioStreamProperties ( eAudioCompressionType, iCeltNumCodedBytes, iSndCrdFrameSizeFactor, iNumAudioChannels );
 
-    // init reverberation
-    AudioReverb.Init ( eAudioChannelConf, iStereoBlockSizeSam, SYSTEM_SAMPLE_RATE_HZ );
+    // init input effects (boost, compression, reverberation)
+    InputEffects.Init ( eAudioChannelConf, iMonoBlockSizeSam, SYSTEM_SAMPLE_RATE_HZ );
 
     // init the sound card conversion buffers
     if ( bSndCrdConversionBufferRequired )
@@ -1541,26 +1549,31 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     // Transmit signal ---------------------------------------------------------
 
-    if ( iInputBoost != 1 )
+    // apply the input effects per input channel: boost, compression and
+    // reverberation (the input level meter is updated inside with the boosted
+    // signal before compression, it is not needed in headless mode)
+    SInputEffectsParams FxParams;
+
+    FxParams.bLinked = IsEffectsLinked();
+
+    for ( i = 0; i < NUM_FX_CHANNELS; i++ )
     {
-        // apply a general gain boost to all audio input:
-        for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-        {
-            vecsStereoSndCrd[j + 1] = Float2Short ( iInputBoost * vecsStereoSndCrd[j + 1] );
-            vecsStereoSndCrd[j]     = Float2Short ( iInputBoost * vecsStereoSndCrd[j] );
-        }
+        const int iRatioIdx = iFxCompRatioIdx[i];
+
+        FxParams.fBoostDb[i]           = static_cast<float> ( iFxBoostDb[i] );
+        FxParams.fCompRatio[i]         = static_cast<float> ( iRatioIdx + 1 ); // 0: 1:1 (off), 1: 2:1, 2: 3:1, 3: 4:1
+        FxParams.fCompThresholdDb[i]   = static_cast<float> ( iFxCompThresholdDb[i] );
+        FxParams.fReverbAttenuation[i] = static_cast<float> ( iFxReverbLevel[i] ) / AUD_REVERB_MAX / 4;
     }
 
-    // update stereo signal level meter (not needed in headless mode)
-#ifndef HEADLESS
-    SignalLevelMeter.Update ( vecsStereoSndCrd, iMonoBlockSizeSam, true );
+#ifdef HEADLESS
+    InputEffects.Process ( vecsStereoSndCrd, FxParams, nullptr );
+#else
+    InputEffects.Process ( vecsStereoSndCrd, FxParams, &SignalLevelMeter );
+
+    // the output level meter shows what is sent (silence if muted)
+    SignalLevelMeterOut.Update ( bMuteOutStream ? vecZeros : vecsStereoSndCrd, iMonoBlockSizeSam, true );
 #endif
-
-    // add reverberation effect if activated
-    if ( iReverbLevel != 0 )
-    {
-        AudioReverb.Process ( vecsStereoSndCrd, bReverbOnLeftChan, static_cast<float> ( iReverbLevel ) / AUD_REVERB_MAX / 4 );
-    }
 
     // apply pan (audio fader) and mix mono signals
     if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf == CC_STEREO ) ) )

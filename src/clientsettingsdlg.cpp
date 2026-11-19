@@ -363,22 +363,69 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     edtNewClientLevel->setWhatsThis ( strNewClientLevel );
     edtNewClientLevel->setAccessibleName ( tr ( "New client level edit box" ) );
 
-    // input boost
-    QString strInputBoost = "<b>" + tr ( "Input Boost" ) + ":</b> " +
-                            tr ( "This setting allows you to increase your input signal level "
-                                 "by factors up to 10 (+20dB). "
-                                 "If your sound is too quiet, first try to increase the level by "
-                                 "getting closer to the microphone, adjusting your sound equipment "
-                                 "or increasing levels in your operating system's input settings. "
-                                 "Only if this fails, set a factor here. "
-                                 "If your sound is too loud, sounds distorted and is clipping, this "
-                                 "option will not help. Do not use it. The distortion will still be "
-                                 "there. Instead, decrease your input level by getting farther away "
-                                 "from your microphone, adjusting your sound equipment "
-                                 "or by decreasing your operating system's input settings." );
-    lblInputBoost->setWhatsThis ( strInputBoost );
-    cbxInputBoost->setWhatsThis ( strInputBoost );
-    cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
+    // effects tab: collect the per channel widgets
+    grbFxChannel[0]        = grbFxChannel0;
+    grbFxChannel[1]        = grbFxChannel1;
+    sldFxBoost[0]          = sldFxBoost0;
+    sldFxBoost[1]          = sldFxBoost1;
+    lblFxBoostValue[0]     = lblFxBoostValue0;
+    lblFxBoostValue[1]     = lblFxBoostValue1;
+    cbxFxCompression[0]    = cbxFxCompression0;
+    cbxFxCompression[1]    = cbxFxCompression1;
+    lblFxThreshold[0]      = lblFxThreshold0;
+    lblFxThreshold[1]      = lblFxThreshold1;
+    sldFxThreshold[0]      = sldFxThreshold0;
+    sldFxThreshold[1]      = sldFxThreshold1;
+    lblFxThresholdValue[0] = lblFxThresholdValue0;
+    lblFxThresholdValue[1] = lblFxThresholdValue1;
+    lblFxEffComp[0]        = lblFxEffComp0;
+    lblFxEffComp[1]        = lblFxEffComp1;
+    pgbFxEffComp[0]        = pgbFxEffComp0;
+    pgbFxEffComp[1]        = pgbFxEffComp1;
+    lblFxEffCompValue[0]   = lblFxEffCompValue0;
+    lblFxEffCompValue[1]   = lblFxEffCompValue1;
+    sldFxReverb[0]         = sldFxReverb0;
+    sldFxReverb[1]         = sldFxReverb1;
+    lblFxReverbValue[0]    = lblFxReverbValue0;
+    lblFxReverbValue[1]    = lblFxReverbValue1;
+
+    // effects tab help texts
+    const QString strFxSeparate = "<b>" + tr ( "Separate settings for left and right channel" ) + ":</b> " +
+                                  tr ( "If enabled, the left and right input channels are processed with their own "
+                                       "settings, e.g. if a microphone is connected to the left and an instrument "
+                                       "to the right input. In Stereo mode both channels are one source and "
+                                       "always use the same settings." );
+    chbFxSeparate->setWhatsThis ( strFxSeparate );
+
+    const QString strFxBoost = "<b>" + tr ( "Boost" ) + ":</b> " +
+                               tr ( "Increases your input signal level before compression. "
+                                    "If your sound is too quiet, first try to increase the level at your "
+                                    "sound equipment. Watch the input level meter: the signal should not reach "
+                                    "the red area." );
+    const QString strFxCompression = "<b>" + tr ( "Compression" ) + ":</b> " +
+                                     tr ( "Reduces the level difference between loud and quiet parts of your "
+                                          "sound. The output level is raised automatically so that your loudest "
+                                          "sound stays as loud as before while quieter parts become louder." );
+    const QString strFxThreshold = "<b>" + tr ( "Threshold" ) + ":</b> " +
+                                   tr ( "Only the part of your signal above this level is compressed. "
+                                        "A lower threshold compresses more of your sound." );
+    const QString strFxEffComp =
+        "<b>" + tr ( "Effective compression" ) + ":</b> " + tr ( "Shows how much your signal is currently turned down by the compressor." );
+    const QString strFxReverb = "<b>" + tr ( "Reverb" ) + ":</b> " + tr ( "Adds a reverberation effect to your signal after the compression." );
+
+    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
+    {
+        sldFxBoost[iCh]->setWhatsThis ( strFxBoost );
+        cbxFxCompression[iCh]->setWhatsThis ( strFxCompression );
+        sldFxThreshold[iCh]->setWhatsThis ( strFxThreshold );
+        pgbFxEffComp[iCh]->setWhatsThis ( strFxEffComp );
+        sldFxReverb[iCh]->setWhatsThis ( strFxReverb );
+
+        sldFxBoost[iCh]->setAccessibleName ( tr ( "Boost slider" ) );
+        cbxFxCompression[iCh]->setAccessibleName ( tr ( "Compression combo box" ) );
+        sldFxThreshold[iCh]->setAccessibleName ( tr ( "Compression threshold slider" ) );
+        sldFxReverb[iCh]->setAccessibleName ( tr ( "Reverb level slider" ) );
+    }
 
     // custom directories
     QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
@@ -545,15 +592,24 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
 
-    // Input Boost combo box
-    cbxInputBoost->clear();
-    cbxInputBoost->addItem ( tr ( "None" ) );
-    for ( int i = 2; i <= 10; i++ )
+    // effects tab controls
+    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
     {
-        cbxInputBoost->addItem ( QString ( "%1x" ).arg ( i ) );
+        sldFxBoost[iCh]->setRange ( 0, FX_BOOST_DB_MAX );
+        sldFxThreshold[iCh]->setRange ( FX_COMP_THRESHOLD_DB_MIN, FX_COMP_THRESHOLD_DB_MAX );
+        sldFxReverb[iCh]->setRange ( 0, AUD_REVERB_MAX );
+
+        // index corresponds to the compression ratio index (0: off)
+        cbxFxCompression[iCh]->clear();
+        cbxFxCompression[iCh]->addItem ( tr ( "Off" ) );
+        cbxFxCompression[iCh]->addItem ( tr ( "Low (2:1)" ) );
+        cbxFxCompression[iCh]->addItem ( tr ( "Moderate (3:1)" ) );
+        cbxFxCompression[iCh]->addItem ( tr ( "Strong (4:1)" ) );
+
+        bFxStrongStyle[iCh] = true; // force initial style update
     }
-    // factor is 1-based while index is 0-based:
-    cbxInputBoost->setCurrentIndex ( pSettings->iInputBoost - 1 );
+
+    UpdateEffectsTab();
 
     // init number of mixer rows
     spnMixerRows->setValue ( pSettings->iNumMixerPanelRows );
@@ -781,10 +837,26 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CClientSettingsDlg::OnLanguageChanged );
 
-    QObject::connect ( cbxInputBoost,
-                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-                       this,
-                       &CClientSettingsDlg::OnInputBoostChanged );
+    // effects tab
+    QObject::connect ( chbFxSeparate, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnFxSeparateStateChanged );
+
+    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
+    {
+        QObject::connect ( sldFxBoost[iCh], &QSlider::valueChanged, this, [this, iCh] ( int value ) { OnFxBoostValueChanged ( iCh, value ); } );
+
+        QObject::connect ( cbxFxCompression[iCh],
+                           static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                           this,
+                           [this, iCh] ( int iIdx ) { OnFxCompressionActivated ( iCh, iIdx ); } );
+
+        QObject::connect ( sldFxThreshold[iCh], &QSlider::valueChanged, this, [this, iCh] ( int value ) {
+            OnFxThresholdValueChanged ( iCh, value );
+        } );
+
+        QObject::connect ( sldFxReverb[iCh], &QSlider::valueChanged, this, [this, iCh] ( int value ) { OnFxReverbValueChanged ( iCh, value ); } );
+    }
+
+    QObject::connect ( &TimerEffects, &QTimer::timeout, this, &CClientSettingsDlg::OnTimerEffects );
 
     // buttons
 #if defined( _WIN32 ) && !defined( WITH_JACK )
@@ -956,12 +1028,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
+
+    // timer for the effective compression display on the effects tab
+    TimerEffects.start ( EFFECTS_DISPLAY_UPDATE_TIME );
 }
 
 void CClientSettingsDlg::showEvent ( QShowEvent* event )
 {
     UpdateDisplay();
     UpdateDirectoryComboBox();
+    UpdateEffectsTab();
 
     // set the name
     pedtAlias->setText ( pClient->ChannelInfo.strName );
@@ -1251,6 +1327,10 @@ void CClientSettingsDlg::OnAudioChannelsActivated ( int iChanIdx )
     pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iChanIdx ) );
     emit AudioChannelsChanged();
     UpdateDisplay(); // upload rate will be changed
+
+    // the effects are always linked in stereo mode
+    UpdateEffectsTab();
+    emit EffectsChanged();
 }
 
 void CClientSettingsDlg::OnAudioQualityActivated ( int iQualityIdx )
@@ -1382,11 +1462,160 @@ void CClientSettingsDlg::UpdateDirectoryComboBox()
     }
 }
 
-void CClientSettingsDlg::OnInputBoostChanged()
+void CClientSettingsDlg::UpdateEffectsTab()
 {
-    // index is zero-based while boost factor must be 1-based:
-    pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
-    pClient->SetInputBoost ( pSettings->iInputBoost );
+    const bool bStereo = ( pClient->GetAudioChannels() == CC_STEREO );
+    const bool bLinked = pClient->IsEffectsLinked();
+
+    // in stereo mode both channels are one source and are always linked
+    chbFxSeparate->setVisible ( !bStereo );
+    lblFxSeparateHint->setVisible ( !bStereo );
+
+    chbFxSeparate->blockSignals ( true );
+    chbFxSeparate->setChecked ( pClient->GetEffectsSeparate() );
+    chbFxSeparate->blockSignals ( false );
+
+    if ( bLinked )
+    {
+        grbFxChannel[0]->setTitle ( tr ( "Both channels" ) );
+        lblFxSeparateHint->setText ( tr ( "Both input channels use the same settings." ) );
+    }
+    else
+    {
+        grbFxChannel[0]->setTitle ( tr ( "Left (%1)" ).arg ( pClient->GetSndCrdInputChannelName ( pClient->GetSndCrdLeftInputChannel() ) ) );
+        grbFxChannel[1]->setTitle ( tr ( "Right (%1)" ).arg ( pClient->GetSndCrdInputChannelName ( pClient->GetSndCrdRightInputChannel() ) ) );
+        lblFxSeparateHint->setText ( tr ( "The left and right input channels are processed independently." ) );
+    }
+
+    grbFxChannel[1]->setVisible ( !bLinked );
+
+    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
+    {
+        sldFxBoost[iCh]->blockSignals ( true );
+        sldFxThreshold[iCh]->blockSignals ( true );
+        sldFxReverb[iCh]->blockSignals ( true );
+
+        sldFxBoost[iCh]->setValue ( pClient->GetEffectBoostDb ( iCh ) );
+        cbxFxCompression[iCh]->setCurrentIndex ( pClient->GetEffectCompRatioIdx ( iCh ) );
+        sldFxThreshold[iCh]->setValue ( pClient->GetEffectCompThresholdDb ( iCh ) );
+        sldFxReverb[iCh]->setValue ( pClient->GetEffectReverbLevel ( iCh ) );
+
+        sldFxBoost[iCh]->blockSignals ( false );
+        sldFxThreshold[iCh]->blockSignals ( false );
+        sldFxReverb[iCh]->blockSignals ( false );
+
+        UpdateEffectsValueLabels ( iCh );
+    }
+}
+
+void CClientSettingsDlg::UpdateEffectsValueLabels ( const int iCh )
+{
+    const int  iBoostDb = sldFxBoost[iCh]->value();
+    const bool bCompOn  = ( cbxFxCompression[iCh]->currentIndex() > 0 );
+
+    lblFxBoostValue[iCh]->setText ( iBoostDb > 0 ? QString ( "+%1 dB" ).arg ( iBoostDb ) : QString ( "0 dB" ) );
+    lblFxThresholdValue[iCh]->setText ( QString ( "%1 dB" ).arg ( sldFxThreshold[iCh]->value() ) );
+    lblFxReverbValue[iCh]->setText ( QString ( "%1 %" ).arg ( sldFxReverb[iCh]->value() ) );
+
+    // threshold and effective compression only make sense with compression on
+    lblFxThreshold[iCh]->setEnabled ( bCompOn );
+    sldFxThreshold[iCh]->setEnabled ( bCompOn );
+    lblFxThresholdValue[iCh]->setEnabled ( bCompOn );
+    lblFxEffComp[iCh]->setEnabled ( bCompOn );
+    pgbFxEffComp[iCh]->setEnabled ( bCompOn );
+    lblFxEffCompValue[iCh]->setEnabled ( bCompOn );
+
+    if ( !bCompOn )
+    {
+        pgbFxEffComp[iCh]->setValue ( 0 );
+        lblFxEffCompValue[iCh]->setText ( "0 dB" );
+    }
+}
+
+void CClientSettingsDlg::OnFxSeparateStateChanged ( int value )
+{
+    const bool bSeparate = ( value == Qt::Checked );
+
+    // when switching to separate settings, the right channel starts with the
+    // settings which were used for both channels so far
+    if ( bSeparate )
+    {
+        pClient->SetEffectBoostDb ( 1, pClient->GetEffectBoostDb ( 0 ) );
+        pClient->SetEffectCompRatioIdx ( 1, pClient->GetEffectCompRatioIdx ( 0 ) );
+        pClient->SetEffectCompThresholdDb ( 1, pClient->GetEffectCompThresholdDb ( 0 ) );
+        pClient->SetEffectReverbLevel ( 1, pClient->GetEffectReverbLevel ( 0 ) );
+    }
+
+    pClient->SetEffectsSeparate ( bSeparate );
+
+    UpdateEffectsTab();
+    emit EffectsChanged();
+}
+
+void CClientSettingsDlg::OnFxBoostValueChanged ( const int iCh, const int value )
+{
+    pClient->SetEffectBoostDb ( iCh, value );
+    UpdateEffectsValueLabels ( iCh );
+}
+
+void CClientSettingsDlg::OnFxCompressionActivated ( const int iCh, const int iIdx )
+{
+    pClient->SetEffectCompRatioIdx ( iCh, iIdx );
+    UpdateEffectsValueLabels ( iCh );
+    emit EffectsChanged();
+}
+
+void CClientSettingsDlg::OnFxThresholdValueChanged ( const int iCh, const int value )
+{
+    pClient->SetEffectCompThresholdDb ( iCh, value );
+    UpdateEffectsValueLabels ( iCh );
+}
+
+void CClientSettingsDlg::OnFxReverbValueChanged ( const int iCh, const int value )
+{
+    pClient->SetEffectReverbLevel ( iCh, value );
+    UpdateEffectsValueLabels ( iCh );
+}
+
+void CClientSettingsDlg::OnTimerEffects()
+{
+    // only update the effective compression display if it can be seen
+    if ( !isVisible() || ( tabSettings->currentIndex() != SETTING_TAB_EFFECTS ) )
+    {
+        return;
+    }
+
+    const bool bLinked = pClient->IsEffectsLinked();
+
+    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
+    {
+        if ( !pgbFxEffComp[iCh]->isEnabled() || ( bLinked && ( iCh > 0 ) ) )
+        {
+            continue;
+        }
+
+        // with linked settings, both channels are shown in the first group
+        float fGrDb = pClient->GetEffectGainReductionDb ( iCh );
+
+        if ( bLinked )
+        {
+            fGrDb = std::max ( fGrDb, pClient->GetEffectGainReductionDb ( 1 ) );
+        }
+
+        pgbFxEffComp[iCh]->setValue ( std::min ( pgbFxEffComp[iCh]->maximum(), static_cast<int> ( fGrDb * 10.0f ) ) );
+        lblFxEffCompValue[iCh]->setText ( fGrDb >= 0.1f ? QString ( "-%1 dB" ).arg ( fGrDb, 0, 'f', 1 ) : QString ( "0 dB" ) );
+
+        // the bar turns dark green for hard compression
+        const bool bStrong = ( fGrDb > FX_GR_STRONG_DB );
+
+        if ( bStrong != bFxStrongStyle[iCh] )
+        {
+            bFxStrongStyle[iCh] = bStrong;
+            pgbFxEffComp[iCh]->setStyleSheet ( QString ( "QProgressBar { border: 1px solid #b0b0b0; border-radius: 3px; background: #e6e6e6; }"
+                                                         "QProgressBar::chunk { background-color: %1; border-radius: 2px; }" )
+                                                   .arg ( bStrong ? FX_COLOR_STRONG_COMP : FX_COLOR_LIGHT_COMP ) );
+        }
+    }
 }
 
 void CClientSettingsDlg::OnAliasTextChanged ( const QString& strNewName )
@@ -1459,7 +1688,16 @@ void CClientSettingsDlg::OnMakeTabChange ( int iTab )
     pSettings->iSettingsTab = iTab;
 }
 
-void CClientSettingsDlg::OnTabChanged ( void ) { pSettings->iSettingsTab = tabSettings->currentIndex(); }
+void CClientSettingsDlg::OnTabChanged ( void )
+{
+    pSettings->iSettingsTab = tabSettings->currentIndex();
+
+    // input channel names in the group titles may have changed
+    if ( pSettings->iSettingsTab == SETTING_TAB_EFFECTS )
+    {
+        UpdateEffectsTab();
+    }
+}
 
 void CClientSettingsDlg::UpdateAudioFaderSlider()
 {

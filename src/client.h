@@ -61,7 +61,7 @@
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
-#include "plugins/audioreverb.h"
+#include "plugins/inputeffects.h"
 #include "buffer.h"
 #include "signalhandler.h"
 
@@ -188,6 +188,10 @@ public:
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
 
+    // level of the signal which is sent (after the input effects)
+    double GetOutLevelForMeterdBLeft() { return SignalLevelMeterOut.GetLevelForMeterdBLeftOrMono(); }
+    double GetOutLevelForMeterdBRight() { return SignalLevelMeterOut.GetLevelForMeterdBRight(); }
+
     bool GetAndResetbJitterBufferOKFlag();
 
     bool IsConnected() { return Channel.IsConnected(); }
@@ -207,15 +211,30 @@ public:
     int  GetAudioInFader() const { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
-    int  GetReverbLevel() const { return iReverbLevel; }
-    void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
+    // input effects (per input channel iCh: 0 = left, 1 = right)
+    bool GetEffectsSeparate() const { return bEffectsSeparate; }
+    void SetEffectsSeparate ( const bool bNSep ) { bEffectsSeparate = bNSep; }
 
-    bool IsReverbOnLeftChan() const { return bReverbOnLeftChan; }
-    void SetReverbOnLeftChan ( const bool bIL )
-    {
-        bReverbOnLeftChan = bIL;
-        AudioReverb.Clear();
-    }
+    // true if both channels use the channel 0 settings (always the case in stereo mode)
+    bool IsEffectsLinked() const { return !bEffectsSeparate || ( eAudioChannelConf == CC_STEREO ); }
+
+    int  GetEffectBoostDb ( const int iCh ) const { return iFxBoostDb[iCh]; }
+    void SetEffectBoostDb ( const int iCh, const int iNV ) { iFxBoostDb[iCh] = iNV; }
+
+    int  GetEffectCompRatioIdx ( const int iCh ) const { return iFxCompRatioIdx[iCh]; }
+    void SetEffectCompRatioIdx ( const int iCh, const int iNV ) { iFxCompRatioIdx[iCh] = iNV; }
+
+    int  GetEffectCompThresholdDb ( const int iCh ) const { return iFxCompThresholdDb[iCh]; }
+    void SetEffectCompThresholdDb ( const int iCh, const int iNV ) { iFxCompThresholdDb[iCh] = iNV; }
+
+    int  GetEffectReverbLevel ( const int iCh ) const { return iFxReverbLevel[iCh]; }
+    void SetEffectReverbLevel ( const int iCh, const int iNV ) { iFxReverbLevel[iCh] = iNV; }
+
+    // compression is active on the given channel (taking linking into account)
+    bool IsEffectCompressionOn ( const int iCh ) const { return iFxCompRatioIdx[IsEffectsLinked() ? 0 : iCh] > 0; }
+
+    // current gain reduction of the compressor in dB (positive value)
+    float GetEffectGainReductionDb ( const int iCh ) const { return InputEffects.GetGainReductionDb ( iCh ); }
 
     void SetDoAutoSockBufSize ( const bool bValue );
     bool GetDoAutoSockBufSize() const { return Channel.GetDoAutoSockBufSize(); }
@@ -305,8 +324,6 @@ public:
     void StartTimerGainOrPan();
 
     void SetControllerInFaderLevel ( int iChannelIdx, int iValue ) { OnControllerInFaderLevel ( iChannelIdx, iValue ); }
-
-    void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
@@ -428,14 +445,17 @@ protected:
 
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
+    CStereoSignalLevelMeter SignalLevelMeterOut;
 
     CVector<uint8_t> vecbyNetwData;
 
     std::atomic<int>  iAudioInFader;
-    std::atomic<bool> bReverbOnLeftChan;
-    std::atomic<int>  iReverbLevel;
-    CAudioReverb      AudioReverb;
-    std::atomic<int>  iInputBoost;
+    std::atomic<bool> bEffectsSeparate;
+    std::atomic<int>  iFxBoostDb[NUM_FX_CHANNELS];
+    std::atomic<int>  iFxCompRatioIdx[NUM_FX_CHANNELS];
+    std::atomic<int>  iFxCompThresholdDb[NUM_FX_CHANNELS];
+    std::atomic<int>  iFxReverbLevel[NUM_FX_CHANNELS];
+    CInputEffects     InputEffects;
 
     int iSndCrdPrefFrameSizeFactor;
     int iSndCrdFrameSizeFactor;

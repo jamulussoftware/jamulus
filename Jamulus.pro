@@ -420,6 +420,7 @@ HEADERS += src/plugins/audioreverb.h \
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
+        src/plugins/inputeffects.h \
         src/sound/soundbase.h \
         src/testbench.h
 }
@@ -527,6 +528,7 @@ SOURCES += src/plugins/audioreverb.cpp \
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
+        src/plugins/inputeffects.cpp \
         src/sound/soundbase.cpp \
 }
 

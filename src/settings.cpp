@@ -415,10 +415,10 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         iNewClientFaderLevel = iValue;
     }
 
-    // input boost
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "inputboost", 1, 10, iValue ) )
+    // main window level meter mode
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "metermode", METER_MODE_INPUT, METER_MODE_BOTH, iValue ) )
     {
-        iInputBoost = iValue;
+        iMeterMode = iValue;
     }
 
     if ( GetFlagIniSet ( IniXMLDocument, "client", "enablefeedbackdetection", bValue ) )
@@ -494,18 +494,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
     {
         pClient->SetAudioInFader ( iValue );
-    }
-
-    // reverberation level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
-    {
-        pClient->SetReverbLevel ( iValue );
-    }
-
-    // reverberation channel assignment
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
-    {
-        pClient->SetReverbOnLeftChan ( bValue );
     }
 
     // sound card selection
@@ -624,6 +612,79 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 2 /* CC_STEREO */, iValue ) )
     {
         pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iValue ) );
+    }
+
+    // input effects per input channel (must be read after the audio channels)
+    if ( GetIniSetting ( IniXMLDocument, "client", "fxrevlev0" ).isEmpty() )
+    {
+        // compatibility to old version: convert the global input boost factor
+        // and the single reverberation (which in the mono modes was only
+        // applied to one input channel)
+        int  iOldBoostDb   = 0;
+        int  iOldRevLevel  = 0;
+        bool bOldRevOnLeft = false;
+
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "inputboost", 1, 10, iValue ) )
+        {
+            iOldBoostDb = static_cast<int> ( std::lround ( 20.0 * std::log10 ( static_cast<double> ( iValue ) ) ) );
+        }
+
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
+        {
+            iOldRevLevel = iValue;
+        }
+
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
+        {
+            bOldRevOnLeft = bValue;
+        }
+
+        const bool bOldRevOneChannel = ( iOldRevLevel > 0 ) && ( pClient->GetAudioChannels() != CC_STEREO );
+
+        pClient->SetEffectsSeparate ( bOldRevOneChannel );
+
+        for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
+        {
+            const bool bRevOnThisChannel = !bOldRevOneChannel || ( ( iCh == 0 ) == bOldRevOnLeft );
+
+            pClient->SetEffectBoostDb ( iCh, iOldBoostDb );
+            pClient->SetEffectReverbLevel ( iCh, bRevOnThisChannel ? iOldRevLevel : 0 );
+        }
+    }
+    else
+    {
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "effectsseparate", bValue ) )
+        {
+            pClient->SetEffectsSeparate ( bValue );
+        }
+
+        for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
+        {
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "fxboostdb%1" ).arg ( iCh ), 0, FX_BOOST_DB_MAX, iValue ) )
+            {
+                pClient->SetEffectBoostDb ( iCh, iValue );
+            }
+
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "fxcompratio%1" ).arg ( iCh ), 0, FX_COMP_RATIO_IDX_MAX, iValue ) )
+            {
+                pClient->SetEffectCompRatioIdx ( iCh, iValue );
+            }
+
+            if ( GetNumericIniSet ( IniXMLDocument,
+                                    "client",
+                                    QString ( "fxcompthresh%1" ).arg ( iCh ),
+                                    FX_COMP_THRESHOLD_DB_MIN,
+                                    FX_COMP_THRESHOLD_DB_MAX,
+                                    iValue ) )
+            {
+                pClient->SetEffectCompThresholdDb ( iCh, iValue );
+            }
+
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "fxrevlev%1" ).arg ( iCh ), 0, AUD_REVERB_MAX, iValue ) )
+            {
+                pClient->SetEffectReverbLevel ( iCh, iValue );
+            }
+        }
     }
 
     // audio quality
@@ -824,7 +885,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // selected Settings Tab
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, 3, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, SETTING_TAB_EFFECTS, iValue ) )
     {
         iSettingsTab = iValue;
     }
@@ -903,8 +964,8 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // new client level
     SetNumericIniSet ( IniXMLDocument, "client", "newclientlevel", iNewClientFaderLevel );
 
-    // input boost
-    SetNumericIniSet ( IniXMLDocument, "client", "inputboost", iInputBoost );
+    // main window level meter mode
+    SetNumericIniSet ( IniXMLDocument, "client", "metermode", iMeterMode );
 
     // feedback detection
     SetFlagIniSet ( IniXMLDocument, "client", "enablefeedbackdetection", bEnableFeedbackDetection );
@@ -945,11 +1006,16 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // audio fader
     SetNumericIniSet ( IniXMLDocument, "client", "audfad", pClient->GetAudioInFader() );
 
-    // reverberation level
-    SetNumericIniSet ( IniXMLDocument, "client", "revlev", pClient->GetReverbLevel() );
+    // input effects per input channel
+    SetFlagIniSet ( IniXMLDocument, "client", "effectsseparate", pClient->GetEffectsSeparate() );
 
-    // reverberation channel assignment
-    SetFlagIniSet ( IniXMLDocument, "client", "reverblchan", pClient->IsReverbOnLeftChan() );
+    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
+    {
+        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxboostdb%1" ).arg ( iCh ), pClient->GetEffectBoostDb ( iCh ) );
+        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxcompratio%1" ).arg ( iCh ), pClient->GetEffectCompRatioIdx ( iCh ) );
+        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxcompthresh%1" ).arg ( iCh ), pClient->GetEffectCompThresholdDb ( iCh ) );
+        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxrevlev%1" ).arg ( iCh ), pClient->GetEffectReverbLevel ( iCh ) );
+    }
 
     // sound card selection
     PutIniSetting ( IniXMLDocument, "client", "auddev_base64", ToBase64 ( pClient->GetSndCrdDev() ) );

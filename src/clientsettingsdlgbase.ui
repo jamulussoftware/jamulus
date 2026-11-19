@@ -2223,6 +2223,30 @@
       </attribute>
       <layout class="QVBoxLayout" name="vblFxTab">
        <item>
+        <widget class="QCheckBox" name="chbFxPreview">
+         <property name="text">
+          <string>Preview: hear myself with effects (use headphones)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblFxPreviewHint">
+         <property name="text">
+          <string>Only available while not connected.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="lineFxPreview">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="chbFxSeparate">
          <property name="text">
           <string>Separate settings for left and right channel</string>
@@ -2708,6 +2732,7 @@
   <tabstop>spnMuteOffset</tabstop>
   <tabstop>butLearnMuteOffset</tabstop>
   <tabstop>spnMuteCount</tabstop>
+  <tabstop>chbFxPreview</tabstop>
   <tabstop>chbFxSeparate</tabstop>
   <tabstop>sldFxBoost0</tabstop>
   <tabstop>cbxFxCompression0</tabstop>

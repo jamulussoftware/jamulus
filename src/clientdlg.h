@@ -205,6 +205,8 @@ public slots:
     void OnLocalMuteStateChanged ( int value );
 
     void OnMeterModeClicked();
+    void OnLocalPreviewChanged ( bool bActive );
+    void SetLevelMetersActive ( const bool bActive );
 
     void UpdateEffectsDisplay();
 

@@ -236,6 +236,12 @@ public:
     // current gain reduction of the compressor in dB (positive value)
     float GetEffectGainReductionDb ( const int iCh ) const { return InputEffects.GetGainReductionDb ( iCh ); }
 
+    // local preview: while not connected, run the sound card and play the
+    // processed input signal (what would be sent) to the outputs; throws
+    // CGenErr if the sound card cannot be started
+    bool IsLocalPreviewActive() const { return bLocalPreview; }
+    void SetLocalPreview ( const bool bOn );
+
     void SetDoAutoSockBufSize ( const bool bValue );
     bool GetDoAutoSockBufSize() const { return Channel.GetDoAutoSockBufSize(); }
 
@@ -451,6 +457,7 @@ protected:
 
     std::atomic<int>  iAudioInFader;
     std::atomic<bool> bEffectsSeparate;
+    std::atomic<bool> bLocalPreview;
     std::atomic<int>  iFxBoostDb[NUM_FX_CHANNELS];
     std::atomic<int>  iFxCompRatioIdx[NUM_FX_CHANNELS];
     std::atomic<int>  iFxCompThresholdDb[NUM_FX_CHANNELS];
@@ -558,6 +565,7 @@ signals:
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
     void ConnectionStateChanged ( EConnectionState eConnectionState );
+    void LocalPreviewChanged ( bool bActive );
     void Connecting ( const QString& strServerName );
     void ConnectingFailed ( const QString& errorMessage );
     void Disconnected();

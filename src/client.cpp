@@ -77,6 +77,7 @@ CClient::CClient ( const quint16  iPortNumber,
     Sound ( AudioCallback, this, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bEffectsSeparate ( false ),
+    bLocalPreview ( false ),
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     bSndCrdConversionBufferRequired ( false ),
@@ -1063,8 +1064,50 @@ void CClient::OnRawAudioSupported()
     }
 }
 
+void CClient::SetLocalPreview ( const bool bOn )
+{
+    // the preview uses the sound card, therefore it is only possible while
+    // not connected
+    if ( ( bOn == bLocalPreview ) || ( bOn && ( GetConnectionState() != CS_DISCONNECTED ) ) )
+    {
+        return;
+    }
+
+    if ( bOn )
+    {
+        Init(); // may throw CGenErr
+        bLocalPreview = true;
+
+        try
+        {
+            Sound.Start();
+        }
+        catch ( const CGenErr& )
+        {
+            bLocalPreview = false;
+            throw;
+        }
+    }
+    else
+    {
+        Sound.Stop();
+        bLocalPreview = false;
+    }
+
+    SignalLevelMeter.Reset();
+    SignalLevelMeterOut.Reset();
+
+    emit LocalPreviewChanged ( bLocalPreview );
+}
+
 void CClient::Start()
 {
+    // a running local preview must end before connecting
+    if ( bLocalPreview )
+    {
+        SetLocalPreview ( false );
+    }
+
     // init object
     Init();
 
@@ -1571,8 +1614,9 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 #else
     InputEffects.Process ( vecsStereoSndCrd, FxParams, &SignalLevelMeter );
 
-    // the output level meter shows what is sent (silence if muted)
-    SignalLevelMeterOut.Update ( bMuteOutStream ? vecZeros : vecsStereoSndCrd, iMonoBlockSizeSam, true );
+    // the output level meter shows what is sent (silence if muted, but the
+    // local preview is always heard)
+    SignalLevelMeterOut.Update ( ( bMuteOutStream && !bLocalPreview ) ? vecZeros : vecsStereoSndCrd, iMonoBlockSizeSam, true );
 #endif
 
     // apply pan (audio fader) and mix mono signals
@@ -1623,6 +1667,23 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         {
             vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] = vecsStereoSndCrd[i];
         }
+    }
+
+    // local preview (not connected): nothing is sent or received, instead the
+    // processed signal which would be sent is played to the sound card outputs
+    if ( bLocalPreview )
+    {
+        if ( eAudioChannelConf == CC_MONO )
+        {
+            // copy mono data in stereo sound card buffer (start from the end
+            // not to overwrite input values)
+            for ( i = iMonoBlockSizeSam - 1, j = iStereoBlockSizeSam - 2; i >= 0; i--, j -= 2 )
+            {
+                vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] = vecsStereoSndCrd[i];
+            }
+        }
+
+        return;
     }
 
     for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )

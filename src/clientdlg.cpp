@@ -571,6 +571,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::EffectsChanged, this, &CClientDlg::UpdateEffectsDisplay );
 
+    QObject::connect ( pClient, &CClient::LocalPreviewChanged, this, &CClientDlg::OnLocalPreviewChanged );
+
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::CustomDirectoriesChanged, &ConnectDlg, &CConnectDlg::OnCustomDirectoriesChanged );
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::NumMixerPanelRowsChanged, this, &CClientDlg::OnNumMixerPanelRowsChanged );
@@ -796,6 +798,42 @@ void CClientDlg::UpdateMeterMode()
 
     // the arrow indicates that clicking cycles through the modes
     butMeterMode->setText ( strMode + QString::fromUtf8 ( " ↻" ) );
+}
+
+void CClientDlg::SetLevelMetersActive ( const bool bActive )
+{
+    CLevelMeter* pMeters[4] = { lbrInputLevelL, lbrInputLevelR, lbrOutputLevelL, lbrOutputLevelR };
+
+    for ( CLevelMeter* pMeter : pMeters )
+    {
+        pMeter->setEnabled ( bActive );
+
+        if ( !bActive )
+        {
+            pMeter->SetValue ( 0 );
+        }
+    }
+
+    if ( bActive )
+    {
+        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+    }
+    else
+    {
+        TimerSigMet.stop();
+    }
+
+    UpdateCompressionLeds();
+}
+
+void CClientDlg::OnLocalPreviewChanged ( bool bActive )
+{
+    // during the local preview the level meters run as if connected (when
+    // connecting, the preview ends first and the meters are restarted)
+    if ( pClient->GetConnectionState() == CS_DISCONNECTED )
+    {
+        SetLevelMetersActive ( bActive );
+    }
 }
 
 void CClientDlg::OnMeterModeClicked()
@@ -1322,10 +1360,6 @@ void CClientDlg::OnConnecting ( const QString& strMixerBoardLabel )
 
     // hide label connect to server
     lblConnectToServer->hide();
-    lbrInputLevelL->setEnabled ( true );
-    lbrInputLevelR->setEnabled ( true );
-    lbrOutputLevelL->setEnabled ( true );
-    lbrOutputLevelR->setEnabled ( true );
 
     // change connect button text to "disconnect"
     butConnect->setText ( tr ( "&Disconnect" ) );
@@ -1333,8 +1367,8 @@ void CClientDlg::OnConnecting ( const QString& strMixerBoardLabel )
     // set server name in audio mixer group box title
     MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
-    // start timer for level meter bar and ping time measurement
-    TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+    // start level meters and timers for ping time measurement
+    SetLevelMetersActive ( true );
     TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
     TimerPing.start ( PING_UPDATE_TIME_MS );
     TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
@@ -1357,17 +1391,8 @@ void CClientDlg::OnDisconnect()
     // reset server name in audio mixer group box title
     MainMixerBoard->SetServerName ( "" );
 
-    // stop timer for level meter bars and reset them
-    TimerSigMet.stop();
-    lbrInputLevelL->setEnabled ( false );
-    lbrInputLevelR->setEnabled ( false );
-    lbrInputLevelL->SetValue ( 0 );
-    lbrInputLevelR->SetValue ( 0 );
-    lbrOutputLevelL->setEnabled ( false );
-    lbrOutputLevelR->setEnabled ( false );
-    lbrOutputLevelL->SetValue ( 0 );
-    lbrOutputLevelR->SetValue ( 0 );
-    UpdateCompressionLeds();
+    // stop level meters and reset them
+    SetLevelMetersActive ( false );
 
     // show connect to server message
     lblConnectToServer->show();

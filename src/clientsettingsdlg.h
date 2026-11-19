@@ -99,6 +99,7 @@ protected:
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
     virtual void showEvent ( QShowEvent* ) override;
+    virtual void hideEvent ( QHideEvent* ) override;
     virtual bool eventFilter ( QObject* obj, QEvent* event ) override;
 
     CClient*         pClient;
@@ -132,6 +133,9 @@ public slots:
     void OnFeedbackDetectionChanged ( int value );
     void OnCustomDirectoriesChanged ( bool bDelete );
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
+    void OnFxPreviewToggled ( bool bChecked );
+    void OnLocalPreviewChanged ( bool bActive );
+    void OnConnectionStateChanged ( EConnectionState eConnectionState );
     void OnFxSeparateStateChanged ( int value );
     void OnFxBoostValueChanged ( const int iCh, const int value );
     void OnFxCompressionActivated ( const int iCh, const int iIdx );

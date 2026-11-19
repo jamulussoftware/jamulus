@@ -397,6 +397,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                        "always use the same settings." );
     chbFxSeparate->setWhatsThis ( strFxSeparate );
 
+    const QString strFxPreview = "<b>" + tr ( "Preview" ) + ":</b> " +
+                                 tr ( "While not connected, plays your own signal with all effects applied to "
+                                      "your outputs, so that you can adjust the effects and watch the level "
+                                      "meters. Use headphones to avoid feedback. The preview ends when you "
+                                      "connect or close the settings." );
+    chbFxPreview->setWhatsThis ( strFxPreview );
+    lblFxPreviewHint->setWhatsThis ( strFxPreview );
+
     const QString strFxBoost = "<b>" + tr ( "Boost" ) + ":</b> " +
                                tr ( "Increases your input signal level before compression. "
                                     "If your sound is too quiet, first try to increase the level at your "
@@ -838,6 +846,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CClientSettingsDlg::OnLanguageChanged );
 
     // effects tab
+    QObject::connect ( chbFxPreview, &QCheckBox::toggled, this, &CClientSettingsDlg::OnFxPreviewToggled );
+
+    QObject::connect ( pClient, &CClient::LocalPreviewChanged, this, &CClientSettingsDlg::OnLocalPreviewChanged );
+
+    QObject::connect ( pClient, &CClient::ConnectionStateChanged, this, &CClientSettingsDlg::OnConnectionStateChanged );
+
     QObject::connect ( chbFxSeparate, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnFxSeparateStateChanged );
 
     for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
@@ -1530,6 +1544,45 @@ void CClientSettingsDlg::UpdateEffectsValueLabels ( const int iCh )
         pgbFxEffComp[iCh]->setValue ( 0 );
         lblFxEffCompValue[iCh]->setText ( "0 dB" );
     }
+}
+
+void CClientSettingsDlg::hideEvent ( QHideEvent* event )
+{
+    // the local preview ends when the settings are closed
+    if ( pClient->IsLocalPreviewActive() )
+    {
+        pClient->SetLocalPreview ( false );
+    }
+
+    QDialog::hideEvent ( event );
+}
+
+void CClientSettingsDlg::OnFxPreviewToggled ( bool bChecked )
+{
+    try
+    {
+        pClient->SetLocalPreview ( bChecked );
+    }
+    catch ( const CGenErr& generr )
+    {
+        QMessageBox::critical ( this, APP_NAME, generr.GetErrorText() );
+    }
+
+    // reflect the actual state (e.g. if starting the sound card failed)
+    OnLocalPreviewChanged ( pClient->IsLocalPreviewActive() );
+}
+
+void CClientSettingsDlg::OnLocalPreviewChanged ( bool bActive )
+{
+    chbFxPreview->blockSignals ( true );
+    chbFxPreview->setChecked ( bActive );
+    chbFxPreview->blockSignals ( false );
+}
+
+void CClientSettingsDlg::OnConnectionStateChanged ( EConnectionState eConnectionState )
+{
+    // the preview is only possible while not connected
+    chbFxPreview->setEnabled ( eConnectionState == CS_DISCONNECTED );
 }
 
 void CClientSettingsDlg::OnFxSeparateStateChanged ( int value )

@@ -381,7 +381,9 @@ void CConnectDlg::OnHostResolved ( const QHostInfo& info, quint16 port )
 
 void CConnectDlg::hideEvent ( QHideEvent* )
 {
-    // if window is closed, stop timers
+    // if window is closed, invalidate any pending lookup and stop timers
+    ++iResolverSeq;
+
     TimerPing.stop();
     TimerReRequestServList.stop();
 }

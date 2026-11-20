@@ -96,8 +96,9 @@ enum EConnectionState
     // stream towards the configured server and "established" once the server
     // has assigned a channel ID to the client
     CS_DISCONNECTED = 0, // no connection requested or established
-    CS_CONNECTING   = 1, // connection requested but not yet established
-    CS_CONNECTED    = 2  // connection established and current
+    CS_RESOLVING    = 1, // resolving address
+    CS_CONNECTING   = 2, // connection requested but not yet established
+    CS_CONNECTED    = 3  // connection established and current
 };
 
 // audio in fader range
@@ -180,7 +181,6 @@ public:
 
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
-    bool SetServerAddr ( QString strNAddr );
 
     // IPv6 Available
     bool IsIPv6Available() { return bIPv6Available; }
@@ -478,6 +478,9 @@ protected:
     int    maxGainOrPanId;
     int    iCurPingTime;
 
+    // sequence number for asynchronous DNS resolver
+    int iResolverSeq;
+
 protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
@@ -489,14 +492,7 @@ protected slots:
     void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
     void OnNewConnection();
-    void OnCLDisconnection ( CHostAddress InetAddr )
-    {
-        if ( InetAddr == Channel.GetAddress() )
-        {
-            // Stop client in case it received a Disconnection request
-            Stop();
-        }
-    }
+    void OnCLDisconnection ( CHostAddress InetAddr );
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
 
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
@@ -514,6 +510,7 @@ protected slots:
     void OnMuteStateHasChangedReceived ( int iServerChanID, bool bIsMuted );
     void OnCLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void OnHostResolved ( const QHostInfo& info, quint16 port );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
@@ -538,6 +535,7 @@ signals:
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
     void ConnectionStateChanged ( EConnectionState eConnectionState );
+    void Resolving ( const QString& strServerName );
     void Connecting ( const QString& strServerName );
     void ConnectingFailed ( const QString& errorMessage );
     void Disconnected();

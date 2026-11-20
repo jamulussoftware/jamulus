@@ -80,6 +80,7 @@ public:
 
     void UpdateUploadRate();
     void UpdateDisplay();
+    void UpdateSoundDeviceSelection();
     void UpdateSoundDeviceChannelSelectionFrame();
 
     void SetEnableFeedbackDetection ( bool enable );
@@ -111,6 +112,8 @@ public slots:
     void OnInputBoostChanged();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
+    void OnInputDeviceActivated ( int iSndDevIdx );
+    void OnOutputDeviceActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );
     void OnRInChanActivated ( int iChanIdx );
     void OnLOutChanActivated ( int iChanIdx );

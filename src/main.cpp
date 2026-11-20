@@ -688,6 +688,12 @@ int main ( int argc, char** argv )
     else
 #endif
     {
+        if ( iPortNumber == 0 )
+        {
+            qCritical() << qUtf8Printable (
+                QString ( "%1: Port number 0 not permitted for a server.  Specify a value from 1 to 65535" ).arg ( argv[0] ) );
+            exit ( 1 );
+        }
 
         if ( ClientOnlyOptions.size() != 0 )
         {
@@ -1151,7 +1157,7 @@ QString UsageArguments ( char** argv )
            "  -i, --inifile           initialization file name\n"
            "                          (not supported for headless Server mode)\n"
            "  -n, --nogui             disable GUI (\"headless\")\n"
-           "  -p, --port              set the local port number\n"
+           "  -p, --port              set the local port number (0-65535 on client, 1-65535 on server)\n"
            "      --jsonrpcport       enable JSON-RPC server, set TCP port number\n"
            "                          (EXPERIMENTAL, APIs might still change;\n"
            "                          only accessible from localhost)\n"

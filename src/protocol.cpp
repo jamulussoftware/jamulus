@@ -1864,6 +1864,21 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr, const 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER, vecData, InetAddr );
 }
 
+// A directory should never store port 0 in the local address, as a server
+// that sends port 0 (from -p) has actually bound to a random port number.
+// If a local port of 0 was supplied, copy the server port to it;
+// this will work provided the server's NAT has not changed the source port.
+// We cannot tell whether it has or not, so this is best-effort.
+static quint16 handleLocalPort0 ( quint16 port, const CHostAddress& InetAddr )
+{
+    if ( port == 0 )
+    {
+        port = InetAddr.iPort;
+        qWarning().noquote() << "Registration received from" << InetAddr.toString() << "specified local port 0 - using" << port << "instead";
+    }
+    return port;
+}
+
 bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData )
 {
     int             iPos     = 0; // init position pointer
@@ -1879,7 +1894,7 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr, cons
     }
 
     // port number (2 bytes)
-    LInetAddr.iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
+    LInetAddr.iPort = handleLocalPort0 ( GetValFromStream ( vecData, iPos, 2 ), InetAddr );
 
     // country (2 bytes)
     RecServerInfo.eCountry = GetCountryFromStream ( vecData, iPos );
@@ -1999,7 +2014,7 @@ bool CProtocol::EvaluateCLRegisterServerExMes ( const CHostAddress& InetAddr, co
     }
 
     // port number (2 bytes)
-    LInetAddr.iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
+    LInetAddr.iPort = handleLocalPort0 ( GetValFromStream ( vecData, iPos, 2 ), InetAddr );
 
     // country (2 bytes)
     RecServerInfo.eCountry = GetCountryFromStream ( vecData, iPos );

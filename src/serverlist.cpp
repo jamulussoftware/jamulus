@@ -96,11 +96,6 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
         return CServerListEntry();
     }
 
-    if ( haServerLocalAddr.iPort == 0 )
-    {
-        haServerLocalAddr.iPort = haServerHostAddr.iPort;
-    }
-
     // Capture parsing success of integers
     bool ok;
 

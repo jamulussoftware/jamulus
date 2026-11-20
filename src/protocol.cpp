@@ -1874,7 +1874,6 @@ static quint16 handleLocalPort0 ( quint16 port, const CHostAddress& InetAddr )
     if ( port == 0 )
     {
         port = InetAddr.iPort;
-        qWarning().noquote() << "Registration received from" << InetAddr.toString() << "specified local port 0 - using" << port << "instead";
     }
     return port;
 }

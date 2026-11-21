@@ -49,6 +49,7 @@
 #include <QThread>
 #include <QString>
 #include <QMutex>
+#include <atomic>
 #ifndef HEADLESS
 #    include <QMessageBox>
 #endif
@@ -193,10 +194,10 @@ protected:
         ( *fpProcessCallback ) ( psData, pProcessCallbackArg );
     }
 
-    bool   bRun;
-    bool   bCallbackEntered;
-    QMutex MutexAudioProcessCallback;
-    QMutex MutexDevProperties;
+    std::atomic<bool> bRun;
+    std::atomic<bool> bCallbackEntered;
+    QMutex            MutexAudioProcessCallback;
+    QMutex            MutexDevProperties;
 
     QString                strSystemDriverTechniqueName;
     int                    iCtrlMIDIChannel;

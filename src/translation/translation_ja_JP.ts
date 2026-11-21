@@ -1787,10 +1787,6 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>全ジャンル 2</translation>
     </message>
     <message>
-        <source>Any Genre 3</source>
-        <translation type="vanished">全ジャンル 3</translation>
-    </message>
-    <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
         <translation type="unfinished"></translation>

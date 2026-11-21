@@ -1787,10 +1787,6 @@ Nós silenciamos o seu canal e ativamos &apos;Silenciar-me&apos;. Por favor, res
         <translation>Qualquer Estilo 2</translation>
     </message>
     <message>
-        <source>Any Genre 3</source>
-        <translation type="vanished">Qualquer Estilo 3</translation>
-    </message>
-    <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
         <translation type="unfinished"></translation>

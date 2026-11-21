@@ -51,6 +51,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QMutex>
+#include <atomic>
 #ifdef USE_OPUS_SHARED_LIB
 #    include "opus/opus_custom.h"
 #else
@@ -88,6 +89,17 @@
 #endif
 
 /* Definitions ****************************************************************/
+// Client connection state -----------------------------------------------------
+enum EConnectionState
+{
+    // a connection is "requested" as soon as the client starts the audio
+    // stream towards the configured server and "established" once the server
+    // has assigned a channel ID to the client
+    CS_DISCONNECTED = 0, // no connection requested or established
+    CS_CONNECTING   = 1, // connection requested but not yet established
+    CS_CONNECTED    = 2  // connection established and current
+};
+
 // audio in fader range
 #define AUD_FADER_IN_MIN    0
 #define AUD_FADER_IN_MAX    100
@@ -157,8 +169,15 @@ public:
 
     virtual ~CClient();
 
-    void Start();
-    void Stop();
+    void Disconnect();
+    void Connect ( const QString& strServerAddress, const QString& strServerName );
+
+    // The ConnectedServerName is emitted by Connecting() to update the UI with a human readable server name
+    void    SetConnectedServerName ( const QString& strServerName ) { strConnectedServerName = strServerName; };
+    QString GetConnectedServerName() const { return strConnectedServerName; };
+
+    EConnectionState GetConnectionState() const { return eConnectionState; }
+
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
     bool SetServerAddr ( QString strNAddr );
@@ -341,6 +360,9 @@ protected:
     // callback function must be static, otherwise it does not work
     static void AudioCallback ( CVector<short>& psData, void* arg );
 
+    void Start();
+    void Stop();
+
     void Init();
     void ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
     void ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
@@ -353,6 +375,13 @@ protected:
     void FreeClientChannel ( const int iServerChannelID );
     int  FindClientChannel ( const int iServerChannelID, const bool bCreateIfNew ); // returns a client channel ID or INVALID_INDEX
     bool ReorderLevelList ( CVector<uint16_t>& vecLevelList );                      // modifies vecLevelList, passed by reference
+    // human-readable name of the current server, shown in the UI
+    QString strConnectedServerName;
+
+    // current connection state; set only via SetConnectionState()
+    EConnectionState eConnectionState;
+
+    void SetConnectionState ( const EConnectionState eNewConnectionState );
 
     // only one channel is needed for client application
     CChannel  Channel;
@@ -390,8 +419,8 @@ protected:
     EAudChanConf           eAudioChannelConf;
     int                    iNumAudioChannels;
     bool                   bIsInitializationPhase;
-    bool                   bMuteOutStream;
-    float                  fMuteOutStreamGain;
+    std::atomic<bool>      bMuteOutStream;
+    std::atomic<float>     fMuteOutStreamGain;
     CVector<unsigned char> vecCeltData;
 
     bool            bIPv6Available; // must be before Socket - passed by reference to Socket
@@ -402,11 +431,11 @@ protected:
 
     CVector<uint8_t> vecbyNetwData;
 
-    int          iAudioInFader;
-    bool         bReverbOnLeftChan;
-    int          iReverbLevel;
-    CAudioReverb AudioReverb;
-    int          iInputBoost;
+    std::atomic<int>  iAudioInFader;
+    std::atomic<bool> bReverbOnLeftChan;
+    std::atomic<int>  iReverbLevel;
+    CAudioReverb      AudioReverb;
+    std::atomic<int>  iInputBoost;
 
     int iSndCrdPrefFrameSizeFactor;
     int iSndCrdFrameSizeFactor;
@@ -431,9 +460,9 @@ protected:
     bool        bEnableAudioAlerts;
     bool        bEnableOPUS64;
 
-    bool   bJitterBufferOK;
-    bool   bMuteMeInPersonalMix;
-    QMutex MutexDriverReinit;
+    std::atomic<bool> bJitterBufferOK;
+    bool              bMuteMeInPersonalMix;
+    QMutex            MutexDriverReinit;
 
     // server settings
     int  iServerSockBufNumFrames;
@@ -464,7 +493,8 @@ protected slots:
     {
         if ( InetAddr == Channel.GetAddress() )
         {
-            emit Disconnected();
+            // Stop client in case it received a Disconnection request
+            Stop();
         }
     }
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
@@ -507,7 +537,11 @@ signals:
 
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
+    void ConnectionStateChanged ( EConnectionState eConnectionState );
+    void Connecting ( const QString& strServerName );
+    void ConnectingFailed ( const QString& errorMessage );
     void Disconnected();
+
     void SoundDeviceChanged ( QString strError );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
     void ControllerInPanValue ( int iChannelIdx, int iValue );

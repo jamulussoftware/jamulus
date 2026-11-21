@@ -46,6 +46,84 @@
 
 #include "util.h"
 
+namespace
+{
+// Capture layout:
+//   (1)=major, (2)=minor, (3)=patch,
+//   (4)=suffix (may include dev-<sha>), (5)=timestamp.
+// Examples:
+//   3.10.1 -> (3,10,1,"","")
+//   3.10.1dev-2f2d2a1:1756656363 -> (3,10,1,"dev-2f2d2a1","1756656363")
+//   3.10.1dev-2f2d2a1 -> (3,10,1,"dev-2f2d2a1","")
+//   3.10.2rc1 -> (3,10,2,"rc1","")
+//   v3.10.1 -> no match
+const QRegularExpression& GetSemVerRegex()
+{
+    static const QRegularExpression semVerRegex ( R"(^(\d+)\.(\d+)\.(\d+)-?([^:]*):?(.*)$)" );
+    return semVerRegex;
+}
+} // namespace
+
+bool IsMappedReleaseVersion ( const QString& mappedVersion )
+{
+    // Mapped release keys are exactly "mmmnnnppp=" and contain no dot placeholders.
+    return ( mappedVersion.size() == 10 ) && ( mappedVersion.at ( 9 ) == QLatin1Char ( '=' ) ) && ( !mappedVersion.contains ( QLatin1Char ( '.' ) ) );
+}
+
+QString MapVersionStrForCompare ( const QString& versionStr )
+{
+    QString key;
+    QString x = ">"; // default suffix is later (git, dev, nightly, etc)
+
+    // Build a lexicographically sortable key from regex captures so ordering is:
+    // pre-release (alpha/beta/rc) < release (x.y.z) < post-release/dev/homebrew.
+    // If capture (5) timestamp exists, it is used as the tie-break payload.
+    QRegularExpressionMatch match = GetSemVerRegex().match ( versionStr );
+
+    if ( !match.hasMatch() )
+    {
+        return QString ( "..." ) + versionStr;
+    }
+
+    bool majorOk = false;
+    bool minorOk = false;
+    bool patchOk = false;
+    int  major   = match.captured ( 1 ).toInt ( &majorOk );
+    int  minor   = match.captured ( 2 ).toInt ( &minorOk );
+    int  patch   = match.captured ( 3 ).toInt ( &patchOk );
+
+    if ( !majorOk || !minorOk || !patchOk )
+    {
+        return QString ( "..." ) + versionStr;
+    }
+
+    QString suffix = match.captured ( 4 ); // suffix, if present
+    QString tstamp = match.captured ( 5 ); // timestamp, if present
+
+    if ( suffix.isEmpty() )
+    {
+        x = "="; // bare version number
+    }
+    else if ( suffix.startsWith ( "rc" ) || suffix.startsWith ( "beta" ) || suffix.startsWith ( "alpha" ) )
+    {
+        x = "<"; // pre-release version
+    }
+
+    // construct a sortable key mmmnnnpppksuffix, where:
+    //    mmm = major
+    //    nnn = minor
+    //    ppp = patch
+    //    k = sort key to sort alpha, beta, rc before bare version number, and other suffixes after (<, =, >)
+    //    suffix = supplied suffix
+    const QString majorPart = QString ( "%1" ).arg ( major, 3, 10, QLatin1Char ( '0' ) );
+    const QString minorPart = QString ( "%1" ).arg ( minor, 3, 10, QLatin1Char ( '0' ) );
+    const QString patchPart = QString ( "%1" ).arg ( patch, 3, 10, QLatin1Char ( '0' ) );
+
+    key = QString ( "%1%2%3%4%5" ).arg ( majorPart ).arg ( minorPart ).arg ( patchPart ).arg ( x ).arg ( tstamp.isEmpty() ? suffix : tstamp );
+
+    return key;
+}
+
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
 void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio, const int iMonoBlockSizeSam, const bool bIsStereoIn )

@@ -63,9 +63,6 @@
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
-     <property name="tabKeyNavigation">
-      <bool>true</bool>
-     </property>
      <column>
       <property name="text">
        <string>Server Name</string>

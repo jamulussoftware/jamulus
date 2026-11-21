@@ -51,6 +51,7 @@
 #include <QHostAddress>
 #include <QFileInfo>
 #include <algorithm>
+#include <atomic>
 #ifdef USE_OPUS_SHARED_LIB
 #    include "opus/opus_custom.h"
 #else
@@ -251,10 +252,10 @@ protected:
     int    vecChannelOrder[MAX_NUM_CHANNELS];
     QMutex MutexChanOrder;
 
-    CProtocol ConnLessProtocol;
-    QMutex    Mutex;
-    QMutex    MutexWelcomeMessage;
-    bool      bChannelIsNowDisconnected;
+    CProtocol         ConnLessProtocol;
+    QMutex            Mutex;
+    QMutex            MutexWelcomeMessage;
+    std::atomic<bool> bChannelIsNowDisconnected;
 
     // audio encoder/decoder
     OpusCustomMode*    Opus64Mode[MAX_NUM_CHANNELS];
@@ -275,6 +276,7 @@ protected:
 
     CVector<QString> vstrChatColors;
     CVector<int>     vecChanIDsCurConChan;
+    CVector<float>   vecfFadeInGains;
 
     CVector<CVector<float>>   vecvecfGains;
     CVector<CVector<float>>   vecvecfPannings;

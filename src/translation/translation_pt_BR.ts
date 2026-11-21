@@ -932,7 +932,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
-        <translation>Latência</translation>
+        <translation>Atraso</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="247"/>
@@ -1690,7 +1690,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Máx</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>
@@ -1791,13 +1791,9 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation>Gênero Variado 2</translation>
     </message>
     <message>
-        <source>Any Genre 3</source>
-        <translation type="vanished">Gênero Variado 3</translation>
-    </message>
-    <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation type="unfinished"></translation>
+        <translation>Gênero Variado Ásia</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>
@@ -3614,7 +3610,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1590"/>
         <source>Released under the GNU Affero General Public License 3.0 (or any later version)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lançado sob a GNU Affero General Public License 3.0 (ou qualquer versão posterior)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1658"/>

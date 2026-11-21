@@ -783,7 +783,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
 
     // custom directory index
     if ( ( eDirectoryType == AT_CUSTOM ) &&
-         GetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", 0, MAX_NUM_SERVER_ADDR_ITEMS, iValue ) )
+         GetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", 0, MAX_NUM_SERVER_ADDR_ITEMS - 1, iValue ) )
     {
         iCustomDirectoryIndex = iValue;
     }

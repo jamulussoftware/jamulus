@@ -1430,7 +1430,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>
@@ -1785,10 +1785,6 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../util.h" line="647"/>
         <source>Any Genre 2</source>
         <translation>Alle Genres 2</translation>
-    </message>
-    <message>
-        <source>Any Genre 3</source>
-        <translation type="vanished">Alle Genres 3</translation>
     </message>
     <message>
         <location filename="../util.h" line="650"/>

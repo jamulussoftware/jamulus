@@ -190,19 +190,26 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         CHostAddress haDirectoryAddress;
 
         // Allow IPv4 only for communicating with Directories
-        if ( NetworkUtil::ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, false ) )
-        {
-            // send the request for the server list
-            pClient->CreateCLReqServerListMes ( haDirectoryAddress );
-            response["result"] = "ok";
-        }
-        else
+        if ( !NetworkUtil::ParseNetworkAddress ( jsonDirectoryIp.toString(), haDirectoryAddress, false ) )
         {
             response["error"] =
                 CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: directory is not a valid socket address" );
+            return;
         }
 
+        // send the request for the server list
+        pClient->CreateCLReqServerListMes ( haDirectoryAddress );
         response["result"] = "ok";
+    } );
+
+    /// @rpc_method jamulusclient/getCurrentDirectory
+    /// @brief Returns the currently selected directory socket address.
+    /// @param {object} params - No parameters (empty object).
+    /// @result {string} result - The socket address of the current directory, usable as params.directory in jamulusclient/pollServerList.
+    pRpcServer->HandleMethod ( "jamulusclient/getCurrentDirectory", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        response["result"] =
+            NetworkUtil::GetDirectoryAddress ( m_pSettings->eDirectoryType, m_pSettings->vstrDirectoryAddress[m_pSettings->iCustomDirectoryIndex] );
+        Q_UNUSED ( params );
     } );
 
     /// @rpc_method jamulus/getMode
@@ -298,6 +305,7 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
         {
             pClient->ChannelInfo.eSkillLevel = SL_NOT_SET;
             pClient->SetRemoteInfo();
+            response["result"] = "ok";
             return;
         }
 
@@ -327,6 +335,32 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
             return;
         }
 
+        pClient->SetRemoteInfo();
+        response["result"] = "ok";
+    } );
+
+    /// @rpc_method jamulusclient/setInstrumentCode
+    /// @brief Sets your instrument code.
+    /// @param {number} params.instrCode - The new instrument code.
+    /// @result {string} result - Always "ok".
+    pRpcServer->HandleMethod ( "jamulusclient/setInstrumentCode", [=] ( const QJsonObject& params, QJsonObject& response ) {
+        auto jsonInstrCode = params["instrCode"];
+
+        if ( !jsonInstrCode.isDouble() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: instrCode is not a number" );
+            return;
+        }
+
+        const int iNInstrument = static_cast<int> ( jsonInstrCode.toDouble() );
+
+        if ( CInstPictures::GetName ( iNInstrument ).isEmpty() )
+        {
+            response["error"] = CRpcServer::CreateJsonRpcError ( CRpcServer::iErrInvalidParams, "Invalid params: unknown instrCode" );
+            return;
+        }
+
+        pClient->ChannelInfo.iInstrument = iNInstrument;
         pClient->SetRemoteInfo();
         response["result"] = "ok";
     } );

@@ -315,21 +315,6 @@ void CChannel::SetGain ( const int iChanID, const float fNewGain )
     }
 }
 
-float CChannel::GetGain ( const int iChanID )
-{
-    QMutexLocker locker ( &Mutex );
-
-    // get value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
-    {
-        return vecfGains[iChanID];
-    }
-    else
-    {
-        return 0;
-    }
-}
-
 void CChannel::SetPan ( const int iChanID, const float fNewPan )
 {
     QMutexLocker locker ( &Mutex );
@@ -337,34 +322,66 @@ void CChannel::SetPan ( const int iChanID, const float fNewPan )
     // set value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        vecfPannings[iChanID] = fNewPan;
+        // pan range is 0..1; guard to avoid wrong values from the network
+        vecfPannings[iChanID] = std::min ( 1.0f, std::max ( fNewPan, 0.0f ) );
     }
 }
 
-float CChannel::GetPan ( const int iChanID )
+/// @brief Copies a consistent snapshot of gain and panning settings for the requested channel IDs under Mutex.
+/// @param vecChanIDs Channel IDs to read, in the order used for the output vectors.
+/// @param iNumClients Number of leading entries to read and populate. All three vectors must contain at least this many entries.
+/// @param vecGains Receives each requested channel's gain, or zero for an out-of-range channel ID.
+/// @param vecPannings Receives each requested channel's panning, or zero for an out-of-range channel ID.
+void CChannel::GetGainsAndPannings ( const CVector<int>& vecChanIDs, const int iNumClients, CVector<float>& vecGains, CVector<float>& vecPannings )
 {
     QMutexLocker locker ( &Mutex );
 
-    // get value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    // copy the gain and pan values of the connected channels
+    for ( int j = 0; j < iNumClients; j++ )
     {
-        return vecfPannings[iChanID];
+        const int iChanID = vecChanIDs[j];
+
+        if ( MathUtils::InRange<int> ( iChanID, 0, MAX_NUM_CHANNELS ) )
+        {
+            vecGains[j]    = vecfGains[iChanID];
+            vecPannings[j] = vecfPannings[iChanID];
+        }
+        else
+        {
+            // should not happen
+            vecGains[j]    = 0.0;
+            vecPannings[j] = 0.5;
+        }
     }
-    else
-    {
-        return 0;
-    }
+}
+
+void CChannel::ResetInfo()
+{
+    QMutexLocker locker ( &Mutex );
+
+    bIsIdentified = false;
+    ChannelInfo   = CChannelCoreInfo();
 }
 
 void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
 {
-    // apply value (if a new channel or different from previous one)
-    if ( !bIsIdentified || ChannelInfo != NChanInf )
+    bool bChanged = false;
+
     {
-        bIsIdentified = true; // Indicate we have received channel info
+        QMutexLocker locker ( &Mutex );
 
-        ChannelInfo = NChanInf;
+        // apply value (if a new channel or different from previous one)
+        if ( !bIsIdentified || ChannelInfo != NChanInf )
+        {
+            bIsIdentified = true; // Indicate we have received channel info
 
+            ChannelInfo = NChanInf;
+            bChanged    = true;
+        }
+    }
+
+    if ( bChanged )
+    {
         // fire message that the channel info has changed
         emit ChanInfoHasChanged();
     }
@@ -377,6 +394,15 @@ QString CChannel::GetName()
     QMutexLocker locker ( &Mutex );
 
     return ChannelInfo.strName;
+}
+
+CChannelCoreInfo CChannel::GetChanInfo()
+{
+    // make sure the struct is not written at the same time when it is
+    // read here -> use mutex to secure access
+    QMutexLocker locker ( &Mutex );
+
+    return ChannelInfo;
 }
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )

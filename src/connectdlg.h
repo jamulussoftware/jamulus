@@ -115,17 +115,20 @@ public:
     };
 
 protected:
-    virtual void showEvent ( QShowEvent* );
-    virtual void hideEvent ( QHideEvent* );
+    virtual void showEvent ( QShowEvent* ) override;
+    virtual void hideEvent ( QHideEvent* ) override;
 
     CMappedTreeWidgetItem* FindListViewItem ( const CHostAddress& InetAddr );
     CMappedTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
-    void                   DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
+    void                   DeleteAllListViewItemChildren ( QTreeWidgetItem* pItem );
     void                   UpdateListFilter();
     void                   ShowAllMusicians ( const bool bState );
     void                   RequestServerList();
     void                   EmitCLServerListPingMes ( const CHostAddress& haServerAddress, const bool bNeedVersion );
     void                   UpdateDirectoryComboBox();
+
+    bool                   eventFilter ( QObject* obj, QEvent* event ) override;
+    CMappedTreeWidgetItem* savedServer;
 
     CClient*         pClient;
     CClientSettings* pSettings;
@@ -145,7 +148,6 @@ protected:
 
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
-    void OnServerAddrEditTextChanged ( const QString& );
     void OnDirectoryChanged ( int iTypeIdx );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }

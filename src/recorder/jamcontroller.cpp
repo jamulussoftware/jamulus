@@ -116,6 +116,12 @@ void CJamController::SetRecordingDir ( QString newRecordingDir, int iServerFrame
         bRecorderInitialised = ( strRecorderErrMsg == QString() );
         bEnableRecording     = bRecorderInitialised && !bDisableRecording;
 
+        if ( !bRecorderInitialised )
+        {
+            delete pJamRecorder;    // Init() failed: never moved to thread / never
+            pJamRecorder = nullptr; // wired to deleteLater, so free it here (#1083)
+        }
+
         qInfo() << qUtf8Printable ( QString ( "Recording state: %1" ).arg ( bEnableRecording ? "enabled" : "disabled" ) );
     }
     else

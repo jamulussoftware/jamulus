@@ -69,8 +69,8 @@ public:
     CAnalyzerConsole ( CClient* pNCliP, QWidget* parent = nullptr );
 
 protected:
-    virtual void showEvent ( QShowEvent* );
-    virtual void hideEvent ( QHideEvent* );
+    virtual void showEvent ( QShowEvent* ) override;
+    virtual void hideEvent ( QHideEvent* ) override;
 
     void DrawFrame();
     void DrawErrorRateTrace();

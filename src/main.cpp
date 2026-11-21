@@ -66,6 +66,8 @@
 #endif
 #if defined( Q_OS_MACOS )
 #    include "mac/activity.h"
+#endif
+#if defined( Q_OS_MACOS ) && !defined( HEADLESS )
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
 #include <memory>
@@ -82,7 +84,7 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 int main ( int argc, char** argv )
 {
 
-#if defined( Q_OS_MACOS )
+#if defined( Q_OS_MACOS ) && !defined( HEADLESS )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
     // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
     qt_set_sequence_auto_mnemonic ( true );
@@ -686,6 +688,12 @@ int main ( int argc, char** argv )
     else
 #endif
     {
+        if ( iPortNumber == 0 )
+        {
+            qCritical() << qUtf8Printable (
+                QString ( "%1: Port number 0 not permitted for a server.  Specify a value from 1 to 65535" ).arg ( argv[0] ) );
+            exit ( 1 );
+        }
 
         if ( ClientOnlyOptions.size() != 0 )
         {
@@ -909,7 +917,7 @@ int main ( int argc, char** argv )
     // For accessible support we need to add a plugin to qt. The plugin has to
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.
-    QDir ApplDir ( QApplication::applicationDirPath() );
+    QDir ApplDir ( QCoreApplication::applicationDirPath() );
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
@@ -1005,25 +1013,30 @@ int main ( int argc, char** argv )
                 }
 
                 // GUI object
-                CClientDlg
-                    ClientDlg ( &Client, &Settings, strConnOnStartupAddress, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, nullptr );
+                CClientDlg ClientDlg ( &Client, &Settings, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, nullptr );
 
                 // show dialog
                 ClientDlg.show();
+
+                // Connect on startup if requested
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
 
                 pApp->exec();
             }
             else
 #    endif
             {
-                if ( !strConnOnStartupAddress.isEmpty() )
-                {
-                    Client.SetServerAddr ( strConnOnStartupAddress );
-                    Client.Start();
-                }
-
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+
+                // Connect on startup if requested
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
 
                 pApp->exec();
             }
@@ -1144,7 +1157,7 @@ QString UsageArguments ( char** argv )
            "  -i, --inifile           initialization file name\n"
            "                          (not supported for headless Server mode)\n"
            "  -n, --nogui             disable GUI (\"headless\")\n"
-           "  -p, --port              set the local port number\n"
+           "  -p, --port              set the local port number (0-65535 on client, 1-65535 on server)\n"
            "      --jsonrpcport       enable JSON-RPC server, set TCP port number\n"
            "                          (EXPERIMENTAL, APIs might still change;\n"
            "                          only accessible from localhost)\n"

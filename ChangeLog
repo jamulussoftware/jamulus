@@ -1,42 +1,66 @@
-### 3.12.2dev <- NOTE: the release version number will be 4.0.0 ###
+### 3.12.6dev <- NOTE: the release version number will be 4.0.0 ###
 
-- Optimize Images (#3539).
-  (contributed by @ann0see)
+- Client: Build opus with NEON intrinsics on ARM (Android ABIs included) (#3833).
+  (contributed by @mcfnord)
 
-- Added uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023) (#3653).
-  (contributed by @dingodoppelt)
-
-- Internals: fix deprecation warnings in threadpool.h for C++17 onwards (#3681).
+- Client: removed double ping from Connect Dialog, improving accuracy of initial ping times displayed (#3847).
   (contributed by @softins)
 
-- Make server version string searchable (#3693).
-  (contributed by @dingodoppelt)
+- Client: Avoid crashing on sound device errors (#3851).
+  (contributed by @softins)
 
-- Introduce Directory Server in Asia. This replaces Any Genre 3. Asian/Australian users should from now on use Any Genre Asia (#3697).
-  (contributed by @ann0see)
+- Client: Improved server list navigation in Connect Dialog (#3859).
+  (contributed by @softins)
 
-- Move internal domains from jamulus.io to jamulus.app as .io domains have an unclear future (#3701).
-  (contributed by @ann0see)
+- Client: Fixed a startup crash caused by an out-of-range custom directory index in the settings file (#3931).
+  (contributed by @mcfnord)
 
-- Updated copyright to incorporate AGPL3.0+ (#3712).
-  (contributed by @pljones)
-
-- Bugfix: Provide a working location for famfamfam flags (#3722).
-  (contributed by @pljones)
-
-- Request and receive server features by connection-less message (#3727).
-  (contributed by @pljones)
-
-- Bugfix: Fix memory leak for audio alerts (#3728).
-  (contributed by @ann0see)
-
-- Refactor server chat handling by extracting methods (#3741).
+- Client: Make server version string searchable (#3693).
   (contributed by @dingodoppelt)
 
 - Client: Ensure INI file settings are loaded before doing -c/--connect startup (#3738).
   (contributed by @seanogdelaney)
 
+- Client/Server: Improved performance of getting gain and pan by using one time snapshot (#3948).
+  (contributed by @ann0see)
+
+- Client/Server: reworked and improved UDP socket opening logic (#3893).
+  (contributed by @softins)
+
+- Client/Server: Improved handling of IPv6 by using separate sockets (#3774).
+  (contributed by @softins)
+
 - Client/Server: Enable IPv6 by default if supported by host. Provide option to disable manually (#3720).
+  (contributed by @softins)
+
+- Client/Server: Use mapped version for updated notification check (#3855).
+  (contributed by @pljones)
+
+- Client/Server: Added uncompressed audio transmission - dedicated to the memory of Hans Petter Selasky (1982 - 2023) (#3653).
+  (contributed by @dingodoppelt)
+
+- Client/Server: Introduce Directory Server in Asia. This replaces Any Genre 3. Asian/Australian users should from now on use Any Genre Asia (#3697).
+  (contributed by @ann0see)
+
+- Client/Server: Move internal domains from jamulus.io to jamulus.app as .io domains have an unclear future (#3701).
+  (contributed by @ann0see)
+
+- Server: `jamulusserver/setDirectory` rejects an unrecognised `directoryType` instead of silently registering the server with the default public directory (#3963).
+  (contributed by @mcfnord)
+
+- Server: Fixed the start of a new client's recording containing audio from the previous client in the same channel (#3969).
+  (contributed by @mcfnord)
+
+- Server: Reduced the mixing cost per frame by computing each channel's fade-in gain once per frame instead of once per channel pair (#3959).
+  (contributed by @mcfnord)
+
+- Server: fix occasional crash seen when clients < 3.6 change jitter buffer size (#3751).
+  (contributed by @softins)
+
+- Server: avoid per-frame deep copy of audio buffers in CreateLevelsForAllConChannels (#3803).
+  (contributed by @mcfnord)
+
+- Server: Added protocol for requesting a server's Welcome Message without connecting (#3742).
   (contributed by @softins)
 
 - Server: Report OS as Unix if not Windows, Mac, iOS, Android or Linux (#3699).
@@ -48,14 +72,168 @@
 - Server: Removed HTML status file support and -m/--htmlstatus option (#3721).
   (contributed by @softins)
 
+- JSON-RPC: `jamulusclient/setSkillLevel` now returns `"ok"` when called with `null`, instead of a JSON-RPC response with neither `result` nor `error` (#3943).
+  (contributed by @mcfnord)
+
+- JSON-RPC: bound the per-connection read buffer so unterminated input cannot exhaust memory (#3861).
+  (contributed by @mcfnord)
+
+- JSONRPC: Added jamulusclient/setInstrumentCode JSONRPC method (#3772).
+  (contributed by @dingodoppelt)
+
+- JSONRPC jamulusclient/getCurrentDirectory (#3814).
+  (contributed by @digable1)
+
+- JSONRPC: Added new RPC methods and notifications (mostly for scripting interaction) to server and client (#3730).
+  (contributed by @dingodoppelt)
+
+- JSONRPC: Added jamulusserver/privateChatMessage RPC method for sending messages to single channels (#3731).
+  (contributed by @dingodoppelt)
+
+- Protocol: Request and receive server features by connection-less message (#3727).
+  (contributed by @pljones)
+
+- Performance: Enable auto vectorization by default (#3739).
+  (contributed by @ann0see)
+
+- Internals: fix deprecation warnings in threadpool.h for C++17 onwards (#3681).
+  (contributed by @softins)
+
+- Internal: Refactor server chat handling by extracting methods (#3741).
+  (contributed by @dingodoppelt)
+
+- Internal: Improved thread safety in socket handling (#3788).
+  (contributed by @softins)
+
 - Internal: Removed unused array to silence compiler warning (#3717).
   (contributed by @softins)
+
+- Refactor: Optimize images for slightly smaller binary size (#3539).
+  (contributed by @ann0see)
+
+- Refactor buffer.cpp to removed unused variable (#3770).
+  (contributed by @dingodoppelt)
+
+- Refactor: Removed duplicate import (#3778).
+  (contributed by @ann0see)
+
+- Refactor Connect/Disconnect out to CClient with an explicit connection state (#3805).
+  (contributed by @mcfnord)
+
+- Refactor: Removed unused variable (#3824).
+  (contributed by @dingodoppelt)
+
+- Refactor: Added missing override specifiers for virtual methods (#3888).
+  (contributed by @softins)
+
+- Bugfix: Client: Handle first mouse click inside Connect Dialog box (#3980).
+  (contributed by @pljones)
+
+- Bugfix: Client: Input Boost now clips instead of wrapping around when the boosted signal exceeds full scale (#3834).
+  (contributed by @mcfnord)
+
+- Bugfix: Fix connection to ClientDisconnected signal (#3760).
+  (contributed by @dingodoppelt)
+
+- Bugfix: Check for half open interval in MathUtils::InRange (#3812).
+  (contributed by @dingodoppelt)
+
+- Bugfix: Added bounds checking for country code lookup (#3811).
+  (contributed by @ann0see)
+
+- Bugfix: Server: Fix #1083: free CJamRecorder if Init() fails (#3838).
+  (contributed by @mcfnord)
+
+- Bugfix: Make cross-thread run/status flags std::atomic (#3798 batches A/B) (#3800).
+  (contributed by @mcfnord)
+
+- Bugfix: Make cross-thread audio params and channel/server flags std::atomic (#3802).
+  (contributed by @mcfnord)
+
+- Bugfix: Fix hang on Windows while changing devices in ASIO4ALL (#3867).
+  (contributed by @ann0see)
+
+- Bugfix: Ensure correct bounds for panning (#3899).
+  (contributed by @ann0see)
+
+- Bugfix: Removed potential server crash when recording (#3909).
+  (contributed by @pljones)
+
+- Bugfix: Ensure ChannelInfo mutex taken (#3930).
+  (contributed by @pljones)
+
+- Bugfix: Provide a working location for famfamfam flags (#3722).
+  (contributed by @pljones)
+
+- Bugfix: Fix memory leak for audio alerts (#3728).
+  (contributed by @ann0see)
+
+- Bugfix: Resolve out of bounds access issue (#3810).
+  (contributed by @ann0see)
+
+- Bugfix: Fix jamulus/pollServerList reporting success on invalid directory address (#3820).
+  (contributed by @mcfnord)
+
+- Updated copyright to incorporate AGPL3.0+ (#3712).
+  (contributed by @pljones)
+
+- Added AI guidance for contributing documentation (#3910).
+  (contributed by @ann0see)
+
+- Docs: fix Fedora dependency list to build the GUI (qt5-qtmultimedia-devel) (#3852).
+  (contributed by @mcfnord)
+
+- Translations: Fix some typos found by AI in Russian translation (#3752).
+  (contributed by @ann0see)
+
+- Translations updated from Hosted Weblate (#3889).
+  (contributed by @weblate)
+
+- Translations updated from Hosted Weblate (#3817, #3713, #3849).
+  (contributed by @weblate)
+
+- Build: Guard auto-vectorization flag for GCC only (#3864).
+  (contributed by @RawNuke)
+
+- Build: Enable dependabot for git submodule updates (#3848).
+  (contributed by @mcfnord)
+
+- Build: Fix extra space generated by "generate_json_rpc_docs.py" in multi line comments (#3737).
+  (contributed by @dingodoppelt)
+
+- Build: improved make distclean to remove leftover files and directories (#3886).
+  (contributed by @softins)
+
+- Build: Use a separate ui directory for generated ui header files (#3921).
+  (contributed by @softins)
+
+- Build: Windows: Updated Windows build environment to Windows Server 2025 (#3763).
+  (contributed by @ann0see)
+
+- Build: Bump github/codeql-action from 4 (to 4.37.[46789]) to 4.38.1 (#3860, #3887, #3920, #3928, #3936, #3962).
+  (contributed by @app/dependabot)
+
+- Build: Bump actions/cache from 5 to 6 (#3759).
+  (contributed by @app/dependabot)
+
+- Build: Bump actions/checkout from 6 to 7 (#3749).
+  (contributed by @app/dependabot)
+
+- Build: Updated create-dmg (macOS) to version 1.3.0 (#3764).
+  (contributed by @app/github-actions)
+
+- Build: use Ubuntu 22 for building Linux deb packages (#3797).
+  (contributed by @softins)
+
+- Build: Fixed headless builds (`CONFIG+=headless`) not compiling on macOS and Windows (#3826).
+  (contributed by @dtinth)
 
 
 ### 3.12.1 (2026-05-17) ###
 
 - Client: Fix occasional spurious version updated message display (#3691).
   (contributed by @softins)
+
 
 ### 3.12.0 (2026-05-02) ###
 

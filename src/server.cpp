@@ -172,6 +172,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init ( iMaxNumChannels );
+    vecfFadeInGains.Init ( iMaxNumChannels );
     vecvecfGains.Init ( iMaxNumChannels );
     vecvecfPannings.Init ( iMaxNumChannels );
     vecvecsData.Init ( iMaxNumChannels );
@@ -678,6 +679,12 @@ void CServer::OnTimer()
                 // connected clients is less, only a subset of elements of this
                 // vector are actually used and the others are dummy elements)
                 vecChanIDsCurConChan[iNumClients] = i;
+
+                // read the fade-in gain of the channel once per frame for use in
+                // DecodeReceiveData() (the fade-in counters are only written under
+                // the server mutex, which is held here and for the whole decode phase)
+                vecfFadeInGains[iNumClients] = vecChannels[i].GetFadeInGain();
+
                 iNumClients++;
             }
         }
@@ -894,29 +901,32 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
     else
     {
         CurOpusDecoder = nullptr;
+
+        // no codec yet, so nothing below overwrites these buffers: clear them so that a new client
+        // does not inherit the audio of this channel's previous client (#3901)
+        vecvecsData[iChanCnt].Reset ( 0 );
+        vecvecsData2[iChanCnt].Reset ( 0 );
     }
 
-    // get gains of all connected channels
+    // get gains and pannings of all connected channels, compacted to the order of
+    // "vecChanIDsCurConChan" (the second index of "vecvecfGains" does not represent the
+    // channel ID but the position in "vecChanIDsCurConChan")
+    vecChannels[iCurChanID].GetGainsAndPannings ( vecChanIDsCurConChan, iNumClients, vecvecfGains[iChanCnt], vecvecfPannings[iChanCnt] );
+
+    // apply the audio fade-in: each connected channel fades in with its own fade-in gain,
+    // and the fade-in gain of the current channel is applied to all other channels as well
+    // to avoid the client volumes being at 100% when joining a server (#628); the fade-in
+    // gains were read once per frame into "vecfFadeInGains" in the same order
+    const float fCurChanFadeInGain = vecfFadeInGains[iChanCnt];
+
     for ( int j = 0; j < iNumClients; j++ )
     {
-        // The second index of "vecvecdGains" does not represent
-        // the channel ID! Therefore we have to use
-        // "vecChanIDsCurConChan" to query the IDs of the currently
-        // connected channels
-        vecvecfGains[iChanCnt][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
+        vecvecfGains[iChanCnt][j] *= vecfFadeInGains[j];
 
-        // consider audio fade-in
-        vecvecfGains[iChanCnt][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
-
-        // use the fade in of the current channel for all other connected clients
-        // as well to avoid the client volumes are at 100% when joining a server (#628)
         if ( j != iChanCnt )
         {
-            vecvecfGains[iChanCnt][j] *= vecChannels[iCurChanID].GetFadeInGain();
+            vecvecfGains[iChanCnt][j] *= fCurChanFadeInGain;
         }
-
-        // panning
-        vecvecfPannings[iChanCnt][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
     }
 
     // If the server frame size is smaller than the received OPUS frame size, we need a conversion
@@ -942,11 +952,18 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             {
                 emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
 
+                // reset the decoders so that the next client in this channel does not continue
+                // the previous client's audio (#3901)
+                opus_custom_decoder_ctl ( OpusDecoderMono[iCurChanID], OPUS_RESET_STATE );
+                opus_custom_decoder_ctl ( OpusDecoderStereo[iCurChanID], OPUS_RESET_STATE );
+                opus_custom_decoder_ctl ( Opus64DecoderMono[iCurChanID], OPUS_RESET_STATE );
+                opus_custom_decoder_ctl ( Opus64DecoderStereo[iCurChanID], OPUS_RESET_STATE );
+
                 FreeChannel ( iCurChanID ); // note that the channel is now not in use
 
-                // note that no mutex is needed for this shared resource since it is not a
-                // read-modify-write operation but an atomic write and also each thread can
-                // only set it to true and never to false
+                // note that no mutex is needed for this shared resource since it is a
+                // std::atomic write (not a read-modify-write operation) and also each
+                // thread can only set it to true and never to false
                 bChannelIsNowDisconnected = true;
 
                 // since the channel is no longer in use, we should return

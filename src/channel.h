@@ -49,6 +49,7 @@
 #include <QThread>
 #include <QDateTime>
 #include <QFile>
+#include <atomic>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif
@@ -108,14 +109,10 @@ public:
     void                SetAddress ( const CHostAddress& NAddr ) { InetAddr = NAddr; }
     const CHostAddress& GetAddress() const { return InetAddr; }
 
-    void ResetInfo()
-    {
-        bIsIdentified = false;
-        ChannelInfo   = CChannelCoreInfo();
-    } // reset does not emit a message
-    QString           GetName();
-    void              SetChanInfo ( const CChannelCoreInfo& NChanInf );
-    CChannelCoreInfo& GetChanInfo() { return ChannelInfo; }
+    void             ResetInfo(); // reset does not emit a message
+    QString          GetName();
+    void             SetChanInfo ( const CChannelCoreInfo& NChanInf );
+    CChannelCoreInfo GetChanInfo();
 
     void SetRemoteInfo ( const CChannelCoreInfo ChInfo ) { Protocol.CreateChanInfoMes ( ChInfo ); }
 
@@ -124,11 +121,11 @@ public:
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
 
     void  SetGain ( const int iChanID, const float fNewGain );
-    float GetGain ( const int iChanID );
     float GetFadeInGain() { return static_cast<float> ( iFadeInCnt ) / iFadeInCntMax; }
 
-    void  SetPan ( const int iChanID, const float fNewPan );
-    float GetPan ( const int iChanID );
+    void SetPan ( const int iChanID, const float fNewPan );
+
+    void GetGainsAndPannings ( const CVector<int>& vecChanIDs, const int iNumClients, CVector<float>& vecGains, CVector<float>& vecPannings );
 
     void SetRemoteChanGain ( const int iId, const float fGain ) { Protocol.CreateChanGainMes ( iId, fGain ); }
 
@@ -231,14 +228,14 @@ protected:
     // network protocol
     CProtocol Protocol;
 
-    int iConTimeOut;
-    int iConTimeOutStartVal;
-    int iFadeInCnt;
-    int iFadeInCntMax;
+    std::atomic<int> iConTimeOut;
+    int              iConTimeOutStartVal;
+    int              iFadeInCnt;
+    int              iFadeInCntMax;
 
-    bool bIsEnabled;
-    bool bIsServer;
-    bool bIsIdentified;
+    std::atomic<bool> bIsEnabled;
+    bool              bIsServer;
+    std::atomic<bool> bIsIdentified;
 
     int iNetwFrameSizeFact;
     int iNetwFrameSize;

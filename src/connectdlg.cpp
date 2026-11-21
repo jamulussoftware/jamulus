@@ -46,58 +46,14 @@
 
 #include "connectdlg.h"
 
+#include <QFocusEvent>
+
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 8, 0 )
 #    include <QAccessible>
 #    include <QAccessibleAnnouncementEvent>
 #endif
 
 /* Implementation *************************************************************/
-
-// mapVersionStr - converts a version number to a sortable string
-static QString mapVersionStr ( const QString& versionStr )
-{
-    QString key;
-    QString x = ">"; // default suffix is later (git, dev, nightly, etc)
-
-    // Regex for SemVer: major.minor.patch-suffix
-    QRegularExpression      semVerRegex ( R"(^(\d+)\.(\d+)\.(\d+)-?(.*):?(.*)$)" );
-    QRegularExpressionMatch match = semVerRegex.match ( versionStr );
-
-    if ( !match.hasMatch() )
-    {
-        return versionStr; // fallback: plain text
-    }
-
-    int     major  = match.captured ( 1 ).toInt();
-    int     minor  = match.captured ( 2 ).toInt();
-    int     patch  = match.captured ( 3 ).toInt();
-    QString suffix = match.captured ( 4 ); // may be empty
-    QString tstamp = match.captured ( 5 ); // may be empty
-
-    if ( suffix.isEmpty() )
-    {
-        x = "="; // bare version number
-    }
-    else if ( suffix.startsWith ( "rc" ) || suffix.startsWith ( "beta" ) || suffix.startsWith ( "alpha" ) )
-    {
-        x = "<"; // pre-release version
-    }
-
-    // construct a sortable key mmmnnnpppksuffix, where:
-    //    mmm = major
-    //    nnn = minor
-    //    ppp = patch
-    //    k = sort key to sort alpha, beta, rc before bare version number, and other suffixes after (<, =, >)
-    //    suffix = supplied suffix
-    key = QString ( "%1%2%3%4%5" )
-              .arg ( major, 3, 10, QLatin1Char ( '0' ) )
-              .arg ( minor, 3, 10, QLatin1Char ( '0' ) )
-              .arg ( patch, 3, 10, QLatin1Char ( '0' ) )
-              .arg ( x )
-              .arg ( tstamp.isEmpty() ? suffix : tstamp );
-
-    return key;
-}
 
 // Subclass of QTreeWidgetItem that allows LVC_VERSION to sort by the UserRole data value
 CMappedTreeWidgetItem::CMappedTreeWidgetItem ( QTreeWidget* owner ) : QTreeWidgetItem ( owner ), owner ( owner ) {}
@@ -124,6 +80,7 @@ bool CMappedTreeWidgetItem::operator<( const QTreeWidgetItem& other ) const
 
 CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent ) :
     CBaseDlg ( parent, Qt::Dialog ),
+    savedServer ( nullptr ),
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     strSelectedAddress ( "" ),
@@ -205,6 +162,10 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool 
     cbxServerAddr->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
     cbxServerAddr->setInsertPolicy ( QComboBox::NoInsert );
 
+    // install event filter to catch FocusIn
+    cbxServerAddr->installEventFilter ( this );
+    lvwServers->installEventFilter ( this );
+
     // set up list view for connected clients (note that the last column size
     // must not be specified since this column takes all the remaining space)
 #ifdef ANDROID
@@ -276,9 +237,10 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, CClientSettings* pNSetP, const bool 
     QObject::connect ( edtFilter, &QLineEdit::textEdited, this, &CConnectDlg::OnFilterTextEdited );
 
     // combo boxes
-    QObject::connect ( cbxServerAddr, &QComboBox::editTextChanged, this, &CConnectDlg::OnServerAddrEditTextChanged );
-
     QObject::connect ( cbxDirectory, static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ), this, &CConnectDlg::OnDirectoryChanged );
+
+    // connect when pressing Enter in the Server Address box
+    QObject::connect ( cbxServerAddr->lineEdit(), &QLineEdit::returnPressed, this, &CConnectDlg::OnConnectClicked );
 
     // check boxes
     QObject::connect ( chbExpandAll, &QCheckBox::stateChanged, this, &CConnectDlg::OnExpandAllStateChanged );
@@ -318,6 +280,9 @@ void CConnectDlg::showEvent ( QShowEvent* )
 
 void CConnectDlg::RequestServerList()
 {
+    // ensure ping timer is stopped
+    TimerPing.stop();
+
     // reset flags
     bServerListReceived        = false;
     bReducedServerListReceived = false;
@@ -329,6 +294,7 @@ void CConnectDlg::RequestServerList()
     strSelectedServerName = "";
 
     // clear server list view
+    savedServer = nullptr;
     lvwServers->clear();
 
     // update list combo box (disable events to avoid a signal)
@@ -440,6 +406,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     }
 
     // first clear list
+    savedServer = nullptr;
     lvwServers->clear();
 
     // add list item for each server in the server list
@@ -560,10 +527,14 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
         }
     }
 
+    // only if the ping timer is not already running (avoids double ping):
     // immediately issue the ping measurements and start the ping timer since
     // the server list is filled now
-    OnTimerPing();
-    TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
+    if ( !TimerPing.isActive() )
+    {
+        OnTimerPing();
+        TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
+    }
 }
 
 void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo )
@@ -574,7 +545,7 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVect
     if ( pCurListViewItem )
     {
         // first remove any existing children
-        DeleteAllListViewItemChilds ( pCurListViewItem );
+        DeleteAllListViewItemChildren ( pCurListViewItem );
 
         // get number of connected clients
         const int iNumConnectedClients = vecChanInfo.Size();
@@ -652,13 +623,6 @@ void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int )
     {
         OnConnectClicked();
     }
-}
-
-void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
-{
-    // in the server address combo box, a text was changed, remove selection
-    // in the server list (if any)
-    lvwServers->clearSelection();
 }
 
 void CConnectDlg::OnCustomDirectoriesChanged()
@@ -1039,19 +1003,19 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
     }
 
     // if no server item has children, do not show decoration
-    bool      bAnyListItemHasChilds = false;
-    const int iServerListLen        = lvwServers->topLevelItemCount();
+    bool      bAnyListItemHasChildren = false;
+    const int iServerListLen          = lvwServers->topLevelItemCount();
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
         // check if the current list item has children
         if ( lvwServers->topLevelItem ( iIdx )->childCount() > 0 )
         {
-            bAnyListItemHasChilds = true;
+            bAnyListItemHasChildren = true;
         }
     }
 
-    if ( !bAnyListItemHasChilds )
+    if ( !bAnyListItemHasChildren )
     {
         lvwServers->setRootIsDecorated ( false );
     }
@@ -1071,7 +1035,7 @@ void CConnectDlg::SetServerVersionResult ( const CHostAddress& InetAddr, const Q
         pCurListViewItem->setText ( LVC_VERSION, GetDisplayVersion ( strVersion ) );
 
         // and store sortable mapped version number
-        pCurListViewItem->setData ( LVC_VERSION, Qt::UserRole, mapVersionStr ( strVersion ) );
+        pCurListViewItem->setData ( LVC_VERSION, Qt::UserRole, MapVersionStrForCompare ( strVersion ) );
 
         if ( pCurListViewItem == lvwServers->currentItem() )
         {
@@ -1114,19 +1078,19 @@ CMappedTreeWidgetItem* CConnectDlg::GetParentListViewItem ( QTreeWidgetItem* pIt
     }
 }
 
-void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
+void CConnectDlg::DeleteAllListViewItemChildren ( QTreeWidgetItem* pItem )
 {
     // loop over all children
     while ( pItem->childCount() > 0 )
     {
         // get the first child in the list
-        QTreeWidgetItem* pCurChildItem = pItem->child ( 0 );
+        QTreeWidgetItem* pCurChild = pItem->child ( 0 );
 
         // remove it from the item (note that the object is not deleted)
-        pItem->removeChild ( pCurChildItem );
+        pItem->removeChild ( pCurChild );
 
         // delete the object to avoid a memory leak
-        delete pCurChildItem;
+        delete pCurChild;
     }
 }
 
@@ -1187,4 +1151,39 @@ void CConnectDlg::OnCurrentServerItemChanged ( QTreeWidgetItem* current, QTreeWi
     }
     QAccessible::updateAccessibility ( new QAccessibleAnnouncementEvent ( lvwServers, announcement ) );
 #endif
+}
+
+bool CConnectDlg::eventFilter ( QObject* obj, QEvent* event )
+{
+    if ( obj == cbxServerAddr && event->type() == QEvent::FocusIn )
+    {
+        // check for a selected server before clearing the selection in the list
+        QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
+
+        if ( CurSelListItemList.count() > 0 )
+        {
+            // there was a selected item - save it before deselecting
+            savedServer = GetParentListViewItem ( CurSelListItemList[0] );
+        }
+        // remove selection in the server list (if any)
+        lvwServers->clearSelection();
+    }
+
+    if ( obj == lvwServers && event->type() == QEvent::FocusIn )
+    {
+        if ( savedServer )
+        {
+            // re-select any previously-selected server on regaining focus
+            lvwServers->setCurrentItem ( savedServer );
+            savedServer = nullptr;
+        }
+        else if ( static_cast<QFocusEvent*> ( event )->reason() != Qt::MouseFocusReason && !lvwServers->currentItem() &&
+                  lvwServers->topLevelItemCount() > 0 )
+        {
+            // no saved server and no current item: select first item in list for keyboard navigation
+            lvwServers->setCurrentItem ( lvwServers->topLevelItem ( 0 ) );
+        }
+    }
+
+    return QDialog::eventFilter ( obj, event );
 }

@@ -1,4 +1,4 @@
-VERSION = 3.12.2dev
+VERSION = 3.12.6dev
 
 # Using lrelease and embed_translations only works for Qt 5.12 or later.
 # See https://github.com/jamulussoftware/jamulus/pull/3288 for these changes.
@@ -239,15 +239,20 @@ win32 {
     CONFIG+=add_ios_ffmpeg_libraries # QTBUG-129651
     QMAKE_ASSET_CATALOGS += src/res/iOSIcons.xcassets
     QMAKE_INFO_PLIST = ios/Info.plist
-    OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
-    HEADERS += src/ios/ios_app_delegate.h
+    # Qt 6 already ships QIOSApplicationDelegate
+    lessThan(QT_MAJOR_VERSION, 6) {
+        OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
+        HEADERS += src/ios/ios_app_delegate.h
+    }
     HEADERS += src/sound/coreaudio-ios/sound.h
     OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = app.jamulussoftware
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {
-    ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    isEmpty(ANDROID_ABIS) {
+        ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    }
     ANDROID_VERSION_NAME = $$VERSION
     ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
@@ -289,6 +294,7 @@ win32 {
     HEADERS += $$OBOE_HEADERS
     SOURCES += $$OBOE_SOURCES
     DISTFILES += $$DISTFILES_OBOE
+    QMAKE_DISTCLEAN += android-$${TARGET}-deployment-settings.json
 } else:unix {
     # we want to compile with C++11
     CONFIG += c++11
@@ -376,6 +382,16 @@ win32 {
 # Do not set RCC_DIR explicitly when using embed_translations.
 # It doesn't work with multiple targets or architectures.
 RESOURCES += src/resources.qrc
+
+# store ui_*.h files in a directory instead of project root
+UI_DIR = ui
+
+# A tree built in place before UI_DIR was set still has ui_*.h in its root, and
+# they must be deleted before creating the new Makefiles.
+STALE_UI_HEADERS = $$files(ui_*.h)
+for (stale, STALE_UI_HEADERS) {
+    system($$QMAKE_DEL_FILE $$stale)
+}
 
 FORMS_GUI = src/aboutdlgbase.ui \
     src/serverdlgbase.ui
@@ -668,9 +684,7 @@ SOURCES_OPUS_ARM = libs/opus/celt/arm/armcpu.c \
     libs/opus/silk/arm/NSQ_del_dec_neon_intr.c \
     libs/opus/silk/arm/NSQ_neon.c \
     libs/opus/celt/arm/celt_neon_intr.c \
-    libs/opus/celt/arm/pitch_neon_intr.c \
-    libs/opus/celt/arm/celt_fft_ne10.c \
-    libs/opus/celt/arm/celt_mdct_ne10.c
+    libs/opus/celt/arm/pitch_neon_intr.c
 
 SOURCES_OPUS_X86_SSE = libs/opus/celt/x86/x86cpu.c \
     libs/opus/celt/x86/x86_celt_map.c \
@@ -685,11 +699,16 @@ SOURCES_OPUS_X86_SSE4 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
      libs/opus/silk/x86/VAD_sse4_1.c \
      libs/opus/silk/x86/VQ_WMat_EC_sse4_1.c
 
-contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
+contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) | contains(QT_ARCH, arm64) {
+    # armeabi-v7a and arm64-v8a are the Android ABI names; plain arm64 is what Qt
+    # reports for 64-bit ARM everywhere else (Apple Silicon macOS, iOS, Linux aarch64).
+    # OPUS_ARM_MAY_HAVE_NEON_INTR is required in addition to the PRESUME defines:
+    # opus gates the inclusion of its arm/*.h headers on it
+    # (see libs/opus/celt/pitch.h and libs/opus/celt/cpu_support.h).
     HEADERS_OPUS += $$HEADERS_OPUS_ARM
     SOURCES_OPUS_ARCH += $$SOURCES_OPUS_ARM
-    DEFINES_OPUS += OPUS_ARM_PRESUME_NEON=1 OPUS_ARM_PRESUME_NEON_INTR=1
-    contains(QT_ARCH, arm64-v8a):DEFINES_OPUS += OPUS_ARM_PRESUME_AARCH64_NEON_INTR
+    DEFINES_OPUS += OPUS_ARM_MAY_HAVE_NEON_INTR=1 OPUS_ARM_PRESUME_NEON=1 OPUS_ARM_PRESUME_NEON_INTR=1
+    contains(QT_ARCH, arm64-v8a) | contains(QT_ARCH, arm64):DEFINES_OPUS += OPUS_ARM_PRESUME_AARCH64_NEON_INTR
 } else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
     HEADERS_OPUS += $$HEADERS_OPUS_X86
     SOURCES_OPUS_ARCH += $$SOURCES_OPUS_X86_SSE $$SOURCES_OPUS_X86_SSE2 $$SOURCES_OPUS_X86_SSE4
@@ -1172,7 +1191,20 @@ contains(CONFIG, "opus_shared_lib") {
             sse4_cc.variable_out = OBJECTS
             QMAKE_EXTRA_COMPILERS += sse_cc sse2_cc sse4_cc
         }
+    } else:contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) | contains(QT_ARCH, arm64) {
+        # Unlike the x86 SSE files above, the NEON intrinsics need no special
+        # compiler flags: NEON is part of the base AArch64 ISA, and the NDK's
+        # clang enables it by default for armv7a-linux-androideabi. So they
+        # can be compiled like any other source file.
+        SOURCES += $$SOURCES_OPUS_ARCH
     }
+}
+
+# Scope -ftree-vectorize to GCC mkspecs (#3863): Clang already auto-vectorizes
+# and MSVC warns on the flag. At -O2 the flag raises GCC's cost model to `cheap`,
+# which vectorizes the mixer loops on every current GCC (11 through 14).
+*-g++* {
+    QMAKE_CXXFLAGS += -ftree-vectorize
 }
 
 # disable version check if requested (#370)
@@ -1195,3 +1227,27 @@ CLANG_FORMAT_SOURCES = $$find(CLANG_FORMAT_SOURCES, ^\(android|ios|mac|linux|src
 CLANG_FORMAT_SOURCES ~= s!^\(libs/.*/|src/res/qrc_resources\.cpp\)\S*$!!g
 clang_format.commands = 'clang-format -i $$CLANG_FORMAT_SOURCES'
 QMAKE_EXTRA_TARGETS += clang_format
+
+# QMAKE_DISTCLEAN only removes files. Use a custom target to remove
+# generated directory trees. Deliberately do not remove user-installed
+# dependencies such as libs/ASIOSDK2.
+android {
+    for (abi, ANDROID_ABIS) {
+        DISTCLEAN_DIRS += debug-$${abi} release-$${abi}
+    }
+    DISTCLEAN_DIRS += $$UI_DIR .qm
+} else {
+    DISTCLEAN_DIRS += debug release $$UI_DIR .qm
+}
+
+win32 {
+    for(dir, DISTCLEAN_DIRS) {
+        distclean_dirs.commands += if exist $$replace(dir, /, \\) rmdir /s /q $$replace(dir, /, \\) $$escape_expand(\\n\\t)
+    }
+} else {
+    # Works for Linux, macOS, iOS, and Android using standard Unix rm
+    distclean_dirs.commands += rm -rf $$DISTCLEAN_DIRS
+}
+
+QMAKE_EXTRA_TARGETS += distclean_dirs
+DISTCLEAN_DEPS += distclean_dirs

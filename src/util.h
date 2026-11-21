@@ -403,6 +403,25 @@ class CBaseDlg : public QDialog
 public:
     CBaseDlg ( QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags() ) : QDialog ( parent, flags ) {}
 
+protected:
+    bool event ( QEvent* pEvent ) override
+    {
+        const bool bHandled = QDialog::event ( pEvent );
+
+#    if defined( Q_OS_IOS )
+        // a window keeps the palette it resolved when it was created. On iOS the system
+        // colour scheme is only known after the first window is shown, so the dialogs,
+        // which are created in the client dialog's constructor, would be painted with
+        // black text on the dark background until something repaints them
+        if ( pEvent->type() == QEvent::Show )
+        {
+            setPalette ( QPalette() );
+        }
+#    endif
+
+        return bHandled;
+    }
+
 public slots:
     void keyPressEvent ( QKeyEvent* pEvent )
     {

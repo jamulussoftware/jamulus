@@ -56,7 +56,7 @@
 
 
 ; Compile-time definitions
-; CodeRabbit review: limit install/uninstall sections to payloads actually built.
+; CodeRabbit review: match install/uninstall payload and registry view to built architectures.
 !ifndef HAS_X86_64
     !define HAS_X86_64 1
 !endif
@@ -403,6 +403,8 @@ Function .onInit
             !if ${HAS_X86} == 1
         ${SelectSection} ${INST_32}
         SetRegView      32
+        ReadRegStr $INSTDIR HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_VALUE}"
+        IfErrors   0 +2
         StrCpy $INSTDIR "$PROGRAMFILES32\${APP_NAME}"
             !else
         MessageBox MB_OK|MB_ICONSTOP "This installer contains no supported application payload."
@@ -648,9 +650,15 @@ SectionEnd
 
 Function un.onInit
 
-    ; Set up registry access for current architecture
+    ; Match the registry view to the payload selected by the installer.
     ${If} ${RunningX64}
+        !if ${HAS_X86_64} == 1
         SetRegView 64
+        !else
+            !if ${HAS_X86} == 1
+        SetRegView 32
+            !endif
+        !endif
     ${Else}
         SetRegView 32
     ${EndIf}

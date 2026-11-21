@@ -261,9 +261,11 @@ Function Initialize-Build-Environment
     )
 
     # Look for Visual Studio/Build Tools 2017 or later (version 15.0 or above)
+    $ProgramFilesX86 = [Environment]::GetEnvironmentVariable("ProgramFiles(x86)")
+    $ProgramFiles = [Environment]::GetEnvironmentVariable("ProgramFiles")
     $VsWhereCandidates = @(
-        "$env:ProgramFiles(x86)\Microsoft Visual Studio\Installer\vswhere.exe",
-        "$env:ProgramFiles\Microsoft Visual Studio\Installer\vswhere.exe"
+        $(if ($ProgramFilesX86) { Join-Path $ProgramFilesX86 "Microsoft Visual Studio\Installer\vswhere.exe" }),
+        $(if ($ProgramFiles) { Join-Path $ProgramFiles "Microsoft Visual Studio\Installer\vswhere.exe" })
     )
     $VsWherePath = $VsWhereCandidates | Where-Object { Test-Path -Path $_ } | Select-Object -First 1
 
@@ -528,13 +530,15 @@ Function Build-Installer
     }
 
     $NsisVerb = if ($DebugMode) { "/v4" } else { "/v2" }
+    $Has64Define = "/DHAS_X86_64=$([int]$Has64)"
+    $Has32Define = "/DHAS_X86=$([int]$Has32)"
 
     if ($BuildOption -ne "")
     {
         Invoke-Native-Command -Command "$RootPath\libs\NSIS\NSIS-source\makensis" `
             -Arguments ($NsisVerb, "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
             "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
-            "/DBUILD_OPTION=$BuildOption", `
+            "/DBUILD_OPTION=$BuildOption", $Has64Define, $Has32Define, `
             "$WindowsPath\installer.nsi")
     }
     else
@@ -542,6 +546,7 @@ Function Build-Installer
         Invoke-Native-Command -Command "$RootPath\libs\NSIS\NSIS-source\makensis" `
             -Arguments ($NsisVerb, "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
             "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
+            $Has64Define, $Has32Define, `
             "$WindowsPath\installer.nsi")
     }
 }

@@ -56,6 +56,12 @@
 
 
 ; Compile-time definitions
+!ifndef HAS_X86_64
+    !define HAS_X86_64 1
+!endif
+!ifndef HAS_X86
+    !define HAS_X86 1
+!endif
 !define VC_REDIST32_EXE   "vc_redist.x86.exe"
 !define VC_REDIST64_EXE   "vc_redist.x64.exe"
 !define APP_INSTALL_KEY   "Software\${APP_NAME}"
@@ -298,6 +304,7 @@ Var bRunApp
 
 !define UnSelectSection '!insertmacro SecUnSelect'
 
+!if ${HAS_X86_64} == 1
 Section "Install_64Bit" INST_64
     ; check if old, wrongly installed Jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
     IfFileExists "$PROGRAMFILES32\Jamulus\Uninstall.exe" 0 continueinstall
@@ -358,7 +365,9 @@ Section "Install_64Bit" INST_64
     ExecWait "$\"$INSTDIR\${VC_REDIST64_EXE}$\" /q /norestart"
     Delete   "$INSTDIR\${VC_REDIST64_EXE}"
 SectionEnd
+!endif
 
+!if ${HAS_X86} == 1
 Section "Install_32Bit" INST_32
 
     ; Install the main application
@@ -370,6 +379,7 @@ Section "Install_32Bit" INST_32
     Delete   "$INSTDIR\${VC_REDIST32_EXE}"
 
 SectionEnd
+!endif
 
 Function .onInit
 
@@ -382,9 +392,22 @@ Function .onInit
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES64\${APP_NAME}"
 
-        ; enable the 64 bit install section
+        ; Enable the matching payload; fall back to 32-bit only for a 32-bit payload in a 64-bit build.
+        !if ${HAS_X86_64} == 1
         ${SelectSection} ${INST_64}
+            !if ${HAS_X86} == 1
         ${UnSelectSection} ${INST_32}
+            !endif
+        !else
+            !if ${HAS_X86} == 1
+        ${SelectSection} ${INST_32}
+        SetRegView      32
+        StrCpy $INSTDIR "$PROGRAMFILES32\${APP_NAME}"
+            !else
+        MessageBox MB_OK|MB_ICONSTOP "This installer contains no supported application payload."
+        Abort
+            !endif
+        !endif
 
     ${Else}
         SetRegView      32
@@ -394,9 +417,15 @@ Function .onInit
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES32\${APP_NAME}"
 
-        ; enable the 32 bit install section
+        !if ${HAS_X86} == 1
         ${SelectSection} ${INST_32}
+            !if ${HAS_X86_64} == 1
         ${UnSelectSection} ${INST_64}
+            !endif
+        !else
+        MessageBox MB_OK|MB_ICONSTOP "This installer does not contain a 32-bit application payload."
+        Abort
+        !endif
     ${EndIf}
 
     ; Install for all users
@@ -584,9 +613,20 @@ FunctionEnd
 Section "un.Install"
     ; Delete the main application
     ${If} ${RunningX64}
+        !if ${HAS_X86_64} == 1
         !insertmacro un.InstallFiles x86_64
-    ${Else}
+        !else
+            !if ${HAS_X86} == 1
         !insertmacro un.InstallFiles x86
+            !endif
+        !endif
+    ${Else}
+        !if ${HAS_X86} == 1
+        !insertmacro un.InstallFiles x86
+        !else
+        MessageBox MB_OK|MB_ICONSTOP "This uninstaller does not contain a 32-bit application payload."
+        Abort
+        !endif
     ${EndIf}
 
     ; Remove the Start Menu and desktop shortcuts

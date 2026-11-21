@@ -188,9 +188,9 @@ public:
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
 
-    // level of the signal which is sent (after the input effects)
-    double GetOutLevelForMeterdBLeft() { return SignalLevelMeterOut.GetLevelForMeterdBLeftOrMono(); }
-    double GetOutLevelForMeterdBRight() { return SignalLevelMeterOut.GetLevelForMeterdBRight(); }
+    // level as recorded from the sound card, before the input effects
+    double GetRawLevelForMeterdBLeft() { return SignalLevelMeterRaw.GetLevelForMeterdBLeftOrMono(); }
+    double GetRawLevelForMeterdBRight() { return SignalLevelMeterRaw.GetLevelForMeterdBRight(); }
 
     bool GetAndResetbJitterBufferOKFlag();
 
@@ -229,12 +229,6 @@ public:
 
     int  GetEffectReverbLevel ( const int iCh ) const { return iFxReverbLevel[iCh]; }
     void SetEffectReverbLevel ( const int iCh, const int iNV ) { iFxReverbLevel[iCh] = iNV; }
-
-    // compression is active on the given channel (taking linking into account)
-    bool IsEffectCompressionOn ( const int iCh ) const { return iFxCompRatioIdx[IsEffectsLinked() ? 0 : iCh] > 0; }
-
-    // current gain reduction of the compressor in dB (positive value)
-    float GetEffectGainReductionDb ( const int iCh ) const { return InputEffects.GetGainReductionDb ( iCh ); }
 
     // local preview: while not connected, run the sound card and play the
     // processed input signal (what would be sent) to the outputs; throws
@@ -451,7 +445,7 @@ protected:
 
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
-    CStereoSignalLevelMeter SignalLevelMeterOut;
+    CStereoSignalLevelMeter SignalLevelMeterRaw; // before the input effects
 
     CVector<uint8_t> vecbyNetwData;
 

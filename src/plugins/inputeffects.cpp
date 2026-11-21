@@ -89,63 +89,29 @@ float CAudioCompressor::Process ( const float fLevel, const float fThresholdDb, 
         fGainReductionDb = fReleaseCoef * fGainReductionDb + ( 1.0f - fReleaseCoef ) * fTargetGrDb;
     }
 
+    // flush to zero: the release decays towards zero and would end up in
+    // denormal numbers, which are very slow on many CPUs (real-time safety)
+    if ( fGainReductionDb > -1e-6f )
+    {
+        fGainReductionDb = 0.0f;
+    }
+
     return fGainReductionDb;
-}
-
-/******************************************************************************\
-* Safety limiter                                                               *
-\******************************************************************************/
-void CSafetyLimiter::Init ( const int iSampleRate )
-{
-    fReleaseCoef = TimeConstToCoef ( FX_LIMITER_RELEASE_S, iSampleRate );
-    Reset();
-}
-
-float CSafetyLimiter::Process ( const float fPeak )
-{
-    const float fTargetGain = ( fPeak > FX_LIMITER_CEILING ) ? FX_LIMITER_CEILING / fPeak : 1.0f;
-
-    if ( fTargetGain < fGain )
-    {
-        // instant attack so that the ceiling is never exceeded
-        fGain = fTargetGain;
-    }
-    else
-    {
-        fGain = fReleaseCoef * fGain + ( 1.0f - fReleaseCoef ) * fTargetGain;
-    }
-
-    return fGain;
 }
 
 /******************************************************************************\
 * Input effects chain                                                          *
 \******************************************************************************/
-CInputEffects::CInputEffects() : eAudioChannelConf ( CC_MONO ), iMonoBlockSizeSam ( 0 ), fGainReductionDecay ( 0 )
-{
-    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
-    {
-        fGainReductionHoldDb[iCh] = 0.0f;
-        fGainReductionDispDb[iCh] = 0.0f;
-    }
-}
+CInputEffects::CInputEffects() : eAudioChannelConf ( CC_MONO ), iMonoBlockSizeSam ( 0 ) {}
 
 void CInputEffects::Init ( const EAudChanConf eNAudioChannelConf, const int iNMonoBlockSizeSam, const int iSampleRate )
 {
     eAudioChannelConf = eNAudioChannelConf;
     iMonoBlockSizeSam = iNMonoBlockSizeSam;
 
-    vecsInputMeterBuf.Init ( 2 * iMonoBlockSizeSam );
-
-    // peak hold decay of the gain reduction display, applied once per block
-    fGainReductionDecay = expf ( -static_cast<float> ( iMonoBlockSizeSam ) / ( FX_GR_DISPLAY_DECAY_S * iSampleRate ) );
-
     for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
     {
         Compressor[iCh].Init ( iSampleRate );
-        Limiter[iCh].Init ( iSampleRate );
-        fGainReductionHoldDb[iCh] = 0.0f;
-        fGainReductionDispDb[iCh] = 0.0f;
     }
 
     // In stereo mode a single reverb processes both channels (as before). In
@@ -162,11 +128,11 @@ void CInputEffects::Init ( const EAudChanConf eNAudioChannelConf, const int iNMo
     }
 }
 
-void CInputEffects::Process ( CVector<int16_t>& vecsStereoInOut, const SInputEffectsParams& Params, CStereoSignalLevelMeter* pInputMeter )
+void CInputEffects::Process ( CVector<int16_t>& vecsStereoInOut, const SInputEffectsParams& Params )
 {
     // In stereo mode the two channels are one source, therefore the settings
-    // are always linked and the compressor and limiter use a common detector so
-    // that the stereo image does not shift.
+    // are always linked and the compressor uses a common detector so that the
+    // stereo image does not shift.
     const bool bStereo               = ( eAudioChannelConf == CC_STEREO );
     const int  iParCh1               = ( bStereo || Params.bLinked ) ? 0 : 1;
     const int  iPar[NUM_FX_CHANNELS] = { 0, iParCh1 };
@@ -174,17 +140,19 @@ void CInputEffects::Process ( CVector<int16_t>& vecsStereoInOut, const SInputEff
     float fBoost[NUM_FX_CHANNELS];
     float fMakeup[NUM_FX_CHANNELS];
     bool  bCompOn[NUM_FX_CHANNELS];
-    float fMaxGrDb[NUM_FX_CHANNELS];
+    bool  bGainOn[NUM_FX_CHANNELS];
 
     for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
     {
         const int iP = iPar[iCh];
 
         // the signal is processed in floating point normalized to full scale
-        fBoost[iCh]   = DbToLin ( Params.fBoostDb[iP] ) / 32768.0f;
-        bCompOn[iCh]  = ( Params.fCompRatio[iP] > 1.0f );
-        fMakeup[iCh]  = bCompOn[iCh] ? DbToLin ( CAudioCompressor::GetAutoMakeupDb ( Params.fCompThresholdDb[iP], Params.fCompRatio[iP] ) ) : 1.0f;
-        fMaxGrDb[iCh] = 0.0f;
+        fBoost[iCh]  = DbToLin ( Params.fBoostDb[iP] ) / 32768.0f;
+        bCompOn[iCh] = ( Params.fCompRatio[iP] > 1.0f );
+        fMakeup[iCh] = bCompOn[iCh] ? DbToLin ( CAudioCompressor::GetAutoMakeupDb ( Params.fCompThresholdDb[iP], Params.fCompRatio[iP] ) ) : 1.0f;
+
+        // without boost and compression the channel is passed through unchanged
+        bGainOn[iCh] = bCompOn[iCh] || ( Params.fBoostDb[iP] > 0.0f );
 
         if ( !bCompOn[iCh] )
         {
@@ -192,16 +160,10 @@ void CInputEffects::Process ( CVector<int16_t>& vecsStereoInOut, const SInputEff
         }
     }
 
-    for ( int i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+    // skip the sample loop if no channel needs gain processing
+    for ( int i = 0, j = 0; ( bGainOn[0] || bGainOn[1] ) && ( i < iMonoBlockSizeSam ); i++, j += 2 )
     {
         float fSig[NUM_FX_CHANNELS] = { fBoost[0] * vecsStereoInOut[j], fBoost[1] * vecsStereoInOut[j + 1] };
-
-        // the input level meter shows the boosted signal before compression
-        if ( pInputMeter != nullptr )
-        {
-            vecsInputMeterBuf[j]     = Float2Short ( fSig[0] * 32768.0f );
-            vecsInputMeterBuf[j + 1] = Float2Short ( fSig[1] * 32768.0f );
-        }
 
         // compressor with automatic makeup gain
         if ( bStereo )
@@ -214,7 +176,6 @@ void CInputEffects::Process ( CVector<int16_t>& vecsStereoInOut, const SInputEff
 
                 fSig[0] *= fGain;
                 fSig[1] *= fGain;
-                fMaxGrDb[0] = std::min ( fMaxGrDb[0], fGrDb );
             }
         }
         else
@@ -227,46 +188,20 @@ void CInputEffects::Process ( CVector<int16_t>& vecsStereoInOut, const SInputEff
                     const float fGrDb = Compressor[iCh].Process ( fabsf ( fSig[iCh] ), Params.fCompThresholdDb[iP], Params.fCompRatio[iP] );
 
                     fSig[iCh] *= DbToLin ( fGrDb ) * fMakeup[iCh];
-                    fMaxGrDb[iCh] = std::min ( fMaxGrDb[iCh], fGrDb );
                 }
             }
         }
 
-        // safety limiter, always active, catches peaks which pass the
-        // compressor during its attack phase or due to a high boost
-        if ( bStereo )
+        // channels without gain processing keep their original samples
+        if ( bGainOn[0] )
         {
-            const float fGain = Limiter[0].Process ( std::max ( fabsf ( fSig[0] ), fabsf ( fSig[1] ) ) );
-
-            fSig[0] *= fGain;
-            fSig[1] *= fGain;
-        }
-        else
-        {
-            fSig[0] *= Limiter[0].Process ( fabsf ( fSig[0] ) );
-            fSig[1] *= Limiter[1].Process ( fabsf ( fSig[1] ) );
+            vecsStereoInOut[j] = Float2Short ( fSig[0] * 32768.0f );
         }
 
-        vecsStereoInOut[j]     = Float2Short ( fSig[0] * 32768.0f );
-        vecsStereoInOut[j + 1] = Float2Short ( fSig[1] * 32768.0f );
-    }
-
-    if ( pInputMeter != nullptr )
-    {
-        pInputMeter->Update ( vecsInputMeterBuf, iMonoBlockSizeSam, true );
-    }
-
-    // gain reduction display with peak hold (in stereo mode both channels
-    // show the common gain reduction)
-    if ( bStereo )
-    {
-        fMaxGrDb[1] = fMaxGrDb[0];
-    }
-
-    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
-    {
-        fGainReductionHoldDb[iCh] = std::max ( -fMaxGrDb[iCh], fGainReductionHoldDb[iCh] * fGainReductionDecay );
-        fGainReductionDispDb[iCh] = bCompOn[iCh] ? fGainReductionHoldDb[iCh] : 0.0f;
+        if ( bGainOn[1] )
+        {
+            vecsStereoInOut[j + 1] = Float2Short ( fSig[1] * 32768.0f );
+        }
     }
 
     // reverberation

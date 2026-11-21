@@ -415,10 +415,10 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         iNewClientFaderLevel = iValue;
     }
 
-    // main window level meter mode
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "metermode", METER_MODE_INPUT, METER_MODE_BOTH, iValue ) )
+    // raw level meter visibility
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "showrawlevelmeter", bValue ) )
     {
-        iMeterMode = iValue;
+        bShowRawLevelMeter = bValue;
     }
 
     if ( GetFlagIniSet ( IniXMLDocument, "client", "enablefeedbackdetection", bValue ) )
@@ -885,7 +885,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // selected Settings Tab
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, SETTING_TAB_EFFECTS, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab", 0, SETTING_TAB_MIDI, iValue ) )
     {
         iSettingsTab = iValue;
     }
@@ -964,8 +964,8 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // new client level
     SetNumericIniSet ( IniXMLDocument, "client", "newclientlevel", iNewClientFaderLevel );
 
-    // main window level meter mode
-    SetNumericIniSet ( IniXMLDocument, "client", "metermode", iMeterMode );
+    // raw level meter visibility
+    SetFlagIniSet ( IniXMLDocument, "client", "showrawlevelmeter", bShowRawLevelMeter );
 
     // feedback detection
     SetFlagIniSet ( IniXMLDocument, "client", "enablefeedbackdetection", bEnableFeedbackDetection );

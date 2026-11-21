@@ -988,6 +988,384 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_2_effects">
+      <attribute name="title">
+       <string>Effects</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="vblFxTab">
+       <item>
+        <layout class="QHBoxLayout" name="hblFxTop">
+         <item>
+          <widget class="QCheckBox" name="chbFxSameLR">
+           <property name="text">
+            <string>Same settings for L and R</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="hspFxTop">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="butFxPreview">
+           <property name="text">
+            <string>Live preview</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="hblFxChannels">
+        <item>
+         <widget class="QGroupBox" name="grbFxChannel0">
+          <property name="title">
+           <string>Both channels</string>
+          </property>
+          <layout class="QGridLayout" name="grdFxChannel0">
+         <item row="0" column="0" colspan="3">
+          <widget class="QLabel" name="lblFxSectionBoost0">
+           <property name="text">
+            <string>&lt;b&gt;Input Boost&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="lblFxBoost0">
+           <property name="text">
+            <string>Level</string>
+           </property>
+           <property name="buddy">
+            <cstring>sldFxBoost0</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSlider" name="sldFxBoost0">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="pageStep">
+            <number>1</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="lblFxBoostValue0">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>0 dB</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="3">
+          <widget class="QLabel" name="lblFxSectionDynamics0">
+           <property name="text">
+            <string>&lt;b&gt;Dynamic Range&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="lblFxCompression0">
+           <property name="text">
+            <string>Compression</string>
+           </property>
+           <property name="buddy">
+            <cstring>cbxFxCompression0</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1" colspan="2">
+          <widget class="QComboBox" name="cbxFxCompression0"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="lblFxThreshold0">
+           <property name="text">
+            <string>Threshold</string>
+           </property>
+           <property name="buddy">
+            <cstring>sldFxThreshold0</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QSlider" name="sldFxThreshold0">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="pageStep">
+            <number>1</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="lblFxThresholdValue0">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>-20 dB</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0" colspan="3">
+          <widget class="QLabel" name="lblFxSectionReverb0">
+           <property name="text">
+            <string>&lt;b&gt;Reverb&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="lblFxReverb0">
+           <property name="text">
+            <string>Level</string>
+           </property>
+           <property name="buddy">
+            <cstring>sldFxReverb0</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QSlider" name="sldFxReverb0">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="pageStep">
+            <number>1</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="2">
+          <widget class="QLabel" name="lblFxReverbValue0">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>0 %</string>
+           </property>
+          </widget>
+         </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="grbFxChannel1">
+          <property name="title">
+           <string>Right</string>
+          </property>
+          <layout class="QGridLayout" name="grdFxChannel1">
+         <item row="0" column="0" colspan="3">
+          <widget class="QLabel" name="lblFxSectionBoost1">
+           <property name="text">
+            <string>&lt;b&gt;Input Boost&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="lblFxBoost1">
+           <property name="text">
+            <string>Level</string>
+           </property>
+           <property name="buddy">
+            <cstring>sldFxBoost1</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSlider" name="sldFxBoost1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="pageStep">
+            <number>1</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="lblFxBoostValue1">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>0 dB</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="3">
+          <widget class="QLabel" name="lblFxSectionDynamics1">
+           <property name="text">
+            <string>&lt;b&gt;Dynamic Range&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="lblFxCompression1">
+           <property name="text">
+            <string>Compression</string>
+           </property>
+           <property name="buddy">
+            <cstring>cbxFxCompression1</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1" colspan="2">
+          <widget class="QComboBox" name="cbxFxCompression1"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="lblFxThreshold1">
+           <property name="text">
+            <string>Threshold</string>
+           </property>
+           <property name="buddy">
+            <cstring>sldFxThreshold1</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QSlider" name="sldFxThreshold1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="pageStep">
+            <number>1</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="lblFxThresholdValue1">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>-20 dB</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0" colspan="3">
+          <widget class="QLabel" name="lblFxSectionReverb1">
+           <property name="text">
+            <string>&lt;b&gt;Reverb&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="lblFxReverb1">
+           <property name="text">
+            <string>Level</string>
+           </property>
+           <property name="buddy">
+            <cstring>sldFxReverb1</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QSlider" name="sldFxReverb1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="pageStep">
+            <number>1</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="2">
+          <widget class="QLabel" name="lblFxReverbValue1">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>0 %</string>
+           </property>
+          </widget>
+         </item>
+          </layout>
+         </widget>
+        </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="vspFxTab">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tab_2_advanced">
       <attribute name="title">
        <string>Advanced Setup</string>
@@ -2217,455 +2595,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4_effects">
-      <attribute name="title">
-       <string>Effects</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="vblFxTab">
-       <item>
-        <widget class="QCheckBox" name="chbFxPreview">
-         <property name="text">
-          <string>Preview: hear myself with effects (use headphones)</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblFxPreviewHint">
-         <property name="text">
-          <string>Only available while not connected.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="lineFxPreview">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="chbFxSeparate">
-         <property name="text">
-          <string>Separate settings for left and right channel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblFxSeparateHint">
-         <property name="text">
-          <string>Both input channels use the same settings.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="hblFxChannels">
-        <item>
-         <widget class="QGroupBox" name="grbFxChannel0">
-          <property name="title">
-           <string>Both channels</string>
-          </property>
-          <layout class="QGridLayout" name="grdFxChannel0">
-         <item row="0" column="0" colspan="3">
-          <widget class="QLabel" name="lblFxSectionLevel0">
-           <property name="text">
-            <string>&lt;b&gt;Level &amp;amp; Compression&lt;/b&gt;</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lblFxBoost0">
-           <property name="text">
-            <string>Boost</string>
-           </property>
-           <property name="buddy">
-            <cstring>sldFxBoost0</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSlider" name="sldFxBoost0">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="pageStep">
-            <number>1</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="lblFxBoostValue0">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>0 dB</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="lblFxCompression0">
-           <property name="text">
-            <string>Compression</string>
-           </property>
-           <property name="buddy">
-            <cstring>cbxFxCompression0</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1" colspan="2">
-          <widget class="QComboBox" name="cbxFxCompression0"/>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="lblFxThreshold0">
-           <property name="text">
-            <string>Threshold</string>
-           </property>
-           <property name="buddy">
-            <cstring>sldFxThreshold0</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSlider" name="sldFxThreshold0">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="pageStep">
-            <number>1</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="2">
-          <widget class="QLabel" name="lblFxThresholdValue0">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>-20 dB</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="lblFxEffComp0">
-           <property name="text">
-            <string>Effective compression</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QProgressBar" name="pgbFxEffComp0">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>12</height>
-            </size>
-           </property>
-           <property name="maximum">
-            <number>120</number>
-           </property>
-           <property name="value">
-            <number>0</number>
-           </property>
-           <property name="textVisible">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="2">
-          <widget class="QLabel" name="lblFxEffCompValue0">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>0 dB</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0" colspan="3">
-          <widget class="QLabel" name="lblFxSectionReverb0">
-           <property name="text">
-            <string>&lt;b&gt;Reverb&lt;/b&gt;</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="lblFxReverb0">
-           <property name="text">
-            <string>Level</string>
-           </property>
-           <property name="buddy">
-            <cstring>sldFxReverb0</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QSlider" name="sldFxReverb0">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="pageStep">
-            <number>1</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="2">
-          <widget class="QLabel" name="lblFxReverbValue0">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>0 %</string>
-           </property>
-          </widget>
-         </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="grbFxChannel1">
-          <property name="title">
-           <string>Right</string>
-          </property>
-          <layout class="QGridLayout" name="grdFxChannel1">
-         <item row="0" column="0" colspan="3">
-          <widget class="QLabel" name="lblFxSectionLevel1">
-           <property name="text">
-            <string>&lt;b&gt;Level &amp;amp; Compression&lt;/b&gt;</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lblFxBoost1">
-           <property name="text">
-            <string>Boost</string>
-           </property>
-           <property name="buddy">
-            <cstring>sldFxBoost1</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSlider" name="sldFxBoost1">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="pageStep">
-            <number>1</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="lblFxBoostValue1">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>0 dB</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="lblFxCompression1">
-           <property name="text">
-            <string>Compression</string>
-           </property>
-           <property name="buddy">
-            <cstring>cbxFxCompression1</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1" colspan="2">
-          <widget class="QComboBox" name="cbxFxCompression1"/>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="lblFxThreshold1">
-           <property name="text">
-            <string>Threshold</string>
-           </property>
-           <property name="buddy">
-            <cstring>sldFxThreshold1</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSlider" name="sldFxThreshold1">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="pageStep">
-            <number>1</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="2">
-          <widget class="QLabel" name="lblFxThresholdValue1">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>-20 dB</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="lblFxEffComp1">
-           <property name="text">
-            <string>Effective compression</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QProgressBar" name="pgbFxEffComp1">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>12</height>
-            </size>
-           </property>
-           <property name="maximum">
-            <number>120</number>
-           </property>
-           <property name="value">
-            <number>0</number>
-           </property>
-           <property name="textVisible">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="2">
-          <widget class="QLabel" name="lblFxEffCompValue1">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>0 dB</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0" colspan="3">
-          <widget class="QLabel" name="lblFxSectionReverb1">
-           <property name="text">
-            <string>&lt;b&gt;Reverb&lt;/b&gt;</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="lblFxReverb1">
-           <property name="text">
-            <string>Level</string>
-           </property>
-           <property name="buddy">
-            <cstring>sldFxReverb1</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QSlider" name="sldFxReverb1">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="pageStep">
-            <number>1</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="2">
-          <widget class="QLabel" name="lblFxReverbValue1">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>0 %</string>
-           </property>
-          </widget>
-         </item>
-          </layout>
-         </widget>
-        </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="vspFxTab">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>
@@ -2732,8 +2661,8 @@
   <tabstop>spnMuteOffset</tabstop>
   <tabstop>butLearnMuteOffset</tabstop>
   <tabstop>spnMuteCount</tabstop>
-  <tabstop>chbFxPreview</tabstop>
-  <tabstop>chbFxSeparate</tabstop>
+  <tabstop>chbFxSameLR</tabstop>
+  <tabstop>butFxPreview</tabstop>
   <tabstop>sldFxBoost0</tabstop>
   <tabstop>cbxFxCompression0</tabstop>
   <tabstop>sldFxThreshold0</tabstop>

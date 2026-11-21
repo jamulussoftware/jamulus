@@ -72,9 +72,6 @@
 // update time for GUI controls
 #define DISPLAY_UPDATE_TIME 1000 // ms
 
-// update time for the effective compression display
-#define EFFECTS_DISPLAY_UPDATE_TIME 100 // ms
-
 /* Classes ********************************************************************/
 class CClientSettingsDlg : public CBaseDlg, private Ui_CClientSettingsDlgBase
 {
@@ -96,6 +93,7 @@ protected:
     void    UpdateAudioFaderSlider();
     void    UpdateEffectsTab();
     void    UpdateEffectsValueLabels ( const int iCh );
+    void    UpdatePreviewButton();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
     virtual void showEvent ( QShowEvent* ) override;
@@ -105,24 +103,19 @@ protected:
     CClient*         pClient;
     CClientSettings* pSettings;
     QTimer           TimerStatus;
-    QTimer           TimerEffects;
     QButtonGroup     SndCrdBufferDelayButtonGroup;
 
     // effects tab widgets per input channel (channel 0 is also used for the
     // linked settings)
-    QGroupBox*    grbFxChannel[NUM_FX_CHANNELS];
-    QSlider*      sldFxBoost[NUM_FX_CHANNELS];
-    QLabel*       lblFxBoostValue[NUM_FX_CHANNELS];
-    QComboBox*    cbxFxCompression[NUM_FX_CHANNELS];
-    QLabel*       lblFxThreshold[NUM_FX_CHANNELS];
-    QSlider*      sldFxThreshold[NUM_FX_CHANNELS];
-    QLabel*       lblFxThresholdValue[NUM_FX_CHANNELS];
-    QLabel*       lblFxEffComp[NUM_FX_CHANNELS];
-    QProgressBar* pgbFxEffComp[NUM_FX_CHANNELS];
-    QLabel*       lblFxEffCompValue[NUM_FX_CHANNELS];
-    QSlider*      sldFxReverb[NUM_FX_CHANNELS];
-    QLabel*       lblFxReverbValue[NUM_FX_CHANNELS];
-    bool          bFxStrongStyle[NUM_FX_CHANNELS];
+    QGroupBox* grbFxChannel[NUM_FX_CHANNELS];
+    QSlider*   sldFxBoost[NUM_FX_CHANNELS];
+    QLabel*    lblFxBoostValue[NUM_FX_CHANNELS];
+    QComboBox* cbxFxCompression[NUM_FX_CHANNELS];
+    QLabel*    lblFxThreshold[NUM_FX_CHANNELS];
+    QSlider*   sldFxThreshold[NUM_FX_CHANNELS];
+    QLabel*    lblFxThresholdValue[NUM_FX_CHANNELS];
+    QSlider*   sldFxReverb[NUM_FX_CHANNELS];
+    QLabel*    lblFxReverbValue[NUM_FX_CHANNELS];
 
 public slots:
     void OnTimerStatus() { UpdateDisplay(); }
@@ -136,12 +129,11 @@ public slots:
     void OnFxPreviewToggled ( bool bChecked );
     void OnLocalPreviewChanged ( bool bActive );
     void OnConnectionStateChanged ( EConnectionState eConnectionState );
-    void OnFxSeparateStateChanged ( int value );
+    void OnFxSameLRStateChanged ( int value );
     void OnFxBoostValueChanged ( const int iCh, const int value );
     void OnFxCompressionActivated ( const int iCh, const int iIdx );
     void OnFxThresholdValueChanged ( const int iCh, const int value );
     void OnFxReverbValueChanged ( const int iCh, const int value );
-    void OnTimerEffects();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );
@@ -174,7 +166,6 @@ signals:
     void MeterStyleChanged();
     void AudioAlertsChanged();
     void AudioChannelsChanged();
-    void EffectsChanged();
     void CustomDirectoriesChanged();
     void NumMixerPanelRowsChanged ( int value );
     void MIDIControllerUsageChanged ( bool bEnabled );

@@ -26,8 +26,7 @@
 
 /*
     Local input effects chain, applied per input channel (L/R) before the
-    pan/mono mix: boost -> compressor (with automatic makeup gain) ->
-    safety limiter -> reverb.
+    pan/mono mix: boost -> compressor (with automatic makeup gain) -> reverb.
 
     The compressor follows the feed-forward design described in
     D. Giannoulis, M. Massberg, J. D. Reiss, "Digital Dynamic Range Compressor
@@ -39,7 +38,6 @@
 
 #pragma once
 
-#include <atomic>
 #include "util.h"
 #include "audioreverb.h"
 
@@ -55,12 +53,9 @@
 #define FX_COMP_THRESHOLD_DB_DEFAULT ( -20 )
 
 // fixed (not configurable) dynamics parameters
-#define FX_COMP_ATTACK_S      0.005f
-#define FX_COMP_RELEASE_S     0.1f
-#define FX_COMP_KNEE_DB       6.0f
-#define FX_LIMITER_CEILING    0.966f // -0.3 dBFS
-#define FX_LIMITER_RELEASE_S  0.05f
-#define FX_GR_DISPLAY_DECAY_S 0.3f
+#define FX_COMP_ATTACK_S  0.005f
+#define FX_COMP_RELEASE_S 0.1f
+#define FX_COMP_KNEE_DB   6.0f
 
 /* Classes ********************************************************************/
 // parameters for one processing block, prepared by the caller from the
@@ -95,22 +90,6 @@ protected:
     float fGainReductionDb;
 };
 
-class CSafetyLimiter
-{
-public:
-    CSafetyLimiter() : fReleaseCoef ( 0 ), fGain ( 1 ) {}
-
-    void Init ( const int iSampleRate );
-    void Reset() { fGain = 1; }
-
-    // takes the peak level (linear, full scale = 1) and returns the gain to apply
-    float Process ( const float fPeak );
-
-protected:
-    float fReleaseCoef;
-    float fGain;
-};
-
 class CInputEffects
 {
 public:
@@ -119,23 +98,12 @@ public:
     // must not be called while Process() may run (allocates memory)
     void Init ( const EAudChanConf eNAudioChannelConf, const int iNMonoBlockSizeSam, const int iSampleRate );
 
-    // in-place processing of an interleaved stereo block; if pInputMeter is
-    // not null, it is updated with the boosted signal before compression
-    void Process ( CVector<int16_t>& vecsStereoInOut, const SInputEffectsParams& Params, CStereoSignalLevelMeter* pInputMeter );
-
-    // current gain reduction for display purpose in dB (positive value),
-    // safe to be called from any thread
-    float GetGainReductionDb ( const int iCh ) const { return fGainReductionDispDb[iCh].load(); }
+    // in-place processing of an interleaved stereo block
+    void Process ( CVector<int16_t>& vecsStereoInOut, const SInputEffectsParams& Params );
 
 protected:
     EAudChanConf     eAudioChannelConf;
     int              iMonoBlockSizeSam;
     CAudioCompressor Compressor[NUM_FX_CHANNELS];
-    CSafetyLimiter   Limiter[NUM_FX_CHANNELS];
     CAudioReverb     Reverb[NUM_FX_CHANNELS];
-    CVector<int16_t> vecsInputMeterBuf;
-    float            fGainReductionHoldDb[NUM_FX_CHANNELS];
-    float            fGainReductionDecay;
-
-    std::atomic<float> fGainReductionDispDb[NUM_FX_CHANNELS];
 };

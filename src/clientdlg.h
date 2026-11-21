@@ -114,8 +114,7 @@ protected:
     void ShowChatWindow ( const bool bForceRaise = true );
     void ShowAnalyzerConsole();
     void UpdateAudioFaderSlider();
-    void UpdateCompressionLeds();
-    void UpdateMeterMode();
+    void UpdateRawLevelMeterVisibility();
     void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
     void SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
@@ -128,7 +127,6 @@ protected:
     bool           bDetectFeedback;
     ERecorderState eLastRecorderState;
     EGUIDesign     eLastDesign;
-    int            iCompLedState[NUM_FX_CHANNELS];
     QTimer         TimerSigMet;
     QTimer         TimerBuffersLED;
     QTimer         TimerStatus;
@@ -204,11 +202,10 @@ public slots:
     void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
 
-    void OnMeterModeClicked();
     void OnLocalPreviewChanged ( bool bActive );
     void SetLevelMetersActive ( const bool bActive );
 
-    void UpdateEffectsDisplay();
+    void UpdatePanDisplay();
 
     void OnFeedbackDetectionChanged ( int state ) { ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked ); }
 
@@ -260,7 +257,7 @@ public slots:
     void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
-    void OnAudioChannelsChanged() { UpdateEffectsDisplay(); }
+    void OnAudioChannelsChanged() { UpdatePanDisplay(); }
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones

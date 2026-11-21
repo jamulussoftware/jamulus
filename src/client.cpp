@@ -1095,7 +1095,7 @@ void CClient::SetLocalPreview ( const bool bOn )
     }
 
     SignalLevelMeter.Reset();
-    SignalLevelMeterOut.Reset();
+    SignalLevelMeterRaw.Reset();
 
     emit LocalPreviewChanged ( bLocalPreview );
 }
@@ -1182,7 +1182,7 @@ void CClient::Stop()
     // reset current signal level and LEDs
     bJitterBufferOK = true;
     SignalLevelMeter.Reset();
-    SignalLevelMeterOut.Reset();
+    SignalLevelMeterRaw.Reset();
 
 #if defined( Q_OS_WINDOWS )
     // Allow hibernation or display dimming if the app is running again (Windows)
@@ -1592,9 +1592,14 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     // Transmit signal ---------------------------------------------------------
 
+    // update the raw level meter: the signal as recorded from the sound card,
+    // before the input effects (not needed in headless mode)
+#ifndef HEADLESS
+    SignalLevelMeterRaw.Update ( vecsStereoSndCrd, iMonoBlockSizeSam, true );
+#endif
+
     // apply the input effects per input channel: boost, compression and
-    // reverberation (the input level meter is updated inside with the boosted
-    // signal before compression, it is not needed in headless mode)
+    // reverberation
     SInputEffectsParams FxParams;
 
     FxParams.bLinked = IsEffectsLinked();
@@ -1609,14 +1614,12 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         FxParams.fReverbAttenuation[i] = static_cast<float> ( iFxReverbLevel[i] ) / AUD_REVERB_MAX / 4;
     }
 
-#ifdef HEADLESS
-    InputEffects.Process ( vecsStereoSndCrd, FxParams, nullptr );
-#else
-    InputEffects.Process ( vecsStereoSndCrd, FxParams, &SignalLevelMeter );
+    InputEffects.Process ( vecsStereoSndCrd, FxParams );
 
-    // the output level meter shows what is sent (silence if muted, but the
-    // local preview is always heard)
-    SignalLevelMeterOut.Update ( ( bMuteOutStream && !bLocalPreview ) ? vecZeros : vecsStereoSndCrd, iMonoBlockSizeSam, true );
+    // update stereo signal level meter (not needed in headless mode); this is
+    // after the input effects, i.e. the signal which is sent (also shown while muted)
+#ifndef HEADLESS
+    SignalLevelMeter.Update ( vecsStereoSndCrd, iMonoBlockSizeSam, true );
 #endif
 
     // apply pan (audio fader) and mix mono signals

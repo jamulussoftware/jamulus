@@ -170,7 +170,7 @@ public:
         vecStoredFaderGroupID ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
         vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel ( 100 ),
-        iMeterMode ( METER_MODE_INPUT ),
+        bShowRawLevelMeter ( false ),
         iSettingsTab ( SETTING_TAB_AUDIONET ),
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType ( ST_NO_SORT ),
@@ -242,7 +242,7 @@ public:
     CVector<int>     vecStoredFaderGroupID;
     CVector<QString> vstrIPAddress;
     int              iNewClientFaderLevel;
-    int              iMeterMode;
+    bool             bShowRawLevelMeter; // show the raw level meter next to the regular one
     int              iSettingsTab;
     bool             bConnectDlgShowAllMusicians;
     EChSortType      eChannelSortType;

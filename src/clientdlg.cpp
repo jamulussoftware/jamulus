@@ -68,12 +68,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 {
     setupUi ( this );
 
-    // compressor LEDs have no style yet
-    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
-    {
-        iCompLedState[iCh] = -1;
-    }
-
     // Add help text to controls -----------------------------------------------
     // input level meter
     QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " +
@@ -102,7 +96,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QString strInpLevHAccText  = tr ( "Input level meter" );
     QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );
 
-    lblMeterCaptionIn->setWhatsThis ( strInpLevH );
+    lblInputLEDMeter->setWhatsThis ( strInpLevH );
     lblLevelMeterLeft->setWhatsThis ( strInpLevH );
     lblLevelMeterRight->setWhatsThis ( strInpLevH );
     lbrInputLevelL->setWhatsThis ( strInpLevH );
@@ -123,44 +117,34 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     butConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
 
-    // output level meter (what is sent to the server)
-    QString strOutLevH = "<b>" + tr ( "Output Level Meter" ) + ":</b> " +
-                         tr ( "Shows the level of the signal which is sent to the server, i.e. "
-                              "after boost, compression and reverb. If Mute Myself is active, "
-                              "nothing is sent and the meter stays dark." );
+    // raw level meter (optional): the signal as recorded from the sound card,
+    // before the input effects; tool tips are marked as rich text with <qt>
+    // so that Qt wraps long lines
+    const QString strRawLevTT = tr ( "Level as recorded from your sound card, before boost, compression and reverb. "
+                                     "Use it to set the input gain of your audio interface." );
+    const QString strRawLevH  = "<b>" + tr ( "Raw Signal Level Meter" ) + ":</b> " + strRawLevTT;
 
-    lblMeterCaptionOut->setWhatsThis ( strOutLevH );
-    lblOutLevelMeterLeft->setWhatsThis ( strOutLevH );
-    lblOutLevelMeterRight->setWhatsThis ( strOutLevH );
-    lbrOutputLevelL->setWhatsThis ( strOutLevH );
-    lbrOutputLevelL->setAccessibleName ( tr ( "Output level meter" ) );
-    lbrOutputLevelL->setEnabled ( false );
-    lbrOutputLevelR->setWhatsThis ( strOutLevH );
-    lbrOutputLevelR->setAccessibleName ( tr ( "Output level meter" ) );
-    lbrOutputLevelR->setEnabled ( false );
+    lblRawLEDMeter->setWhatsThis ( strRawLevH );
 
-    // meter mode button
-    butMeterMode->setWhatsThis ( "<b>" + tr ( "Level Meter Mode" ) + ":</b> " +
-                                 tr ( "Switches the level meters between the input signal (after boost, "
-                                      "before compression), the output signal (what is sent) and both." ) );
-    butMeterMode->setAccessibleName ( tr ( "Level meter mode button" ) );
+    // small gap between the meter captions and the meters
+    lblRawLEDMeter->setContentsMargins ( 0, 0, 0, 4 );
+    lblInputLEDMeter->setContentsMargins ( 0, 0, 0, 4 );
+    lblRawLevelMeterLeft->setWhatsThis ( strRawLevH );
+    lblRawLevelMeterRight->setWhatsThis ( strRawLevH );
+    lbrRawLevelL->setWhatsThis ( strRawLevH );
+    lbrRawLevelL->setToolTip ( "<qt>" + strRawLevTT + "</qt>" );
+    lbrRawLevelL->setAccessibleName ( tr ( "Raw signal level meter" ) );
+    lbrRawLevelL->setEnabled ( false );
+    lbrRawLevelR->setWhatsThis ( strRawLevH );
+    lbrRawLevelR->setToolTip ( "<qt>" + strRawLevTT + "</qt>" );
+    lbrRawLevelR->setAccessibleName ( tr ( "Raw signal level meter" ) );
+    lbrRawLevelR->setEnabled ( false );
 
-    // compressor activity LEDs
-    QString strCompLeds = "<b>" + tr ( "Compression" ) + ":</b> " +
-                          tr ( "Shows the activity of the compressor per input channel: grey means "
-                               "no compression, light green light compression and dark green hard "
-                               "compression. Only shown if compression is enabled in the effects settings." );
-
-    lblCompLeds->setWhatsThis ( strCompLeds );
-    lblCompLedL->setWhatsThis ( strCompLeds );
-    lblCompLedR->setWhatsThis ( strCompLeds );
-
-    // effects button
-    butEffects->setText ( tr ( "Effects" ) + QString::fromUtf8 ( "…" ) );
-    butEffects->setWhatsThis ( "<b>" + tr ( "Effects" ) + ":</b> " +
-                               tr ( "Opens the effects settings: boost, compression and reverb for "
-                                    "your input channels." ) );
-    butEffects->setAccessibleName ( tr ( "Effects settings button" ) );
+    // show raw signal check box: toggles the raw level meter next to the regular one
+    const QString strShowRawTT = tr ( "Also show the level as recorded from your sound card, before boost, compression and reverb." );
+    chbShowRawLevelMeter->setWhatsThis ( "<b>" + tr ( "Show Raw" ) + ":</b> " + strShowRawTT );
+    chbShowRawLevelMeter->setToolTip ( "<qt>" + strShowRawTT + "</qt>" );
+    chbShowRawLevelMeter->setAccessibleName ( tr ( "Show raw signal check box" ) );
 
     // delay LED
     QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " + tr ( "Shows the current audio delay status:" ) +
@@ -268,19 +252,20 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // init connection button text
     butConnect->setText ( tr ( "C&onnect" ) );
 
-    // init input and output level meter bars
+    // init input level meter bars
     lbrInputLevelL->SetValue ( 0 );
     lbrInputLevelR->SetValue ( 0 );
-    lbrOutputLevelL->SetValue ( 0 );
-    lbrOutputLevelR->SetValue ( 0 );
+    lbrRawLevelL->SetValue ( 0 );
+    lbrRawLevelR->SetValue ( 0 );
 
     // init status LEDs
     ledBuffers->Reset();
     ledDelay->Reset();
 
-    // init level meter mode, compressor LEDs and pan display
-    UpdateMeterMode();
-    UpdateEffectsDisplay();
+    // init raw level meter visibility and pan display
+    chbShowRawLevelMeter->setChecked ( pSettings->bShowRawLevelMeter );
+    UpdateRawLevelMeterVisibility();
+    UpdatePanDisplay();
 
     // init connect dialog
     ConnectDlg.SetShowAllMusicians ( pSettings->bConnectDlgShowAllMusicians );
@@ -422,6 +407,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pSettingsMenu->addAction ( tr ( "Audio/Network &Settings..." ), this, SLOT ( OnOpenAudioNetSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_S ) );
 
+    pSettingsMenu->addAction (
+        tr ( "&Effects Settings..." ),
+        this,
+        [this] { ShowGeneralSettings ( SETTING_TAB_EFFECTS ); },
+        QKeySequence ( Qt::CTRL | Qt::SHIFT | Qt::Key_E ) );
+
     pSettingsMenu->addAction ( tr ( "A&dvanced Settings..." ), this, SLOT ( OnOpenAdvancedSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_D ) );
 
     pSettingsMenu->addAction (
@@ -429,12 +420,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         this,
         [this] { ShowGeneralSettings ( SETTING_TAB_MIDI ); },
         QKeySequence ( Qt::CTRL + Qt::Key_M ) );
-
-    pSettingsMenu->addAction (
-        tr ( "&Effects Settings..." ),
-        this,
-        [this] { ShowGeneralSettings ( SETTING_TAB_EFFECTS ); },
-        QKeySequence ( Qt::CTRL + Qt::Key_E ) );
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
@@ -507,10 +492,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerDetectFeedback, &QTimer::timeout, this, &CClientDlg::OnTimerDetectFeedback );
 
-    // level meter mode and effects buttons
-    QObject::connect ( butMeterMode, &QPushButton::clicked, this, &CClientDlg::OnMeterModeClicked );
-
-    QObject::connect ( butEffects, &QPushButton::clicked, this, [this] { ShowGeneralSettings ( SETTING_TAB_EFFECTS ); } );
+    QObject::connect ( chbShowRawLevelMeter, &QCheckBox::stateChanged, this, [this] ( int value ) {
+        pSettings->bShowRawLevelMeter = ( value == Qt::Checked );
+        UpdateRawLevelMeterVisibility();
+    } );
 
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
@@ -568,8 +553,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::MeterStyleChanged, this, &CClientDlg::OnMeterStyleChanged );
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::AudioChannelsChanged, this, &CClientDlg::OnAudioChannelsChanged );
-
-    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::EffectsChanged, this, &CClientDlg::UpdateEffectsDisplay );
 
     QObject::connect ( pClient, &CClient::LocalPreviewChanged, this, &CClientDlg::OnLocalPreviewChanged );
 
@@ -704,105 +687,28 @@ void CClientDlg::ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept )
     }
 }
 
-void CClientDlg::UpdateEffectsDisplay()
+void CClientDlg::UpdatePanDisplay()
 {
-    // the compressor LEDs are only shown for channels with compression enabled
-    const bool bCompL = pClient->IsEffectCompressionOn ( 0 );
-    const bool bCompR = pClient->IsEffectCompressionOn ( 1 );
-
-    lblCompLeds->setVisible ( bCompL || bCompR );
-    lblCompLedL->setVisible ( bCompL );
-    lblCompLedR->setVisible ( bCompR );
-
-    UpdateCompressionLeds();
-
     // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
 }
 
-void CClientDlg::UpdateCompressionLeds()
+void CClientDlg::UpdateRawLevelMeterVisibility()
 {
-    QLabel* pLeds[NUM_FX_CHANNELS] = { lblCompLedL, lblCompLedR };
+    // the raw level meter is optional, the regular one is always shown
+    const bool bShow = pSettings->bShowRawLevelMeter;
 
-    for ( int iCh = 0; iCh < NUM_FX_CHANNELS; iCh++ )
-    {
-        if ( pLeds[iCh]->isHidden() )
-        {
-            continue;
-        }
-
-        // only meaningful while the audio is running (i.e. connected)
-        const float fGrDb = TimerSigMet.isActive() ? pClient->GetEffectGainReductionDb ( iCh ) : 0.0f;
-
-        int iState = 0; // not compressing
-
-        if ( fGrDb > FX_GR_STRONG_DB )
-        {
-            iState = 2;
-        }
-        else if ( fGrDb > FX_GR_ACTIVE_DB )
-        {
-            iState = 1;
-        }
-
-        // only touch the style sheet if the state changes
-        if ( iState != iCompLedState[iCh] )
-        {
-            const char* strColors[3] = { FX_COLOR_INACTIVE, FX_COLOR_LIGHT_COMP, FX_COLOR_STRONG_COMP };
-
-            iCompLedState[iCh] = iState;
-            pLeds[iCh]->setStyleSheet (
-                QString ( "background-color: %1; border: 1px solid #202020; border-radius: 6px;" ).arg ( strColors[iState] ) );
-        }
-    }
-}
-
-void CClientDlg::UpdateMeterMode()
-{
-    const int iMode = pSettings->iMeterMode;
-
-    const bool bShowIn   = ( iMode != METER_MODE_OUTPUT );
-    const bool bShowOut  = ( iMode != METER_MODE_INPUT );
-    const bool bShowBoth = ( iMode == METER_MODE_BOTH );
-
-    lbrInputLevelL->setVisible ( bShowIn );
-    lbrInputLevelR->setVisible ( bShowIn );
-    lblLevelMeterLeft->setVisible ( bShowIn );
-    lblLevelMeterRight->setVisible ( bShowIn );
-    lbrOutputLevelL->setVisible ( bShowOut );
-    lbrOutputLevelR->setVisible ( bShowOut );
-    lblOutLevelMeterLeft->setVisible ( bShowOut );
-    lblOutLevelMeterRight->setVisible ( bShowOut );
-
-    // the In/Out captions and the separator are only needed if both are shown
-    lblMeterCaptionIn->setVisible ( bShowBoth );
-    lblMeterCaptionOut->setVisible ( bShowBoth );
-    lineMeterInOut->setVisible ( bShowBoth );
-
-    QString strMode;
-
-    switch ( iMode )
-    {
-    case METER_MODE_OUTPUT:
-        strMode = tr ( "Output" );
-        break;
-
-    case METER_MODE_BOTH:
-        strMode = tr ( "In + Out" );
-        break;
-
-    default:
-        strMode = tr ( "Input" );
-        break;
-    }
-
-    // the arrow indicates that clicking cycles through the modes
-    butMeterMode->setText ( strMode + QString::fromUtf8 ( " ↻" ) );
+    lblRawLEDMeter->setVisible ( bShow );
+    lbrRawLevelL->setVisible ( bShow );
+    lbrRawLevelR->setVisible ( bShow );
+    lblRawLevelMeterLeft->setVisible ( bShow );
+    lblRawLevelMeterRight->setVisible ( bShow );
+    lineRawLevelMeter->setVisible ( bShow );
 }
 
 void CClientDlg::SetLevelMetersActive ( const bool bActive )
 {
-    CLevelMeter* pMeters[4] = { lbrInputLevelL, lbrInputLevelR, lbrOutputLevelL, lbrOutputLevelR };
+    CLevelMeter* pMeters[4] = { lbrInputLevelL, lbrInputLevelR, lbrRawLevelL, lbrRawLevelR };
 
     for ( CLevelMeter* pMeter : pMeters )
     {
@@ -822,8 +728,6 @@ void CClientDlg::SetLevelMetersActive ( const bool bActive )
     {
         TimerSigMet.stop();
     }
-
-    UpdateCompressionLeds();
 }
 
 void CClientDlg::OnLocalPreviewChanged ( bool bActive )
@@ -834,13 +738,6 @@ void CClientDlg::OnLocalPreviewChanged ( bool bActive )
     {
         SetLevelMetersActive ( bActive );
     }
-}
-
-void CClientDlg::OnMeterModeClicked()
-{
-    // cycle input -> output -> both
-    pSettings->iMeterMode = ( pSettings->iMeterMode + 1 ) % ( METER_MODE_BOTH + 1 );
-    UpdateMeterMode();
 }
 
 void CClientDlg::OnConnectDlgAccepted()
@@ -1213,11 +1110,8 @@ void CClientDlg::OnTimerSigMet()
     // show current level
     lbrInputLevelL->SetValue ( pClient->GetLevelForMeterdBLeft() );
     lbrInputLevelR->SetValue ( pClient->GetLevelForMeterdBRight() );
-    lbrOutputLevelL->SetValue ( pClient->GetOutLevelForMeterdBLeft() );
-    lbrOutputLevelR->SetValue ( pClient->GetOutLevelForMeterdBRight() );
-
-    // show compressor activity
-    UpdateCompressionLeds();
+    lbrRawLevelL->SetValue ( pClient->GetRawLevelForMeterdBLeft() );
+    lbrRawLevelR->SetValue ( pClient->GetRawLevelForMeterdBRight() );
 
     if ( bDetectFeedback &&
          ( pClient->GetLevelForMeterdBLeft() > NUM_STEPS_LED_BAR - 0.5 || pClient->GetLevelForMeterdBRight() > NUM_STEPS_LED_BAR - 0.5 ) )
@@ -1516,24 +1410,24 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
     case MT_LED_STRIPE:
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
-        lbrOutputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
-        lbrOutputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
+        lbrRawLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
+        lbrRawLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
         break;
 
     case MT_LED_ROUND_BIG:
     case MT_LED_ROUND_SMALL:
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        lbrOutputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
-        lbrOutputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+        lbrRawLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+        lbrRawLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
 
     case MT_BAR_WIDE:
     case MT_BAR_NARROW:
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        lbrOutputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
-        lbrOutputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+        lbrRawLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+        lbrRawLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         break;
     }
 

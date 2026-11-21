@@ -56,6 +56,7 @@
 
 
 ; Compile-time definitions
+; CodeRabbit review: limit install/uninstall sections to payloads actually built.
 !ifndef HAS_X86_64
     !define HAS_X86_64 1
 !endif

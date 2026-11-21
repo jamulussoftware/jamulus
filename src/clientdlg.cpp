@@ -116,7 +116,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                                     "If you are connected, pressing this button will end the session." ) );
 
     butConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
-
+#ifndef NO_REVERB
     // reverberation level
     QString strAudReverb = "<b>" + tr ( "Reverb effect" ) + ":</b> " +
                            tr ( "Reverb can be applied to one local mono audio channel or to both "
@@ -142,7 +142,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverb" ) );
     rbtReverbSelR->setWhatsThis ( strRevChanSel );
     rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverb" ) );
-
+#endif
+#ifdef NO_REVERB
+    lblAudioReverb->setVisible ( false );
+    sldAudioReverb->setVisible ( false );
+    rbtReverbSelL->setVisible ( false );
+    rbtReverbSelR->setVisible ( false );
+#endif
     // delay LED
     QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " + tr ( "Shows the current audio delay status:" ) +
                           "<ul>"
@@ -256,18 +262,19 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // init status LEDs
     ledBuffers->Reset();
     ledDelay->Reset();
-
+#ifndef NO_REVERB
     // init audio reverberation
     sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
     const int iCurAudReverb = pClient->GetReverbLevel();
     sldAudioReverb->setValue ( iCurAudReverb );
     sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
+#endif
+
+    // init reverb channel (needed for pan feature as well)
+    UpdateRevSelection();
 
     // init input boost
     pClient->SetInputBoost ( pSettings->iInputBoost );
-
-    // init reverb channel
-    UpdateRevSelection();
 
     // init connect dialog
     ConnectDlg.SetShowAllMusicians ( pSettings->bConnectDlgShowAllMusicians );
@@ -487,14 +494,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( &TimerCheckAudioDeviceOk, &QTimer::timeout, this, &CClientDlg::OnTimerCheckAudioDeviceOk );
 
     QObject::connect ( &TimerDetectFeedback, &QTimer::timeout, this, &CClientDlg::OnTimerDetectFeedback );
-
+#ifndef NO_REVERB
     QObject::connect ( sldAudioReverb, &QSlider::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
 
     // radio buttons
     QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
 
     QObject::connect ( rbtReverbSelR, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelRClicked );
-
+#endif
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
 
@@ -682,9 +689,9 @@ void CClientDlg::ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept )
         }
     }
 }
-
 void CClientDlg::UpdateRevSelection()
 {
+#ifndef NO_REVERB
     if ( pClient->GetAudioChannels() == CC_STEREO )
     {
         // for stereo make channel selection invisible since
@@ -708,11 +715,10 @@ void CClientDlg::UpdateRevSelection()
             rbtReverbSelR->setChecked ( true );
         }
     }
-
+#endif
     // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
 }
-
 void CClientDlg::OnConnectDlgAccepted()
 {
     // We had an issue that the accepted signal was emit twice if a list item was double
@@ -1361,7 +1367,8 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
             "QCheckBox {              color:          rgb(220, 220, 220);"
             "                         font:           bold; }" );
-#ifdef _WIN32
+#ifndef NO_REVERB
+#    ifdef _WIN32
         // Workaround QT-Windows problem: This should not be necessary since in the
         // background frame the style sheet for QRadioButton was already set. But it
         // seems that it is only applied if the style was set to default and then back
@@ -1370,6 +1377,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
                                        "font:  bold;" );
         rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
                                        "font:  bold;" );
+#    endif
 #endif
 
         ledBuffers->SetType ( CMultiColorLED::MT_LED );
@@ -1380,10 +1388,12 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
         // reset style sheet and set original parameters
         backgroundFrame->setStyleSheet ( "" );
 
-#ifdef _WIN32
+#ifndef NO_REVERB
+#    ifdef _WIN32
         // Workaround QT-Windows problem: See above description
         rbtReverbSelL->setStyleSheet ( "" );
         rbtReverbSelR->setStyleSheet ( "" );
+#    endif
 #endif
 
         ledBuffers->SetType ( CMultiColorLED::MT_INDICATOR );

@@ -1011,6 +1011,11 @@ int main ( int argc, char** argv )
 
                 // show dialog
                 ClientDlg.show();
+#        if defined( Q_OS_IOS )
+                // iOS has no window manager, so the main window is presented in front of
+                // the windows restored from the settings. Bring them forward again.
+                ClientDlg.RaiseRestoredWindows();
+#        endif
 
                 // Connect on startup if requested
                 if ( !strConnOnStartupAddress.isEmpty() )

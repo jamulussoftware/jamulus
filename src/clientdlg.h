@@ -105,6 +105,10 @@ public:
                  const bool       bMuteStream,
                  QWidget*         parent = nullptr );
 
+#if defined( Q_OS_IOS )
+    void RaiseRestoredWindows();
+#endif
+
 protected:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetMeterStyle ( const EMeterStyle eNewMeterStyle );

@@ -1013,6 +1013,24 @@ void CClientDlg::ShowGeneralSettings ( int iTab )
     ClientSettingsDlg.activateWindow();
 }
 
+#if defined( Q_OS_IOS )
+void CClientDlg::RaiseRestoredWindows()
+{
+    // the dialogs restored from the settings are shown in the constructor, i.e. before
+    // this window, so the main window is in front of them. Bring them forward again.
+    if ( ClientSettingsDlg.isVisible() )
+    {
+        ClientSettingsDlg.raise();
+        ClientSettingsDlg.activateWindow();
+    }
+
+    if ( ChatDlg.isVisible() )
+    {
+        ChatDlg.raise();
+    }
+}
+#endif
+
 void CClientDlg::ShowChatWindow ( const bool bForceRaise )
 {
     ChatDlg.show();

@@ -61,7 +61,9 @@ param (
     [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.12/nsis-3.12.zip",
     [string] $BuildOption = "",
     # Toggles for debugging and targeted builds
-    [switch] $DebugMode
+    [switch] $DebugMode,
+    [switch] $Skip64Bit,
+    [switch] $Skip32Bit
 )
 
 # Fail early on all errors
@@ -194,35 +196,6 @@ Function Get-RedirectedUrl {
     }
 }
 
-function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/51692402
-
-    # If module is imported say that and do nothing
-    if (Get-Module | Where-Object {$_.Name -eq $m}) {
-        Write-Log "INFO" "Module $m is already imported."
-    }
-    else {
-
-        # If module is not imported, but available on disk then import
-        if (Get-Module -ListAvailable | Where-Object {$_.Name -eq $m}) {
-            Import-Module $m
-        }
-        else {
-
-            # If module is not imported, not available on disk, but is in online gallery then install and import
-            if (Find-Module -Name $m | Where-Object {$_.Name -eq $m}) {
-                Install-Module -Name $m -Force -Verbose -Scope CurrentUser
-                Import-Module $m
-            }
-            else {
-
-                # If module is not imported, not available and not in online gallery then abort
-                Write-Log "ERROR" "Module $m not imported, not available and not in online gallery, exiting."
-                EXIT 1
-            }
-        }
-    }
-}
-
 # Download and uncompress dependency in ZIP format
 Function Install-Dependency
 {
@@ -264,14 +237,10 @@ Function Install-Dependency
     Remove-Item -Path $TempFileName -Force
 }
 
-# Install VSSetup (Visual Studio detection), ASIO SDK and NSIS Installer
+# Install ASIO SDK and NSIS Installer
 Function Install-Dependencies
 {
     Write-Log "STEP" "Installing Dependencies..."
-    if (-not (Get-PackageProvider -Name nuget).Name -eq "nuget") {
-      Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
-    }
-    Initialize-Module-Here -m "VSSetup"
     Install-Dependency -Uri $NsisUrl -Destination "..\libs\NSIS\NSIS-source"
 
     if ($BuildOption -Notmatch "jack") {
@@ -292,11 +261,41 @@ Function Initialize-Build-Environment
     )
 
     # Look for Visual Studio/Build Tools 2017 or later (version 15.0 or above)
-    $VsInstallPath = Get-VSSetupInstance | `
-        Select-VSSetupInstance -Product "*" -Version "15.0" -Latest | `
-        Select-Object -ExpandProperty "InstallationPath"
+    $VsWhereCandidates = @(
+        "$env:ProgramFiles(x86)\Microsoft Visual Studio\Installer\vswhere.exe",
+        "$env:ProgramFiles\Microsoft Visual Studio\Installer\vswhere.exe"
+    )
+    $VsWherePath = $VsWhereCandidates | Where-Object { Test-Path -Path $_ } | Select-Object -First 1
 
-    if ($VsInstallPath -Eq "") { $VsInstallPath = "<N/A>" }
+    if (-not $VsWherePath)
+    {
+        $VsWhereCommand = Get-Command "vswhere.exe" -ErrorAction SilentlyContinue
+        if ($VsWhereCommand) { $VsWherePath = $VsWhereCommand.Source }
+    }
+
+    if (-not $VsWherePath)
+    {
+        Throw "vswhere.exe could not be located. Please install Visual Studio 2017 or newer."
+    }
+
+    $VsInstallPath = (& "$VsWherePath" -latest -products "*" `
+        -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+        -property installationPath 2>$null | Select-Object -First 1)
+
+    if ([string]::IsNullOrWhiteSpace($VsInstallPath))
+    {
+        $VsInstallPath = (& "$VsWherePath" -latest -products "*" `
+            -property installationPath 2>$null | Select-Object -First 1)
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($VsInstallPath))
+    {
+        $VsInstallPath = $VsInstallPath.Trim()
+    }
+    else
+    {
+        $VsInstallPath = "<N/A>"
+    }
 
     if ($BuildArch -Eq "x86_64")
     {
@@ -470,8 +469,24 @@ Function Build-App
 # Build and deploy Jamulus 64bit and 32bit variants
 function Build-App-Variants
 {
+    if ($Skip64Bit -and $Skip32Bit)
+    {
+        Throw "Both 64-bit and 32-bit builds are skipped; no application binaries will be produced."
+    }
+
     foreach ($_ in ("x86_64", "x86"))
     {
+        if ($_ -eq "x86_64" -and $Skip64Bit)
+        {
+            Write-Log "INFO" "Skipping 64-bit build."
+            continue
+        }
+        if ($_ -eq "x86" -and $Skip32Bit)
+        {
+            Write-Log "INFO" "Skipping 32-bit build."
+            continue
+        }
+
         $OriginalEnv = Get-ChildItem Env:
         if ($_ -eq "x86")
         {

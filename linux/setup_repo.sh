@@ -41,20 +41,58 @@ if [[ ${APT_MAJOR} -lt 2 || (${APT_MAJOR} -eq 2 && ${APT_MINOR} -lt 2)   ]]; the
     done
 fi
 
-REPO_FILE=/etc/apt/sources.list.d/jamulus.list
-KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc
+REPO_FILE=/etc/apt/sources.list.d/jamulus.sources
+KEY_DIR=/etc/apt/keyrings
+KEY_FILE=${KEY_DIR}/jamulus.asc
+# Files written by earlier versions of this script
+OLD_REPO_FILE=/etc/apt/sources.list.d/jamulus.list
+OLD_KEY_FILE=/etc/apt/trusted.gpg.d/jamulus.asc
 GITHUB_REPOSITORY="jamulussoftware/jamulus"
 
-echo "Setting up Jamulus repo at ${REPO_FILE}..."
-echo "deb https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/ ./" > ${REPO_FILE}
 echo "Installing Jamulus GPG key at ${KEY_FILE}..."
-curl --fail --show-error -sLo "${KEY_FILE}" https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/key.asc
+if ! mkdir -p "${KEY_DIR}" || ! chmod 0755 "${KEY_DIR}"; then
+    echo "Error: Could not prepare ${KEY_DIR}."
+    exit 1
+fi
+# Download next to the current key, so a broken download never replaces it
+TMP_KEY_FILE="${KEY_FILE}.tmp"
+curl --fail --show-error -sLo "${TMP_KEY_FILE}" https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/key.asc
 
 CURL_EXITCODE=$?
 if [[ ${CURL_EXITCODE} -ne 0 ]]; then
+    rm -f "${TMP_KEY_FILE}"
     echo "Error: Download of gpg key failed. Please try again later."
     exit ${CURL_EXITCODE}
 fi
+if ! chmod 0644 "${TMP_KEY_FILE}" || ! mv -f "${TMP_KEY_FILE}" "${KEY_FILE}"; then
+    rm -f "${TMP_KEY_FILE}"
+    echo "Error: Could not write ${KEY_FILE}."
+    exit 1
+fi
+
+echo "Setting up Jamulus repo at ${REPO_FILE}..."
+# Write the new source next to the old one and move it into place, so a failed
+# write never leaves a broken or empty source behind.
+TMP_REPO_FILE="${REPO_FILE}.tmp"
+if ! printf '%s\n' \
+    "Types: deb" \
+    "URIs: https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/" \
+    "Suites: ./" \
+    "Signed-By: ${KEY_FILE}" > "${TMP_REPO_FILE}" ||
+    ! chmod 0644 "${TMP_REPO_FILE}" ||
+    ! mv -f "${TMP_REPO_FILE}" "${REPO_FILE}"; then
+    rm -f "${TMP_REPO_FILE}"
+    echo "Error: Could not write ${REPO_FILE}. The previous setup was left in place."
+    exit 1
+fi
+
+# Only now that the new source is in place, remove what earlier versions wrote
+for OLD_FILE in "${OLD_REPO_FILE}" "${OLD_KEY_FILE}"; do
+    if [[ -e ${OLD_FILE} ]]; then
+        echo "Removing old ${OLD_FILE}..."
+        rm -f "${OLD_FILE}"
+    fi
+done
 
 echo "Running apt update..."
 apt -qq update

@@ -91,6 +91,7 @@ If you build with *ASIO* support, you'll need the [ASIO development files](https
 1. To allow unsigned scripts, right-click on the `windows\deploy_windows.ps1` script, select properties and allow the execution of this script. You can also run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. (You can revert this after having run this script. For more information see the [Microsoft PowerShell documentation page](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy)).
 1. Run the Jamulus compilation and installer script in PowerShell: `.\windows\deploy_windows.ps1`.
     The script reads the Qt, ASIO SDK, and NSIS versions from `.github/autobuild/windows-dependencies.ps1`.
+    It expects Qt under `C:\Qt` and does not accept custom Qt installation paths or compiler-version overrides.
 1. You can now find the Jamulus installer in the `.\deploy` directory.
 
 ### Compiling only
@@ -120,6 +121,8 @@ brew link Qt@5 --force
 ```
 
 To use Qt 5, install the Qt 5 version listed in `.github/autobuild/mac-dependencies_qt5.sh` instead.
+
+For the manual build below, use the path to your Qt installation in the `qmake` command. The `mac/deploy_mac.sh` script invokes `qmake` and `macdeployqt` from `PATH`, so ensure the matching Qt `bin` directory is on `PATH` when running it. The autobuild setup installs Qt under `$HOME/qt/<QtVersion>/macos` for Qt 6 and `$HOME/qt/<QtVersion>/clang_64` for Qt 5, and adds that `bin` directory to `PATH`.
 
 ### Generate Xcode Project file
 
@@ -167,6 +170,7 @@ If you want to build the installer, please run the `deploy_mac.sh` script: `./ma
 1. Install [Xcode from the Mac AppStore](https://apps.apple.com/us/app/xcode/id497799835?mt=12)
 2. [Download and install Qt5 with the Qt Installer](https://www.qt.io/download) (not homebrew, Qt6 is found to be buggy). Explicitly select iOS when choosing the Qt version. For the version matching the GitHub build, check `.github/autobuild/ios-dependencies.sh`.
 3. Go to the folder of the Jamulus source code via terminal and run `/path/to/qt/<QtVersion>/ios/bin/qmake -spec macx-xcode Jamulus.pro` to generate an .xcodeproject file
+   The `ios/deploy_ios.sh` script invokes `qmake` from `PATH`; add the `bin` directory from the same Qt iOS installation to `PATH` before running it. The autobuild setup installs Qt under `$HOME/qt/<QtVersion>/ios` and adds that `bin` directory to `PATH`.
 4. Open the generated .xcodeproject in Xcode
 5. Go to the Signing & Capabilities tab and fix signing errors by setting a team. Xcode will tell you what you need to change.
 

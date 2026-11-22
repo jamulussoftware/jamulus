@@ -13,6 +13,7 @@ Makefile.*
 .idea
 .vscode
 .cache
+.gradle/
 *.user
 *.user.*
 *.o
@@ -64,3 +65,4 @@ jamulus_plugin_import.cpp
 **/*.log
 android-build_*.settings
 Copilot-Processing.md
+/play-store/

@@ -1,0 +1,72 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.10.0'
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+apply plugin: 'com.android.application'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+}
+
+android {
+    namespace 'app.jamulus.jamulus.pljones_test'
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+    buildToolsVersion androidBuildToolsVersion
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
+            aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
+            res.srcDirs = [qt5AndroidDir + '/res', 'res']
+            resources.srcDirs = ['resources']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.incremental = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lint {
+        abortOnError false
+    }
+
+    androidResources {
+        noCompress += 'rcc'
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+
+    buildFeatures {
+        aidl true
+    }
+
+    defaultConfig {
+        resConfig 'en'
+        minSdkVersion qtMinSdkVersion
+        targetSdkVersion qtTargetSdkVersion
+    }
+}

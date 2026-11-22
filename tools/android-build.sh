@@ -33,6 +33,7 @@ readonly SCRIPT_NAME
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 readonly PROJECT_DIR
 readonly ANDROID_SH="${PROJECT_DIR}/.github/autobuild/android.sh"
+readonly ANDROID_PLAY_STORE_SH="${PROJECT_DIR}/.github/autobuild/android-play-store.sh"
 
 MANAGED_VARS=(
     JAVA_HOME
@@ -49,7 +50,9 @@ MANAGED_VARS=(
     JAMULUS_ANDROID_QMAKE_CONFIG
     JAMULUS_ANDROID_MAKE_JOBS
     JAMULUS_ANDROID_STREAM
+    JAMULUS_ANDROID_PLAY_STORE_BUILD
     JAMULUS_ANDROID_ARTIFACT_SUFFIX
+    JAMULUS_ANDROID_PACKAGE_FORMAT
     JAMULUS_ANDROID_VERSION_CODE
     JAMULUS_ANDROID_BUILD_DIR
     JAMULUS_ANDROID_DEPLOY_DIR
@@ -78,7 +81,11 @@ apply_local_defaults() {
     export QT_SELECT="${QT_SELECT:-${QT_VERSION}-android}"
     # android.sh derives QT_ANDROID_DIR itself as "${QT_DIR}/${QT_VERSION}/android"
     : "${QT_DIR:=/opt/Qt}"
-    : "${BUILD_MODES:=debug release}"
+    local default_build_modes="debug release"
+    if has_stage play-store; then
+        default_build_modes=release
+    fi
+    : "${BUILD_MODES:=${default_build_modes}}"
     : "${TARGET_ARCHS:=armeabi-v7a arm64-v8a x86 x86_64}"
 }
 
@@ -163,7 +170,7 @@ run_distclean() {
 
     local generated_path
 
-    for generated_path in "$BUILD_ROOT" "$DEPLOY_DIR"; do
+    for generated_path in "$BUILD_ROOT" "$DEPLOY_DIR" "${PROJECT_DIR}/play-store"; do
         rm -rf -- "$generated_path"
     done
 
@@ -180,6 +187,9 @@ run_stage() {
         setup | build | get-artifacts)
             run_logged "$ANDROID_SH" "$stage"
             ;;
+        play-store)
+            run_logged "$ANDROID_PLAY_STORE_SH"
+            ;;
         distclean)
             run_distclean
             ;;
@@ -187,6 +197,15 @@ run_stage() {
             error "unknown stage: $stage"
             ;;
     esac
+}
+
+has_stage() {
+    local requested_stage="$1"
+    local stage
+    for stage in "${STAGES[@]}"; do
+        [[ "$stage" == "$requested_stage" ]] && return 0
+    done
+    return 1
 }
 
 resolve_settings_file() {
@@ -199,7 +218,11 @@ resolve_settings_file() {
         printf '%s' "$JAMULUS_ANDROID_SETTINGS"
         return
     fi
-    local default_settings_file="${PROJECT_DIR}/android-build_${JAMULUS_ANDROID_STREAM}.settings"
+    local settings_suffix="$JAMULUS_ANDROID_STREAM"
+    if has_stage play-store; then
+        settings_suffix="${settings_suffix}-play-store"
+    fi
+    local default_settings_file="${PROJECT_DIR}/android-build_${settings_suffix}.settings"
     if [[ -f "$default_settings_file" ]]; then
         printf '%s' "$default_settings_file"
         return
@@ -218,20 +241,22 @@ Jamulus.pro (plus the git hash for development versions) unless already set.
 
 Stages:
     setup          Install CI-style SDK/NDK/Qt under /opt (rarely needed locally)
-    distclean      make distclean (if a Makefile exists) and remove Android build and deploy outputs
+    distclean      make distclean (if a Makefile exists) and remove Android build, deploy and Play Store outputs
     build          Build selected debug/release packages
     get-artifacts  Rename packages into deploy/
+    play-store     Qt 5 only: copy the release App Bundle from deploy/ to play-store/
+                   (also selects an App Bundle, release-only build; needs a release keystore)
     all            distclean, build, and get-artifacts (default)
 
 Options:
     -h, --help             Show this help
-    --settings FILE        Override file (default: android-build_qtVERSION.settings if present)
+    --settings FILE        Override file (default: stream settings; Play Store uses its own profile)
     --stream STREAM        Select the Qt 5 or Qt 6 build (default: qt5)
     --log FILE             Also write combined stdout/stderr to FILE
     --print-env            Print the resolved environment and exit
     --build-modes "MODES"  Override BUILD_MODES (default: "debug release")
     --archs "ARCHS"        Override TARGET_ARCHS (default: "armeabi-v7a arm64-v8a x86 x86_64")
-    --jobs JOBS             Limit parallel compiler jobs (default: nproc)
+    --jobs JOBS            Limit parallel compiler jobs (default: nproc)
 
 Precedence: command-line options > settings file > existing environment > documented local defaults.
 See the matching tools/android-build_qtVERSION.settings.example.
@@ -292,7 +317,7 @@ while [[ $# -gt 0 ]]; do
             STAGES+=(distclean build get-artifacts)
             shift
             ;;
-        setup | distclean | build | get-artifacts)
+        setup | distclean | build | get-artifacts | play-store)
             STAGES+=("$1")
             shift
             ;;
@@ -308,11 +333,18 @@ fi
 
 cd "$PROJECT_DIR"
 [[ -x "$ANDROID_SH" || -f "$ANDROID_SH" ]] || error "cannot find $ANDROID_SH"
+[[ -x "$ANDROID_PLAY_STORE_SH" || -f "$ANDROID_PLAY_STORE_SH" ]] ||
+    error "cannot find $ANDROID_PLAY_STORE_SH"
 
 JAMULUS_ANDROID_STREAM="${OPTION_STREAM:-${JAMULUS_ANDROID_STREAM:-qt5}}"
 [[ "$JAMULUS_ANDROID_STREAM" == qt5 || "$JAMULUS_ANDROID_STREAM" == qt6 ]] ||
     error "unsupported Android build stream: $JAMULUS_ANDROID_STREAM"
-ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_${JAMULUS_ANDROID_STREAM}.sh"
+if has_stage play-store; then
+    [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]] || error "the play-store stage requires --stream qt5"
+    ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_qt5-play-store.sh"
+else
+    ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_${JAMULUS_ANDROID_STREAM}.sh"
+fi
 EXPLICIT_COMMANDLINETOOLS_VERSION="${COMMANDLINETOOLS_VERSION:-}"
 EXPLICIT_ANDROID_NDK_VERSION="${ANDROID_NDK_VERSION:-}"
 EXPLICIT_ANDROID_PLATFORM="${ANDROID_PLATFORM:-}"
@@ -333,6 +365,10 @@ load_settings_file "$(resolve_settings_file "$SETTINGS_FILE")"
 [[ -n "$OPTION_BUILD_MODES" ]] && BUILD_MODES="$OPTION_BUILD_MODES"
 [[ -n "$OPTION_TARGET_ARCHS" ]] && TARGET_ARCHS="$OPTION_TARGET_ARCHS"
 [[ -n "$OPTION_MAKE_JOBS" ]] && export JAMULUS_ANDROID_MAKE_JOBS="$OPTION_MAKE_JOBS"
+if has_stage play-store; then
+    # shellcheck disable=SC2034
+    JAMULUS_ANDROID_PLAY_STORE_BUILD=true
+fi
 apply_local_defaults
 export_managed_env
 ensure_java_on_path

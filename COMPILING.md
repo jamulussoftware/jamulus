@@ -192,20 +192,24 @@ If you want to build the installer, please run the `deploy_mac.sh` script: `./ma
 
 ## Android
 
-Android builds are available in two independent streams:
+Android builds are available in the following independent profiles:
 
-| Stream | Qt | Package | Java | NDK | Build Tools | Compile / target SDK |
+| Stream | Qt | Package | Java | NDK | Build Tools | Compile / target SDK | Android range |
 | ------ | -- | ------- | ---- | --- | ----------- | ------------------- | ------------------------- |
 | `qt5` | 5.15.2 | Multi-ABI APK | 8 | r21d (21.0.6113669) | 30.0.2 | Android 11 / API 30 | API 21-31 |
-| `qt6` | 6.10.2 | One APK per ABI, ZIPped | 17 | r27d (27.3.13750724) | 36.0.0 | Android 16 / API 36 |
+| `qt5-play-store` | 5.15.2 | Release AAB | 17 | r21d (21.0.6113669) | 36.0.0 | Android 16 / API 36 | API 21-31 |
+| `qt6` | 6.10.2 | One APK per ABI, ZIPped | 17 | r27d (27.3.13750724) | 36.0.0 | Android 16 / API 36 | API 28-36 |
 
-As of Jamulus 4.0.0, the Android package ID is `app.jamulus.jamulus`.
-Prior installation using the former `com.github.jamulussoftware.jamulus` ID will not be upgraded in-place.
-(Users must uninstall the former package before installing the new one, losing their settings).
+Android builds from this branch use the package ID
+`app.jamulus.jamulus.pljones_test` for the personal Google Play test app.
+This differs from the team's `app.jamulus.jamulus` package ID and will install
+as a separate app.
 
 The compile/target SDK is the SDK level used to build and target the app, not
 the full Android compatibility range supported by Qt:
 - Qt 5 targets API 30 within its Android 5.0-12 / API 21-31 range.
+- The Qt 5 Play Store profile targets API 36; Qt 5's Android compatibility
+  range remains Android 5.0-12 / API 21-31.
 - Qt 6 targets API 36 within its Android 9-16 / API 28-36 range.
 
 - Install the Qt, Android SDK, NDK, and JDK versions for the selected stream.
@@ -236,6 +240,12 @@ The wrapper loads `android-build_qt5.settings` or
 and ABI/mode subsets in the matching file. Inspect resolved values with
 `--print-env`.
 
+The Play Store AAB build uses a separate API 36 toolchain profile. For a local
+Play Store build, optionally create
+`android-build_qt5-play-store.settings` from
+`tools/android-build_qt5-play-store.settings.example`; this keeps its Java 17
+and SDK paths separate from the regular Qt 5 APK settings.
+
 Build Qt 5 APKs, which are suitable for temporary or release side-loading:
 
 ```bash
@@ -247,6 +257,34 @@ Build experimental Qt 6 APK ZIPs with:
 ```bash
 tools/android-build.sh --stream qt6 --log android-qt6.log
 ```
+
+### Signing and the Google Play attempt
+
+Release builds are signed when `JAMULUS_ANDROID_KEYSTORE` (a file) or
+`JAMULUS_ANDROID_KEYSTORE_BASE64`, `JAMULUS_ANDROID_KEY_ALIAS`,
+`JAMULUS_ANDROID_KEYSTORE_PASSWORD` and `JAMULUS_ANDROID_KEY_PASSWORD` are set;
+otherwise a generated debug key is used. This applies to both streams. In
+GitHub Actions the keystore and passwords come from the `ANDROID_KEYSTORE`,
+`ANDROID_KEY_ALIAS`, `ANDROID_KEYSTORE_PASSWORD` and `ANDROID_KEY_PASSWORD`
+secrets, used only when all four are present.
+
+Only on request, the Qt 5 stream can build a release Android App Bundle (`.aab`)
+instead of an APK. The Play Store build uses a separate experimental API 36
+target and updated Gradle packaging files; the regular Qt 5 APK build remains
+on API 30. A release keystore is required.
+
+```bash
+tools/android-build.sh --stream qt5 build get-artifacts play-store
+```
+
+This writes `deploy/jamulus_<version>_android_release_qt5.aab` and copies it to
+`play-store/`. The `autobuild.yml` workflow can build and upload the bundle to
+the app's Internal testing track via Workload Identity Federation when started
+manually with `android_play_store_upload` (repository variables
+`GCP_WORKLOAD_IDENTITY_PROVIDER` and `GCP_SERVICE_ACCOUNT_EMAIL` are required,
+as are the Android release-signing secrets). The workflow publishes a completed
+release on the `qa` track and sets a unique Android version code from the
+workflow run number and attempt.
 
 ### Build options
 
@@ -291,7 +329,8 @@ tools/android-build.sh --stream qt6 --log android-qt6.log
 - Release builds use the normal positive Git revision count as their Android
     version code for non-development versions. Development builds default to
     version code `1`. Set `JAMULUS_ANDROID_VERSION_CODE` when a build needs an
-    explicit positive version code.
+    explicit positive version code. The Google Play autobuild sets a unique
+    version code from the workflow run number and attempt.
 - Release builds use supplied Android keystore credentials when configured;
     debug builds ignore them and use normal debug signing. Without a supplied
     key, release builds use a temporary debug key and are not suitable for

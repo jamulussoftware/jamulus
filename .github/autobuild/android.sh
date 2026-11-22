@@ -59,9 +59,18 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 readonly PROJECT_DIR
 
 JAMULUS_ANDROID_STREAM="${JAMULUS_ANDROID_STREAM:-qt5}"
+JAMULUS_ANDROID_PLAY_STORE_BUILD="${JAMULUS_ANDROID_PLAY_STORE_BUILD:-false}"
+[[ "$JAMULUS_ANDROID_PLAY_STORE_BUILD" == true || "$JAMULUS_ANDROID_PLAY_STORE_BUILD" == false ]] || {
+    echo "JAMULUS_ANDROID_PLAY_STORE_BUILD must be true or false" >&2
+    exit 1
+}
 case "$JAMULUS_ANDROID_STREAM" in
     qt5)
-        ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_qt5.sh"
+        if [[ "$JAMULUS_ANDROID_PLAY_STORE_BUILD" == true ]]; then
+            ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_qt5-play-store.sh"
+        else
+            ANDROID_DEPENDENCIES="${PROJECT_DIR}/.github/autobuild/android-dependencies_qt5.sh"
+        fi
         DEFAULT_ARTIFACT_SUFFIX="_qt5"
         ;;
     qt6)
@@ -161,12 +170,19 @@ done
 # shellcheck disable=SC1090
 source "${PROJECT_DIR}/.github/autobuild/android-output-paths.sh"
 
-readonly BUILD_MODES="${BUILD_MODES:-debug release}"
+DEFAULT_BUILD_MODES="debug release"
+DEFAULT_PACKAGE_FORMAT=apk
+if [[ "$JAMULUS_ANDROID_PLAY_STORE_BUILD" == true ]]; then
+    DEFAULT_BUILD_MODES=release
+    DEFAULT_PACKAGE_FORMAT=aab
+fi
+readonly BUILD_MODES="${BUILD_MODES:-${DEFAULT_BUILD_MODES}}"
 readonly QMAKE_CONFIG="${JAMULUS_ANDROID_QMAKE_CONFIG:-}"
 MAX_MAKE_JOBS="$(nproc)"
 readonly MAX_MAKE_JOBS
 readonly MAKE_JOBS="${JAMULUS_ANDROID_MAKE_JOBS:-${MAX_MAKE_JOBS}}"
 readonly ARTIFACT_SUFFIX="${JAMULUS_ANDROID_ARTIFACT_SUFFIX:-${DEFAULT_ARTIFACT_SUFFIX}}"
+readonly PACKAGE_FORMAT="${JAMULUS_ANDROID_PACKAGE_FORMAT:-${DEFAULT_PACKAGE_FORMAT}}"
 
 if [[ ! "$MAKE_JOBS" =~ ^[1-9][0-9]*$ ]] || ((MAKE_JOBS > MAX_MAKE_JOBS)); then
     echo "JAMULUS_ANDROID_MAKE_JOBS must be a positive integer no greater than ${MAX_MAKE_JOBS}" >&2
@@ -383,6 +399,36 @@ validate_build_mode() {
     done
 }
 
+validate_package_format() {
+    if [[ "$JAMULUS_ANDROID_PLAY_STORE_BUILD" == true && "$PACKAGE_FORMAT" != aab ]]; then
+        echo "JAMULUS_ANDROID_PLAY_STORE_BUILD=true requires JAMULUS_ANDROID_PACKAGE_FORMAT=aab" >&2
+        exit 1
+    fi
+
+    case "$PACKAGE_FORMAT" in
+        apk) ;;
+        aab)
+            # Only the Qt 5 build can produce a single multi-ABI bundle; Qt 6 builds one APK per ABI.
+            [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]] || {
+                echo "JAMULUS_ANDROID_PACKAGE_FORMAT=aab requires the qt5 stream" >&2
+                exit 1
+            }
+            [[ "$BUILD_MODES" == release ]] || {
+                echo "JAMULUS_ANDROID_PACKAGE_FORMAT=aab requires BUILD_MODES=release" >&2
+                exit 1
+            }
+            [[ "$JAMULUS_ANDROID_PLAY_STORE_BUILD" == true ]] || {
+                echo "AAB builds require JAMULUS_ANDROID_PLAY_STORE_BUILD=true" >&2
+                exit 1
+            }
+            ;;
+        *)
+            echo "Unsupported Android package format: $PACKAGE_FORMAT" >&2
+            exit 1
+            ;;
+    esac
+}
+
 validate_android_toolchain() {
     [[ -f "${ANDROID_NDK_ROOT}/source.properties" ]] || {
         echo "Selected Android NDK is not installed: ${ANDROID_NDK_ROOT}" >&2
@@ -405,6 +451,11 @@ validate_signing() {
     local signing_setting
 
     [[ " $BUILD_MODES " == *" release "* ]] || return 0
+    # A bundle for store upload must never fall back to the generated debug key.
+    [[ "$PACKAGE_FORMAT" != aab || -n "${JAMULUS_ANDROID_KEYSTORE:-}${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]] || {
+        echo "An Android App Bundle requires a release keystore" >&2
+        exit 1
+    }
     [[ -z "${JAMULUS_ANDROID_KEYSTORE:-}" ]] && echo "No Android keystore file specified" >&2
     [[ -z "${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]] && echo "No Android keystore base64 specified" >&2
     [[ -z "${JAMULUS_ANDROID_KEY_ALIAS:-}" ]] && echo "No Android keystore alias specified" >&2
@@ -557,10 +608,20 @@ qmake5_qmake_make() {
     local qmake_config=("$@")
     local -a package_args=("${_p[@]}")
 
+    if [[ "$PACKAGE_FORMAT" == aab && "$JAMULUS_ANDROID_PLAY_STORE_BUILD" == true ]]; then
+        cp "${PROJECT_DIR}/android/play-store/build.gradle" \
+            "${QT_ANDROID_DIR}/src/android/templates/build.gradle"
+        cp "${PROJECT_DIR}/android/play-store/gradle-wrapper.properties" \
+            "${QT_ANDROID_DIR}/src/3rdparty/gradle/gradle/wrapper/gradle-wrapper.properties"
+        cp "${PROJECT_DIR}/android/play-store/gradlew" \
+            "${QT_ANDROID_DIR}/src/3rdparty/gradle/gradlew"
+        chmod +x "${QT_ANDROID_DIR}/src/3rdparty/gradle/gradlew"
+    fi
+
     build_dir="$(absolute_path "$build_dir")"
     pushd "${build_dir}" > /dev/null
     "${QT_QMAKE}" "${PROJECT_DIR}/Jamulus.pro" -spec android-clang "${qmake_config[@]}" \
-        ANDROID_ABIS="${TARGET_ARCHS}" ANDROID_TARGET_SDK_VERSION=30
+        ANDROID_ABIS="${TARGET_ARCHS}" ANDROID_TARGET_SDK_VERSION="${ANDROID_PLATFORM#android-}"
 
     "${ANDROID_NDK_MAKE}" -j "$MAKE_JOBS"
     "${ANDROID_NDK_MAKE}" INSTALL_ROOT="${build_dir}" install
@@ -569,7 +630,8 @@ qmake5_qmake_make() {
         package_args+=(--sign "${ANDROID_KEYSTORE_FILE}" "${JAMULUS_ANDROID_KEY_ALIAS}" --storepass "${JAMULUS_ANDROID_KEYSTORE_PASSWORD}")
         [[ -n "${JAMULUS_ANDROID_KEY_PASSWORD:-}" ]] && package_args+=(--keypass "${JAMULUS_ANDROID_KEY_PASSWORD}")
     fi
-    "${QT_ANDROIDDEPLOYQT}" --verbose --input android-Jamulus-deployment-settings.json --output "${build_dir}" "${package_args[@]}"
+    "${QT_ANDROIDDEPLOYQT}" --verbose --input android-Jamulus-deployment-settings.json \
+        --output "${build_dir}" "${package_args[@]}"
     popd > /dev/null
 }
 
@@ -655,6 +717,7 @@ build_app() {
     if [[ "$build_mode" == release ]]; then
         package_args+=(--release)
     fi
+    [[ "$PACKAGE_FORMAT" == aab ]] && package_args+=(--aab)
     if [[ "$build_mode" == release && -n "${ANDROID_KEYSTORE_FILE:-}" ]]; then
         local detected_keystore_type
         detected_keystore_type="$(keystore_type "${ANDROID_KEYSTORE_FILE}" "${JAMULUS_ANDROID_KEYSTORE_PASSWORD}")" || detected_keystore_type="unknown"
@@ -667,7 +730,7 @@ build_app() {
         fi
     fi
 
-    echo "Android packaging: format=APK platform=${ANDROID_PLATFORM}"
+    echo "Android packaging: format=${PACKAGE_FORMAT^^} platform=${ANDROID_PLATFORM}"
 
     # Diagnostic environment - non-secret variables only
     echo "Android environment:"
@@ -705,14 +768,18 @@ pass_artifact_to_job() {
 
     for build_mode in $BUILD_MODES; do
         if [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]]; then
-            artifact="jamulus_${JAMULUS_BUILD_VERSION}_android_${build_mode}${ARTIFACT_SUFFIX}.apk"
+            artifact="jamulus_${JAMULUS_BUILD_VERSION}_android_${build_mode}${ARTIFACT_SUFFIX}.${PACKAGE_FORMAT}"
             if [[ "$build_mode" == debug ]]; then
                 package_path="$(find "${BUILD_ROOT}/${build_mode}/build/outputs" -type f -name '*-debug.apk' -print -quit)"
+            elif [[ "$PACKAGE_FORMAT" == aab ]]; then
+                # release AAB files are produced without a "-signed" suffix; locate any .aab file
+                package_path="$(find "${BUILD_ROOT}/${build_mode}/build/outputs" -type f -name "*-release.aab" -print -quit)"
             else
-                package_path="$(find "${BUILD_ROOT}/${build_mode}/build/outputs" -type f -name '*-signed.apk' -print -quit)"
+                # release APK files are signed and have a "-signed" suffix
+                package_path="$(find "${BUILD_ROOT}/${build_mode}/build/outputs" -type f -name "*-release-signed.apk" -print -quit)"
             fi
             [[ -n "$package_path" ]] || {
-                echo "No Android APK was produced for ${build_mode}" >&2
+                echo "No Android ${PACKAGE_FORMAT^^} was produced for ${build_mode}" >&2
                 exit 1
             }
             mv "$package_path" "${DEPLOY_DIR}/${artifact}"
@@ -753,6 +820,7 @@ case "${1:-}" in
         ;;
     build)
         validate_build_mode
+        validate_package_format
         validate_android_toolchain
         validate_signing
         for build_mode in $BUILD_MODES; do
@@ -762,6 +830,7 @@ case "${1:-}" in
         done
         ;;
     get-artifacts)
+        validate_package_format
         pass_artifact_to_job
         ;;
     *)

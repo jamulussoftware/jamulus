@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+APP_HOME="$(cd "$(dirname "$0")" && pwd)"
+sed -i '/^android\.bundle\.enableUncompressedNativeLibs=/d' "${APP_HOME}/gradle.properties"
+
+JAVA=java
+if [[ -n "${JAVA_HOME:-}" ]]; then
+	JAVA="${JAVA_HOME}/bin/java"
+fi
+exec "${JAVA}" -classpath "${APP_HOME}/gradle/wrapper/gradle-wrapper.jar" \
+	org.gradle.wrapper.GradleWrapperMain "$@"

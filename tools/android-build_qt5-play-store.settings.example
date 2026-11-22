@@ -1,0 +1,11 @@
+# Copy to android-build_qt5-play-store.settings in the repository root
+# (gitignored), or pass --settings /path/to/file. Adjust paths for your system.
+
+# JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+# ANDROID_SDK_ROOT=/opt/android-sdk
+# ANDROID_NDK_ROOT=${ANDROID_SDK_ROOT}/ndk/21.0.6113669
+# QT_DIR=/opt/Qt
+# QT_VERSION=5.15.2
+
+# Add release signing values to this ignored file or provide them in the
+# environment; never commit keystores or passwords.

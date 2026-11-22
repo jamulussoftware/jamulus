@@ -429,6 +429,14 @@ validate_package_format() {
     esac
 }
 
+validate_package_name() {
+    if [[ -n "${JAMULUS_ANDROID_PACKAGE_NAME:-}" ]] &&
+        [[ ! "$JAMULUS_ANDROID_PACKAGE_NAME" =~ ^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+$ ]]; then
+        echo "Invalid Android package name: ${JAMULUS_ANDROID_PACKAGE_NAME}" >&2
+        exit 1
+    fi
+}
+
 validate_android_toolchain() {
     [[ -f "${ANDROID_NDK_ROOT}/source.properties" ]] || {
         echo "Selected Android NDK is not installed: ${ANDROID_NDK_ROOT}" >&2
@@ -448,33 +456,34 @@ validate_android_toolchain() {
 }
 
 validate_signing() {
-    local signing_setting
+    local build_mode
 
-    [[ " $BUILD_MODES " == *" release "* ]] || return 0
-    # A bundle for store upload must never fall back to the generated debug key.
+    validate_android_output_paths
+    for build_mode in $BUILD_MODES; do
+        [[ "$build_mode" == release ]] && break
+    done
+    [[ "${build_mode:-}" == release ]] || return 0
+    [[ -z "${JAMULUS_ANDROID_DEBUG_KEYSTORE:-}" ]] || {
+        echo "JAMULUS_ANDROID_DEBUG_KEYSTORE has been renamed to JAMULUS_ANDROID_DEV_KEYSTORE" >&2
+        exit 1
+    }
     [[ "$PACKAGE_FORMAT" != aab || -n "${JAMULUS_ANDROID_KEYSTORE:-}${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]] || {
         echo "An Android App Bundle requires a release keystore" >&2
         exit 1
     }
-    [[ -z "${JAMULUS_ANDROID_KEYSTORE:-}" ]] && echo "No Android keystore file specified" >&2
-    [[ -z "${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]] && echo "No Android keystore base64 specified" >&2
-    [[ -z "${JAMULUS_ANDROID_KEY_ALIAS:-}" ]] && echo "No Android keystore alias specified" >&2
-    [[ -z "${JAMULUS_ANDROID_KEYSTORE_PASSWORD:-}" ]] && echo "No Android keystore password specified" >&2
-    [[ -z "${JAMULUS_ANDROID_KEY_PASSWORD:-}" ]] && echo "No Android key password specified" >&2
-
     [[ -z "${JAMULUS_ANDROID_KEYSTORE:-}" || -z "${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]] || {
         echo "Set only one of JAMULUS_ANDROID_KEYSTORE and JAMULUS_ANDROID_KEYSTORE_BASE64" >&2
         exit 1
     }
-    for signing_setting in JAMULUS_ANDROID_KEYSTORE JAMULUS_ANDROID_KEYSTORE_BASE64 \
-        JAMULUS_ANDROID_KEY_ALIAS \
-        JAMULUS_ANDROID_KEYSTORE_PASSWORD JAMULUS_ANDROID_KEY_PASSWORD; do
-        [[ -z "${!signing_setting:-}" || -n "${JAMULUS_ANDROID_KEYSTORE:-}" ||
-            -n "${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]] || {
-            echo "$signing_setting requires an Android keystore" >&2
+    if [[ -n "${JAMULUS_ANDROID_DEV_KEYSTORE:-}" ]]; then
+        [[ -z "${JAMULUS_ANDROID_KEYSTORE:-}${JAMULUS_ANDROID_KEYSTORE_BASE64:-}${JAMULUS_ANDROID_KEY_ALIAS:-}${JAMULUS_ANDROID_KEYSTORE_PASSWORD:-}${JAMULUS_ANDROID_KEY_PASSWORD:-}" ]] || {
+            echo "JAMULUS_ANDROID_DEV_KEYSTORE cannot be combined with release signing credentials" >&2
             exit 1
         }
-    done
+    elif [[ -z "${JAMULUS_ANDROID_KEYSTORE:-}${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]]; then
+        echo "A release build requires JAMULUS_ANDROID_DEV_KEYSTORE or release keystore credentials" >&2
+        exit 1
+    fi
     if [[ -n "${JAMULUS_ANDROID_KEYSTORE:-}" || -n "${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]]; then
         [[ -n "${JAMULUS_ANDROID_KEY_ALIAS:-}" ]] || {
             echo "JAMULUS_ANDROID_KEY_ALIAS is required with a keystore" >&2
@@ -486,8 +495,9 @@ validate_signing() {
         }
     fi
 
-    validate_android_output_paths
 }
+
+ANDROID_KEYSTORE_CLEANUP_FILE=""
 
 cleanup_signing_for_mode() {
     if [[ -n "${ANDROID_KEYSTORE_CLEANUP_FILE:-}" ]]; then
@@ -505,8 +515,8 @@ prepare_signing_for_mode() {
 
     if [[ -n "${JAMULUS_ANDROID_KEYSTORE:-}" || -n "${JAMULUS_ANDROID_KEYSTORE_BASE64:-}" ]]; then
         prepare_keystore
-    elif [[ " $BUILD_MODES " == *" release "* ]]; then
-        prepare_debug_keystore
+    else
+        prepare_dev_keystore
     fi
 }
 
@@ -525,7 +535,8 @@ prepare_keystore() {
             echo "Failed to create temporary Android keystore file" >&2
             exit 1
         fi
-        trap 'rm -f -- "$ANDROID_KEYSTORE_FILE"' EXIT
+        ANDROID_KEYSTORE_CLEANUP_FILE="$ANDROID_KEYSTORE_FILE"
+        trap cleanup_signing_for_mode EXIT
         local original_umask
         original_umask="$(umask)"
         umask 077
@@ -539,38 +550,28 @@ prepare_keystore() {
     fi
 }
 
-prepare_debug_keystore() {
-    local debug_keystore="${JAMULUS_ANDROID_DEBUG_KEYSTORE:-}"
-
+prepare_dev_keystore() {
     JAMULUS_ANDROID_KEYSTORE_PASSWORD="android"
     JAMULUS_ANDROID_KEY_ALIAS="androiddebugkey"
     JAMULUS_ANDROID_KEY_PASSWORD="android"
 
-    if [[ -n "$debug_keystore" ]]; then
-        ANDROID_KEYSTORE_FILE="$(absolute_path "$debug_keystore")"
-        if [[ -e "$ANDROID_KEYSTORE_FILE" || -L "$ANDROID_KEYSTORE_FILE" ]]; then
-            if [[ -f "$ANDROID_KEYSTORE_FILE" && -r "$ANDROID_KEYSTORE_FILE" ]] &&
-                keytool -list -keystore "$ANDROID_KEYSTORE_FILE" \
-                    -storepass "$JAMULUS_ANDROID_KEYSTORE_PASSWORD" \
-                    -alias "$JAMULUS_ANDROID_KEY_ALIAS" > /dev/null 2>&1; then
-                return
-            else
-                echo "Invalid Android debug keystore: $ANDROID_KEYSTORE_FILE" >&2
-                exit 1
-            fi
+    ANDROID_KEYSTORE_FILE="$(absolute_path "$JAMULUS_ANDROID_DEV_KEYSTORE")"
+    if [[ -e "$ANDROID_KEYSTORE_FILE" || -L "$ANDROID_KEYSTORE_FILE" ]]; then
+        if [[ -f "$ANDROID_KEYSTORE_FILE" && -r "$ANDROID_KEYSTORE_FILE" ]] &&
+            keytool -list -keystore "$ANDROID_KEYSTORE_FILE" \
+                -storepass "$JAMULUS_ANDROID_KEYSTORE_PASSWORD" \
+                -alias "$JAMULUS_ANDROID_KEY_ALIAS" > /dev/null 2>&1; then
+            return
         else
-            mkdir -p "$(dirname "${ANDROID_KEYSTORE_FILE}")"
-        fi
-    else
-        if ! ANDROID_KEYSTORE_TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/jamulus-android-debug-signing.XXXXXX")"; then
-            echo "Failed to create temporary Android debug keystore" >&2
+            echo "Invalid Android development keystore: $ANDROID_KEYSTORE_FILE" >&2
             exit 1
         fi
-        ANDROID_KEYSTORE_FILE="${ANDROID_KEYSTORE_TEMP_DIR}/debug.jks"
-        trap 'rm -rf -- "$ANDROID_KEYSTORE_TEMP_DIR"' EXIT
     fi
 
     mkdir -p "$(dirname "$ANDROID_KEYSTORE_FILE")"
+    local original_umask
+    original_umask="$(umask)"
+    umask 077
     keytool -genkeypair \
         -keystore "$ANDROID_KEYSTORE_FILE" \
         -storepass "$JAMULUS_ANDROID_KEYSTORE_PASSWORD" \
@@ -580,6 +581,7 @@ prepare_debug_keystore() {
         -keysize 2048 \
         -validity 10000 \
         -dname "CN=Android Debug,O=Android,C=US"
+    umask "$original_umask"
     chmod 600 "$ANDROID_KEYSTORE_FILE"
 }
 
@@ -621,7 +623,8 @@ qmake5_qmake_make() {
     build_dir="$(absolute_path "$build_dir")"
     pushd "${build_dir}" > /dev/null
     "${QT_QMAKE}" "${PROJECT_DIR}/Jamulus.pro" -spec android-clang "${qmake_config[@]}" \
-        ANDROID_ABIS="${TARGET_ARCHS}" ANDROID_TARGET_SDK_VERSION="${ANDROID_PLATFORM#android-}"
+        ANDROID_ABIS="${TARGET_ARCHS}" ANDROID_TARGET_SDK_VERSION="${ANDROID_PLATFORM#android-}" \
+        "${package_source_override[@]}"
 
     "${ANDROID_NDK_MAKE}" -j "$MAKE_JOBS"
     "${ANDROID_NDK_MAKE}" INSTALL_ROOT="${build_dir}" install
@@ -673,7 +676,8 @@ qmake6_qmake_make() {
         mkdir -p "$arch_build_dir"
         pushd "$arch_build_dir" > /dev/null
         "$qmake6_qmake" "${PROJECT_DIR}/Jamulus.pro" -spec android-clang "${qmake_config[@]}" \
-            ANDROID_ABIS="${target_arch}" ANDROID_TARGET_SDK_VERSION="${ANDROID_PLATFORM#android-}"
+            ANDROID_ABIS="${target_arch}" ANDROID_TARGET_SDK_VERSION="${ANDROID_PLATFORM#android-}" \
+            "${package_source_override[@]}"
         "${ANDROID_NDK_MAKE}" -j "$MAKE_JOBS"
         "${ANDROID_NDK_MAKE}" INSTALL_ROOT="${arch_build_dir}" install
 
@@ -740,6 +744,44 @@ build_app() {
 
     rm -rf "${build_dir}"
     mkdir -p "${build_dir}"
+
+    local -a package_source_override=()
+    local gradle_template="${QT_ANDROID_DIR}/src/android/templates/build.gradle"
+    if [[ "$PACKAGE_FORMAT" == aab && "$JAMULUS_ANDROID_PLAY_STORE_BUILD" == true ]]; then
+        gradle_template="${PROJECT_DIR}/android/play-store/build.gradle"
+    fi
+    local static_namespace="^[[:space:]]*namespace[[:space:]]+['\"][^'\"]+['\"]"
+    local package_name="${JAMULUS_ANDROID_PACKAGE_NAME:-}"
+    [[ -n "$package_name" ]] || {
+        echo "JAMULUS_ANDROID_PACKAGE_NAME must be set to build the Android package" >&2
+        exit 1
+    }
+    # Debug APKs are signed with the development key, so they get their own ID to coexist with release installs.
+    [[ "$build_mode" == debug ]] && package_name+=".debug"
+    local package_source="${PROJECT_DIR}/android"
+    local source_entry
+    [[ "$JAMULUS_ANDROID_STREAM" == qt6 ]] && package_source+="/qt6"
+    mkdir -p "${build_dir}/package-source"
+    for source_entry in "${package_source}"/*; do
+        case "${source_entry##*/}" in
+            play-store | qt6 | README.md) continue ;;
+        esac
+        cp -RL "$source_entry" "${build_dir}/package-source/"
+    done
+    grep -Fq 'package="++JAMULUS_ANDROID_PACKAGE_NAME++"' "${build_dir}/package-source/AndroidManifest.xml" || {
+        echo "Android manifest package template was not found" >&2
+        exit 1
+    }
+    sed -i "s/package=\"++JAMULUS_ANDROID_PACKAGE_NAME++\"/package=\"${package_name}\"/" \
+        "${build_dir}/package-source/AndroidManifest.xml"
+    if [[ "$JAMULUS_ANDROID_STREAM" == qt5 && -f "$gradle_template" ]] && grep -Eq "$static_namespace" "$gradle_template"; then
+        sed -E "s|${static_namespace}|    namespace '${package_name}'|" "$gradle_template" \
+            > "${build_dir}/package-source/build.gradle"
+    elif [[ "$PACKAGE_FORMAT" == aab ]]; then
+        echo "Android Gradle namespace template was not found" >&2
+        exit 1
+    fi
+    package_source_override=(-after "ANDROID_PACKAGE_SOURCE_DIR=${build_dir}/package-source")
 
     if [[ "$JAMULUS_ANDROID_STREAM" == qt5 ]]; then
         qmake5_qmake_make "$build_mode" "${build_dir}" package_args "${qmake_config[@]}"
@@ -821,6 +863,7 @@ case "${1:-}" in
     build)
         validate_build_mode
         validate_package_format
+        validate_package_name
         validate_android_toolchain
         validate_signing
         for build_mode in $BUILD_MODES; do

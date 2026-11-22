@@ -10,14 +10,21 @@
 # QT_DIR=/opt/Qt
 # ANDROID_PLATFORM=android-36
 
-# Defaults to all four ABIs and both build modes.
+# Defaults to all four ABIs and debug mode. Release mode requires signing:
 # BUILD_MODES=release
 TARGET_ARCHS=arm64-v8a
+
+# Application ID for APKs. Required for build stages unless origin is a GitHub
+# remote (then app.<owner>.<repo> is used). Uncomment and set to override.
+# Use a distinct ID for development release APKs, and a persistent keystore
+# outside generated output directories:
+# JAMULUS_ANDROID_PACKAGE_NAME=app.example.jamulus
+# JAMULUS_ANDROID_DEV_KEYSTORE=${HOME}/Jamulus/dev-signing.jks
 
 # Optional qmake CONFIG values, space-separated:
 # JAMULUS_ANDROID_QMAKE_CONFIG="serveronly disable_version_check"
 
-# Optional release signing (keep these outside the repository):
+# Production release signing instead of the development keystore:
 # JAMULUS_ANDROID_KEYSTORE=${HOME}/Jamulus/jamulus-upload.jks
 # JAMULUS_ANDROID_KEY_ALIAS=jamulus
 # JAMULUS_ANDROID_KEYSTORE_PASSWORD=production-password

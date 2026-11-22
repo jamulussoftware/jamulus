@@ -21,7 +21,7 @@ dependencies {
 }
 
 android {
-    namespace 'app.jamulus.jamulus.pljones_test'
+    namespace '++JAMULUS_ANDROID_PACKAGE_NAME++'
     compileSdkVersion androidCompileSdkVersion.toInteger()
     buildToolsVersion androidBuildToolsVersion
 

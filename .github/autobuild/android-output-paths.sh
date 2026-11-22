@@ -76,13 +76,13 @@ validate_android_output_paths() {
         exit 1
     fi
 
-    for signing_path in "${JAMULUS_ANDROID_KEYSTORE:-}" "${JAMULUS_ANDROID_DEBUG_KEYSTORE:-}"; do
+    for signing_path in "${JAMULUS_ANDROID_KEYSTORE:-}" "${JAMULUS_ANDROID_DEV_KEYSTORE:-}" "${JAMULUS_ANDROID_DEBUG_KEYSTORE:-}"; do
         [[ -n "$signing_path" ]] || continue
         canonical_path="$(absolute_path "$signing_path")" || {
             echo "Failed to resolve Android signing file path: $signing_path" >&2
             exit 1
         }
-        for output_path in "${output_paths[@]}" "${LEGACY_ANDROID_OUTPUTS[@]}"; do
+        for output_path in "${output_paths[@]}" "${LEGACY_ANDROID_OUTPUTS[@]}" "${PROJECT_DIR}/play-store" "${PROJECT_DIR}/android/play-store/build" "${PROJECT_DIR}/android/play-store/.gradle"; do
             if path_is_within "$canonical_path" "$output_path"; then
                 echo "Android signing file must not be inside a generated output path: $signing_path" >&2
                 exit 1

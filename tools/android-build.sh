@@ -53,6 +53,7 @@ MANAGED_VARS=(
     JAMULUS_ANDROID_PLAY_STORE_BUILD
     JAMULUS_ANDROID_ARTIFACT_SUFFIX
     JAMULUS_ANDROID_PACKAGE_FORMAT
+    JAMULUS_ANDROID_PACKAGE_NAME
     JAMULUS_ANDROID_VERSION_CODE
     JAMULUS_ANDROID_BUILD_DIR
     JAMULUS_ANDROID_DEPLOY_DIR
@@ -81,7 +82,7 @@ apply_local_defaults() {
     export QT_SELECT="${QT_SELECT:-${QT_VERSION}-android}"
     # android.sh derives QT_ANDROID_DIR itself as "${QT_DIR}/${QT_VERSION}/android"
     : "${QT_DIR:=/opt/Qt}"
-    local default_build_modes="debug release"
+    local default_build_modes=debug
     if has_stage play-store; then
         default_build_modes=release
     fi
@@ -101,6 +102,16 @@ load_settings_file() {
     # shellcheck disable=SC1090
     source "$settings_file"
     set +a
+}
+
+# Derives the default application ID from the origin remote's GitHub owner/repo.
+default_package_name_from_origin() {
+    local url owner repo
+    url="$(git -C "$PROJECT_DIR" remote get-url origin 2> /dev/null)" || return 1
+    [[ "$url" =~ github\.com[:/]+([^/:]+)/([^/]+)/?$ ]] || return 1
+    owner="${BASH_REMATCH[1]}"
+    repo="${BASH_REMATCH[2]%.git}"
+    android_default_package_name "$owner" "$repo"
 }
 
 export_managed_env() {
@@ -170,7 +181,7 @@ run_distclean() {
 
     local generated_path
 
-    for generated_path in "$BUILD_ROOT" "$DEPLOY_DIR" "${PROJECT_DIR}/play-store"; do
+    for generated_path in "$BUILD_ROOT" "$DEPLOY_DIR" "${PROJECT_DIR}/play-store" "${PROJECT_DIR}/android/play-store/build" "${PROJECT_DIR}/android/play-store/.gradle"; do
         rm -rf -- "$generated_path"
     done
 
@@ -254,11 +265,14 @@ Options:
     --stream STREAM        Select the Qt 5 or Qt 6 build (default: qt5)
     --log FILE             Also write combined stdout/stderr to FILE
     --print-env            Print the resolved environment and exit
-    --build-modes "MODES"  Override BUILD_MODES (default: "debug release")
+    --build-modes "MODES"  Override BUILD_MODES (default: debug; Play Store: release)
     --archs "ARCHS"        Override TARGET_ARCHS (default: "armeabi-v7a arm64-v8a x86 x86_64")
     --jobs JOBS            Limit parallel compiler jobs (default: nproc)
 
 Precedence: command-line options > settings file > existing environment > documented local defaults.
+JAMULUS_ANDROID_PACKAGE_NAME is required for build stages: it defaults to
+app.<owner>.<repo> from a GitHub origin remote; otherwise set it in the
+environment or the settings file.
 See the matching tools/android-build_qtVERSION.settings.example.
 EOF
 }
@@ -362,6 +376,12 @@ source "$ANDROID_DEPENDENCIES"
 [[ -n "$EXPLICIT_ANDROID_JAVA_VERSION" ]] && ANDROID_JAVA_VERSION="$EXPLICIT_ANDROID_JAVA_VERSION"
 [[ -n "$EXPLICIT_QT_VERSION" ]] && QT_VERSION="$EXPLICIT_QT_VERSION"
 load_settings_file "$(resolve_settings_file "$SETTINGS_FILE")"
+# shellcheck disable=SC1090
+source "${PROJECT_DIR}/.github/autobuild/android-package-default.sh"
+if [[ -z "${JAMULUS_ANDROID_PACKAGE_NAME:-}" ]] && { has_stage build || has_stage play-store; }; then
+    JAMULUS_ANDROID_PACKAGE_NAME="$(default_package_name_from_origin)" ||
+        error "JAMULUS_ANDROID_PACKAGE_NAME is not set and origin is not a GitHub remote; set it on the command line or in the settings file"
+fi
 [[ -n "$OPTION_BUILD_MODES" ]] && BUILD_MODES="$OPTION_BUILD_MODES"
 [[ -n "$OPTION_TARGET_ARCHS" ]] && TARGET_ARCHS="$OPTION_TARGET_ARCHS"
 [[ -n "$OPTION_MAKE_JOBS" ]] && export JAMULUS_ANDROID_MAKE_JOBS="$OPTION_MAKE_JOBS"

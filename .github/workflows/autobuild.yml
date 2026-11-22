@@ -79,6 +79,7 @@ jobs:
       build_all_targets:            ${{ steps.decide-build-targets.outputs.build_all_targets }}
       android_signing_ready:        ${{ steps.android-readiness.outputs.signing_ready }}
       android_play_store_upload:    ${{ steps.android-readiness.outputs.play_store_upload }}
+      android_package_name:         ${{ steps.android-package-name.outputs.package_name }}
     env:
       release_changelog_path:       ./.github_release_changelog.md
     # Set permissions. We need write permissions to content for creating/removing the release
@@ -140,6 +141,21 @@ jobs:
           release_name:             ${{ steps.get-build-vars.outputs.RELEASE_TITLE }}
           body_path:                ${{ env.release_changelog_path }}
           prerelease:               ${{ steps.get-build-vars.outputs.IS_PRERELEASE }}
+
+      - name:                       Select Android application ID
+        id:                         android-package-name
+        env:
+          REPO_FULL:                ${{ github.repository }}
+          PACKAGE_NAME_VAR:         ${{ vars.ANDROID_PACKAGE_NAME }}
+        run:                        |
+          source .github/autobuild/android-package-default.sh
+          if [[ -n "${PACKAGE_NAME_VAR}" ]]; then
+            package_name="${PACKAGE_NAME_VAR}"
+          else
+            package_name="$(android_default_package_name "${REPO_FULL%%/*}" "${REPO_FULL#*/}")"
+          fi
+          echo "package_name=${package_name}" >> $GITHUB_OUTPUT
+          echo "Android application ID: ${package_name}"
 
       - name:                       Check Android signing and Google Play readiness
         id:                         android-readiness
@@ -481,6 +497,23 @@ jobs:
           echo "JAMULUS_ANDROID_VERSION_CODE=${version_code}" >> "$GITHUB_ENV"
           echo "Using Android version code ${version_code}"
 
+      - name:                       Select Android build modes
+        if:                         matrix.config.target_os == 'android'
+        env:
+          SIGNING_READY:            ${{ needs.create_release.outputs.android_signing_ready }}
+          PLAY_STORE_UPLOAD:        ${{ matrix.config.play_store_upload }}
+        run:                        |
+          if [[ "${PLAY_STORE_UPLOAD}" == 'true' ]]; then
+            build_modes=release
+          elif [[ "${SIGNING_READY}" == 'true' ]]; then
+            build_modes='debug release'
+          else
+            build_modes=debug
+            echo "::notice::Android release build skipped: signing secrets are unavailable or incomplete."
+          fi
+          echo "BUILD_MODES=${build_modes}" >> "$GITHUB_ENV"
+          echo "Android build modes: ${build_modes}"
+
       - name:                       Build for ${{ matrix.config.config_name }}
         id:                         build
         run:                        ${{ matrix.config.base_command }} build
@@ -493,7 +526,8 @@ jobs:
           #  For every certificate, export it as base64 encoded string with `base64 -i certificate.p12`
           #  Set the certificates based on the variables below
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
-          # Android release signing: all-or-nothing, otherwise release builds use a generated debug key.
+          JAMULUS_ANDROID_PACKAGE_NAME:      ${{ needs.create_release.outputs.android_package_name }}
+          # Android release signing is all-or-nothing.
           JAMULUS_ANDROID_KEYSTORE_BASE64:   ${{ needs.create_release.outputs.android_signing_ready == 'true' && secrets.ANDROID_KEYSTORE || '' }}
           JAMULUS_ANDROID_KEY_ALIAS:         ${{ needs.create_release.outputs.android_signing_ready == 'true' && secrets.ANDROID_KEY_ALIAS || '' }}
           JAMULUS_ANDROID_KEYSTORE_PASSWORD: ${{ needs.create_release.outputs.android_signing_ready == 'true' && secrets.ANDROID_KEYSTORE_PASSWORD || '' }}
@@ -616,7 +650,7 @@ jobs:
         uses:                       r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5
         with:
           serviceAccountJson:       ${{ steps.gcloud-auth.outputs.credentials_file_path }}
-          packageName:              app.jamulus.jamulus.pljones_test
+          packageName:              ${{ needs.create_release.outputs.android_package_name }}
           releaseFiles:             ${{ steps.select-bundle.outputs.release_file }}
           releaseName:              ${{ needs.create_release.outputs.build_version }}
           tracks:                   internal

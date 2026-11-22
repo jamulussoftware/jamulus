@@ -200,10 +200,11 @@ Android builds are available in the following independent profiles:
 | `qt5-play-store` | 5.15.2 | Release AAB | 17 | r21d (21.0.6113669) | 36.0.0 | Android 16 / API 36 | API 21-31 |
 | `qt6` | 6.10.2 | One APK per ABI, ZIPped | 17 | r27d (27.3.13750724) | 36.0.0 | Android 16 / API 36 | API 28-36 |
 
-Android builds from this branch use the package ID
-`app.jamulus.jamulus.pljones_test` for the personal Google Play test app.
-This differs from the team's `app.jamulus.jamulus` package ID and will install
-as a separate app.
+Local builds take the package ID from `JAMULUS_ANDROID_PACKAGE_NAME` (environment
+or settings file). If it is unset, `tools/android-build.sh` uses
+`app.<owner>.<repo>` from a GitHub `origin` remote, the same as the workflow,
+and otherwise stops with an error. Different package IDs install as separate
+apps. Debug builds append `.debug` to the ID.
 
 The compile/target SDK is the SDK level used to build and target the app, not
 the full Android compatibility range supported by Qt:
@@ -235,16 +236,11 @@ cp tools/android-build_qt5.settings.example android-build_qt5.settings
 cp tools/android-build_qt6.settings.example android-build_qt6.settings
 ```
 
-The wrapper loads `android-build_qt5.settings` or
-`android-build_qt6.settings` by default. Set machine-specific toolchain paths
-and ABI/mode subsets in the matching file. Inspect resolved values with
-`--print-env`.
-
-The Play Store AAB build uses a separate API 36 toolchain profile. For a local
-Play Store build, optionally create
-`android-build_qt5-play-store.settings` from
-`tools/android-build_qt5-play-store.settings.example`; this keeps its Java 17
-and SDK paths separate from the regular Qt 5 APK settings.
+The wrapper defaults to the `qt5` stream. For APK builds, it loads
+`android-build_qt5.settings`; with `--stream qt6`, it loads
+`android-build_qt6.settings` instead. The `play-store` stage selects a
+separate Qt 5 settings file. Set machine-specific toolchain paths and ABI/mode
+subsets in the matching file. Inspect resolved values with `--print-env`.
 
 Build Qt 5 APKs, which are suitable for temporary or release side-loading:
 
@@ -258,37 +254,28 @@ Build experimental Qt 6 APK ZIPs with:
 tools/android-build.sh --stream qt6 --log android-qt6.log
 ```
 
-### Signing and the Google Play attempt
+### Signing and Google Play
 
-Release builds are signed when `JAMULUS_ANDROID_KEYSTORE` (a file) or
-`JAMULUS_ANDROID_KEYSTORE_BASE64`, `JAMULUS_ANDROID_KEY_ALIAS`,
-`JAMULUS_ANDROID_KEYSTORE_PASSWORD` and `JAMULUS_ANDROID_KEY_PASSWORD` are set;
-otherwise a generated debug key is used. This applies to both streams. In
-GitHub Actions the keystore and passwords come from the `ANDROID_KEYSTORE`,
-`ANDROID_KEY_ALIAS`, `ANDROID_KEYSTORE_PASSWORD` and `ANDROID_KEY_PASSWORD`
-secrets, used only when all four are present.
+Release builds require signing: use `JAMULUS_ANDROID_KEYSTORE` (a file) or
+`JAMULUS_ANDROID_KEYSTORE_BASE64` with `JAMULUS_ANDROID_KEY_ALIAS` and
+`JAMULUS_ANDROID_KEYSTORE_PASSWORD`; set `JAMULUS_ANDROID_KEY_PASSWORD` when
+the key requires it. For local development release APKs, use
+`JAMULUS_ANDROID_DEV_KEYSTORE` instead. A release build without a key fails.
+Debug builds use normal debug signing. This applies to both streams.
+Play Store bundles require a release keystore matching the app's registered
+upload certificate.
 
-Only on request, the Qt 5 stream can build a release Android App Bundle (`.aab`)
-instead of an APK. The Play Store build uses a separate experimental API 36
-target and updated Gradle packaging files; the regular Qt 5 APK build remains
-on API 30. A release keystore is required.
-
-```bash
-tools/android-build.sh --stream qt5 build get-artifacts play-store
-```
-
-This writes `deploy/jamulus_<version>_android_release_qt5.aab` and copies it to
-`play-store/`. The `autobuild.yml` workflow can build and upload the bundle to
-the app's Internal testing track via Workload Identity Federation when started
-manually with `android_play_store_upload` (repository variables
-`GCP_WORKLOAD_IDENTITY_PROVIDER` and `GCP_SERVICE_ACCOUNT_EMAIL` are required,
-as are the Android release-signing secrets). The workflow publishes a completed
-release on the `qa` track and sets a unique Android version code from the
-workflow run number and attempt.
+The Qt 5 Play profile builds an Android App Bundle (`.aab`). The GitHub workflow
+can upload it to Google Play's internal testing track. A locally built AAB can
+also be uploaded manually in Play Console; the local build script does not
+upload it. For Play builds and deployment setup, see
+[Android deployment](android/README.md).
 
 ### Build options
 
-- Both streams default to all four ABIs and debug and release modes. Qt 5
+- Local APK builds default to all four ABIs and debug mode. Request release
+    with `--build-modes release` or `--build-modes "debug release"`, or set
+    `BUILD_MODES` in the settings file or environment. Qt 5
     artifacts are multi-ABI APKs with the `_qt5.apk` suffix. Qt 6 builds a
     standalone APK for each ABI and exports one `_qt6.zip` per mode; each ZIP
     contains exactly the selected ABIs. Build outputs are under
@@ -299,9 +286,10 @@ workflow run number and attempt.
     tools/android-build.sh distclean
     ```
 
-    This removes `android-build/`, `deploy/`, and the known legacy qmake Android
-    output paths, but leaves similarly named files and unrelated untracked
-    files in the checkout alone.
+    This removes `android-build/`, `deploy/`, `play-store/`,
+    `android/play-store/build/`, `android/play-store/.gradle/`, and the known
+    legacy qmake Android output paths, but leaves similarly named files and
+    unrelated untracked files in the checkout alone.
 - To build only the release compilation variant, set `BUILD_MODES=release`.
     Select a subset of architectures with `TARGET_ARCHS`:
 
@@ -320,21 +308,18 @@ workflow run number and attempt.
     Set `ANDROID_NDK_ROOT` or `QT_DIR` to use different installed toolchains.
     Set `ANDROID_PLATFORM` to select the Android SDK platform. `BUILD_MODES`
     and `TARGET_ARCHS` can also be set in the stream's settings file.
-- Debug builds are packaged as debuggable APKs. Local release builds use a
-    temporary debug keystore by default; it is deleted after the build. Set
-    `JAMULUS_ANDROID_DEBUG_KEYSTORE` to retain and reuse a debug keystore. An
-    existing file must be a valid Android debug keystore; a missing file is
-    created and retained. This key is for local development only, not for
-    publishing releases.
+- Debug builds are packaged as debuggable APKs using Gradle's debug signing.
+    For local release-variant testing, set `JAMULUS_ANDROID_DEV_KEYSTORE` to a
+    reusable development keystore path. An existing file must be a valid
+    Android debug keystore; a missing file is created and retained. Its
+    well-known credentials make it unsuitable for publishing. Use a different
+    `JAMULUS_ANDROID_PACKAGE_NAME` from the official release. Debug and
+    development-release APKs with the same ID cannot update each other unless
+    they are signed with the same key.
 - Release builds use the normal positive Git revision count as their Android
     version code for non-development versions. Development builds default to
     version code `1`. Set `JAMULUS_ANDROID_VERSION_CODE` when a build needs an
-    explicit positive version code. The Google Play autobuild sets a unique
-    version code from the workflow run number and attempt.
-- Release builds use supplied Android keystore credentials when configured;
-    debug builds ignore them and use normal debug signing. Without a supplied
-    key, release builds use a temporary debug key and are not suitable for
-    updating a retained production installation.
+    explicit positive version code.
 - Qt 5 APKs can be installed directly with `adb`. Extract a Qt 6 ABI APK from
     its ZIP before installing it.
 

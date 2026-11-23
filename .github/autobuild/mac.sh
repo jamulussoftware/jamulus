@@ -71,10 +71,16 @@ if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
     exit 1
 fi
-if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
-    exit 1
-fi
+
+# Only stages that actually consume JAMULUS_BUILD_VERSION need to validate it;
+# call this at the top of those (build, get-artifacts) so e.g. "setup" can run
+# without it being set.
+validate_build_version() {
+    if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+        echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
+        exit 1
+    fi
+}
 
 setup() {
     if [[ -x "${QT_DIR}/${QT_VERSION}/${QT_PLATFORM}/bin/qmake" &&
@@ -199,6 +205,8 @@ prepare_signing() {
 }
 
 build_app_as_dmg_installer() {
+    validate_build_version
+
     # Add the qt binaries to the PATH.
     # The clang_64 entry can be dropped when Qt <6.2 compatibility is no longer needed.
     export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${QT_DIR}/${QT_VERSION}/clang_64/bin:${PATH}"
@@ -212,6 +220,8 @@ build_app_as_dmg_installer() {
 }
 
 pass_artifact_to_job() {
+    validate_build_version
+
     artifact="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
     echo "Moving build artifact to deploy/${artifact}"
     mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact}"

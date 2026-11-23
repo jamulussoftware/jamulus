@@ -171,6 +171,7 @@ public:
 
     void Disconnect();
     void Connect ( const QString& strServerAddress, const QString& strServerName );
+    void Connect ( const CHostAddress& HostAddress, const QString& strServerName );
 
     // The ConnectedServerName is emitted by Connecting() to update the UI with a human readable server name
     void    SetConnectedServerName ( const QString& strServerName ) { strConnectedServerName = strServerName; };
@@ -180,7 +181,6 @@ public:
 
     bool IsRunning() { return Sound.IsRunning(); }
     bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
-    bool SetServerAddr ( QString strNAddr );
 
     // IPv6 Available
     bool IsIPv6Available() { return bIPv6Available; }

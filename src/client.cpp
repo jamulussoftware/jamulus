@@ -505,6 +505,8 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 
 void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader )
 {
+    Q_ASSERT ( iId >= 0 && iId < MAX_NUM_CHANNELS );
+
     QMutexLocker locker ( &MutexGainOrPan );
 
     CClientChannel* clientChan = &clientChannels[iId];

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CInputEffectsDlgBase</class>
+ <widget class="QDialog" name="CInputEffectsDlgBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>760</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Input Effects</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/png/main/res/fronticon.png</normaloff>:/png/main/res/fronticon.png</iconset>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayoutMain">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayoutTop">
+     <item>
+      <widget class="QCheckBox" name="chbLinked">
+       <property name="text">
+        <string>Same settings for L and R</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblChannel">
+       <property name="text">
+        <string>Channel</string>
+       </property>
+       <property name="buddy">
+        <cstring>cbxChannel</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cbxChannel">
+       <item>
+        <property name="text">
+         <string>Both</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Right</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacerTop">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="butPreview">
+       <property name="text">
+        <string>&amp;Preview</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblHint">
+     <property name="text">
+      <string>Applied to your sound before it is sent to the server. All effects are off by default.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblNoEffects">
+     <property name="text">
+      <string>This build has no built-in effects.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayoutLanes">
+     <item>
+      <widget class="CInputEffectLane" name="wdgLaneL">
+       <property name="title">
+        <string>Left</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="CInputEffectLane" name="wdgLaneR">
+       <property name="title">
+        <string>Right</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grbInputBalance">
+     <property name="title">
+      <string>Input Balance</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayoutBalance">
+      <item>
+       <widget class="QLabel" name="lblAudioPan">
+        <property name="text">
+         <string>Pan</string>
+        </property>
+        <property name="buddy">
+         <cstring>sldAudioPan</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="sldAudioPan">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBothSides</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblAudioPanValue">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Center</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CInputEffectLane</class>
+   <extends>QGroupBox</extends>
+   <header>inputeffectlane.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>chbLinked</tabstop>
+  <tabstop>cbxChannel</tabstop>
+  <tabstop>butPreview</tabstop>
+  <tabstop>wdgLaneL</tabstop>
+  <tabstop>wdgLaneR</tabstop>
+  <tabstop>sldAudioPan</tabstop>
+ </tabstops>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

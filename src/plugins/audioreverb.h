@@ -16,16 +16,25 @@
 
 #pragma once
 #include "util.h"
+#include "inputeffect.h"
 
-class CAudioReverb
+/* Definitions ****************************************************************/
+#define AUD_REVERB_MAX     100
+#define AUD_REVERB_DEFAULT 30
+
+/* Classes ********************************************************************/
+class CAudioReverb : public CInputEffect
 {
 public:
-    CAudioReverb() {}
+    CAudioReverb() : iNumChannels ( 1 ), iLevel ( AUD_REVERB_DEFAULT ) {}
 
-    void Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam, const int iSampleRate, const float fT60 = 1.1f );
+    // reverberation level in the range 0 .. AUD_REVERB_MAX
+    void SetLevel ( const int iNewLevel );
+    int  GetLevel() const { return iLevel; }
 
-    void Clear();
-    void Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fAttenuation );
+    virtual void Activate ( const int iNNumChannels, const int ) override;
+    virtual void Reset() override;
+    virtual void Process ( float* const* ppfChannels, const int iNumFrames ) override;
 
 protected:
     void setT60 ( const float fT60, const int iSampleRate );
@@ -45,9 +54,9 @@ protected:
         float fLastSample;
     };
 
-    EAudChanConf eAudioChannelConf;
-    int          iStereoBlockSizeSam;
-    CFIFO<float> allpassDelays[3];
+    int              iNumChannels;
+    std::atomic<int> iLevel;
+    CFIFO<float>     allpassDelays[3];
     CFIFO<float> combDelays[4];
     COnePole     combFilters[4];
     CFIFO<float> outLeftDelay;

@@ -88,7 +88,6 @@ protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
     void    UpdateDirectoryComboBox();
-    void    UpdateAudioFaderSlider();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
     virtual void showEvent ( QShowEvent* ) override;
@@ -108,7 +107,6 @@ public slots:
     void OnFeedbackDetectionChanged ( int value );
     void OnCustomDirectoriesChanged ( bool bDelete );
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
-    void OnInputBoostChanged();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );
@@ -128,7 +126,6 @@ public slots:
     void OnSkillActivated ( int iCntryListItem );
     void OnTabChanged();
     void OnMakeTabChange ( int iTabIdx );
-    void OnAudioPanValueChanged ( int value );
     void OnMidiDeviceActivated ( int iMidiDevIdx );
 
 #if defined( _WIN32 ) && !defined( WITH_JACK )

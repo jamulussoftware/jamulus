@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CInputEffectLaneBase</class>
+ <widget class="QGroupBox" name="CInputEffectLaneBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>360</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="title">
+   <string>Left</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayoutLane">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayoutEffects">
+     <item>
+      <widget class="QGroupBox" name="grbBoost">
+       <property name="title">
+        <string>Boost</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <layout class="QGridLayout" name="gridLayoutBoost">
+        <item row="0" column="0">
+         <widget class="QLabel" name="lblBoostGain">
+          <property name="text">
+           <string>Gain</string>
+          </property>
+          <property name="buddy">
+           <cstring>sldBoost</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSlider" name="sldBoost">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="pageStep">
+           <number>1</number>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksBelow</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="lblBoostValue">
+          <property name="minimumSize">
+           <size>
+            <width>55</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>+6 dB</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="grbComp">
+       <property name="title">
+        <string>Compressor</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <layout class="QGridLayout" name="gridLayoutComp">
+        <item row="0" column="0">
+         <widget class="QLabel" name="lblCompAmount">
+          <property name="text">
+           <string>Amount</string>
+          </property>
+          <property name="buddy">
+           <cstring>cbxCompAmount</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="cbxCompAmount"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="lblCompThreshold">
+          <property name="text">
+           <string>Threshold</string>
+          </property>
+          <property name="buddy">
+           <cstring>sldCompThreshold</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSlider" name="sldCompThreshold">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="pageStep">
+           <number>1</number>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksBelow</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="lblCompThresholdValue">
+          <property name="minimumSize">
+           <size>
+            <width>55</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>-20 dB</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="grbReverb">
+       <property name="title">
+        <string>Reverb</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <layout class="QGridLayout" name="gridLayoutReverb">
+        <item row="0" column="0">
+         <widget class="QLabel" name="lblReverbLevel">
+          <property name="text">
+           <string>Level</string>
+          </property>
+          <property name="buddy">
+           <cstring>sldReverb</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSlider" name="sldReverb">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="pageStep">
+           <number>1</number>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksBelow</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="lblReverbValue">
+          <property name="minimumSize">
+           <size>
+            <width>55</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>30 %</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacerEffects">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>0</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayoutMeters">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayoutMeterIn">
+       <item>
+        <widget class="CLevelMeter" name="lbrInputRaw" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>125</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblMeterIn">
+         <property name="text">
+          <string>In</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayoutMeterOut">
+       <item>
+        <widget class="CLevelMeter" name="lbrOutput" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>125</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblMeterOut">
+         <property name="text">
+          <string>Out</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CLevelMeter</class>
+   <extends>QWidget</extends>
+   <header>levelmeter.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>grbBoost</tabstop>
+  <tabstop>sldBoost</tabstop>
+  <tabstop>grbComp</tabstop>
+  <tabstop>cbxCompAmount</tabstop>
+  <tabstop>sldCompThreshold</tabstop>
+  <tabstop>grbReverb</tabstop>
+  <tabstop>sldReverb</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

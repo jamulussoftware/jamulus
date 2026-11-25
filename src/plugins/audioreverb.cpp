@@ -16,11 +16,21 @@
 
 #include "audioreverb.h"
 
-void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam, const int iSampleRate, const float fT60 )
+void CAudioReverb::SetLevel ( const int iNewLevel )
+{
+    if ( ( iNewLevel >= 0 ) && ( iNewLevel <= AUD_REVERB_MAX ) )
+    {
+        iLevel = iNewLevel;
+    }
+}
+
+void CAudioReverb::Activate ( const int iNNumChannels, const int )
 {
     // store parameters
-    eAudioChannelConf   = eNAudioChannelConf;
-    iStereoBlockSizeSam = iNStereoBlockSizeSam;
+    iNumChannels = iNNumChannels;
+
+    const int   iSampleRate = SYSTEM_SAMPLE_RATE_HZ;
+    const float fT60        = 1.1f; // reverberation decay time in seconds
 
     // delay lengths for 44100 Hz sample rate
     int         lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
@@ -61,7 +71,7 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf, const int iNSte
     outLeftDelay.Init ( lengths[7] );
     outRightDelay.Init ( lengths[8] );
     allpassCoefficient = 0.7f;
-    Clear();
+    Reset();
 }
 
 bool CAudioReverb::isPrime ( const int number )
@@ -93,7 +103,7 @@ bool CAudioReverb::isPrime ( const int number )
     }
 }
 
-void CAudioReverb::Clear()
+void CAudioReverb::Reset()
 {
     // reset and clear all internal state
     allpassDelays[0].Reset ( 0 );
@@ -135,28 +145,31 @@ float CAudioReverb::COnePole::Calc ( const float fIn )
     return fLastSample;
 }
 
-void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fAttenuation )
+void CAudioReverb::Process ( float* const* ppfChannels, const int iNumFrames )
 {
+    // the level is read once per block; 0 means no reverberation
+    const int iCurLevel = iLevel;
+
+    if ( iCurLevel == 0 )
+    {
+        return;
+    }
+
+    const float fAttenuation = static_cast<float> ( iCurLevel ) / AUD_REVERB_MAX / 4;
+
     float fMixedInput, temp, temp0, temp1, temp2;
 
-    for ( int i = 0; i < iStereoBlockSizeSam; i += 2 )
+    for ( int i = 0; i < iNumFrames; i++ )
     {
-        // we sum up the stereo input channels (in case mono input is used, a zero
-        // shall be input for the right channel)
-        if ( eAudioChannelConf == CC_STEREO )
+        // we sum up the channels of the lane (both channels in stereo mode,
+        // only the own channel in the mono modes)
+        if ( iNumChannels == 2 )
         {
-            fMixedInput = 0.5f * ( vecsStereoInOut[i] + vecsStereoInOut[i + 1] );
+            fMixedInput = 0.5f * ( ppfChannels[0][i] + ppfChannels[1][i] );
         }
         else
         {
-            if ( bReverbOnLeftChan )
-            {
-                fMixedInput = vecsStereoInOut[i];
-            }
-            else
-            {
-                fMixedInput = vecsStereoInOut[i + 1];
-            }
+            fMixedInput = ppfChannels[0][i];
         }
 
         temp  = allpassDelays[0].Get();
@@ -192,16 +205,17 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut, const bool bReve
         outLeftDelay.Add ( filtout );
         outRightDelay.Add ( filtout );
 
-        // inplace apply the attenuated reverb signal (for stereo always apply
-        // reverberation effect on both channels)
-        if ( ( eAudioChannelConf == CC_STEREO ) || bReverbOnLeftChan )
-        {
-            vecsStereoInOut[i] = Float2Short ( ( 1.0f - fAttenuation ) * vecsStereoInOut[i] + 0.5f * fAttenuation * outLeftDelay.Get() );
-        }
+        // inplace apply the attenuated reverb signal to all channels of the lane
+        ppfChannels[0][i] = ( 1.0f - fAttenuation ) * ppfChannels[0][i] + 0.5f * fAttenuation * outLeftDelay.Get();
 
-        if ( ( eAudioChannelConf == CC_STEREO ) || !bReverbOnLeftChan )
+        if ( iNumChannels == 2 )
         {
-            vecsStereoInOut[i + 1] = Float2Short ( ( 1.0f - fAttenuation ) * vecsStereoInOut[i + 1] + 0.5f * fAttenuation * outRightDelay.Get() );
+            ppfChannels[1][i] = ( 1.0f - fAttenuation ) * ppfChannels[1][i] + 0.5f * fAttenuation * outRightDelay.Get();
+        }
+        else
+        {
+            // keep the second decorrelation delay line running
+            outRightDelay.Get();
         }
     }
 }

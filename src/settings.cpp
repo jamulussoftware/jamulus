@@ -44,6 +44,7 @@
  *
 \******************************************************************************/
 
+#include <cmath>
 #include "settings.h"
 
 /* Implementation *************************************************************/
@@ -415,12 +416,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         iNewClientFaderLevel = iValue;
     }
 
-    // input boost
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "inputboost", 1, 10, iValue ) )
-    {
-        iInputBoost = iValue;
-    }
-
     if ( GetFlagIniSet ( IniXMLDocument, "client", "enablefeedbackdetection", bValue ) )
     {
         bEnableFeedbackDetection = bValue;
@@ -496,17 +491,98 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetAudioInFader ( iValue );
     }
 
-    // reverberation level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
+    // input effects
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "fxlinked", bValue ) )
     {
-        pClient->SetReverbLevel ( iValue );
+        bInputEffectsLinked = bValue;
     }
 
-    // reverberation channel assignment
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
+#ifndef NO_INTERNAL_EFFECTS
+    CInputEffectChain& Fx = pClient->GetInputEffects();
+
+    if ( GetIniSetting ( IniXMLDocument, "client", "fxrevlev0" ).isEmpty() )
     {
-        pClient->SetReverbOnLeftChan ( bValue );
+        // settings written by a version without the input effects window: take
+        // over the old input boost and reverberation settings so that the
+        // sound stays the same after the update
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "inputboost", 2, 10, iValue ) )
+        {
+            const float fBoostDb = static_cast<float> ( qRound ( 20.0 * log10 ( static_cast<double> ( iValue ) ) ) );
+
+            for ( int iLane = 0; iLane < MAX_FX_LANES; iLane++ )
+            {
+                Fx.Boost ( iLane ).SetEnabled ( true );
+                Fx.Boost ( iLane ).SetGainDb ( fBoostDb );
+            }
+        }
+
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 1, AUD_REVERB_MAX, iValue ) )
+        {
+            // the reverb was applied to both channels in stereo mode, otherwise
+            // to one channel only (the right one by default)
+            int  iAudioChannels    = 0;
+            bool bReverbOnLeftChan = false;
+            GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 2 /* CC_STEREO */, iAudioChannels );
+            GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bReverbOnLeftChan );
+
+            const bool bStereo = ( iAudioChannels == static_cast<int> ( CC_STEREO ) );
+            const int  iLane   = ( bStereo || bReverbOnLeftChan ) ? 0 : 1;
+
+            Fx.Reverb ( iLane ).SetEnabled ( true );
+            Fx.Reverb ( iLane ).SetLevel ( iValue );
+
+            if ( !bStereo )
+            {
+                bInputEffectsLinked = false;
+            }
+        }
     }
+    else
+    {
+        for ( int iLane = 0; iLane < MAX_FX_LANES; iLane++ )
+        {
+            if ( GetFlagIniSet ( IniXMLDocument, "client", QString ( "fxbooston%1" ).arg ( iLane ), bValue ) )
+            {
+                Fx.Boost ( iLane ).SetEnabled ( bValue );
+            }
+
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "fxboostdb%1" ).arg ( iLane ), 0, FX_BOOST_DB_MAX, iValue ) )
+            {
+                Fx.Boost ( iLane ).SetGainDb ( static_cast<float> ( iValue ) );
+            }
+
+            if ( GetFlagIniSet ( IniXMLDocument, "client", QString ( "fxcompon%1" ).arg ( iLane ), bValue ) )
+            {
+                Fx.Compressor ( iLane ).SetEnabled ( bValue );
+            }
+
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "fxcompratio%1" ).arg ( iLane ), 0, FX_COMP_NUM_RATIOS - 1, iValue ) )
+            {
+                Fx.Compressor ( iLane ).SetRatioIdx ( iValue );
+            }
+
+            if ( GetNumericIniSet ( IniXMLDocument,
+                                    "client",
+                                    QString ( "fxcompthresh%1" ).arg ( iLane ),
+                                    FX_COMP_THRESHOLD_DB_MIN,
+                                    FX_COMP_THRESHOLD_DB_MAX,
+                                    iValue ) )
+            {
+                Fx.Compressor ( iLane ).SetThresholdDb ( static_cast<float> ( iValue ) );
+            }
+
+            if ( GetFlagIniSet ( IniXMLDocument, "client", QString ( "fxrevon%1" ).arg ( iLane ), bValue ) )
+            {
+                Fx.Reverb ( iLane ).SetEnabled ( bValue );
+            }
+
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "fxrevlev%1" ).arg ( iLane ), 0, AUD_REVERB_MAX, iValue ) )
+            {
+                Fx.Reverb ( iLane ).SetLevel ( iValue );
+            }
+        }
+    }
+#endif
 
     // sound card selection
     const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
@@ -805,6 +881,9 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     // window position of the connect window
     vecWindowPosConnect = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposcon_base64" ) );
 
+    // window position of the input effects window
+    vecWindowPosInputFx = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "client", "winposfx_base64" ) );
+
     // visibility state of the settings window
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisset", bValue ) )
     {
@@ -821,6 +900,12 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winviscon", bValue ) )
     {
         bWindowWasShownConnect = bValue;
+    }
+
+    // visibility state of the input effects window
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisfx", bValue ) )
+    {
+        bWindowWasShownInputFx = bValue;
     }
 
     // selected Settings Tab
@@ -903,9 +988,6 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // new client level
     SetNumericIniSet ( IniXMLDocument, "client", "newclientlevel", iNewClientFaderLevel );
 
-    // input boost
-    SetNumericIniSet ( IniXMLDocument, "client", "inputboost", iInputBoost );
-
     // feedback detection
     SetFlagIniSet ( IniXMLDocument, "client", "enablefeedbackdetection", bEnableFeedbackDetection );
 
@@ -945,11 +1027,26 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // audio fader
     SetNumericIniSet ( IniXMLDocument, "client", "audfad", pClient->GetAudioInFader() );
 
-    // reverberation level
-    SetNumericIniSet ( IniXMLDocument, "client", "revlev", pClient->GetReverbLevel() );
+    // input effects
+    SetFlagIniSet ( IniXMLDocument, "client", "fxlinked", bInputEffectsLinked );
 
-    // reverberation channel assignment
-    SetFlagIniSet ( IniXMLDocument, "client", "reverblchan", pClient->IsReverbOnLeftChan() );
+#ifndef NO_INTERNAL_EFFECTS
+    CInputEffectChain& Fx = pClient->GetInputEffects();
+
+    for ( int iLane = 0; iLane < MAX_FX_LANES; iLane++ )
+    {
+        SetFlagIniSet ( IniXMLDocument, "client", QString ( "fxbooston%1" ).arg ( iLane ), Fx.Boost ( iLane ).IsEnabled() );
+        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxboostdb%1" ).arg ( iLane ), static_cast<int> ( Fx.Boost ( iLane ).GetGainDb() + 0.5f ) );
+        SetFlagIniSet ( IniXMLDocument, "client", QString ( "fxcompon%1" ).arg ( iLane ), Fx.Compressor ( iLane ).IsEnabled() );
+        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxcompratio%1" ).arg ( iLane ), Fx.Compressor ( iLane ).GetRatioIdx() );
+        SetNumericIniSet ( IniXMLDocument,
+                           "client",
+                           QString ( "fxcompthresh%1" ).arg ( iLane ),
+                           static_cast<int> ( Fx.Compressor ( iLane ).GetThresholdDb() - 0.5f ) );
+        SetFlagIniSet ( IniXMLDocument, "client", QString ( "fxrevon%1" ).arg ( iLane ), Fx.Reverb ( iLane ).IsEnabled() );
+        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxrevlev%1" ).arg ( iLane ), Fx.Reverb ( iLane ).GetLevel() );
+    }
+#endif
 
     // sound card selection
     PutIniSetting ( IniXMLDocument, "client", "auddev_base64", ToBase64 ( pClient->GetSndCrdDev() ) );
@@ -1017,6 +1114,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // window position of the connect window
     PutIniSetting ( IniXMLDocument, "client", "winposcon_base64", ToBase64 ( vecWindowPosConnect ) );
 
+    // window position of the input effects window
+    PutIniSetting ( IniXMLDocument, "client", "winposfx_base64", ToBase64 ( vecWindowPosInputFx ) );
+
     // visibility state of the settings window
     SetFlagIniSet ( IniXMLDocument, "client", "winvisset", bWindowWasShownSettings );
 
@@ -1025,6 +1125,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
 
     // visibility state of the connect window
     SetFlagIniSet ( IniXMLDocument, "client", "winviscon", bWindowWasShownConnect );
+
+    // visibility state of the input effects window
+    SetFlagIniSet ( IniXMLDocument, "client", "winvisfx", bWindowWasShownInputFx );
 
     // Settings Tab
     SetNumericIniSet ( IniXMLDocument, "client", "settingstab", iSettingsTab );

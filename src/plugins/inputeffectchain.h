@@ -64,9 +64,6 @@ public:
     // real-time safe
     bool IsAnyEnabled() const;
 
-    int GetNumLanes() const { return iNumLanes; }                     // 1 for stereo, else 2
-    int GetNumChannelsPerLane() const { return iNumChannelsPerLane; } // 2 for stereo, else 1
-
 #ifndef NO_INTERNAL_EFFECTS
     CInputBoost&      Boost ( const int iLane ) { return Boost_[iLane]; }
     CAudioCompressor& Compressor ( const int iLane ) { return Compressor_[iLane]; }
@@ -74,8 +71,8 @@ public:
 #endif
 
 protected:
-    int            iNumLanes;
-    int            iNumChannelsPerLane;
+    int            iNumLanes;           // 1 for stereo, else 2
+    int            iNumChannelsPerLane; // 2 for stereo, else 1
     int            iMonoBlockSizeSam;
     int            iNumEffectsPerLane;
     CVector<float> vecfChan[MAX_FX_CHANNELS]; // planar buffers: left, right

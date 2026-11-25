@@ -63,7 +63,8 @@ public:
 
     static float GetRatio ( const int iIdx );
 
-    virtual void Activate ( const int iNNumChannels, const int ) override;
+    // the compressor has no block buffer, therefore iMaxFrames is not needed
+    virtual void Activate ( const int iNNumChannels, const int /* iMaxFrames */ ) override;
     virtual void Reset() override;
     virtual void Process ( float* const* ppfChannels, const int iNumFrames ) override;
 

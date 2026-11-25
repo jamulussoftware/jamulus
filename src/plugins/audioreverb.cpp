@@ -24,7 +24,7 @@ void CAudioReverb::SetLevel ( const int iNewLevel )
     }
 }
 
-void CAudioReverb::Activate ( const int iNNumChannels, const int )
+void CAudioReverb::Activate ( const int iNNumChannels, const int /* iMaxFrames */ )
 {
     // store parameters
     iNumChannels = iNNumChannels;

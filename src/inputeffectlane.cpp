@@ -161,10 +161,10 @@ void CInputEffectLane::UpdateFromClient()
     sldReverb->blockSignals ( true );
 
     grbBoost->setChecked ( Fx.Boost ( iLane ).IsEnabled() );
-    sldBoost->setValue ( static_cast<int> ( Fx.Boost ( iLane ).GetGainDb() + 0.5f ) );
+    sldBoost->setValue ( qRound ( Fx.Boost ( iLane ).GetGainDb() ) );
     grbComp->setChecked ( Fx.Compressor ( iLane ).IsEnabled() );
     cbxCompAmount->setCurrentIndex ( Fx.Compressor ( iLane ).GetRatioIdx() );
-    sldCompThreshold->setValue ( static_cast<int> ( Fx.Compressor ( iLane ).GetThresholdDb() - 0.5f ) );
+    sldCompThreshold->setValue ( qRound ( Fx.Compressor ( iLane ).GetThresholdDb() ) );
     grbReverb->setChecked ( Fx.Reverb ( iLane ).IsEnabled() );
     sldReverb->setValue ( Fx.Reverb ( iLane ).GetLevel() );
 
@@ -221,20 +221,6 @@ void CInputEffectLane::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
         lbrOutput->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         break;
     }
-}
-
-bool CInputEffectLane::IsAnyEffectEnabled() const
-{
-#ifndef NO_INTERNAL_EFFECTS
-    if ( pClient != nullptr )
-    {
-        CInputEffectChain& Fx = pClient->GetInputEffects();
-
-        return Fx.Boost ( iLane ).IsEnabled() || Fx.Compressor ( iLane ).IsEnabled() || Fx.Reverb ( iLane ).IsEnabled();
-    }
-#endif
-
-    return false;
 }
 
 void CInputEffectLane::OnBoostToggled ( bool bChecked )

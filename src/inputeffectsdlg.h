@@ -58,7 +58,7 @@ public:
     void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
 
     // the preview is only available while not connected
-    void SetConnected ( const bool bNConnected );
+    void SetConnected ( const bool bConnected );
 
     void UpdateAudioFaderSlider();
 
@@ -70,7 +70,6 @@ protected:
 
     CClient*         pClient;
     CClientSettings* pSettings;
-    bool             bConnected;
     bool             bMobile;
     int              iMobileLane; // lane shown on phones when not linked
 

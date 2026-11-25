@@ -29,7 +29,6 @@ CInputEffectsDlg::CInputEffectsDlg ( CClient* pNCliP, CClientSettings* pNSetP, Q
     CBaseDlg ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
-    bConnected ( false ),
     bMobile ( false ),
     iMobileLane ( 0 )
 {
@@ -150,6 +149,14 @@ void CInputEffectsDlg::UpdateChannelLayout()
     const bool bStereo = ( pClient->GetAudioChannels() == CC_STEREO );
     const bool bLinked = pSettings->bInputEffectsLinked;
 
+    if ( bLinked && !bStereo )
+    {
+        // only the left lane is shown and edited: make sure the right lane
+        // processes with the same parameters (e.g. after a switch from stereo
+        // mode, where the right lane is not used)
+        CopyLaneParams ( 0, 1 );
+    }
+
 #ifndef NO_INTERNAL_EFFECTS
     // the linking controls make no sense in stereo mode (one source)
     chbLinked->setVisible ( !bStereo && !bMobile );
@@ -207,10 +214,8 @@ void CInputEffectsDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
     wdgLaneR->SetMeterStyle ( eNewMeterStyle );
 }
 
-void CInputEffectsDlg::SetConnected ( const bool bNConnected )
+void CInputEffectsDlg::SetConnected ( const bool bConnected )
 {
-    bConnected = bNConnected;
-
     // the sound card is in use while connected
     butPreview->setEnabled ( !bConnected );
 }

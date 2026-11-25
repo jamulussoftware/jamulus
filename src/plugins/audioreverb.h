@@ -32,7 +32,8 @@ public:
     void SetLevel ( const int iNewLevel );
     int  GetLevel() const { return iLevel; }
 
-    virtual void Activate ( const int iNNumChannels, const int ) override;
+    // the delay lines are sized by the decay time, iMaxFrames is not needed
+    virtual void Activate ( const int iNNumChannels, const int /* iMaxFrames */ ) override;
     virtual void Reset() override;
     virtual void Process ( float* const* ppfChannels, const int iNumFrames ) override;
 

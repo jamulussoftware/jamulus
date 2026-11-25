@@ -35,12 +35,14 @@
 class CInputBoost : public CInputEffect
 {
 public:
-    CInputBoost() : iNumChannels ( 1 ), fGainDb ( FX_BOOST_DB_DEFAULT ), fGain ( 1.0f ) { SetGainDb ( FX_BOOST_DB_DEFAULT ); }
+    CInputBoost() : iNumChannels ( 1 ), fGainDb ( 0.0f ), fGain ( 1.0f ) { SetGainDb ( FX_BOOST_DB_DEFAULT ); }
 
+    // gain in dB in the range 0 .. FX_BOOST_DB_MAX
     void  SetGainDb ( const float fNewGainDb );
     float GetGainDb() const { return fGainDb; }
 
-    virtual void Activate ( const int iNNumChannels, const int ) override { iNumChannels = iNNumChannels; }
+    // the boost has no block buffer, therefore iMaxFrames is not needed
+    virtual void Activate ( const int iNNumChannels, const int /* iMaxFrames */ ) override { iNumChannels = iNNumChannels; }
     virtual void Reset() override {}
     virtual void Process ( float* const* ppfChannels, const int iNumFrames ) override;
 

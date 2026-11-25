@@ -736,14 +736,16 @@ void CClientDlg::OnConnectDlgAccepted()
 
 void CClientDlg::OnConnectDisconBut()
 {
-    // the connect/disconnect button implements a toggle functionality
-    if ( pClient->IsRunning() )
+    // the connect/disconnect button implements a toggle functionality (note
+    // that the sound card may also be running for the local preview, so the
+    // connection state is checked and not the sound card state)
+    if ( pClient->GetConnectionState() != CS_DISCONNECTED )
     {
         pClient->Disconnect();
     }
     else
     {
-        // If the client isn't running, we assume that we weren't connected. Thus show the connect dialog
+        // not connected, thus show the connect dialog
         // TODO: Refactor to have robust error handling
         ShowConnectionSetupDialog();
     }
@@ -1055,12 +1057,19 @@ void CClientDlg::OnInputFxStateChanged ( int value )
 
 void CClientDlg::OnLocalPreviewChanged ( bool bActive )
 {
-    // the level meters are also running during the local preview
+    // the level meters and the feedback detection also run during the local
+    // preview (the preview plays the own input signal to the speakers)
     if ( bActive )
     {
         lbrInputLevelL->setEnabled ( true );
         lbrInputLevelR->setEnabled ( true );
         TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+
+        if ( pSettings->bEnableFeedbackDetection )
+        {
+            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+            bDetectFeedback = true;
+        }
     }
     else if ( !pClient->IsRunning() )
     {
@@ -1069,6 +1078,8 @@ void CClientDlg::OnLocalPreviewChanged ( bool bActive )
         lbrInputLevelR->setEnabled ( false );
         lbrInputLevelL->SetValue ( 0 );
         lbrInputLevelR->SetValue ( 0 );
+        TimerDetectFeedback.stop();
+        bDetectFeedback = false;
     }
 }
 
@@ -1102,17 +1113,45 @@ void CClientDlg::OnTimerSigMet()
     if ( bDetectFeedback &&
          ( pClient->GetLevelForMeterdBLeft() > NUM_STEPS_LED_BAR - 0.5 || pClient->GetLevelForMeterdBRight() > NUM_STEPS_LED_BAR - 0.5 ) )
     {
-        // mute locally and mute channel
-        chbLocalMute->setCheckState ( Qt::Checked );
-        MainMixerBoard->MuteMyChannel();
+        const bool bWasPreview = pClient->IsLocalPreviewActive();
+
+        if ( bWasPreview )
+        {
+            // the local preview is the signal path which causes the feedback
+            try
+            {
+                pClient->SetLocalPreview ( false );
+            }
+            catch ( const CGenErr& )
+            {
+                // the sound card could not be stopped, nothing more to do here
+            }
+        }
+        else
+        {
+            // mute locally and mute channel
+            chbLocalMute->setCheckState ( Qt::Checked );
+            MainMixerBoard->MuteMyChannel();
+        }
 
         // show message box about feedback issue
         QCheckBox* chb = new QCheckBox ( tr ( "Enable feedback detection" ) );
         chb->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
         QMessageBox msgbox;
-        msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
-                              "We muted your channel and activated 'Mute Myself'. Please solve "
-                              "the feedback issue first and unmute yourself afterwards." ) );
+
+        if ( bWasPreview )
+        {
+            msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
+                                  "We stopped the preview. Please solve the feedback issue first, "
+                                  "e.g. by using headphones." ) );
+        }
+        else
+        {
+            msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
+                                  "We muted your channel and activated 'Mute Myself'. Please solve "
+                                  "the feedback issue first and unmute yourself afterwards." ) );
+        }
+
         msgbox.setIcon ( QMessageBox::Icon::Warning );
         msgbox.addButton ( QMessageBox::Ok );
         msgbox.setDefaultButton ( QMessageBox::Ok );

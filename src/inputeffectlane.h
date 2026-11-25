@@ -55,8 +55,6 @@ public:
     void ResetMeters();
     void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
 
-    bool IsAnyEffectEnabled() const;
-
 protected:
     void UpdateValueLabels();
 

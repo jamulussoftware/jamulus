@@ -1036,13 +1036,10 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     for ( int iLane = 0; iLane < MAX_FX_LANES; iLane++ )
     {
         SetFlagIniSet ( IniXMLDocument, "client", QString ( "fxbooston%1" ).arg ( iLane ), Fx.Boost ( iLane ).IsEnabled() );
-        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxboostdb%1" ).arg ( iLane ), static_cast<int> ( Fx.Boost ( iLane ).GetGainDb() + 0.5f ) );
+        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxboostdb%1" ).arg ( iLane ), qRound ( Fx.Boost ( iLane ).GetGainDb() ) );
         SetFlagIniSet ( IniXMLDocument, "client", QString ( "fxcompon%1" ).arg ( iLane ), Fx.Compressor ( iLane ).IsEnabled() );
         SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxcompratio%1" ).arg ( iLane ), Fx.Compressor ( iLane ).GetRatioIdx() );
-        SetNumericIniSet ( IniXMLDocument,
-                           "client",
-                           QString ( "fxcompthresh%1" ).arg ( iLane ),
-                           static_cast<int> ( Fx.Compressor ( iLane ).GetThresholdDb() - 0.5f ) );
+        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxcompthresh%1" ).arg ( iLane ), qRound ( Fx.Compressor ( iLane ).GetThresholdDb() ) );
         SetFlagIniSet ( IniXMLDocument, "client", QString ( "fxrevon%1" ).arg ( iLane ), Fx.Reverb ( iLane ).IsEnabled() );
         SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxrevlev%1" ).arg ( iLane ), Fx.Reverb ( iLane ).GetLevel() );
     }

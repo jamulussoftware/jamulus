@@ -75,7 +75,7 @@ void CAudioCompressor::SetThresholdDb ( const float fNewThresholdDb )
     fThresholdDb = std::min ( static_cast<float> ( FX_COMP_THRESHOLD_DB_MAX ), std::max ( static_cast<float> ( FX_COMP_THRESHOLD_DB_MIN ), fNewThresholdDb ) );
 }
 
-void CAudioCompressor::Activate ( const int iNNumChannels, const int )
+void CAudioCompressor::Activate ( const int iNNumChannels, const int /* iMaxFrames */ )
 {
     iNumChannels = iNNumChannels;
     fAttackCoef  = TimeConstToCoef ( FX_COMP_ATTACK_S );

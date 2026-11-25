@@ -916,6 +916,13 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
         strError = generr.GetErrorText();
     }
 
+    // a local preview does not survive a failed sound card restart
+    if ( bLocalPreview && !Sound.IsRunning() )
+    {
+        bLocalPreview = false;
+        emit LocalPreviewChanged ( false );
+    }
+
     // inform GUI about the sound card device change
     emit SoundDeviceChanged ( strError );
 }
@@ -1129,6 +1136,13 @@ void CClient::Start()
 ///       Use to set CClientDlg to show not being connected
 void CClient::Stop()
 {
+    // the local preview ends together with the sound card
+    if ( bLocalPreview )
+    {
+        bLocalPreview = false;
+        emit LocalPreviewChanged ( false );
+    }
+
     // stop audio interface
     Sound.Stop();
 

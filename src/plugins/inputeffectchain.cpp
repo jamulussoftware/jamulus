@@ -40,9 +40,18 @@ void CInputEffectChain::Init ( const EAudChanConf eNAudioChannelConf, const int 
 {
     // in stereo mode both channels form one source which is processed by one
     // lane, in the mono modes each input channel has its own lane
-    iNumLanes           = ( eNAudioChannelConf == CC_STEREO ) ? 1 : 2;
-    iNumChannelsPerLane = MAX_FX_CHANNELS + 1 - iNumLanes;
-    iMonoBlockSizeSam   = iNMonoBlockSizeSam;
+    if ( eNAudioChannelConf == CC_STEREO )
+    {
+        iNumLanes           = 1;
+        iNumChannelsPerLane = 2;
+    }
+    else
+    {
+        iNumLanes           = 2;
+        iNumChannelsPerLane = 1;
+    }
+
+    iMonoBlockSizeSam = iNMonoBlockSizeSam;
 
     for ( int c = 0; c < MAX_FX_CHANNELS; c++ )
     {
@@ -108,8 +117,12 @@ void CInputEffectChain::Process ( CVector<int16_t>& vecsStereoInOut )
 
     for ( int iLane = 0; iLane < iNumLanes; iLane++ )
     {
-        // a stereo lane sees both channels, a mono lane sees its own one
-        float* apfLane[MAX_FX_CHANNELS] = { &vecfChan[iLane][0], &vecfChan[1][0] };
+        // channel pointers of this lane: a mono lane sees only its own input
+        // channel (left for lane 0, right for lane 1), the stereo lane (always
+        // lane 0) sees both
+        float* apfLane[MAX_FX_CHANNELS];
+        apfLane[0] = &vecfChan[iLane][0];
+        apfLane[1] = &vecfChan[1][0]; // only used by the stereo lane
 
         for ( int iEff = 0; iEff < iNumEffectsPerLane; iEff++ )
         {

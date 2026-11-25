@@ -46,7 +46,7 @@
 class CInputEffect
 {
 public:
-    CInputEffect() : bEnabled ( false ) {}
+    CInputEffect() : bEnabled ( false ) {} // all effects are off by default
     virtual ~CInputEffect() {}
 
     // called with the sound card stopped, may allocate memory

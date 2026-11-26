@@ -89,9 +89,12 @@ CInputEffectLane::CInputEffectLane ( QWidget* parent ) : QGroupBox ( parent ), p
     lbrOutput->setAccessibleName ( tr ( "Input level after the effects" ) );
 
     // short tooltips (rich text, so that long tooltips wrap)
-    sldBoost->setToolTip ( "<p>" + tr ( "Raises the input volume before the other effects. Prefer the gain control on your audio interface if it has one." ) + "</p>" );
-    grbComp->setToolTip ( "<p>" + tr ( "Compresses the dynamic range: loud parts are turned down and the whole signal is raised to compensate, "
-                               "so your sound gets louder and more even." ) + "</p>" );
+    sldBoost->setToolTip (
+        "<p>" + tr ( "Raises the input volume before the other effects. Prefer the gain control on your audio interface if it has one." ) + "</p>" );
+    grbComp->setToolTip ( "<p>" +
+                          tr ( "Compresses the dynamic range: loud parts are turned down and the whole signal is raised to compensate, "
+                               "so your sound gets louder and more even." ) +
+                          "</p>" );
     cbxCompAmount->setToolTip ( "<p>" + tr ( "Light: vocals, acoustic guitar." ) + "<br>" + tr ( "Moderate: expressive singing, bass, percussion." ) +
                                 "<br>" + tr ( "Strong: drums, very dynamic sources." ) + "</p><p>" +
                                 tr ( "Note: already compressed input (mixer, pedal) needs none." ) + "</p>" );

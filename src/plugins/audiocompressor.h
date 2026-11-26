@@ -38,7 +38,7 @@
 
 /* Definitions ****************************************************************/
 // selectable ratios (index into the table)
-#define FX_COMP_NUM_RATIOS       3
+#define FX_COMP_NUM_RATIOS        3
 #define FX_COMP_RATIO_IDX_DEFAULT 0 // 2:1
 
 #define FX_COMP_THRESHOLD_DB_MIN     ( -40 )

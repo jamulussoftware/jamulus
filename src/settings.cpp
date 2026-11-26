@@ -497,7 +497,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         bInputEffectsLinked = bValue;
     }
 
-#ifndef NO_INTERNAL_EFFECTS
+#    ifndef NO_INTERNAL_EFFECTS
     CInputEffectChain& Fx = pClient->GetInputEffects();
 
     if ( GetIniSetting ( IniXMLDocument, "client", "fxrevlev0" ).isEmpty() )
@@ -582,7 +582,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
             }
         }
     }
-#endif
+#    endif
 
     // sound card selection
     const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
@@ -1030,7 +1030,7 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
     // input effects
     SetFlagIniSet ( IniXMLDocument, "client", "fxlinked", bInputEffectsLinked );
 
-#ifndef NO_INTERNAL_EFFECTS
+#    ifndef NO_INTERNAL_EFFECTS
     CInputEffectChain& Fx = pClient->GetInputEffects();
 
     for ( int iLane = 0; iLane < MAX_FX_LANES; iLane++ )
@@ -1039,11 +1039,14 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument, bool is
         SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxboostdb%1" ).arg ( iLane ), qRound ( Fx.Boost ( iLane ).GetGainDb() ) );
         SetFlagIniSet ( IniXMLDocument, "client", QString ( "fxcompon%1" ).arg ( iLane ), Fx.Compressor ( iLane ).IsEnabled() );
         SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxcompratio%1" ).arg ( iLane ), Fx.Compressor ( iLane ).GetRatioIdx() );
-        SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxcompthresh%1" ).arg ( iLane ), qRound ( Fx.Compressor ( iLane ).GetThresholdDb() ) );
+        SetNumericIniSet ( IniXMLDocument,
+                           "client",
+                           QString ( "fxcompthresh%1" ).arg ( iLane ),
+                           qRound ( Fx.Compressor ( iLane ).GetThresholdDb() ) );
         SetFlagIniSet ( IniXMLDocument, "client", QString ( "fxrevon%1" ).arg ( iLane ), Fx.Reverb ( iLane ).IsEnabled() );
         SetNumericIniSet ( IniXMLDocument, "client", QString ( "fxrevlev%1" ).arg ( iLane ), Fx.Reverb ( iLane ).GetLevel() );
     }
-#endif
+#    endif
 
     // sound card selection
     PutIniSetting ( IniXMLDocument, "client", "auddev_base64", ToBase64 ( pClient->GetSndCrdDev() ) );

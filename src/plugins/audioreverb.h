@@ -58,10 +58,10 @@ protected:
     int              iNumChannels;
     std::atomic<int> iLevel;
     CFIFO<float>     allpassDelays[3];
-    CFIFO<float> combDelays[4];
-    COnePole     combFilters[4];
-    CFIFO<float> outLeftDelay;
-    CFIFO<float> outRightDelay;
-    float        allpassCoefficient;
-    float        combCoefficient[4];
+    CFIFO<float>     combDelays[4];
+    COnePole         combFilters[4];
+    CFIFO<float>     outLeftDelay;
+    CFIFO<float>     outRightDelay;
+    float            allpassCoefficient;
+    float            combCoefficient[4];
 };

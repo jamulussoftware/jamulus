@@ -124,7 +124,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                                     "input balance of your local input channels can be set up." ) );
 
     chbInputFx->setAccessibleName ( tr ( "Input effects window toggle button" ) );
-    chbInputFx->setToolTip ( tr ( "Boost, compressor, reverb and balance of your input" ) );
+    chbInputFx->setToolTip ( "<p>" + tr ( "Boost, compressor, reverb and balance of your input." ) + "</p>" );
 
     // delay LED
     QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " + tr ( "Shows the current audio delay status:" ) +

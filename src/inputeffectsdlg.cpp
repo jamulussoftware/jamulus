@@ -2,7 +2,7 @@
  * Copyright (c) 2026
  *
  * Author(s):
- *  uazure
+ *  Serhii Popov (uazure@gmail.com)
  *
  ******************************************************************************
  *
@@ -81,7 +81,7 @@ CInputEffectsDlg::CInputEffectsDlg ( CClient* pNCliP, CClientSettings* pNSetP, Q
                               "available while you are not connected to a server." );
 
     butPreview->setWhatsThis ( strPreview );
-    butPreview->setToolTip ( tr ( "Play your processed sound locally to check the effects. Use headphones to avoid feedback." ) );
+    butPreview->setToolTip ( "<p>" + tr ( "Play your processed sound locally to check the effects. Use headphones to avoid feedback." ) + "</p>" );
     butPreview->setAccessibleName ( tr ( "Preview toggle button" ) );
 
     // local audio input fader
@@ -100,10 +100,10 @@ CInputEffectsDlg::CInputEffectsDlg ( CClient* pNCliP, CClientSettings* pNSetP, Q
     sldAudioPan->setWhatsThis ( strAudFader );
     sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 
-    // short tooltips
-    chbLinked->setToolTip ( tr ( "Use one set of effects for both input channels." ) );
-    cbxChannel->setToolTip ( tr ( "Input channel to set up." ) );
-    sldAudioPan->setToolTip ( tr ( "Balance between the left and right input channel." ) );
+    // short tooltips (rich text, so that long tooltips wrap)
+    chbLinked->setToolTip ( "<p>" + tr ( "Use one set of effects for both input channels." ) + "</p>" );
+    cbxChannel->setToolTip ( "<p>" + tr ( "Input channel to set up." ) + "</p>" );
+    sldAudioPan->setToolTip ( "<p>" + tr ( "Balance between the left and right input channel." ) + "</p>" );
 
     // init controls -----------------------------------------------------------
     wdgLaneL->SetClientAndLane ( pClient, 0 );

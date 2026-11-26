@@ -2,7 +2,7 @@
  * Copyright (c) 2026
  *
  * Author(s):
- *  uazure
+ *  Serhii Popov (uazure@gmail.com)
  *
  ******************************************************************************
  *
@@ -31,10 +31,10 @@ CInputEffectLane::CInputEffectLane ( QWidget* parent ) : QGroupBox ( parent ), p
 
     // Add help text to controls -----------------------------------------------
     QString strBoost = "<b>" + tr ( "Boost" ) + ":</b> " +
-                       tr ( "Increases your input signal level by up to %1 dB. "
+                       tr ( "Raises the input volume by up to %1 dB before the other effects. "
                             "If your sound is too quiet, first try to increase the level by "
-                            "getting closer to the microphone, adjusting your sound equipment "
-                            "or increasing levels in your operating system's input settings. "
+                            "getting closer to the microphone, with the gain control of your "
+                            "audio interface or in your operating system's input settings. "
                             "Only if this fails, switch on the boost. "
                             "If your sound is too loud, sounds distorted and is clipping, the "
                             "boost will not help. Instead, decrease your input level." )
@@ -48,10 +48,12 @@ CInputEffectLane::CInputEffectLane ( QWidget* parent ) : QGroupBox ( parent ), p
     sldBoost->setAccessibleName ( tr ( "Boost gain slider" ) );
 
     QString strComp = "<b>" + tr ( "Compressor" ) + ":</b> " +
-                      tr ( "Evens out your level by turning down loud parts; a makeup gain "
-                           "brings the overall level back up. Light is subtle, Strong is "
-                           "clearly audible. The threshold is the level above which the "
-                           "compressor starts working." );
+                      tr ( "Compresses the dynamic range of your sound: loud parts are turned "
+                           "down and the whole signal is raised to compensate, so your sound "
+                           "gets louder and more even. The amount sets how strongly loud parts "
+                           "are turned down, the threshold is the level above which the "
+                           "compression starts. Input which is already compressed, e.g. by a "
+                           "mixer or a pedal, usually needs no compression here." );
 
     grbComp->setWhatsThis ( strComp );
     lblCompAmount->setWhatsThis ( strComp );
@@ -86,16 +88,17 @@ CInputEffectLane::CInputEffectLane ( QWidget* parent ) : QGroupBox ( parent ), p
     lbrInputRaw->setAccessibleName ( tr ( "Input level before the effects" ) );
     lbrOutput->setAccessibleName ( tr ( "Input level after the effects" ) );
 
-    // short tooltips
-    grbBoost->setToolTip ( tr ( "Makes a quiet input louder. Does not help against distortion." ) );
-    sldBoost->setToolTip ( tr ( "Gain added to the input signal." ) );
-    grbComp->setToolTip ( tr ( "Evens out your level: loud parts are turned down, the overall level is brought back up." ) );
-    cbxCompAmount->setToolTip ( tr ( "How strongly loud parts are turned down." ) );
-    sldCompThreshold->setToolTip ( tr ( "Level above which the compressor starts working. Lower means more compression." ) );
-    grbReverb->setToolTip ( tr ( "Adds room ambience to your sound." ) );
-    sldReverb->setToolTip ( tr ( "Amount of reverb mixed into the signal." ) );
-    lbrInputRaw->setToolTip ( tr ( "Level from the sound card, before the effects" ) );
-    lbrOutput->setToolTip ( tr ( "Level after the effects, as sent to the server" ) );
+    // short tooltips (rich text, so that long tooltips wrap)
+    sldBoost->setToolTip ( "<p>" + tr ( "Raises the input volume before the other effects. Prefer the gain control on your audio interface if it has one." ) + "</p>" );
+    grbComp->setToolTip ( "<p>" + tr ( "Compresses the dynamic range: loud parts are turned down and the whole signal is raised to compensate, "
+                               "so your sound gets louder and more even." ) + "</p>" );
+    cbxCompAmount->setToolTip ( "<p>" + tr ( "Light: vocals, acoustic guitar." ) + "<br>" + tr ( "Moderate: expressive singing, bass, percussion." ) +
+                                "<br>" + tr ( "Strong: drums, very dynamic sources." ) + "</p><p>" +
+                                tr ( "Note: already compressed input (mixer, pedal) needs none." ) + "</p>" );
+    sldCompThreshold->setToolTip ( "<p>" + tr ( "Level above which compression starts. Lower means more compression and more volume." ) + "</p>" );
+    sldReverb->setToolTip ( "<p>" + tr ( "Amount of reverb mixed into the signal." ) + "</p>" );
+    lbrInputRaw->setToolTip ( "<p>" + tr ( "Level from the sound card, before the effects." ) + "</p>" );
+    lbrOutput->setToolTip ( "<p>" + tr ( "Level after the effects, as sent to the server." ) + "</p>" );
 
     // init controls -----------------------------------------------------------
 #ifndef NO_INTERNAL_EFFECTS

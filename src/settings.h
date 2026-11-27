@@ -170,7 +170,6 @@ public:
         vecStoredFaderGroupID ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
         vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel ( 100 ),
-        iInputBoost ( 1 ),
         iSettingsTab ( SETTING_TAB_AUDIONET ),
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType ( ST_NO_SORT ),
@@ -179,12 +178,15 @@ public:
         eDirectoryType ( AT_DEFAULT ),
         bEnableFeedbackDetection ( true ),
         bEnableAudioAlerts ( false ),
+        bInputEffectsLinked ( true ),
         vecWindowPosSettings(), // empty array
         vecWindowPosChat(),     // empty array
         vecWindowPosConnect(),  // empty array
+        vecWindowPosInputFx(),  // empty array
         bWindowWasShownSettings ( false ),
         bWindowWasShownChat ( false ),
         bWindowWasShownConnect ( false ),
+        bWindowWasShownInputFx ( false ),
         bOwnFaderFirst ( false ),
         iMidiChannel ( 0 ),
         iMidiMuteMyself ( 0 ),
@@ -242,7 +244,6 @@ public:
     CVector<int>     vecStoredFaderGroupID;
     CVector<QString> vstrIPAddress;
     int              iNewClientFaderLevel;
-    int              iInputBoost;
     int              iSettingsTab;
     bool             bConnectDlgShowAllMusicians;
     EChSortType      eChannelSortType;
@@ -252,14 +253,17 @@ public:
     int              iCustomDirectoryIndex; // index of selected custom directory
     bool             bEnableFeedbackDetection;
     bool             bEnableAudioAlerts;
+    bool             bInputEffectsLinked; // same input effect settings for left and right
 
     // window position/state settings
     QByteArray vecWindowPosSettings;
     QByteArray vecWindowPosChat;
     QByteArray vecWindowPosConnect;
+    QByteArray vecWindowPosInputFx;
     bool       bWindowWasShownSettings;
     bool       bWindowWasShownChat;
     bool       bWindowWasShownConnect;
+    bool       bWindowWasShownInputFx;
     bool       bOwnFaderFirst;
 
     // MIDI settings

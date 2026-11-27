@@ -74,6 +74,7 @@
 #include "audiomixerboard.h"
 #include "clientsettingsdlg.h"
 #include "chatdlg.h"
+#include "inputeffectsdlg.h"
 #include "connectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
@@ -112,9 +113,10 @@ protected:
     void ShowConnectionSetupDialog();
     void ShowGeneralSettings ( int iTab );
     void ShowChatWindow ( const bool bForceRaise = true );
+    void ShowInputEffects();
     void ShowAnalyzerConsole();
     void UpdateAudioFaderSlider();
-    void UpdateRevSelection();
+    void UpdateAudioChannelsDisplay();
     void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
     void SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
@@ -141,6 +143,7 @@ protected:
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
+    CInputEffectsDlg   InputEffectsDlg;
     CConnectDlg        ConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
 
@@ -181,6 +184,7 @@ public slots:
     void OnOpenAudioNetSettings();
     void OnOpenAdvancedSettings();
     void OnOpenChatDialog() { ShowChatWindow(); }
+    void OnOpenInputEffectsDialog() { ShowInputEffects(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
     void OnOwnFaderFirst()
     {
@@ -200,13 +204,9 @@ public slots:
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
+    void OnInputFxStateChanged ( int value );
+    void OnLocalPreviewChanged ( bool bActive );
     void OnLocalMuteStateChanged ( int value );
-
-    void OnAudioReverbValueChanged ( int value ) { pClient->SetReverbLevel ( value ); }
-
-    void OnReverbSelLClicked() { pClient->SetReverbOnLeftChan ( true ); }
-
-    void OnReverbSelRClicked() { pClient->SetReverbOnLeftChan ( false ); }
 
     void OnFeedbackDetectionChanged ( int state ) { ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked ); }
 
@@ -258,7 +258,7 @@ public slots:
     void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
-    void OnAudioChannelsChanged() { UpdateRevSelection(); }
+    void OnAudioChannelsChanged() { UpdateAudioChannelsDisplay(); }
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones

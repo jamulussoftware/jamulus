@@ -208,6 +208,7 @@ During compile time some CONFIG arguments can be given to enable or disable spec
 | `serveronly`            | Only support running as Server                                          |
 | `headless`              | Disable GUI. Supports Client and Server. Usually used with serveronly   |
 | `nojsonrpc`             | Disable JSON-RPC support                                                |
+| `nointernaleffects`     | Build the Client without the built-in input effects (boost, compressor, reverb); the effects chain stays empty |
 | `jackonwindows`         | Use JACK instead of ASIO on Windows                                     |
 | `jackonmac`             | Use JACK instead of CoreAudio on macOS (untested)                       |
 | `server_bundle`         | macOS only: Create an application bundle which starts server by default |

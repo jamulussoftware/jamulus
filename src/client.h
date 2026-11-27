@@ -61,7 +61,7 @@
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
-#include "plugins/audioreverb.h"
+#include "plugins/inputeffectchain.h"
 #include "buffer.h"
 #include "signalhandler.h"
 
@@ -104,9 +104,6 @@ enum EConnectionState
 #define AUD_FADER_IN_MIN    0
 #define AUD_FADER_IN_MAX    100
 #define AUD_FADER_IN_MIDDLE ( AUD_FADER_IN_MAX / 2 )
-
-// audio reverberation range
-#define AUD_REVERB_MAX 100
 
 // default delay period between successive gain updates (ms)
 // this will be increased to double the ping time if connected to a distant server
@@ -185,8 +182,18 @@ public:
     // IPv6 Available
     bool IsIPv6Available() { return bIPv6Available; }
 
+    // signal level after the input effects (what is sent to the server)
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
+
+    // signal level as it comes from the sound card
+    double GetLevelForMeterdBRawLeft() { return SignalLevelMeterRaw.GetLevelForMeterdBLeftOrMono(); }
+    double GetLevelForMeterdBRawRight() { return SignalLevelMeterRaw.GetLevelForMeterdBRight(); }
+
+    // local preview: while not connected, run the sound card and play the
+    // processed input signal to the outputs instead of sending it
+    bool IsLocalPreviewActive() const { return bLocalPreview; }
+    void SetLocalPreview ( const bool bOn );
 
     bool GetAndResetbJitterBufferOKFlag();
 
@@ -207,15 +214,7 @@ public:
     int  GetAudioInFader() const { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
-    int  GetReverbLevel() const { return iReverbLevel; }
-    void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
-
-    bool IsReverbOnLeftChan() const { return bReverbOnLeftChan; }
-    void SetReverbOnLeftChan ( const bool bIL )
-    {
-        bReverbOnLeftChan = bIL;
-        AudioReverb.Clear();
-    }
+    CInputEffectChain& GetInputEffects() { return InputEffects; }
 
     void SetDoAutoSockBufSize ( const bool bValue );
     bool GetDoAutoSockBufSize() const { return Channel.GetDoAutoSockBufSize(); }
@@ -305,8 +304,6 @@ public:
     void StartTimerGainOrPan();
 
     void SetControllerInFaderLevel ( int iChannelIdx, int iValue ) { OnControllerInFaderLevel ( iChannelIdx, iValue ); }
-
-    void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
@@ -428,14 +425,13 @@ protected:
 
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
+    CStereoSignalLevelMeter SignalLevelMeterRaw;
 
     CVector<uint8_t> vecbyNetwData;
 
     std::atomic<int>  iAudioInFader;
-    std::atomic<bool> bReverbOnLeftChan;
-    std::atomic<int>  iReverbLevel;
-    CAudioReverb      AudioReverb;
-    std::atomic<int>  iInputBoost;
+    CInputEffectChain InputEffects;
+    std::atomic<bool> bLocalPreview;
 
     int iSndCrdPrefFrameSizeFactor;
     int iSndCrdFrameSizeFactor;
@@ -543,6 +539,7 @@ signals:
     void Disconnected();
 
     void SoundDeviceChanged ( QString strError );
+    void LocalPreviewChanged ( bool bActive );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
     void ControllerInPanValue ( int iChannelIdx, int iValue );
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );

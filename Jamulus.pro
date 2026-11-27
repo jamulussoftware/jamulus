@@ -50,6 +50,11 @@ contains(CONFIG, "headless") {
     QT += multimedia
 }
 
+contains(CONFIG, "nointernaleffects") {
+    message(Building without the internal input effects due to CONFIG+=nointernaleffects.)
+    DEFINES += NO_INTERNAL_EFFECTS
+}
+
 # Do not set LRELEASE_DIR explicitly when using embed_translations.
 # It doesn't work with multiple targets or architectures.
 TRANSLATIONS = src/translation/translation_ja_JP.ts \
@@ -400,11 +405,12 @@ FORMS_GUI = src/aboutdlgbase.ui \
     FORMS_GUI += src/clientdlgbase.ui \
         src/clientsettingsdlgbase.ui \
         src/chatdlgbase.ui \
-        src/connectdlgbase.ui
+        src/connectdlgbase.ui \
+        src/inputeffectlanebase.ui \
+        src/inputeffectsdlgbase.ui
 }
 
-HEADERS += src/plugins/audioreverb.h \
-    src/buffer.h \
+HEADERS += src/buffer.h \
     src/channel.h \
     src/global.h \
     src/protocol.h \
@@ -423,6 +429,11 @@ HEADERS += src/plugins/audioreverb.h \
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
+        src/plugins/inputeffect.h \
+        src/plugins/inputeffectchain.h \
+        src/plugins/inputboost.h \
+        src/plugins/audiocompressor.h \
+        src/plugins/audioreverb.h \
         src/sound/soundbase.h \
         src/testbench.h
 }
@@ -435,6 +446,8 @@ HEADERS_GUI = src/serverdlg.h
         src/clientsettingsdlg.h \
         src/connectdlg.h \
         src/clientdlg.h \
+        src/inputeffectlane.h \
+        src/inputeffectsdlg.h \
         src/levelmeter.h \
         src/analyzerconsole.h \
         src/multicolorled.h
@@ -511,8 +524,7 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/x86cpu.h \
     $$files(libs/opus/silk/x86/*.h)
 
-SOURCES += src/plugins/audioreverb.cpp \
-    src/buffer.cpp \
+SOURCES += src/buffer.cpp \
     src/channel.cpp \
     src/main.cpp \
     src/protocol.cpp \
@@ -530,7 +542,16 @@ SOURCES += src/plugins/audioreverb.cpp \
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
-        src/sound/soundbase.cpp \
+        src/plugins/inputeffectchain.cpp \
+        src/sound/soundbase.cpp
+
+    # the internal input effects can be left out (e.g. for a build with a
+    # plugin host instead)
+    !contains(CONFIG, "nointernaleffects") {
+        SOURCES += src/plugins/inputboost.cpp \
+            src/plugins/audiocompressor.cpp \
+            src/plugins/audioreverb.cpp
+    }
 }
 
 SOURCES_GUI = src/serverdlg.cpp
@@ -541,6 +562,8 @@ SOURCES_GUI = src/serverdlg.cpp
         src/clientsettingsdlg.cpp \
         src/connectdlg.cpp \
         src/clientdlg.cpp \
+        src/inputeffectlane.cpp \
+        src/inputeffectsdlg.cpp \
         src/multicolorled.cpp \
         src/levelmeter.cpp \
         src/analyzerconsole.cpp

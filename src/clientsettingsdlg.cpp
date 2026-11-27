@@ -77,23 +77,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 #endif
 
     // Add help text to controls -----------------------------------------------
-    // local audio input fader
-    QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +
-                          tr ( "Controls the relative levels of the left and right local audio "
-                               "channels. For a mono signal it acts as a pan between the two channels. "
-                               "For example, if a microphone is connected to "
-                               "the right input channel and an instrument is connected to the left "
-                               "input channel which is much louder than the microphone, move the "
-                               "audio fader in a direction where the label above the fader shows "
-                               "%1, where %2 is the current attenuation indicator." )
-                              .arg ( "<i>" + tr ( "L" ) + " -x</i>", "<i>x</i>" );
-
-    lblAudioPan->setWhatsThis ( strAudFader );
-    lblAudioPanValue->setWhatsThis ( strAudFader );
-    sldAudioPan->setWhatsThis ( strAudFader );
-
-    sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
-
     // jitter buffer
     QString strJitterBufferSize = "<b>" + tr ( "Jitter Buffer Size" ) + ":</b> " +
                                   tr ( "The jitter buffer compensates for network and sound card timing jitters. The "
@@ -363,23 +346,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     edtNewClientLevel->setWhatsThis ( strNewClientLevel );
     edtNewClientLevel->setAccessibleName ( tr ( "New client level edit box" ) );
 
-    // input boost
-    QString strInputBoost = "<b>" + tr ( "Input Boost" ) + ":</b> " +
-                            tr ( "This setting allows you to increase your input signal level "
-                                 "by factors up to 10 (+20dB). "
-                                 "If your sound is too quiet, first try to increase the level by "
-                                 "getting closer to the microphone, adjusting your sound equipment "
-                                 "or increasing levels in your operating system's input settings. "
-                                 "Only if this fails, set a factor here. "
-                                 "If your sound is too loud, sounds distorted and is clipping, this "
-                                 "option will not help. Do not use it. The distortion will still be "
-                                 "there. Instead, decrease your input level by getting farther away "
-                                 "from your microphone, adjusting your sound equipment "
-                                 "or by decreasing your operating system's input settings." );
-    lblInputBoost->setWhatsThis ( strInputBoost );
-    cbxInputBoost->setWhatsThis ( strInputBoost );
-    cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
-
     // custom directories
     QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
                                    tr ( "If you need to add additional directories to the Connect dialog Directory drop down, "
@@ -485,11 +451,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     butDriverSetup->hide();
 #endif
 
-    // init audio in fader
-    sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
-    sldAudioPan->setTickInterval ( AUD_FADER_IN_MAX / 5 );
-    UpdateAudioFaderSlider();
-
     // init delay and other information controls
     lblUpstreamValue->setText ( "---" );
     lblUpstreamUnit->setText ( "" );
@@ -544,16 +505,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
-
-    // Input Boost combo box
-    cbxInputBoost->clear();
-    cbxInputBoost->addItem ( tr ( "None" ) );
-    for ( int i = 2; i <= 10; i++ )
-    {
-        cbxInputBoost->addItem ( QString ( "%1x" ).arg ( i ) );
-    }
-    // factor is 1-based while index is 0-based:
-    cbxInputBoost->setCurrentIndex ( pSettings->iInputBoost - 1 );
 
     // init number of mixer rows
     spnMixerRows->setValue ( pSettings->iNumMixerPanelRows );
@@ -781,11 +732,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CClientSettingsDlg::OnLanguageChanged );
 
-    QObject::connect ( cbxInputBoost,
-                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-                       this,
-                       &CClientSettingsDlg::OnInputBoostChanged );
-
     // buttons
 #if defined( _WIN32 ) && !defined( WITH_JACK )
     // Driver Setup button is only available for Windows when JACK is not used
@@ -796,9 +742,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QObject::connect ( tbtDeleteCustomDirectory, &QToolButton::clicked, this, [this] { CClientSettingsDlg::OnCustomDirectoriesChanged ( true ); } );
 
     // misc
-    // sliders
-    QObject::connect ( sldAudioPan, &QSlider::valueChanged, this, &CClientSettingsDlg::OnAudioPanValueChanged );
-
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
                        static_cast<void ( QButtonGroup::* ) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
                        this,
@@ -1382,13 +1325,6 @@ void CClientSettingsDlg::UpdateDirectoryComboBox()
     }
 }
 
-void CClientSettingsDlg::OnInputBoostChanged()
-{
-    // index is zero-based while boost factor must be 1-based:
-    pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
-    pClient->SetInputBoost ( pSettings->iInputBoost );
-}
-
 void CClientSettingsDlg::OnAliasTextChanged ( const QString& strNewName )
 {
     // check length
@@ -1460,39 +1396,6 @@ void CClientSettingsDlg::OnMakeTabChange ( int iTab )
 }
 
 void CClientSettingsDlg::OnTabChanged ( void ) { pSettings->iSettingsTab = tabSettings->currentIndex(); }
-
-void CClientSettingsDlg::UpdateAudioFaderSlider()
-{
-    // update slider and label of audio fader
-    const int iCurAudInFader = pClient->GetAudioInFader();
-    sldAudioPan->setValue ( iCurAudInFader );
-
-    // show in label the center position and what channel is
-    // attenuated
-    if ( iCurAudInFader == AUD_FADER_IN_MIDDLE )
-    {
-        lblAudioPanValue->setText ( tr ( "Center" ) );
-    }
-    else
-    {
-        if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
-        {
-            // attenuation on right channel
-            lblAudioPanValue->setText ( tr ( "L" ) + " -" + QString().setNum ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) );
-        }
-        else
-        {
-            // attenuation on left channel
-            lblAudioPanValue->setText ( tr ( "R" ) + " -" + QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
-        }
-    }
-}
-
-void CClientSettingsDlg::OnAudioPanValueChanged ( int value )
-{
-    pClient->SetAudioInFader ( value );
-    UpdateAudioFaderSlider();
-}
 
 void CClientSettingsDlg::ResetMidiLearn()
 {

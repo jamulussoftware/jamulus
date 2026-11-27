@@ -63,6 +63,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     eLastDesign ( GD_DEFAULT ),          //          "
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
     ChatDlg ( parent ),
+    InputEffectsDlg ( pNCliP, pNSetP, parent ),
     ConnectDlg ( pNCliP, pNSetP, bNewShowComplRegConnList, parent ),
     AnalyzerConsole ( pNCliP, parent )
 {
@@ -117,31 +118,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     butConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
 
-    // reverberation level
-    QString strAudReverb = "<b>" + tr ( "Reverb effect" ) + ":</b> " +
-                           tr ( "Reverb can be applied to one local mono audio channel or to both "
-                                "channels in stereo mode. The mono channel selection and the "
-                                "reverb level can be modified. For example, if "
-                                "a microphone signal is fed in to the right audio channel of the "
-                                "sound card and a reverb effect needs to be applied, set the "
-                                "channel selector to right and move the fader upwards until the "
-                                "desired reverb level is reached." );
+    // input effects button
+    chbInputFx->setWhatsThis ( "<b>" + tr ( "Input FX" ) + ":</b> " +
+                               tr ( "Opens the Input Effects window where boost, compressor, reverb and "
+                                    "input balance of your local input channels can be set up." ) );
 
-    lblAudioReverb->setWhatsThis ( strAudReverb );
-    sldAudioReverb->setWhatsThis ( strAudReverb );
-
-    sldAudioReverb->setAccessibleName ( tr ( "Reverb effect level setting" ) );
-
-    // reverberation channel selection
-    QString strRevChanSel = "<b>" + tr ( "Reverb Channel Selection" ) + ":</b> " +
-                            tr ( "With these radio buttons the audio input channel on which the "
-                                 "reverb effect is applied can be chosen. Either the left "
-                                 "or right input channel can be selected." );
-
-    rbtReverbSelL->setWhatsThis ( strRevChanSel );
-    rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverb" ) );
-    rbtReverbSelR->setWhatsThis ( strRevChanSel );
-    rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverb" ) );
+    chbInputFx->setAccessibleName ( tr ( "Input effects window toggle button" ) );
+    chbInputFx->setToolTip ( "<p>" + tr ( "Boost, compressor, reverb and balance of your input." ) + "</p>" );
 
     // delay LED
     QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " + tr ( "Shows the current audio delay status:" ) +
@@ -257,17 +240,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ledBuffers->Reset();
     ledDelay->Reset();
 
-    // init audio reverberation
-    sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
-    const int iCurAudReverb = pClient->GetReverbLevel();
-    sldAudioReverb->setValue ( iCurAudReverb );
-    sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
-
-    // init input boost
-    pClient->SetInputBoost ( pSettings->iInputBoost );
-
-    // init reverb channel
-    UpdateRevSelection();
+    // init channel dependent controls
+    UpdateAudioChannelsDisplay();
 
     // init connect dialog
     ConnectDlg.SetShowAllMusicians ( pSettings->bConnectDlgShowAllMusicians );
@@ -392,6 +366,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pViewMenu->addSeparator();
 
+    pViewMenu->addAction ( tr ( "Input &Effects..." ), this, SLOT ( OnOpenInputEffectsDialog() ) );
+
     pViewMenu->addAction ( tr ( "C&hat..." ), this, SLOT ( OnOpenChatDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_H ) );
 
     // optionally show analyzer console entry
@@ -458,6 +434,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         ShowChatWindow();
     }
 
+    // input effects window
+    if ( !pSettings->vecWindowPosInputFx.isEmpty() && !pSettings->vecWindowPosInputFx.isNull() )
+    {
+        InputEffectsDlg.restoreGeometry ( pSettings->vecWindowPosInputFx );
+    }
+
+    if ( pSettings->bWindowWasShownInputFx )
+    {
+        ShowInputEffects();
+    }
+
     // connection setup window
     if ( !pSettings->vecWindowPosConnect.isEmpty() && !pSettings->vecWindowPosConnect.isNull() )
     {
@@ -473,6 +460,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( chbChat, &QCheckBox::stateChanged, this, &CClientDlg::OnChatStateChanged );
 
+    QObject::connect ( chbInputFx, &QCheckBox::stateChanged, this, &CClientDlg::OnInputFxStateChanged );
+
     QObject::connect ( chbLocalMute, &QCheckBox::stateChanged, this, &CClientDlg::OnLocalMuteStateChanged );
 
     // timers
@@ -487,13 +476,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( &TimerCheckAudioDeviceOk, &QTimer::timeout, this, &CClientDlg::OnTimerCheckAudioDeviceOk );
 
     QObject::connect ( &TimerDetectFeedback, &QTimer::timeout, this, &CClientDlg::OnTimerDetectFeedback );
-
-    QObject::connect ( sldAudioReverb, &QSlider::valueChanged, this, &CClientDlg::OnAudioReverbValueChanged );
-
-    // radio buttons
-    QObject::connect ( rbtReverbSelL, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelLClicked );
-
-    QObject::connect ( rbtReverbSelR, &QRadioButton::clicked, this, &CClientDlg::OnReverbSelRClicked );
 
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
@@ -545,6 +527,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::CLVersionAndOSReceived, this, &CClientDlg::OnCLVersionAndOSReceived );
 
     QObject::connect ( pClient, &CClient::SoundDeviceChanged, this, &CClientDlg::OnSoundDeviceChanged );
+
+    QObject::connect ( pClient, &CClient::LocalPreviewChanged, this, &CClientDlg::OnLocalPreviewChanged );
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged, this, &CClientDlg::OnGUIDesignChanged );
 
@@ -630,14 +614,17 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pSettings->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
     pSettings->vecWindowPosChat     = ChatDlg.saveGeometry();
     pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
+    pSettings->vecWindowPosInputFx  = InputEffectsDlg.saveGeometry();
 
     pSettings->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
     pSettings->bWindowWasShownChat     = ChatDlg.isVisible();
     pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
+    pSettings->bWindowWasShownInputFx  = InputEffectsDlg.isVisible();
 
     // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
     ChatDlg.close();
+    InputEffectsDlg.close();
     ConnectDlg.close();
     AnalyzerConsole.close();
 
@@ -683,34 +670,13 @@ void CClientDlg::ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept )
     }
 }
 
-void CClientDlg::UpdateRevSelection()
+void CClientDlg::UpdateAudioChannelsDisplay()
 {
-    if ( pClient->GetAudioChannels() == CC_STEREO )
-    {
-        // for stereo make channel selection invisible since
-        // reverberation effect is always applied to both channels
-        rbtReverbSelL->setVisible ( false );
-        rbtReverbSelR->setVisible ( false );
-    }
-    else
-    {
-        // make radio buttons visible
-        rbtReverbSelL->setVisible ( true );
-        rbtReverbSelR->setVisible ( true );
-
-        // update value
-        if ( pClient->IsReverbOnLeftChan() )
-        {
-            rbtReverbSelL->setChecked ( true );
-        }
-        else
-        {
-            rbtReverbSelR->setChecked ( true );
-        }
-    }
-
     // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
+
+    // the input effects window shows one or two input channels
+    InputEffectsDlg.UpdateChannelLayout();
 }
 
 void CClientDlg::OnConnectDlgAccepted()
@@ -770,14 +736,16 @@ void CClientDlg::OnConnectDlgAccepted()
 
 void CClientDlg::OnConnectDisconBut()
 {
-    // the connect/disconnect button implements a toggle functionality
-    if ( pClient->IsRunning() )
+    // the connect/disconnect button implements a toggle functionality (note
+    // that the sound card may also be running for the local preview, so the
+    // connection state is checked and not the sound card state)
+    if ( pClient->GetConnectionState() != CS_DISCONNECTED )
     {
         pClient->Disconnect();
     }
     else
     {
-        // If the client isn't running, we assume that we weren't connected. Thus show the connect dialog
+        // not connected, thus show the connect dialog
         // TODO: Refactor to have robust error handling
         ShowConnectionSetupDialog();
     }
@@ -1029,6 +997,18 @@ void CClientDlg::ShowChatWindow ( const bool bForceRaise )
     UpdateDisplay();
 }
 
+void CClientDlg::ShowInputEffects()
+{
+    InputEffectsDlg.show();
+    InputEffectsDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Input Effects" ), pClient->strClientName ) );
+
+    // make sure dialog is upfront and has focus
+    InputEffectsDlg.raise();
+    InputEffectsDlg.activateWindow();
+
+    UpdateDisplay();
+}
+
 void CClientDlg::ShowAnalyzerConsole()
 {
     // open analyzer console dialog
@@ -1063,6 +1043,46 @@ void CClientDlg::OnChatStateChanged ( int value )
     }
 }
 
+void CClientDlg::OnInputFxStateChanged ( int value )
+{
+    if ( value == Qt::Checked )
+    {
+        ShowInputEffects();
+    }
+    else
+    {
+        InputEffectsDlg.hide();
+    }
+}
+
+void CClientDlg::OnLocalPreviewChanged ( bool bActive )
+{
+    // the level meters and the feedback detection also run during the local
+    // preview (the preview plays the own input signal to the speakers)
+    if ( bActive )
+    {
+        lbrInputLevelL->setEnabled ( true );
+        lbrInputLevelR->setEnabled ( true );
+        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+
+        if ( pSettings->bEnableFeedbackDetection )
+        {
+            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+            bDetectFeedback = true;
+        }
+    }
+    else if ( !pClient->IsRunning() )
+    {
+        TimerSigMet.stop();
+        lbrInputLevelL->setEnabled ( false );
+        lbrInputLevelR->setEnabled ( false );
+        lbrInputLevelL->SetValue ( 0 );
+        lbrInputLevelR->SetValue ( 0 );
+        TimerDetectFeedback.stop();
+        bDetectFeedback = false;
+    }
+}
+
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
@@ -1084,20 +1104,54 @@ void CClientDlg::OnTimerSigMet()
     lbrInputLevelL->SetValue ( pClient->GetLevelForMeterdBLeft() );
     lbrInputLevelR->SetValue ( pClient->GetLevelForMeterdBRight() );
 
+    // the input effects window has its own level meters
+    if ( InputEffectsDlg.isVisible() )
+    {
+        InputEffectsDlg.UpdateMeters();
+    }
+
     if ( bDetectFeedback &&
          ( pClient->GetLevelForMeterdBLeft() > NUM_STEPS_LED_BAR - 0.5 || pClient->GetLevelForMeterdBRight() > NUM_STEPS_LED_BAR - 0.5 ) )
     {
-        // mute locally and mute channel
-        chbLocalMute->setCheckState ( Qt::Checked );
-        MainMixerBoard->MuteMyChannel();
+        const bool bWasPreview = pClient->IsLocalPreviewActive();
+
+        if ( bWasPreview )
+        {
+            // the local preview is the signal path which causes the feedback
+            try
+            {
+                pClient->SetLocalPreview ( false );
+            }
+            catch ( const CGenErr& )
+            {
+                // the sound card could not be stopped, nothing more to do here
+            }
+        }
+        else
+        {
+            // mute locally and mute channel
+            chbLocalMute->setCheckState ( Qt::Checked );
+            MainMixerBoard->MuteMyChannel();
+        }
 
         // show message box about feedback issue
         QCheckBox* chb = new QCheckBox ( tr ( "Enable feedback detection" ) );
         chb->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
         QMessageBox msgbox;
-        msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
-                              "We muted your channel and activated 'Mute Myself'. Please solve "
-                              "the feedback issue first and unmute yourself afterwards." ) );
+
+        if ( bWasPreview )
+        {
+            msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
+                                  "We stopped the preview. Please solve the feedback issue first, "
+                                  "e.g. by using headphones." ) );
+        }
+        else
+        {
+            msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
+                                  "We muted your channel and activated 'Mute Myself'. Please solve "
+                                  "the feedback issue first and unmute yourself afterwards." ) );
+        }
+
         msgbox.setIcon ( QMessageBox::Icon::Warning );
         msgbox.addButton ( QMessageBox::Ok );
         msgbox.setDefaultButton ( QMessageBox::Ok );
@@ -1231,6 +1285,9 @@ void CClientDlg::OnConnecting ( const QString& strMixerBoardLabel )
     // change connect button text to "disconnect"
     butConnect->setText ( tr ( "&Disconnect" ) );
 
+    // the local preview is not available while connected
+    InputEffectsDlg.SetConnected ( true );
+
     // set server name in audio mixer group box title
     MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
@@ -1254,6 +1311,9 @@ void CClientDlg::OnDisconnect()
 {
     // change connect button text to "connect"
     butConnect->setText ( tr ( "C&onnect" ) );
+
+    InputEffectsDlg.SetConnected ( false );
+    InputEffectsDlg.ResetMeters();
 
     // reset server name in audio mixer group box title
     MainMixerBoard->SetServerName ( "" );
@@ -1326,6 +1386,19 @@ void CClientDlg::UpdateDisplay()
         chbChat->setChecked ( true );
         chbChat->blockSignals ( false );
     }
+
+    if ( chbInputFx->isChecked() && !InputEffectsDlg.isVisible() )
+    {
+        chbInputFx->blockSignals ( true );
+        chbInputFx->setChecked ( false );
+        chbInputFx->blockSignals ( false );
+    }
+    if ( !chbInputFx->isChecked() && InputEffectsDlg.isVisible() )
+    {
+        chbInputFx->blockSignals ( true );
+        chbInputFx->setChecked ( true );
+        chbInputFx->blockSignals ( false );
+    }
 }
 
 void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -1347,8 +1420,6 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         margin:        -5px, -5px, 0px, 0px; }"
             "QLabel {                 color:          rgb(220, 220, 220);"
             "                         font:           bold; }"
-            "QRadioButton {           color:          rgb(220, 220, 220);"
-            "                         font:           bold; }"
             "QScrollArea {            background:     transparent; }"
             ".QWidget {               background:     transparent; }" // note: matches instances of QWidget, but not of its subclasses
             "QGroupBox {              background:     transparent; }"
@@ -1361,16 +1432,6 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
             "QCheckBox {              color:          rgb(220, 220, 220);"
             "                         font:           bold; }" );
-#ifdef _WIN32
-        // Workaround QT-Windows problem: This should not be necessary since in the
-        // background frame the style sheet for QRadioButton was already set. But it
-        // seems that it is only applied if the style was set to default and then back
-        // to GD_ORIGINAL. This seems to be a QT related issue...
-        rbtReverbSelL->setStyleSheet ( "color: rgb(220, 220, 220);"
-                                       "font:  bold;" );
-        rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
-                                       "font:  bold;" );
-#endif
 
         ledBuffers->SetType ( CMultiColorLED::MT_LED );
         ledDelay->SetType ( CMultiColorLED::MT_LED );
@@ -1379,12 +1440,6 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
     default:
         // reset style sheet and set original parameters
         backgroundFrame->setStyleSheet ( "" );
-
-#ifdef _WIN32
-        // Workaround QT-Windows problem: See above description
-        rbtReverbSelL->setStyleSheet ( "" );
-        rbtReverbSelR->setStyleSheet ( "" );
-#endif
 
         ledBuffers->SetType ( CMultiColorLED::MT_INDICATOR );
         ledDelay->SetType ( CMultiColorLED::MT_INDICATOR );
@@ -1421,6 +1476,7 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
 
     // also apply MeterStyle to child GUI controls
     MainMixerBoard->SetMeterStyle ( eNewMeterStyle );
+    InputEffectsDlg.SetMeterStyle ( eNewMeterStyle );
 }
 
 void CClientDlg::OnRecorderStateReceived ( const ERecorderState newRecorderState )

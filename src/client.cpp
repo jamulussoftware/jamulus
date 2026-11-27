@@ -76,9 +76,7 @@ CClient::CClient ( const quint16  iPortNumber,
     Socket ( &Channel, iPortNumber, iQosNumber, "", "", bNDisableIPv6, bIPv6Available ),
     Sound ( AudioCallback, this, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
-    bReverbOnLeftChan ( false ),
-    iReverbLevel ( 0 ),
-    iInputBoost ( 1 ),
+    bLocalPreview ( false ),
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     bSndCrdConversionBufferRequired ( false ),
@@ -918,6 +916,13 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
         strError = generr.GetErrorText();
     }
 
+    // a local preview does not survive a failed sound card restart
+    if ( bLocalPreview && !Sound.IsRunning() )
+    {
+        bLocalPreview = false;
+        emit LocalPreviewChanged ( false );
+    }
+
     // inform GUI about the sound card device change
     emit SoundDeviceChanged ( strError );
 }
@@ -1056,8 +1061,50 @@ void CClient::OnRawAudioSupported()
     }
 }
 
+void CClient::SetLocalPreview ( const bool bOn )
+{
+    // the preview uses the sound card, therefore it is only possible while
+    // not connected
+    if ( ( bOn == bLocalPreview ) || ( bOn && ( GetConnectionState() != CS_DISCONNECTED ) ) )
+    {
+        return;
+    }
+
+    if ( bOn )
+    {
+        Init(); // may throw CGenErr
+        bLocalPreview = true;
+
+        try
+        {
+            Sound.Start();
+        }
+        catch ( const CGenErr& )
+        {
+            bLocalPreview = false;
+            throw;
+        }
+    }
+    else
+    {
+        Sound.Stop();
+        bLocalPreview = false;
+    }
+
+    SignalLevelMeter.Reset();
+    SignalLevelMeterRaw.Reset();
+
+    emit LocalPreviewChanged ( bLocalPreview );
+}
+
 void CClient::Start()
 {
+    // a running local preview must end before connecting
+    if ( bLocalPreview )
+    {
+        SetLocalPreview ( false );
+    }
+
     // init object
     Init();
 
@@ -1089,6 +1136,13 @@ void CClient::Start()
 ///       Use to set CClientDlg to show not being connected
 void CClient::Stop()
 {
+    // the local preview ends together with the sound card
+    if ( bLocalPreview )
+    {
+        bLocalPreview = false;
+        emit LocalPreviewChanged ( false );
+    }
+
     // stop audio interface
     Sound.Stop();
 
@@ -1132,6 +1186,7 @@ void CClient::Stop()
     // reset current signal level and LEDs
     bJitterBufferOK = true;
     SignalLevelMeter.Reset();
+    SignalLevelMeterRaw.Reset();
 
 #if defined( Q_OS_WINDOWS )
     // Allow hibernation or display dimming if the app is running again (Windows)
@@ -1461,8 +1516,8 @@ void CClient::Init()
     // set the channel network properties
     Channel.SetAudioStreamProperties ( eAudioCompressionType, iCeltNumCodedBytes, iSndCrdFrameSizeFactor, iNumAudioChannels );
 
-    // init reverberation
-    AudioReverb.Init ( eAudioChannelConf, iStereoBlockSizeSam, SYSTEM_SAMPLE_RATE_HZ );
+    // init the local input effects
+    InputEffects.Init ( eAudioChannelConf, iMonoBlockSizeSam );
 
     // init the sound card conversion buffers
     if ( bSndCrdConversionBufferRequired )
@@ -1541,26 +1596,18 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     // Transmit signal ---------------------------------------------------------
 
-    if ( iInputBoost != 1 )
-    {
-        // apply a general gain boost to all audio input:
-        for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-        {
-            vecsStereoSndCrd[j + 1] = Float2Short ( iInputBoost * vecsStereoSndCrd[j + 1] );
-            vecsStereoSndCrd[j]     = Float2Short ( iInputBoost * vecsStereoSndCrd[j] );
-        }
-    }
+    // update the signal level meters before and after the local input
+    // effects (not needed in headless mode)
+#ifndef HEADLESS
+    SignalLevelMeterRaw.Update ( vecsStereoSndCrd, iMonoBlockSizeSam, true );
+#endif
 
-    // update stereo signal level meter (not needed in headless mode)
+    // apply the local input effects (boost, compressor, reverberation)
+    InputEffects.Process ( vecsStereoSndCrd );
+
 #ifndef HEADLESS
     SignalLevelMeter.Update ( vecsStereoSndCrd, iMonoBlockSizeSam, true );
 #endif
-
-    // add reverberation effect if activated
-    if ( iReverbLevel != 0 )
-    {
-        AudioReverb.Process ( vecsStereoSndCrd, bReverbOnLeftChan, static_cast<float> ( iReverbLevel ) / AUD_REVERB_MAX / 4 );
-    }
 
     // apply pan (audio fader) and mix mono signals
     if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf == CC_STEREO ) ) )
@@ -1610,6 +1657,23 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         {
             vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] = vecsStereoSndCrd[i];
         }
+    }
+
+    // local preview (not connected): nothing is sent or received, instead the
+    // processed signal which would be sent is played to the sound card outputs
+    if ( bLocalPreview )
+    {
+        if ( eAudioChannelConf == CC_MONO )
+        {
+            // copy mono data in stereo sound card buffer (start from the end
+            // not to overwrite input values)
+            for ( i = iMonoBlockSizeSam - 1, j = iStereoBlockSizeSam - 2; i >= 0; i--, j -= 2 )
+            {
+                vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] = vecsStereoSndCrd[i];
+            }
+        }
+
+        return;
     }
 
     for ( i = 0, j = 0; i < iSndCrdFrameSizeFactor; i++, j += iNumAudioChannels * iOPUSFrameSizeSamples )

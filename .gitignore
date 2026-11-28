@@ -13,6 +13,7 @@ Makefile.*
 .idea
 .vscode
 .cache
+.gradle/
 *.user
 *.user.*
 *.o
@@ -39,6 +40,8 @@ build/
 deploy/
 build-gui/
 build-nox/
+android-build/
+android-Jamulus-deployment-settings.json
 jamulus.sln
 jamulus.vcxproj
 jamulus.vcxproj.filters
@@ -58,3 +61,8 @@ jamulus_plugin_import.cpp
 .github_release_changelog.md
 /debian/
 .github/instructions/awesome-copilot-instructions
+*.jks
+**/*.log
+android-build_*.settings
+Copilot-Processing.md
+/play-store/

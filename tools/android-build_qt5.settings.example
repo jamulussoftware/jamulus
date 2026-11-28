@@ -1,0 +1,29 @@
+# Copy to android-build_qt5.settings in the repository root (gitignored), or
+# pass --settings /path/to/file. Values here override existing environment
+# values and tools/android-build.sh defaults. Command-line options take
+# precedence.
+
+# JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+# ANDROID_SDK_ROOT=/opt/android-sdk
+# ANDROID_NDK_ROOT=${ANDROID_SDK_ROOT}/ndk/21.0.6113669
+# ANDROID_BUILD_TOOLS=30.0.2
+# QT_DIR=/opt/Qt
+# ANDROID_PLATFORM=android-30
+
+# Default build mode is debug. Release mode requires signing:
+# BUILD_MODES=release
+TARGET_ARCHS=arm64-v8a
+
+# Application ID for APKs. Required for build stages unless origin is a GitHub
+# remote (then app.<owner>.<repo> is used). Uncomment and set to override.
+# Use a distinct ID for development release APKs, and a persistent keystore
+# outside generated output directories:
+# JAMULUS_ANDROID_PACKAGE_NAME=app.example.jamulus
+# JAMULUS_ANDROID_DEV_KEYSTORE=${HOME}/Jamulus/dev-signing.jks
+
+# Optional qmake CONFIG values, space-separated:
+# JAMULUS_ANDROID_QMAKE_CONFIG="serveronly disable_version_check"
+
+# Override the default `_qt5` artifact suffix if necessary:
+# JAMULUS_ANDROID_ARTIFACT_SUFFIX=_custom
+# Add machine-specific toolchain overrides to the ignored settings file.

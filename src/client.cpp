@@ -1207,7 +1207,7 @@ void CClient::OnHostResolved ( const QHostInfo& info, quint16 port )
     if ( info.error() != QHostInfo::NoError )
     {
         SetConnectionState ( CS_DISCONNECTED ); // no longer CS_RESOLVING
-        emit ConnectingFailed ( "Cannot connect: " + info.errorString() );
+        emit ConnectingFailed ( tr ( "Cannot connect: " ) + info.errorString() );
         return;
     }
 
@@ -1233,7 +1233,7 @@ void CClient::OnHostResolved ( const QHostInfo& info, quint16 port )
     }
 
     SetConnectionState ( CS_DISCONNECTED ); // no longer CS_RESOLVING
-    emit ConnectingFailed ( "Hostname returned no usable addresses" );
+    emit ConnectingFailed ( tr ( "Hostname returned no usable addresses" ) );
 }
 
 /// @method

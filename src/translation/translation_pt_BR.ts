@@ -1690,7 +1690,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Max</source>
-        <translation type="unfinished">Máx</translation>
+        <translation>Máximo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>
@@ -1793,7 +1793,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.h" line="650"/>
         <source>Any Genre Asia</source>
-        <translation>Gênero Variado Ásia</translation>
+        <translation>Qualquer gênero Ásia</translation>
     </message>
     <message>
         <location filename="../util.h" line="653"/>
@@ -2451,7 +2451,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <location filename="../clientsettingsdlgbase.ui" line="2024"/>
         <location filename="../clientsettingsdlgbase.ui" line="2148"/>
         <source>Count</source>
-        <translation>Contagem</translation>
+        <translation>Contador</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1803"/>

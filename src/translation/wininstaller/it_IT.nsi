@@ -10,13 +10,13 @@ LangString RUNNING_APP_MSG ${LANG_ITALIAN} \
    "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_ITALIAN} \
-    "E' stata trovata una precedente versione di ${APP_NAME} nella cartella Programmi. E' altamente consigliato rimuoverla prima di procedere con l'insallazione di una nuova versione di ${APP_NAME}. Vuoi rimuoverla adesso?"
+    "E' stata trovata una precedente versione di ${APP_NAME} nella cartella Programmi a 32 bit. E' altamente consigliato rimuoverla prima di procedere con l'installazione di una nuova versione di ${APP_NAME}. Vuoi rimuoverla adesso?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ITALIAN} \
     "Se non viene cancellata l'installazione potrebbe non andare a buona fine! Sei sicuro di voler continuare?"
 
 LangString OLD_VER_REMOVE_FAILED ${LANG_ITALIAN} \
-     "ERRORE: L'UNISTALLERE HA FALLITO. Cliccando OK la vecchia versione rimarrà installata nel PC verrà tentato comunque di installare la nuova versione. Premi Cancel per provare ad eliminarla manualmente."
+     "Non è stato possibile disinstallare la vecchia versione. Proveremo comunque a installare quella nuova, ma puoi anche premere Annulla e provare a rimuovere la vecchia versione manualmente."
 
 LangString ASIO_DRIVER_HEADER ${LANG_ITALIAN} \
      "ASIO driver"
@@ -34,13 +34,13 @@ LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ITALIAN} \
      "https://jamulus.io/wiki/Installation-for-Windows#asio"
 
 LangString ASIO_EXIT_NO_DRIVER ${LANG_ITALIAN} \
-     "Per assicurare una bassa latenza, ${APP_NAME} usa i driver ASIO. Questi non sono presenti sul PC, puoi installarne una versione come gli ASIO4ALL. Maggiori informazione su jamulus.io, trovi il link nella pagina in cui ti trovavi. Per tornarci premi su NO. Se premi 'Si', l'installazione continuerà."
+     "${APP_NAME} ha bisogno di un driver audio ASIO per funzionare, ma non ne è stato trovato nessuno sul PC. Dovresti installarne uno, come ASIO4ALL (maggiori informazioni su jamulus.io, alla pagina Installazione per Windows). Vuoi comunque continuare prima con l'installazione di ${APP_NAME}?"
 
 LangString JACK_DRIVER_HEADER ${LANG_ITALIAN} \
      "JACK Audio Connection Kit"
 
 LangString JACK_DRIVER_SUB ${LANG_ITALIAN} \
-     "Per usare questa versione di ${APP_NAME},hai bisogno di installare il: JACK Audio Connection Kit"
+     "Per usare questa versione di ${APP_NAME}, hai bisogno di JACK Audio Connection Kit"
 
 LangString JACK_DRIVER_EXPLAIN ${LANG_ITALIAN} \
      "Per usare questa versione di ${APP_NAME} è necessario avviare il JACK Audio Connection Kit. Assicurati di averlo installato altrimenti scarica ${APP_NAME} su jamulus.io per usare gli ASIO."

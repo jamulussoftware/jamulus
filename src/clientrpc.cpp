@@ -197,8 +197,9 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
                 if ( info.error() != QHostInfo::NoError )
                 {
                     qWarning() << "Directory lookup failed:" << info.errorString();
-                    pRpcServer->BroadcastNotification ( "jamulusclient/pollServerList",
-                                                        QJsonObject{ { "error", "Directory lookup failed" }, { "reason", info.errorString() } } );
+                    pRpcServer->BroadcastNotification (
+                        "jamulusclient/pollServerList",
+                        QJsonObject{ { "error", "Directory lookup failed" }, { "reason", info.errorString() }, { "directory", info.hostName() } } );
                     return;
                 }
 
@@ -214,9 +215,10 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
                     }
                 }
                 qWarning() << "No usable address found for directory";
-                pRpcServer->BroadcastNotification (
-                    "jamulusclient/pollServerList",
-                    QJsonObject{ { "error", "Directory lookup failed" }, { "reason", "No usable address found for directory" } } );
+                pRpcServer->BroadcastNotification ( "jamulusclient/pollServerList",
+                                                    QJsonObject{ { "error", "Directory lookup failed" },
+                                                                 { "reason", "No usable address found for directory" },
+                                                                 { "directory", info.hostName() } } );
             },
             true,   // allow hostname lookup
             true ); // allow SRV lookup

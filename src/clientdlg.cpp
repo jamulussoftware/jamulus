@@ -498,6 +498,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
 
+    QObject::connect ( pClient, &CClient::Resolving, this, &CClientDlg::OnResolving );
+
     QObject::connect ( pClient, &CClient::Connecting, this, &CClientDlg::OnConnecting );
 
     QObject::connect ( pClient, &CClient::ConnectingFailed, this, &CClientDlg::OnConnectingFailed );
@@ -584,6 +586,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
     QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
+    QObject::connect ( &ConnectDlg, &CConnectDlg::rejected, this, &CClientDlg::OnConnectDlgRejected );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -605,22 +608,40 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // that the connection less message respond may not make it back but that
     // is not critical since the next time Jamulus is started we have another
     // chance and the update check is not time-critical at all)
-    CHostAddress UpdateServerHostAddress;
-
-    // Send the request to two servers for redundancy if either or both of them
-    // has a higher release version number, the reply will trigger the notification.
 
     // Don't use SRV resolution when resolving update servers.
-
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, pClient->IsIPv6Available() ) )
+    if ( !NetworkUtil::ResolveAddress ( UPDATECHECK1_ADDRESS, pClient->IsIPv6Available(), this, &CClientDlg::OnHostResolved, true, false ) )
     {
-        pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
+        qWarning() << "Cannot start update check for" << UPDATECHECK1_ADDRESS;
     }
 
-    if ( NetworkUtil::ParseNetworkAddressBare ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, pClient->IsIPv6Available() ) )
+    if ( !NetworkUtil::ResolveAddress ( UPDATECHECK2_ADDRESS, pClient->IsIPv6Available(), this, &CClientDlg::OnHostResolved, true, false ) )
     {
-        pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
+        qWarning() << "Cannot start update check for" << UPDATECHECK2_ADDRESS;
     }
+}
+
+void CClientDlg::OnHostResolved ( const QHostInfo& info, quint16 port )
+{
+    if ( info.error() != QHostInfo::NoError )
+    {
+        qWarning() << "Update lookup failed:" << info.errorString();
+        return;
+    }
+
+    for ( const QHostAddress& HostAddr : info.addresses() )
+    {
+        // qInfo() << "Resolved network address to" << HostAddr << "for proto" << HostAddr.protocol();
+        if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol ||
+             ( HostAddr.protocol() == QAbstractSocket::IPv6Protocol && pClient->IsIPv6Available() ) )
+        {
+            CHostAddress HostAddress ( HostAddr, port );
+
+            pClient->CreateCLServerListReqVerAndOSMes ( HostAddress );
+            return;
+        }
+    }
+    qWarning() << "Update check: no usable addresses found for" << info.hostName();
 }
 
 void CClientDlg::closeEvent ( QCloseEvent* Event )
@@ -768,10 +789,19 @@ void CClientDlg::OnConnectDlgAccepted()
     }
 }
 
+void CClientDlg::OnConnectDlgRejected()
+{
+    // cancelling while resolving must invalidate the pending lookup
+    if ( pClient->GetConnectionState() == CS_RESOLVING )
+    {
+        pClient->Disconnect();
+    }
+}
+
 void CClientDlg::OnConnectDisconBut()
 {
     // the connect/disconnect button implements a toggle functionality
-    if ( pClient->IsRunning() )
+    if ( pClient->GetConnectionState() != CS_DISCONNECTED )
     {
         pClient->Disconnect();
     }
@@ -1220,6 +1250,14 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
 }
 
+void CClientDlg::OnResolving ( const QString& strMixerBoardLabel )
+{
+    Q_UNUSED ( strMixerBoardLabel ); // might want to use it in the future
+
+    // change connect button text to "disconnect" while resolving too
+    butConnect->setText ( tr ( "&Disconnect" ) );
+}
+
 void CClientDlg::OnConnecting ( const QString& strMixerBoardLabel )
 {
 
@@ -1248,7 +1286,13 @@ void CClientDlg::OnConnecting ( const QString& strMixerBoardLabel )
     }
 }
 
-void CClientDlg::OnConnectingFailed ( const QString& strError ) { QMessageBox::critical ( this, APP_NAME, strError, tr ( "Close" ), nullptr ); }
+void CClientDlg::OnConnectingFailed ( const QString& strError )
+{
+    // change connect button text back to "connect"
+    butConnect->setText ( tr ( "C&onnect" ) );
+
+    QMessageBox::critical ( this, APP_NAME, strError, tr ( "Close" ), nullptr );
+}
 
 void CClientDlg::OnDisconnect()
 {

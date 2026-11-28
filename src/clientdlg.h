@@ -145,6 +145,7 @@ protected:
     CAnalyzerConsole   AnalyzerConsole;
 
 public slots:
+    void OnResolving ( const QString& strServerName );
     void OnConnecting ( const QString& strServerName );
     void OnConnectingFailed ( const QString& strErrorText );
     void OnDisconnect();
@@ -254,12 +255,14 @@ public slots:
     }
 
     void OnConnectDlgAccepted();
+    void OnConnectDlgRejected();
     void OnGUIDesignChanged();
     void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
+    void OnHostResolved ( const QHostInfo& info, quint16 port );
 
     void accept() { close(); } // introduced by pljones
 

@@ -1022,11 +1022,19 @@ void CClientDlg::ShowChatWindow ( const bool bForceRaise )
     ChatDlg.show();
     ChatDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Chat" ), pClient->strClientName ) );
 
+#if defined( Q_OS_IOS )
+    // iOS has no window manager. Thus we need to force full screen and raise
+    ChatDlg.showMaximized();
+    ChatDlg.raise();
+#endif
+
     if ( bForceRaise )
     {
         // make sure dialog is upfront and has focus
+#if !defined( Q_OS_IOS )
         ChatDlg.showNormal();
         ChatDlg.raise();
+#endif
         ChatDlg.activateWindow();
     }
 

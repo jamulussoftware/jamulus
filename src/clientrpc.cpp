@@ -192,11 +192,13 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
             jsonDirectoryIp.toString(),
             false, // Currently IPv4 only for directories
             pClient,
-            [pClient] ( const QHostInfo& info, quint16 port ) {
+            [pClient, pRpcServer] ( const QHostInfo& info, quint16 port ) {
                 // this callback runs later, after the RPC handler has returned
                 if ( info.error() != QHostInfo::NoError )
                 {
                     qWarning() << "Directory lookup failed:" << info.errorString();
+                    pRpcServer->BroadcastNotification ( "jamulusclient/pollServerList",
+                                                        QJsonObject{ { "error", "Directory lookup failed" }, { "reason", info.errorString() } } );
                     return;
                 }
 
@@ -212,6 +214,9 @@ CClientRpc::CClientRpc ( CClient* pClient, CClientSettings* pSettings, CRpcServe
                     }
                 }
                 qWarning() << "No usable address found for directory";
+                pRpcServer->BroadcastNotification (
+                    "jamulusclient/pollServerList",
+                    QJsonObject{ { "error", "Directory lookup failed" }, { "reason", "No usable address found for directory" } } );
             },
             true,   // allow hostname lookup
             true ); // allow SRV lookup

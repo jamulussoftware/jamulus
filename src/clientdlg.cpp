@@ -641,6 +641,7 @@ void CClientDlg::OnHostResolved ( const QHostInfo& info, quint16 port )
             return;
         }
     }
+    qWarning() << "Update check: no usable addresses found for" << info.hostName();
 }
 
 void CClientDlg::closeEvent ( QCloseEvent* Event )
